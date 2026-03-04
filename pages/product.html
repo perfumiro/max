@@ -1,0 +1,493 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPORDISE - Produit Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../script.js"></script>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body class="bg-white text-gray-800 font-sans antialiased">
+    <div class="bg-brand-red text-white text-center py-2 text-sm font-medium tracking-wide">
+        Delivery fee: 35 MAD in all Morocco cities. <a href="#" class="underline hover:text-gray-200">SHOP NOW!</a>
+    </div>
+
+    <header class="bg-brand-dark text-white sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <div class="flex-shrink-0 flex items-center">
+                <a href="../index.html" class="font-serif text-3xl font-bold tracking-widest text-white">
+                    IPORDISE<span class="text-brand-red">.</span>
+                </a>
+            </div>
+
+            <div class="flex-1 max-w-2xl mx-8 relative hidden md:block">
+                <div class="relative">
+                    <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, houses, notes...">
+                    <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 md:gap-6">
+                <a href="#" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">
+                    PROMOTIONS <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                </a>
+
+                <div class="flex items-center gap-2 md:gap-3 text-lg">
+                    <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
+                        <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                    </button>
+                    <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Compte"><i class="far fa-user"></i></a>
+                    <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                    <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Panier">
+                        <i class="fas fa-shopping-bag"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="perfume-nav hidden md:block">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ul class="perfume-nav-list">
+                <li><a href="#" class="perfume-nav-link is-active">ALL PERFUMES</a></li>
+                <li><a href="#" class="perfume-nav-link">HOMME</a></li>
+                <li><a href="#" class="perfume-nav-link">WOHOMME</a></li>
+                <li><a href="#" class="perfume-nav-link">UNISEX</a></li>
+                <li><a href="#" class="perfume-nav-link">NICHE</a></li>
+                <li><a href="#" class="perfume-nav-link">ARABIAN</a></li>
+                <li><a href="#" class="perfume-nav-link">DESIGNER</a></li>
+                <li><a href="#" class="perfume-nav-link">DISCOVERY SETS</a></li>
+                <li><a href="#" class="perfume-nav-link">MEILLEURES VENTES</a></li>
+                <li><a href="#" class="perfume-nav-link">NEW IN</a></li>
+                <li><a href="#" class="perfume-nav-link">OFFERS</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+    <main>
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+            <nav class="text-sm text-gray-500 mb-6 md:mb-8" aria-label="Breadcrumb">
+                <ol class="flex flex-wrap items-center gap-2">
+                    <li><a href="../index.html" class="hover:text-gray-900">Accueil</a></li>
+                    <li><i class="fas fa-chevron-right text-xs"></i></li>
+                    <li><a href="../discover.html" class="hover:text-gray-900">Perfumes</a></li>
+                    <li><i class="fas fa-chevron-right text-xs"></i></li>
+                    <li class="text-gray-900 font-semibold" id="productBreadcrumb">Product</li>
+                </ol>
+            </nav>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                <div class="lg:col-span-6">
+                    <div class="product-gallery-shell">
+                        <div class="product-main-image-wrap">
+                            <img id="productMainImage" src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp" alt="Product image" class="product-main-image">
+                        </div>
+                        <div class="grid grid-cols-4 gap-3 mt-4" id="productThumbs">
+                            <button class="product-thumb-btn is-active" type="button" data-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp">
+                                <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp" alt="Thumb 1" class="product-thumb-image">
+                            </button>
+                            <button class="product-thumb-btn" type="button" data-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/2.webp">
+                                <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/2.webp" alt="Thumb 2" class="product-thumb-image">
+                            </button>
+                            <button class="product-thumb-btn" type="button" data-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/3.webp">
+                                <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/3.webp" alt="Thumb 3" class="product-thumb-image">
+                            </button>
+                            <button class="product-thumb-btn" type="button" data-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/4.webp">
+                                <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/4.webp" alt="Thumb 4" class="product-thumb-image">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6">
+                    <p id="productBrand" class="text-xs font-bold text-gray-500 uppercase tracking-[0.2em]">GIORGIO ARMANI</p>
+                    <h1 id="productName" class="text-3xl md:text-4xl font-bold text-brand-dark mt-2">Emporio Armani Stronger With You Intensely EDP</h1>
+                    <p id="productSubtitle" class="text-sm text-gray-600 mt-3 max-w-xl">Men's fragrance Â· Oriental FougÃ¨re Â· A bold, addictive signature with pink pepper, vanilla, and ambery woods.</p>
+
+                    <div class="flex items-center gap-3 mt-4">
+                        <div class="text-yellow-400 text-sm" aria-label="Rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span id="productReviewsCount" class="text-sm text-gray-500">(0 reviews)</span>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <div class="flex items-end gap-3">
+                            <span id="productOldPrice" class="text-lg text-gray-400 line-through"></span>
+                            <span id="productDiscount" class="text-sm font-bold text-brand-red"></span>
+                        </div>
+                        <p id="productPrice" class="text-4xl font-bold text-gray-400 mt-1">Select a size to view price</p>
+                        <p class="text-sm text-gray-500 mt-1">In stock · Delivery fee: 35 MAD (VAT included)</p>
+                    </div>
+
+                    <div class="mt-6">
+                        <p class="text-sm font-semibold text-gray-700 mb-3">Size</p>
+                        <div class="flex flex-wrap gap-2" id="sizeSelector">
+                            <button class="size-pill" type="button">50 ML</button>
+                            <button class="size-pill" type="button">100 ML</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex items-center gap-3">
+                        <div class="qty-box" role="group" aria-label="Quantity selector">
+                            <button id="qtyMinus" class="qty-btn" type="button" aria-label="Decrease quantity">-</button>
+                            <span id="qtyValue" class="qty-value">1</span>
+                            <button id="qtyPlus" class="qty-btn" type="button" aria-label="Increase quantity">+</button>
+                        </div>
+                        <button id="addToCartBtn" class="hidden bg-brand-dark hover:bg-black text-white font-bold py-3 px-8 rounded-full transition" type="button">Ajouter au panier</button>
+                        <button class="w-12 h-12 rounded-full border border-gray-300 text-gray-600 hover:border-brand-red hover:text-brand-red transition" type="button" aria-label="Add to wishlist">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+
+                    <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="detail-chip"><i class="fas fa-truck text-brand-red"></i> Delivery fee: 35 MAD (VAT included)</div>
+                        <div class="detail-chip"><i class="fas fa-shield-heart text-brand-red"></i> 100% authentic</div>
+                        <div class="detail-chip"><i class="fas fa-rotate-left text-brand-red"></i> Easy returns</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+            <div class="border-b border-gray-200">
+                <div class="flex flex-wrap gap-2 md:gap-4" id="productTabs" role="tablist" aria-label="Product information tabs">
+                    <button class="tab-btn is-active" type="button" data-tab="details" role="tab" aria-selected="true">Details</button>
+                    <button class="tab-btn" type="button" data-tab="notes" role="tab" aria-selected="false">Notes</button>
+                    <button class="tab-btn" type="button" data-tab="ingredients" role="tab" aria-selected="false">Ingredients</button>
+                    <button class="tab-btn" type="button" data-tab="reviews" role="tab" aria-selected="false">Reviews</button>
+                </div>
+            </div>
+
+            <div class="py-6 md:py-8">
+                <div class="tab-panel is-active" id="tab-details" role="tabpanel">
+                    <p class="text-gray-700 leading-relaxed max-w-4xl" id="productLongDescription">
+                        Created for clients who want elegance and personality in one bottle, this fragrance starts luminous, then evolves into a smooth and sophisticated signature.
+                    </p>
+                </div>
+
+                <div class="tab-panel" id="tab-notes" role="tabpanel" hidden>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl">
+                        <article class="note-card">
+                            <h3 class="font-bold text-brand-dark">Top Notes</h3>
+                            <p class="text-sm text-gray-600 mt-2">Bergamot, pear blossom, pink pepper</p>
+                        </article>
+                        <article class="note-card">
+                            <h3 class="font-bold text-brand-dark">Heart Notes</h3>
+                            <p class="text-sm text-gray-600 mt-2">Jasmine sambac, iris, rose petals</p>
+                        </article>
+                        <article class="note-card">
+                            <h3 class="font-bold text-brand-dark">Base Notes</h3>
+                            <p class="text-sm text-gray-600 mt-2">Sandalwood, amber, white musk</p>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="tab-panel" id="tab-ingredients" role="tabpanel" hidden>
+                    <p class="text-sm text-gray-700 leading-relaxed max-w-5xl">
+                        Alcohol Denat., Parfum (Fragrance), Aqua (Water), Limonene, Linalool, Citral, Geraniol, Citronellol, Coumarin, Benzyl Salicylate.
+                    </p>
+                </div>
+
+                <div class="tab-panel" id="tab-reviews" role="tabpanel" hidden>
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <div class="lg:col-span-4 review-summary">
+                            <p class="text-5xl font-bold text-brand-dark">4.8</p>
+                            <p class="text-sm text-gray-500 mt-1">Based on 69 verified reviews</p>
+                            <div class="text-yellow-400 mt-3">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-8 space-y-4">
+                            <article class="review-card">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="font-bold text-gray-900">Yassine A</h4>
+                                    <span class="text-xs text-gray-500">2026-01-29</span>
+                                </div>
+                                <div class="text-yellow-400 text-xs mt-1"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                                <p class="text-sm text-gray-700 mt-2">Elegant scent and very good longevity. Packaging also feels luxury.</p>
+                            </article>
+                            <article class="review-card">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="font-bold text-gray-900">Salma B</h4>
+                                    <span class="text-xs text-gray-500">2026-01-27</span>
+                                </div>
+                                <div class="text-yellow-400 text-xs mt-1"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                                <p class="text-sm text-gray-700 mt-2">Beautiful coffret and quick delivery. I will order again.</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-brand-light py-12 md:py-14">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between gap-4 mb-6">
+                    <h2 class="text-2xl md:text-3xl font-bold text-brand-dark">You may also like</h2>
+                    <a href="../discover.html" class="text-sm font-semibold text-gray-600 hover:text-gray-900">Explore more <i class="fas fa-arrow-right ml-1 text-xs"></i></a>
+                </div>
+
+                <div class="related-track flex overflow-x-auto gap-5 pb-2 hide-scrollbar snap-x snap-mandatory scroll-smooth">
+                    <article class="related-card js-product-link" data-product-name="Emporio Armani Stronger With You Intensely EDP" data-product-brand="GIORGIO ARMANI" data-product-price="50ML 650DH Â· 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp">
+                        <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp" alt="Emporio Armani Stronger With You Intensely EDP" class="related-image">
+                        <p class="related-brand">GIORGIO ARMANI</p>
+                        <h3 class="related-title">Emporio Armani Stronger With You Intensely EDP</h3>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                        </div>
+                    </article>
+
+                    <article class="related-card js-product-link" data-product-name="Jean Paul Gaultier Le male Elixir Eau de Parfum" data-product-brand="JEAN PAUL GAULTIER" data-product-price="75ML 990DH Â· 125ML 1350DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp">
+                        <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp" alt="Jean Paul Gaultier Le male Elixir Eau de Parfum" class="related-image">
+                        <p class="related-brand">JEAN PAUL GAULTIER</p>
+                        <h3 class="related-title">Jean Paul Gaultier Le male Elixir Eau de Parfum</h3>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">75ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">125ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                        </div>
+                    </article>
+
+                    <article class="related-card js-product-link" data-product-name="Jean Paul Gaultier Le male Le parfum Eau de Parfum" data-product-brand="JEAN PAUL GAULTIER" data-product-price="75ML 950DH Â· 125ML 1290DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp">
+                        <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp" alt="Jean Paul Gaultier Le male Le parfum Eau de Parfum" class="related-image">
+                        <p class="related-brand">JEAN PAUL GAULTIER</p>
+                        <h3 class="related-title">Jean Paul Gaultier Le male Le parfum Eau de Parfum</h3>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">75ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">125ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                        </div>
+                    </article>
+
+                    <article class="related-card js-product-link" data-product-name="Jean Paul Gaultier Le Beau Eau de Parfum" data-product-brand="JEAN PAUL GAULTIER" data-product-price="75ML 980DH Â· 125ML 1320DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp">
+                        <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp" alt="Jean Paul Gaultier Le Beau Eau de Parfum" class="related-image">
+                        <p class="related-brand">JEAN PAUL GAULTIER</p>
+                        <h3 class="related-title">Jean Paul Gaultier Le Beau Eau de Parfum</h3>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">75ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">125ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-dark mb-6">More reviews</h2>
+
+            <div class="customer-reviews-grid">
+                <aside class="customer-rating-panel">
+                    <p class="customer-rating-value">4.88</p>
+
+                    <div class="rating-breakdown-list" aria-label="Rating distribution">
+                        <div class="rating-row">
+                            <span class="rating-label">5 <i class="fas fa-star"></i></span>
+                            <div class="rating-bar-track"><span class="rating-bar-fill" style="width: 89.9%;"></span></div>
+                            <span class="rating-percent">89.9%</span>
+                        </div>
+                        <div class="rating-row">
+                            <span class="rating-label">4 <i class="fas fa-star"></i></span>
+                            <div class="rating-bar-track"><span class="rating-bar-fill" style="width: 8.7%;"></span></div>
+                            <span class="rating-percent">8.7%</span>
+                        </div>
+                        <div class="rating-row">
+                            <span class="rating-label">3 <i class="fas fa-star"></i></span>
+                            <div class="rating-bar-track"><span class="rating-bar-fill" style="width: 1.4%;"></span></div>
+                            <span class="rating-percent">1.4%</span>
+                        </div>
+                        <div class="rating-row">
+                            <span class="rating-label">2 <i class="fas fa-star"></i></span>
+                            <div class="rating-bar-track"><span class="rating-bar-fill" style="width: 0%;"></span></div>
+                            <span class="rating-percent">0.0%</span>
+                        </div>
+                        <div class="rating-row">
+                            <span class="rating-label">1 <i class="fas fa-star"></i></span>
+                            <div class="rating-bar-track"><span class="rating-bar-fill" style="width: 0%;"></span></div>
+                            <span class="rating-percent">0.0%</span>
+                        </div>
+                    </div>
+
+                    <p class="customer-rating-footnote">Calculated from verified customer ratings.</p>
+                </aside>
+
+                <div class="customer-reviews-panel">
+                    <div class="customer-reviews-toolbar">
+                        <p class="text-sm font-semibold text-gray-800">5 star Â· 69 reviews</p>
+                        <button class="text-sm text-gray-600 hover:text-gray-900" type="button">Sort by: Most relevant <i class="fas fa-chevron-down text-xs ml-1"></i></button>
+                    </div>
+
+                    <div class="customer-review-list">
+                        <article class="customer-review-item">
+                            <div class="text-yellow-400 text-xs"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                            <h3 class="mt-2 font-bold text-gray-900">Yassine A</h3>
+                            <p class="text-xs text-gray-500 mt-1">2026-01-29 | Morocco | Verified purchase</p>
+                            <p class="text-sm text-gray-700 mt-3">Elegant scent and very good longevity.</p>
+                        </article>
+
+                        <article class="customer-review-item">
+                            <div class="text-yellow-400 text-xs"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                            <h3 class="mt-2 font-bold text-gray-900">Salma B</h3>
+                            <p class="text-xs text-gray-500 mt-1">2026-01-27 | Morocco | Verified purchase</p>
+                            <p class="text-sm text-gray-700 mt-3">Beautiful coffret and quick delivery.</p>
+                        </article>
+
+                        <article class="customer-review-item">
+                            <div class="text-yellow-400 text-xs"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                            <h3 class="mt-2 font-bold text-gray-900">Imane E</h3>
+                            <p class="text-xs text-gray-500 mt-1">2026-01-24 | Morocco | Verified purchase</p>
+                            <p class="text-sm text-gray-700 mt-3">Luxury presentation and long-lasting scent.</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ipordise-adv-news py-16 border-t border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h3 class="text-center text-xl font-bold text-gray-800 mb-10 ipordise-adv-title">IPORDISE Advantages</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 text-center ipordise-adv-grid">
+                    <div class="flex flex-col items-center justify-center space-y-3 ipordise-adv-item">
+                        <i class="fas fa-truck-fast text-3xl text-gray-600 ipordise-adv-icon"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-800 ipordise-adv-heading">Delivery in Morocco</h4>
+                            <p class="text-xs text-gray-500 mt-1 ipordise-adv-copy">Fixed fee: 35 MAD</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center justify-center space-y-3 ipordise-adv-item">
+                        <i class="fas fa-box-open text-3xl text-gray-600 ipordise-adv-icon"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-800 ipordise-adv-heading">Money-back Guarantee</h4>
+                            <p class="text-xs text-gray-500 mt-1 ipordise-adv-copy">14 days for returns, subject to stated conditions</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center justify-center space-y-3 ipordise-adv-item">
+                        <i class="fas fa-lock text-3xl text-gray-600 ipordise-adv-icon"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-800 ipordise-adv-heading">Secure Payment & 1-Click Shop</h4>
+                            <p class="text-xs text-gray-500 mt-1 ipordise-adv-copy">Fast, secure and no hidden fees</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="max-w-4xl mx-auto text-center ipordise-newsletter-shell">
+                    <p class="text-lg text-gray-700 mb-2 ipordise-news-title">Subscribe to our newsletter to receive new product updates and beauty tips.</p>
+                    <p class="text-lg font-bold text-gray-800 mb-8 ipordise-news-subtitle">Don't miss our exclusive offers!</p>
+
+                    <form class="space-y-6 ipordise-news-form">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="text-left">
+                                <input type="text" placeholder="Name *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
+                                <p class="text-[10px] text-gray-500 mt-1">* Required fields</p>
+                            </div>
+                            <div class="text-left">
+                                <input type="email" placeholder="Email address *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
+                            </div>
+                            <div class="text-left">
+                                <div class="relative">
+                                    <select required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-gray-500 text-sm appearance-none ipordise-news-input">
+                                        <option value="" disabled selected>Gender *</option>
+                                        <option value="female">Female</option>
+                                        <option value="male">Male</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                                        <i class="fas fa-chevron-down text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-center space-x-2 text-sm text-gray-600 ipordise-privacy-row">
+                            <input type="checkbox" id="privacy" required class="w-4 h-4 text-brand-red rounded border-gray-300 focus:ring-brand-red cursor-pointer">
+                            <label for="privacy" class="cursor-pointer">I have read the <a href="privacy-policy.html" class="text-blue-500 hover:text-blue-700 underline transition ipordise-privacy-link">privacy policy</a> and I want to subscribe to the IPORDISE newsletter. *</label>
+                        </div>
+
+                        <button type="submit" class="text-white font-bold py-3 px-12 rounded-full transition duration-300 shadow-md uppercase tracking-wide text-sm mt-4 ipordise-news-submit">
+                            SUBSCRIBE
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-brand-dark text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
+                    <p class="text-gray-400 text-sm mb-6">La destination ultime pour les parfums de luxe, les cosmetiques et les soins beaute en ligne. Sublimez votre quotidien.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Service Client</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="contact.html" class="hover:text-white transition">Contactez-nous</a></li>
+                        <li><a href="shipping.html" class="hover:text-white transition">Livraison & Retours</a></li>
+                        <li><a href="track-order.html" class="hover:text-white transition">Suivre la commande</a></li>
+                        <li><a href="faq.html" class="hover:text-white transition">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">À Propos</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="our-story.html" class="hover:text-white transition">Notre Histoire</a></li>
+                        <li><a href="careers.html" class="hover:text-white transition">Carrières</a></li>
+                        <li><a href="store-locator.html" class="hover:text-white transition">Trouver un magasin</a></li>
+                        <li><a href="terms.html" class="hover:text-white transition">Conditions Générales</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Subscribe to receive product updates, beauty tips, and more.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email address" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">
+                        <a href="newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition">SUBSCRIBE</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2026 IPORDISE. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="product-sticky-buy">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                    <img id="stickyImage" src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp" alt="Product mini" class="w-12 h-12 object-cover rounded-md border border-gray-200">
+                    <div class="min-w-0">
+                        <p id="stickyName" class="text-sm font-semibold text-gray-900 truncate">Emporio Armani Stronger With You Intensely EDP</p>
+                        <p id="stickyPrice" class="text-sm font-bold text-gray-500">Choose size</p>
+                    </div>
+                </div>
+                    <button id="stickyAddToCartBtn" class="hidden bg-brand-dark hover:bg-black text-white text-sm font-bold py-2.5 px-6 rounded-full transition" type="button">Ajouter au panier</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

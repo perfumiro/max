@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPORDISE - Checkout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../script.js"></script>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body class="bg-white text-gray-800 font-sans antialiased">
+
+    <div class="bg-brand-red text-white text-center py-2 text-sm font-medium tracking-wide">
+        Delivery fee: 35 MAD in all Morocco cities. <a href="#" class="underline hover:text-gray-200">SHOP NOW!</a>
+    </div>
+
+    <header class="bg-brand-dark text-white sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <div class="flex-shrink-0 flex items-center">
+                <a href="../index.html" class="font-serif text-3xl font-bold tracking-widest text-white">
+                    IPORDISE<span class="text-brand-red">.</span>
+                </a>
+            </div>
+
+            <div class="flex-1 max-w-2xl mx-8 relative hidden md:block">
+                <div class="relative">
+                    <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, houses, notes...">
+                    <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 md:gap-6">
+                <a href="#" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">
+                    PROMOTIONS <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                </a>
+
+                <div class="flex items-center gap-2 md:gap-3 text-lg">
+                    <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
+                        <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                    </button>
+                    <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                    <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                    <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart">
+                        <i class="fas fa-shopping-bag"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="perfume-nav hidden md:block">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ul class="perfume-nav-list">
+                <li><a href="#" class="perfume-nav-link is-active">ALL PERFUMES</a></li>
+                <li><a href="#" class="perfume-nav-link">HOMME</a></li>
+                <li><a href="#" class="perfume-nav-link">WOHOMME</a></li>
+                <li><a href="#" class="perfume-nav-link">UNISEX</a></li>
+                <li><a href="#" class="perfume-nav-link">NICHE</a></li>
+                <li><a href="#" class="perfume-nav-link">ARABIAN</a></li>
+                <li><a href="#" class="perfume-nav-link">DESIGNER</a></li>
+                <li><a href="#" class="perfume-nav-link">DISCOVERY SETS</a></li>
+                <li><a href="#" class="perfume-nav-link">BEST SELLERS</a></li>
+                <li><a href="#" class="perfume-nav-link">NEW IN</a></li>
+                <li><a href="#" class="perfume-nav-link">OFFERS</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+    <section class="checkout-hero relative overflow-hidden">
+        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+            <p class="text-white/80 text-sm mb-4">
+                <a href="../index.html" class="hover:text-white transition">Home</a>
+                <span class="mx-2">/</span>
+                <a href="cart.html" class="hover:text-white transition">Cart</a>
+                <span class="mx-2">/</span>
+                <span class="text-white font-semibold">Checkout</span>
+            </p>
+
+            <div class="checkout-steps inline-flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm font-bold tracking-[0.12em] uppercase bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2.5 text-white">
+                <a href="cart.html" class="opacity-80 hover:opacity-100 hover:text-white transition">Cart</a>
+                <i class="fas fa-arrow-right text-[10px] opacity-70"></i>
+                <span class="text-brand-red">Checkout</span>
+                <i class="fas fa-arrow-right text-[10px] opacity-70"></i>
+                <span class="opacity-80">Place Order</span>
+            </div>
+
+            <h1 class="mt-5 text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight">Secure Checkout</h1>
+            <p class="mt-2 text-white/80 max-w-2xl text-sm sm:text-base">Finalize your details and review your order before confirmation.</p>
+        </div>
+    </section>
+
+    <main class="bg-brand-light py-10 sm:py-12 min-h-[70vh]">
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8 items-start">
+                <div class="xl:col-span-2 space-y-5">
+                    <div class="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 shadow-sm">
+                        <p class="text-sm text-gray-600">Returning customer?
+                            <a href="#" class="text-brand-red font-semibold hover:text-brand-redHover transition ml-1">Click here to sign in</a>
+                        </p>
+                    </div>
+
+                    <form class="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 shadow-sm">
+                        <div class="flex items-center justify-between gap-3 mb-5">
+                            <h2 class="text-xl sm:text-2xl font-serif font-bold text-brand-dark">Billing Details</h2>
+                            <span class="text-xs text-gray-500">* Required fields</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="checkout-field">
+                                <span>First Name *</span>
+                                <input type="text" placeholder="Your first name" class="border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red">
+                            </label>
+
+                            <label class="checkout-field">
+                                <span>Last Name *</span>
+                                <input type="text" placeholder="Your last name" class="border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red">
+                            </label>
+
+                            <label class="checkout-field">
+                                <span>Company (optional)</span>
+                                <input type="text" placeholder="Company name" class="border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red">
+                            </label>
+
+                            <label class="checkout-field">
+                                <span>ICE / Tax ID (optional)</span>
+                                <input type="text" placeholder="Identifier" class="border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red">
+                            </label>
+
+                            <label class="checkout-field sm:col-span-2">
+                                <span>Address *</span>
+                                <input type="text" placeholder="Street, district, building" class="border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red">
+                            </label>
+
+                            <label class="checkout-field">
+                                <span>City *</span>
+                                <input type="text" placeholder="City" class="border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red">
+                            </label>
+
+                            <label class="checkout-field">
+                                <span>Phone *</span>
+                                <input type="tel" placeholder="+212 ..." class="border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red">
+                            </label>
+
+                            <label class="checkout-field sm:col-span-2">
+                                <span>Email Address *</span>
+                                <input type="email" placeholder="you@example.com" class="border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red">
+                            </label>
+                        </div>
+
+                        <div class="mt-5 space-y-3">
+                            <label class="inline-flex items-center gap-2 text-sm text-gray-600">
+                                <input type="checkbox" class="rounded border-gray-300 text-brand-red focus:ring-brand-red">
+                                <span>Create an account?</span>
+                            </label>
+
+                            <label class="inline-flex items-center gap-2 text-sm text-gray-600">
+                                <input type="checkbox" class="rounded border-gray-300 text-brand-red focus:ring-brand-red">
+                                <span>Receive exclusive offers and product updates by email.</span>
+                            </label>
+                        </div>
+
+                        <label class="checkout-field mt-5 block">
+                            <span>Order Notes (optional)</span>
+                            <textarea rows="4" placeholder="Special delivery instructions, fragrance gift note, etc." class="border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-red"></textarea>
+                        </label>
+                    </form>
+                </div>
+
+                <aside class="space-y-4 xl:sticky xl:top-28">
+                    <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                        <h3 class="text-lg font-bold text-brand-dark mb-4">Your Order</h3>
+
+                        <div class="space-y-3 text-sm text-gray-700">
+                            <div id="checkoutOrderItems"></div>
+
+                            <div class="flex items-center justify-between">
+                                <span>Subtotal</span>
+                                <span id="checkoutSubtotal" class="font-semibold">797.50 MAD</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span>Shipping</span>
+                                <span id="checkoutShipping" class="font-semibold text-green-600">35 MAD (VAT incl.)</span>
+                            </div>
+                            <div class="flex items-center justify-between text-brand-red">
+                                <span>Discount</span>
+                                <span id="checkoutPromo" class="font-semibold">0 MAD</span>
+                            </div>
+                        </div>
+
+                        <div class="my-4 border-t border-gray-100 pt-4 flex items-center justify-between">
+                            <span class="text-base font-semibold text-brand-dark">Total</span>
+                            <span id="checkoutTotal" class="text-2xl font-bold text-brand-dark">701.78 MAD</span>
+                        </div>
+
+                        <div class="space-y-3 text-sm text-gray-600 mb-5">
+                            <label class="checkout-payment border border-brand-red/40 bg-red-50">
+                                <input type="radio" name="payment" checked>
+                                <div>
+                                    <p class="font-semibold text-gray-800">Cash on Delivery</p>
+                                    <p class="text-xs text-gray-500 mt-1">Pay securely when your package arrives.</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <details class="group">
+                            <summary class="list-none w-full bg-brand-red hover:bg-brand-redHover text-white font-bold py-3 rounded-xl transition duration-200 inline-flex items-center justify-center gap-2 cursor-pointer">
+                                Place Order <i class="fas fa-check text-xs"></i>
+                            </summary>
+
+                            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <a href="https://wa.me/212600000000?text=Hello%20IPORDISE%2C%20I%20want%20to%20confirm%20my%20order." target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 rounded-lg border border-green-500/40 bg-green-50 text-green-700 font-semibold py-2.5 hover:bg-green-100 transition">
+                                    <i class="fab fa-whatsapp"></i> Confirm via WhatsApp
+                                </a>
+                                <a href="mailto:orders@ipordise.com?subject=Order%20Confirmation&body=Hello%20IPORDISE%2C%20I%20want%20to%20confirm%20my%20order." class="inline-flex items-center justify-center gap-2 rounded-lg border border-blue-500/40 bg-blue-50 text-blue-700 font-semibold py-2.5 hover:bg-blue-100 transition">
+                                    <i class="fas fa-envelope"></i> Confirm via Email
+                                </a>
+                            </div>
+                        </details>
+
+                        <p class="text-[11px] text-gray-500 text-center mt-3">
+                            Your information is protected by secure payment encryption.
+                        </p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-brand-dark text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
+                    <p class="text-gray-400 text-sm mb-6">La destination ultime pour les parfums de luxe, les cosmetiques et les soins beaute en ligne. Sublimez votre quotidien.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Customer Care</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="contact.html" class="hover:text-white transition">Contact Us</a></li>
+                        <li><a href="shipping.html" class="hover:text-white transition">Shipping & Returns</a></li>
+                        <li><a href="track-order.html" class="hover:text-white transition">Track Order</a></li>
+                        <li><a href="faq.html" class="hover:text-white transition">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">About</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="our-story.html" class="hover:text-white transition">Our Story</a></li>
+                        <li><a href="careers.html" class="hover:text-white transition">Careers</a></li>
+                        <li><a href="store-locator.html" class="hover:text-white transition">Find a Store</a></li>
+                        <li><a href="terms.html" class="hover:text-white transition">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Subscribe to receive new arrivals, beauty tips, and more.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email address" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">
+                        <a href="newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition">SUBSCRIBE</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
