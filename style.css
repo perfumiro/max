@@ -13,6 +13,68 @@
     user-select: none;
 }
 
+.search-suggest {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 0.5rem);
+    background: #ffffff;
+    border: 1px solid rgba(229, 231, 235, 0.9);
+    border-radius: 0.75rem;
+    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.12);
+    padding: 0.35rem;
+    z-index: 50;
+    max-height: 18rem;
+    overflow-y: auto;
+}
+
+.search-suggest-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 0.6rem;
+    text-align: left;
+    color: #111827;
+    background: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.search-suggest-item:hover,
+.search-suggest-item:focus {
+    background: rgba(15, 23, 42, 0.06);
+    outline: none;
+}
+
+.search-suggest-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 0.5rem;
+    object-fit: contain;
+    background: #f8fafc;
+    flex-shrink: 0;
+}
+
+.search-suggest-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.search-suggest-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.search-suggest-brand {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6b7280;
+}
+
 html,
 body {
     overflow-x: hidden;

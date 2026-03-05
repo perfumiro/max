@@ -196,6 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const path = window.location.pathname.replace(/\\/g, '/');
         const inPagesFolder = path.includes('/pages/');
         const rootPrefix = inPagesFolder ? '../' : '';
+        const showMobileSearch = path.endsWith('/discover.html') || path.endsWith('/discover.html/');
 
         const indexPath = `${rootPrefix}index.html`;
         const discoverPath = `${rootPrefix}discover.html`;
@@ -206,6 +207,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 Delivery fee: 35 MAD in all Morocco cities. <a href="#" class="top-announcement-link">SHOP NOW!</a>
             </div>
         `;
+
+        const mobileSearchHtml = showMobileSearch
+            ? `
+                <div class="md:hidden px-4 sm:px-6 lg:px-8 pb-4">
+                    <div class="relative">
+                        <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, brands, makeup..." data-discover-search>
+                        <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            `
+            : '';
 
         const headerHtml = `
             <header class="bg-brand-dark text-white sticky top-0 z-50">
@@ -230,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         <div class="flex-1 max-w-2xl mx-8 relative hidden md:block">
                             <div class="relative">
-                                <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, houses, notes...">
+                                <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, houses, notes..." data-discover-search>
                                 <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -255,6 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 </div>
+
+                ${mobileSearchHtml}
 
                 <nav class="perfume-nav hidden md:block">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -829,6 +845,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return inPagesFolder ? 'cart.html' : 'pages/cart.html';
     };
 
+    const normalizeSearchText = (value) => String(value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim();
+
     const extractProductDataFromCard = (card) => {
         const nameEl = card.querySelector('h3, h4, .product-title');
         const brandEl = card.querySelector('p.text-xs');
@@ -847,6 +869,128 @@ document.addEventListener('DOMContentLoaded', () => {
             reviews: (card.dataset.productReviews || (reviewsEl?.textContent || '').replace(/[^0-9]/g, '') || '0').trim(),
             image: normalizeImagePathForCurrentPage(card.dataset.productImage || imageEl?.getAttribute('src') || '')
         };
+    };
+
+    const initHeaderSearchSuggestions = () => {
+        const searchInputs = Array.from(document.querySelectorAll('header input[type="text"]'));
+        if (!searchInputs.length) return;
+
+        const productCards = Array.from(document.querySelectorAll(
+            '#productCarousel > .group, #newArrivalsCarousel > article, article.group, .js-product-link'
+        ));
+
+        const catalog = [];
+        const seenKeys = new Set();
+
+        productCards.forEach((card) => {
+            const data = extractProductDataFromCard(card);
+            const key = `${normalizeSearchText(data.name)}|${normalizeSearchText(data.brand)}`;
+            if (!data.name || seenKeys.has(key)) return;
+            seenKeys.add(key);
+            catalog.push(data);
+        });
+
+        if (!catalog.length && Array.isArray(relatedProductCatalog)) {
+            relatedProductCatalog.forEach((item) => {
+                const key = `${normalizeSearchText(item.name)}|${normalizeSearchText(item.brand)}`;
+                if (!item.name || seenKeys.has(key)) return;
+                seenKeys.add(key);
+                catalog.push({
+                    name: item.name,
+                    brand: item.brand,
+                    price: item.price,
+                    image: item.image
+                });
+            });
+        }
+
+        const closeAllMenus = () => {
+            document.querySelectorAll('.search-suggest').forEach((menu) => {
+                menu.classList.add('hidden');
+                menu.innerHTML = '';
+            });
+        };
+
+        const buildSuggestions = (query) => {
+            const normalizedQuery = normalizeSearchText(query);
+            if (!normalizedQuery) return [];
+
+            const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
+            const results = catalog.filter((item) => {
+                const haystack = normalizeSearchText(`${item.name} ${item.brand}`);
+                return tokens.every((token) => haystack.includes(token));
+            });
+
+            return results.slice(0, 6);
+        };
+
+        const renderMenu = (menu, items) => {
+            if (!items.length) {
+                menu.classList.add('hidden');
+                menu.innerHTML = '';
+                return;
+            }
+
+            menu.innerHTML = items.map((item, index) => `
+                <button type="button" class="search-suggest-item" data-index="${index}">
+                    <img src="${item.image || ''}" alt="" class="search-suggest-thumb" />
+                    <span class="search-suggest-text">
+                        <span class="search-suggest-name">${item.name}</span>
+                        <span class="search-suggest-brand">${item.brand}</span>
+                    </span>
+                </button>
+            `).join('');
+            menu.classList.remove('hidden');
+        };
+
+        searchInputs.forEach((input) => {
+            const wrapper = input.closest('.relative') || input.parentElement;
+            if (!wrapper) return;
+
+            let menu = wrapper.querySelector('.search-suggest');
+            if (!menu) {
+                menu = document.createElement('div');
+                menu.className = 'search-suggest hidden';
+                wrapper.appendChild(menu);
+            }
+
+            input.addEventListener('input', (event) => {
+                const value = event.target.value || '';
+                const suggestions = value.length < 2 ? [] : buildSuggestions(value);
+                renderMenu(menu, suggestions);
+            });
+
+            input.addEventListener('focus', (event) => {
+                const value = event.target.value || '';
+                const suggestions = value.length < 2 ? [] : buildSuggestions(value);
+                renderMenu(menu, suggestions);
+            });
+
+            menu.addEventListener('click', (event) => {
+                const button = event.target.closest('.search-suggest-item');
+                if (!button) return;
+
+                const index = Number(button.dataset.index || 0);
+                const items = buildSuggestions(input.value || '');
+                const selected = items[index];
+                if (!selected) return;
+
+                const query = new URLSearchParams({
+                    name: selected.name,
+                    brand: selected.brand,
+                    price: selected.price || '',
+                    image: selected.image || ''
+                });
+
+                window.location.href = `${getProductPagePath()}?${query.toString()}`;
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.search-suggest') && !event.target.closest('header input[type="text"]')) {
+                closeAllMenus();
+            }
+        });
     };
 
     const bindProductLinks = () => {
@@ -1787,6 +1931,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!filterButtons.length || !productsGrid) return;
 
         const productCards = Array.from(productsGrid.querySelectorAll('.js-product-link'));
+        const searchInputs = Array.from(document.querySelectorAll('[data-discover-search]'));
         if (!productCards.length) return;
 
         const emptyState = document.createElement('p');
@@ -1818,11 +1963,26 @@ document.addEventListener('DOMContentLoaded', () => {
             return filters.includes(filter);
         };
 
-        const applyFilter = (filter) => {
+        const cardMatchesQuery = (card, query) => {
+            if (!query) return true;
+            const haystack = normalizeSearchText([
+                card.dataset.productName,
+                card.dataset.productBrand,
+                card.dataset.productPrice
+            ].filter(Boolean).join(' '));
+            const tokens = normalizeSearchText(query).split(/\s+/).filter(Boolean);
+            return tokens.every((token) => haystack.includes(token));
+        };
+
+        let activeFilter = 'all';
+        let activeQuery = '';
+
+        const applyFilter = () => {
             let visibleCount = 0;
 
             productCards.forEach((card) => {
-                const shouldShow = cardMatchesFilter(card, filter);
+                const shouldShow = cardMatchesFilter(card, activeFilter)
+                    && cardMatchesQuery(card, activeQuery);
                 card.classList.toggle('hidden', !shouldShow);
                 if (shouldShow) {
                     visibleCount += 1;
@@ -1844,7 +2004,20 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('click', () => {
                 const filter = (button.dataset.discoverFilter || 'all').toLowerCase();
                 setActiveButton(button);
-                applyFilter(filter);
+                activeFilter = filter;
+                applyFilter();
+            });
+        });
+
+        searchInputs.forEach((input) => {
+            input.addEventListener('input', (event) => {
+                activeQuery = event.target.value || '';
+                searchInputs.forEach((peer) => {
+                    if (peer !== event.target) {
+                        peer.value = event.target.value;
+                    }
+                });
+                applyFilter();
             });
         });
 
@@ -1858,7 +2031,8 @@ document.addEventListener('DOMContentLoaded', () => {
             || filterButtons[0];
 
         setActiveButton(defaultButton);
-        applyFilter((defaultButton.dataset.discoverFilter || 'all').toLowerCase());
+        activeFilter = (defaultButton.dataset.discoverFilter || 'all').toLowerCase();
+        applyFilter();
     };
 
     const buildCartItemHtml = (item) => {
@@ -2211,8 +2385,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!logos.length) return;
 
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const animationStartDelayMs = 25000;
+        const animationStartDelayMs = 0;
         const dotDuration = 7600;
+        const idleDelayMs = 30000;
         const holdOffset = 0.11;
         const hopWindow = 0.67;
 
@@ -2293,7 +2468,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     startDelayTimer = undefined;
                 }
                 if (letterLoopTimer) {
-                    window.clearInterval(letterLoopTimer);
+                    window.clearTimeout(letterLoopTimer);
                     letterLoopTimer = undefined;
                 }
             };
@@ -2339,7 +2514,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             };
 
-            const runAnimation = () => {
+            const runAnimationOnce = () => {
                 const { baseX, baseY, points } = computePositions();
 
                 if (!points.length) {
@@ -2405,15 +2580,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 currentAnimation = dot.animate(keyframes, {
                     duration: dotDuration,
-                    iterations: Infinity,
+                    iterations: 1,
                     fill: 'both'
                 });
 
                 scheduleLetterLifts();
                 if (letterLoopTimer) {
-                    window.clearInterval(letterLoopTimer);
+                    window.clearTimeout(letterLoopTimer);
                 }
-                letterLoopTimer = window.setInterval(scheduleLetterLifts, dotDuration);
+                letterLoopTimer = window.setTimeout(() => {
+                    clearLetterAnimations();
+                }, dotDuration);
+
+                currentAnimation.onfinish = () => {
+                    applyStaticDot();
+                    startDelayTimer = window.setTimeout(runAnimationOnce, idleDelayMs);
+                };
             };
 
             if (prefersReducedMotion) {
@@ -2422,23 +2604,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Show dot immediately in its final static position, no animation yet
+            // Show dot immediately in its final static position, then animate
             applyStaticDot();
-            // Remove any previous animation if present
             if (currentAnimation) {
                 currentAnimation.cancel();
                 currentAnimation = undefined;
             }
-            // Wait 25s, then start animation
             startDelayTimer = window.setTimeout(() => {
-                runAnimation();
+                runAnimationOnce();
             }, animationStartDelayMs);
 
             window.addEventListener('resize', () => {
                 window.clearTimeout(resizeTimer);
                 resizeTimer = window.setTimeout(() => {
                     if (currentAnimation) {
-                        runAnimation();
+                        runAnimationOnce();
                         return;
                     }
                     applyStaticDot();
@@ -2459,4 +2639,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initWishlistButtons();
     setHeaderCartCount();
     initDiscoverFilters();
+    initHeaderSearchSuggestions();
 });
