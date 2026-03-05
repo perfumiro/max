@@ -875,6 +875,46 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchInputs = Array.from(document.querySelectorAll('header input[type="text"]'));
         if (!searchInputs.length) return;
 
+        const path = window.location.pathname.replace(/\\/g, '/');
+        const onDiscoverPage = path.endsWith('/discover.html') || path.endsWith('/discover.html/');
+        const discoverPath = path.includes('/pages/') ? '../discover.html' : 'discover.html';
+
+        if (!onDiscoverPage) {
+            let hasRedirected = false;
+
+            const redirectToDiscover = (query) => {
+                if (hasRedirected) return;
+                hasRedirected = true;
+                const trimmed = String(query || '').trim();
+                const params = new URLSearchParams();
+                if (trimmed) {
+                    params.set('q', trimmed);
+                }
+                window.location.href = params.toString()
+                    ? `${discoverPath}?${params.toString()}`
+                    : discoverPath;
+            };
+
+            searchInputs.forEach((input) => {
+                input.addEventListener('focus', (event) => {
+                    redirectToDiscover(event.target.value || '');
+                });
+
+                input.addEventListener('input', (event) => {
+                    redirectToDiscover(event.target.value || '');
+                });
+
+                input.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        redirectToDiscover(event.target.value || '');
+                    }
+                });
+            });
+
+            return;
+        }
+
         const productCards = Array.from(document.querySelectorAll(
             '#productCarousel > .group, #newArrivalsCarousel > article, article.group, .js-product-link'
         ));
@@ -2022,7 +2062,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const allowedFilters = new Set(['all', 'new-in', 'best-sellers', 'for-men', 'for-women', 'unisex', 'niche', 'arabian', 'designer', 'discovery-sets', 'offers']);
-        const urlFilterRaw = new URLSearchParams(window.location.search).get('filter') || '';
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlFilterRaw = urlParams.get('filter') || '';
+        const urlQueryRaw = urlParams.get('q') || '';
         const urlFilter = urlFilterRaw.toLowerCase().trim();
         const initialFilter = allowedFilters.has(urlFilter) ? urlFilter : 'all';
 
@@ -2032,6 +2074,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setActiveButton(defaultButton);
         activeFilter = (defaultButton.dataset.discoverFilter || 'all').toLowerCase();
+        activeQuery = urlQueryRaw || '';
+        if (activeQuery) {
+            searchInputs.forEach((input) => {
+                input.value = activeQuery;
+            });
+        }
+        if (searchInputs.length) {
+            const targetInput = searchInputs[0];
+            targetInput.focus({ preventScroll: true });
+            const length = targetInput.value.length;
+            targetInput.setSelectionRange(length, length);
+        }
         applyFilter();
     };
 
