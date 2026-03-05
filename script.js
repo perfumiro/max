@@ -212,8 +212,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center justify-between h-20">
                         <div class="flex-shrink-0 flex items-center">
-                            <a href="${indexPath}" class="font-serif text-3xl font-bold tracking-widest text-white">
-                                IPORDISE<span class="text-brand-red">.</span>
+                            <a href="${indexPath}" class="font-serif text-3xl font-bold tracking-widest text-white brand-logo-animated" aria-label="IPORDISE">
+                                <span class="sr-only">IPORDISE</span>
+                                <span class="brand-logo-word" aria-hidden="true">
+                                    <span class="brand-logo-letter">I</span>
+                                    <span class="brand-logo-letter">P</span>
+                                    <span class="brand-logo-letter">O</span>
+                                    <span class="brand-logo-letter">R</span>
+                                    <span class="brand-logo-letter">D</span>
+                                    <span class="brand-logo-letter">I</span>
+                                    <span class="brand-logo-letter">S</span>
+                                    <span class="brand-logo-letter">E</span>
+                                </span>
+                                <span class="brand-logo-dot" aria-hidden="true"></span>
                             </a>
                         </div>
 
@@ -1890,6 +1901,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const initCartPage = () => {
+        if (window.__IPORDISE_DEDICATED_CART__) return;
+
         const isCartPage = window.location.pathname.replace(/\\/g, '/').endsWith('/pages/cart.html');
         if (!isCartPage) return;
 
@@ -1931,6 +1944,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const initCheckoutPage = () => {
+        if (window.__IPORDISE_DEDICATED_CHECKOUT__) return;
+
         const isCheckoutPage = window.location.pathname.replace(/\\/g, '/').endsWith('/pages/checkout.html');
         if (!isCheckoutPage) return;
 
@@ -2096,57 +2111,38 @@ document.addEventListener('DOMContentLoaded', () => {
         updateIndicator();
     };
 
-    const startAutoCarousel = (carouselId, step, delay) => {
+    const initCarousel = (carouselId) => {
         const carousel = document.getElementById(carouselId);
         if (!carousel) return;
 
-        let direction = 1;
+        bindDragScroll(carousel);
+
+        setupCarouselIndicator(carouselId);
+    };
+
+    const enableCarouselAutoplay = (carouselId, step = 160, delay = 2600) => {
+        const carousel = document.getElementById(carouselId);
+        if (!carousel) return;
+
         let paused = false;
-        let isAutoAnimating = false;
 
-        const animateScrollTo = (targetLeft, duration = 700) => {
-            if (isAutoAnimating) return;
+        const scrollNext = () => {
+            if (paused) return;
 
-            const from = carousel.scrollLeft;
             const maxScrollLeft = Math.max(0, carousel.scrollWidth - carousel.clientWidth);
-            const to = Math.max(0, Math.min(maxScrollLeft, targetLeft));
+            if (maxScrollLeft <= 0) return;
 
-            if (Math.abs(to - from) < 1) return;
+            const nextLeft = carousel.scrollLeft + step;
+            if (nextLeft >= maxScrollLeft - 8) {
+                carousel.scrollTo({ left: 0, behavior: 'smooth' });
+                return;
+            }
 
-            isAutoAnimating = true;
-            const start = performance.now();
-
-            const easeInOutCubic = (t) => {
-                if (t < 0.5) return 4 * t * t * t;
-                return 1 - Math.pow(-2 * t + 2, 3) / 2;
-            };
-
-            const frame = (now) => {
-                const elapsed = now - start;
-                const progress = Math.min(1, elapsed / duration);
-                const eased = easeInOutCubic(progress);
-                carousel.scrollLeft = from + (to - from) * eased;
-
-                if (progress < 1) {
-                    requestAnimationFrame(frame);
-                    return;
-                }
-
-                isAutoAnimating = false;
-            };
-
-            requestAnimationFrame(frame);
+            carousel.scrollTo({
+                left: nextLeft,
+                behavior: 'smooth'
+            });
         };
-
-        const pauseTemporarily = (duration = 2400) => {
-            paused = true;
-            window.clearTimeout(carousel.__resumeTimeout);
-            carousel.__resumeTimeout = window.setTimeout(() => {
-                paused = false;
-            }, duration);
-        };
-
-        bindDragScroll(carousel, () => pauseTemporarily(3200));
 
         carousel.addEventListener('mouseenter', () => {
             paused = true;
@@ -2156,29 +2152,23 @@ document.addEventListener('DOMContentLoaded', () => {
             paused = false;
         });
 
-        carousel.addEventListener('wheel', () => pauseTemporarily(), { passive: true });
+        carousel.addEventListener('touchstart', () => {
+            paused = true;
+        }, { passive: true });
 
-        setInterval(() => {
-            if (paused || isAutoAnimating) return;
+        carousel.addEventListener('touchend', () => {
+            window.setTimeout(() => {
+                paused = false;
+            }, 1200);
+        });
 
-            const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
-            if (maxScrollLeft <= 0) return;
-
-            if (carousel.scrollLeft >= maxScrollLeft - 8) {
-                direction = -1;
-            } else if (carousel.scrollLeft <= 8) {
-                direction = 1;
-            }
-
-            animateScrollTo(carousel.scrollLeft + (step * direction));
-        }, delay);
-
-        setupCarouselIndicator(carouselId);
+        window.setInterval(scrollNext, delay);
     };
 
-    startAutoCarousel('productCarousel', 240, 2300);
-    startAutoCarousel('brandCarousel', 220, 2200);
-    startAutoCarousel('newArrivalsCarousel', 240, 2400);
+    initCarousel('productCarousel');
+    initCarousel('brandCarousel');
+    initCarousel('newArrivalsCarousel');
+    enableCarouselAutoplay('brandCarousel', 180, 2400);
 
     const testimonialCarousel = document.getElementById('testimonialCarousel');
     const testimonialPrev = document.getElementById('testimonialPrev');
@@ -2207,24 +2197,231 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        setInterval(() => {
-            const maxScrollLeft = testimonialCarousel.scrollWidth - testimonialCarousel.clientWidth;
-            if (maxScrollLeft <= 0) return;
+    }
 
-            const nearEnd = testimonialCarousel.scrollLeft >= maxScrollLeft - 12;
-            if (nearEnd) {
-                testimonialCarousel.scrollTo({ left: 0, behavior: 'smooth' });
+    const initBrandLogoDotAnimation = () => {
+        const logos = document.querySelectorAll('.brand-logo-animated');
+        if (!logos.length) return;
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const dotDuration = 7600;
+        const holdOffset = 0.11;
+        const hopWindow = 0.67;
+
+        logos.forEach((logo) => {
+            if (logo.dataset.brandDotReady === 'true') return;
+
+            const word = logo.querySelector('.brand-logo-word');
+            const dot = logo.querySelector('.brand-logo-dot');
+            const letters = Array.from(logo.querySelectorAll('.brand-logo-letter'));
+
+            if (!word || !dot || letters.length !== 8) return;
+
+            logo.dataset.brandDotReady = 'true';
+
+            let currentAnimation;
+            let resizeTimer;
+            let letterLoopTimer;
+            let letterLiftTimeouts = [];
+            let activeLetterAnimations = [];
+
+            const computePositions = () => {
+                const logoRect = logo.getBoundingClientRect();
+                const wordRect = word.getBoundingClientRect();
+                const dotRect = dot.getBoundingClientRect();
+
+                const baseX = (wordRect.right - logoRect.left) + Math.max(2, dotRect.width * 0.18);
+                const baseY = (wordRect.bottom - logoRect.top) - dotRect.height * 0.92;
+
+                const points = letters.map((letter) => {
+                    const letterRect = letter.getBoundingClientRect();
+                    const jumpX = (letterRect.left + letterRect.width / 2) - logoRect.left - dotRect.width / 2;
+                    const jumpTopY = (letterRect.top - logoRect.top) - dotRect.height * 1.1;
+                    const settleY = jumpTopY + dotRect.height * 0.34;
+                    return {
+                        x: jumpX,
+                        topY: jumpTopY,
+                        settleY
+                    };
+                });
+
+                return {
+                    baseX,
+                    baseY,
+                    points
+                };
+            };
+
+            const applyStaticDot = () => {
+                const { baseX, baseY } = computePositions();
+                dot.style.transform = `translate3d(${baseX}px, ${baseY}px, 0)`;
+            };
+
+            const clearPendingLetterTimeouts = () => {
+                letterLiftTimeouts.forEach((timeoutId) => window.clearTimeout(timeoutId));
+                letterLiftTimeouts = [];
+            };
+
+            const clearLetterAnimations = () => {
+                activeLetterAnimations.forEach((animation) => {
+                    try {
+                        animation.cancel();
+                    } catch (_) {
+                        // No-op
+                    }
+                });
+                activeLetterAnimations = [];
+                letters.forEach((letter) => {
+                    letter.style.transform = 'translate3d(0, 0, 0)';
+                });
+            };
+
+            const clearLetterLoop = () => {
+                clearPendingLetterTimeouts();
+                clearLetterAnimations();
+                if (letterLoopTimer) {
+                    window.clearInterval(letterLoopTimer);
+                    letterLoopTimer = undefined;
+                }
+            };
+
+            const animateLetterLift = (letter) => {
+                const fontSize = parseFloat(window.getComputedStyle(letter).fontSize) || 28;
+                const liftPx = Math.min(10, Math.max(5, fontSize * 0.24));
+
+                const animation = letter.animate([
+                    { transform: 'translate3d(0, 0, 0)', offset: 0 },
+                    { transform: `translate3d(0, -${liftPx}px, 0)`, offset: 0.38 },
+                    { transform: 'translate3d(0, 0, 0)', offset: 1 }
+                ], {
+                    duration: 520,
+                    easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                    fill: 'none'
+                });
+
+                activeLetterAnimations.push(animation);
+                animation.onfinish = () => {
+                    activeLetterAnimations = activeLetterAnimations.filter((entry) => entry !== animation);
+                };
+                animation.oncancel = () => {
+                    activeLetterAnimations = activeLetterAnimations.filter((entry) => entry !== animation);
+                };
+            };
+
+            const scheduleLetterLifts = () => {
+                clearPendingLetterTimeouts();
+                clearLetterAnimations();
+
+                const segment = hopWindow / letters.length;
+
+                letters.forEach((letter, index) => {
+                    const touchOffset = holdOffset + segment * index + segment * 0.42;
+                    const delay = Math.round(dotDuration * touchOffset);
+
+                    const timeoutId = window.setTimeout(() => {
+                        animateLetterLift(letter);
+                    }, delay);
+
+                    letterLiftTimeouts.push(timeoutId);
+                });
+            };
+
+            const runAnimation = () => {
+                const { baseX, baseY, points } = computePositions();
+
+                if (!points.length) {
+                    dot.style.transform = `translate3d(${baseX}px, ${baseY}px, 0)`;
+                    return;
+                }
+
+                if (currentAnimation) {
+                    currentAnimation.cancel();
+                }
+
+                const keyframes = [
+                    {
+                        offset: 0,
+                        transform: `translate3d(${baseX}px, ${baseY}px, 0)`,
+                        easing: 'cubic-bezier(0.22, 1, 0.36, 1)'
+                    },
+                    {
+                        offset: 0.11,
+                        transform: `translate3d(${baseX}px, ${baseY}px, 0)`,
+                        easing: 'cubic-bezier(0.22, 1, 0.36, 1)'
+                    }
+                ];
+
+                const segment = hopWindow / points.length;
+
+                points.forEach((point, index) => {
+                    const segmentStart = 0.11 + segment * index;
+                    const apexOffset = segmentStart + segment * 0.4;
+                    const settleOffset = segmentStart + segment * 0.8;
+
+                    keyframes.push({
+                        offset: apexOffset,
+                        transform: `translate3d(${point.x}px, ${point.topY}px, 0)`,
+                        easing: 'cubic-bezier(0.22, 1, 0.36, 1)'
+                    });
+
+                    keyframes.push({
+                        offset: settleOffset,
+                        transform: `translate3d(${point.x}px, ${point.settleY}px, 0)`,
+                        easing: 'cubic-bezier(0.33, 1, 0.68, 1)'
+                    });
+                });
+
+                const lastPoint = points[points.length - 1];
+
+                keyframes.push(
+                    {
+                        offset: 0.84,
+                        transform: `translate3d(${lastPoint.x}px, ${lastPoint.settleY}px, 0)`,
+                        easing: 'cubic-bezier(0.2, 0.9, 0.2, 1)'
+                    },
+                    {
+                        offset: 0.93,
+                        transform: `translate3d(${baseX}px, ${Math.max(baseY - 2, 0)}px, 0)`,
+                        easing: 'cubic-bezier(0.33, 1, 0.68, 1)'
+                    },
+                    {
+                        offset: 1,
+                        transform: `translate3d(${baseX}px, ${baseY}px, 0)`
+                    }
+                );
+
+                currentAnimation = dot.animate(keyframes, {
+                    duration: dotDuration,
+                    iterations: Infinity,
+                    fill: 'both'
+                });
+
+                scheduleLetterLifts();
+                if (letterLoopTimer) {
+                    window.clearInterval(letterLoopTimer);
+                }
+                letterLoopTimer = window.setInterval(scheduleLetterLifts, dotDuration);
+            };
+
+            if (prefersReducedMotion) {
+                clearLetterLoop();
+                applyStaticDot();
                 return;
             }
 
-            testimonialCarousel.scrollBy({
-                left: getStep(),
-                behavior: 'smooth'
-            });
-        }, 4200);
-    }
+            runAnimation();
+
+            window.addEventListener('resize', () => {
+                window.clearTimeout(resizeTimer);
+                resizeTimer = window.setTimeout(() => {
+                    runAnimation();
+                }, 150);
+            }, { passive: true });
+        });
+    };
 
     applyOfficialHeaderFooter();
+    initBrandLogoDotAnimation();
     normalizeLegacyFrenchContent();
     initLanguageSwitcher();
     bindProductLinks();
