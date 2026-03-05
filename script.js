@@ -976,7 +976,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const extractSizeBadges = (priceText) => {
         const parts = String(priceText || '')
-            .split(/Â·|·|\||,/)
+            .split(/\s-\s|·|\||,/)
             .map((part) => part.trim())
             .filter(Boolean);
 

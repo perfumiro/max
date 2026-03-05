@@ -1227,7 +1227,7 @@ button.product-favorite-btn.is-active i {
 #productCarousel,
 #newArrivalsCarousel,
 #brandCarousel {
-    touch-action: pan-y;
+    touch-action: pan-x;
     scroll-padding-inline: 0.75rem;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
@@ -1235,9 +1235,18 @@ button.product-favorite-btn.is-active i {
 
 #productCarousel > .group,
 #newArrivalsCarousel > article {
+    scroll-snap-stop: always;
     flex: 0 0 82vw !important;
     min-width: 82vw !important;
     max-width: 82vw !important;
+}
+
+@media (max-width: 639px) {
+    #productCarousel,
+    #newArrivalsCarousel,
+    #brandCarousel {
+        scroll-snap-type: x proximity;
+    }
 }
 
 @media (min-width: 640px) {
