@@ -1229,6 +1229,8 @@ button.product-favorite-btn.is-active i {
 #brandCarousel {
     touch-action: pan-y;
     scroll-padding-inline: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
 }
 
 #productCarousel > .group,

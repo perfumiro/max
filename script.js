@@ -1988,8 +1988,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let startScrollLeft = 0;
         let movedDuringDrag = false;
         let activeTouchId = null;
+        const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
-        carousel.style.cursor = 'grab';
+        carousel.style.cursor = isCoarsePointer ? 'auto' : 'grab';
 
         const getTouchById = (touchList, touchId) => {
             for (let index = 0; index < touchList.length; index += 1) {
@@ -2030,40 +2031,46 @@ document.addEventListener('DOMContentLoaded', () => {
             updateDragging(event.clientX);
         });
 
-        carousel.addEventListener('touchstart', (event) => {
-            const firstTouch = event.changedTouches[0];
-            if (!firstTouch) return;
-            startDragging(firstTouch.clientX, firstTouch.identifier);
-        }, { passive: true });
+        if (!isCoarsePointer) {
+            carousel.addEventListener('touchstart', (event) => {
+                const firstTouch = event.changedTouches[0];
+                if (!firstTouch) return;
+                startDragging(firstTouch.clientX, firstTouch.identifier);
+            }, { passive: true });
 
-        carousel.addEventListener('touchmove', (event) => {
-            if (!isDragging || activeTouchId === null) return;
-            const activeTouch = getTouchById(event.touches, activeTouchId);
-            if (!activeTouch) return;
+            carousel.addEventListener('touchmove', (event) => {
+                if (!isDragging || activeTouchId === null) return;
+                const activeTouch = getTouchById(event.touches, activeTouchId);
+                if (!activeTouch) return;
 
-            updateDragging(activeTouch.clientX);
+                updateDragging(activeTouch.clientX);
 
-            if (movedDuringDrag) {
-                event.preventDefault();
-            }
-        }, { passive: false });
+                if (movedDuringDrag) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
 
-        carousel.addEventListener('touchend', (event) => {
-            if (activeTouchId === null) return;
-            const endedTouch = getTouchById(event.changedTouches, activeTouchId);
-            if (!endedTouch) return;
-            stopDragging();
-        });
+            carousel.addEventListener('touchend', (event) => {
+                if (activeTouchId === null) return;
+                const endedTouch = getTouchById(event.changedTouches, activeTouchId);
+                if (!endedTouch) return;
+                stopDragging();
+            });
 
-        carousel.addEventListener('touchcancel', () => {
-            stopDragging();
-        });
+            carousel.addEventListener('touchcancel', () => {
+                stopDragging();
+            });
+        } else {
+            carousel.addEventListener('touchstart', () => {
+                onInteract?.();
+            }, { passive: true });
+        }
 
         const stopDragging = () => {
             if (!isDragging) return;
             isDragging = false;
             activeTouchId = null;
-            carousel.style.cursor = 'grab';
+            carousel.style.cursor = isCoarsePointer ? 'auto' : 'grab';
             carousel.classList.remove('is-dragging-carousel');
         };
 
@@ -2204,6 +2211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!logos.length) return;
 
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const animationStartDelayMs = 25000;
         const dotDuration = 7600;
         const holdOffset = 0.11;
         const hopWindow = 0.67;
@@ -2222,6 +2230,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let currentAnimation;
             let resizeTimer;
             let letterLoopTimer;
+            let startDelayTimer;
             let letterLiftTimeouts = [];
             let activeLetterAnimations = [];
 
@@ -2279,6 +2288,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const clearLetterLoop = () => {
                 clearPendingLetterTimeouts();
                 clearLetterAnimations();
+                if (startDelayTimer) {
+                    window.clearTimeout(startDelayTimer);
+                    startDelayTimer = undefined;
+                }
                 if (letterLoopTimer) {
                     window.clearInterval(letterLoopTimer);
                     letterLoopTimer = undefined;
@@ -2409,12 +2422,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            runAnimation();
+            // Show dot immediately in its final static position, no animation yet
+            applyStaticDot();
+            // Remove any previous animation if present
+            if (currentAnimation) {
+                currentAnimation.cancel();
+                currentAnimation = undefined;
+            }
+            // Wait 25s, then start animation
+            startDelayTimer = window.setTimeout(() => {
+                runAnimation();
+            }, animationStartDelayMs);
 
             window.addEventListener('resize', () => {
                 window.clearTimeout(resizeTimer);
                 resizeTimer = window.setTimeout(() => {
-                    runAnimation();
+                    if (currentAnimation) {
+                        runAnimation();
+                        return;
+                    }
+                    applyStaticDot();
                 }, 150);
             }, { passive: true });
         });
