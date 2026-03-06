@@ -1406,11 +1406,22 @@ button.product-favorite-btn.is-active i {
 
 #productCarousel,
 #newArrivalsCarousel,
-#brandCarousel {
-    touch-action: pan-x;
+#brandCarousel,
+.related-track {
+    /* Keep vertical page scrolling responsive while touching horizontal carousels on mobile. */
+    touch-action: pan-y pinch-zoom;
     scroll-padding-inline: 0.75rem;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    #productCarousel,
+    #newArrivalsCarousel,
+    #brandCarousel,
+    .related-track {
+        touch-action: pan-x;
+    }
 }
 
 .carousel-section {

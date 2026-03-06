@@ -3088,24 +3088,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let dragStartX = 0;
         let startScrollLeft = 0;
         let movedDuringDrag = false;
-        let activeTouchId = null;
         const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
         carousel.style.cursor = isCoarsePointer ? 'auto' : 'grab';
 
-        const getTouchById = (touchList, touchId) => {
-            for (let index = 0; index < touchList.length; index += 1) {
-                if (touchList[index].identifier === touchId) {
-                    return touchList[index];
-                }
-            }
-            return null;
-        };
-
-        const startDragging = (clientX, touchId = null) => {
+        const startDragging = (clientX) => {
             isDragging = true;
             movedDuringDrag = false;
-            activeTouchId = touchId;
             dragStartX = clientX;
             startScrollLeft = carousel.scrollLeft;
             carousel.style.cursor = 'grabbing';
@@ -3132,45 +3121,13 @@ document.addEventListener('DOMContentLoaded', () => {
             updateDragging(event.clientX);
         });
 
-        if (!isCoarsePointer) {
-            carousel.addEventListener('touchstart', (event) => {
-                const firstTouch = event.changedTouches[0];
-                if (!firstTouch) return;
-                startDragging(firstTouch.clientX, firstTouch.identifier);
-            }, { passive: true });
-
-            carousel.addEventListener('touchmove', (event) => {
-                if (!isDragging || activeTouchId === null) return;
-                const activeTouch = getTouchById(event.touches, activeTouchId);
-                if (!activeTouch) return;
-
-                updateDragging(activeTouch.clientX);
-
-                if (movedDuringDrag) {
-                    event.preventDefault();
-                }
-            }, { passive: false });
-
-            carousel.addEventListener('touchend', (event) => {
-                if (activeTouchId === null) return;
-                const endedTouch = getTouchById(event.changedTouches, activeTouchId);
-                if (!endedTouch) return;
-                stopDragging();
-            });
-
-            carousel.addEventListener('touchcancel', () => {
-                stopDragging();
-            });
-        } else {
-            carousel.addEventListener('touchstart', () => {
-                onInteract?.();
-            }, { passive: true });
-        }
+        carousel.addEventListener('touchstart', () => {
+            onInteract?.();
+        }, { passive: true });
 
         const stopDragging = () => {
             if (!isDragging) return;
             isDragging = false;
-            activeTouchId = null;
             carousel.style.cursor = isCoarsePointer ? 'auto' : 'grab';
             carousel.classList.remove('is-dragging-carousel');
         };
