@@ -1,3 +1,4 @@
+
 tailwind.config = {
     theme: {
         extend: {
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         en: {
             lang_label: 'EN',
             announcement_html: 'Delivery fee: 35 MAD in all Morocco cities. <a href="#" class="underline hover:text-gray-200">SHOP NOW!</a>',
-            search_placeholder: 'Search for perfumes, brands, makeup...',
+            search_placeholder: 'Search for perfumes, brands...',
             promo_btn: 'NEW COLLECTION',
             promo_note: '',
             nav_labels: ['BRANDS', 'PERFUMES', 'MAKEUP', 'SKINCARE', 'HAIR', 'PHARMACY', 'HYGIENE', 'MEN', 'SETS', 'SUN CARE', 'BODY', 'SEE MORE'],
@@ -47,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fr: {
             lang_label: 'FR',
             announcement_html: 'Frais de livraison : 35 MAD dans toutes les villes du Maroc. <a href="#" class="underline hover:text-gray-200">J\'EN PROFITE !</a>',
-            search_placeholder: 'Rechercher un parfum, une marque, du maquillage...',
+            search_placeholder: 'Rechercher un parfum, une marque...',
             promo_btn: 'NEW COLLECTION',
             promo_note: '',
             nav_labels: ['MARQUES', 'PARFUMS', 'MAQUILLAGE', 'SOIN VISAGE', 'CHEVEUX', 'PARAPHARMACIE', 'HYGIÈNE', 'HOMME', 'COFFRETS', 'SOLAIRE', 'CORPS', 'VOIR PLUS'],
@@ -196,7 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const path = window.location.pathname.replace(/\\/g, '/');
         const inPagesFolder = path.includes('/pages/');
         const rootPrefix = inPagesFolder ? '../' : '';
-        const showMobileSearch = path.endsWith('/discover.html') || path.endsWith('/discover.html/');
 
         const indexPath = `${rootPrefix}index.html`;
         const discoverPath = `${rootPrefix}discover.html`;
@@ -208,18 +208,16 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        const mobileSearchHtml = showMobileSearch
-            ? `
-                <div class="md:hidden px-4 sm:px-6 lg:px-8 pb-4">
-                    <div class="relative">
-                        <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, brands, makeup..." data-discover-search>
-                        <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red" aria-label="Search">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
+        const mobileSearchHtml = `
+            <div class="header-mobile-search md:hidden px-4 sm:px-6 lg:px-8 pb-4" aria-hidden="true">
+                <div class="relative">
+                    <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, brands..." data-discover-search>
+                    <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
-            `
-            : '';
+            </div>
+        `;
 
         const headerHtml = `
             <header class="bg-brand-dark text-white sticky top-0 z-50">
@@ -244,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         <div class="flex-1 max-w-2xl mx-8 relative hidden md:block">
                             <div class="relative">
-                                <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, houses, notes..." data-discover-search>
+                                <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, brands..." data-discover-search>
                                 <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -259,6 +257,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="flex items-center gap-2 md:gap-3 text-lg">
                                 <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
                                     <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                                </button>
+                                <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
+                                    <i class="fas fa-search"></i>
                                 </button>
                                 <a href="${pagePath('login')}" class="header-icon-btn hover:text-brand-red transition" aria-label="Compte"><i class="far fa-user"></i></a>
                                 <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
@@ -444,6 +445,74 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const initHeroOfferRotator = () => {
+        const card = document.querySelector('[data-hero-rotate]');
+        if (!card) return;
+
+        const titleEl = card.querySelector('[data-hero-title]');
+        const subEl = card.querySelector('[data-hero-sub]');
+        if (!titleEl || !subEl) return;
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const messages = [
+            {
+                title: 'TOP PICKS',
+                subtitle: 'Signature scents for day,<br>night & special moments.',
+                tints: ['rgba(12, 20, 44, 0.76)', 'rgba(18, 32, 72, 0.42)']
+            },
+            {
+                title: 'NEW ARRIVALS',
+                subtitle: 'Fresh launches curated for<br>elevated daily rituals.',
+                tints: ['rgba(20, 24, 44, 0.78)', 'rgba(38, 52, 86, 0.42)']
+            },
+            {
+                title: 'BEST SELLERS',
+                subtitle: 'The most loved perfumes,<br>chosen by our community.',
+                tints: ['rgba(16, 22, 38, 0.78)', 'rgba(28, 42, 74, 0.44)']
+            },
+            {
+                title: 'NIGHT VIBES',
+                subtitle: 'Bold, magnetic trails<br>for evenings out.',
+                tints: ['rgba(18, 16, 40, 0.78)', 'rgba(36, 28, 70, 0.44)']
+            },
+            {
+                title: 'SIGNATURE SCENTS',
+                subtitle: 'Timeless perfumes to define<br>your presence.',
+                tints: ['rgba(14, 22, 40, 0.78)', 'rgba(30, 44, 76, 0.44)']
+            }
+        ];
+
+        let index = 0;
+        const intervalMs = 3800;
+        const transitionMs = 600;
+
+        const applyMessage = (message, animate = true) => {
+            card.style.setProperty('--hero-tint-1', message.tints[0]);
+            card.style.setProperty('--hero-tint-2', message.tints[1]);
+            if (!animate) {
+                titleEl.textContent = message.title;
+                subEl.innerHTML = message.subtitle;
+                return;
+            }
+
+            card.classList.add('is-updating');
+            window.setTimeout(() => {
+                titleEl.textContent = message.title;
+                subEl.innerHTML = message.subtitle;
+                card.classList.remove('is-updating');
+            }, Math.round(transitionMs * 0.6));
+        };
+
+        applyMessage(messages[index], false);
+
+        if (prefersReducedMotion) return;
+
+        window.setInterval(() => {
+            index = (index + 1) % messages.length;
+            applyMessage(messages[index]);
+        }, intervalMs);
+    };
+
     const normalizeImagePathForCurrentPage = (imageSrc) => {
         if (!imageSrc) return '';
         if (/^(https?:)?\/\//.test(imageSrc) || imageSrc.startsWith('data:') || imageSrc.startsWith('/')) {
@@ -474,6 +543,336 @@ document.addEventListener('DOMContentLoaded', () => {
         .trim();
 
     const productDetailOverrides = {
+        'azzaro the most wanted parfum': {
+            brand: 'AZZARO',
+            gender: 'men',
+            subtitle: "Men's fragrance · Spicy Amber · A bold signature with red ginger, woods, and bourbon vanilla.",
+            longDescription: 'Azzaro The Most Wanted Parfum is an intense, magnetic scent built for confident evenings. It opens with a burst of red ginger, settles into warm woods, and finishes with a rich bourbon vanilla trail that feels smooth and addictive. Crafted for modern allure, it leaves a strong, long-lasting impression without overpowering the room.',
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'RED GINGER',
+                    text: 'A vibrant opening that adds energy and an inviting spicy edge.'
+                },
+                {
+                    title: 'WOODY HEART',
+                    text: 'Warm woods create depth and a confident, masculine signature.'
+                },
+                {
+                    title: 'BOURBON VANILLA',
+                    text: 'A smooth, addictive base that lingers with refined sweetness.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/3.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/4.webp'
+            ]
+        },
+        'azzaro the most wanted eau de parfum intense': {
+            brand: 'AZZARO',
+            gender: 'men',
+            subtitle: "Men's fragrance · Spicy Woody · A powerful signature with cardamom, caramel, and amber woods.",
+            longDescription: 'Azzaro The Most Wanted Eau de Parfum Intense delivers a bold, addictive trail built around warm spices and deep woods. The opening is energetic and bright, the heart is rich and confident, and the dry-down is smooth and long-lasting for evening wear.',
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'CARDAMOM',
+                    text: 'A warm and spicy opening that feels vibrant and confident.'
+                },
+                {
+                    title: 'CARAMEL ACCORD',
+                    text: 'A sweet, addictive heart that adds depth and richness.'
+                },
+                {
+                    title: 'AMBER WOODS',
+                    text: 'A smooth woody base that gives long-lasting presence.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/3.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/4.webp'
+            ]
+        },
+        'azzaro forever wanted elixir eau de parfum': {
+            brand: 'AZZARO',
+            gender: 'men',
+            subtitle: "Men's fragrance · Amber Gourmand · A rich, smooth elixir with warm woods and vanilla.",
+            longDescription: 'Azzaro Forever Wanted Elixir is a deep, luxurious scent designed for night. It opens with a refined freshness, settles into rich amber warmth, and finishes with a smooth vanilla trail that stays on skin for hours.',
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'FRESH OPENING',
+                    text: 'A bright start that feels clean and inviting.'
+                },
+                {
+                    title: 'AMBER HEART',
+                    text: 'A warm, resinous core that adds richness.'
+                },
+                {
+                    title: 'VANILLA WOODS',
+                    text: 'A smooth, addictive base for a lasting trail.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/4.jpg'
+            ]
+        },
+        'valentino donna born in roma eau de parfum': {
+            brand: 'VALENTINO',
+            gender: 'women',
+            subtitle: "Women's fragrance · Floral Woody · A luminous blend of jasmine, blackcurrant, and warm woods.",
+            longDescription: 'Valentino Donna Born in Roma is a modern floral with a bright, elegant opening and a smooth, woody base. It feels refined yet bold, perfect for day-to-night wear.',
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'BLACKCURRANT',
+                    text: 'A juicy, vibrant opening with a modern edge.'
+                },
+                {
+                    title: 'JASMINE',
+                    text: 'A rich floral heart that feels elegant and radiant.'
+                },
+                {
+                    title: 'WOODY VANILLA',
+                    text: 'A warm, smooth base that lingers softly on skin.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/3.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/4.webp'
+            ]
+        },
+        'valentino uomo born in roma coral fantasy eau de toilette': {
+            brand: 'VALENTINO',
+            gender: 'men',
+            subtitle: "Men's fragrance · Fruity Woody · A fresh and vibrant blend with apple, sage, and tobacco.",
+            longDescription: 'Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette is a bright, modern scent that balances juicy fruit with aromatic woods. It feels fresh, energetic, and easy to wear.',
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'RED APPLE',
+                    text: 'A crisp, juicy opening that feels vibrant and fresh.'
+                },
+                {
+                    title: 'SAGE',
+                    text: 'An aromatic heart that adds clean, herbal texture.'
+                },
+                {
+                    title: 'TOBACCO',
+                    text: 'A smooth, warm base that adds depth and character.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/3.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/4.webp'
+            ]
+        },
+        'valentino born in roma extradose eau de toilette': {
+            brand: 'VALENTINO',
+            gender: 'men',
+            subtitle: "Men's fragrance · Woody Aromatic · A bold, modern scent with fresh spice and woods.",
+            longDescription: 'Valentino Born in Roma Extradose Eau de Toilette is a clean and confident signature with a fresh opening, aromatic heart, and a smooth woody base for everyday wear.',
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'FRESH SPICE',
+                    text: 'A lively opening with a clean, modern edge.'
+                },
+                {
+                    title: 'AROMATIC HEART',
+                    text: 'A refined aromatic core that feels crisp and masculine.'
+                },
+                {
+                    title: 'WOODY BASE',
+                    text: 'A smooth, long-lasting wood finish.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/4.jpg'
+            ]
+        },
+        'dior homme intense eau de parfum': {
+            brand: 'DIOR',
+            gender: 'men',
+            subtitle: "Men's fragrance · Iris Woody · A refined, elegant scent with iris, amber, and cedar.",
+            longDescription: 'Dior Homme Intense is a smooth, elegant fragrance built around soft iris and warm amber woods. It feels refined and confident, perfect for evening wear and cooler seasons.',
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'IRIS',
+                    text: 'A soft, powdery signature that feels luxurious.'
+                },
+                {
+                    title: 'AMBER',
+                    text: 'A warm core that adds depth and richness.'
+                },
+                {
+                    title: 'CEDAR',
+                    text: 'A clean woody base that gives structure and longevity.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/3.avif',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/4.avif'
+            ]
+        },
+        'valentino born in roma uomo intense eau de parfum': {
+            brand: 'VALENTINO',
+            gender: 'men',
+            subtitle: "Men's fragrance · Amber Woody · A deep, intense blend with vanilla and smoky woods.",
+            longDescription: 'Valentino Born in Roma Uomo Intense Eau de Parfum offers a rich, warm signature with smooth vanilla and dark woods. It is bold yet elegant, ideal for evening wear.',
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'VANILLA',
+                    text: 'A rich opening that feels smooth and addictive.'
+                },
+                {
+                    title: 'LAVENDER',
+                    text: 'A refined aromatic heart for balance.'
+                },
+                {
+                    title: 'SMOKY WOODS',
+                    text: 'A deep base that leaves a lasting trail.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/3.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/4.webp'
+            ]
+        },
+        'valentino born in roma donna intense eau de parfum': {
+            brand: 'VALENTINO',
+            gender: 'women',
+            subtitle: "Women's fragrance · Amber Floral · A sensual blend of jasmine and vanilla with warm woods.",
+            longDescription: 'Valentino Born in Roma Donna Intense is a richer, deeper take on the original with luminous florals and a warm vanilla base. It is elegant, confident, and long-lasting.',
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'JASMINE',
+                    text: 'A radiant floral heart with refined elegance.'
+                },
+                {
+                    title: 'VANILLA',
+                    text: 'A warm, smooth signature that feels sensual.'
+                },
+                {
+                    title: 'WOODY BASE',
+                    text: 'Soft woods that add depth and longevity.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/3.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/4.webp'
+            ]
+        },
+        'valentino uomo born in roma eau de toilette': {
+            brand: 'VALENTINO',
+            gender: 'men',
+            subtitle: "Men's fragrance · Woody Aromatic · A clean and vibrant blend of citrus, sage, and woods.",
+            longDescription: 'Valentino Uomo Born in Roma Eau de Toilette is a fresh and modern signature with crisp citrus, aromatic herbs, and a smooth woody base. Ideal for everyday wear.',
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'CITRUS',
+                    text: 'A bright opening that feels fresh and modern.'
+                },
+                {
+                    title: 'SAGE',
+                    text: 'An aromatic heart that adds clean texture.'
+                },
+                {
+                    title: 'WOODS',
+                    text: 'A smooth base that lasts comfortably on skin.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/4.jpg'
+            ]
+        },
         'emporio armani stronger with you intensely edp': {
             brand: 'GIORGIO ARMANI',
             subtitle: 'Men\'s fragrance · Oriental Fougère · A bold, addictive signature with pink pepper, vanilla, and ambery woods.',
@@ -881,25 +1280,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!onDiscoverPage) {
             let hasRedirected = false;
-
             const redirectToDiscover = (query) => {
                 if (hasRedirected) return;
-                hasRedirected = true;
                 const trimmed = String(query || '').trim();
+                if (!trimmed) return;
+                hasRedirected = true;
                 const params = new URLSearchParams();
-                if (trimmed) {
-                    params.set('q', trimmed);
-                }
-                window.location.href = params.toString()
-                    ? `${discoverPath}?${params.toString()}`
-                    : discoverPath;
+                params.set('q', trimmed);
+                window.location.href = `${discoverPath}?${params.toString()}`;
             };
 
             searchInputs.forEach((input) => {
-                input.addEventListener('focus', (event) => {
-                    redirectToDiscover(event.target.value || '');
-                });
-
                 input.addEventListener('input', (event) => {
                     redirectToDiscover(event.target.value || '');
                 });
@@ -910,6 +1301,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         redirectToDiscover(event.target.value || '');
                     }
                 });
+
+                const wrapper = input.closest('.relative') || input.parentElement;
+                const button = wrapper ? wrapper.querySelector('button') : null;
+                if (button) {
+                    button.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        redirectToDiscover(input.value || '');
+                    });
+                }
             });
 
             return;
@@ -1051,6 +1451,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const navigateToProduct = () => {
+                try {
+                    sessionStorage.setItem('lastCatalogUrl', window.location.href);
+                } catch (error) {
+                    // Ignore storage errors (private mode or blocked storage).
+                }
+
+                if (window.location.pathname.replace(/\\/g, '/').endsWith('/discover.html')) {
+                    try {
+                        const rawState = sessionStorage.getItem('ipordise-discover-state');
+                        const prevState = rawState ? JSON.parse(rawState) : {};
+                        sessionStorage.setItem('ipordise-discover-state', JSON.stringify({
+                            ...prevState,
+                            path: window.location.pathname,
+                            scrollY: window.scrollY
+                        }));
+                    } catch (error) {
+                        // Ignore storage errors (private mode or blocked storage).
+                    }
+                }
+
                 const data = extractProductDataFromCard(card);
                 const query = new URLSearchParams({
                     name: data.name,
@@ -1094,57 +1514,152 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'Emporio Armani Stronger With You Intensely EDP',
             brand: 'GIORGIO ARMANI',
             price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/2.webp'
         },
         {
             name: 'Armani Stronger With You Powerfully Eau de Parfum',
             brand: 'GIORGIO ARMANI',
             price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Armani Stronger With You Absolutely Perfume',
             brand: 'GIORGIO ARMANI',
             price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/first.webp'
         },
         {
             name: 'Yves Saint Laurent Y Eau de Parfum',
             brand: 'YVES SAINT LAURENT',
             price: '60ML 650DH · 100ML 850DH',
+            gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Y%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Yves Saint Laurent Myslf Eau de Parfum',
             brand: 'YVES SAINT LAURENT',
             price: '60ML 650DH · 100ML 850DH',
+            gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Myslf%20Eau%20de%20Parfum/1.jpg'
         },
         {
             name: 'Yves Saint Laurent MYSLF Le Parfum',
             brand: 'YVES SAINT LAURENT',
             price: '60ML 650DH · 100ML 850DH',
+            gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/1.webp'
         },
         {
             name: 'Jean Paul Gaultier Le male Elixir Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '75ML 990DH · 125ML 1350DH',
+            gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp'
         },
         {
             name: 'Jean Paul Gaultier Le male Le parfum Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '75ML 950DH · 125ML 1290DH',
+            gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Jean Paul Gaultier Le Beau Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '75ML 980DH · 125ML 1320DH',
+            gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp'
+        },
+        {
+            name: 'Azzaro The Most Wanted Eau de Parfum Intense',
+            brand: 'AZZARO',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/1.webp'
+        },
+        {
+            name: 'Azzaro Forever Wanted Elixir Eau de Parfum',
+            brand: 'AZZARO',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg'
+        },
+        {
+            name: 'Azzaro The Most Wanted Parfum',
+            brand: 'AZZARO',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/1.webp'
+        },
+        {
+            name: 'Valentino Donna Born in Roma Eau de Parfum',
+            brand: 'VALENTINO',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'women',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/1.webp'
+        },
+        {
+            name: 'Valentino Uomo Born In Roma Coral Fantasy Eau de Toilette',
+            brand: 'VALENTINO',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/1.webp'
+        },
+        {
+            name: 'Valentino Born in Roma Extradose Eau de Toilette',
+            brand: 'VALENTINO',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/1.jpg'
+        },
+        {
+            name: 'Dior Homme Intense Eau de Parfum',
+            brand: 'DIOR',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/1.jpg'
+        },
+        {
+            name: 'Valentino Born In Roma Uomo Intense Eau de Parfum',
+            brand: 'VALENTINO',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/1.webp'
+        },
+        {
+            name: 'Valentino Born In Roma Donna Intense Eau de Parfum',
+            brand: 'VALENTINO',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'women',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/1.webp'
+        },
+        {
+            name: 'Valentino Uomo Born in Roma Eau de Toilette',
+            brand: 'VALENTINO',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/1.jpg'
         }
     ];
+
+    const getGenderFromText = (text) => {
+        const normalized = String(text || '').toLowerCase();
+        if (!normalized) return '';
+        if (normalized.includes("men's") || normalized.includes('mens') || normalized.includes('homme')) return 'men';
+        if (normalized.includes("women's") || normalized.includes('womens') || normalized.includes('femme')) return 'women';
+        if (normalized.includes('unisex')) return 'unisex';
+        return '';
+    };
+
+    const getProductGenderKey = (productName, productOverride, subtitleText) => {
+        if (productOverride?.gender) return productOverride.gender;
+        const subtitleGender = getGenderFromText(productOverride?.subtitle || subtitleText);
+        if (subtitleGender) return subtitleGender;
+        return getGenderFromText(productName);
+    };
 
     const getProductFamilyKey = (name) => {
         const normalizedName = canonicalProductName(name);
@@ -1153,6 +1668,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (normalizedName.includes('stronger with you')) return 'armani-stronger-with-you';
         if (normalizedName.includes('myslf')) return 'ysl-myslf';
         if (normalizedName.startsWith('yves saint laurent y ')) return 'ysl-y';
+        if (normalizedName.includes('most wanted')) return 'azzaro-most-wanted';
+        if (normalizedName.includes('forever wanted')) return 'azzaro-wanted';
+        if (normalizedName.includes('wanted')) return 'azzaro-wanted';
+        if (normalizedName.includes('born in roma') || normalizedName.includes('born in rome')) return 'valentino-born-in-roma';
+        if (normalizedName.includes('dior homme')) return 'dior-homme';
         if (normalizedName.includes('le male')) return 'jpg-le-male';
         if (normalizedName.includes('le beau')) return 'jpg-le-beau';
         return '';
@@ -1174,22 +1694,29 @@ document.addEventListener('DOMContentLoaded', () => {
         return sizeLabels.length ? sizeLabels.slice(0, 2) : ['ONE SIZE'];
     };
 
-    const renderRelatedProducts = (currentProductName, currentProductBrand) => {
+    const renderRelatedProducts = (currentProductName, currentProductBrand, currentGender) => {
         const relatedTrack = document.querySelector('.related-track');
         if (!relatedTrack) return;
 
         const currentCanonicalName = canonicalProductName(currentProductName);
         const currentFamily = getProductFamilyKey(currentProductName);
         const currentCanonicalBrand = canonicalProductName(currentProductBrand);
+        const normalizedGender = String(currentGender || '').toLowerCase();
+
+        const matchesGender = (product) => (
+            !normalizedGender || product.gender === normalizedGender
+        );
 
         const familyMatches = relatedProductCatalog.filter((product) => (
             canonicalProductName(product.name) !== currentCanonicalName
             && getProductFamilyKey(product.name) === currentFamily
+            && matchesGender(product)
         ));
 
         const fallbackBrandMatches = relatedProductCatalog.filter((product) => (
             canonicalProductName(product.name) !== currentCanonicalName
             && canonicalProductName(product.brand) === currentCanonicalBrand
+            && matchesGender(product)
         ));
 
         const merged = [...familyMatches];
@@ -1351,13 +1878,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         assignReviewerNames(productName, productOverride);
 
-        renderRelatedProducts(productName, resolvedBrand);
+        const lastCatalogUrl = (() => {
+            try {
+                return sessionStorage.getItem('lastCatalogUrl') || '';
+            } catch (error) {
+                return '';
+            }
+        })();
+
+        if (lastCatalogUrl) {
+            document.querySelectorAll('main a[href*="discover.html"]').forEach((link) => {
+                link.setAttribute('href', lastCatalogUrl);
+            });
+        }
 
         const subtitle = document.getElementById('productSubtitle');
         if (subtitle) {
             subtitle.textContent = productOverride?.subtitle
                 || `${productName} by ${resolvedBrand}: an elegant choice crafted for a modern signature and long-lasting trail.`;
         }
+
+        const currentGender = getProductGenderKey(productName, productOverride, subtitle?.textContent || '');
+        renderRelatedProducts(productName, resolvedBrand, currentGender);
 
         const longDescription = document.getElementById('productLongDescription');
         if (longDescription) {
@@ -1416,6 +1958,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="${src}" alt="Thumb ${index + 1}" class="product-thumb-image">
                 </button>
             `).join('');
+        } else if (productThumbs && productImage) {
+            const normalizedImage = normalizeImagePathForCurrentPage(productImage);
+            productThumbs.innerHTML = `
+                <button class="product-thumb-btn is-active" type="button" data-image="${normalizedImage}">
+                    <img src="${normalizedImage}" alt="Thumb 1" class="product-thumb-image">
+                </button>
+            `;
         }
 
         const defaultImage = overrideImages[0] || productImage;
@@ -1428,6 +1977,24 @@ document.addEventListener('DOMContentLoaded', () => {
             if (firstThumb) firstThumb.src = defaultImage;
             if (firstThumbBtn) firstThumbBtn.dataset.image = defaultImage;
         }
+
+        const applyThumbFallbacks = () => {
+            if (!defaultImage) return;
+            const thumbImages = document.querySelectorAll('#productThumbs .product-thumb-btn img');
+            thumbImages.forEach((img) => {
+                if (img.dataset.fallbackBound === 'true') return;
+                img.dataset.fallbackBound = 'true';
+                img.addEventListener('error', () => {
+                    if (img.dataset.fallbackApplied === 'true') return;
+                    img.dataset.fallbackApplied = 'true';
+                    img.src = defaultImage;
+                    const btn = img.closest('.product-thumb-btn');
+                    if (btn) btn.dataset.image = defaultImage;
+                });
+            });
+        };
+
+        applyThumbFallbacks();
 
         const thumbButtons = document.querySelectorAll('#productThumbs .product-thumb-btn');
         thumbButtons.forEach((btn) => {
@@ -1475,7 +2042,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updateDisplayedPrice = () => {
             const selectedPrice = selectedSize?.priceText || '';
             if (mainPriceEl) {
-                mainPriceEl.textContent = selectedPrice || 'Select a size to view price';
+                mainPriceEl.textContent = selectedPrice || 'Choose a size to see the price';
                 mainPriceEl.classList.toggle('text-gray-400', !selectedPrice);
                 mainPriceEl.classList.toggle('text-gray-900', !!selectedPrice);
             }
@@ -1967,6 +2534,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const productsGrid = document.querySelector('[data-discover-grid]');
         const countEl = document.querySelector('[data-discover-count]');
         const countLabelEl = document.querySelector('[data-discover-count-label]');
+        const paginationEl = document.querySelector('[data-discover-pagination]');
 
         if (!filterButtons.length || !productsGrid) return;
 
@@ -2014,20 +2582,145 @@ document.addEventListener('DOMContentLoaded', () => {
             return tokens.every((token) => haystack.includes(token));
         };
 
+        const discoverStateKey = 'ipordise-discover-state';
+        const readDiscoverState = () => {
+            try {
+                const raw = sessionStorage.getItem(discoverStateKey);
+                return raw ? JSON.parse(raw) : null;
+            } catch (error) {
+                return null;
+            }
+        };
+
+        const writeDiscoverState = (state) => {
+            try {
+                sessionStorage.setItem(discoverStateKey, JSON.stringify(state));
+            } catch (error) {
+                // Ignore storage errors (private mode or blocked storage).
+            }
+        };
+
         let activeFilter = 'all';
         let activeQuery = '';
+        let currentPage = 1;
+        const getPageSize = () => (window.matchMedia('(max-width: 639px)').matches ? 10 : 9);
+        let pageSize = getPageSize();
+
+        const setPaginationVisible = (visible) => {
+            if (!paginationEl) return;
+            paginationEl.classList.toggle('hidden', !visible);
+        };
+
+        const renderPagination = (totalPages) => {
+            if (!paginationEl) return;
+            if (totalPages <= 1) {
+                paginationEl.innerHTML = '';
+                setPaginationVisible(false);
+                return;
+            }
+
+            const buttons = [];
+            for (let page = 1; page <= totalPages; page += 1) {
+                const isActive = page === currentPage;
+                buttons.push(`
+                    <button type="button" class="px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold ${isActive ? 'bg-brand-dark text-white' : 'border border-gray-300 text-gray-700 hover:border-brand-red hover:text-brand-red transition'}" data-discover-page="${page}">${page}</button>
+                `);
+            }
+
+            paginationEl.innerHTML = buttons.join('');
+            setPaginationVisible(true);
+
+            paginationEl.querySelectorAll('[data-discover-page]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const nextPage = Number(button.dataset.discoverPage || 1);
+                    if (Number.isFinite(nextPage)) {
+                        currentPage = nextPage;
+                        applyFilter();
+                    }
+                });
+            });
+        };
+
+        const shuffleCards = (cards) => {
+            const shuffled = cards.slice();
+            for (let index = shuffled.length - 1; index > 0; index -= 1) {
+                const swapIndex = Math.floor(Math.random() * (index + 1));
+                [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+            }
+            return shuffled;
+        };
+
+        const getCardKey = (card) => {
+            const nameKey = canonicalProductName(card.dataset.productName || '');
+            const brandKey = canonicalProductName(card.dataset.productBrand || '');
+            return `${nameKey}|${brandKey}`;
+        };
+
+        const getOrderKey = () => {
+            const queryKey = normalizeSearchText(activeQuery || '');
+            return `ipordise-discover-order:${activeFilter}:${queryKey}`;
+        };
+
+        const getShuffledVisible = (cards) => {
+            const orderKey = getOrderKey();
+            const cardMap = new Map(cards.map((card) => [getCardKey(card), card]));
+            let storedOrder = [];
+
+            try {
+                const raw = sessionStorage.getItem(orderKey);
+                storedOrder = raw ? JSON.parse(raw) : [];
+            } catch (error) {
+                storedOrder = [];
+            }
+
+            if (Array.isArray(storedOrder) && storedOrder.length) {
+                const ordered = storedOrder.map((key) => cardMap.get(key)).filter(Boolean);
+                const missing = cards.filter((card) => !storedOrder.includes(getCardKey(card)));
+                const combined = ordered.concat(missing);
+                return combined.length ? combined : cards.slice();
+            }
+
+            const shuffled = shuffleCards(cards);
+            try {
+                sessionStorage.setItem(orderKey, JSON.stringify(shuffled.map((card) => getCardKey(card))));
+            } catch (error) {
+                // Ignore storage errors (private mode or blocked storage).
+            }
+            return shuffled;
+        };
 
         const applyFilter = () => {
             let visibleCount = 0;
+            const visibleCards = [];
+            const hiddenCards = [];
 
             productCards.forEach((card) => {
                 const shouldShow = cardMatchesFilter(card, activeFilter)
                     && cardMatchesQuery(card, activeQuery);
-                card.classList.toggle('hidden', !shouldShow);
                 if (shouldShow) {
                     visibleCount += 1;
+                    visibleCards.push(card);
+                } else {
+                    hiddenCards.push(card);
                 }
             });
+
+            const shuffledVisible = getShuffledVisible(visibleCards);
+            const totalPages = Math.max(1, Math.ceil(shuffledVisible.length / pageSize));
+            if (currentPage > totalPages) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * pageSize;
+            const pageSlice = shuffledVisible.slice(startIndex, startIndex + pageSize);
+
+            productCards.forEach((card) => {
+                const shouldShow = pageSlice.includes(card);
+                card.classList.toggle('hidden', !shouldShow);
+            });
+
+            [...pageSlice, ...shuffledVisible.filter((card) => !pageSlice.includes(card)), ...hiddenCards].forEach((card) => {
+                productsGrid.appendChild(card);
+            });
+            productsGrid.appendChild(emptyState);
 
             emptyState.classList.toggle('hidden', visibleCount !== 0);
 
@@ -2038,6 +2731,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (countLabelEl) {
                 countLabelEl.textContent = `product${visibleCount === 1 ? '' : 's'} available`;
             }
+
+            renderPagination(totalPages);
+
+            writeDiscoverState({
+                path: window.location.pathname,
+                filter: activeFilter,
+                query: activeQuery,
+                page: currentPage,
+                scrollY: window.scrollY
+            });
         };
 
         filterButtons.forEach((button) => {
@@ -2045,6 +2748,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const filter = (button.dataset.discoverFilter || 'all').toLowerCase();
                 setActiveButton(button);
                 activeFilter = filter;
+                currentPage = 1;
                 applyFilter();
             });
         });
@@ -2052,6 +2756,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInputs.forEach((input) => {
             input.addEventListener('input', (event) => {
                 activeQuery = event.target.value || '';
+                currentPage = 1;
                 searchInputs.forEach((peer) => {
                     if (peer !== event.target) {
                         peer.value = event.target.value;
@@ -2068,25 +2773,74 @@ document.addEventListener('DOMContentLoaded', () => {
         const urlFilter = urlFilterRaw.toLowerCase().trim();
         const initialFilter = allowedFilters.has(urlFilter) ? urlFilter : 'all';
 
-        const defaultButton = filterButtons.find((button) => (button.dataset.discoverFilter || '').toLowerCase() === initialFilter)
+        const savedState = readDiscoverState();
+        const canRestoreState = savedState && savedState.path === window.location.pathname;
+        const savedFilter = canRestoreState && allowedFilters.has(savedState.filter) ? savedState.filter : null;
+        const savedQuery = canRestoreState ? String(savedState.query || '') : '';
+        const savedPage = canRestoreState && Number.isFinite(savedState.page) ? Number(savedState.page) : 1;
+
+        const preferredFilter = savedFilter || initialFilter;
+        const defaultButton = filterButtons.find((button) => (button.dataset.discoverFilter || '').toLowerCase() === preferredFilter)
             || filterButtons.find((button) => button.classList.contains('bg-brand-dark'))
             || filterButtons[0];
 
         setActiveButton(defaultButton);
         activeFilter = (defaultButton.dataset.discoverFilter || 'all').toLowerCase();
-        activeQuery = urlQueryRaw || '';
+        activeQuery = savedQuery || urlQueryRaw || '';
+        currentPage = savedPage || 1;
         if (activeQuery) {
             searchInputs.forEach((input) => {
                 input.value = activeQuery;
             });
         }
         if (searchInputs.length) {
-            const targetInput = searchInputs[0];
-            targetInput.focus({ preventScroll: true });
-            const length = targetInput.value.length;
-            targetInput.setSelectionRange(length, length);
+            const mobileSearchPanel = document.querySelector('.header-mobile-search');
+            if (mobileSearchPanel) {
+                mobileSearchPanel.classList.add('is-open');
+                mobileSearchPanel.setAttribute('aria-hidden', 'false');
+            }
+
+            const mobileInput = mobileSearchPanel
+                ? mobileSearchPanel.querySelector('input[type="text"]')
+                : null;
+            const targetInput = mobileInput || searchInputs[0];
+
+            if (targetInput) {
+                targetInput.focus({ preventScroll: true });
+                const length = targetInput.value.length;
+                targetInput.setSelectionRange(length, length);
+            }
         }
         applyFilter();
+
+        if (canRestoreState && Number.isFinite(savedState.scrollY)) {
+            window.requestAnimationFrame(() => {
+                window.scrollTo({ top: savedState.scrollY, behavior: 'auto' });
+            });
+        }
+
+        let scrollSaveTimer = null;
+        window.addEventListener('scroll', () => {
+            if (scrollSaveTimer) window.clearTimeout(scrollSaveTimer);
+            scrollSaveTimer = window.setTimeout(() => {
+                writeDiscoverState({
+                    path: window.location.pathname,
+                    filter: activeFilter,
+                    query: activeQuery,
+                    page: currentPage,
+                    scrollY: window.scrollY
+                });
+            }, 120);
+        }, { passive: true });
+
+        window.addEventListener('resize', () => {
+            const nextPageSize = getPageSize();
+            if (nextPageSize !== pageSize) {
+                pageSize = nextPageSize;
+                currentPage = 1;
+                applyFilter();
+            }
+        });
     };
 
     const buildCartItemHtml = (item) => {
@@ -2400,10 +3154,31 @@ document.addEventListener('DOMContentLoaded', () => {
         window.setInterval(scrollNext, delay);
     };
 
+    const bindSectionCarouselNav = (sectionId, carouselId) => {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+
+        const carousel = section.querySelector(`#${carouselId}`);
+        const prevButton = section.querySelector(`[data-carousel-nav="${carouselId}"][data-direction="prev"]`);
+        const nextButton = section.querySelector(`[data-carousel-nav="${carouselId}"][data-direction="next"]`);
+        if (!carousel || !prevButton || !nextButton) return;
+
+        const scrollCarousel = (direction) => {
+            const step = Math.max(240, Math.round(carousel.clientWidth * 0.7));
+            const delta = direction === 'prev' ? -step : step;
+            carousel.scrollBy({ left: delta, behavior: 'smooth' });
+        };
+
+        prevButton.addEventListener('click', () => scrollCarousel('prev'));
+        nextButton.addEventListener('click', () => scrollCarousel('next'));
+    };
+
     initCarousel('productCarousel');
     initCarousel('brandCarousel');
     initCarousel('newArrivalsCarousel');
     enableCarouselAutoplay('brandCarousel', 180, 2400);
+    bindSectionCarouselNav('flashOffersSection', 'productCarousel');
+    bindSectionCarouselNav('newArrivalsSection', 'newArrivalsCarousel');
 
     const testimonialCarousel = document.getElementById('testimonialCarousel');
     const testimonialPrev = document.getElementById('testimonialPrev');
@@ -2681,10 +3456,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const initMobileSearchToggle = () => {
+        const toggleButtons = Array.from(document.querySelectorAll('.header-search-btn'));
+        const mobileSearch = document.querySelector('.header-mobile-search');
+        if (!toggleButtons.length || !mobileSearch) return;
+
+        const input = mobileSearch.querySelector('input[type="text"]');
+
+        const openSearch = () => {
+            mobileSearch.classList.add('is-open');
+            mobileSearch.setAttribute('aria-hidden', 'false');
+            if (input) {
+                input.focus();
+                const valueLength = input.value.length;
+                input.setSelectionRange(valueLength, valueLength);
+            }
+        };
+
+        const closeSearch = () => {
+            mobileSearch.classList.remove('is-open');
+            mobileSearch.setAttribute('aria-hidden', 'true');
+        };
+
+        toggleButtons.forEach((button) => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                if (mobileSearch.classList.contains('is-open')) {
+                    closeSearch();
+                } else {
+                    openSearch();
+                }
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!mobileSearch.contains(event.target) && !event.target.closest('.header-search-btn')) {
+                closeSearch();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeSearch();
+            }
+        });
+    };
+
     applyOfficialHeaderFooter();
     initBrandLogoDotAnimation();
     normalizeLegacyFrenchContent();
     initLanguageSwitcher();
+    initMobileSearchToggle();
+    initHeroOfferRotator();
     bindProductLinks();
     initProductDetailPage();
     initCartPage();

@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Découvrez Notre Collection</title>
+    <title>IPORDISE - Discover Our Collection</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="script.js"></script>
@@ -37,7 +37,7 @@
 
                 <div class="flex-1 max-w-2xl mx-8 relative hidden md:block">
                     <div class="relative">
-                        <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, brands, makeup...">
+                        <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, brands...">
                         <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red">
                             <i class="fas fa-search"></i>
                         </button>
@@ -53,9 +53,12 @@
                         <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
                             <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
                         </button>
-                        <a href="pages/login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Compte"><i class="far fa-user"></i></a>
+                        <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a href="pages/login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
                         <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
-                        <a href="pages/cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Panier">
+                        <a href="pages/cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart">
                             <i class="fas fa-shopping-bag"></i>
                         </a>
                     </div>
@@ -65,7 +68,7 @@
 
         <div class="md:hidden px-4 sm:px-6 lg:px-8 pb-4">
             <div class="relative">
-                <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, brands, makeup...">
+                <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, brands...">
                 <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red" aria-label="Search">
                     <i class="fas fa-search"></i>
                 </button>
@@ -83,11 +86,11 @@
                     <li><a href="#" class="hover:text-white transition">HAIR</a></li>
                     <li><a href="#" class="hover:text-white transition">PHARMACY</a></li>
                     <li><a href="#" class="hover:text-white transition">HYGIENE</a></li>
-                    <li><a href="discover.html?filter=for-men" class="hover:text-white transition">HOMME</a></li>
+                    <li><a href="discover.html?filter=for-men" class="hover:text-white transition">MEN</a></li>
                     <li><a href="#" class="hover:text-white transition">SETS</a></li>
                     <li><a href="#" class="hover:text-white transition">SUN CARE</a></li>
                     <li><a href="#" class="hover:text-white transition">BODY</a></li>
-                    <li><a href="discover.html?filter=for-women" class="hover:text-brand-red transition">WOHOMME</a></li>
+                    <li><a href="discover.html?filter=for-women" class="hover:text-brand-red transition">WOMEN</a></li>
                 </ul>
             </div>
         </nav>
@@ -97,15 +100,15 @@
         <section class="py-8 sm:py-10 border-b border-gray-100">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <p class="text-xs text-gray-500 mb-4">
-                    <a href="index.html" class="hover:text-brand-red">Accueil</a>
+                    <a href="index.html" class="hover:text-brand-red">Home</a>
                     <span class="mx-2">/</span>
-                    <span class="text-gray-700">Découvrir la collection</span>
+                    <span class="text-gray-700">Discover the collection</span>
                 </p>
 
                 <div class="rounded-3xl overflow-hidden relative min-h-[220px] sm:min-h-[280px] flex items-end" style="background-image: linear-gradient(110deg, rgba(17,24,39,0.75), rgba(17,24,39,0.2)), url('https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/assets/Herosectionphotos/DISCOVER%20PHOTO.png'); background-size: cover; background-position: center;">
                     <div class="p-6 sm:p-10 w-full">
                         <p class="text-xs sm:text-sm uppercase tracking-[0.2em] text-gray-200 mb-2">Premium Fragrance Edit</p>
-                        <h1 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white leading-tight max-w-2xl">Découvrez notre collection</h1>
+                        <h1 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white leading-tight max-w-2xl">Discover our collection</h1>
                         <p class="text-gray-100 mt-3 max-w-xl text-sm sm:text-base">Explore signature fragrances for every mood, season, and occasion, carefully selected from our best-selling collections for men and women.</p>
                     </div>
                 </div>
@@ -116,7 +119,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                     <h2 class="text-2xl sm:text-3xl font-bold text-brand-dark">Collection Products</h2>
-                    <p class="text-sm text-gray-600"><span data-discover-count>9</span> <span data-discover-count-label>products available</span></p>
+                    <p class="text-sm text-gray-600"><span data-discover-count>13</span> <span data-discover-count-label>products available</span></p>
                 </div>
 
                 <div class="flex flex-wrap gap-2 sm:gap-3 mb-8">
@@ -153,7 +156,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </article>
@@ -177,7 +180,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </article>
@@ -201,7 +204,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </article>
@@ -225,7 +228,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </article>
@@ -249,7 +252,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </article>
@@ -273,7 +276,247 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="group js-product-link relative flex flex-col h-full bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300" data-filters="new-in,for-men,designer,offers" data-product-name="Azzaro The Most Wanted Eau de Parfum Intense" data-product-brand="AZZARO" data-product-price="50ML 650DH - 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/1.webp">
+                        <span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">New</span>
+                        <button class="absolute top-4 right-4 text-gray-300 hover:text-brand-red transition text-xl" type="button">
+                            <i class="far fa-heart"></i>
+                        </button>
+
+                        <div class="h-48 flex items-center justify-center mt-6 mb-4">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/1.webp" alt="Azzaro The Most Wanted Eau de Parfum Intense" class="max-h-full object-contain group-hover:scale-105 transition duration-300">
+                        </div>
+
+                        <div class="flex-grow flex flex-col">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">AZZARO</p>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Azzaro The Most Wanted Eau de Parfum Intense</h3>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                            </div>
+
+                            <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="group js-product-link relative flex flex-col h-full bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300" data-filters="new-in,for-men,designer,offers" data-product-name="Azzaro Forever Wanted Elixir Eau de Parfum" data-product-brand="AZZARO" data-product-price="50ML 650DH - 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg">
+                        <span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">New</span>
+                        <button class="absolute top-4 right-4 text-gray-300 hover:text-brand-red transition text-xl" type="button">
+                            <i class="far fa-heart"></i>
+                        </button>
+
+                        <div class="h-48 flex items-center justify-center mt-6 mb-4">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg" alt="Azzaro Forever Wanted Elixir Eau de Parfum" class="max-h-full object-contain group-hover:scale-105 transition duration-300">
+                        </div>
+
+                        <div class="flex-grow flex flex-col">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">AZZARO</p>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Azzaro Forever Wanted Elixir Eau de Parfum</h3>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                            </div>
+
+                            <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="group js-product-link relative flex flex-col h-full bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300" data-filters="new-in,for-men,designer,offers" data-product-name="Azzaro The Most Wanted Parfum" data-product-brand="AZZARO" data-product-price="50ML 650DH - 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/1.webp">
+                        <span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">New</span>
+                        <button class="absolute top-4 right-4 text-gray-300 hover:text-brand-red transition text-xl" type="button">
+                            <i class="far fa-heart"></i>
+                        </button>
+
+                        <div class="h-48 flex items-center justify-center mt-6 mb-4">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/1.webp" alt="Azzaro The Most Wanted Parfum" class="max-h-full object-contain group-hover:scale-105 transition duration-300">
+                        </div>
+
+                        <div class="flex-grow flex flex-col">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">AZZARO</p>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Azzaro The Most Wanted Parfum</h3>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                            </div>
+
+                            <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="group js-product-link relative flex flex-col h-full bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300" data-filters="new-in,for-women,designer" data-added="2026-03-05" data-product-name="Valentino Donna Born in Roma Eau de Parfum" data-product-brand="VALENTINO" data-product-price="50ML 650DH - 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/1.webp">
+                        <span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">New</span>
+                        <button class="absolute top-4 right-4 text-gray-300 hover:text-brand-red transition text-xl" type="button">
+                            <i class="far fa-heart"></i>
+                        </button>
+
+                        <div class="h-48 flex items-center justify-center mt-6 mb-4">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/1.webp" alt="Valentino Donna Born in Roma Eau de Parfum" class="max-h-full object-contain group-hover:scale-105 transition duration-300">
+                        </div>
+
+                        <div class="flex-grow flex flex-col">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">VALENTINO</p>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Valentino Donna Born in Roma Eau de Parfum</h3>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                            </div>
+
+                            <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="group js-product-link relative flex flex-col h-full bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300" data-filters="new-in,for-men,designer" data-added="2026-03-05" data-product-name="Valentino Born in Roma Extradose Eau de Toilette" data-product-brand="VALENTINO" data-product-price="50ML 650DH - 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/1.jpg">
+                        <span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">New</span>
+                        <button class="absolute top-4 right-4 text-gray-300 hover:text-brand-red transition text-xl" type="button">
+                            <i class="far fa-heart"></i>
+                        </button>
+
+                        <div class="h-48 flex items-center justify-center mt-6 mb-4">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/1.jpg" alt="Valentino Born in Roma Extradose Eau de Toilette" class="max-h-full object-contain group-hover:scale-105 transition duration-300">
+                        </div>
+
+                        <div class="flex-grow flex flex-col">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">VALENTINO</p>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Valentino Born in Roma Extradose Eau de Toilette</h3>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                            </div>
+
+                            <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="group js-product-link relative flex flex-col h-full bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300" data-filters="new-in,for-men,designer" data-added="2026-03-05" data-product-name="Dior Homme Intense Eau de Parfum" data-product-brand="DIOR" data-product-price="50ML 650DH - 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/1.jpg">
+                        <span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">New</span>
+                        <button class="absolute top-4 right-4 text-gray-300 hover:text-brand-red transition text-xl" type="button">
+                            <i class="far fa-heart"></i>
+                        </button>
+
+                        <div class="h-48 flex items-center justify-center mt-6 mb-4">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/1.jpg" alt="Dior Homme Intense Eau de Parfum" class="max-h-full object-contain group-hover:scale-105 transition duration-300">
+                        </div>
+
+                        <div class="flex-grow flex flex-col">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">DIOR</p>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Dior Homme Intense Eau de Parfum</h3>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                            </div>
+
+                            <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="group js-product-link relative flex flex-col h-full bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300" data-filters="new-in,for-men,designer" data-added="2026-03-05" data-product-name="Valentino Uomo Born In Roma Coral Fantasy Eau de Toilette" data-product-brand="VALENTINO" data-product-price="50ML 650DH - 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/1.webp">
+                        <span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">New</span>
+                        <button class="absolute top-4 right-4 text-gray-300 hover:text-brand-red transition text-xl" type="button">
+                            <i class="far fa-heart"></i>
+                        </button>
+
+                        <div class="h-48 flex items-center justify-center mt-6 mb-4">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/1.webp" alt="Valentino Uomo Born In Roma Coral Fantasy Eau de Toilette" class="max-h-full object-contain group-hover:scale-105 transition duration-300">
+                        </div>
+
+                        <div class="flex-grow flex flex-col">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">VALENTINO</p>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Valentino Uomo Born In Roma Coral Fantasy Eau de Toilette</h3>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                            </div>
+
+                            <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="group js-product-link relative flex flex-col h-full bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300" data-filters="new-in,for-men,designer" data-added="2026-03-05" data-product-name="Valentino Born In Roma Uomo Intense Eau de Parfum" data-product-brand="VALENTINO" data-product-price="50ML 650DH - 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/1.webp">
+                        <span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">New</span>
+                        <button class="absolute top-4 right-4 text-gray-300 hover:text-brand-red transition text-xl" type="button">
+                            <i class="far fa-heart"></i>
+                        </button>
+
+                        <div class="h-48 flex items-center justify-center mt-6 mb-4">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/1.webp" alt="Valentino Born In Roma Uomo Intense Eau de Parfum" class="max-h-full object-contain group-hover:scale-105 transition duration-300">
+                        </div>
+
+                        <div class="flex-grow flex flex-col">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">VALENTINO</p>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Valentino Born In Roma Uomo Intense Eau de Parfum</h3>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                            </div>
+
+                            <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="group js-product-link relative flex flex-col h-full bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300" data-filters="new-in,for-women,designer" data-added="2026-03-05" data-product-name="Valentino Born In Roma Donna Intense Eau de Parfum" data-product-brand="VALENTINO" data-product-price="50ML 650DH - 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/1.webp">
+                        <span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">New</span>
+                        <button class="absolute top-4 right-4 text-gray-300 hover:text-brand-red transition text-xl" type="button">
+                            <i class="far fa-heart"></i>
+                        </button>
+
+                        <div class="h-48 flex items-center justify-center mt-6 mb-4">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/1.webp" alt="Valentino Born In Roma Donna Intense Eau de Parfum" class="max-h-full object-contain group-hover:scale-105 transition duration-300">
+                        </div>
+
+                        <div class="flex-grow flex flex-col">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">VALENTINO</p>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Valentino Born In Roma Donna Intense Eau de Parfum</h3>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                            </div>
+
+                            <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="group js-product-link relative flex flex-col h-full bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300" data-filters="new-in,for-men,designer" data-added="2026-03-05" data-product-name="Valentino Uomo Born in Roma Eau de Toilette" data-product-brand="VALENTINO" data-product-price="50ML 650DH - 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/1.jpg">
+                        <span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">New</span>
+                        <button class="absolute top-4 right-4 text-gray-300 hover:text-brand-red transition text-xl" type="button">
+                            <i class="far fa-heart"></i>
+                        </button>
+
+                        <div class="h-48 flex items-center justify-center mt-6 mb-4">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/1.jpg" alt="Valentino Uomo Born in Roma Eau de Toilette" class="max-h-full object-contain group-hover:scale-105 transition duration-300">
+                        </div>
+
+                        <div class="flex-grow flex flex-col">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">VALENTINO</p>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Valentino Uomo Born in Roma Eau de Toilette</h3>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                            </div>
+
+                            <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </article>
@@ -297,7 +540,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </article>
@@ -321,7 +564,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </article>
@@ -345,18 +588,13 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </article>
                 </div>
 
-                <div class="mt-10 flex justify-center items-center gap-2">
-                    <button class="w-10 h-10 rounded-lg border border-brand-dark text-brand-dark font-semibold">1</button>
-                    <button class="w-10 h-10 rounded-lg border border-gray-300 text-gray-500 hover:border-brand-red hover:text-brand-red transition">2</button>
-                    <button class="w-10 h-10 rounded-lg border border-gray-300 text-gray-500 hover:border-brand-red hover:text-brand-red transition">3</button>
-                    <button class="w-10 h-10 rounded-lg border border-gray-300 text-gray-500 hover:border-brand-red hover:text-brand-red transition"><i class="fas fa-chevron-right text-xs"></i></button>
-                </div>
+                <div class="mt-10 flex justify-center items-center gap-2 hidden" data-discover-pagination></div>
             </div>
         </section>
     </main>
@@ -371,30 +609,30 @@
                 <div>
                     <h5 class="text-sm font-bold tracking-widest text-white mb-4">SHOP</h5>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="discover.html" class="hover:text-brand-red transition">Découvrir la collection</a></li>
-                        <li><a href="discover.html?filter=for-men" class="hover:text-brand-red transition">Parfums Homme</a></li>
-                        <li><a href="discover.html?filter=for-women" class="hover:text-brand-red transition">Parfums Femme</a></li>
+                        <li><a href="discover.html" class="hover:text-brand-red transition">Discover the collection</a></li>
+                        <li><a href="discover.html?filter=for-men" class="hover:text-brand-red transition">Men's Fragrances</a></li>
+                        <li><a href="discover.html?filter=for-women" class="hover:text-brand-red transition">Women's Fragrances</a></li>
                     </ul>
                 </div>
                 <div>
                     <h5 class="text-sm font-bold tracking-widest text-white mb-4">CUSTOMER CARE</h5>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="pages/shipping.html" class="hover:text-brand-red transition">Livraison & Expédition</a></li>
-                        <li><a href="pages/returns.html" class="hover:text-brand-red transition">Retours & Remboursements</a></li>
-                        <li><a href="pages/checkout.html" class="hover:text-brand-red transition">Paiement sécurisé</a></li>
+                        <li><a href="pages/shipping.html" class="hover:text-brand-red transition">Shipping & Delivery</a></li>
+                        <li><a href="pages/returns.html" class="hover:text-brand-red transition">Returns & Refunds</a></li>
+                        <li><a href="pages/checkout.html" class="hover:text-brand-red transition">Secure Checkout</a></li>
                     </ul>
                 </div>
                 <div>
                     <h5 class="text-sm font-bold tracking-widest text-white mb-4">NEWSLETTER</h5>
-                    <p class="text-sm text-gray-400 mb-3">Get exclusive perfume offers and nouveautés every week.</p>
+                    <p class="text-sm text-gray-400 mb-3">Get exclusive perfume offers and new arrivals every week.</p>
                     <div class="flex">
-                        <input type="email" placeholder="Votre e-mail" class="w-full rounded-l-lg bg-white text-gray-800 px-3 py-2 text-sm focus:outline-none">
-                        <a href="pages/newsletter.html" class="bg-brand-red hover:bg-brand-redHover text-white px-4 rounded-r-lg text-sm font-semibold transition inline-flex items-center">S'abonner</a>
+                        <input type="email" placeholder="Your email" class="w-full rounded-l-lg bg-white text-gray-800 px-3 py-2 text-sm focus:outline-none">
+                        <a href="pages/newsletter.html" class="bg-brand-red hover:bg-brand-redHover text-white px-4 rounded-r-lg text-sm font-semibold transition inline-flex items-center">Subscribe</a>
                     </div>
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-10 pt-6 text-xs text-gray-500 text-center">
-                (c) 2026 IPORDISE. Tous droits réservés.
+                (c) 2026 IPORDISE. All rights reserved.
             </div>
         </div>
     </footer>

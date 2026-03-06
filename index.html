@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Parfums & Beauté Haut de Gamme</title>
+    <title>IPORDISE - Premium Perfumes and Beauty</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="script.js"></script>
@@ -13,7 +13,7 @@
 
     <!-- Top Announcement Banner -->
     <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide">
-        Emballage cadeau parfum offert - Code : <span class="top-announcement-code">PARFUM15</span> - <a href="#" class="top-announcement-link">SHOP NOW!</a>
+        Free gift wrapping - Code: <span class="top-announcement-code">PARFUM15</span> - <a href="#" class="top-announcement-link">SHOP NOW!</a>
     </div>
 
     <!-- Main Header -->
@@ -47,9 +47,12 @@
                         <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
                             <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
                         </button>
-                        <a href="pages/login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Compte"><i class="far fa-user"></i></a>
+                        <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a href="pages/login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
                         <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
-                        <a href="pages/cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Panier">
+                        <a href="pages/cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart">
                             <i class="fas fa-shopping-bag"></i>
                         </a>
                     </div>
@@ -62,8 +65,8 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <ul class="perfume-nav-list">
                     <li><a href="discover.html?filter=all" class="perfume-nav-link is-active">ALL PERFUMES</a></li>
-                    <li><a href="discover.html?filter=for-men" class="perfume-nav-link">HOMME</a></li>
-                    <li><a href="discover.html?filter=for-women" class="perfume-nav-link">WOHOMME</a></li>
+                    <li><a href="discover.html?filter=for-men" class="perfume-nav-link">MEN</a></li>
+                    <li><a href="discover.html?filter=for-women" class="perfume-nav-link">WOMEN</a></li>
                     <li><a href="discover.html?filter=unisex" class="perfume-nav-link">UNISEX</a></li>
                     <li><a href="discover.html?filter=niche" class="perfume-nav-link">NICHE</a></li>
                     <li><a href="discover.html?filter=arabian" class="perfume-nav-link">ARABIAN</a></li>
@@ -90,29 +93,31 @@
                         </h1>
                     </div>
 
-                    <div class="hero-offer-card p-5 md:p-6 w-full max-w-[360px] shadow-xl">
+                    <div class="hero-offer-card p-5 md:p-6 w-full max-w-[360px] shadow-xl" data-hero-rotate>
                         <p class="hero-offer-label">LIMITED ONLINE OFFER</p>
-                        <h2 class="hero-offer-value">-12%</h2>
-                        <p class="hero-offer-copy">EXTRA ON PERFUMES,<br>MAKEUP & SKINCARE</p>
-                        <p class="hero-offer-code">CODE: BLOOM12</p>
+                        <div class="hero-offer-text" aria-live="polite">
+                            <h2 class="hero-offer-value" data-hero-title>TOP PICKS</h2>
+                            <p class="hero-offer-copy" data-hero-sub>Signature scents for day,<br>night & special moments.</p>
+                        </div>
+                        <p class="hero-offer-code">FREE GIFT WRAPPING INCLUDED</p>
                     </div>
                 </div>
 
                 <div class="hero-cta-row">
                     <a href="discover.html?filter=all" class="hero-cta-link">PERFUMES</a>
-                    <a href="discover.html?filter=for-men" class="hero-cta-link">HOMME</a>
-                    <a href="discover.html?filter=for-women" class="hero-cta-link">WOHOMME</a>
+                    <a href="discover.html?filter=for-men" class="hero-cta-link">MEN</a>
+                    <a href="discover.html?filter=for-women" class="hero-cta-link">WOMEN</a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Flash Offers Section -->
-    <section class="py-16 bg-brand-light">
+    <section id="flashOffersSection" class="py-16 bg-brand-light carousel-section" style="--carousel-nav-top: 50%;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold text-brand-dark uppercase tracking-wide flex items-center justify-center gap-3">
-                    OFFRES <i class="fas fa-bolt text-brand-red text-4xl"></i> FLASH
+                    FLASH <i class="fas fa-bolt text-brand-red text-4xl"></i> OFFERS
                 </h2>
                 <p class="text-sm text-gray-500 mt-3 max-w-2xl mx-auto">
                     Discover today's most wanted perfumes, rare niche selections, and limited-edition sets. Flash offers are available for 24 hours only.
@@ -120,9 +125,16 @@
             </div>
 
             <!-- Products Carousel / Horizontal Scroll -->
-            <div class="relative w-full">
+            <div class="relative w-full carousel-shell">
                 <!-- Left Fade Effect -->
                 <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-brand-light to-transparent z-10 pointer-events-none hidden md:block"></div>
+
+                <button type="button" class="carousel-nav-btn carousel-nav-prev hidden md:flex" data-carousel-nav="productCarousel" data-direction="prev" aria-label="Scroll flash offers left">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button type="button" class="carousel-nav-btn carousel-nav-next hidden md:flex" data-carousel-nav="productCarousel" data-direction="next" aria-label="Scroll flash offers right">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
                 
                 <div class="flex overflow-x-auto gap-6 pb-6 pt-2 hide-scrollbar snap-x snap-mandatory scroll-smooth" id="productCarousel">
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300 group js-product-link relative flex flex-col h-full min-w-[260px] max-w-[260px] snap-start shrink-0"
@@ -151,7 +163,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -182,7 +194,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -213,7 +225,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -244,7 +256,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -275,7 +287,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -306,7 +318,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -337,7 +349,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -368,7 +380,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -399,7 +411,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -417,8 +429,8 @@
             </div>
             
             <div class="mt-8 text-center">
-                <a href="#" class="inline-block px-8 py-3 text-sm text-gray-500 hover:text-gray-800 border-b-2 border-transparent hover:border-gray-800 transition duration-300 bg-transparent">
-                   Aller a Offres Flash
+                     <a href="discover.html?filter=offers" class="inline-block px-8 py-3 text-sm text-gray-500 hover:text-gray-800 border-b-2 border-transparent hover:border-gray-800 transition duration-300 bg-transparent">
+                         Go to Flash Offers
                 </a>
             </div>
             
@@ -448,239 +460,247 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <section class="mt-12 md:mt-14">
-                <div class="flex items-end justify-between mb-6 md:mb-8">
-                    <div>
-                        <p class="text-xs uppercase tracking-[0.18em] text-gray-500">Fresh Drops</p>
-                        <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">Nouveautés</h3>
-                    </div>
-                    <a href="#" class="text-sm font-semibold text-gray-600 hover:text-gray-900 transition">Voir toutes les nouveautés <i class="fas fa-arrow-right ml-1 text-xs"></i></a>
+    <section id="newArrivalsSection" class="py-16 bg-white carousel-section new-arrivals-section" style="--carousel-nav-top: 50%;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-end justify-between mb-6 md:mb-8 new-arrivals-header">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.18em] text-gray-500">Fresh Drops</p>
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">New Arrivals</h3>
                 </div>
+                <a href="discover.html?filter=new-in" class="text-sm font-semibold text-gray-600 hover:text-gray-900 transition new-arrivals-cta">View all new arrivals <i class="fas fa-arrow-right ml-1 text-xs"></i></a>
+            </div>
 
-                <div class="relative w-full">
-                    <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-brand-light to-transparent z-10 pointer-events-none hidden md:block"></div>
+            <div class="relative w-full carousel-shell">
+                <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none hidden md:block"></div>
 
-                    <div id="newArrivalsCarousel" class="flex overflow-x-auto gap-5 pb-6 pt-1 hide-scrollbar snap-x snap-mandatory scroll-smooth">
-                        <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
-                            data-product-name="Armani Stronger With You Powerfully Eau de Parfum"
-                            data-product-brand="GIORGIO ARMANI"
-                            data-product-price="50ML 650DH - 100ML 850DH"
-                            data-product-old-price=""
-                            data-product-discount=""
-                            data-product-reviews="0"
-                            data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp">
-                            <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
-                            <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
-                                <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp" alt="Armani Stronger With You Powerfully Eau de Parfum" class="max-h-full object-contain">
-                            </div>
-                            <p class="text-xs uppercase tracking-wider text-gray-500">GIORGIO ARMANI</p>
-                            <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Armani Stronger With You Powerfully Eau de Parfum</h4>
-                            <div class="flex items-center gap-2 mt-2">
-                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
-                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-gray-100">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
-                            </div>
-                        </article>
+                <button type="button" class="carousel-nav-btn carousel-nav-prev hidden md:flex" data-carousel-nav="newArrivalsCarousel" data-direction="prev" aria-label="Scroll new arrivals left">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button type="button" class="carousel-nav-btn carousel-nav-next hidden md:flex" data-carousel-nav="newArrivalsCarousel" data-direction="next" aria-label="Scroll new arrivals right">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
 
-                        <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
-                            data-product-name="Armani Stronger With You Absolutely Perfume"
-                            data-product-brand="GIORGIO ARMANI"
-                            data-product-price="50ML 650DH - 100ML 850DH"
-                            data-product-old-price=""
-                            data-product-discount=""
-                            data-product-reviews="0"
-                            data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/first.webp">
-                            <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
-                            <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
-                                <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/first.webp" alt="Armani Stronger With You Absolutely Perfume" class="max-h-full object-contain">
-                            </div>
-                            <p class="text-xs uppercase tracking-wider text-gray-500">GIORGIO ARMANI</p>
-                            <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Armani Stronger With You Absolutely Perfume</h4>
-                            <div class="flex items-center gap-2 mt-2">
-                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
-                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-gray-100">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
-                            </div>
-                        </article>
-
-                        <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
-                            data-product-name="Yves Saint Laurent Y Eau de Parfum"
-                            data-product-brand="YVES SAINT LAURENT"
-                            data-product-price="60ML 650DH - 100ML 850DH"
-                            data-product-old-price=""
-                            data-product-discount=""
-                            data-product-reviews="0"
-                            data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Y%20Eau%20de%20Parfum/1.webp">
-                            <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
-                            <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
-                                <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Y%20Eau%20de%20Parfum/1.webp" alt="Yves Saint Laurent Y Eau de Parfum" class="max-h-full object-contain">
-                            </div>
-                            <p class="text-xs uppercase tracking-wider text-gray-500">YVES SAINT LAURENT</p>
-                            <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Yves Saint Laurent Y Eau de Parfum</h4>
-                            <div class="flex items-center gap-2 mt-2">
-                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">60ML</span>
-                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-gray-100">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
-                            </div>
-                        </article>
-
-                        <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
-                            data-product-name="Yves Saint Laurent Myslf Eau de Parfum"
-                            data-product-brand="YVES SAINT LAURENT"
-                            data-product-price="60ML 650DH - 100ML 850DH"
-                            data-product-old-price=""
-                            data-product-discount=""
-                            data-product-reviews="0"
-                            data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Myslf%20Eau%20de%20Parfum/1.jpg">
-                            <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
-                            <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
-                                <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Myslf%20Eau%20de%20Parfum/1.jpg" alt="Yves Saint Laurent Myslf Eau de Parfum" class="max-h-full object-contain">
-                            </div>
-                            <p class="text-xs uppercase tracking-wider text-gray-500">YVES SAINT LAURENT</p>
-                            <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Yves Saint Laurent Myslf Eau de Parfum</h4>
-                            <div class="flex items-center gap-2 mt-2">
-                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">60ML</span>
-                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-gray-100">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
-                            </div>
-                        </article>
-
-                        <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
-                            data-product-name="Yves Saint Laurent MYSLF Le Parfum"
-                            data-product-brand="YVES SAINT LAURENT"
-                            data-product-price="60ML 650DH - 100ML 850DH"
-                            data-product-old-price=""
-                            data-product-discount=""
-                            data-product-reviews="0"
-                            data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/1.webp">
-                            <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
-                            <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
-                                <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/1.webp" alt="Yves Saint Laurent MYSLF Le Parfum" class="max-h-full object-contain">
-                            </div>
-                            <p class="text-xs uppercase tracking-wider text-gray-500">YVES SAINT LAURENT</p>
-                            <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Yves Saint Laurent MYSLF Le Parfum</h4>
-                            <div class="flex items-center gap-2 mt-2">
-                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">60ML</span>
-                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-gray-100">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
-                            </div>
-                        </article>
-
-                        <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
-                            data-product-name="Jean Paul Gaultier Le male Elixir Eau de Parfum"
-                            data-product-brand="JEAN PAUL GAULTIER"
-                            data-product-price="75ML 990DH - 125ML 1350DH"
-                            data-product-old-price=""
-                            data-product-discount=""
-                            data-product-reviews="0"
-                            data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp">
-                            <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
-                            <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
-                                <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp" alt="Jean Paul Gaultier Le male Elixir Eau de Parfum" class="max-h-full object-contain">
-                            </div>
-                            <p class="text-xs uppercase tracking-wider text-gray-500">JEAN PAUL GAULTIER</p>
-                            <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Jean Paul Gaultier Le male Elixir Eau de Parfum</h4>
-                            <div class="flex items-center gap-2 mt-2">
-                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">75ML</span>
-                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">125ML</span>
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-gray-100">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
-                            </div>
-                        </article>
-
-                        <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
-                            data-product-name="Jean Paul Gaultier Le male Le parfum Eau de Parfum"
-                            data-product-brand="JEAN PAUL GAULTIER"
-                            data-product-price="75ML 950DH - 125ML 1290DH"
-                            data-product-old-price=""
-                            data-product-discount=""
-                            data-product-reviews="0"
-                            data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp">
-                            <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
-                            <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
-                                <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp" alt="Jean Paul Gaultier Le male Le parfum Eau de Parfum" class="max-h-full object-contain">
-                            </div>
-                            <p class="text-xs uppercase tracking-wider text-gray-500">JEAN PAUL GAULTIER</p>
-                            <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Jean Paul Gaultier Le male Le parfum Eau de Parfum</h4>
-                            <div class="flex items-center gap-2 mt-2">
-                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">75ML</span>
-                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">125ML</span>
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-gray-100">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
-                            </div>
-                        </article>
-
-                        <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
-                            data-product-name="Jean Paul Gaultier Le Beau Eau de Parfum"
-                            data-product-brand="JEAN PAUL GAULTIER"
-                            data-product-price="75ML 980DH - 125ML 1320DH"
-                            data-product-old-price=""
-                            data-product-discount=""
-                            data-product-reviews="0"
-                            data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp">
-                            <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
-                            <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
-                                <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp" alt="Jean Paul Gaultier Le Beau Eau de Parfum" class="max-h-full object-contain">
-                            </div>
-                            <p class="text-xs uppercase tracking-wider text-gray-500">JEAN PAUL GAULTIER</p>
-                            <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Jean Paul Gaultier Le Beau Eau de Parfum</h4>
-                            <div class="flex items-center gap-2 mt-2">
-                                <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">75ML</span>
-                                <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">125ML</span>
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-gray-100">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
-                            </div>
-                        </article>
-                    </div>
-
-                    <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-brand-light to-transparent z-10 pointer-events-none hidden md:block"></div>
-
-                </div>
-
-                <div class="flex justify-center mt-5">
-                    <button type="button" class="w-16 h-1 bg-gray-200 rounded-full overflow-hidden relative p-0 border-0 carousel-indicator" data-carousel-indicator="newArrivalsCarousel" aria-label="Move nouveautés slider">
-                        <span class="absolute left-0 top-0 h-full w-1/2 bg-gray-600 rounded-full" data-carousel-fill></span>
-                    </button>
-                </div>
-            </section>
-
-            <section class="mt-10 md:mt-14 max-w-6xl mx-auto">
-                <div class="luxury-story-wrap grid grid-cols-1 lg:grid-cols-2 items-stretch overflow-hidden">
-                    <div class="luxury-story-copy p-8 md:p-12 lg:p-14 bg-white flex flex-col justify-center">
-                        <p class="text-xs uppercase tracking-[0.24em] text-gray-500 font-semibold mb-4">Maison IPORDISE</p>
-                        <h3 class="font-serif text-4xl md:text-5xl text-brand-dark leading-tight mb-5">Your Scent. Your Identity.</h3>
-                        <p class="font-sans text-base md:text-lg text-gray-600 leading-relaxed max-w-xl mb-8">
-                            Discover exclusive fragrances crafted for presence and elegance.
-                        </p>
-                        <a href="discover.html" class="luxury-cta inline-flex items-center justify-center w-fit text-sm uppercase tracking-[0.14em] font-bold">
-                            Découvrir la collection
-                        </a>
-                    </div>
-
-                    <div class="luxury-story-visual bg-brand-light p-6 md:p-8 lg:p-10">
-                        <div class="luxury-product-frame h-full min-h-[360px] md:min-h-[430px]">
-                            <video class="w-full h-full object-cover luxury-3d-image" autoplay muted loop playsinline preload="metadata" aria-label="Luxury perfume campaign video">
-                                <source src="https://www.dropbox.com/scl/fi/o93l4bqxq87w6yqhjd09w/1772627552793.mp4?rlkey=01n1zib4rf64j2y6cuo6sw9lx&st=ykav6jhb&raw=1" type="video/mp4">
-                            </video>
+                <div id="newArrivalsCarousel" class="flex overflow-x-auto gap-5 pb-6 pt-1 hide-scrollbar snap-x snap-mandatory scroll-smooth">
+                    <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
+                        data-product-name="Armani Stronger With You Powerfully Eau de Parfum"
+                        data-product-brand="GIORGIO ARMANI"
+                        data-product-price="50ML 650DH - 100ML 850DH"
+                        data-product-old-price=""
+                        data-product-discount=""
+                        data-product-reviews="0"
+                        data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp">
+                        <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
+                        <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp" alt="Armani Stronger With You Powerfully Eau de Parfum" class="max-h-full object-contain">
                         </div>
-                    </div>
-                </div>
-            </section>
+                        <p class="text-xs uppercase tracking-wider text-gray-500">GIORGIO ARMANI</p>
+                        <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Armani Stronger With You Powerfully Eau de Parfum</h4>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                        </div>
+                    </article>
 
+                    <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
+                        data-product-name="Armani Stronger With You Absolutely Perfume"
+                        data-product-brand="GIORGIO ARMANI"
+                        data-product-price="50ML 650DH - 100ML 850DH"
+                        data-product-old-price=""
+                        data-product-discount=""
+                        data-product-reviews="0"
+                        data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/first.webp">
+                        <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
+                        <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/first.webp" alt="Armani Stronger With You Absolutely Perfume" class="max-h-full object-contain">
+                        </div>
+                        <p class="text-xs uppercase tracking-wider text-gray-500">GIORGIO ARMANI</p>
+                        <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Armani Stronger With You Absolutely Perfume</h4>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                        </div>
+                    </article>
+
+                    <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
+                        data-product-name="Yves Saint Laurent Y Eau de Parfum"
+                        data-product-brand="YVES SAINT LAURENT"
+                        data-product-price="60ML 650DH - 100ML 850DH"
+                        data-product-old-price=""
+                        data-product-discount=""
+                        data-product-reviews="0"
+                        data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Y%20Eau%20de%20Parfum/1.webp">
+                        <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
+                        <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Y%20Eau%20de%20Parfum/1.webp" alt="Yves Saint Laurent Y Eau de Parfum" class="max-h-full object-contain">
+                        </div>
+                        <p class="text-xs uppercase tracking-wider text-gray-500">YVES SAINT LAURENT</p>
+                        <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Yves Saint Laurent Y Eau de Parfum</h4>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">60ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                        </div>
+                    </article>
+
+                    <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
+                        data-product-name="Yves Saint Laurent Myslf Eau de Parfum"
+                        data-product-brand="YVES SAINT LAURENT"
+                        data-product-price="60ML 650DH - 100ML 850DH"
+                        data-product-old-price=""
+                        data-product-discount=""
+                        data-product-reviews="0"
+                        data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Myslf%20Eau%20de%20Parfum/1.jpg">
+                        <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
+                        <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Myslf%20Eau%20de%20Parfum/1.jpg" alt="Yves Saint Laurent Myslf Eau de Parfum" class="max-h-full object-contain">
+                        </div>
+                        <p class="text-xs uppercase tracking-wider text-gray-500">YVES SAINT LAURENT</p>
+                        <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Yves Saint Laurent Myslf Eau de Parfum</h4>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">60ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                        </div>
+                    </article>
+
+                    <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
+                        data-product-name="Yves Saint Laurent MYSLF Le Parfum"
+                        data-product-brand="YVES SAINT LAURENT"
+                        data-product-price="60ML 650DH - 100ML 850DH"
+                        data-product-old-price=""
+                        data-product-discount=""
+                        data-product-reviews="0"
+                        data-product-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/1.webp">
+                        <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
+                        <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/1.webp" alt="Yves Saint Laurent MYSLF Le Parfum" class="max-h-full object-contain">
+                        </div>
+                        <p class="text-xs uppercase tracking-wider text-gray-500">YVES SAINT LAURENT</p>
+                        <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Yves Saint Laurent MYSLF Le Parfum</h4>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">60ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                        </div>
+                    </article>
+
+                    <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
+                        data-product-name="Jean Paul Gaultier Le male Elixir Eau de Parfum"
+                        data-product-brand="JEAN PAUL GAULTIER"
+                        data-product-price="75ML 990DH - 125ML 1350DH"
+                        data-product-old-price=""
+                        data-product-discount=""
+                        data-product-reviews="0"
+                        data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp">
+                        <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
+                        <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp" alt="Jean Paul Gaultier Le male Elixir Eau de Parfum" class="max-h-full object-contain">
+                        </div>
+                        <p class="text-xs uppercase tracking-wider text-gray-500">JEAN PAUL GAULTIER</p>
+                        <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Jean Paul Gaultier Le male Elixir Eau de Parfum</h4>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">75ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">125ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                        </div>
+                    </article>
+
+                    <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
+                        data-product-name="Jean Paul Gaultier Le male Le parfum Eau de Parfum"
+                        data-product-brand="JEAN PAUL GAULTIER"
+                        data-product-price="75ML 950DH - 125ML 1290DH"
+                        data-product-old-price=""
+                        data-product-discount=""
+                        data-product-reviews="0"
+                        data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp">
+                        <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
+                        <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp" alt="Jean Paul Gaultier Le male Le parfum Eau de Parfum" class="max-h-full object-contain">
+                        </div>
+                        <p class="text-xs uppercase tracking-wider text-gray-500">JEAN PAUL GAULTIER</p>
+                        <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Jean Paul Gaultier Le male Le parfum Eau de Parfum</h4>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">75ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">125ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                        </div>
+                    </article>
+
+                    <article class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition min-w-[260px] max-w-[260px] snap-start shrink-0 js-product-link"
+                        data-product-name="Jean Paul Gaultier Le Beau Eau de Parfum"
+                        data-product-brand="JEAN PAUL GAULTIER"
+                        data-product-price="75ML 980DH - 125ML 1320DH"
+                        data-product-old-price=""
+                        data-product-discount=""
+                        data-product-reviews="0"
+                        data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp">
+                        <span class="inline-block text-[10px] font-bold tracking-wide bg-black text-white px-2 py-1 rounded">NEW</span>
+                        <div class="h-44 bg-gray-50 rounded-lg mt-3 mb-4 flex items-center justify-center overflow-hidden">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp" alt="Jean Paul Gaultier Le Beau Eau de Parfum" class="max-h-full object-contain">
+                        </div>
+                        <p class="text-xs uppercase tracking-wider text-gray-500">JEAN PAUL GAULTIER</p>
+                        <h4 class="text-sm font-semibold text-gray-900 mt-1 min-h-[2.6rem]">Jean Paul Gaultier Le Beau Eau de Parfum</h4>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">75ML</span>
+                            <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">125ML</span>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none hidden md:block"></div>
+
+            </div>
+
+            <div class="flex justify-center mt-5">
+                <button type="button" class="w-16 h-1 bg-gray-200 rounded-full overflow-hidden relative p-0 border-0 carousel-indicator" data-carousel-indicator="newArrivalsCarousel" aria-label="Move new arrivals slider">
+                    <span class="absolute left-0 top-0 h-full w-1/2 bg-gray-600 rounded-full" data-carousel-fill></span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-10 md:mt-14 max-w-6xl mx-auto">
+        <div class="luxury-story-wrap grid grid-cols-1 lg:grid-cols-2 items-stretch overflow-hidden">
+            <div class="luxury-story-copy p-8 md:p-12 lg:p-14 bg-white flex flex-col justify-center">
+                <p class="text-xs uppercase tracking-[0.24em] text-gray-500 font-semibold mb-4">House of IPORDISE</p>
+                <h3 class="font-serif text-4xl md:text-5xl text-brand-dark leading-tight mb-5">Your Scent. Your Identity.</h3>
+                <p class="font-sans text-base md:text-lg text-gray-600 leading-relaxed max-w-xl mb-8">
+                    Discover exclusive fragrances crafted for presence and elegance.
+                </p>
+                <a href="discover.html" class="luxury-cta inline-flex items-center justify-center w-fit text-sm uppercase tracking-[0.14em] font-bold">
+                    Discover the collection
+                </a>
+            </div>
+
+            <div class="luxury-story-visual bg-brand-light p-6 md:p-8 lg:p-10">
+                <div class="luxury-product-frame h-full min-h-[360px] md:min-h-[430px]">
+                    <video class="w-full h-full object-cover luxury-3d-image" autoplay muted loop playsinline preload="metadata" aria-label="Luxury perfume campaign video">
+                        <source src="https://www.dropbox.com/scl/fi/o93l4bqxq87w6yqhjd09w/1772627552793.mp4?rlkey=01n1zib4rf64j2y6cuo6sw9lx&st=ykav6jhb&raw=1" type="video/mp4">
+                    </video>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -689,9 +709,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold text-brand-dark uppercase tracking-wide">
-                    Nos catégories
+                    Our categories
                 </h2>
-                <p class="text-sm text-gray-500 mt-2">Découvrez nos collections par genre</p>
+                <p class="text-sm text-gray-500 mt-2">Explore our collections by style</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -700,7 +720,7 @@
                     <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/Herosectionphotos/FOR%20HIM.png" alt="Men's Fragrances" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6">
-                        <h3 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider mb-2">HOMME</h3>
+                        <h3 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider mb-2">MEN</h3>
                         <span class="inline-flex items-center text-sm font-semibold text-white/90 group-hover:text-white transition-colors">
                             Explore collection <i class="fas fa-arrow-right ml-2 text-xs transition-transform group-hover:translate-x-1"></i>
                         </span>
@@ -712,7 +732,7 @@
                     <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/Herosectionphotos/FOR%20HER.png" alt="Women's Fragrances" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6">
-                        <h3 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider mb-2">WOHOMME</h3>
+                        <h3 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider mb-2">WOMEN</h3>
                         <span class="inline-flex items-center text-sm font-semibold text-white/90 group-hover:text-white transition-colors">
                             Explore collection <i class="fas fa-arrow-right ml-2 text-xs transition-transform group-hover:translate-x-1"></i>
                         </span>
@@ -766,21 +786,21 @@
                     <i class="fas fa-box-open text-2xl"></i>
                     <div>
                         <p class="metric-value">+400</p>
-                        <p class="metric-label">Commandes livrées</p>
+                        <p class="metric-label">Orders delivered</p>
                     </div>
                 </div>
                 <div class="metric-item">
                     <i class="fas fa-users text-2xl"></i>
                     <div>
                         <p class="metric-value">370</p>
-                        <p class="metric-label">Clients satisfaits</p>
+                        <p class="metric-label">Happy clients</p>
                     </div>
                 </div>
                 <div class="metric-item">
                     <i class="fas fa-shield-heart text-2xl"></i>
                     <div>
                         <p class="metric-value">100%</p>
-                        <p class="metric-label">Produits authentiques</p>
+                        <p class="metric-label">Authentic products</p>
                     </div>
                 </div>
             </div>
@@ -788,7 +808,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                 <div class="lg:col-span-4 text-white">
                     <span class="testimonial-kicker"></span>
-                    <h2 class="text-4xl md:text-5xl font-bold leading-tight mt-4">Ce que les clients aiment chez IPORDISE</h2>
+                    <h2 class="text-4xl md:text-5xl font-bold leading-tight mt-4">What clients love about IPORDISE</h2>
                     <p class="text-white/70 text-sm md:text-base mt-4 max-w-md">From luxury packaging to long-lasting fragrances, our community shares real feedback after every order.</p>
 
                     <div class="flex items-center gap-3 mt-8">
@@ -807,7 +827,7 @@
                             <div class="flex items-center justify-between mb-4">
                                 <div>
                                     <h3 class="font-bold text-lg text-slate-800">Sara A.</h3>
-                                    <p class="text-xs text-slate-500">Client - Casablanca</p>
+                                    <p class="text-xs text-slate-500">Customer - Casablanca</p>
                                 </div>
                                 <div class="text-[#d4af37] text-xs tracking-wide">
                                     <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
@@ -820,20 +840,20 @@
                             <div class="flex items-center justify-between mb-4">
                                 <div>
                                     <h3 class="font-bold text-lg text-slate-800">Youssef M.</h3>
-                                    <p class="text-xs text-slate-500">Client - Rabat</p>
+                                    <p class="text-xs text-slate-500">Customer - Rabat</p>
                                 </div>
                                 <div class="text-[#d4af37] text-xs tracking-wide">
                                     <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                                 </div>
                             </div>
-                            <p class="text-slate-600 leading-relaxed">J'ai commandé deux parfums, tous deux authentiques avec une excellente tenue. Le service client a répondu à toutes mes questions en quelques minutes.</p>
+                            <p class="text-slate-600 leading-relaxed">I ordered two perfumes, both authentic with excellent longevity. Customer service answered all my questions within minutes.</p>
                         </article>
 
                         <article class="testimonial-card min-w-[88%] sm:min-w-[70%] lg:min-w-[48%] snap-start">
                             <div class="flex items-center justify-between mb-4">
                                 <div>
                                     <h3 class="font-bold text-lg text-slate-800">Imane R.</h3>
-                                    <p class="text-xs text-slate-500">Client - Tangier</p>
+                                    <p class="text-xs text-slate-500">Customer - Tangier</p>
                                 </div>
                                 <div class="text-[#d4af37] text-xs tracking-wide">
                                     <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
@@ -880,25 +900,25 @@
 
             <!-- Newsletter Form -->
             <div class="max-w-4xl mx-auto text-center ipordise-newsletter-shell">
-                <p class="text-lg text-gray-700 mb-2 ipordise-news-title">Abonnez-vous à notre newsletter pour recevoir des nouveautés produits et des conseils beauté.</p>
-                <p class="text-lg font-bold text-gray-800 mb-8 ipordise-news-subtitle">Restez connectés avec IPORDISE.</p>
+                <p class="text-lg text-gray-700 mb-2 ipordise-news-title">Subscribe to our newsletter for new arrivals and fragrance tips.</p>
+                <p class="text-lg font-bold text-gray-800 mb-8 ipordise-news-subtitle">Stay connected with IPORDISE.</p>
 
                 <form class="space-y-6 ipordise-news-form">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="text-left">
-                            <input type="text" placeholder="Nom *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
-                            <p class="text-[10px] text-gray-500 mt-1">* Champs obligatoires</p>
+                            <input type="text" placeholder="Name *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
+                            <p class="text-[10px] text-gray-500 mt-1">* Required fields</p>
                         </div>
                         <div class="text-left">
-                            <input type="email" placeholder="Adresse e-mail *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
+                            <input type="email" placeholder="Email address *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
                         </div>
                         <div class="text-left">
                             <div class="relative">
                                 <select required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-gray-500 text-sm appearance-none ipordise-news-input">
-                                    <option value="" disabled selected>Genre *</option>
-                                    <option value="female">Femme</option>
-                                    <option value="male">Homme</option>
-                                    <option value="other">Autre</option>
+                                    <option value="" disabled selected>Gender *</option>
+                                    <option value="female">Female</option>
+                                    <option value="male">Male</option>
+                                    <option value="other">Other</option>
                                 </select>
                                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
                                     <i class="fas fa-chevron-down text-xs"></i>
@@ -909,11 +929,11 @@
 
                     <div class="flex items-center justify-center space-x-2 text-sm text-gray-600 ipordise-privacy-row">
                         <input type="checkbox" id="privacy" required class="w-4 h-4 text-brand-red rounded border-gray-300 focus:ring-brand-red cursor-pointer">
-                        <label for="privacy" class="cursor-pointer">J'ai lu la <a href="pages/privacy-policy.html" class="text-blue-500 hover:text-blue-700 underline transition ipordise-privacy-link">politique de confidentialité</a> et je souhaite m'abonner à la newsletter IPORDISE. *</label>
+                        <label for="privacy" class="cursor-pointer">I have read the <a href="pages/privacy-policy.html" class="text-blue-500 hover:text-blue-700 underline transition ipordise-privacy-link">privacy policy</a> and want to subscribe to the IPORDISE newsletter. *</label>
                     </div>
 
                     <button type="submit" class="text-white font-bold py-3 px-12 rounded-full transition duration-300 shadow-md uppercase tracking-wide text-sm mt-4 ipordise-news-submit">
-                        S'ABONNER
+                        SUBSCRIBE
                     </button>
                 </form>
             </div>
@@ -927,7 +947,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                 <div>
                     <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-6">La destination ultime pour les parfums de luxe, les cosmetiques et les soins beaute en ligne. Sublimez votre quotidien.</p>
+                    <p class="text-gray-400 text-sm mb-6">The ultimate destination for luxury perfumes and beauty online. Elevate your everyday.</p>
                     <div class="flex space-x-4">
                         <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-facebook-f"></i></a>
@@ -935,41 +955,40 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Service Client</h4>
+                    <h4 class="font-bold text-lg mb-4">Customer Service</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="pages/contact.html" class="hover:text-white transition">Contactez-nous</a></li>
-                        <li><a href="pages/shipping.html" class="hover:text-white transition">Livraison & Retours</a></li>
-                        <li><a href="pages/track-order.html" class="hover:text-white transition">Suivre la commande</a></li>
+                        <li><a href="pages/contact.html" class="hover:text-white transition">Contact Us</a></li>
+                        <li><a href="pages/shipping.html" class="hover:text-white transition">Shipping & Returns</a></li>
+                        <li><a href="pages/track-order.html" class="hover:text-white transition">Track Order</a></li>
                         <li><a href="pages/faq.html" class="hover:text-white transition">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">À Propos</h4>
+                    <h4 class="font-bold text-lg mb-4">About</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="pages/our-story.html" class="hover:text-white transition">Notre Histoire</a></li>
-                        <li><a href="pages/careers.html" class="hover:text-white transition">Carrières</a></li>
-                        <li><a href="pages/store-locator.html" class="hover:text-white transition">Trouver un magasin</a></li>
-                        <li><a href="pages/terms.html" class="hover:text-white transition">Conditions Générales</a></li>
+                        <li><a href="pages/our-story.html" class="hover:text-white transition">Our Story</a></li>
+                        <li><a href="pages/careers.html" class="hover:text-white transition">Careers</a></li>
+                        <li><a href="pages/store-locator.html" class="hover:text-white transition">Find a Store</a></li>
+                        <li><a href="pages/terms.html" class="hover:text-white transition">Terms & Conditions</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold text-lg mb-4">Newsletter</h4>
-                    <p class="text-gray-400 text-sm mb-4">Abonnez-vous pour recevoir des nouveautés, des conseils beauté et plus encore.</p>
+                    <p class="text-gray-400 text-sm mb-4">Subscribe for new arrivals, fragrance tips, and more.</p>
                     <div class="flex">
-                        <input type="email" placeholder="Votre adresse e-mail" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">
-                        <a href="pages/newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition">S'ABONNER</a>
+                        <input type="email" placeholder="Your email address" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">
+                        <a href="pages/newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition">SUBSCRIBE</a>
                     </div>
                 </div>
             </div>
             <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
-                <p>&copy; 2026 IPORDISE. Tous droits réservés.</p>
+                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
 </body>
 </html>
-
 
 
 
