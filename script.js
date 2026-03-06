@@ -1812,15 +1812,34 @@ document.addEventListener('DOMContentLoaded', () => {
             femaleNames[2]
         ];
 
-        const reviewNameEls = document.querySelectorAll(
-            '#tab-reviews .review-card h4, .customer-review-list .customer-review-item h3'
-        );
-        if (!reviewNameEls.length) return;
+        const summaryNames = Array.from(document.querySelectorAll('#tab-reviews .review-card h4'));
+        const detailNames = Array.from(document.querySelectorAll('.customer-review-list .customer-review-item h3'));
+        if (!summaryNames.length && !detailNames.length) return;
 
         const baseHash = getStableHashNumber(canonicalProductName(productName));
-        reviewNameEls.forEach((el, index) => {
-            const name = pool[(baseHash + index) % pool.length];
-            el.textContent = name;
+        const getNameForIndex = (index) => pool[(baseHash + index) % pool.length];
+
+        summaryNames.forEach((el, index) => {
+            el.textContent = getNameForIndex(index);
+        });
+
+        detailNames.forEach((el, index) => {
+            el.textContent = getNameForIndex(index);
+        });
+    };
+
+    const applyReviewVisibility = (productName) => {
+        const baseHash = getStableHashNumber(canonicalProductName(productName));
+        const visibleCount = (baseHash % 3) + 1;
+        const reviewCards = Array.from(document.querySelectorAll('#tab-reviews .review-card'));
+        const customerReviews = Array.from(document.querySelectorAll('.customer-review-list .customer-review-item'));
+
+        reviewCards.forEach((card, index) => {
+            card.classList.toggle('hidden', index >= visibleCount);
+        });
+
+        customerReviews.forEach((card, index) => {
+            card.classList.toggle('hidden', index >= visibleCount);
         });
     };
 
@@ -1877,6 +1896,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         assignReviewerNames(productName, productOverride);
+        applyReviewVisibility(productName);
 
         const lastCatalogUrl = (() => {
             try {
@@ -3100,6 +3120,80 @@ document.addEventListener('DOMContentLoaded', () => {
         updateIndicator();
     };
 
+    const shuffleFlashOffersDaily = () => {
+        const carousel = document.getElementById('productCarousel');
+        if (!carousel) return;
+
+        const cards = Array.from(carousel.children).filter((node) => node.nodeType === 1);
+        if (!cards.length) return;
+
+        const dateKey = new Date().toISOString().slice(0, 10);
+        const storageKey = `ipordise-flash-offers-order-${dateKey}`;
+        const getCardKey = (card) => {
+            const nameKey = canonicalProductName(card.dataset.productName || card.textContent || '');
+            const brandKey = canonicalProductName(card.dataset.productBrand || '');
+            return `${nameKey}|${brandKey}`;
+        };
+
+        const tryGetStoredOrder = () => {
+            try {
+                const raw = localStorage.getItem(storageKey);
+                return raw ? JSON.parse(raw) : null;
+            } catch (error) {
+                return null;
+            }
+        };
+
+        const saveOrder = (order) => {
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(order));
+            } catch (error) {
+                // Ignore storage errors (private mode or blocked storage).
+            }
+        };
+
+        const seededShuffle = (items, seedText) => {
+            let seed = 0;
+            for (let index = 0; index < seedText.length; index += 1) {
+                seed = ((seed << 5) - seed) + seedText.charCodeAt(index);
+                seed |= 0;
+            }
+
+            let t = Math.abs(seed) + 0x6D2B79F5;
+            const rand = () => {
+                t += 0x6D2B79F5;
+                let r = t;
+                r = Math.imul(r ^ (r >>> 15), r | 1);
+                r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
+                return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+            };
+
+            const shuffled = items.slice();
+            for (let index = shuffled.length - 1; index > 0; index -= 1) {
+                const swapIndex = Math.floor(rand() * (index + 1));
+                [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+            }
+            return shuffled;
+        };
+
+        const cardMap = new Map(cards.map((card) => [getCardKey(card), card]));
+        const storedOrder = tryGetStoredOrder();
+
+        let orderedCards = [];
+        if (Array.isArray(storedOrder) && storedOrder.length) {
+            orderedCards = storedOrder.map((key) => cardMap.get(key)).filter(Boolean);
+            const missing = cards.filter((card) => !storedOrder.includes(getCardKey(card)));
+            orderedCards = orderedCards.concat(missing);
+        } else {
+            orderedCards = seededShuffle(cards, dateKey);
+            saveOrder(orderedCards.map((card) => getCardKey(card)));
+        }
+
+        orderedCards.forEach((card) => {
+            carousel.appendChild(card);
+        });
+    };
+
     const initCarousel = (carouselId) => {
         const carousel = document.getElementById(carouselId);
         if (!carousel) return;
@@ -3173,6 +3267,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nextButton.addEventListener('click', () => scrollCarousel('next'));
     };
 
+    shuffleFlashOffersDaily();
     initCarousel('productCarousel');
     initCarousel('brandCarousel');
     initCarousel('newArrivalsCarousel');
