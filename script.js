@@ -24,6 +24,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const languageStorageKey = 'ipordise-language';
     const supportedLanguages = ['en', 'fr'];
 
+    const initMobileFlashBannerRotation = () => {
+        const bannerContainer = document.querySelector('[data-mobile-flash-banners]');
+        if (!bannerContainer) return;
+
+        const slides = Array.from(bannerContainer.querySelectorAll('.mobile-flash-banner-slide'));
+        if (slides.length < 2) return;
+
+        let activeIndex = 0;
+        slides.forEach((slide, index) => {
+            slide.classList.toggle('hidden', index !== activeIndex);
+        });
+
+        window.setInterval(() => {
+            slides[activeIndex].classList.add('hidden');
+            activeIndex = (activeIndex + 1) % slides.length;
+            slides[activeIndex].classList.remove('hidden');
+        }, 3200);
+    };
+
+    initMobileFlashBannerRotation();
+
     const translations = {
         en: {
             lang_label: 'EN',
