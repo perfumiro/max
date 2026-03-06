@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const translations = {
         en: {
             lang_label: 'EN',
-            announcement_html: 'Delivery fee: 35 MAD in all Morocco cities. <a href="#" class="underline hover:text-gray-200">SHOP NOW!</a>',
+            announcement_html: '<div class="top-announcement-marquee"><span class="top-announcement-marquee-item">Niche to designer, find your signature scent today. <a href="#" class="top-announcement-link" data-announcement-target="all">SHOP COLLECTION</a></span><span class="top-announcement-marquee-item">Fresh drops just landed in our perfume edit. <a href="#" class="top-announcement-link" data-announcement-target="new-in">EXPLORE NEW IN</a></span><span class="top-announcement-marquee-item" aria-hidden="true">Niche to designer, find your signature scent today. <a href="#" class="top-announcement-link" data-announcement-target="all">SHOP COLLECTION</a></span><span class="top-announcement-marquee-item" aria-hidden="true">Fresh drops just landed in our perfume edit. <a href="#" class="top-announcement-link" data-announcement-target="new-in">EXPLORE NEW IN</a></span></div>',
             search_placeholder: 'Search for perfumes, brands...',
             promo_btn: 'NEW COLLECTION',
             promo_note: '',
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         fr: {
             lang_label: 'FR',
-            announcement_html: 'Frais de livraison : 35 MAD dans toutes les villes du Maroc. <a href="#" class="underline hover:text-gray-200">J\'EN PROFITE !</a>',
+            announcement_html: '<div class="top-announcement-marquee"><span class="top-announcement-marquee-item">Parfums niche et designer, trouvez votre signature. <a href="#" class="top-announcement-link" data-announcement-target="all">VOIR COLLECTION</a></span><span class="top-announcement-marquee-item">Nouvelles references disponibles dans notre selection. <a href="#" class="top-announcement-link" data-announcement-target="new-in">VOIR NEW IN</a></span><span class="top-announcement-marquee-item" aria-hidden="true">Parfums niche et designer, trouvez votre signature. <a href="#" class="top-announcement-link" data-announcement-target="all">VOIR COLLECTION</a></span><span class="top-announcement-marquee-item" aria-hidden="true">Nouvelles references disponibles dans notre selection. <a href="#" class="top-announcement-link" data-announcement-target="new-in">VOIR NEW IN</a></span></div>',
             search_placeholder: 'Rechercher un parfum, une marque...',
             promo_btn: 'NEW COLLECTION',
             promo_note: '',
@@ -84,15 +84,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyStaticLanguage = () => {
         document.documentElement.lang = currentLanguage;
         const newArrivalsHref = window.location.pathname.includes('/pages/') ? '../index.html#newArrivalsCarousel' : '#newArrivalsCarousel';
+        const discoverPath = window.location.pathname.includes('/pages/') ? '../discover.html' : 'discover.html';
 
         document.querySelectorAll('.header-lang-btn > span:first-child').forEach((label) => {
             label.textContent = t('lang_label');
         });
 
-        const topAnnouncement = document.querySelector('body > div.bg-brand-red.text-white.text-center.py-2');
+        const topAnnouncement = document.querySelector('.top-announcement');
         if (topAnnouncement) {
             topAnnouncement.innerHTML = t('announcement_html');
         }
+
+        document.querySelectorAll('.top-announcement-link[data-announcement-target]').forEach((link) => {
+            const target = (link.getAttribute('data-announcement-target') || 'all').trim() || 'all';
+            link.setAttribute('href', `${discoverPath}?filter=${encodeURIComponent(target)}`);
+        });
 
         document.querySelectorAll('header input[placeholder]').forEach((input) => {
             input.placeholder = t('search_placeholder');
@@ -204,7 +210,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const announcementHtml = `
             <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide">
-                Delivery fee: 35 MAD in all Morocco cities. <a href="#" class="top-announcement-link">SHOP NOW!</a>
+                <div class="top-announcement-marquee">
+                    <span class="top-announcement-marquee-item">Niche to designer, find your signature scent today. <a href="${discoverPath}?filter=all" class="top-announcement-link" data-announcement-target="all">SHOP COLLECTION</a></span>
+                    <span class="top-announcement-marquee-item">Fresh drops just landed in our perfume edit. <a href="${discoverPath}?filter=new-in" class="top-announcement-link" data-announcement-target="new-in">EXPLORE NEW IN</a></span>
+                    <span class="top-announcement-marquee-item" aria-hidden="true">Niche to designer, find your signature scent today. <a href="${discoverPath}?filter=all" class="top-announcement-link" data-announcement-target="all">SHOP COLLECTION</a></span>
+                    <span class="top-announcement-marquee-item" aria-hidden="true">Fresh drops just landed in our perfume edit. <a href="${discoverPath}?filter=new-in" class="top-announcement-link" data-announcement-target="new-in">EXPLORE NEW IN</a></span>
+                </div>
             </div>
         `;
 
@@ -543,6 +554,39 @@ document.addEventListener('DOMContentLoaded', () => {
         .trim();
 
     const productDetailOverrides = {
+        'bleu de chanel eau de parfum spray': {
+            brand: 'CHANEL',
+            gender: 'men',
+            subtitle: "Men's fragrance · Aromatic Woody · A timeless and magnetic signature with a subtly pronounced aroma.",
+            longDescription: 'A tribute to freedom, expressed in an aromatic woody scent with a captivating trail. A timeless fragrance in a bottle of deep, mysterious blue. The Eau de Parfum of BLEU DE CHANEL, with its subtly pronounced aroma, reveals a determined spirit.',
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'AROMATIC OPENING',
+                    text: 'A fresh and vibrant opening that expresses energy and freedom.'
+                },
+                {
+                    title: 'WOODY HEART',
+                    text: 'A structured woody core that feels elegant, modern, and confident.'
+                },
+                {
+                    title: 'CAPTIVATING TRAIL',
+                    text: 'A subtly pronounced signature that lingers with timeless depth.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/4.jpg'
+            ]
+        },
         'azzaro the most wanted parfum': {
             brand: 'AZZARO',
             gender: 'men',
@@ -739,6 +783,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/2.jpg',
                 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/3.jpg',
                 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/4.jpg'
+            ]
+        },
+        'dior sauvage eau de parfum': {
+            brand: 'DIOR',
+            gender: 'men',
+            subtitle: "Men's fragrance · Woody Amber · A desert-inspired trail with vanilla and ambery woods.",
+            longDescription: "Sauvage Eau de Parfum by Dior embodies the wildest, most elegant, and most audacious masculine spirit. A fragrance inspired by desert sunsets, it spreads its exoticism and sensuality through an unforgettable olfactory trail that leaves its mark wherever it goes. The warmth of the desert blends with the coolness of the night, highlighting exceptional notes such as vanilla from Papua New Guinea and a woody, ambery base. The result is a long-lasting, unique, and unforgettable men's fragrance. The 100ml format of Dior's Sauvage Eau de Parfum is refillable and is part of the House of Dior's sustainable plan to reuse bottles.",
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '60ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'DESERT SUNSET ACCORD',
+                    text: 'A warm, radiant opening inspired by the heat of the desert at dusk.'
+                },
+                {
+                    title: 'PAPUA VANILLA',
+                    text: 'Creamy vanilla from Papua New Guinea adds depth and sensuality.'
+                },
+                {
+                    title: 'AMBERY WOODS',
+                    text: 'A woody, ambery base that leaves a long-lasting, memorable trail.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Dior%20SAUVAGE%20Eau%20de%20Parfum/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Dior%20SAUVAGE%20Eau%20de%20Parfum/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Dior%20SAUVAGE%20Eau%20de%20Parfum/3.webp'
             ]
         },
         'dior homme intense eau de parfum': {
@@ -1249,6 +1325,22 @@ document.addEventListener('DOMContentLoaded', () => {
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .trim();
+
+    const parseAddedValue = (value) => {
+        const raw = String(value || '').trim();
+        if (!raw) return null;
+        const numeric = Number(raw);
+        if (Number.isFinite(numeric)) return numeric;
+        const parsed = Date.parse(raw);
+        if (!Number.isNaN(parsed)) return parsed;
+        return null;
+    };
+
+    const getCardAddedScore = (card, fallbackIndex = 0) => {
+        const raw = card?.dataset?.added || card?.dataset?.productAdded || card?.dataset?.addedAt || '';
+        const parsed = parseAddedValue(raw);
+        return Number.isFinite(parsed) ? parsed : fallbackIndex;
+    };
 
     const extractProductDataFromCard = (card) => {
         const nameEl = card.querySelector('h3, h4, .product-title');
@@ -2562,6 +2654,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchInputs = Array.from(document.querySelectorAll('[data-discover-search]'));
         if (!productCards.length) return;
 
+        const addedIndexMap = new Map(productCards.map((card, index) => [card, index]));
+
         const emptyState = document.createElement('p');
         emptyState.className = 'col-span-full text-sm sm:text-base text-gray-500 text-center py-8 hidden';
         emptyState.textContent = 'No perfumes found for this category.';
@@ -2710,7 +2804,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const applyFilter = () => {
-            let visibleCount = 0;
             const visibleCards = [];
             const hiddenCards = [];
 
@@ -2718,38 +2811,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 const shouldShow = cardMatchesFilter(card, activeFilter)
                     && cardMatchesQuery(card, activeQuery);
                 if (shouldShow) {
-                    visibleCount += 1;
                     visibleCards.push(card);
                 } else {
                     hiddenCards.push(card);
                 }
             });
 
-            const shuffledVisible = getShuffledVisible(visibleCards);
-            const totalPages = Math.max(1, Math.ceil(shuffledVisible.length / pageSize));
+            const orderedVisible = activeFilter === 'new-in'
+                ? visibleCards
+                    .slice()
+                    .sort((a, b) => getCardAddedScore(b, addedIndexMap.get(b)) - getCardAddedScore(a, addedIndexMap.get(a)))
+                    .slice(0, 15)
+                : getShuffledVisible(visibleCards);
+
+            const totalPages = Math.max(1, Math.ceil(orderedVisible.length / pageSize));
             if (currentPage > totalPages) currentPage = 1;
 
             const startIndex = (currentPage - 1) * pageSize;
-            const pageSlice = shuffledVisible.slice(startIndex, startIndex + pageSize);
+            const pageSlice = orderedVisible.slice(startIndex, startIndex + pageSize);
 
             productCards.forEach((card) => {
                 const shouldShow = pageSlice.includes(card);
                 card.classList.toggle('hidden', !shouldShow);
             });
 
-            [...pageSlice, ...shuffledVisible.filter((card) => !pageSlice.includes(card)), ...hiddenCards].forEach((card) => {
+            [...pageSlice, ...orderedVisible.filter((card) => !pageSlice.includes(card)), ...hiddenCards].forEach((card) => {
                 productsGrid.appendChild(card);
             });
             productsGrid.appendChild(emptyState);
 
-            emptyState.classList.toggle('hidden', visibleCount !== 0);
+            emptyState.classList.toggle('hidden', orderedVisible.length !== 0);
 
             if (countEl) {
-                countEl.textContent = String(visibleCount);
+                countEl.textContent = String(orderedVisible.length);
             }
 
             if (countLabelEl) {
-                countLabelEl.textContent = `product${visibleCount === 1 ? '' : 's'} available`;
+                countLabelEl.textContent = `product${orderedVisible.length === 1 ? '' : 's'} available`;
             }
 
             renderPagination(totalPages);
@@ -2799,7 +2897,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedQuery = canRestoreState ? String(savedState.query || '') : '';
         const savedPage = canRestoreState && Number.isFinite(savedState.page) ? Number(savedState.page) : 1;
 
-        const preferredFilter = savedFilter || initialFilter;
+        const hasUrlFilter = allowedFilters.has(urlFilter);
+        const preferredFilter = hasUrlFilter ? urlFilter : (savedFilter || initialFilter);
         const defaultButton = filterButtons.find((button) => (button.dataset.discoverFilter || '').toLowerCase() === preferredFilter)
             || filterButtons.find((button) => button.classList.contains('bg-brand-dark'))
             || filterButtons[0];
@@ -3268,6 +3367,25 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     shuffleFlashOffersDaily();
+    const limitNewArrivalsToLatest = () => {
+        const carousel = document.getElementById('newArrivalsCarousel');
+        if (!carousel) return;
+        const cards = Array.from(carousel.querySelectorAll('article'));
+        if (!cards.length) return;
+
+        const indexMap = new Map(cards.map((card, index) => [card, index]));
+        const sorted = cards
+            .slice()
+            .sort((a, b) => getCardAddedScore(b, indexMap.get(b)) - getCardAddedScore(a, indexMap.get(a)));
+        const latest = sorted.slice(0, 8);
+
+        carousel.innerHTML = '';
+        latest.forEach((card) => {
+            carousel.appendChild(card);
+        });
+    };
+
+    limitNewArrivalsToLatest();
     initCarousel('productCarousel');
     initCarousel('brandCarousel');
     initCarousel('newArrivalsCarousel');

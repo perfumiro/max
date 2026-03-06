@@ -88,6 +88,23 @@ body {
     border-top: 1px solid rgba(255, 255, 255, 0.12);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     letter-spacing: 0.03em;
+    overflow: hidden;
+}
+
+.top-announcement-marquee {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.75rem;
+    min-width: max-content;
+    animation: topAnnouncementMarquee 18s linear infinite;
+    will-change: transform;
+}
+
+.top-announcement-marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    white-space: nowrap;
 }
 
 .top-announcement::after {
@@ -115,6 +132,25 @@ body {
 
 .top-announcement-link:hover {
     color: #e73c3c;
+}
+
+.top-announcement:hover .top-announcement-marquee {
+    animation-play-state: paused;
+}
+
+@keyframes topAnnouncementMarquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-50% - 1.375rem));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .top-announcement-marquee {
+        animation: none;
+    }
 }
 
 .perfume-nav {
