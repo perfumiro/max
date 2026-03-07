@@ -545,6 +545,143 @@ document.addEventListener('DOMContentLoaded', () => {
         }, intervalMs);
     };
 
+    const initProductBadgeRotation = () => {
+        const flashCarousel = document.getElementById('productCarousel');
+        if (!flashCarousel) return;
+
+        const DAY_MS = 24 * 60 * 60 * 1000;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const stateClasses = [
+            'badge-state-new',
+            'badge-state-seller',
+            'badge-state-offer',
+            'badge-state-hot',
+            'badge-state-trend'
+        ];
+
+        const rotatingLabelSets = [
+            ['NEW', 'BEST SELLER', 'BEST OFFER'],
+            ['NEW', 'HOT PICK', 'BEST SELLER'],
+            ['NEW', 'BEST OFFER', 'TOP TREND'],
+            ['NEW', 'LIMITED DEAL', 'HOT PICK']
+        ];
+
+        const getBadgeStateClass = (label) => {
+            const normalized = (label || '').toLowerCase();
+            if (normalized.includes('offer') || normalized.includes('deal')) return 'badge-state-offer';
+            if (normalized.includes('seller')) return 'badge-state-seller';
+            if (normalized.includes('hot')) return 'badge-state-hot';
+            if (normalized.includes('trend')) return 'badge-state-trend';
+            return 'badge-state-new';
+        };
+
+        const hashString = (value) => {
+            let hash = 0;
+            for (let i = 0; i < value.length; i += 1) {
+                hash = ((hash << 5) - hash) + value.charCodeAt(i);
+                hash |= 0;
+            }
+            return Math.abs(hash);
+        };
+
+        const clearBadgeTimer = (badge) => {
+            if (badge.dataset.badgeTimerId) {
+                window.clearInterval(Number(badge.dataset.badgeTimerId));
+                badge.dataset.badgeTimerId = '';
+            }
+        };
+
+        const applyDailyBadgeSelection = () => {
+            const cards = Array.from(flashCarousel.querySelectorAll('.js-product-link'));
+            if (!cards.length) return;
+
+            const cardBadges = cards
+                .map((card) => {
+                    const badge = card.querySelector('span.absolute.top-4.left-4');
+                    if (!badge) return null;
+                    return { card, badge };
+                })
+                .filter(Boolean);
+
+            if (!cardBadges.length) return;
+
+            const dayKey = Math.floor(Date.now() / DAY_MS);
+            const rotatingCount = Math.min(3, cardBadges.length);
+
+            const firstBadge = cardBadges[0];
+            const remainingPool = cardBadges.slice(1);
+            const remainingNeeded = Math.max(0, rotatingCount - 1);
+
+            const dailySelected = [...remainingPool]
+                .sort((a, b) => {
+                    const keyA = `${a.card.dataset.productName || ''}-${dayKey}`;
+                    const keyB = `${b.card.dataset.productName || ''}-${dayKey}`;
+                    return hashString(keyA) - hashString(keyB);
+                })
+                .slice(0, remainingNeeded);
+
+            const selected = firstBadge ? [firstBadge, ...dailySelected] : dailySelected;
+
+            const selectedSet = new Set(selected.map((item) => item.badge));
+
+            cardBadges.forEach(({ badge }) => {
+                badge.classList.add('product-rotating-badge');
+                clearBadgeTimer(badge);
+                badge.classList.remove('is-switching', ...stateClasses);
+
+                if (!selectedSet.has(badge)) {
+                    badge.textContent = 'NEW';
+                    badge.classList.add('badge-state-new');
+                }
+            });
+
+            selected.forEach(({ badge }, index) => {
+                const labels = rotatingLabelSets[index % rotatingLabelSets.length];
+                let activeIndex = 0;
+
+                const renderBadge = (nextIndex, animate = true) => {
+                    activeIndex = nextIndex % labels.length;
+                    const nextLabel = labels[activeIndex];
+
+                    const applyVisual = () => {
+                        badge.textContent = nextLabel;
+                        badge.classList.remove(...stateClasses);
+                        badge.classList.add(getBadgeStateClass(nextLabel));
+                    };
+
+                    if (!animate || prefersReducedMotion) {
+                        applyVisual();
+                        return;
+                    }
+
+                    badge.classList.add('is-switching');
+                    window.setTimeout(() => {
+                        applyVisual();
+                    }, 160);
+                    window.setTimeout(() => {
+                        badge.classList.remove('is-switching');
+                    }, 420);
+                };
+
+                renderBadge(activeIndex, false);
+
+                const timerId = window.setInterval(() => {
+                    renderBadge(activeIndex + 1, true);
+                }, 2900 + (index * 260));
+                badge.dataset.badgeTimerId = String(timerId);
+            });
+        };
+
+        applyDailyBadgeSelection();
+
+        const msUntilNextDay = DAY_MS - (Date.now() % DAY_MS) + 200;
+        window.setTimeout(() => {
+            applyDailyBadgeSelection();
+            window.setInterval(applyDailyBadgeSelection, DAY_MS);
+        }, msUntilNextDay);
+    };
+
     const normalizeImagePathForCurrentPage = (imageSrc) => {
         if (!imageSrc) return '';
         if (/^(https?:)?\/\//.test(imageSrc) || imageSrc.startsWith('data:') || imageSrc.startsWith('/')) {
@@ -3715,13 +3852,62 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { capture: true });
     };
 
+    const initSocialVideoSwitcher = () => {
+        const section = document.getElementById('socialVideoSection');
+        if (!section) return;
+
+        const frame = section.querySelector('#socialVideoFrame');
+        const links = Array.from(section.querySelectorAll('.js-social-video-link[data-video-src]'));
+        if (!frame || !links.length) return;
+
+        const activeClasses = ['border-brand-red', 'bg-red-50', 'text-brand-red'];
+        const inactiveClasses = ['border-gray-300', 'text-gray-700'];
+
+        const setActiveLink = (activeLink) => {
+            links.forEach((link) => {
+                const isActive = link === activeLink;
+                link.classList.toggle('border-brand-red', isActive);
+                link.classList.toggle('bg-red-50', isActive);
+                link.classList.toggle('text-brand-red', isActive);
+                link.classList.toggle('border-gray-300', !isActive);
+                link.classList.toggle('text-gray-700', !isActive);
+                link.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            });
+        };
+
+        links.forEach((link) => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+
+                const nextVideoSrc = (link.getAttribute('data-video-src') || '').trim();
+                if (nextVideoSrc && frame.getAttribute('src') !== nextVideoSrc) {
+                    frame.setAttribute('src', nextVideoSrc);
+                }
+
+                setActiveLink(link);
+
+                frame.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+            });
+        });
+
+        const preselectedLink = links.find((link) => link.classList.contains('bg-red-50')) || links[0];
+        if (preselectedLink) {
+            setActiveLink(preselectedLink);
+        }
+    };
+
     applyOfficialHeaderFooter();
     initBrandLogoDotAnimation();
     normalizeLegacyFrenchContent();
     initLanguageSwitcher();
     initMobileSearchToggle();
     disableInspectTools();
+    initSocialVideoSwitcher();
     initHeroOfferRotator();
+    initProductBadgeRotation();
     bindProductLinks();
     initProductDetailPage();
     initCartPage();

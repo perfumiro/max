@@ -694,15 +694,85 @@ body {
 }
 
 .aether-main-media {
+    position: relative;
+    isolation: isolate;
     overflow: hidden;
     border-radius: 0.125rem;
     background: #050505;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
+}
+
+.aether-cinematic-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.aether-cinematic-section::before,
+.aether-cinematic-section::after {
+    content: "";
+    position: absolute;
+    inset: auto;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.aether-cinematic-section::before {
+    width: min(48vw, 620px);
+    height: min(48vw, 620px);
+    left: -10%;
+    top: -16%;
+    background: radial-gradient(circle at 45% 45%, rgba(245, 158, 11, 0.26), rgba(245, 158, 11, 0.08) 46%, transparent 72%);
+    animation: aetherAmbientDrift 16s ease-in-out infinite alternate;
+}
+
+.aether-cinematic-section::after {
+    width: min(44vw, 520px);
+    height: min(44vw, 520px);
+    right: -12%;
+    bottom: -22%;
+    background: radial-gradient(circle at 38% 36%, rgba(56, 189, 248, 0.14), rgba(56, 189, 248, 0.05) 52%, transparent 78%);
+    animation: aetherAmbientDrift 20s ease-in-out infinite alternate-reverse;
+}
+
+.aether-cinematic-section > .max-w-7xl {
+    position: relative;
+    z-index: 1;
+}
+
+.aether-main-media::before {
+    content: "";
+    position: absolute;
+    inset: -22% -48% auto;
+    height: 58%;
+    background: linear-gradient(112deg, rgba(255, 255, 255, 0), rgba(255, 233, 186, 0.22) 44%, rgba(255, 255, 255, 0));
+    transform: translateX(-35%) rotate(6deg);
+    animation: aetherLightSweep 9.5s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.aether-main-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 0.45px, transparent 0.45px);
+    background-size: 3px 3px;
+    opacity: 0.12;
+    mix-blend-mode: soft-light;
+    animation: aetherGrainShift 0.75s steps(2) infinite;
+    pointer-events: none;
+    z-index: 3;
 }
 
 .aether-main-img {
     object-fit: contain;
     object-position: center;
     padding: 0.4rem;
+    transform-origin: 52% 48%;
+    filter: saturate(1.05) contrast(1.04) brightness(1.02);
+    animation:
+        aetherKenBurnsMain 15s ease-in-out infinite alternate,
+        aetherColorGradeMain 11s ease-in-out infinite alternate;
 }
 
 @media (max-width: 767px) {
@@ -726,15 +796,194 @@ body {
 }
 
 .aether-featured-media {
+    position: relative;
+    isolation: isolate;
     height: 250px;
     overflow: hidden;
     border-radius: 0.125rem;
     background: #070707;
+    box-shadow: 0 20px 46px rgba(0, 0, 0, 0.42);
+}
+
+.aether-featured-media::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 12% 24%, rgba(245, 158, 11, 0.22), transparent 48%),
+        linear-gradient(120deg, rgba(245, 158, 11, 0.12), rgba(34, 197, 94, 0.06) 54%, rgba(14, 165, 233, 0.08));
+    mix-blend-mode: soft-light;
+    opacity: 0.32;
+    pointer-events: none;
+    z-index: 2;
+    animation: aetherGradeOverlayShift 12s ease-in-out infinite alternate;
 }
 
 .aether-featured-img {
     object-fit: cover;
     object-position: center 58%;
+    transform-origin: 50% 50%;
+    filter: saturate(1.07) contrast(1.05) brightness(1.01);
+    animation:
+        aetherKenBurnsFeatured 18s ease-in-out infinite alternate,
+        aetherColorGradeFeatured 13s ease-in-out infinite alternate;
+}
+
+.aether-kicker {
+    text-shadow: 0 2px 16px rgba(255, 255, 255, 0.16);
+    animation: aetherKickerPulse 4.8s ease-in-out infinite;
+}
+
+.aether-copy-zone {
+    animation: aetherCopyBreath 6s ease-in-out infinite;
+}
+
+.aether-title {
+    text-shadow: 0 4px 22px rgba(249, 212, 150, 0.22);
+    animation: aetherTitleGlow 4.3s ease-in-out infinite;
+}
+
+.aether-discover-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.aether-discover-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.2rem;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent);
+    transform: scaleX(0.32);
+    transform-origin: center;
+    animation: aetherLinkPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes aetherKenBurnsMain {
+    0% {
+        transform: scale(1.03) translate3d(-1.2%, 0, 0);
+    }
+    100% {
+        transform: scale(1.09) translate3d(1.1%, -1.2%, 0);
+    }
+}
+
+@keyframes aetherKenBurnsFeatured {
+    0% {
+        transform: scale(1.02) translate3d(0, 0.6%, 0);
+    }
+    100% {
+        transform: scale(1.07) translate3d(-1.1%, -0.6%, 0);
+    }
+}
+
+@keyframes aetherLightSweep {
+    0%,
+    100% {
+        transform: translateX(-38%) rotate(6deg);
+        opacity: 0.55;
+    }
+    45% {
+        transform: translateX(28%) rotate(5deg);
+        opacity: 0.9;
+    }
+}
+
+@keyframes aetherColorGradeMain {
+    0% {
+        filter: saturate(1.02) contrast(1.03) brightness(1.01) hue-rotate(0deg);
+    }
+    100% {
+        filter: saturate(1.12) contrast(1.07) brightness(1.04) hue-rotate(-2deg);
+    }
+}
+
+@keyframes aetherColorGradeFeatured {
+    0% {
+        filter: saturate(1.04) contrast(1.03) brightness(1) hue-rotate(0deg);
+    }
+    100% {
+        filter: saturate(1.13) contrast(1.08) brightness(1.03) hue-rotate(-3deg);
+    }
+}
+
+@keyframes aetherGradeOverlayShift {
+    0% {
+        opacity: 0.2;
+        transform: translate3d(-1.5%, 0, 0) scale(1.02);
+    }
+    100% {
+        opacity: 0.38;
+        transform: translate3d(1.5%, -1%, 0) scale(1.04);
+    }
+}
+
+@keyframes aetherGrainShift {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(1px, -1px, 0);
+    }
+}
+
+@keyframes aetherAmbientDrift {
+    0% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+    100% {
+        transform: translate3d(2%, -3%, 0) scale(1.08);
+    }
+}
+
+@keyframes aetherTitleGlow {
+    0%,
+    100% {
+        opacity: 0.96;
+        transform: translateY(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-1px);
+    }
+}
+
+@keyframes aetherCopyBreath {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes aetherKickerPulse {
+    0%,
+    100% {
+        letter-spacing: 0.2em;
+        opacity: 0.86;
+    }
+    50% {
+        letter-spacing: 0.24em;
+        opacity: 1;
+    }
+}
+
+@keyframes aetherLinkPulse {
+    0%,
+    100% {
+        transform: scaleX(0.35);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scaleX(1);
+        opacity: 0.92;
+    }
 }
 
 @media (min-width: 640px) {
@@ -752,6 +1001,23 @@ body {
         object-fit: contain;
         object-position: center;
         padding: 0.65rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aether-cinematic-section::before,
+    .aether-cinematic-section::after,
+    .aether-main-media::before,
+    .aether-main-media::after,
+    .aether-featured-media::before,
+    .aether-main-img,
+    .aether-featured-img,
+    .aether-kicker,
+    .aether-copy-zone,
+    .aether-title,
+    .aether-discover-link::after {
+        animation: none !important;
+        transform: none !important;
     }
 }
 
@@ -1498,6 +1764,78 @@ button.product-favorite-btn.is-active i {
     --carousel-nav-top: 50%;
 }
 
+.flash-offers-title {
+    font-weight: 800;
+    letter-spacing: 0.035em;
+}
+
+.flash-offers-title .flash-word {
+    display: inline-block;
+    transform: translateY(0);
+    animation: flashWordFloat 2.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    will-change: transform;
+}
+
+.flash-offers-title .flash-word-left {
+    animation-delay: 0.05s;
+}
+
+.flash-offers-title .flash-word-right {
+    animation-delay: 0.16s;
+}
+
+.flash-offers-title .flash-bolt {
+    display: inline-block;
+    transform-origin: 50% 55%;
+    filter: drop-shadow(0 4px 10px rgba(231, 60, 60, 0.28));
+    animation: flashBoltStrike 1.55s ease-in-out infinite;
+    will-change: transform, filter;
+}
+
+.flash-offers-title-mobile {
+    font-size: clamp(1.3rem, 6vw, 1.8rem);
+}
+
+.flash-offers-title-desktop {
+    font-size: clamp(1.75rem, 2.4vw, 2.2rem);
+}
+
+@keyframes flashWordFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    18% {
+        transform: translateY(-1px);
+    }
+    36% {
+        transform: translateY(-3px);
+    }
+    54% {
+        transform: translateY(-1px);
+    }
+}
+
+@keyframes flashBoltStrike {
+    0%,
+    100% {
+        transform: translateY(0) scale(1) rotate(0deg);
+        filter: drop-shadow(0 4px 10px rgba(231, 60, 60, 0.24));
+    }
+    20% {
+        transform: translateY(-2px) scale(1.1) rotate(-8deg);
+        filter: drop-shadow(0 7px 16px rgba(231, 60, 60, 0.42));
+    }
+    34% {
+        transform: translateY(0) scale(0.96) rotate(6deg);
+        filter: drop-shadow(0 4px 11px rgba(231, 60, 60, 0.3));
+    }
+    48% {
+        transform: translateY(-1px) scale(1.05) rotate(-4deg);
+        filter: drop-shadow(0 7px 15px rgba(231, 60, 60, 0.4));
+    }
+}
+
 #flashOffersSection .carousel-nav-btn {
     display: none !important;
 }
@@ -1527,6 +1865,15 @@ button.product-favorite-btn.is-active i {
 @media (min-width: 768px) {
     .carousel-shell .carousel-nav-btn {
         display: inline-flex;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .flash-offers-title .flash-word,
+    .flash-offers-title .flash-bolt {
+        animation: none !important;
+        transform: none !important;
+        filter: none !important;
     }
 }
 
@@ -1586,6 +1933,62 @@ button.product-favorite-btn.is-active i {
     min-height: 430px;
     border-radius: 1rem;
     box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+#productCarousel > .group .product-rotating-badge {
+    min-width: 5.6rem;
+    text-align: center;
+    letter-spacing: 0.08em;
+    transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+    will-change: transform, opacity;
+}
+
+#productCarousel > .group .product-rotating-badge.badge-state-new {
+    background: #111827;
+    color: #ffffff;
+}
+
+#productCarousel > .group .product-rotating-badge.badge-state-seller {
+    background: #0f172a;
+    color: #fcd34d;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
+}
+
+#productCarousel > .group .product-rotating-badge.badge-state-offer {
+    background: #dc2626;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.28);
+}
+
+#productCarousel > .group .product-rotating-badge.badge-state-hot {
+    background: #ea580c;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+}
+
+#productCarousel > .group .product-rotating-badge.badge-state-trend {
+    background: #7c3aed;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.24);
+}
+
+#productCarousel > .group .product-rotating-badge.is-switching {
+    animation: productBadgeSwitch 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes productBadgeSwitch {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    40% {
+        transform: translateY(-8px) scale(0.92);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
 }
 
 #productCarousel > .group .h-48 {
