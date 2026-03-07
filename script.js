@@ -3694,11 +3694,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const disableInspectTools = () => {
+        document.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+        }, { capture: true });
+
+        document.addEventListener('keydown', (event) => {
+            const key = (event.key || '').toLowerCase();
+            const ctrlOrMeta = event.ctrlKey || event.metaKey;
+            const shift = event.shiftKey;
+
+            const blockDevToolsCombo = key === 'f12'
+                || (ctrlOrMeta && shift && (key === 'i' || key === 'j' || key === 'c'))
+                || (ctrlOrMeta && (key === 'u' || key === 's'));
+
+            if (!blockDevToolsCombo) return;
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+        }, { capture: true });
+    };
+
     applyOfficialHeaderFooter();
     initBrandLogoDotAnimation();
     normalizeLegacyFrenchContent();
     initLanguageSwitcher();
     initMobileSearchToggle();
+    disableInspectTools();
     initHeroOfferRotator();
     bindProductLinks();
     initProductDetailPage();
