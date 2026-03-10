@@ -31,16 +31,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const slides = Array.from(bannerContainer.querySelectorAll('.mobile-flash-banner-slide'));
         if (slides.length < 2) return;
 
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const rotationDelayMs = prefersReducedMotion ? 4500 : 3600;
+        const transitionCleanupMs = prefersReducedMotion ? 350 : 950;
+
         let activeIndex = 0;
         slides.forEach((slide, index) => {
-            slide.classList.toggle('hidden', index !== activeIndex);
+            slide.classList.remove('hidden', 'block', 'is-active', 'is-exiting');
+            if (index === activeIndex) {
+                slide.classList.add('is-active');
+            }
         });
 
         window.setInterval(() => {
-            slides[activeIndex].classList.add('hidden');
-            activeIndex = (activeIndex + 1) % slides.length;
-            slides[activeIndex].classList.remove('hidden');
-        }, 3200);
+            const currentSlide = slides[activeIndex];
+            const nextIndex = (activeIndex + 1) % slides.length;
+            const nextSlide = slides[nextIndex];
+
+            currentSlide.classList.remove('is-active');
+            currentSlide.classList.add('is-exiting');
+
+            nextSlide.classList.remove('is-exiting');
+            nextSlide.classList.add('is-active');
+
+            window.setTimeout(() => {
+                currentSlide.classList.remove('is-exiting');
+            }, transitionCleanupMs);
+
+            activeIndex = nextIndex;
+        }, rotationDelayMs);
     };
 
     initMobileFlashBannerRotation();
@@ -86,6 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
             wishlist_item_plural: 'articles',
             product_fallback: 'Produit'
         }
+    };
+
+    const getPolicyPageHref = (page) => {
+        const isPagesView = window.location.pathname.includes('/pages/');
+        if (isPagesView) return `${page}.html`;
+        return `pages/${page}.html`;
     };
 
     let currentLanguage = supportedLanguages.includes(localStorage.getItem(languageStorageKey))
@@ -743,6 +768,243 @@ document.addEventListener('DOMContentLoaded', () => {
                 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/2.jpg',
                 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/3.jpg',
                 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/4.jpg'
+            ]
+        },
+        'rabanne one million parfum': {
+            brand: 'RABANNE',
+            gender: 'men',
+            subtitle: "Men's fragrance · Salty Woody · An iconic signature blending leather audacity with floral and spicy touches.",
+            longDescription: "One Million Eau de Parfum is Paco Rabanne's star men's fragrance that has been a sensation since its launch. It's a recognized scent that leaves its mark wherever it goes. The sensuality and freshness it conveys are part of its unique identity, which possesses the audacity of the most authentic leather and the duality between a salty and woody impulse with floral and spicy touches. The One Million EDP gift set will allow you to offer the gift with the intense aroma that everyone desires.",
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'AUTHENTIC LEATHER',
+                    text: 'A bold leather character gives the fragrance its audacious and unmistakable identity.'
+                },
+                {
+                    title: 'SALTY WOODY IMPULSE',
+                    text: 'A sensual salty-woody contrast creates freshness, depth, and modern intensity.'
+                },
+                {
+                    title: 'FLORAL & SPICY TOUCHES',
+                    text: 'Floral nuances and spicy accents round out the trail with lasting sophistication.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Parfum/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Parfum/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Parfum/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Parfum/4.jpg'
+            ]
+        },
+        'rabanne one million elixir intense': {
+            brand: 'RABANNE',
+            gender: 'men',
+            subtitle: "Men's fragrance · Aromatic Amber · The pinnacle of One Million intensity with rose, tonka bean, woods, and black vanilla.",
+            longDescription: "Discover One Million Elixir , the pinnacle of Million 's intensity , a new fragrance guided by the desire for supreme quality. A blend of carefully selected ingredients from around the world, celebrating the craftsmanship of our perfumers and the fusion of the finest raw materials. A new dimension, incredibly intense, undoubtedly One Million. The iconic One Million gold ingot , bolder and more sophisticated than ever. A handcrafted jewel that reflects the different facets of the fragrance. A symbol of a new strength: elegant, intense, and enigmatic. The exquisitely crafted bottle encapsulates the soul and essence of One Million , the infinite depth of this new olfactory creation. The pinnacle of absolute intensity. One Million Elixir , more intense than ever, to captivate you. Hand-selected ingredients—Turkish rose, osmanthus, and wild-harvested tonka bean—make this masterpiece stand out for its exceptional quality. The deeply sensual Davana liqueur vibrates with the touch of soft woods and black vanilla seeds; supreme sensuality meets absolute, long-lasting power.",
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'TURKISH ROSE & OSMANTHUS',
+                    text: 'A refined floral duo that brings richness, elegance, and exceptional depth.'
+                },
+                {
+                    title: 'DAVANA LIQUEUR',
+                    text: 'A deeply sensual heart with a warm liqueur-like texture and magnetic character.'
+                },
+                {
+                    title: 'TONKA, WOODS & BLACK VANILLA',
+                    text: 'Wild tonka bean, soft woods, and black vanilla create an intense, long-lasting trail.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/4.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/5.jpg'
+            ]
+        },
+        'givenchy gentleman society amber eau de parfum': {
+            brand: 'GIVENCHY',
+            gender: 'men',
+            subtitle: "Men's fragrance · Amber Woody · Narcissus and vetiver enhanced by leather, tobacco, warm spices, and Tasuki vanilla.",
+            longDescription: "Givenchy presents Gentleman Society Eau de Parfum Ambree , a captivating blend of vibrant narcissus flower and a quartet of vetivers, enhanced by rich notes of leather and tobacco. A COMPOSITION MADE WITH EXCEPTIONAL RAW MATERIALS Gentleman Society Ambree reinvents the iconic woody signature of Gentleman Society with a new amber facet, enriched with the balsamic notes of Tasuki vanilla. Expressing Givenchy's unique savoir-faire, Gentleman Society Eau de Parfum Ambree unveils a sophisticated accord of narcissus blossom and a quartet of vetiver, intensified by the boldness of leather and tobacco. Warm spices blend harmoniously with the richness of Tasuki vanilla from Madagascar, combined with a balsam essence, creating an elegant and deeply captivating trail. AN ICONIC BOTTLE WITH GOLDEN REFLECTIONS The iconic Gentleman Society bottle, entirely lacquered in black, is adorned with a refined gold crest, a symbol of elegance and prestige. Combining opulence and timelessness, it invites the expression of sensuality and individuality. GENTLEMAN SOCIETY. MORE THAN A PLACE, A STATE OF MIND For this new chapter, Gentleman Society expands around the English composer Benjamin Clementine. His elegance and undeniable charisma resonate as an invitation to join a community that is bolder and more inclusive than ever.",
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'NARCISSUS & VETIVER',
+                    text: 'A sophisticated floral-woody core built around narcissus and a quartet of vetivers.'
+                },
+                {
+                    title: 'LEATHER & TOBACCO',
+                    text: 'Rich leather and tobacco add bold texture and deep masculine character.'
+                },
+                {
+                    title: 'TASUKI VANILLA',
+                    text: 'Warm spices and balsamic vanilla from Madagascar create an elegant amber trail.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/4.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/5.jpg'
+            ]
+        },
+        'givenchy gentleman society nomade eau de parfum': {
+            brand: 'GIVENCHY',
+            gender: 'men',
+            subtitle: "Men's fragrance · Floral Woody · Sage, narcissus, vetiver quartet, woods, and vanilla in a bold Givenchy signature.",
+            longDescription: "Givenchy redefines the figure of the gentleman with Gentleman Society Eau de Parfum, a bold statement for men who reinvent their own rules and always act for a better world. Wild narcissus blossom blends with a mysterious woody accord to create a fragrance of rare sophistication. An expression of Givenchy's unique savoir-faire, Gentleman Society is composed of exceptional raw materials. From the very first spritz, the fresh, aromatic notes of sage blend with wild narcissus absolute harvested in the heart of France. This unique floral facet is contrasted by the dark intensity of a quartet of vetiver from Uruguay and Madagascar. Essences of cedarwood and sandalwood melt into an addictive and sensual vanilla, leaving a truly memorable trail. A deep and multifaceted men's Eau de Parfum. The couture design reimagines the iconic Gentleman bottle with pure elegance. Like a coat of arms, a reinterpreted 4G monogram in gleaming silver metal adorns the intense black lacquer. The bottle contains 15% recycled glass.",
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'SAGE & NARCISSUS',
+                    text: 'An aromatic opening with wild narcissus that brings freshness and floral sophistication.'
+                },
+                {
+                    title: 'VETIVER QUARTET',
+                    text: 'Vetiver from Uruguay and Madagascar adds a dark, textured, and modern woody heart.'
+                },
+                {
+                    title: 'CEDAR, SANDALWOOD & VANILLA',
+                    text: 'Woods and sensual vanilla leave a deep, memorable, and multifaceted trail.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/4.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/5.jpg'
+            ]
+        },
+        'givenchy gentleman society extreme eau de parfum': {
+            brand: 'GIVENCHY',
+            gender: 'men',
+            subtitle: "Men's fragrance · Woody Aromatic · A daring blend of clary sage, iced mint, coffee, vetiver, woods, patchouli, and vanilla.",
+            longDescription: "GIVENCHY Gentleman Society Extreme EDP With its magnetic masculine signature, Gentleman Society Eau de Parfum Extreme embodies a new attitude within the Gentleman Society. Tailor-made for the most daring, this addictive fragrance is designed for the man who pushes his limits in an eternal quest for excellence, breaking barriers and fearlessly leaping into the unknown. Crafted with Givenchy's expertise, Gentleman Society Eau de Parfum Extreme is composed of exceptional raw materials, carefully selected for their outstanding olfactory qualities. The top notes of Clary Sage are enhanced by Iced Mint and Nutmeg, creating an immediate aromatic and spicy touch. The mysterious heart reveals the original Gentleman Society accord, a blend of Narcissus Absolute and Iris Concrete, contrasted by the characteristic quartet of Vetiver. From this accord emerges a powerful and unexpected Coffee Absolute Extract. Combined with Mint Essence, this Coffee note becomes icy, revealing a new and intensely textured facet. At the base, the woody notes of Cedar and Sandalwood are deepened with Patchouli Essence and Vanilla Absolute, perfecting this profound signature. Inspired by haute couture, the iconic design of the Gentleman bottle is reinterpreted with a striking new look. The deep black lacquered finish is enhanced with Givenchy's symbol: the 4G logo, engraved like a crest, in a new metallic bronze finish. The Gentleman Society Eau de Parfum Extreme bottle is made with 15% recycled glass. Gentleman Society. It's not a place, it's a state of mind. Join us.",
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'CLARY SAGE, MINT & NUTMEG',
+                    text: 'An aromatic-spicy opening with iced freshness and immediate intensity.'
+                },
+                {
+                    title: 'NARCISSUS, IRIS & VETIVER',
+                    text: 'The signature Gentleman Society heart gains depth through floral elegance and smoky vetiver power.'
+                },
+                {
+                    title: 'COFFEE, WOODS & VANILLA',
+                    text: 'Icy coffee meets cedar, sandalwood, patchouli, and vanilla for a bold, long-lasting finish.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/4.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/5.jpg'
+            ]
+        },
+        'gentleman private reserve eau de parfum': {
+            brand: 'GIVENCHY',
+            gender: 'men',
+            subtitle: "Men's fragrance · Amber Woody · Airy iris and amber woods elevated by natural whisky absolute.",
+            longDescription: "Timeless elegance is reinvented with Givenchy Gentleman Reserve Privee , a fragrance that celebrates the sensuality of amber wood and the sophistication of airy iris . This olfactory duo creates an addictive and enveloping composition , a symbol of contemporary masculine refinement. At the heart of this creation beats the absolute of natural whisky , made in Grasse from aromatic barley from a Scottish distillery , for a warm, intense and unique character. Its bottle with clean lines and amber finish , inspired by the silhouette of an elegant flask, reflects the perfect fusion between tradition and modernity. Gentleman Reserve Privee Eau de Parfum is an ode to the sophisticated, self-assured, and profoundly authentic man. A fragrance that embodies the art of French savoir-faire combined with the essence of Scotch whisky: intense, refined, and eternally elegant .",
+            sizes: [
+                'Decante 10ML — 90DH',
+                'Decante 20ML — 180DH',
+                'Decante 30ML — 370DH',
+                '50ML — 650DH',
+                '100ML — 850DH'
+            ],
+            notes: [
+                {
+                    title: 'AIRY IRIS',
+                    text: 'A refined iris accord brings elegance and contemporary masculine sophistication.'
+                },
+                {
+                    title: 'WHISKY ABSOLUTE',
+                    text: 'Natural whisky absolute from aromatic barley adds warmth, intensity, and uniqueness.'
+                },
+                {
+                    title: 'AMBER WOODS',
+                    text: 'Sensual amber woods create an enveloping and long-lasting elegant trail.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/1.png',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/4.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/5.jpg'
+            ]
+        },
+        'jean paul gaultier scandal elixir': {
+            brand: 'JEAN PAUL GAULTIER',
+            gender: 'men',
+            subtitle: "Men's fragrance · Amber Fruity Woody · Black cherry, patchouli, and tonka bean in a rich, provocative elixir.",
+            longDescription: "In first class on the Gaultier train, Scandal Pour Homme Elixir reigns supreme, with its amber, fruity, and woody fragrance. Its provocative black cherry and audacious patchouli assert themselves with elegance, while its tonka bean reveals a scandalous sweetness. Who wouldn't dream of encountering it? Behind the red velvet and the closed door of its exclusive case, only the most audacious can enter and succumb to the silver gradient of its amber-hued bottle. Crowned with intensity and excess, everything about it is temptation. Excess dominates, pleasures multiply. The passengers are outraged? So much the better! That's exactly what it's after.",
+            sizes: [
+                'Decante 10ML — 130DH',
+                'Decante 20ML — 240DH',
+                'Decante 30ML — 350DH',
+                '75ML — 990DH',
+                '125ML — 1350DH'
+            ],
+            notes: [
+                {
+                    title: 'BLACK CHERRY',
+                    text: 'A provocative fruity opening that immediately commands attention.'
+                },
+                {
+                    title: 'PATCHOULI',
+                    text: 'Audacious patchouli adds depth, elegance, and bold character.'
+                },
+                {
+                    title: 'TONKA BEAN',
+                    text: 'A smooth, scandalous sweetness that lingers with addictive intensity.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/4.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/5.jpg'
             ]
         },
         'azzaro the most wanted parfum': {
@@ -1761,6 +2023,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const relatedProductCatalog = [
         {
+            name: 'Rabanne One Million Parfum',
+            brand: 'RABANNE',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Parfum/1.jpg'
+        },
+        {
+            name: 'Rabanne One Million Elixir Intense',
+            brand: 'RABANNE',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/1.webp'
+        },
+        {
+            name: 'Givenchy Gentleman Society Amber Eau de Parfum',
+            brand: 'GIVENCHY',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/1.jpg'
+        },
+        {
+            name: 'Givenchy Gentleman Society Nomade Eau de Parfum',
+            brand: 'GIVENCHY',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/1.webp'
+        },
+        {
+            name: 'Givenchy Gentleman Society Extreme Eau de Parfum',
+            brand: 'GIVENCHY',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/1.webp'
+        },
+        {
+            name: 'Gentleman Private Reserve Eau de Parfum',
+            brand: 'GIVENCHY',
+            price: '50ML 650DH · 100ML 850DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/1.png'
+        },
+        {
+            name: 'Jean Paul Gaultier Scandal Elixir',
+            brand: 'JEAN PAUL GAULTIER',
+            price: '75ML 990DH · 125ML 1350DH',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/1.jpg'
+        },
+        {
             name: 'Emporio Armani Stronger With You Intensely EDP',
             brand: 'GIORGIO ARMANI',
             price: '50ML 650DH · 100ML 850DH',
@@ -2278,6 +2589,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const mainPriceEl = document.getElementById('productPrice');
+        const oldPriceEl = document.getElementById('productOldPrice');
+        const discountEl = document.getElementById('productDiscount');
+        const priceCardEl = mainPriceEl ? mainPriceEl.closest('.product-price-card') : null;
         const stickyPriceEl = document.getElementById('stickyPrice');
         const addToCartBtn = document.getElementById('addToCartBtn');
         const stickyAddToCartBtn = document.getElementById('stickyAddToCartBtn');
@@ -2298,6 +2612,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         let selectedSize = null;
+
+        const syncPriceCardState = (selectedPriceText) => {
+            if (!priceCardEl) return;
+
+            const hasMeta = Boolean((oldPriceEl?.textContent || '').trim() || (discountEl?.textContent || '').trim());
+            const hasSelectedPrice = Boolean(selectedPriceText);
+
+            priceCardEl.classList.toggle('has-meta', hasMeta);
+            priceCardEl.classList.toggle('is-priced', hasSelectedPrice);
+
+            if (!hasSelectedPrice) {
+                priceCardEl.classList.remove('is-price-animating');
+                return;
+            }
+
+            // Re-trigger the reveal animation each time a size is selected.
+            priceCardEl.classList.remove('is-price-animating');
+            void priceCardEl.offsetWidth;
+            priceCardEl.classList.add('is-price-animating');
+        };
 
         const setAddButtonsEnabled = (enabled) => {
             [addToCartBtn, stickyAddToCartBtn].forEach((button) => {
@@ -2322,6 +2656,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 stickyPriceEl.classList.toggle('text-gray-500', !selectedPrice);
                 stickyPriceEl.classList.toggle('text-brand-dark', !!selectedPrice);
             }
+
+            syncPriceCardState(selectedPrice);
         };
 
         sizeButtons.forEach((btn) => btn.classList.remove('is-active'));
@@ -3899,11 +4235,194 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const initLoginLegalConsent = () => {
+        const isLoginPage = window.location.pathname.replace(/\\/g, '/').endsWith('/pages/login.html');
+        if (!isLoginPage) return;
+
+        const form = document.getElementById('loginForm') || document.querySelector('main form[action="#"]');
+        const consentCheckbox = document.getElementById('loginLegalConsent');
+        const submitButton = document.getElementById('loginSubmitBtn');
+        const messageEl = document.getElementById('loginLegalConsentMessage');
+        const passwordInput = document.getElementById('loginPasswordInput');
+        const passwordToggle = document.querySelector('[data-password-toggle]');
+
+        if (!form || !consentCheckbox || !submitButton || !messageEl) return;
+
+        if (passwordInput && passwordToggle && passwordToggle.dataset.bound !== 'true') {
+            passwordToggle.dataset.bound = 'true';
+            passwordToggle.addEventListener('click', () => {
+                const isVisible = passwordInput.type === 'text';
+                passwordInput.type = isVisible ? 'password' : 'text';
+                passwordToggle.setAttribute('aria-label', isVisible ? 'Show password' : 'Hide password');
+                const icon = passwordToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-eye', isVisible);
+                    icon.classList.toggle('fa-eye-slash', !isVisible);
+                }
+            });
+        }
+
+        const syncLoginState = () => {
+            const isAccepted = consentCheckbox.checked;
+            submitButton.disabled = !isAccepted;
+            submitButton.setAttribute('aria-disabled', String(!isAccepted));
+            submitButton.classList.toggle('opacity-50', !isAccepted);
+            submitButton.classList.toggle('cursor-not-allowed', !isAccepted);
+            messageEl.classList.toggle('hidden', isAccepted);
+        };
+
+        form.addEventListener('submit', (event) => {
+            if (consentCheckbox.checked) return;
+            event.preventDefault();
+            syncLoginState();
+        });
+
+        consentCheckbox.addEventListener('change', syncLoginState);
+        syncLoginState();
+    };
+
+    const initConsentBanner = () => {
+        const storageKey = 'ipordise-consent-choice';
+        const consentCopy = {
+            en: {
+                badge: 'Privacy choices',
+                title: 'We respect your privacy.',
+                description: 'IPORDISE uses cookies and similar technologies to improve navigation, secure the website, and understand how visitors use our pages. You can accept or refuse non-essential cookies at any time.',
+                accept: 'Accept',
+                refuse: 'Refuse',
+                manage: 'Privacy settings',
+                links: 'Read our',
+                privacy: 'Privacy Policy',
+                and: 'and',
+                terms: 'Terms & Conditions',
+                statusAccepted: 'Accepted',
+                statusRefused: 'Refused'
+            },
+            fr: {
+                badge: 'Choix de confidentialite',
+                title: 'Nous respectons votre vie privee.',
+                description: 'IPORDISE utilise des cookies et des technologies similaires pour ameliorer la navigation, securiser le site et comprendre l\'utilisation des pages. Vous pouvez accepter ou refuser les cookies non essentiels a tout moment.',
+                accept: 'Accepter',
+                refuse: 'Refuser',
+                manage: 'Parametres de confidentialite',
+                links: 'Consultez notre',
+                privacy: 'Politique de confidentialite',
+                and: 'et nos',
+                terms: 'Conditions generales',
+                statusAccepted: 'Accepte',
+                statusRefused: 'Refuse'
+            }
+        };
+
+        const getCopy = () => consentCopy[currentLanguage] || consentCopy.en;
+        const readStoredConsent = () => {
+            try {
+                return JSON.parse(localStorage.getItem(storageKey) || 'null');
+            } catch (error) {
+                return null;
+            }
+        };
+
+        const writeStoredConsent = (choice) => {
+            try {
+                localStorage.setItem(storageKey, JSON.stringify({
+                    choice,
+                    timestamp: Date.now()
+                }));
+            } catch (error) {
+                // Ignore storage failures and keep the banner functional for the session.
+            }
+        };
+
+        const existingBanner = document.querySelector('.site-consent-banner');
+        const existingManage = document.querySelector('.site-consent-manage');
+        if (existingBanner || existingManage) return;
+
+        const banner = document.createElement('section');
+        banner.className = 'site-consent-banner';
+        banner.setAttribute('role', 'dialog');
+        banner.setAttribute('aria-live', 'polite');
+        banner.setAttribute('aria-label', 'Cookie consent');
+
+        const manageButton = document.createElement('button');
+        manageButton.type = 'button';
+        manageButton.className = 'site-consent-manage';
+
+        const renderConsentUi = () => {
+            const copy = getCopy();
+            const stored = readStoredConsent();
+            const statusLabel = stored?.choice === 'accepted'
+                ? copy.statusAccepted
+                : stored?.choice === 'refused'
+                    ? copy.statusRefused
+                    : '';
+
+            banner.innerHTML = `
+                <div class="site-consent-shell">
+                    <div class="site-consent-copy">
+                        <span class="site-consent-badge">${copy.badge}</span>
+                        <h3 class="site-consent-title">${copy.title}</h3>
+                        <p class="site-consent-text">${copy.description}</p>
+                        <p class="site-consent-links">${copy.links} <a href="${getPolicyPageHref('privacy-policy')}" class="site-consent-link">${copy.privacy}</a> ${copy.and} <a href="${getPolicyPageHref('terms')}" class="site-consent-link">${copy.terms}</a>.</p>
+                    </div>
+                    <div class="site-consent-actions">
+                        <button type="button" class="site-consent-btn site-consent-btn-secondary" data-consent-action="refused">${copy.refuse}</button>
+                        <button type="button" class="site-consent-btn site-consent-btn-primary" data-consent-action="accepted">${copy.accept}</button>
+                    </div>
+                </div>
+            `;
+
+            manageButton.innerHTML = `<i class="fas fa-shield-heart" aria-hidden="true"></i><span>${copy.manage}${statusLabel ? ` · ${statusLabel}` : ''}</span>`;
+        };
+
+        const closeBanner = () => {
+            banner.classList.remove('is-visible');
+            document.body.classList.remove('consent-visible');
+        };
+
+        const openBanner = () => {
+            renderConsentUi();
+            banner.classList.add('is-visible');
+            document.body.classList.add('consent-visible');
+        };
+
+        const applyConsentState = (stored) => {
+            document.documentElement.dataset.consentChoice = stored?.choice || 'unset';
+            manageButton.classList.toggle('is-visible', stored?.choice === 'refused');
+            if (stored?.choice) {
+                closeBanner();
+            } else {
+                openBanner();
+            }
+            renderConsentUi();
+        };
+
+        banner.addEventListener('click', (event) => {
+            const actionButton = event.target.closest('[data-consent-action]');
+            if (!actionButton) return;
+
+            const choice = actionButton.getAttribute('data-consent-action');
+            writeStoredConsent(choice);
+            applyConsentState(readStoredConsent());
+        });
+
+        manageButton.addEventListener('click', () => {
+            openBanner();
+        });
+
+        document.body.appendChild(banner);
+        document.body.appendChild(manageButton);
+        applyConsentState(readStoredConsent());
+        onLanguageChange(() => applyConsentState(readStoredConsent()));
+    };
+
     applyOfficialHeaderFooter();
     initBrandLogoDotAnimation();
     normalizeLegacyFrenchContent();
     initLanguageSwitcher();
     initMobileSearchToggle();
+    initConsentBanner();
+    initLoginLegalConsent();
     disableInspectTools();
     initSocialVideoSwitcher();
     initHeroOfferRotator();
