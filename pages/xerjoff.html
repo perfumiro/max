@@ -133,8 +133,8 @@
 
         .xerjoff-story-img img {
             width: 100%;
-            height: 400px;
-            object-fit: cover;
+            height: auto;
+            object-fit: contain;
             transition: transform 0.6s ease;
         }
 
@@ -395,6 +395,205 @@
         .xerjoff-cta-btn:hover {
             background: #e73c3c;
         }
+
+        /* ── Product Entries ── */
+        .xerjoff-product-entry {
+            padding: 3.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .xerjoff-product-entry:last-child { border-bottom: none; }
+        .xerjoff-product-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+        @media (min-width: 768px) {
+            .xerjoff-product-layout { grid-template-columns: 1fr 1fr; gap: 3.5rem; }
+        }
+        .xerjoff-gallery-main {
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background: #f3f4f6;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .xerjoff-gallery-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 1.5rem;
+            transition: opacity 0.2s ease;
+        }
+        .xerjoff-gallery-thumbs {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .xerjoff-gallery-thumb {
+            width: 68px;
+            height: 68px;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.375rem;
+            overflow: hidden;
+            cursor: pointer;
+            background: #f9f9f9;
+            transition: border-color 0.2s;
+            flex-shrink: 0;
+        }
+        .xerjoff-gallery-thumb.is-active { border-color: #1a1a1a; }
+        .xerjoff-gallery-thumb img { width: 100%; height: 100%; object-fit: contain; padding: 0.25rem; }
+        .xerjoff-product-brand-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin-bottom: 0.4rem;
+        }
+        .xerjoff-product-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+            font-weight: 800;
+            color: #1a1a1a;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+        .xerjoff-product-subtitle {
+            font-size: 0.83rem;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .xerjoff-decante-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 0.63rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1.25rem;
+        }
+        .xerjoff-size-label {
+            font-size: 0.73rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #374151;
+            margin-bottom: 0.6rem;
+        }
+        .xerjoff-size-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+        .xerjoff-size-btn {
+            padding: 0.55rem 1.4rem;
+            border: 1.5px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #6b7280;
+            background: #fff;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+        }
+        .xerjoff-size-btn:hover { border-color: #1a1a1a; color: #1a1a1a; }
+        .xerjoff-size-btn.is-active { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
+        .xerjoff-price-display { font-size: 1.8rem; font-weight: 800; color: #1a1a1a; margin-bottom: 0.35rem; }
+        .xerjoff-price-note { font-size: 0.75rem; color: #9ca3af; margin-bottom: 1.5rem; }
+        .xerjoff-qty-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+        .xerjoff-qty-box { display: flex; align-items: center; border: 1.5px solid #e5e7eb; border-radius: 4px; overflow: hidden; }
+        .xerjoff-qty-btn {
+            width: 36px; height: 44px;
+            background: #f9f9f9;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #374151;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .xerjoff-qty-btn:hover { background: #f3f4f6; }
+        .xerjoff-qty-val { width: 40px; text-align: center; font-size: 0.9rem; font-weight: 700; color: #1a1a1a; }
+        .xerjoff-cart-btn {
+            flex: 1;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.85rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .xerjoff-cart-btn:hover { background: #e73c3c; }
+        .xerjoff-trust-chips {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .xerjoff-trust-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            color: #6b7280;
+            background: #f9f9f9;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            border: 1px solid #f3f4f6;
+        }
+        .xerjoff-notes-toggle {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.85rem 0;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+            border-left: none;
+            border-right: none;
+            background: none;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #374151;
+            cursor: pointer;
+        }
+        .xerjoff-notes-body { padding: 1rem 0; display: none; }
+        .xerjoff-notes-body.is-open { display: block; }
+        .xerjoff-note-tier { margin-bottom: 0.75rem; }
+        .xerjoff-note-tier-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #e73c3c;
+            margin-bottom: 0.25rem;
+        }
+        .xerjoff-note-tier-value { font-size: 0.82rem; color: #374151; }
+        .xerjoff-wish-btn {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            border: 1.5px solid #e5e7eb;
+            background: #fff;
+            cursor: pointer;
+            color: #6b7280;
+            font-size: 1rem;
+            transition: border-color 0.2s, color 0.2s;
+            flex-shrink: 0;
+        }
+        .xerjoff-wish-btn:hover { border-color: #e73c3c; color: #e73c3c; }
     </style>
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
@@ -461,7 +660,7 @@
     <!-- Hero -->
     <section class="xerjoff-hero">
         <div class="xerjoff-hero-bg">
-            <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/second%20one.png" alt="XERJOFF Collection">
+            <img src="https://scentira.in/cdn/shop/files/xerjoff.png?v=1725455132&width=1920" alt="XERJOFF Collection">
         </div>
         <div class="xerjoff-hero-content">
             <span class="xerjoff-hero-kicker">Italian Haute Parfumerie</span>
@@ -478,7 +677,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="xerjoff-story-grid">
                 <div class="xerjoff-story-img">
-                    <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/first%20image.png" alt="XERJOFF Craftsmanship">
+                    <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/second%20one.png" alt="XERJOFF Craftsmanship">
                 </div>
                 <div>
                     <p class="xerjoff-story-label">The House</p>
@@ -499,65 +698,260 @@
             <div class="xerjoff-collection-header">
                 <p class="xerjoff-collection-label">The Collection</p>
                 <h2 class="xerjoff-collection-title">Our XERJOFF Selection</h2>
+                <p style="font-size:0.85rem;color:#6b7280;margin-top:0.5rem;">All fragrances available as premium decants &mdash; <strong>5 ML</strong> &amp; <strong>10 ML</strong></p>
             </div>
 
-            <div class="xerjoff-perfume-grid">
-                <!-- Alexandria II -->
-                <div class="xerjoff-perfume-card">
-                    <div class="xerjoff-perfume-card-img">
-                        <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/second%20one.png" alt="XERJOFF Alexandria II">
-                    </div>
-                    <div class="xerjoff-perfume-card-body">
-                        <h3 class="xerjoff-perfume-card-name">Alexandria II</h3>
-                        <p class="xerjoff-perfume-card-family">Amber &middot; Oud &middot; Vanilla</p>
-                        <p class="xerjoff-perfume-card-desc">
-                            A golden amber masterpiece that channels the opulence of ancient Alexandria. Rich oud, warm vanilla, and precious resins create an unforgettable trail of timeless luxury and regal presence.
-                        </p>
-                        <div class="xerjoff-perfume-card-footer">
-                            <span class="xerjoff-perfume-card-price">Contact for Price</span>
-                            <a href="contact.html" class="xerjoff-perfume-card-btn">Inquire</a>
+            <!-- ─── Product 1: Alexandria II ─── -->
+            <div class="xerjoff-product-entry" id="product-alex">
+                <div class="xerjoff-product-layout">
+                    <!-- Gallery -->
+                    <div>
+                        <div class="xerjoff-gallery-main">
+                            <img id="alex-main" src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/XERJOFF%20Alexandria%20ll%20Eau%20de%20Parfum/1.webp" alt="XERJOFF Alexandria II Eau de Parfum">
+                        </div>
+                        <div class="xerjoff-gallery-thumbs">
+                            <div class="xerjoff-gallery-thumb is-active" onclick="xerjoffGallery('alex-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/XERJOFF%20Alexandria%20ll%20Eau%20de%20Parfum/1.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/XERJOFF%20Alexandria%20ll%20Eau%20de%20Parfum/1.webp" alt="1"></div>
+                            <div class="xerjoff-gallery-thumb" onclick="xerjoffGallery('alex-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/XERJOFF%20Alexandria%20ll%20Eau%20de%20Parfum/2.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/XERJOFF%20Alexandria%20ll%20Eau%20de%20Parfum/2.webp" alt="2"></div>
+                            <div class="xerjoff-gallery-thumb" onclick="xerjoffGallery('alex-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/XERJOFF%20Alexandria%20ll%20Eau%20de%20Parfum/3.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/XERJOFF%20Alexandria%20ll%20Eau%20de%20Parfum/3.webp" alt="3"></div>
+                            <div class="xerjoff-gallery-thumb" onclick="xerjoffGallery('alex-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/XERJOFF%20Alexandria%20ll%20Eau%20de%20Parfum/4.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/XERJOFF%20Alexandria%20ll%20Eau%20de%20Parfum/4.webp" alt="4"></div>
+                            <div class="xerjoff-gallery-thumb" onclick="xerjoffGallery('alex-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/XERJOFF%20Alexandria%20ll%20Eau%20de%20Parfum/5.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/XERJOFF%20Alexandria%20ll%20Eau%20de%20Parfum/5.webp" alt="5"></div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Naxos -->
-                <div class="xerjoff-perfume-card">
-                    <div class="xerjoff-perfume-card-img">
-                        <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/second%20one.png" alt="XERJOFF Naxos">
-                    </div>
-                    <div class="xerjoff-perfume-card-body">
-                        <h3 class="xerjoff-perfume-card-name">Naxos</h3>
-                        <p class="xerjoff-perfume-card-family">Tobacco &middot; Honey &middot; Lavender</p>
-                        <p class="xerjoff-perfume-card-desc">
-                            Inspired by the sun-drenched island of Naxos, this warm and sensual fragrance blends Sicilian honey, tobacco leaf, and aromatic lavender into a composition of Mediterranean warmth and Italian sophistication.
-                        </p>
-                        <div class="xerjoff-perfume-card-footer">
-                            <span class="xerjoff-perfume-card-price">Contact for Price</span>
-                            <a href="contact.html" class="xerjoff-perfume-card-btn">Inquire</a>
+                    <!-- Info -->
+                    <div>
+                        <p class="xerjoff-product-brand-tag">XERJOFF &middot; Eau de Parfum</p>
+                        <h3 class="xerjoff-product-name">Alexandria II</h3>
+                        <p class="xerjoff-product-subtitle">Unisex &middot; Amber Oud &middot; An iconic monument of Italian niche perfumery, born in XERJOFF&rsquo;s storied Cachemire collection. Rich oud, warm vanilla, and golden amber create an unforgettable trail of timeless opulence and regal presence.</p>
+                        <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
+                        <p class="xerjoff-size-label">Size</p>
+                        <div class="xerjoff-size-row">
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'alex-price','90 DH')">5 ML</button>
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'alex-price','160 DH')">10 ML</button>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Erba Pura -->
-                <div class="xerjoff-perfume-card">
-                    <div class="xerjoff-perfume-card-img">
-                        <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/second%20one.png" alt="XERJOFF Erba Pura">
-                    </div>
-                    <div class="xerjoff-perfume-card-body">
-                        <h3 class="xerjoff-perfume-card-name">Erba Pura</h3>
-                        <p class="xerjoff-perfume-card-family">Citrus &middot; Fruit &middot; Musk</p>
-                        <p class="xerjoff-perfume-card-desc">
-                            A radiant explosion of Sicilian citrus, juicy fruits, and white musk creates a luminous, addictive trail. Erba Pura is XERJOFF's celebration of freshness and Mediterranean joy, perfect for any season.
-                        </p>
-                        <div class="xerjoff-perfume-card-footer">
-                            <span class="xerjoff-perfume-card-price">Contact for Price</span>
-                            <a href="contact.html" class="xerjoff-perfume-card-btn">Inquire</a>
+                        <p id="alex-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to see the price</p>
+                        <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
+                        <div class="xerjoff-qty-row">
+                            <div class="xerjoff-qty-box">
+                                <button class="xerjoff-qty-btn" onclick="xerjoffQty('alex-qty',-1)">&#8722;</button>
+                                <span id="alex-qty" class="xerjoff-qty-val">1</span>
+                                <button class="xerjoff-qty-btn" onclick="xerjoffQty('alex-qty',1)">+</button>
+                            </div>
+                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('alex','Alexandria II')">Add to Cart</button>
+                            <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
+                        </div>
+                        <div class="xerjoff-trust-chips">
+                            <div class="xerjoff-trust-chip"><i class="fas fa-truck" style="color:#e73c3c"></i> Delivery: 35 MAD</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-shield-heart" style="color:#e73c3c"></i> 100% Authentic</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-flask" style="color:#e73c3c"></i> Premium Decante</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-rotate-left" style="color:#e73c3c"></i> Easy Returns</div>
+                        </div>
+                        <button class="xerjoff-notes-toggle" onclick="xerjoffToggleNotes(this)">Fragrance Notes <i class="fas fa-chevron-down"></i></button>
+                        <div class="xerjoff-notes-body">
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-wind"></i> Top Notes</p><p class="xerjoff-note-tier-value">Grapefruit &middot; Bergamot &middot; Cardamom</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-heart"></i> Heart Notes</p><p class="xerjoff-note-tier-value">Rose &middot; Oud &middot; Neroli &middot; Black Pepper</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-mountain"></i> Base Notes</p><p class="xerjoff-note-tier-value">Amber &middot; Vanilla &middot; Sandalwood &middot; White Musk</p></div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- ─── Product 2: Erba Pura ─── -->
+            <div class="xerjoff-product-entry" id="product-erba">
+                <div class="xerjoff-product-layout">
+                    <div>
+                        <div class="xerjoff-gallery-main">
+                            <img id="erba-main" src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Erba%20Pura/1.webp" alt="Xerjoff Erba Pura Eau de Parfum">
+                        </div>
+                        <div class="xerjoff-gallery-thumbs">
+                            <div class="xerjoff-gallery-thumb is-active" onclick="xerjoffGallery('erba-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Erba%20Pura/1.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Erba%20Pura/1.webp" alt="1"></div>
+                            <div class="xerjoff-gallery-thumb" onclick="xerjoffGallery('erba-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Erba%20Pura/2.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Erba%20Pura/2.webp" alt="2"></div>
+                            <div class="xerjoff-gallery-thumb" onclick="xerjoffGallery('erba-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Erba%20Pura/3.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Erba%20Pura/3.webp" alt="3"></div>
+                            <div class="xerjoff-gallery-thumb" onclick="xerjoffGallery('erba-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Erba%20Pura/4.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Erba%20Pura/4.webp" alt="4"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="xerjoff-product-brand-tag">XERJOFF &middot; Eau de Parfum</p>
+                        <h3 class="xerjoff-product-name">Erba Pura</h3>
+                        <p class="xerjoff-product-subtitle">Unisex &middot; Fruity Citrus Musk &middot; A radiant explosion of Sicilian citrus, juicy fruits, and white musk. XERJOFF&rsquo;s celebration of Mediterranean freshness and sunlit joy &mdash; luminous, addictive, and perfect for any season.</p>
+                        <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
+                        <p class="xerjoff-size-label">Size</p>
+                        <div class="xerjoff-size-row">
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'erba-price','90 DH')">5 ML</button>
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'erba-price','160 DH')">10 ML</button>
+                        </div>
+                        <p id="erba-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to see the price</p>
+                        <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
+                        <div class="xerjoff-qty-row">
+                            <div class="xerjoff-qty-box">
+                                <button class="xerjoff-qty-btn" onclick="xerjoffQty('erba-qty',-1)">&#8722;</button>
+                                <span id="erba-qty" class="xerjoff-qty-val">1</span>
+                                <button class="xerjoff-qty-btn" onclick="xerjoffQty('erba-qty',1)">+</button>
+                            </div>
+                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('erba','Erba Pura')">Add to Cart</button>
+                            <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
+                        </div>
+                        <div class="xerjoff-trust-chips">
+                            <div class="xerjoff-trust-chip"><i class="fas fa-truck" style="color:#e73c3c"></i> Delivery: 35 MAD</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-shield-heart" style="color:#e73c3c"></i> 100% Authentic</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-flask" style="color:#e73c3c"></i> Premium Decante</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-rotate-left" style="color:#e73c3c"></i> Easy Returns</div>
+                        </div>
+                        <button class="xerjoff-notes-toggle" onclick="xerjoffToggleNotes(this)">Fragrance Notes <i class="fas fa-chevron-down"></i></button>
+                        <div class="xerjoff-notes-body">
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-wind"></i> Top Notes</p><p class="xerjoff-note-tier-value">Sicilian Lemon &middot; White Grapefruit &middot; Calabrian Bergamot</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-heart"></i> Heart Notes</p><p class="xerjoff-note-tier-value">Fruits &middot; Jasmine &middot; White Flowers</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-mountain"></i> Base Notes</p><p class="xerjoff-note-tier-value">White Musk &middot; Sandalwood &middot; Amber &middot; Vanilla</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── Product 3: Naxos ─── -->
+            <div class="xerjoff-product-entry" id="product-naxos">
+                <div class="xerjoff-product-layout">
+                    <div>
+                        <div class="xerjoff-gallery-main">
+                            <img id="naxos-main" src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Naxos/1.webp" alt="Xerjoff Naxos Eau de Parfum">
+                        </div>
+                        <div class="xerjoff-gallery-thumbs">
+                            <div class="xerjoff-gallery-thumb is-active" onclick="xerjoffGallery('naxos-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Naxos/1.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Naxos/1.webp" alt="1"></div>
+                            <div class="xerjoff-gallery-thumb" onclick="xerjoffGallery('naxos-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Naxos/2.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Naxos/2.webp" alt="2"></div>
+                            <div class="xerjoff-gallery-thumb" onclick="xerjoffGallery('naxos-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Naxos/3.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Naxos/3.webp" alt="3"></div>
+                            <div class="xerjoff-gallery-thumb" onclick="xerjoffGallery('naxos-main',this,'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Naxos/4.webp')"><img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/Xerjoff%20Products/Xerjoff%20Naxos/4.webp" alt="4"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="xerjoff-product-brand-tag">XERJOFF &middot; Eau de Parfum</p>
+                        <h3 class="xerjoff-product-name">Naxos</h3>
+                        <p class="xerjoff-product-subtitle">Unisex &middot; Amber Foug&egrave;re &middot; Inspired by the sun-drenched Greek island, Naxos blends Sicilian honey, tobacco leaf, and aromatic lavender into a composition of Mediterranean warmth and Italian sophistication.</p>
+                        <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
+                        <p class="xerjoff-size-label">Size</p>
+                        <div class="xerjoff-size-row">
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'naxos-price','90 DH')">5 ML</button>
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'naxos-price','160 DH')">10 ML</button>
+                        </div>
+                        <p id="naxos-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to see the price</p>
+                        <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
+                        <div class="xerjoff-qty-row">
+                            <div class="xerjoff-qty-box">
+                                <button class="xerjoff-qty-btn" onclick="xerjoffQty('naxos-qty',-1)">&#8722;</button>
+                                <span id="naxos-qty" class="xerjoff-qty-val">1</span>
+                                <button class="xerjoff-qty-btn" onclick="xerjoffQty('naxos-qty',1)">+</button>
+                            </div>
+                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('naxos','Naxos')">Add to Cart</button>
+                            <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
+                        </div>
+                        <div class="xerjoff-trust-chips">
+                            <div class="xerjoff-trust-chip"><i class="fas fa-truck" style="color:#e73c3c"></i> Delivery: 35 MAD</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-shield-heart" style="color:#e73c3c"></i> 100% Authentic</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-flask" style="color:#e73c3c"></i> Premium Decante</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-rotate-left" style="color:#e73c3c"></i> Easy Returns</div>
+                        </div>
+                        <button class="xerjoff-notes-toggle" onclick="xerjoffToggleNotes(this)">Fragrance Notes <i class="fas fa-chevron-down"></i></button>
+                        <div class="xerjoff-notes-body">
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-wind"></i> Top Notes</p><p class="xerjoff-note-tier-value">Bergamot &middot; Lavender &middot; Lemon</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-heart"></i> Heart Notes</p><p class="xerjoff-note-tier-value">Tobacco Flower &middot; Honey &middot; Heliotrope &middot; Cinnamon</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-mountain"></i> Base Notes</p><p class="xerjoff-note-tier-value">Sandalwood &middot; Tonka Bean &middot; White Musk &middot; Labdanum</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
+
+    <script>
+        function xerjoffGallery(mainId, thumb, url) {
+            document.getElementById(mainId).src = url;
+            thumb.closest('.xerjoff-gallery-thumbs').querySelectorAll('.xerjoff-gallery-thumb').forEach(function(t){ t.classList.remove('is-active'); });
+            thumb.classList.add('is-active');
+        }
+        function xerjoffSize(btn, priceId, price) {
+            btn.closest('.xerjoff-size-row').querySelectorAll('.xerjoff-size-btn').forEach(function(b){ b.classList.remove('is-active'); });
+            btn.classList.add('is-active');
+            var el = document.getElementById(priceId);
+            el.textContent = price;
+            el.style.color = '#1a1a1a';
+            el.style.fontSize = '1.9rem';
+            el.style.fontWeight = '800';
+            el.dataset.price = price;
+            el.dataset.size = btn.textContent.trim();
+        }
+        function xerjoffQty(qtyId, delta) {
+            var el = document.getElementById(qtyId);
+            el.textContent = Math.max(1, parseInt(el.textContent) + delta);
+        }
+        function xerjoffToggleNotes(btn) {
+            var body = btn.nextElementSibling;
+            var icon = btn.querySelector('i');
+            body.classList.toggle('is-open');
+            icon.style.transition = 'transform 0.2s';
+            icon.style.transform = body.classList.contains('is-open') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+        function xerjoffAddToCart(prefix, productName) {
+            var priceEl = document.getElementById(prefix + '-price');
+            var sizeLabel = priceEl && priceEl.dataset.size;
+            var priceText = priceEl && priceEl.dataset.price;
+            if (!sizeLabel || !priceText) {
+                alert('Please select a size first.');
+                return;
+            }
+            var qty = parseInt(document.getElementById(prefix + '-qty').textContent) || 1;
+            // Always use the first (default) product image regardless of which thumbnail is active
+            var firstThumb = document.querySelector('#product-' + prefix + ' .xerjoff-gallery-thumb img');
+            var image = firstThumb ? firstThumb.src : document.getElementById(prefix + '-main').src;
+            var numericPrice = parseFloat(priceText.replace(/[^\d.]/g, '')) || 0;
+            var cart = [];
+            try { cart = JSON.parse(localStorage.getItem('cart')) || []; } catch(e) { cart = []; }
+            if (!Array.isArray(cart)) cart = [];
+            var existingIdx = cart.findIndex(function(i) { return i.name === productName && i.size === sizeLabel; });
+            if (existingIdx >= 0) {
+                cart[existingIdx].qty = Math.min(99, (parseInt(cart[existingIdx].qty) || 1) + qty);
+            } else {
+                cart.unshift({
+                    id: 'xerjoff-' + prefix + '-' + sizeLabel.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now(),
+                    name: productName,
+                    price: numericPrice,
+                    image: image,
+                    size: sizeLabel,
+                    qty: qty
+                });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            // Sync legacy key so script.js header badge updates immediately
+            localStorage.setItem('ipordise-cart-items', JSON.stringify(cart));
+            // Update header cart badge count
+            var totalQty = cart.reduce(function(s, i) { return s + Math.max(1, parseInt(i.qty) || 1); }, 0);
+            var cartBtns = Array.from(document.querySelectorAll('.header-icon-btn')).filter(function(b) {
+                var al = (b.getAttribute('aria-label') || '').toLowerCase();
+                var href = (b.getAttribute('href') || '').toLowerCase();
+                return al === 'cart' || href.indexOf('cart.html') !== -1 || b.querySelector('.fa-shopping-bag');
+            });
+            cartBtns.forEach(function(button) {
+                var badge = button.querySelector('.header-cart-badge');
+                if (totalQty > 0) {
+                    if (!badge) {
+                        badge = document.createElement('span');
+                        badge.className = 'header-wishlist-badge header-cart-badge absolute -top-1.5 -right-2';
+                        button.appendChild(badge);
+                    }
+                    badge.textContent = String(Math.min(totalQty, 99));
+                } else if (badge) {
+                    badge.remove();
+                }
+            });
+            // Show confirmation on the button — no redirect
+            var btn = document.querySelector('#product-' + prefix + ' .xerjoff-cart-btn');
+            btn.textContent = '✓ Added to Cart';
+            btn.style.background = '#16a34a';
+            btn.disabled = true;
+            setTimeout(function() {
+                btn.textContent = 'Add to Cart';
+                btn.style.background = '';
+                btn.disabled = false;
+            }, 2000);
+        }
+    </script>
 
     <!-- Values -->
     <section class="xerjoff-values">
