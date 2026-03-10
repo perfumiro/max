@@ -18,6 +18,11 @@
     <header class="bg-brand-dark text-white sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
+                <!-- Mobile Menu Toggle -->
+                <button id="mobileMenuToggle" class="md:hidden header-icon-btn hover:text-brand-red transition" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
                 <div class="flex-shrink-0 flex items-center">
                     <a href="index.html" class="font-serif text-3xl font-bold tracking-widest text-white brand-logo-animated" aria-label="IPORDISE">
                         <span class="sr-only">IPORDISE</span>
@@ -66,16 +71,6 @@
             </div>
         </div>
 
-        <div class="md:hidden px-4 sm:px-6 lg:px-8 pb-4">
-            <div class="relative">
-                <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, brands...">
-                <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red" aria-label="Search">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-        </div>
-
-
         <nav class="border-t border-gray-800 hidden md:block">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <ul class="flex items-center justify-between py-3 text-xs font-bold tracking-wider text-gray-300">
@@ -95,6 +90,68 @@
             </div>
         </nav>
     </header>
+
+    <!-- Trust Bar -->
+    <div class="trust-bar bg-white border-b border-gray-200 py-2.5 hidden md:block">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between text-xs text-gray-600">
+                <div class="trust-bar-item flex items-center gap-2">
+                    <i class="fas fa-truck-fast text-brand-red"></i>
+                    <span><strong>Free Delivery</strong> from 35 MAD</span>
+                </div>
+                <div class="trust-bar-divider"></div>
+                <div class="trust-bar-item flex items-center gap-2">
+                    <i class="fas fa-rotate-left text-brand-red"></i>
+                    <span><strong>14-Day Returns</strong> hassle-free</span>
+                </div>
+                <div class="trust-bar-divider"></div>
+                <div class="trust-bar-item flex items-center gap-2">
+                    <i class="fas fa-shield-halved text-brand-red"></i>
+                    <span><strong>Secure Payment</strong> & 1-click checkout</span>
+                </div>
+                <div class="trust-bar-divider"></div>
+                <div class="trust-bar-item flex items-center gap-2">
+                    <i class="fas fa-certificate text-brand-red"></i>
+                    <span><strong>100% Authentic</strong> products guaranteed</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay" aria-hidden="true"></div>
+    <nav id="mobileMenuDrawer" class="mobile-menu-drawer" aria-label="Mobile navigation">
+        <div class="mobile-menu-header">
+            <span class="font-serif text-xl font-bold tracking-widest">IPORDISE<span class="text-brand-red">.</span></span>
+            <button id="mobileMenuClose" class="mobile-menu-close" aria-label="Close menu">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-search">
+            <div class="relative">
+                <input type="text" class="w-full bg-gray-100 text-gray-900 rounded-full py-2.5 pl-5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search perfumes...">
+                <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-400">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <ul class="mobile-menu-list">
+            <li><a href="discover.html?filter=all" class="mobile-menu-link"><i class="fas fa-spray-can-sparkles"></i> All Perfumes</a></li>
+            <li><a href="discover.html?filter=for-men" class="mobile-menu-link"><i class="fas fa-mars"></i> Men</a></li>
+            <li><a href="discover.html?filter=for-women" class="mobile-menu-link"><i class="fas fa-venus"></i> Women</a></li>
+            <li><a href="discover.html?filter=unisex" class="mobile-menu-link"><i class="fas fa-transgender-alt"></i> Unisex</a></li>
+            <li><a href="discover.html?filter=niche" class="mobile-menu-link"><i class="fas fa-gem"></i> Niche</a></li>
+            <li><a href="discover.html?filter=designer" class="mobile-menu-link"><i class="fas fa-crown"></i> Designer</a></li>
+            <li><a href="discover.html?filter=arabian" class="mobile-menu-link"><i class="fas fa-mosque"></i> Arabian</a></li>
+            <li><a href="discover.html?filter=best-sellers" class="mobile-menu-link"><i class="fas fa-fire"></i> Best Sellers</a></li>
+            <li><a href="discover.html?filter=new-in" class="mobile-menu-link"><i class="fas fa-sparkles"></i> New In</a></li>
+            <li><a href="discover.html?filter=offers" class="mobile-menu-link"><i class="fas fa-bolt"></i> Flash Offers</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+            <a href="pages/login.html" class="mobile-menu-footer-btn"><i class="fas fa-user"></i> My Account</a>
+            <a href="pages/contact.html" class="mobile-menu-footer-btn"><i class="fas fa-headset"></i> Contact Us</a>
+        </div>
+    </nav>
 
     <main class="bg-white">
         <section class="py-8 sm:py-10 border-b border-gray-100">
@@ -815,40 +872,86 @@
         </section>
     </main>
 
-    <footer class="bg-brand-dark text-gray-300 py-12 mt-8">
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <footer class="bg-brand-dark text-white pt-16 pb-8 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-                <div>
-                    <h4 class="font-serif text-2xl text-white mb-4">IPORDISE<span class="text-brand-red">.</span></h4>
-                    <p class="text-sm leading-relaxed text-gray-400">Luxury fragrance destination with carefully curated collections, premium brands, and limited editions.</p>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+                <div class="col-span-2 md:col-span-1">
+                    <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
+                    <p class="text-gray-400 text-sm mb-6">The ultimate destination for luxury perfumes and beauty online. Elevate your everyday.</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
                 <div>
-                    <h5 class="text-sm font-bold tracking-widest text-white mb-4">SHOP</h5>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="discover.html" class="hover:text-brand-red transition">Discover the collection</a></li>
-                        <li><a href="discover.html?filter=for-men" class="hover:text-brand-red transition">Men's Fragrances</a></li>
-                        <li><a href="discover.html?filter=for-women" class="hover:text-brand-red transition">Women's Fragrances</a></li>
+                    <h4 class="footer-col-title">Customer Service</h4>
+                    <ul class="footer-links">
+                        <li><a href="pages/contact.html">Contact Us</a></li>
+                        <li><a href="pages/shipping.html">Shipping & Returns</a></li>
+                        <li><a href="pages/track-order.html">Track Order</a></li>
+                        <li><a href="pages/faq.html">FAQ</a></li>
+                        <li><a href="pages/support.html">Support Center</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h5 class="text-sm font-bold tracking-widest text-white mb-4">CUSTOMER CARE</h5>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="pages/shipping.html" class="hover:text-brand-red transition">Shipping & Delivery</a></li>
-                        <li><a href="pages/returns.html" class="hover:text-brand-red transition">Returns & Refunds</a></li>
-                        <li><a href="pages/checkout.html" class="hover:text-brand-red transition">Secure Checkout</a></li>
+                    <h4 class="footer-col-title">About IPORDISE</h4>
+                    <ul class="footer-links">
+                        <li><a href="pages/our-story.html">Our Story</a></li>
+                        <li><a href="pages/careers.html">Careers</a></li>
+                        <li><a href="pages/store-locator.html">Find a Store</a></li>
+                        <li><a href="pages/terms.html">Terms & Conditions</a></li>
+                        <li><a href="pages/privacy-policy.html">Privacy Policy</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h5 class="text-sm font-bold tracking-widest text-white mb-4">NEWSLETTER</h5>
-                    <p class="text-sm text-gray-400 mb-3">Get exclusive perfume offers and new arrivals every week.</p>
+                    <h4 class="footer-col-title">Promotions</h4>
+                    <ul class="footer-links">
+                        <li><a href="discover.html?filter=offers">Flash Offers</a></li>
+                        <li><a href="discover.html?filter=new-in">New Arrivals</a></li>
+                        <li><a href="discover.html?filter=best-sellers">Best Sellers</a></li>
+                        <li><a href="discover.html?filter=niche">Niche Collection</a></li>
+                        <li><a href="discover.html?filter=designer">Designer Collection</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals, new arrivals, and fragrance tips.</p>
                     <div class="flex">
-                        <input type="email" placeholder="Your email" class="w-full rounded-l-lg bg-white text-gray-800 px-3 py-2 text-sm focus:outline-none">
-                        <a href="pages/newsletter.html" class="bg-brand-red hover:bg-brand-redHover text-white px-4 rounded-r-lg text-sm font-semibold transition inline-flex items-center">Subscribe</a>
+                        <input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10">
+                        <a href="pages/newsletter.html" class="bg-brand-red px-5 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm whitespace-nowrap">GO</a>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-700 mt-10 pt-6 text-xs text-gray-500 text-center">
-                (c) 2026 IPORDISE. All rights reserved.
+
+            <!-- Payment Methods -->
+            <div class="border-t border-white/10 pt-8 pb-6">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Accepted Payment Methods</p>
+                    <div class="flex items-center gap-3 flex-wrap justify-center">
+                        <span class="payment-icon"><i class="fab fa-cc-visa text-xl"></i></span>
+                        <span class="payment-icon"><i class="fab fa-cc-mastercard text-xl"></i></span>
+                        <span class="payment-icon"><i class="fab fa-cc-paypal text-xl"></i></span>
+                        <span class="payment-icon"><i class="fab fa-cc-apple-pay text-xl"></i></span>
+                        <span class="payment-icon"><i class="fab fa-google-pay text-xl"></i></span>
+                        <span class="payment-icon payment-icon-text">COD</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
+                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="pages/terms.html" class="hover:text-white transition">Terms</a>
+                    <a href="pages/privacy-policy.html" class="hover:text-white transition">Privacy</a>
+                    <a href="pages/returns.html" class="hover:text-white transition">Returns</a>
+                </div>
             </div>
         </div>
     </footer>

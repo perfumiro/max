@@ -740,6 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'bleu de chanel eau de parfum spray': {
             brand: 'CHANEL',
             gender: 'men',
+            fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 75, sillageLabel: 'Strong', season: 90, seasonLabel: 'All Year' },
             subtitle: "Men's fragrance · Aromatic Woody · A timeless and magnetic signature with a subtly pronounced aroma.",
             longDescription: 'A tribute to freedom, expressed in an aromatic woody scent with a captivating trail. A timeless fragrance in a bottle of deep, mysterious blue. The Eau de Parfum of BLEU DE CHANEL, with its subtly pronounced aroma, reveals a determined spirit.',
             sizes: [
@@ -773,6 +774,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'rabanne one million parfum': {
             brand: 'RABANNE',
             gender: 'men',
+            fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 80, sillageLabel: 'Strong', season: 70, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Salty Woody · An iconic signature blending leather audacity with floral and spicy touches.",
             longDescription: "One Million Eau de Parfum is Paco Rabanne's star men's fragrance that has been a sensation since its launch. It's a recognized scent that leaves its mark wherever it goes. The sensuality and freshness it conveys are part of its unique identity, which possesses the audacity of the most authentic leather and the duality between a salty and woody impulse with floral and spicy touches. The One Million EDP gift set will allow you to offer the gift with the intense aroma that everyone desires.",
             sizes: [
@@ -806,6 +808,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'rabanne one million elixir intense': {
             brand: 'RABANNE',
             gender: 'men',
+            fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 85, sillageLabel: 'Very Strong', season: 65, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Aromatic Amber · The pinnacle of One Million intensity with rose, tonka bean, woods, and black vanilla.",
             longDescription: "Discover One Million Elixir , the pinnacle of Million 's intensity , a new fragrance guided by the desire for supreme quality. A blend of carefully selected ingredients from around the world, celebrating the craftsmanship of our perfumers and the fusion of the finest raw materials. A new dimension, incredibly intense, undoubtedly One Million. The iconic One Million gold ingot , bolder and more sophisticated than ever. A handcrafted jewel that reflects the different facets of the fragrance. A symbol of a new strength: elegant, intense, and enigmatic. The exquisitely crafted bottle encapsulates the soul and essence of One Million , the infinite depth of this new olfactory creation. The pinnacle of absolute intensity. One Million Elixir , more intense than ever, to captivate you. Hand-selected ingredients—Turkish rose, osmanthus, and wild-harvested tonka bean—make this masterpiece stand out for its exceptional quality. The deeply sensual Davana liqueur vibrates with the touch of soft woods and black vanilla seeds; supreme sensuality meets absolute, long-lasting power.",
             sizes: [
@@ -840,6 +843,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'givenchy gentleman society amber eau de parfum': {
             brand: 'GIVENCHY',
             gender: 'men',
+            fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 70, sillageLabel: 'Moderate', season: 60, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Amber Woody · Narcissus and vetiver enhanced by leather, tobacco, warm spices, and Tasuki vanilla.",
             longDescription: "Givenchy presents Gentleman Society Eau de Parfum Ambree , a captivating blend of vibrant narcissus flower and a quartet of vetivers, enhanced by rich notes of leather and tobacco. A COMPOSITION MADE WITH EXCEPTIONAL RAW MATERIALS Gentleman Society Ambree reinvents the iconic woody signature of Gentleman Society with a new amber facet, enriched with the balsamic notes of Tasuki vanilla. Expressing Givenchy's unique savoir-faire, Gentleman Society Eau de Parfum Ambree unveils a sophisticated accord of narcissus blossom and a quartet of vetiver, intensified by the boldness of leather and tobacco. Warm spices blend harmoniously with the richness of Tasuki vanilla from Madagascar, combined with a balsam essence, creating an elegant and deeply captivating trail. AN ICONIC BOTTLE WITH GOLDEN REFLECTIONS The iconic Gentleman Society bottle, entirely lacquered in black, is adorned with a refined gold crest, a symbol of elegance and prestige. Combining opulence and timelessness, it invites the expression of sensuality and individuality. GENTLEMAN SOCIETY. MORE THAN A PLACE, A STATE OF MIND For this new chapter, Gentleman Society expands around the English composer Benjamin Clementine. His elegance and undeniable charisma resonate as an invitation to join a community that is bolder and more inclusive than ever.",
             sizes: [
@@ -874,6 +878,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'givenchy gentleman society nomade eau de parfum': {
             brand: 'GIVENCHY',
             gender: 'men',
+            fragranceProfile: { longevity: 75, longevityLabel: '6-8h', sillage: 70, sillageLabel: 'Moderate', season: 85, seasonLabel: 'Spring/Summer' },
             subtitle: "Men's fragrance · Floral Woody · Sage, narcissus, vetiver quartet, woods, and vanilla in a bold Givenchy signature.",
             longDescription: "Givenchy redefines the figure of the gentleman with Gentleman Society Eau de Parfum, a bold statement for men who reinvent their own rules and always act for a better world. Wild narcissus blossom blends with a mysterious woody accord to create a fragrance of rare sophistication. An expression of Givenchy's unique savoir-faire, Gentleman Society is composed of exceptional raw materials. From the very first spritz, the fresh, aromatic notes of sage blend with wild narcissus absolute harvested in the heart of France. This unique floral facet is contrasted by the dark intensity of a quartet of vetiver from Uruguay and Madagascar. Essences of cedarwood and sandalwood melt into an addictive and sensual vanilla, leaving a truly memorable trail. A deep and multifaceted men's Eau de Parfum. The couture design reimagines the iconic Gentleman bottle with pure elegance. Like a coat of arms, a reinterpreted 4G monogram in gleaming silver metal adorns the intense black lacquer. The bottle contains 15% recycled glass.",
             sizes: [
@@ -908,6 +913,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'givenchy gentleman society extreme eau de parfum': {
             brand: 'GIVENCHY',
             gender: 'men',
+            fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 80, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Woody Aromatic · A daring blend of clary sage, iced mint, coffee, vetiver, woods, patchouli, and vanilla.",
             longDescription: "GIVENCHY Gentleman Society Extreme EDP With its magnetic masculine signature, Gentleman Society Eau de Parfum Extreme embodies a new attitude within the Gentleman Society. Tailor-made for the most daring, this addictive fragrance is designed for the man who pushes his limits in an eternal quest for excellence, breaking barriers and fearlessly leaping into the unknown. Crafted with Givenchy's expertise, Gentleman Society Eau de Parfum Extreme is composed of exceptional raw materials, carefully selected for their outstanding olfactory qualities. The top notes of Clary Sage are enhanced by Iced Mint and Nutmeg, creating an immediate aromatic and spicy touch. The mysterious heart reveals the original Gentleman Society accord, a blend of Narcissus Absolute and Iris Concrete, contrasted by the characteristic quartet of Vetiver. From this accord emerges a powerful and unexpected Coffee Absolute Extract. Combined with Mint Essence, this Coffee note becomes icy, revealing a new and intensely textured facet. At the base, the woody notes of Cedar and Sandalwood are deepened with Patchouli Essence and Vanilla Absolute, perfecting this profound signature. Inspired by haute couture, the iconic design of the Gentleman bottle is reinterpreted with a striking new look. The deep black lacquered finish is enhanced with Givenchy's symbol: the 4G logo, engraved like a crest, in a new metallic bronze finish. The Gentleman Society Eau de Parfum Extreme bottle is made with 15% recycled glass. Gentleman Society. It's not a place, it's a state of mind. Join us.",
             sizes: [
@@ -942,6 +948,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'gentleman private reserve eau de parfum': {
             brand: 'GIVENCHY',
             gender: 'men',
+            fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 75, sillageLabel: 'Strong', season: 50, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Amber Woody · Airy iris and amber woods elevated by natural whisky absolute.",
             longDescription: "Timeless elegance is reinvented with Givenchy Gentleman Reserve Privee , a fragrance that celebrates the sensuality of amber wood and the sophistication of airy iris . This olfactory duo creates an addictive and enveloping composition , a symbol of contemporary masculine refinement. At the heart of this creation beats the absolute of natural whisky , made in Grasse from aromatic barley from a Scottish distillery , for a warm, intense and unique character. Its bottle with clean lines and amber finish , inspired by the silhouette of an elegant flask, reflects the perfect fusion between tradition and modernity. Gentleman Reserve Privee Eau de Parfum is an ode to the sophisticated, self-assured, and profoundly authentic man. A fragrance that embodies the art of French savoir-faire combined with the essence of Scotch whisky: intense, refined, and eternally elegant .",
             sizes: [
@@ -976,6 +983,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'jean paul gaultier scandal elixir': {
             brand: 'JEAN PAUL GAULTIER',
             gender: 'men',
+            fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 78, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Amber Fruity Woody · Black cherry, patchouli, and tonka bean in a rich, provocative elixir.",
             longDescription: "In first class on the Gaultier train, Scandal Pour Homme Elixir reigns supreme, with its amber, fruity, and woody fragrance. Its provocative black cherry and audacious patchouli assert themselves with elegance, while its tonka bean reveals a scandalous sweetness. Who wouldn't dream of encountering it? Behind the red velvet and the closed door of its exclusive case, only the most audacious can enter and succumb to the silver gradient of its amber-hued bottle. Crowned with intensity and excess, everything about it is temptation. Excess dominates, pleasures multiply. The passengers are outraged? So much the better! That's exactly what it's after.",
             sizes: [
@@ -1010,6 +1018,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'azzaro the most wanted parfum': {
             brand: 'AZZARO',
             gender: 'men',
+            fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 85, sillageLabel: 'Very Strong', season: 55, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Spicy Amber · A bold signature with red ginger, woods, and bourbon vanilla.",
             longDescription: 'Azzaro The Most Wanted Parfum is an intense, magnetic scent built for confident evenings. It opens with a burst of red ginger, settles into warm woods, and finishes with a rich bourbon vanilla trail that feels smooth and addictive. Crafted for modern allure, it leaves a strong, long-lasting impression without overpowering the room.',
             sizes: [
@@ -1043,6 +1052,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'azzaro the most wanted eau de parfum intense': {
             brand: 'AZZARO',
             gender: 'men',
+            fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 82, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Spicy Woody · A powerful signature with cardamom, caramel, and amber woods.",
             longDescription: 'Azzaro The Most Wanted Eau de Parfum Intense delivers a bold, addictive trail built around warm spices and deep woods. The opening is energetic and bright, the heart is rich and confident, and the dry-down is smooth and long-lasting for evening wear.',
             sizes: [
@@ -1076,6 +1086,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'azzaro forever wanted elixir eau de parfum': {
             brand: 'AZZARO',
             gender: 'men',
+            fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 80, sillageLabel: 'Strong', season: 50, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Amber Gourmand · A rich, smooth elixir with warm woods and vanilla.",
             longDescription: 'Azzaro Forever Wanted Elixir is a deep, luxurious scent designed for night. It opens with a refined freshness, settles into rich amber warmth, and finishes with a smooth vanilla trail that stays on skin for hours.',
             sizes: [
@@ -1109,6 +1120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'valentino donna born in roma eau de parfum': {
             brand: 'VALENTINO',
             gender: 'women',
+            fragranceProfile: { longevity: 78, longevityLabel: '7-9h', sillage: 72, sillageLabel: 'Moderate', season: 75, seasonLabel: 'All Year' },
             subtitle: "Women's fragrance · Floral Woody · A luminous blend of jasmine, blackcurrant, and warm woods.",
             longDescription: 'Valentino Donna Born in Roma is a modern floral with a bright, elegant opening and a smooth, woody base. It feels refined yet bold, perfect for day-to-night wear.',
             sizes: [
@@ -1142,6 +1154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'valentino uomo born in roma coral fantasy eau de toilette': {
             brand: 'VALENTINO',
             gender: 'men',
+            fragranceProfile: { longevity: 65, longevityLabel: '5-7h', sillage: 60, sillageLabel: 'Moderate', season: 90, seasonLabel: 'Spring/Summer' },
             subtitle: "Men's fragrance · Fruity Woody · A fresh and vibrant blend with apple, sage, and tobacco.",
             longDescription: 'Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette is a bright, modern scent that balances juicy fruit with aromatic woods. It feels fresh, energetic, and easy to wear.',
             sizes: [
@@ -1175,6 +1188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'valentino born in roma extradose eau de toilette': {
             brand: 'VALENTINO',
             gender: 'men',
+            fragranceProfile: { longevity: 70, longevityLabel: '6-8h', sillage: 68, sillageLabel: 'Moderate', season: 80, seasonLabel: 'Spring/Summer' },
             subtitle: "Men's fragrance · Woody Aromatic · A bold, modern scent with fresh spice and woods.",
             longDescription: 'Valentino Born in Roma Extradose Eau de Toilette is a clean and confident signature with a fresh opening, aromatic heart, and a smooth woody base for everyday wear.',
             sizes: [
@@ -1208,6 +1222,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'dior sauvage eau de parfum': {
             brand: 'DIOR',
             gender: 'men',
+            fragranceProfile: { longevity: 88, longevityLabel: '9-12h', sillage: 85, sillageLabel: 'Very Strong', season: 90, seasonLabel: 'All Year' },
             subtitle: "Men's fragrance · Woody Amber · A desert-inspired trail with vanilla and ambery woods.",
             longDescription: "Sauvage Eau de Parfum by Dior embodies the wildest, most elegant, and most audacious masculine spirit. A fragrance inspired by desert sunsets, it spreads its exoticism and sensuality through an unforgettable olfactory trail that leaves its mark wherever it goes. The warmth of the desert blends with the coolness of the night, highlighting exceptional notes such as vanilla from Papua New Guinea and a woody, ambery base. The result is a long-lasting, unique, and unforgettable men's fragrance. The 100ml format of Dior's Sauvage Eau de Parfum is refillable and is part of the House of Dior's sustainable plan to reuse bottles.",
             sizes: [
@@ -1240,6 +1255,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'dior homme intense eau de parfum': {
             brand: 'DIOR',
             gender: 'men',
+            fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 70, sillageLabel: 'Moderate', season: 65, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Iris Woody · A refined, elegant scent with iris, amber, and cedar.",
             longDescription: 'Dior Homme Intense is a smooth, elegant fragrance built around soft iris and warm amber woods. It feels refined and confident, perfect for evening wear and cooler seasons.',
             sizes: [
@@ -1273,6 +1289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'valentino born in roma uomo intense eau de parfum': {
             brand: 'VALENTINO',
             gender: 'men',
+            fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 78, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Amber Woody · A deep, intense blend with vanilla and smoky woods.",
             longDescription: 'Valentino Born in Roma Uomo Intense Eau de Parfum offers a rich, warm signature with smooth vanilla and dark woods. It is bold yet elegant, ideal for evening wear.',
             sizes: [
@@ -1306,6 +1323,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'valentino born in roma donna intense eau de parfum': {
             brand: 'VALENTINO',
             gender: 'women',
+            fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 75, sillageLabel: 'Strong', season: 70, seasonLabel: 'All Year' },
             subtitle: "Women's fragrance · Amber Floral · A sensual blend of jasmine and vanilla with warm woods.",
             longDescription: 'Valentino Born in Roma Donna Intense is a richer, deeper take on the original with luminous florals and a warm vanilla base. It is elegant, confident, and long-lasting.',
             sizes: [
@@ -1339,6 +1357,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'valentino uomo born in roma eau de toilette': {
             brand: 'VALENTINO',
             gender: 'men',
+            fragranceProfile: { longevity: 72, longevityLabel: '6-8h', sillage: 65, sillageLabel: 'Moderate', season: 75, seasonLabel: 'Spring/Summer' },
             subtitle: "Men's fragrance · Woody Aromatic · A clean and vibrant blend of citrus, sage, and woods.",
             longDescription: 'Valentino Uomo Born in Roma Eau de Toilette is a fresh and modern signature with crisp citrus, aromatic herbs, and a smooth woody base. Ideal for everyday wear.',
             sizes: [
@@ -1371,6 +1390,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'emporio armani stronger with you intensely edp': {
             brand: 'GIORGIO ARMANI',
+            fragranceProfile: { longevity: 88, longevityLabel: '9-12h', sillage: 82, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
             subtitle: 'Men\'s fragrance · Oriental Fougère · A bold, addictive signature with pink pepper, vanilla, and ambery woods.',
             longDescription: 'This addictive fougère fragrance unveils notes of pink pepper, vanilla, and an ambery woody accord. It reflects the personality of the modern man seeking a powerful scent to illuminate his intense love story. This intense masculine fragrance reveals warm heart notes of vanilla and vibrant ambery woody accords, contrasted by spicy touches of pink pepper. Its aged cognac hue perfectly embodies the intensity of this fragrance. BOTTLE: The clean lines and essential shapes characteristic of Giorgio Armani are reflected in the Emporio Armani bottle. Its simplicity conveys a profound sensuality, with curves reminiscent of masculine shoulders, and a round metallic cap that underscores understated elegance. Beneath this cap, intertwined rings symbolize a strong connection and unconditional love. Emporio Armani Stronger With You is a men\'s fragrance for bold men, belonging to the Oriental Fougere olfactory family. Because together, we are stronger.',
             sizes: [
@@ -1405,6 +1425,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'armani stronger with you powerfully eau de parfum': {
             brand: 'GIORGIO ARMANI',
+            fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 80, sillageLabel: 'Strong', season: 50, seasonLabel: 'Fall/Winter' },
             subtitle: 'Men\'s fragrance · Smoky Amber · A more intense and powerful signature with cherry, mandarin, lavender, vanilla, and amber woods.',
             longDescription: 'Stronger With You Powerfully reinvents the collection\'s iconic signature with a more intense, smoky, and powerful dimension. This Eau de Parfum opens with a vibrant burst of cherry and juicy mandarin, delivering immediate energy and luminous warmth. At its heart, Diva lavender blends with an aromatic spice accord, balancing freshness and intensity to express modern sophistication. At its base, the fragrance unveils a sensual foundation of creamy vanilla, smoky amber woods, and the iconic caramelized chestnut accord, the signature of the Stronger With You line. The result: an enveloping, addictive trail that lasts up to 24 hours. The perfume comes in an imposing red bottle with bold lines, topped with a blackened silver cap and adorned with the iconic motif of intertwined rings, a symbol of connection and strength.',
             sizes: [
@@ -1438,6 +1459,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'armani stronger with you absolutely perfume': {
             brand: 'GIORGIO ARMANI',
+            fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 85, sillageLabel: 'Very Strong', season: 45, seasonLabel: 'Fall/Winter' },
             subtitle: 'Men\'s fragrance · Oriental Fougère · An irresistible and addictive signature inspired by the power of absolute love.',
             longDescription: 'GIORGIO ARMANI Stronger With You Absolutely Perfume. Stronger with You Absolutely by Giorgio Armani is an Oriental Fougère fragrance for men. This fragrance was launched in 2021. Olfactory pyramid of Stronger With You Absolutely Parfum: Stronger With You Absolutely Parfum by Giorgio Armani is inspired by the power of absolute love. A refined men\'s fragrance fueled by the addictive new rum accord. The bottle with an intense smoky lacquer envelops the iconic Emporio Armani You fragrance, bringing the absolute strength of the perfume to the bottle. Stronger With You Absolutely Parfum is an irresistible men\'s fragrance.',
             sizes: [
@@ -1472,6 +1494,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'yves saint laurent y eau de parfum': {
             brand: 'YVES SAINT LAURENT',
+            fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 75, sillageLabel: 'Strong', season: 85, seasonLabel: 'All Year' },
             subtitle: 'Men\'s fragrance · Clean Woody · A long-lasting and powerful YSL signature of lavender, cedar, geranium, and incense.',
             longDescription: 'YVES SAINT LAURENT Y Eau de Parfum for Men. Immerse yourself in the essence of the creative and successful man with Y Le Parfum, the fragrance that captures the spirit of YSL personified by legendary ambassador Lenny Kravitz. This fragrance embodies the "Why not?" philosophy that defines the YSL man. Y Le Parfum, the new interpretation of the iconic Y franchise, is a long-lasting, clean, woody fragrance that celebrates self-realization. This version, more intense and powerful than ever, fuses vibrant French lavender with the strength of American cedar, two exclusive ingredients of YSL Beauty. The fragrance is distinguished by the mentholated touch of iconic geranium and the deep sensuality of incense, creating a powerful and addictive olfactory statement. An aroma that reflects the strength and determination of the YSL man in every drop.',
             sizes: [
@@ -1504,6 +1527,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'yves saint laurent myslf eau de parfum': {
             brand: 'YVES SAINT LAURENT',
+            fragranceProfile: { longevity: 78, longevityLabel: '7-9h', sillage: 72, sillageLabel: 'Moderate', season: 80, seasonLabel: 'Spring/Summer' },
             subtitle: 'Men\'s fragrance · Floral Woody · A modern masculine signature with bergamot, orange blossom, patchouli, and Ambrofix™.',
             longDescription: 'YVES SAINT LAURENT Myslf Refillable Eau de Parfum. Yves Saint Laurent\'s new refillable men\'s fragrance is Myslf. An expression of the man you are, with all your nuances. A declaration of modern masculinity, embracing all its facets and emotions. YSL BEAUTY\'s first floral woody fragrance for a trail of modernity with contrasts. YSL Myslf men\'s fragrance opens with a fresh and vibrant accord of Calabrian bergamot and green bergamot. At its heart lies a pure and intense orange blossom absolute from Tunisia, created exclusively for YSL beauty. The fragrance finishes with a sensual and textured woody accord of Indonesian patchouli and Ambrofix™. A YSL icon in a bottle. Elegant. Fluid. The YSL Myslf men\'s fragrance comes in a black lacquered bottle with shades that reflect your own image. At its center, embedded in the glass, is the iconic YSL Cassandre logo.',
             sizes: [
@@ -1537,6 +1561,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'yves saint laurent myslf le parfum': {
             brand: 'YVES SAINT LAURENT',
+            fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 78, sillageLabel: 'Strong', season: 75, seasonLabel: 'All Year' },
             subtitle: 'Men\'s fragrance · Floral Woody · A new intense and sensual MYSLF signature with black pepper, orange blossom, woods, and vanilla.',
             longDescription: 'YVES SAINT LAURENT MYSLF Le Parfum Floral Woody Men\'s Fragrance. MYSLF Le Parfum, the new and intense floral woody men\'s fragrance designed to leave a sensual and lasting trail. A new affirmation of modern masculinity. The expression of the man you are, with all your facets and emotions. The fragrance opens with a sparkling and exotic accord of black pepper, which gives way to a radiant and rich heart of orange blossom. In the base notes, the sensuality of woods envelops a velvety infusion of vanilla, creating an irresistible trail that lingers on the skin. Matte black and the bold shine of YSL\'s Casandra. The bottle is a perfect play of contrasts that reflects the duality of the YSL man: bold and self-assured, sophisticated and sentimental. A style statement as complex as the man who wears it.',
             sizes: [
@@ -1569,6 +1594,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'jean paul gaultier le male elixir eau de parfum': {
             brand: 'JEAN PAUL GAULTIER',
+            fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 88, sillageLabel: 'Very Strong', season: 55, seasonLabel: 'Fall/Winter' },
             subtitle: 'Men\'s fragrance · Aromatic Amber · Intense, sexy and addictive with lavender, tonka bean, mint and benzoin.',
             longDescription: 'Le Male Elixir Eau de Parfum, Jean Paul Gaultier\'s new sailor-inspired fragrance, has arrived. More intense and sexier than ever. When he steps aboard, Le Male Elixir unleashes a wave of heat. This men\'s fragrance is so intense that the gold melts, creating golden trails along its sleek torso and metallic case. Male Elixir takes the reins of sensuality, exuding the ultimate expression of sex appeal. Be careful not to touch its skin, you\'ll get burned! Male Elixir ignites all the senses, creating maximum addiction. Sunny tropical tonka bean blends with already legendary lavender and, with the animal magnetism of benzoin, creates an explosion of fresh mint and bergamot. Impossible not to melt with desire. With Jean Paul Gaultier\'s Le Male Elixir, the senses are awakened, desire burns, and gold flows freely. Dazzling and sexy.',
             sizes: [
@@ -1601,6 +1627,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'jean paul gaultier le male le parfum eau de parfum': {
             brand: 'JEAN PAUL GAULTIER',
+            fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 80, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
             subtitle: 'Men\'s fragrance · Woody Oriental · Intense elegance in a black and gold signature bottle.',
             longDescription: 'On the way to Le Male Le Parfum, the new men\'s fragrance from Jean Paul Gaultier! With its official black and gold packaging, this intense eau de parfum revisits the Le Male olfactory line with style and strength. An elegant, woody oriental trail, imbued with the charisma and power of a leader. Sailors to your stations! The captain is here, for an almost imminent departure.',
             sizes: [
@@ -1634,6 +1661,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'jean paul gaultier le beau eau de parfum': {
             brand: 'JEAN PAUL GAULTIER',
+            fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 75, sillageLabel: 'Strong', season: 70, seasonLabel: 'Spring/Summer' },
             subtitle: 'Men\'s fragrance · Woody Amber · Intense and sensual with tonka bean, sandalwood, ginger, pineapple, and ambergris.',
             longDescription: 'Le Beau Le Parfum, Men\'s Perfume, Intense Eau de Parfum. Le Beau Le Parfum, the new original and intense men\'s fragrance by Jean Paul Gaultier. While Jean Paul Gaultier created this fragrance in its purest form, it wasn\'t designed to be dressed up! The bottle, lacquered in black and green, boasts a sleek and muscular silhouette, adorned with a golden fabric leaf as if it were a single garment. The new Eau de Parfum Intense is an even more sensual temptation, with its exciting woody amber scent. Le Beau is a men\'s fragrance built around an addictive tonka bean, sandalwood, ginger, pineapple, and ambergris. A light yet powerful base for a seductive and ultra-sexy man.',
             sizes: [
@@ -2428,6 +2456,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const honestRating = getHonestRatingValue(productName);
         setText('productName', productName);
         setText('productBrand', resolvedBrand);
+        setText('productBrandBannerName', resolvedBrand);
         setText('productPrice', productPrice);
         setText('productOldPrice', productOldPrice || '');
         setText('productDiscount', productDiscount || '');
@@ -2458,6 +2487,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         assignReviewerNames(productName, productOverride);
         applyReviewVisibility(productName);
+
+        // Update fragrance profile bars dynamically
+        const fp = productOverride?.fragranceProfile;
+        if (fp) {
+            const dnaRows = document.querySelectorAll('#fragranceProfile .product-dna-row');
+            const profiles = [
+                { fill: fp.longevity, label: fp.longevityLabel },
+                { fill: fp.sillage, label: fp.sillageLabel },
+                { fill: fp.season, label: fp.seasonLabel }
+            ];
+            dnaRows.forEach((row, i) => {
+                if (!profiles[i]) return;
+                const fill = row.querySelector('.product-dna-fill');
+                const value = row.querySelector('.product-dna-value');
+                if (fill) {
+                    fill.style.width = '0%';
+                    fill.setAttribute('data-target', profiles[i].fill + '%');
+                }
+                if (value) value.textContent = profiles[i].label;
+            });
+        }
 
         const lastCatalogUrl = (() => {
             try {
@@ -2582,7 +2632,13 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', () => {
                 const imageSrc = btn.dataset.image;
                 if (!imageSrc) return;
-                if (mainImage) mainImage.src = imageSrc;
+                if (mainImage) {
+                    mainImage.style.opacity = '0';
+                    setTimeout(() => {
+                        mainImage.src = imageSrc;
+                        mainImage.style.opacity = '1';
+                    }, 200);
+                }
                 thumbButtons.forEach((item) => item.classList.remove('is-active'));
                 btn.classList.add('is-active');
             });
@@ -4436,4 +4492,245 @@ document.addEventListener('DOMContentLoaded', () => {
     setHeaderCartCount();
     initDiscoverFilters();
     initHeaderSearchSuggestions();
+
+    /* --- Mobile Menu --- */
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileMenuClose = document.getElementById('mobileMenuClose');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+    const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
+
+    const openMobileMenu = () => {
+        if (!mobileMenuDrawer) return;
+        mobileMenuDrawer.classList.add('is-open');
+        mobileMenuOverlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    };
+    const closeMobileMenu = () => {
+        if (!mobileMenuDrawer) return;
+        mobileMenuDrawer.classList.remove('is-open');
+        mobileMenuOverlay.classList.remove('is-open');
+        document.body.style.overflow = '';
+    };
+
+    if (mobileMenuToggle) mobileMenuToggle.addEventListener('click', openMobileMenu);
+    if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeMobileMenu);
+    if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+
+    /* --- Flash Offers Countdown Timer --- */
+    const flashHoursEl = document.getElementById('flashHours');
+    const flashMinutesEl = document.getElementById('flashMinutes');
+    const flashSecondsEl = document.getElementById('flashSeconds');
+
+    if (flashHoursEl && flashMinutesEl && flashSecondsEl) {
+        const updateFlashCountdown = () => {
+            const now = new Date();
+            const endOfDay = new Date(now);
+            endOfDay.setHours(23, 59, 59, 999);
+            const diff = endOfDay - now;
+            const hours = Math.floor(diff / 3600000);
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            flashHoursEl.textContent = String(hours).padStart(2, '0');
+            flashMinutesEl.textContent = String(minutes).padStart(2, '0');
+            flashSecondsEl.textContent = String(seconds).padStart(2, '0');
+        };
+        updateFlashCountdown();
+        setInterval(updateFlashCountdown, 1000);
+    }
+
+    /* --- Back to Top Button --- */
+    const backToTopBtn = document.getElementById('backToTop');
+    if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 600) {
+                backToTopBtn.classList.add('is-visible');
+            } else {
+                backToTopBtn.classList.remove('is-visible');
+            }
+        }, { passive: true });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    /* --- Product Image Zoom on Hover --- */
+    const zoomContainer = document.getElementById('productZoomContainer');
+    if (zoomContainer) {
+        const zoomImg = zoomContainer.querySelector('.product-main-image');
+        if (zoomImg) {
+            zoomContainer.addEventListener('mousemove', (e) => {
+                const rect = zoomContainer.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                zoomImg.style.transformOrigin = `${x}% ${y}%`;
+            });
+            zoomContainer.addEventListener('mouseleave', () => {
+                zoomImg.style.transformOrigin = 'center center';
+            });
+        }
+
+        /* Mobile swipe to change images */
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const swipeThreshold = 50;
+
+        zoomContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        zoomContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) < swipeThreshold) return;
+
+            const thumbs = Array.from(document.querySelectorAll('#productThumbs .product-thumb-btn'));
+            if (!thumbs.length) return;
+            const activeIndex = thumbs.findIndex((t) => t.classList.contains('is-active'));
+            let nextIndex;
+            if (diff > 0) {
+                nextIndex = activeIndex < thumbs.length - 1 ? activeIndex + 1 : 0;
+            } else {
+                nextIndex = activeIndex > 0 ? activeIndex - 1 : thumbs.length - 1;
+            }
+            thumbs[nextIndex].click();
+            const thumbsContainer = document.getElementById('productThumbs');
+            if (thumbsContainer) {
+                thumbsContainer.scrollLeft = thumbs[nextIndex].offsetLeft - thumbsContainer.offsetLeft - (thumbsContainer.clientWidth / 2) + (thumbs[nextIndex].offsetWidth / 2);
+            }
+        }, { passive: true });
+    }
+
+    /* --- Thumbnail Arrow Navigation --- */
+    const thumbsRow = document.getElementById('productThumbs');
+    if (thumbsRow) {
+        const leftArrow = document.querySelector('.thumbs-arrow-left');
+        const rightArrow = document.querySelector('.thumbs-arrow-right');
+
+        const navigateThumb = (direction) => {
+            const thumbs = Array.from(thumbsRow.querySelectorAll('.product-thumb-btn'));
+            if (thumbs.length < 2) return;
+            const activeIndex = thumbs.findIndex((t) => t.classList.contains('is-active'));
+            let nextIndex;
+            if (direction === 'next') {
+                nextIndex = activeIndex < thumbs.length - 1 ? activeIndex + 1 : 0;
+            } else {
+                nextIndex = activeIndex > 0 ? activeIndex - 1 : thumbs.length - 1;
+            }
+            thumbs[nextIndex].click();
+            thumbsRow.scrollLeft = thumbs[nextIndex].offsetLeft - thumbsRow.offsetLeft - (thumbsRow.clientWidth / 2) + (thumbs[nextIndex].offsetWidth / 2);
+        };
+
+        if (leftArrow) {
+            leftArrow.addEventListener('click', () => navigateThumb('prev'));
+        }
+        if (rightArrow) {
+            rightArrow.addEventListener('click', () => navigateThumb('next'));
+        }
+    }
+
+    /* --- Product Image Auto-Slideshow --- */
+    const autoSlideThumbsContainer = document.getElementById('productThumbs');
+    if (autoSlideThumbsContainer) {
+        let autoSlideTimer = null;
+        const AUTO_SLIDE_DELAY = 3500;
+
+        const startAutoSlide = () => {
+            stopAutoSlide();
+            autoSlideTimer = setInterval(() => {
+                const thumbs = Array.from(autoSlideThumbsContainer.querySelectorAll('.product-thumb-btn'));
+                if (thumbs.length < 2) return;
+                const activeIndex = thumbs.findIndex((t) => t.classList.contains('is-active'));
+                const nextIndex = (activeIndex + 1) % thumbs.length;
+                thumbs[nextIndex].click();
+                autoSlideThumbsContainer.scrollLeft = thumbs[nextIndex].offsetLeft - autoSlideThumbsContainer.offsetLeft - (autoSlideThumbsContainer.clientWidth / 2) + (thumbs[nextIndex].offsetWidth / 2);
+            }, AUTO_SLIDE_DELAY);
+        };
+
+        const stopAutoSlide = () => {
+            if (autoSlideTimer) { clearInterval(autoSlideTimer); autoSlideTimer = null; }
+        };
+
+        // Pause on hover / touch, resume on leave
+        const galleryShell = autoSlideThumbsContainer.closest('.product-gallery-v2');
+        if (galleryShell) {
+            galleryShell.addEventListener('mouseenter', stopAutoSlide);
+            galleryShell.addEventListener('mouseleave', startAutoSlide);
+            galleryShell.addEventListener('touchstart', stopAutoSlide, { passive: true });
+            galleryShell.addEventListener('touchend', () => { setTimeout(startAutoSlide, 4000); }, { passive: true });
+        }
+
+        startAutoSlide();
+    }
+
+    /* --- Share Buttons --- */
+    document.querySelectorAll('.product-share-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+            const label = btn.getAttribute('aria-label') || '';
+
+            if (label.includes('Facebook')) {
+                window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank', 'width=600,height=400');
+            } else if (label.includes('Twitter')) {
+                window.open('https://twitter.com/intent/tweet?url=' + url + '&text=' + title, '_blank', 'width=600,height=400');
+            } else if (label.includes('WhatsApp')) {
+                window.open('https://wa.me/?text=' + title + '%20' + url, '_blank');
+            } else if (label.includes('Copy')) {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    const icon = btn.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-check';
+                        setTimeout(() => { icon.className = 'fas fa-link'; }, 1500);
+                    }
+                });
+            }
+        });
+    });
+
+    // Gallery share button (top-right of image)
+    const galleryShareBtn = document.querySelector('.gallery-share-btn');
+    if (galleryShareBtn) {
+        galleryShareBtn.addEventListener('click', () => {
+            if (navigator.share) {
+                navigator.share({ title: document.title, url: window.location.href });
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    const icon = galleryShareBtn.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-check';
+                        setTimeout(() => { icon.className = 'fas fa-share-nodes'; }, 1500);
+                    }
+                });
+            }
+        });
+    }
+
+    /* --- Fragrance DNA animation on scroll --- */
+    const dnaFills = document.querySelectorAll('.product-dna-fill');
+    if (dnaFills.length) {
+        const animateDna = () => {
+            dnaFills.forEach((fill) => {
+                const rect = fill.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 40) {
+                    fill.style.width = fill.style.width; // triggers transition
+                }
+            });
+        };
+        // Start fills at 0 and animate when visible
+        dnaFills.forEach((fill) => {
+            const target = fill.dataset.target || fill.style.width;
+            fill.dataset.target = target;
+            fill.style.width = '0%';
+        });
+        const dnaObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const fill = entry.target;
+                    fill.style.width = fill.dataset.target;
+                    dnaObserver.unobserve(fill);
+                }
+            });
+        }, { threshold: 0.3 });
+        dnaFills.forEach((fill) => dnaObserver.observe(fill));
+    }
 });

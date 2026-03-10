@@ -25,6 +25,11 @@
     <header class="bg-brand-dark text-white sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
+                <!-- Mobile Menu Toggle -->
+                <button id="mobileMenuToggle" class="md:hidden header-icon-btn hover:text-brand-red transition" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="#" class="font-serif text-3xl font-bold tracking-widest text-white">
@@ -85,6 +90,81 @@
         </nav>
     </header>
 
+    <!-- Trust Bar -->
+    <div class="trust-bar bg-white border-b border-gray-200 py-2.5 hidden md:block">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between text-xs text-gray-600">
+                <div class="trust-bar-item flex items-center gap-2">
+                    <i class="fas fa-truck-fast text-brand-red"></i>
+                    <span><strong>Free Delivery</strong> from 35 MAD</span>
+                </div>
+                <div class="trust-bar-divider"></div>
+                <div class="trust-bar-item flex items-center gap-2">
+                    <i class="fas fa-rotate-left text-brand-red"></i>
+                    <span><strong>14-Day Returns</strong> hassle-free</span>
+                </div>
+                <div class="trust-bar-divider"></div>
+                <div class="trust-bar-item flex items-center gap-2">
+                    <i class="fas fa-shield-halved text-brand-red"></i>
+                    <span><strong>Secure Payment</strong> & 1-click checkout</span>
+                </div>
+                <div class="trust-bar-divider"></div>
+                <div class="trust-bar-item flex items-center gap-2">
+                    <i class="fas fa-certificate text-brand-red"></i>
+                    <span><strong>100% Authentic</strong> products guaranteed</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay" aria-hidden="true"></div>
+    <nav id="mobileMenuDrawer" class="mobile-menu-drawer" aria-label="Mobile navigation">
+        <div class="mobile-menu-header">
+            <span class="font-serif text-xl font-bold tracking-widest">IPORDISE<span class="text-brand-red">.</span></span>
+            <button id="mobileMenuClose" class="mobile-menu-close" aria-label="Close menu">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-search">
+            <div class="relative">
+                <input type="text" class="w-full bg-gray-100 text-gray-900 rounded-full py-2.5 pl-5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search perfumes...">
+                <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-400">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <ul class="mobile-menu-list">
+            <li><a href="discover.html?filter=all" class="mobile-menu-link"><i class="fas fa-spray-can-sparkles"></i> All Perfumes</a></li>
+            <li><a href="discover.html?filter=for-men" class="mobile-menu-link"><i class="fas fa-mars"></i> Men</a></li>
+            <li><a href="discover.html?filter=for-women" class="mobile-menu-link"><i class="fas fa-venus"></i> Women</a></li>
+            <li><a href="discover.html?filter=unisex" class="mobile-menu-link"><i class="fas fa-transgender-alt"></i> Unisex</a></li>
+            <li><a href="discover.html?filter=niche" class="mobile-menu-link"><i class="fas fa-gem"></i> Niche</a></li>
+            <li><a href="discover.html?filter=designer" class="mobile-menu-link"><i class="fas fa-crown"></i> Designer</a></li>
+            <li><a href="discover.html?filter=arabian" class="mobile-menu-link"><i class="fas fa-mosque"></i> Arabian</a></li>
+            <li><a href="discover.html?filter=best-sellers" class="mobile-menu-link"><i class="fas fa-fire"></i> Best Sellers</a></li>
+            <li><a href="discover.html?filter=new-in" class="mobile-menu-link"><i class="fas fa-sparkles"></i> New In</a></li>
+            <li><a href="discover.html?filter=offers" class="mobile-menu-link"><i class="fas fa-bolt"></i> Flash Offers</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+            <a href="pages/login.html" class="mobile-menu-footer-btn"><i class="fas fa-user"></i> My Account</a>
+            <a href="pages/contact.html" class="mobile-menu-footer-btn"><i class="fas fa-headset"></i> Contact Us</a>
+        </div>
+    </nav>
+
+    <!-- Quick Category Strip -->
+    <div class="quick-cat-strip md:hidden">
+        <div class="quick-cat-scroll hide-scrollbar">
+            <a href="discover.html?filter=offers" class="quick-cat-pill quick-cat-pill-hot"><i class="fas fa-bolt"></i> Flash Offers</a>
+            <a href="discover.html?filter=new-in" class="quick-cat-pill"><i class="fas fa-sparkles"></i> New In</a>
+            <a href="discover.html?filter=best-sellers" class="quick-cat-pill"><i class="fas fa-fire"></i> Best Sellers</a>
+            <a href="discover.html?filter=for-men" class="quick-cat-pill">Men</a>
+            <a href="discover.html?filter=for-women" class="quick-cat-pill">Women</a>
+            <a href="discover.html?filter=niche" class="quick-cat-pill">Niche</a>
+            <a href="discover.html?filter=designer" class="quick-cat-pill">Designer</a>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section class="relative w-full hero-prime hero-bg overflow-hidden">
         <div class="hero-surface"></div>
@@ -122,26 +202,36 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold text-brand-dark uppercase tracking-wide flex flex-col md:flex-row items-center justify-center gap-3">
-                    <div class="w-full md:hidden mobile-flash-banner-stack" data-mobile-flash-banners>
-                        <div class="mobile-flash-banner-slide mobile-flash-banner-3d mobile-flash-banner-3d-amber" role="img" aria-label="Armani Stronger With You Powerfully Eau de Parfum bottle">
-                            <div class="mobile-flash-banner-copy">
-                                <span class="mobile-flash-kicker">Emporio Armani</span>
-                                <span class="mobile-flash-headline">Stronger With You Powerfully</span>
+                    <a href="pages/xerjoff.html" class="w-full md:hidden mobile-flash-banner-stack" data-mobile-flash-banners>
+                        <div class="mobile-flash-banner-slide" role="img" aria-label="XERJOFF Italian Haute Parfumerie">
+                            <div class="mobile-flash-bg">
+                                <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/second%20one.png" alt="" class="mobile-flash-bg-img" loading="eager" decoding="async" fetchpriority="high">
                             </div>
-                            <div class="mobile-flash-banner-scene" aria-hidden="true">
-                                <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp" srcset="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp 540w, https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp 1080w" sizes="(max-width: 767px) 45vw, 280px" loading="eager" decoding="async" fetchpriority="high" alt="Armani Stronger With You Powerfully Eau de Parfum" class="mobile-flash-product-photo" />
-                            </div>
-                        </div>
-                        <div class="mobile-flash-banner-slide mobile-flash-banner-3d mobile-flash-banner-3d-rose" role="img" aria-label="Armani Stronger With You Powerfully Eau de Parfum bottle">
-                            <div class="mobile-flash-banner-copy">
-                                <span class="mobile-flash-kicker">Bold Amber Signature</span>
-                                <span class="mobile-flash-headline">Now In Flash Offers</span>
-                            </div>
-                            <div class="mobile-flash-banner-scene" aria-hidden="true">
-                                <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/5.webp" srcset="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/3.webp 540w, https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/5.webp 1080w" sizes="(max-width: 767px) 45vw, 280px" loading="eager" decoding="async" fetchpriority="high" alt="Armani Stronger With You Powerfully Eau de Parfum" class="mobile-flash-product-photo" />
+                            <div class="mobile-flash-overlay"></div>
+                            <div class="mobile-flash-content">
+                                <div class="mobile-flash-copy">
+                                    <span class="mobile-flash-kicker"><span class="mobile-flash-kicker-line"></span>Exclusive Collection</span>
+                                    <span class="mobile-flash-headline">XERJOFF</span>
+                                    <span class="mobile-flash-sub">Italian Haute Parfumerie</span>
+                                </div>
+                                <span class="mobile-flash-cta">Explore <i class="fas fa-arrow-right"></i></span>
                             </div>
                         </div>
-                    </div>
+                        <div class="mobile-flash-banner-slide" role="img" aria-label="XERJOFF Luxury Niche">
+                            <div class="mobile-flash-bg">
+                                <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/first%20image.png" alt="" class="mobile-flash-bg-img" loading="eager" decoding="async" fetchpriority="high">
+                            </div>
+                            <div class="mobile-flash-overlay"></div>
+                            <div class="mobile-flash-content">
+                                <div class="mobile-flash-copy">
+                                    <span class="mobile-flash-kicker"><span class="mobile-flash-kicker-line"></span>Luxury Niche</span>
+                                    <span class="mobile-flash-headline">XERJOFF</span>
+                                    <span class="mobile-flash-sub">Discover the Art of Perfumery</span>
+                                </div>
+                                <span class="mobile-flash-cta">Shop Now <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
                     <span class="flash-offers-title flash-offers-title-mobile flex md:hidden items-center justify-center gap-3" aria-label="Flash Offers">
                         <span class="flash-word flash-word-left">FLASH</span>
                         <i class="fas fa-bolt text-brand-red text-4xl flash-bolt" aria-hidden="true"></i>
@@ -156,6 +246,17 @@
                 <p class="text-sm text-gray-500 mt-3 max-w-2xl mx-auto">
                     Discover today's most wanted perfumes, rare niche selections, and limited-edition sets. Flash offers are available for 24 hours only.
                 </p>
+                <!-- Countdown Timer -->
+                <div class="flash-countdown-bar mt-5" id="flashCountdown">
+                    <span class="flash-countdown-label">Ends in</span>
+                    <div class="flash-countdown-units">
+                        <div class="flash-countdown-unit"><span id="flashHours">00</span><small>HRS</small></div>
+                        <span class="flash-countdown-sep">:</span>
+                        <div class="flash-countdown-unit"><span id="flashMinutes">00</span><small>MIN</small></div>
+                        <span class="flash-countdown-sep">:</span>
+                        <div class="flash-countdown-unit"><span id="flashSeconds">00</span><small>SEC</small></div>
+                    </div>
+                </div>
             </div>
 
             <!-- Products Carousel / Horizontal Scroll -->
@@ -994,29 +1095,29 @@
     <!-- Featured Brand Section -->
     <section class="bg-[#111111] text-white py-16 aether-cinematic-section">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-center text-sm font-bold tracking-[0.2em] mb-10 uppercase text-gray-300 aether-kicker">XERJOFF ALEXANDERIA II</h2>
+            <h2 class="text-center text-sm font-bold tracking-[0.2em] mb-10 uppercase text-gray-300 aether-kicker">THE HOUSE OF XERJOFF</h2>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-6">
                 <!-- Main Image -->
                 <div class="w-full h-[300px] sm:h-[360px] md:h-[420px] lg:h-[400px] aether-main-media">
-                    <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/second%20one.png" alt="AETHER Model" class="w-full h-full aether-main-img rounded-sm opacity-90 hover:opacity-100 transition duration-500">
+                    <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/second%20one.png" alt="XERJOFF Luxury Perfume" class="w-full h-full aether-main-img rounded-sm opacity-90 hover:opacity-100 transition duration-500">
                 </div>
                 
                 <!-- Text Area -->
                 <div class="text-center px-8 lg:px-16 aether-copy-zone">
-                    <h3 class="text-2xl lg:text-3xl font-serif font-bold mb-4 aether-title">COMMAND THE NIGHT IN GOLDEN SILENCE.</h3>
+                    <h3 class="text-2xl lg:text-3xl font-serif font-bold mb-4 aether-title">ITALIAN HAUTE PARFUMERIE.</h3>
                     <p class="text-gray-400 text-sm leading-relaxed mb-8 aether-subcopy">
-                        Velvet smoke, polished amber, and dark florals unfold with cinematic depth - an extrait crafted for rare presence, magnetic confidence, and unforgettable arrival.
+                        Born in Turin, crafted with obsession. XERJOFF perfumes are masterpieces of rare ingredients, golden artistry, and uncompromising luxury — where every bottle tells a story of Italian excellence.
                     </p>
-                    <a href="#" class="inline-block border-b border-white pb-1 font-semibold text-sm hover:text-brand-red hover:border-brand-red transition duration-300 aether-discover-link">
-                        Discover it!
+                    <a href="pages/xerjoff.html" class="inline-block border-b border-white pb-1 font-semibold text-sm hover:text-brand-red hover:border-brand-red transition duration-300 aether-discover-link">
+                        Explore the Collection
                     </a>
                 </div>
             </div>
 
             <!-- Featured Image -->
             <div class="aether-featured-media mt-2">
-                <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/first%20image.png" alt="AETHER Featured" class="w-full h-full aether-featured-img rounded-sm opacity-90 hover:opacity-100 transition duration-500">
+                <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/first%20image.png" alt="XERJOFF Collection" class="w-full h-full aether-featured-img rounded-sm opacity-90 hover:opacity-100 transition duration-500">
             </div>
         </div>
     </section>
@@ -1268,48 +1369,87 @@
         </div>
     </section>
 
-    <!-- Footer snippet for completeness -->
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Footer -->
     <footer class="bg-brand-dark text-white pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-                <div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+                <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
                     <p class="text-gray-400 text-sm mb-6">The ultimate destination for luxury perfumes and beauty online. Elevate your everyday.</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-tiktok"></i></a>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Customer Service</h4>
-                    <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="pages/contact.html" class="hover:text-white transition">Contact Us</a></li>
-                        <li><a href="pages/shipping.html" class="hover:text-white transition">Shipping & Returns</a></li>
-                        <li><a href="pages/track-order.html" class="hover:text-white transition">Track Order</a></li>
-                        <li><a href="pages/faq.html" class="hover:text-white transition">FAQ</a></li>
+                    <h4 class="footer-col-title">Customer Service</h4>
+                    <ul class="footer-links">
+                        <li><a href="pages/contact.html">Contact Us</a></li>
+                        <li><a href="pages/shipping.html">Shipping & Returns</a></li>
+                        <li><a href="pages/track-order.html">Track Order</a></li>
+                        <li><a href="pages/faq.html">FAQ</a></li>
+                        <li><a href="pages/support.html">Support Center</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">About</h4>
-                    <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="pages/our-story.html" class="hover:text-white transition">Our Story</a></li>
-                        <li><a href="pages/careers.html" class="hover:text-white transition">Careers</a></li>
-                        <li><a href="pages/store-locator.html" class="hover:text-white transition">Find a Store</a></li>
-                        <li><a href="pages/terms.html" class="hover:text-white transition">Terms & Conditions</a></li>
+                    <h4 class="footer-col-title">About IPORDISE</h4>
+                    <ul class="footer-links">
+                        <li><a href="pages/our-story.html">Our Story</a></li>
+                        <li><a href="pages/careers.html">Careers</a></li>
+                        <li><a href="pages/store-locator.html">Find a Store</a></li>
+                        <li><a href="pages/terms.html">Terms & Conditions</a></li>
+                        <li><a href="pages/privacy-policy.html">Privacy Policy</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Newsletter</h4>
-                    <p class="text-gray-400 text-sm mb-4">Subscribe for new arrivals, fragrance tips, and more.</p>
+                    <h4 class="footer-col-title">Promotions</h4>
+                    <ul class="footer-links">
+                        <li><a href="discover.html?filter=offers">Flash Offers</a></li>
+                        <li><a href="discover.html?filter=new-in">New Arrivals</a></li>
+                        <li><a href="discover.html?filter=best-sellers">Best Sellers</a></li>
+                        <li><a href="discover.html?filter=niche">Niche Collection</a></li>
+                        <li><a href="discover.html?filter=designer">Designer Collection</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-col-title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals, new arrivals, and fragrance tips.</p>
                     <div class="flex">
-                        <input type="email" placeholder="Your email address" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">
-                        <a href="pages/newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition">SUBSCRIBE</a>
+                        <input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10">
+                        <a href="pages/newsletter.html" class="bg-brand-red px-5 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm whitespace-nowrap">GO</a>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+
+            <!-- Payment Methods -->
+            <div class="border-t border-white/10 pt-8 pb-6">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Accepted Payment Methods</p>
+                    <div class="flex items-center gap-3 flex-wrap justify-center">
+                        <span class="payment-icon"><i class="fab fa-cc-visa text-xl"></i></span>
+                        <span class="payment-icon"><i class="fab fa-cc-mastercard text-xl"></i></span>
+                        <span class="payment-icon"><i class="fab fa-cc-paypal text-xl"></i></span>
+                        <span class="payment-icon"><i class="fab fa-cc-apple-pay text-xl"></i></span>
+                        <span class="payment-icon"><i class="fab fa-google-pay text-xl"></i></span>
+                        <span class="payment-icon payment-icon-text">COD</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
                 <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="pages/terms.html" class="hover:text-white transition">Terms</a>
+                    <a href="pages/privacy-policy.html" class="hover:text-white transition">Privacy</a>
+                    <a href="pages/returns.html" class="hover:text-white transition">Returns</a>
+                </div>
             </div>
         </div>
     </footer>
