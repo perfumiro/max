@@ -4671,8 +4671,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (label.includes('Facebook')) {
                 window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank', 'width=600,height=400');
-            } else if (label.includes('Twitter')) {
-                window.open('https://twitter.com/intent/tweet?url=' + url + '&text=' + title, '_blank', 'width=600,height=400');
+            } else if (label.includes('Instagram')) {
+                window.open('https://www.instagram.com/', '_blank');
             } else if (label.includes('WhatsApp')) {
                 window.open('https://wa.me/?text=' + title + '%20' + url, '_blank');
             } else if (label.includes('Copy')) {

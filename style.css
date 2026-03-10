@@ -267,16 +267,16 @@ body {
     }
 
     .hero-prime {
-        min-height: 690px;
+        min-height: 100vh;
     }
 
     .hero-content-shell {
-        padding-top: 4.2rem;
-        padding-bottom: 3.2rem;
+        padding-top: 0;
+        padding-bottom: 5rem;
     }
 
     .hero-left-copy h1 {
-        font-size: clamp(3.7rem, 4.95vw, 5.1rem);
+        font-size: clamp(5.5rem, 8vw, 10rem);
     }
 
     .hero-main-grid {
@@ -305,8 +305,8 @@ body {
     inset: 0;
     z-index: 0;
     background:
-        linear-gradient(88deg, rgba(25, 31, 62, 0.74) 0%, rgba(25, 31, 62, 0.52) 36%, rgba(13, 19, 41, 0.16) 64%, rgba(11, 16, 34, 0.58) 100%),
-        linear-gradient(0deg, rgba(5, 10, 25, 0.14), rgba(5, 10, 25, 0.14));
+        linear-gradient(88deg, rgba(25, 31, 62, 0.82) 0%, rgba(25, 31, 62, 0.56) 32%, rgba(13, 19, 41, 0.10) 62%, rgba(11, 16, 34, 0.62) 100%),
+        linear-gradient(180deg, rgba(5, 10, 25, 0.40) 0%, rgba(5, 10, 25, 0.0) 22%, rgba(5, 10, 25, 0.0) 68%, rgba(2, 6, 18, 0.65) 100%);
 }
 
 .hero-bg::before,
@@ -573,8 +573,22 @@ body {
 }
 
 @media (min-width: 1024px) {
+    .hero-prime {
+        min-height: 100vh;
+    }
+
+    .hero-content-shell {
+        padding-top: 0;
+        padding-bottom: 4rem;
+        min-height: calc(100vh - 80px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
     .hero-main-grid {
         grid-template-columns: 1fr;
+        gap: 2rem;
     }
 
     .hero-offer-card {
@@ -582,7 +596,72 @@ body {
     }
 
     .hero-left-copy h1 {
+        font-size: clamp(4.8rem, 7vw, 8.8rem);
+        letter-spacing: -0.03em;
         max-width: 12ch;
+        line-height: 0.93;
+        text-shadow:
+            0 2px 4px rgba(0, 0, 0, 0.65),
+            0 8px 28px rgba(0, 0, 0, 0.50),
+            0 24px 70px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero-kicker {
+        font-size: 0.83rem;
+        letter-spacing: 0.32em;
+        margin-bottom: 1.7rem;
+        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-offer-label {
+        font-size: 0.72rem;
+        letter-spacing: 0.22em;
+    }
+
+    .hero-offer-value {
+        font-size: 4rem;
+        letter-spacing: -0.02em;
+        text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .hero-offer-copy {
+        font-size: 1.45rem;
+        line-height: 1.25;
+    }
+
+    .hero-cta-row {
+        max-width: 640px;
+        margin-top: 4.2rem;
+        gap: 1.1rem;
+    }
+
+    .hero-cta-link {
+        padding: 1.1rem 1.6rem;
+        font-size: 0.92rem;
+        letter-spacing: 0.12em;
+        box-shadow: 0 16px 36px rgba(2, 6, 23, 0.38), inset 0 1px 0 rgba(255,255,255,0.14);
+    }
+
+    .hero-bg::before {
+        width: 68vw;
+        height: 68vw;
+        max-width: 920px;
+        max-height: 920px;
+        right: -12%;
+        top: -18%;
+        background: radial-gradient(circle at 38% 38%, rgba(120, 60, 220, 0.08), rgba(94, 54, 180, 0.38) 46%, rgba(54, 130, 220, 0.16) 72%, transparent 88%);
+        filter: blur(10px);
+    }
+
+    .hero-bg::after {
+        width: 58vw;
+        height: 58vw;
+        max-width: 740px;
+        max-height: 740px;
+        right: 1%;
+        bottom: -28%;
+        background: radial-gradient(circle at 38% 42%, rgba(250, 190, 21, 0.16), rgba(217, 100, 6, 0.38) 52%, rgba(22, 163, 74, 0.12) 76%, transparent 90%);
+        filter: blur(14px);
     }
 }
 
@@ -623,6 +702,15 @@ body {
     }
     100% {
         transform: translateX(145%) skewX(-18deg);
+    }
+}
+
+@keyframes heroCardFloat {
+    0% {
+        transform: perspective(1200px) rotateY(-10deg) rotateX(4deg) translateY(0px);
+    }
+    100% {
+        transform: perspective(1200px) rotateY(-7deg) rotateX(2deg) translateY(-16px);
     }
 }
 
