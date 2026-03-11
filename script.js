@@ -2708,7 +2708,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams(window.location.search);
         const productName = params.get('name') || productNameEl.textContent.trim();
         const productBrand = params.get('brand') || 'IPORDISE';
-        const productPrice = params.get('price') || '0.00 MAD';
+        const productPrice = params.get('price') || '/';
         const productOldPrice = params.get('oldPrice') || '';
         const productDiscount = params.get('discount') || '';
         const productReviews = params.get('reviews') || '0';
@@ -3267,7 +3267,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!raw) {
                 return {
                     size: 'Default',
-                    priceText: '0 MAD',
+                    priceText: '/',
                     unitPrice: 0
                 };
             }
