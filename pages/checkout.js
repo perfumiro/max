@@ -70,6 +70,7 @@
     const normalizeItem = (item) => {
         const qty = Math.max(1, Number(item?.qty ?? item?.quantity ?? 1));
         const price = parsePrice(item?.price ?? item?.unitPrice ?? item?.priceText ?? 0);
+        const pricePending = Boolean(item?.pricePending ?? item?.onRequest) || price <= 0;
         const id = String(item?.id ?? item?.sku ?? '');
         if (!id) return null;
 
@@ -78,7 +79,8 @@
             name: String(item?.name ?? item?.title ?? 'Product'),
             size: item?.size ? String(item.size) : '',
             qty: Number.isFinite(qty) ? qty : 1,
-            price
+            price,
+            pricePending
         };
     };
 
@@ -96,10 +98,12 @@
     const summarize = (items) => {
         const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
         const shipping = items.length ? SHIPPING_MAD : 0;
+        const hasPendingPricing = items.some((item) => item.pricePending);
         return {
             subtotal,
             shipping,
-            total: subtotal + shipping
+            total: subtotal + shipping,
+            hasPendingPricing
         };
     };
 
@@ -110,12 +114,14 @@
         const form = document.getElementById('checkoutBillingForm');
         const placeOrderBtn = document.getElementById('placeOrderBtn');
         const validationMsg = document.getElementById('checkoutValidationMessage');
+        const legalConsentEl = document.getElementById('checkoutLegalConsent');
+        const legalConsentMessageEl = document.getElementById('checkoutLegalConsentMessage');
         const confirmOptions = document.getElementById('orderConfirmOptions');
         const confirmWhatsApp = document.getElementById('confirmWhatsApp');
         const confirmEmail = document.getElementById('confirmEmail');
         const orderItemsEl = document.getElementById('checkoutOrderItems');
 
-        if (!form || !placeOrderBtn || !validationMsg || !confirmOptions || !orderItemsEl || !confirmWhatsApp || !confirmEmail) return;
+        if (!form || !placeOrderBtn || !validationMsg || !confirmOptions || !orderItemsEl || !confirmWhatsApp || !confirmEmail || !legalConsentEl || !legalConsentMessageEl) return;
 
         const requiredFields = [
             document.getElementById('billingFirstName'),
@@ -141,17 +147,17 @@
                                 <p class="font-semibold text-gray-800">${item.name}</p>
                                 <p class="text-xs text-gray-500">${item.size || '-'} · Qty ${item.qty}</p>
                             </div>
-                            <span class="font-semibold">${formatMAD(item.price * item.qty)}</span>
+                            <span class="font-semibold">${item.pricePending ? 'Pending confirmation' : formatMAD(item.price * item.qty)}</span>
                         </div>
                     `;
                 }).join('')
                 : '<p class="text-sm text-gray-500 pb-3 border-b border-gray-100">No items in cart yet.</p>';
 
             const summary = summarize(items);
-            if (subtotalEl) subtotalEl.textContent = formatMAD(summary.subtotal);
+            if (subtotalEl) subtotalEl.textContent = summary.hasPendingPricing ? 'Pending confirmation' : formatMAD(summary.subtotal);
             if (shippingEl) shippingEl.textContent = summary.shipping ? `${formatMAD(summary.shipping)} (VAT incl.)` : formatMAD(0);
             if (promoEl) promoEl.textContent = '0 MAD';
-            if (totalEl) totalEl.textContent = formatMAD(summary.total);
+            if (totalEl) totalEl.textContent = summary.hasPendingPricing ? 'Pending confirmation' : formatMAD(summary.total);
         };
 
         const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
@@ -172,7 +178,8 @@
             const email = (document.getElementById('billingEmail')?.value || '').trim();
 
             const orderLines = items.map((item, index) => {
-                return `${index + 1}. ${item.name} (${item.size || '-'}) x${item.qty} - ${formatMAD(item.price * item.qty)}`;
+                const amountText = item.pricePending ? 'Price confirmed after review' : formatMAD(item.price * item.qty);
+                return `${index + 1}. ${item.name} (${item.size || '-'}) x${item.qty} - ${amountText}`;
             }).join('\n');
 
             const bodyText = [
@@ -187,9 +194,9 @@
                 'Order Details',
                 orderLines || '- No items -',
                 '',
-                `Subtotal: ${formatMAD(summary.subtotal)}`,
+                `Subtotal: ${summary.hasPendingPricing ? 'Pending confirmation' : formatMAD(summary.subtotal)}`,
                 `Shipping: ${summary.shipping ? `${formatMAD(summary.shipping)} (VAT incl.)` : formatMAD(0)}`,
-                `Total: ${formatMAD(summary.total)}`
+                `Total: ${summary.hasPendingPricing ? 'Pending confirmation' : formatMAD(summary.total)}`
             ].join('\n');
 
             return bodyText;
@@ -246,17 +253,19 @@
             const city = (document.getElementById('billingCity')?.value || '').trim();
             const phone = document.getElementById('billingPhone')?.value || '';
             const email = document.getElementById('billingEmail')?.value || '';
+            const hasLegalConsent = legalConsentEl.checked;
 
             const fieldsFilled = firstName && lastName && address && city;
             const normalizedEmail = email.trim();
             const emailValidIfProvided = !normalizedEmail || isValidEmail(normalizedEmail);
             const contactValid = isValidPhone(phone) && emailValidIfProvided;
-            const isReady = Boolean(cartHasItems && fieldsFilled && contactValid);
+            const isReady = Boolean(cartHasItems && fieldsFilled && contactValid && hasLegalConsent);
 
             placeOrderBtn.disabled = !isReady;
             placeOrderBtn.setAttribute('aria-disabled', String(!isReady));
             placeOrderBtn.classList.toggle('opacity-50', !isReady);
             placeOrderBtn.classList.toggle('cursor-not-allowed', !isReady);
+            legalConsentMessageEl.classList.add('hidden');
 
             if (!cartHasItems) {
                 validationMsg.textContent = 'Your cart is empty. Add items before placing your order.';
@@ -282,6 +291,13 @@
                 return;
             }
 
+            if (!hasLegalConsent) {
+                validationMsg.textContent = 'Please accept the Privacy Policy and Terms & Conditions to continue.';
+                legalConsentMessageEl.classList.remove('hidden');
+                confirmOptions.classList.add('hidden');
+                return;
+            }
+
             validationMsg.textContent = 'Perfect. You can now place your order and choose your confirmation method.';
             updateConfirmationLinks();
             confirmOptions.classList.remove('hidden');
@@ -295,6 +311,8 @@
             field.addEventListener('input', checkFormValidity);
             field.addEventListener('blur', checkFormValidity);
         });
+
+        legalConsentEl.addEventListener('change', checkFormValidity);
 
         window.addEventListener('storage', (event) => {
             if (event.key === CART_STORAGE_KEY || event.key === LEGACY_CART_STORAGE_KEY) {

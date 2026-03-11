@@ -58,13 +58,15 @@
     const normalizeItem = (item) => {
         const qty = Math.max(1, Number(item?.qty ?? item?.quantity ?? 1));
         const resolvedPrice = parsePrice(item?.price ?? item?.unitPrice ?? item?.priceText ?? 0);
+        const pricePending = Boolean(item?.pricePending ?? item?.onRequest) || resolvedPrice <= 0;
         const normalized = {
             id: String(item?.id ?? item?.sku ?? ''),
             name: String(item?.name ?? item?.title ?? 'Product'),
             price: resolvedPrice,
             image: String(item?.image ?? item?.imageUrl ?? ''),
             size: item?.size ? String(item.size) : '',
-            qty: Number.isFinite(qty) ? qty : 1
+            qty: Number.isFinite(qty) ? qty : 1,
+            pricePending
         };
         return normalized.id ? normalized : null;
     };
@@ -140,10 +142,12 @@
     const summarize = (items) => {
         const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
         const shipping = items.length ? SHIPPING_MAD : 0;
+        const hasPendingPricing = items.some((item) => item.pricePending);
         return {
             subtotal,
             shipping,
-            total: subtotal + shipping
+            total: subtotal + shipping,
+            hasPendingPricing
         };
     };
 
@@ -176,8 +180,9 @@
                             </div>
 
                             <div class="text-right">
-                                <p class="text-xs text-gray-500">Unit: ${formatMAD(item.price)}</p>
-                                <p class="text-lg font-bold text-brand-dark">${formatMAD(item.price * item.qty)}</p>
+                                ${item.pricePending
+                                    ? '<p class="text-xs font-semibold text-brand-red">Price confirmed after review</p>'
+                                    : `<p class="text-xs text-gray-500">Unit: ${formatMAD(item.price)}</p><p class="text-lg font-bold text-brand-dark">${formatMAD(item.price * item.qty)}</p>`}
                             </div>
                         </div>
                     </div>
@@ -239,11 +244,11 @@
 
             const summary = summarize(items);
 
-            if (subtotalEl) subtotalEl.textContent = formatMAD(summary.subtotal);
+            if (subtotalEl) subtotalEl.textContent = summary.hasPendingPricing ? 'Pending confirmation' : formatMAD(summary.subtotal);
             if (shippingEl) shippingEl.textContent = items.length ? `${formatMAD(summary.shipping)} (VAT incl.)` : formatMAD(0);
             if (taxEl) taxEl.textContent = 'Included in shipping';
             if (promoEl) promoEl.textContent = '0 MAD';
-            if (totalEl) totalEl.textContent = formatMAD(summary.total);
+            if (totalEl) totalEl.textContent = summary.hasPendingPricing ? 'Pending confirmation' : formatMAD(summary.total);
 
             const isEmpty = items.length === 0;
             setCheckoutState(isEmpty);
