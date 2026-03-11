@@ -5331,6 +5331,152 @@ section {
     }
 }
 
+/* ============================================================
+   Floating Music Toggle Button
+   ============================================================ */
+.music-toggle-btn {
+    position: fixed;
+    bottom: 28px;
+    left: 24px;
+    z-index: 9998;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    border: 1.5px solid rgba(231, 60, 60, 0.55);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 22px rgba(0, 0, 0, 0.45), 0 0 0 0 rgba(231, 60, 60, 0);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    outline: none;
+}
+
+.music-toggle-btn:hover,
+.music-toggle-btn:focus-visible {
+    transform: scale(1.12);
+    box-shadow: 0 6px 28px rgba(231, 60, 60, 0.35);
+    border-color: #e73c3c;
+}
+
+/* Pulse ring when muted (waiting for interaction) */
+.music-toggle-btn.is-muted::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid rgba(231, 60, 60, 0.4);
+    animation: musicPulse 1.8s ease-out infinite;
+    pointer-events: none;
+}
+
+@keyframes musicPulse {
+    0%   { transform: scale(0.92); opacity: 0.8; }
+    70%  { transform: scale(1.35); opacity: 0; }
+    100% { transform: scale(1.35); opacity: 0; }
+}
+
+/* Music note icon (shown when muted or not yet ready) */
+.music-toggle-icon {
+    font-size: 15px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Animated equalizer bars (shown when playing & unmuted) */
+.music-bars {
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 3px;
+    height: 22px;
+}
+
+.music-bars span {
+    display: block;
+    width: 3px;
+    border-radius: 2px;
+    background: #e73c3c;
+    transform-origin: bottom center;
+}
+
+.music-bars span:nth-child(1) { height: 10px; }
+.music-bars span:nth-child(2) { height: 17px; }
+.music-bars span:nth-child(3) { height: 12px; }
+.music-bars span:nth-child(4) { height: 19px; }
+
+/* Active state: show bars, hide icon */
+.music-toggle-btn.is-playing .music-toggle-icon { display: none; }
+.music-toggle-btn.is-playing .music-bars {
+    display: flex;
+}
+.music-toggle-btn.is-playing .music-bars span {
+    animation: eqBar 0.75s ease-in-out infinite alternate;
+}
+.music-toggle-btn.is-playing .music-bars span:nth-child(1) { animation-delay: 0s; }
+.music-toggle-btn.is-playing .music-bars span:nth-child(2) { animation-delay: 0.18s; }
+.music-toggle-btn.is-playing .music-bars span:nth-child(3) { animation-delay: 0.35s; }
+.music-toggle-btn.is-playing .music-bars span:nth-child(4) { animation-delay: 0.52s; }
+
+@keyframes eqBar {
+    0%   { transform: scaleY(0.35); }
+    100% { transform: scaleY(1.45); }
+}
+
+/* Muted state: dim icon, no bars */
+.music-toggle-btn.is-muted .music-toggle-icon {
+    opacity: 0.45;
+}
+
+/* Tooltip */
+.music-toggle-tooltip {
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    padding: 5px 10px;
+    border-radius: 6px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.music-toggle-tooltip::after {
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-right-color: #1a1a1a;
+}
+
+.music-toggle-btn.is-muted:hover .music-toggle-tooltip,
+.music-toggle-btn.is-muted:focus-visible .music-toggle-tooltip {
+    opacity: 1;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+    .music-toggle-btn {
+        bottom: 20px;
+        left: 14px;
+        width: 36px;
+        height: 36px;
+    }
+}
+
 
 
 

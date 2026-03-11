@@ -1454,23 +1454,93 @@
         </div>
     </footer>
 
-    <!-- Background Music -->
+    <!-- Background Music (hidden YouTube player) -->
     <div id="yt-bg-music" style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;pointer-events:none;" aria-hidden="true">
         <div id="yt-player"></div>
     </div>
+
+    <!-- Floating Music Toggle Button -->
+    <button id="music-toggle-btn" class="music-toggle-btn" aria-label="Toggle background music" title="Background Music">
+        <span class="music-toggle-icon"><i class="fas fa-music"></i></span>
+        <span class="music-bars" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <span class="music-toggle-tooltip">Tap to hear music</span>
+    </button>
+
     <script>
         (function () {
-            // Load YouTube IFrame API immediately
+            var ytPlayer = null;
+            var isMuted = true;
+            var isReady = false;
+            var interactionEvents = ['click', 'touchstart', 'scroll', 'keydown', 'mousemove'];
+
+            function updateBtn() {
+                var btn = document.getElementById('music-toggle-btn');
+                if (!btn) return;
+                if (isReady && !isMuted) {
+                    btn.classList.add('is-playing');
+                    btn.classList.remove('is-muted');
+                    btn.setAttribute('aria-label', 'Mute background music');
+                } else if (isReady && isMuted) {
+                    btn.classList.remove('is-playing');
+                    btn.classList.add('is-muted');
+                    btn.setAttribute('aria-label', 'Unmute background music');
+                }
+            }
+
+            function removeInteractionListeners() {
+                interactionEvents.forEach(function (ev) {
+                    document.removeEventListener(ev, unmuteOnInteraction);
+                });
+            }
+
+            function unmuteOnInteraction() {
+                if (!ytPlayer || !isMuted) return;
+                ytPlayer.unMute();
+                ytPlayer.setVolume(40);
+                isMuted = false;
+                updateBtn();
+                removeInteractionListeners();
+            }
+
+            // Floating button click handler
+            function setupMusicBtn() {
+                var btn = document.getElementById('music-toggle-btn');
+                if (!btn) return;
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation(); // prevent triggering unmuteOnInteraction
+                    if (!ytPlayer || !isReady) return;
+                    if (isMuted) {
+                        ytPlayer.unMute();
+                        ytPlayer.setVolume(40);
+                        isMuted = false;
+                        removeInteractionListeners();
+                    } else {
+                        ytPlayer.mute();
+                        isMuted = true;
+                    }
+                    updateBtn();
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', setupMusicBtn);
+            } else {
+                setupMusicBtn();
+            }
+
+            // Load YouTube IFrame API
             var tag = document.createElement('script');
             tag.src = 'https://www.youtube.com/iframe_api';
             document.head.appendChild(tag);
 
             window.onYouTubeIframeAPIReady = function () {
-                window._ytPlayer = new YT.Player('yt-player', {
+                ytPlayer = new YT.Player('yt-player', {
                     videoId: '0HDuzhQOhuM',
                     playerVars: {
                         autoplay: 1,
-                        mute: 1,           // muted = browser allows autoplay
+                        mute: 1,
                         loop: 1,
                         playlist: '0HDuzhQOhuM',
                         controls: 0,
@@ -1482,18 +1552,14 @@
                     },
                     events: {
                         onReady: function (e) {
-                            e.target.setVolume(30);
+                            e.target.setVolume(40);
                             e.target.playVideo();
-
-                            // Once user interacts, unmute so they hear it
-                            function unmuteOnInteraction() {
-                                e.target.unMute();
-                                e.target.setVolume(30);
-                                ['click', 'touchstart', 'scroll', 'keydown', 'mousemove'].forEach(function (ev) {
-                                    document.removeEventListener(ev, unmuteOnInteraction);
-                                });
-                            }
-                            ['click', 'touchstart', 'scroll', 'keydown', 'mousemove'].forEach(function (ev) {
+                            isReady = true;
+                            isMuted = true;
+                            window._ytPlayer = ytPlayer;
+                            updateBtn();
+                            // Unmute on the very first user interaction (any touch/click/scroll)
+                            interactionEvents.forEach(function (ev) {
                                 document.addEventListener(ev, unmuteOnInteraction, { passive: true });
                             });
                         }
