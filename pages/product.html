@@ -158,6 +158,16 @@
                             <button class="thumbs-arrow thumbs-arrow-right" type="button" aria-label="Next thumbnails"><i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
+
+                    <section class="product-main-accords-panel product-main-accords-panel-desktop hidden lg:block" id="productMainAccordsPanel" hidden>
+                        <div class="product-main-accords-card">
+                            <div class="product-main-accords-head">
+                                <span class="product-main-accords-kicker">Olfactive Signature</span>
+                                <h2 class="product-main-accords-title">Main accords</h2>
+                            </div>
+                            <div class="product-main-accords-list" id="productMainAccordsList"></div>
+                        </div>
+                    </section>
                 </div>
 
                 <div class="lg:col-span-5 product-info-col">
@@ -176,37 +186,55 @@
                             <span id="productReviewsCount" class="text-sm text-gray-500">(0 reviews)</span>
                         </div>
 
-                        <div class="mt-6 pt-6 border-t border-gray-200 product-price-card">
+                        <!-- Shown when product has prices -->
+                        <div class="mt-6 pt-6 border-t border-gray-200 product-price-card" id="productPriceCard" hidden>
                             <div class="flex items-end gap-3">
                                 <span id="productOldPrice" class="text-lg text-gray-400 line-through"></span>
                                 <span id="productDiscount" class="text-sm font-bold text-brand-red"></span>
                             </div>
                             <p id="productPrice" class="text-4xl font-bold text-gray-400 mt-1">Choose a size to see the price</p>
-                            <p class="text-sm text-gray-500 mt-1">In stock - Delivery in Morocco: 35 MAD (VAT included)</p>
+                            <p id="productDeliveryInfo" class="text-sm text-gray-500 mt-1">In stock - Delivery in Morocco: 35 MAD (VAT included)</p>
+                        </div>
+
+                        <!-- Shown when no prices — ask via WhatsApp -->
+                        <div class="mt-6 pt-6 border-t border-gray-200" id="productOndemandBox" hidden>
+                            <div class="product-ondemand-box">
+                                <div class="product-ondemand-icon"><i class="fab fa-whatsapp"></i></div>
+                                <div>
+                                    <p class="product-ondemand-title">Price on Request</p>
+                                    <p class="product-ondemand-sub">Select your size, then contact us on WhatsApp to get the best price instantly.</p>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mt-6">
                             <p class="text-sm font-semibold text-gray-700 mb-3 product-size-label">Size</p>
-                            <div class="flex flex-wrap gap-2" id="sizeSelector">
-                                <button class="size-pill" type="button">50 ML</button>
-                                <button class="size-pill" type="button">100 ML</button>
+                            <div id="sizeSelector" class="size-selector-grid">
+                                <button class="size-pill" type="button" data-label="50 ML">
+                                    <span class="spill-vol">50 ML</span>
+                                </button>
+                                <button class="size-pill" type="button" data-label="100 ML">
+                                    <span class="spill-vol">100 ML</span>
+                                </button>
                             </div>
                         </div>
 
                         <div class="mt-6 flex items-center gap-3 product-cta-row">
-                            <div class="qty-box" role="group" aria-label="Quantity selector">
-                                <button id="qtyMinus" class="qty-btn" type="button" aria-label="Decrease quantity">-</button>
-                                <span id="qtyValue" class="qty-value">1</span>
-                                <button id="qtyPlus" class="qty-btn" type="button" aria-label="Increase quantity">+</button>
+                            <div id="qtyBoxContainer" class="hidden">
+                                <div class="qty-box" role="group" aria-label="Quantity selector">
+                                    <button id="qtyMinus" class="qty-btn" type="button" aria-label="Decrease quantity">-</button>
+                                    <span id="qtyValue" class="qty-value">1</span>
+                                    <button id="qtyPlus" class="qty-btn" type="button" aria-label="Increase quantity">+</button>
+                                </div>
                             </div>
-                            <button id="addToCartBtn" class="hidden bg-brand-dark hover:bg-black text-white font-bold py-3 px-8 rounded-full transition product-cta" type="button">Add to Cart</button>
+                            <button id="addToCartBtn" class="hidden" type="button">Add to Cart</button>
                             <button class="w-12 h-12 rounded-full border border-gray-300 text-gray-600 hover:border-brand-red hover:text-brand-red transition product-wishlist-btn" type="button" aria-label="Add to wishlist">
                                 <i class="far fa-heart"></i>
                             </button>
                         </div>
 
                         <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 product-trust-grid">
-                            <div class="detail-chip"><i class="fas fa-truck text-brand-red"></i> Delivery fee: 35 MAD (VAT included)</div>
+                            <div id="productDeliveryChip" class="detail-chip"><i class="fas fa-truck text-brand-red"></i> Delivery fee: 35 MAD (VAT included)</div>
                             <div class="detail-chip"><i class="fas fa-shield-heart text-brand-red"></i> 100% authentic</div>
                             <div class="detail-chip"><i class="fas fa-rotate-left text-brand-red"></i> Easy returns</div>
                         </div>
@@ -286,6 +314,16 @@
             </div>
 
             <div class="py-6 md:py-8">
+                <section class="product-main-accords-panel product-main-accords-panel-mobile lg:hidden" id="productMainAccordsPanelMobile" hidden>
+                    <div class="product-main-accords-card">
+                        <div class="product-main-accords-head">
+                            <span class="product-main-accords-kicker">Olfactive Signature</span>
+                            <h2 class="product-main-accords-title">Main accords</h2>
+                        </div>
+                        <div class="product-main-accords-list" id="productMainAccordsListMobile"></div>
+                    </div>
+                </section>
+
                 <div class="tab-panel is-active" id="tab-details" role="tabpanel">
                     <p class="text-gray-700 leading-relaxed max-w-4xl" id="productLongDescription">
                         Created for clients who want elegance and personality in one bottle, this fragrance starts luminous, then evolves into a smooth and sophisticated signature.
