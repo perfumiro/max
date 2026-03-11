@@ -3999,6 +3999,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     shuffleFlashOffersDaily();
+    // Always reset carousel to the first product on page load
+    const _pcReset = document.getElementById('productCarousel');
+    if (_pcReset) { _pcReset.scrollLeft = 0; }
     const limitNewArrivalsToLatest = () => {
         const carousel = document.getElementById('newArrivalsCarousel');
         if (!carousel) return;

@@ -1473,7 +1473,9 @@
             var ytPlayer = null;
             var isMuted = true;
             var isReady = false;
-            var interactionEvents = ['click', 'touchstart', 'scroll', 'keydown', 'mousemove'];
+            var isPlaying = false; // tracks whether playback actually started (needed for mobile)
+            // touchstart must come first so iOS fires it before click
+            var interactionEvents = ['touchstart', 'click', 'scroll', 'keydown', 'mousemove'];
 
             function updateBtn() {
                 var btn = document.getElementById('music-toggle-btn');
@@ -1482,7 +1484,7 @@
                     btn.classList.add('is-playing');
                     btn.classList.remove('is-muted');
                     btn.setAttribute('aria-label', 'Mute background music');
-                } else if (isReady && isMuted) {
+                } else if (isReady) {
                     btn.classList.remove('is-playing');
                     btn.classList.add('is-muted');
                     btn.setAttribute('aria-label', 'Unmute background music');
@@ -1491,12 +1493,18 @@
 
             function removeInteractionListeners() {
                 interactionEvents.forEach(function (ev) {
-                    document.removeEventListener(ev, unmuteOnInteraction);
+                    document.removeEventListener(ev, startAndUnmuteOnInteraction);
                 });
             }
 
-            function unmuteOnInteraction() {
+            // On mobile, playVideo() is blocked until a real user gesture.
+            // So on first interaction we both START playback and unmute.
+            function startAndUnmuteOnInteraction() {
                 if (!ytPlayer || !isMuted) return;
+                // playVideo() is needed on mobile where autoplay was silently blocked
+                if (!isPlaying) {
+                    ytPlayer.playVideo();
+                }
                 ytPlayer.unMute();
                 ytPlayer.setVolume(40);
                 isMuted = false;
@@ -1504,14 +1512,17 @@
                 removeInteractionListeners();
             }
 
-            // Floating button click handler
+            // Floating button click / tap handler
             function setupMusicBtn() {
                 var btn = document.getElementById('music-toggle-btn');
                 if (!btn) return;
                 btn.addEventListener('click', function (e) {
-                    e.stopPropagation(); // prevent triggering unmuteOnInteraction
+                    e.stopPropagation();
                     if (!ytPlayer || !isReady) return;
                     if (isMuted) {
+                        if (!isPlaying) {
+                            ytPlayer.playVideo(); // ensure playback started on mobile
+                        }
                         ytPlayer.unMute();
                         ytPlayer.setVolume(40);
                         isMuted = false;
@@ -1546,22 +1557,33 @@
                         controls: 0,
                         disablekb: 1,
                         fs: 0,
+                        playsinline: 1,   // required for iOS inline playback
                         iv_load_policy: 3,
                         modestbranding: 1,
                         rel: 0
                     },
                     events: {
                         onReady: function (e) {
+                            e.target.mute();
                             e.target.setVolume(40);
-                            e.target.playVideo();
+                            e.target.playVideo(); // works on desktop; silently ignored on iOS until gesture
                             isReady = true;
                             isMuted = true;
                             window._ytPlayer = ytPlayer;
                             updateBtn();
-                            // Unmute on the very first user interaction (any touch/click/scroll)
+                            // Listen for first interaction to start+unmute on mobile
                             interactionEvents.forEach(function (ev) {
-                                document.addEventListener(ev, unmuteOnInteraction, { passive: true });
+                                document.addEventListener(ev, startAndUnmuteOnInteraction, { passive: true });
                             });
+                        },
+                        onStateChange: function (e) {
+                            // YT.PlayerState.PLAYING = 1
+                            if (e.data === 1) {
+                                isPlaying = true;
+                            } else if (e.data === 0 || e.data === 2) {
+                                // ENDED (0) or PAUSED (2)
+                                isPlaying = false;
+                            }
                         }
                     }
                 });
