@@ -736,7 +736,7 @@
                                 <span id="alex-qty" class="xerjoff-qty-val">1</span>
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('alex-qty',1)">+</button>
                             </div>
-                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('alex','Alexandria II')">Ask on WhatsApp</button>
+                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('alex','Alexandria II')">Add to Cart</button>
                             <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
                         </div>
                         <div class="xerjoff-trust-chips">
@@ -787,7 +787,7 @@
                                 <span id="erba-qty" class="xerjoff-qty-val">1</span>
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('erba-qty',1)">+</button>
                             </div>
-                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('erba','Erba Pura')">Ask on WhatsApp</button>
+                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('erba','Erba Pura')">Add to Cart</button>
                             <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
                         </div>
                         <div class="xerjoff-trust-chips">
@@ -838,7 +838,7 @@
                                 <span id="naxos-qty" class="xerjoff-qty-val">1</span>
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('naxos-qty',1)">+</button>
                             </div>
-                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('naxos','Naxos')">Ask on WhatsApp</button>
+                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('naxos','Naxos')">Add to Cart</button>
                             <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
                         </div>
                         <div class="xerjoff-trust-chips">
@@ -897,27 +897,28 @@
                 alert('Please select a size first.');
                 return;
             }
-            if (!priceText) {
-                var msg = 'Bonjour IPORDISE 👋%0A%0AJe suis intéressé(e) par :%0A🌸 *' + encodeURIComponent(productName) + '*%0A📦 Taille : *' + encodeURIComponent(sizeLabel) + '*%0A%0APourriez-vous me donner le prix et les détails de livraison ? Merci !';
-                window.open('https://wa.me/212600000000?text=' + msg, '_blank');
-                return;
-            }
             var qty = parseInt(document.getElementById(prefix + '-qty').textContent) || 1;
             // Always use the first (default) product image regardless of which thumbnail is active
             var firstThumb = document.querySelector('#product-' + prefix + ' .xerjoff-gallery-thumb img');
             var image = firstThumb ? firstThumb.src : document.getElementById(prefix + '-main').src;
-            var numericPrice = parseFloat(priceText.replace(/[^\d.]/g, '')) || 0;
+            var numericPrice = parseFloat(String(priceText || '').replace(/[^\d.]/g, '')) || 0;
+            var pricePending = !priceText;
             var cart = [];
             try { cart = JSON.parse(localStorage.getItem('cart')) || []; } catch(e) { cart = []; }
             if (!Array.isArray(cart)) cart = [];
             var existingIdx = cart.findIndex(function(i) { return i.name === productName && i.size === sizeLabel; });
             if (existingIdx >= 0) {
                 cart[existingIdx].qty = Math.min(99, (parseInt(cart[existingIdx].qty) || 1) + qty);
+                cart[existingIdx].price = numericPrice;
+                cart[existingIdx].priceText = priceText || '';
+                cart[existingIdx].pricePending = pricePending;
             } else {
                 cart.unshift({
                     id: 'xerjoff-' + prefix + '-' + sizeLabel.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now(),
                     name: productName,
                     price: numericPrice,
+                    priceText: priceText || '',
+                    pricePending: pricePending,
                     image: image,
                     size: sizeLabel,
                     qty: qty
