@@ -2812,25 +2812,174 @@ button.product-favorite-btn.is-active i {
     font-size: 0.68rem;
 }
 
-.size-pill {
-    border: 1px solid rgba(148, 163, 184, 0.6);
-    border-radius: 9999px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #334155;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.55rem 1rem;
-    transition: all 0.2s ease;
+/* ═══════════════════════════════════════════════
+   SIZE SELECTOR — Premium Redesign
+   ═══════════════════════════════════════════════ */
+
+.size-selector-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
 }
 
-.size-pill:hover,
-.size-pill.is-active {
-    border-color: #111827;
-    color: #111827;
-    background: #f8fafc;
-    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.1);
+/* Group wrapper */
+.size-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
 }
+
+/* Group header label — thin line extends right */
+.size-group-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    white-space: nowrap;
+}
+
+.size-group-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(148,163,184,0.35), transparent);
+}
+
+.size-group-label i {
+    font-size: 0.6rem;
+    opacity: 0.7;
+}
+
+/* Pills row */
+.size-group-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+/* ── Individual size pill ── */
+.size-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 0.9rem 0.6rem 0.75rem;
+    border-radius: 0.6rem;
+    border: 1.5px solid rgba(203, 213, 225, 0.7);
+    background: #ffffff;
+    cursor: pointer;
+    min-width: 76px;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-align: left;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Shimmer sweep on hover */
+.size-pill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.55) 50%, transparent 60%);
+    transform: translateX(-100%);
+    transition: transform 0.45s ease;
+    pointer-events: none;
+}
+
+.size-pill:hover::after {
+    transform: translateX(100%);
+}
+
+/* Radio-style selection dot */
+.spill-indicator {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1.5px solid #cbd5e1;
+    background: transparent;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+/* Volume text */
+.spill-vol {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #1e293b;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+/* Remove old spill-cat */
+.spill-cat { display: none; }
+
+/* Price */
+.spill-price {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.02em;
+    margin-top: 0.18rem;
+    transition: color 0.2s ease;
+}
+
+/* Hover */
+.size-pill:hover {
+    border-color: rgba(231, 60, 60, 0.45);
+    background: #fef9f9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(231, 60, 60, 0.09);
+}
+
+.size-pill:hover .spill-indicator {
+    border-color: #e73c3c;
+}
+
+/* Active — solid red fill for premium feel */
+.size-pill.is-active {
+    border-color: #c0392b;
+    background: linear-gradient(145deg, #e73c3c 0%, #c0392b 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(192, 57, 43, 0.3);
+}
+
+.size-pill.is-active .spill-vol {
+    color: #ffffff;
+}
+
+.size-pill.is-active .spill-price {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.size-pill.is-active .spill-indicator {
+    border-color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.9);
+    transform: scale(1.1);
+}
+
+/* Remove old ::before checkmark */
+.size-pill.is-active::before {
+    display: none;
+}
+
+/* Decante pills — subtle tint on non-active */
+.size-pill.is-decante:not(.is-active) {
+    background: #fafbff;
+}
+
 
 .qty-box {
     border: 1px solid rgba(148, 163, 184, 0.6);
@@ -2866,6 +3015,108 @@ button.product-favorite-btn.is-active i {
 
 .product-cta-row {
     flex-wrap: wrap;
+}
+
+/* On-demand price box */
+.product-ondemand-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1.5px solid #86efac;
+    border-radius: 1rem;
+    padding: 1rem 1.1rem;
+}
+
+.product-ondemand-icon {
+    flex-shrink: 0;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    background: #25D366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+}
+
+.product-ondemand-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #14532d;
+    letter-spacing: 0.03em;
+}
+
+.product-ondemand-sub {
+    font-size: 0.72rem;
+    color: #166534;
+    margin-top: 0.2rem;
+    line-height: 1.5;
+}
+
+/* WhatsApp CTA button */
+.product-cart-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #111827;
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+    flex: 1;
+}
+
+.product-cart-btn:hover {
+    background: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.32);
+}
+
+.product-cart-btn:active {
+    transform: translateY(0);
+}
+
+.product-whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35);
+    flex: 1;
+}
+
+.product-whatsapp-btn i {
+    font-size: 1.05rem;
+}
+
+.product-whatsapp-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(37, 211, 102, 0.45);
+    background: linear-gradient(135deg, #22c55e 0%, #0f766e 100%);
+}
+
+.product-whatsapp-btn:active {
+    transform: translateY(0);
 }
 
 .product-cta {
@@ -4929,33 +5180,7 @@ section {
     50% { background-position: 100% 50%; }
 }
 
-/* Enhanced Size Pills */
-.size-pill {
-    position: relative;
-    overflow: hidden;
-}
-
-.size-pill::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at center, rgba(231, 60, 60, 0.08), transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.size-pill:hover::before,
-.size-pill.is-active::before {
-    opacity: 1;
-}
-
-.size-pill.is-active {
-    border-color: #e73c3c;
-    color: #e73c3c;
-    background: #fff5f5;
-    box-shadow: 0 4px 14px rgba(231, 60, 60, 0.15);
-    transform: translateY(-1px);
-}
+/* Size pill enhanced states — see primary size-pill styles above */
 
 /* Enhanced Add to Cart Button */
 .product-cta {

@@ -1,4 +1,4 @@
-
+﻿
 tailwind.config = {
     theme: {
         extend: {
@@ -744,11 +744,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Aromatic Woody · A timeless and magnetic signature with a subtly pronounced aroma.",
             longDescription: 'A tribute to freedom, expressed in an aromatic woody scent with a captivating trail. A timeless fragrance in a bottle of deep, mysterious blue. The Eau de Parfum of BLEU DE CHANEL, with its subtly pronounced aroma, reveals a determined spirit.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -778,11 +778,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Salty Woody · An iconic signature blending leather audacity with floral and spicy touches.",
             longDescription: "One Million Eau de Parfum is Paco Rabanne's star men's fragrance that has been a sensation since its launch. It's a recognized scent that leaves its mark wherever it goes. The sensuality and freshness it conveys are part of its unique identity, which possesses the audacity of the most authentic leather and the duality between a salty and woody impulse with floral and spicy touches. The One Million EDP gift set will allow you to offer the gift with the intense aroma that everyone desires.",
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -812,11 +812,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Aromatic Amber · The pinnacle of One Million intensity with rose, tonka bean, woods, and black vanilla.",
             longDescription: "Discover One Million Elixir , the pinnacle of Million 's intensity , a new fragrance guided by the desire for supreme quality. A blend of carefully selected ingredients from around the world, celebrating the craftsmanship of our perfumers and the fusion of the finest raw materials. A new dimension, incredibly intense, undoubtedly One Million. The iconic One Million gold ingot , bolder and more sophisticated than ever. A handcrafted jewel that reflects the different facets of the fragrance. A symbol of a new strength: elegant, intense, and enigmatic. The exquisitely crafted bottle encapsulates the soul and essence of One Million , the infinite depth of this new olfactory creation. The pinnacle of absolute intensity. One Million Elixir , more intense than ever, to captivate you. Hand-selected ingredients—Turkish rose, osmanthus, and wild-harvested tonka bean—make this masterpiece stand out for its exceptional quality. The deeply sensual Davana liqueur vibrates with the touch of soft woods and black vanilla seeds; supreme sensuality meets absolute, long-lasting power.",
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -847,11 +847,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Amber Woody · Narcissus and vetiver enhanced by leather, tobacco, warm spices, and Tasuki vanilla.",
             longDescription: "Givenchy presents Gentleman Society Eau de Parfum Ambree , a captivating blend of vibrant narcissus flower and a quartet of vetivers, enhanced by rich notes of leather and tobacco. A COMPOSITION MADE WITH EXCEPTIONAL RAW MATERIALS Gentleman Society Ambree reinvents the iconic woody signature of Gentleman Society with a new amber facet, enriched with the balsamic notes of Tasuki vanilla. Expressing Givenchy's unique savoir-faire, Gentleman Society Eau de Parfum Ambree unveils a sophisticated accord of narcissus blossom and a quartet of vetiver, intensified by the boldness of leather and tobacco. Warm spices blend harmoniously with the richness of Tasuki vanilla from Madagascar, combined with a balsam essence, creating an elegant and deeply captivating trail. AN ICONIC BOTTLE WITH GOLDEN REFLECTIONS The iconic Gentleman Society bottle, entirely lacquered in black, is adorned with a refined gold crest, a symbol of elegance and prestige. Combining opulence and timelessness, it invites the expression of sensuality and individuality. GENTLEMAN SOCIETY. MORE THAN A PLACE, A STATE OF MIND For this new chapter, Gentleman Society expands around the English composer Benjamin Clementine. His elegance and undeniable charisma resonate as an invitation to join a community that is bolder and more inclusive than ever.",
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -882,11 +882,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Floral Woody · Sage, narcissus, vetiver quartet, woods, and vanilla in a bold Givenchy signature.",
             longDescription: "Givenchy redefines the figure of the gentleman with Gentleman Society Eau de Parfum, a bold statement for men who reinvent their own rules and always act for a better world. Wild narcissus blossom blends with a mysterious woody accord to create a fragrance of rare sophistication. An expression of Givenchy's unique savoir-faire, Gentleman Society is composed of exceptional raw materials. From the very first spritz, the fresh, aromatic notes of sage blend with wild narcissus absolute harvested in the heart of France. This unique floral facet is contrasted by the dark intensity of a quartet of vetiver from Uruguay and Madagascar. Essences of cedarwood and sandalwood melt into an addictive and sensual vanilla, leaving a truly memorable trail. A deep and multifaceted men's Eau de Parfum. The couture design reimagines the iconic Gentleman bottle with pure elegance. Like a coat of arms, a reinterpreted 4G monogram in gleaming silver metal adorns the intense black lacquer. The bottle contains 15% recycled glass.",
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -917,11 +917,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Woody Aromatic · A daring blend of clary sage, iced mint, coffee, vetiver, woods, patchouli, and vanilla.",
             longDescription: "GIVENCHY Gentleman Society Extreme EDP With its magnetic masculine signature, Gentleman Society Eau de Parfum Extreme embodies a new attitude within the Gentleman Society. Tailor-made for the most daring, this addictive fragrance is designed for the man who pushes his limits in an eternal quest for excellence, breaking barriers and fearlessly leaping into the unknown. Crafted with Givenchy's expertise, Gentleman Society Eau de Parfum Extreme is composed of exceptional raw materials, carefully selected for their outstanding olfactory qualities. The top notes of Clary Sage are enhanced by Iced Mint and Nutmeg, creating an immediate aromatic and spicy touch. The mysterious heart reveals the original Gentleman Society accord, a blend of Narcissus Absolute and Iris Concrete, contrasted by the characteristic quartet of Vetiver. From this accord emerges a powerful and unexpected Coffee Absolute Extract. Combined with Mint Essence, this Coffee note becomes icy, revealing a new and intensely textured facet. At the base, the woody notes of Cedar and Sandalwood are deepened with Patchouli Essence and Vanilla Absolute, perfecting this profound signature. Inspired by haute couture, the iconic design of the Gentleman bottle is reinterpreted with a striking new look. The deep black lacquered finish is enhanced with Givenchy's symbol: the 4G logo, engraved like a crest, in a new metallic bronze finish. The Gentleman Society Eau de Parfum Extreme bottle is made with 15% recycled glass. Gentleman Society. It's not a place, it's a state of mind. Join us.",
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -952,11 +952,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Amber Woody · Airy iris and amber woods elevated by natural whisky absolute.",
             longDescription: "Timeless elegance is reinvented with Givenchy Gentleman Reserve Privee , a fragrance that celebrates the sensuality of amber wood and the sophistication of airy iris . This olfactory duo creates an addictive and enveloping composition , a symbol of contemporary masculine refinement. At the heart of this creation beats the absolute of natural whisky , made in Grasse from aromatic barley from a Scottish distillery , for a warm, intense and unique character. Its bottle with clean lines and amber finish , inspired by the silhouette of an elegant flask, reflects the perfect fusion between tradition and modernity. Gentleman Reserve Privee Eau de Parfum is an ode to the sophisticated, self-assured, and profoundly authentic man. A fragrance that embodies the art of French savoir-faire combined with the essence of Scotch whisky: intense, refined, and eternally elegant .",
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -987,11 +987,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Amber Fruity Woody · Black cherry, patchouli, and tonka bean in a rich, provocative elixir.",
             longDescription: "In first class on the Gaultier train, Scandal Pour Homme Elixir reigns supreme, with its amber, fruity, and woody fragrance. Its provocative black cherry and audacious patchouli assert themselves with elegance, while its tonka bean reveals a scandalous sweetness. Who wouldn't dream of encountering it? Behind the red velvet and the closed door of its exclusive case, only the most audacious can enter and succumb to the silver gradient of its amber-hued bottle. Crowned with intensity and excess, everything about it is temptation. Excess dominates, pleasures multiply. The passengers are outraged? So much the better! That's exactly what it's after.",
             sizes: [
-                'Decante 10ML — 130DH',
-                'Decante 20ML — 240DH',
-                'Decante 30ML — 350DH',
-                '75ML — 990DH',
-                '125ML — 1350DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '75ML',
+                '125ML'
             ],
             notes: [
                 {
@@ -1022,11 +1022,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Spicy Amber · A bold signature with red ginger, woods, and bourbon vanilla.",
             longDescription: 'Azzaro The Most Wanted Parfum is an intense, magnetic scent built for confident evenings. It opens with a burst of red ginger, settles into warm woods, and finishes with a rich bourbon vanilla trail that feels smooth and addictive. Crafted for modern allure, it leaves a strong, long-lasting impression without overpowering the room.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1056,11 +1056,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Spicy Woody · A powerful signature with cardamom, caramel, and amber woods.",
             longDescription: 'Azzaro The Most Wanted Eau de Parfum Intense delivers a bold, addictive trail built around warm spices and deep woods. The opening is energetic and bright, the heart is rich and confident, and the dry-down is smooth and long-lasting for evening wear.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1090,11 +1090,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Amber Gourmand · A rich, smooth elixir with warm woods and vanilla.",
             longDescription: 'Azzaro Forever Wanted Elixir is a deep, luxurious scent designed for night. It opens with a refined freshness, settles into rich amber warmth, and finishes with a smooth vanilla trail that stays on skin for hours.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1124,11 +1124,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Women's fragrance · Floral Woody · A luminous blend of jasmine, blackcurrant, and warm woods.",
             longDescription: 'Valentino Donna Born in Roma is a modern floral with a bright, elegant opening and a smooth, woody base. It feels refined yet bold, perfect for day-to-night wear.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1158,11 +1158,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Fruity Woody · A fresh and vibrant blend with apple, sage, and tobacco.",
             longDescription: 'Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette is a bright, modern scent that balances juicy fruit with aromatic woods. It feels fresh, energetic, and easy to wear.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML — 110DH',
+                'Decante 20ML — 220DH',
+                'Decante 30ML — 330DH',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1192,11 +1192,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Woody Aromatic · A bold, modern scent with fresh spice and woods.",
             longDescription: 'Valentino Born in Roma Extradose Eau de Toilette is a clean and confident signature with a fresh opening, aromatic heart, and a smooth woody base for everyday wear.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1226,11 +1226,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Woody Amber · A desert-inspired trail with vanilla and ambery woods.",
             longDescription: "Sauvage Eau de Parfum by Dior embodies the wildest, most elegant, and most audacious masculine spirit. A fragrance inspired by desert sunsets, it spreads its exoticism and sensuality through an unforgettable olfactory trail that leaves its mark wherever it goes. The warmth of the desert blends with the coolness of the night, highlighting exceptional notes such as vanilla from Papua New Guinea and a woody, ambery base. The result is a long-lasting, unique, and unforgettable men's fragrance. The 100ml format of Dior's Sauvage Eau de Parfum is refillable and is part of the House of Dior's sustainable plan to reuse bottles.",
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '60ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '60ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1259,11 +1259,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Iris Woody · A refined, elegant scent with iris, amber, and cedar.",
             longDescription: 'Dior Homme Intense is a smooth, elegant fragrance built around soft iris and warm amber woods. It feels refined and confident, perfect for evening wear and cooler seasons.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1293,11 +1293,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Amber Woody · A deep, intense blend with vanilla and smoky woods.",
             longDescription: 'Valentino Born in Roma Uomo Intense Eau de Parfum offers a rich, warm signature with smooth vanilla and dark woods. It is bold yet elegant, ideal for evening wear.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1327,11 +1327,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Women's fragrance · Amber Floral · A sensual blend of jasmine and vanilla with warm woods.",
             longDescription: 'Valentino Born in Roma Donna Intense is a richer, deeper take on the original with luminous florals and a warm vanilla base. It is elegant, confident, and long-lasting.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1361,11 +1361,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Woody Aromatic · A clean and vibrant blend of citrus, sage, and woods.",
             longDescription: 'Valentino Uomo Born in Roma Eau de Toilette is a fresh and modern signature with crisp citrus, aromatic herbs, and a smooth woody base. Ideal for everyday wear.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1394,11 +1394,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: 'Men\'s fragrance · Oriental Fougère · A bold, addictive signature with pink pepper, vanilla, and ambery woods.',
             longDescription: 'This addictive fougère fragrance unveils notes of pink pepper, vanilla, and an ambery woody accord. It reflects the personality of the modern man seeking a powerful scent to illuminate his intense love story. This intense masculine fragrance reveals warm heart notes of vanilla and vibrant ambery woody accords, contrasted by spicy touches of pink pepper. Its aged cognac hue perfectly embodies the intensity of this fragrance. BOTTLE: The clean lines and essential shapes characteristic of Giorgio Armani are reflected in the Emporio Armani bottle. Its simplicity conveys a profound sensuality, with curves reminiscent of masculine shoulders, and a round metallic cap that underscores understated elegance. Beneath this cap, intertwined rings symbolize a strong connection and unconditional love. Emporio Armani Stronger With You is a men\'s fragrance for bold men, belonging to the Oriental Fougere olfactory family. Because together, we are stronger.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1429,11 +1429,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: 'Men\'s fragrance · Smoky Amber · A more intense and powerful signature with cherry, mandarin, lavender, vanilla, and amber woods.',
             longDescription: 'Stronger With You Powerfully reinvents the collection\'s iconic signature with a more intense, smoky, and powerful dimension. This Eau de Parfum opens with a vibrant burst of cherry and juicy mandarin, delivering immediate energy and luminous warmth. At its heart, Diva lavender blends with an aromatic spice accord, balancing freshness and intensity to express modern sophistication. At its base, the fragrance unveils a sensual foundation of creamy vanilla, smoky amber woods, and the iconic caramelized chestnut accord, the signature of the Stronger With You line. The result: an enveloping, addictive trail that lasts up to 24 hours. The perfume comes in an imposing red bottle with bold lines, topped with a blackened silver cap and adorned with the iconic motif of intertwined rings, a symbol of connection and strength.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1463,11 +1463,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: 'Men\'s fragrance · Oriental Fougère · An irresistible and addictive signature inspired by the power of absolute love.',
             longDescription: 'GIORGIO ARMANI Stronger With You Absolutely Perfume. Stronger with You Absolutely by Giorgio Armani is an Oriental Fougère fragrance for men. This fragrance was launched in 2021. Olfactory pyramid of Stronger With You Absolutely Parfum: Stronger With You Absolutely Parfum by Giorgio Armani is inspired by the power of absolute love. A refined men\'s fragrance fueled by the addictive new rum accord. The bottle with an intense smoky lacquer envelops the iconic Emporio Armani You fragrance, bringing the absolute strength of the perfume to the bottle. Stronger With You Absolutely Parfum is an irresistible men\'s fragrance.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '50ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1498,11 +1498,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: 'Men\'s fragrance · Clean Woody · A long-lasting and powerful YSL signature of lavender, cedar, geranium, and incense.',
             longDescription: 'YVES SAINT LAURENT Y Eau de Parfum for Men. Immerse yourself in the essence of the creative and successful man with Y Le Parfum, the fragrance that captures the spirit of YSL personified by legendary ambassador Lenny Kravitz. This fragrance embodies the "Why not?" philosophy that defines the YSL man. Y Le Parfum, the new interpretation of the iconic Y franchise, is a long-lasting, clean, woody fragrance that celebrates self-realization. This version, more intense and powerful than ever, fuses vibrant French lavender with the strength of American cedar, two exclusive ingredients of YSL Beauty. The fragrance is distinguished by the mentholated touch of iconic geranium and the deep sensuality of incense, creating a powerful and addictive olfactory statement. An aroma that reflects the strength and determination of the YSL man in every drop.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '60ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '60ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1531,11 +1531,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: 'Men\'s fragrance · Floral Woody · A modern masculine signature with bergamot, orange blossom, patchouli, and Ambrofix™.',
             longDescription: 'YVES SAINT LAURENT Myslf Refillable Eau de Parfum. Yves Saint Laurent\'s new refillable men\'s fragrance is Myslf. An expression of the man you are, with all your nuances. A declaration of modern masculinity, embracing all its facets and emotions. YSL BEAUTY\'s first floral woody fragrance for a trail of modernity with contrasts. YSL Myslf men\'s fragrance opens with a fresh and vibrant accord of Calabrian bergamot and green bergamot. At its heart lies a pure and intense orange blossom absolute from Tunisia, created exclusively for YSL beauty. The fragrance finishes with a sensual and textured woody accord of Indonesian patchouli and Ambrofix™. A YSL icon in a bottle. Elegant. Fluid. The YSL Myslf men\'s fragrance comes in a black lacquered bottle with shades that reflect your own image. At its center, embedded in the glass, is the iconic YSL Cassandre logo.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '60ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '60ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1565,11 +1565,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: 'Men\'s fragrance · Floral Woody · A new intense and sensual MYSLF signature with black pepper, orange blossom, woods, and vanilla.',
             longDescription: 'YVES SAINT LAURENT MYSLF Le Parfum Floral Woody Men\'s Fragrance. MYSLF Le Parfum, the new and intense floral woody men\'s fragrance designed to leave a sensual and lasting trail. A new affirmation of modern masculinity. The expression of the man you are, with all your facets and emotions. The fragrance opens with a sparkling and exotic accord of black pepper, which gives way to a radiant and rich heart of orange blossom. In the base notes, the sensuality of woods envelops a velvety infusion of vanilla, creating an irresistible trail that lingers on the skin. Matte black and the bold shine of YSL\'s Casandra. The bottle is a perfect play of contrasts that reflects the duality of the YSL man: bold and self-assured, sophisticated and sentimental. A style statement as complex as the man who wears it.',
             sizes: [
-                'Decante 10ML — 90DH',
-                'Decante 20ML — 180DH',
-                'Decante 30ML — 370DH',
-                '60ML — 650DH',
-                '100ML — 850DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '60ML',
+                '100ML'
             ],
             notes: [
                 {
@@ -1598,11 +1598,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: 'Men\'s fragrance · Aromatic Amber · Intense, sexy and addictive with lavender, tonka bean, mint and benzoin.',
             longDescription: 'Le Male Elixir Eau de Parfum, Jean Paul Gaultier\'s new sailor-inspired fragrance, has arrived. More intense and sexier than ever. When he steps aboard, Le Male Elixir unleashes a wave of heat. This men\'s fragrance is so intense that the gold melts, creating golden trails along its sleek torso and metallic case. Male Elixir takes the reins of sensuality, exuding the ultimate expression of sex appeal. Be careful not to touch its skin, you\'ll get burned! Male Elixir ignites all the senses, creating maximum addiction. Sunny tropical tonka bean blends with already legendary lavender and, with the animal magnetism of benzoin, creates an explosion of fresh mint and bergamot. Impossible not to melt with desire. With Jean Paul Gaultier\'s Le Male Elixir, the senses are awakened, desire burns, and gold flows freely. Dazzling and sexy.',
             sizes: [
-                'Decante 10ML — 130DH',
-                'Decante 20ML — 240DH',
-                'Decante 30ML — 350DH',
-                '75ML — 990DH',
-                '125ML — 1350DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '75ML',
+                '125ML'
             ],
             notes: [
                 {
@@ -1631,11 +1631,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: 'Men\'s fragrance · Woody Oriental · Intense elegance in a black and gold signature bottle.',
             longDescription: 'On the way to Le Male Le Parfum, the new men\'s fragrance from Jean Paul Gaultier! With its official black and gold packaging, this intense eau de parfum revisits the Le Male olfactory line with style and strength. An elegant, woody oriental trail, imbued with the charisma and power of a leader. Sailors to your stations! The captain is here, for an almost imminent departure.',
             sizes: [
-                'Decante 10ML — 120DH',
-                'Decante 20ML — 230DH',
-                'Decante 30ML — 340DH',
-                '75ML — 950DH',
-                '125ML — 1290DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '75ML',
+                '125ML'
             ],
             notes: [
                 {
@@ -1665,11 +1665,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: 'Men\'s fragrance · Woody Amber · Intense and sensual with tonka bean, sandalwood, ginger, pineapple, and ambergris.',
             longDescription: 'Le Beau Le Parfum, Men\'s Perfume, Intense Eau de Parfum. Le Beau Le Parfum, the new original and intense men\'s fragrance by Jean Paul Gaultier. While Jean Paul Gaultier created this fragrance in its purest form, it wasn\'t designed to be dressed up! The bottle, lacquered in black and green, boasts a sleek and muscular silhouette, adorned with a golden fabric leaf as if it were a single garment. The new Eau de Parfum Intense is an even more sensual temptation, with its exciting woody amber scent. Le Beau is a men\'s fragrance built around an addictive tonka bean, sandalwood, ginger, pineapple, and ambergris. A light yet powerful base for a seductive and ultra-sexy man.',
             sizes: [
-                'Decante 10ML — 125DH',
-                'Decante 20ML — 235DH',
-                'Decante 30ML — 345DH',
-                '75ML — 980DH',
-                '125ML — 1320DH'
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '75ML',
+                '125ML'
             ],
             notes: [
                 {
@@ -1698,7 +1698,7 @@ document.addEventListener('DOMContentLoaded', () => {
     productDetailOverrides['jean paul gaultier le homme elixir eau de parfum'] = productDetailOverrides['jean paul gaultier le male elixir eau de parfum'];
     productDetailOverrides['jean paul gaultier le homme le parfum eau de parfum'] = productDetailOverrides['jean paul gaultier le male le parfum eau de parfum'];
 
-    const cartStorageKey = 'ipordise-cart-items';
+    const cartStorageKey = 'cart';
 
     const readCart = () => {
         try {
@@ -1721,7 +1721,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (!cartButtons.length) return;
 
-        const count = readCart().reduce((sum, item) => sum + Math.max(1, Number(item.quantity || 1)), 0);
+        const count = readCart().reduce((sum, item) => sum + Math.max(1, Number(item.qty || item.quantity || 1)), 0);
 
         cartButtons.forEach((button) => {
             let badge = button.querySelector('.header-cart-badge');
@@ -1746,6 +1746,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const writeCart = (items) => {
         localStorage.setItem(cartStorageKey, JSON.stringify(items));
         setHeaderCartCount();
+    };
+
+    const showAddedToCartToast = (name, size) => {
+        const existing = document.getElementById('ipordise-cart-toast');
+        if (existing) existing.remove();
+
+        const cartPath = getCartPagePath ? getCartPagePath() : 'cart.html';
+        const toast = document.createElement('div');
+        toast.id = 'ipordise-cart-toast';
+        toast.innerHTML = `
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <div style="width:2.2rem;height:2.2rem;background:#111827;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div style="flex:1;min-width:0;">
+                    <p style="margin:0;font-weight:700;font-size:0.82rem;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name}</p>
+                    <p style="margin:0;font-size:0.75rem;color:#6b7280;">${size} added to cart</p>
+                </div>
+                <a href="${cartPath}" style="flex-shrink:0;background:#111827;color:#fff;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:0.45rem 0.9rem;border-radius:999px;text-decoration:none;">View Cart</a>
+            </div>`;
+        Object.assign(toast.style, {
+            position: 'fixed', bottom: '1.5rem', left: '50%', transform: 'translateX(-50%) translateY(6rem)',
+            background: '#fff', border: '1px solid rgba(0,0,0,0.08)', borderRadius: '1rem',
+            padding: '0.85rem 1rem', boxShadow: '0 8px 32px rgba(15,23,42,0.18)',
+            zIndex: '9999', minWidth: '20rem', maxWidth: '90vw',
+            transition: 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease',
+            opacity: '0', fontFamily: 'inherit'
+        });
+        document.body.appendChild(toast);
+        requestAnimationFrame(() => {
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            toast.style.opacity = '1';
+        });
+        setTimeout(() => {
+            toast.style.transform = 'translateX(-50%) translateY(6rem)';
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 350);
+        }, 3500);
     };
 
     const parsePriceNumber = (priceText) => {
@@ -2053,182 +2091,182 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             name: 'Rabanne One Million Parfum',
             brand: 'RABANNE',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Parfum/1.jpg'
         },
         {
             name: 'Rabanne One Million Elixir Intense',
             brand: 'RABANNE',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/1.webp'
         },
         {
             name: 'Givenchy Gentleman Society Amber Eau de Parfum',
             brand: 'GIVENCHY',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/1.jpg'
         },
         {
             name: 'Givenchy Gentleman Society Nomade Eau de Parfum',
             brand: 'GIVENCHY',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Givenchy Gentleman Society Extreme Eau de Parfum',
             brand: 'GIVENCHY',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Gentleman Private Reserve Eau de Parfum',
             brand: 'GIVENCHY',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/1.png'
         },
         {
             name: 'Jean Paul Gaultier Scandal Elixir',
             brand: 'JEAN PAUL GAULTIER',
-            price: '75ML 990DH · 125ML 1350DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/1.jpg'
         },
         {
             name: 'Emporio Armani Stronger With You Intensely EDP',
             brand: 'GIORGIO ARMANI',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/2.webp'
         },
         {
             name: 'Armani Stronger With You Powerfully Eau de Parfum',
             brand: 'GIORGIO ARMANI',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Armani Stronger With You Absolutely Perfume',
             brand: 'GIORGIO ARMANI',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/first.webp'
         },
         {
             name: 'Yves Saint Laurent Y Eau de Parfum',
             brand: 'YVES SAINT LAURENT',
-            price: '60ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Y%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Yves Saint Laurent Myslf Eau de Parfum',
             brand: 'YVES SAINT LAURENT',
-            price: '60ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Myslf%20Eau%20de%20Parfum/1.jpg'
         },
         {
             name: 'Yves Saint Laurent MYSLF Le Parfum',
             brand: 'YVES SAINT LAURENT',
-            price: '60ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/1.webp'
         },
         {
             name: 'Jean Paul Gaultier Le male Elixir Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
-            price: '75ML 990DH · 125ML 1350DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp'
         },
         {
             name: 'Jean Paul Gaultier Le male Le parfum Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
-            price: '75ML 950DH · 125ML 1290DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Jean Paul Gaultier Le Beau Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
-            price: '75ML 980DH · 125ML 1320DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Azzaro The Most Wanted Eau de Parfum Intense',
             brand: 'AZZARO',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/1.webp'
         },
         {
             name: 'Azzaro Forever Wanted Elixir Eau de Parfum',
             brand: 'AZZARO',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg'
         },
         {
             name: 'Azzaro The Most Wanted Parfum',
             brand: 'AZZARO',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/1.webp'
         },
         {
             name: 'Valentino Donna Born in Roma Eau de Parfum',
             brand: 'VALENTINO',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'women',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Valentino Uomo Born In Roma Coral Fantasy Eau de Toilette',
             brand: 'VALENTINO',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/1.webp'
         },
         {
             name: 'Valentino Born in Roma Extradose Eau de Toilette',
             brand: 'VALENTINO',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/1.jpg'
         },
         {
             name: 'Dior Homme Intense Eau de Parfum',
             brand: 'DIOR',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/1.jpg'
         },
         {
             name: 'Valentino Born In Roma Uomo Intense Eau de Parfum',
             brand: 'VALENTINO',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Valentino Born In Roma Donna Intense Eau de Parfum',
             brand: 'VALENTINO',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'women',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/1.webp'
         },
         {
             name: 'Valentino Uomo Born in Roma Eau de Toilette',
             brand: 'VALENTINO',
-            price: '50ML 650DH · 100ML 850DH',
+            price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/1.jpg'
         }
@@ -2264,6 +2302,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (normalizedName.includes('dior homme')) return 'dior-homme';
         if (normalizedName.includes('le male')) return 'jpg-le-male';
         if (normalizedName.includes('le beau')) return 'jpg-le-beau';
+        if (normalizedName.includes('scandal')) return 'jpg-scandal';
+        if (normalizedName.includes('one million')) return 'rabanne-one-million';
+        if (normalizedName.includes('gentleman')) return 'givenchy-gentleman';
         return '';
     };
 
@@ -2289,33 +2330,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const currentCanonicalName = canonicalProductName(currentProductName);
         const currentFamily = getProductFamilyKey(currentProductName);
-        const currentCanonicalBrand = canonicalProductName(currentProductBrand);
-        const normalizedGender = String(currentGender || '').toLowerCase();
 
-        const matchesGender = (product) => (
-            !normalizedGender || product.gender === normalizedGender
-        );
+        // Only show products from the exact same family — no brand fallback
+        if (!currentFamily) {
+            const section = relatedTrack.closest('section');
+            if (section) section.style.display = 'none';
+            return;
+        }
 
         const familyMatches = relatedProductCatalog.filter((product) => (
             canonicalProductName(product.name) !== currentCanonicalName
             && getProductFamilyKey(product.name) === currentFamily
-            && matchesGender(product)
         ));
 
-        const fallbackBrandMatches = relatedProductCatalog.filter((product) => (
-            canonicalProductName(product.name) !== currentCanonicalName
-            && canonicalProductName(product.brand) === currentCanonicalBrand
-            && matchesGender(product)
-        ));
-
-        const merged = [...familyMatches];
-        fallbackBrandMatches.forEach((product) => {
-            const alreadyIncluded = merged.some((item) => canonicalProductName(item.name) === canonicalProductName(product.name));
-            if (!alreadyIncluded) merged.push(product);
-        });
-
-        const recommendations = merged.slice(0, 4);
-        if (!recommendations.length) return;
+        const recommendations = familyMatches.slice(0, 6);
+        if (!recommendations.length) {
+            const section = relatedTrack.closest('section');
+            if (section) section.style.display = 'none';
+            return;
+        }
 
         relatedTrack.innerHTML = recommendations.map((product) => {
             const sizeBadges = extractSizeBadges(product.price);
@@ -2567,12 +2600,41 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         };
 
+        let hasPrices = parsePriceNumber(productPrice) > 0;
+
         if (Array.isArray(productOverride?.sizes) && productOverride.sizes.length) {
             const sizeSelector = document.getElementById('sizeSelector');
             if (sizeSelector) {
-                sizeSelector.innerHTML = productOverride.sizes
-                    .map((size) => `<button class="size-pill" type="button">${getSizeOptionFromLabel(size, productPrice).label}</button>`)
-                    .join('');
+                const allOpts = productOverride.sizes.map((s) => {
+                    const opt = getSizeOptionFromLabel(s, productPrice);
+                    return { ...opt, isDecante: /decante/i.test(opt.label) };
+                });
+                hasPrices = allOpts.some((o) => parsePriceNumber(o.priceText) > 0);
+                const decanteOpts = allOpts.filter((o) => o.isDecante);
+                const fullOpts = allOpts.filter((o) => !o.isDecante);
+
+                const buildBtn = ({ label, priceText, isDecante }) => {
+                    const vol = label.replace(/decante\s*/i, '').trim();
+                    return `<button class="size-pill${isDecante ? ' is-decante' : ''}" type="button" data-label="${label}">
+                        <span class="spill-indicator"></span>
+                        <span class="spill-vol">${vol}</span>
+                        ${hasPrices && priceText ? `<span class="spill-price">${priceText}</span>` : ''}
+                    </button>`;
+                };
+
+                if (decanteOpts.length && fullOpts.length) {
+                    sizeSelector.innerHTML =
+                        `<div class="size-group">
+                            <span class="size-group-label"><i class="fas fa-flask"></i> Décante</span>
+                            <div class="size-group-pills">${decanteOpts.map(buildBtn).join('')}</div>
+                        </div>
+                        <div class="size-group">
+                            <span class="size-group-label"><i class="fas fa-bottle-droplet"></i> Full Bottle</span>
+                            <div class="size-group-pills">${fullOpts.map(buildBtn).join('')}</div>
+                        </div>`;
+                } else {
+                    sizeSelector.innerHTML = allOpts.map(buildBtn).join('');
+                }
             }
         }
 
@@ -2654,11 +2716,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const sizeButtons = Array.from(document.querySelectorAll('#sizeSelector .size-pill'));
         const sizeOptions = sizeButtons.map((btn) => {
+            const bLabel = btn.dataset.label || btn.textContent.trim();
             const matchingRawSize = Array.isArray(productOverride?.sizes)
-                ? productOverride.sizes.find((raw) => getSizeOptionFromLabel(raw, productPrice).label === btn.textContent.trim())
-                : btn.textContent.trim();
+                ? productOverride.sizes.find((raw) => getSizeOptionFromLabel(raw, productPrice).label === bLabel)
+                : bLabel;
 
-            const parsed = getSizeOptionFromLabel(matchingRawSize || btn.textContent.trim(), productPrice);
+            const parsed = getSizeOptionFromLabel(matchingRawSize || bLabel, productPrice);
             return {
                 button: btn,
                 label: parsed.label,
@@ -2689,32 +2752,82 @@ document.addEventListener('DOMContentLoaded', () => {
             priceCardEl.classList.add('is-price-animating');
         };
 
+        const qtyBoxContainer = document.getElementById('qtyBoxContainer');
         const setAddButtonsEnabled = (enabled) => {
+            const sizeHasPrice = enabled && selectedSize && selectedSize.unitPrice > 0;
             [addToCartBtn, stickyAddToCartBtn].forEach((button) => {
                 if (!button) return;
-                button.classList.toggle('hidden', !enabled);
-                button.disabled = !enabled;
-                button.classList.toggle('opacity-50', !enabled);
-                button.classList.toggle('cursor-not-allowed', !enabled);
+                if (!enabled) {
+                    button.classList.add('hidden');
+                    button.disabled = true;
+                } else {
+                    button.classList.remove('hidden');
+                    button.disabled = false;
+                    if (sizeHasPrice) {
+                        button.className = 'product-cart-btn';
+                        button.textContent = 'Add to Cart';
+                    } else {
+                        button.className = 'product-whatsapp-btn';
+                        button.innerHTML = '<i class="fab fa-whatsapp"></i> Ask for Price on WhatsApp';
+                    }
+                }
             });
+            if (qtyBoxContainer) {
+                qtyBoxContainer.classList.toggle('hidden', !sizeHasPrice);
+            }
         };
+
+        const deliveryChipEl = document.getElementById('productDeliveryChip');
+        const deliveryInfoEl = document.getElementById('productDeliveryInfo');
 
         const updateDisplayedPrice = () => {
             const selectedPrice = selectedSize?.priceText || '';
-            if (mainPriceEl) {
-                mainPriceEl.textContent = selectedPrice || 'Choose a size to see the price';
-                mainPriceEl.classList.toggle('text-gray-400', !selectedPrice);
-                mainPriceEl.classList.toggle('text-gray-900', !!selectedPrice);
-            }
+            const sizeHasPrice = selectedSize && selectedSize.unitPrice > 0;
+            const isDecante = /decante/i.test(selectedSize?.label || '');
+            const deliveryFee = isDecante ? '35 MAD' : '35 MAD (VAT included)';
 
-            if (stickyPriceEl) {
-                stickyPriceEl.textContent = selectedPrice || 'Choose size';
-                stickyPriceEl.classList.toggle('text-gray-500', !selectedPrice);
-                stickyPriceEl.classList.toggle('text-brand-dark', !!selectedPrice);
+            if (hasPrices) {
+                if (mainPriceEl) {
+                    const displayText = !selectedSize
+                        ? 'Choose a size to see the price'
+                        : sizeHasPrice ? selectedPrice : 'Price on Request';
+                    mainPriceEl.textContent = displayText;
+                    mainPriceEl.classList.toggle('text-gray-400', !sizeHasPrice);
+                    mainPriceEl.classList.toggle('text-gray-900', !!sizeHasPrice);
+                }
+                if (stickyPriceEl) {
+                    stickyPriceEl.textContent = sizeHasPrice ? selectedPrice : (selectedSize ? 'Ask on WhatsApp' : 'Choose size');
+                }
+                if (deliveryInfoEl) {
+                    deliveryInfoEl.textContent = `In stock - Delivery in Morocco: ${deliveryFee}`;
+                }
+                syncPriceCardState(sizeHasPrice ? selectedPrice : '');
+            } else {
+                if (addToCartBtn && selectedSize) {
+                    addToCartBtn.innerHTML = `<i class="fab fa-whatsapp"></i> Ask for Price — ${selectedSize.label}`;
+                }
             }
-
-            syncPriceCardState(selectedPrice);
+            if (deliveryChipEl) {
+                deliveryChipEl.innerHTML = `<i class="fas fa-truck text-brand-red"></i> Delivery fee: ${deliveryFee}`;
+            }
         };
+
+        // Show the correct info block and configure the CTA button based on price availability
+        const productPriceCard = document.getElementById('productPriceCard');
+        const productOndemandBox = document.getElementById('productOndemandBox');
+        if (hasPrices) {
+            if (productPriceCard) productPriceCard.removeAttribute('hidden');
+            if (addToCartBtn) {
+                addToCartBtn.className = 'hidden product-cart-btn';
+                addToCartBtn.textContent = 'Add to Cart';
+            }
+        } else {
+            if (productOndemandBox) productOndemandBox.removeAttribute('hidden');
+            if (addToCartBtn) {
+                addToCartBtn.className = 'hidden product-whatsapp-btn';
+                addToCartBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Ask for Price on WhatsApp';
+            }
+        }
 
         sizeButtons.forEach((btn) => btn.classList.remove('is-active'));
         updateDisplayedPrice();
@@ -2749,31 +2862,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const handleAddToCart = () => {
             if (!selectedSize) return;
-
-            const nextItems = readCart();
-            const existingIndex = nextItems.findIndex((item) => (
-                item.name === productName
-                && item.brand === resolvedBrand
-                && item.size === selectedSize.label
-            ));
-
-            if (existingIndex >= 0) {
-                nextItems[existingIndex].quantity = Math.min(99, Number(nextItems[existingIndex].quantity || 1) + quantity);
-            } else {
-                nextItems.unshift({
-                    id: `${canonicalProductName(productName)}-${canonicalProductName(selectedSize.label)}-${Date.now()}`,
-                    name: productName,
-                    brand: resolvedBrand,
-                    size: selectedSize.label,
-                    quantity,
-                    priceText: selectedSize.priceText,
-                    unitPrice: selectedSize.unitPrice,
-                    image: defaultImage || ''
+            if (selectedSize.unitPrice > 0) {
+                const qty = qtyValue ? Number(qtyValue.textContent) || 1 : 1;
+                const nextItems = readCart();
+                const existingIndex = nextItems.findIndex(
+                    (item) => item.name === productName && item.brand === resolvedBrand && item.size === selectedSize.label
+                );
+                if (existingIndex >= 0) {
+                    nextItems[existingIndex].quantity = Math.min(99, Number(nextItems[existingIndex].quantity || 1) + qty);
+                } else {
+                    nextItems.unshift({
+                        id: `${canonicalProductName(productName)}-${canonicalProductName(selectedSize.label)}-${Date.now()}`,
+                        name: productName,
+                        brand: resolvedBrand,
+                        size: selectedSize.label,
+                        quantity: qty,
+                        priceText: selectedSize.priceText,
+                        unitPrice: selectedSize.unitPrice,
+                        image: defaultImage || ''
+                    });
+                }
+                writeCart(nextItems);
+                // Flash button green then back to black
+                [addToCartBtn, stickyAddToCartBtn].forEach((btn) => {
+                    if (!btn) return;
+                    btn.style.transition = 'background 0.2s ease';
+                    btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+                    btn.textContent = '✓ Added!';
+                    setTimeout(() => {
+                        btn.style.background = '';
+                        btn.textContent = 'Add to Cart';
+                    }, 1800);
                 });
+                showAddedToCartToast(productName, selectedSize.label);
+            } else {
+                const msg = `Bonjour IPORDISE 👋%0A%0AJe suis intéressé(e) par :%0A🌸 *${productName}*%0A📦 Taille : *${selectedSize.label}*%0A%0APourriez-vous me donner le prix et les détails de livraison ? Merci !`;
+                window.open(`https://wa.me/212600000000?text=${msg}`, '_blank');
             }
-
-            writeCart(nextItems);
-            window.location.href = getCartPagePath();
         };
 
         if (addToCartBtn) {
