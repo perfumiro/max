@@ -2973,7 +2973,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const qtyBoxContainer = document.getElementById('qtyBoxContainer');
         const setAddButtonsEnabled = (enabled) => {
-            const sizeHasPrice = enabled && selectedSize && selectedSize.unitPrice > 0;
             [addToCartBtn, stickyAddToCartBtn].forEach((button) => {
                 if (!button) return;
                 if (!enabled) {
@@ -2982,17 +2981,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     button.classList.remove('hidden');
                     button.disabled = false;
-                    if (sizeHasPrice) {
-                        button.className = 'product-cart-btn';
-                        button.textContent = 'Add to Cart';
-                    } else {
-                        button.className = 'product-whatsapp-btn';
-                        button.innerHTML = '<i class="fab fa-whatsapp"></i> Ask for Price on WhatsApp';
-                    }
+                    button.className = 'product-cart-btn';
+                    button.textContent = 'Add to Cart';
                 }
             });
             if (qtyBoxContainer) {
-                qtyBoxContainer.classList.toggle('hidden', !sizeHasPrice);
+                qtyBoxContainer.classList.toggle('hidden', !enabled);
             }
         };
 
@@ -3015,16 +3009,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     mainPriceEl.classList.toggle('text-gray-900', !!sizeHasPrice);
                 }
                 if (stickyPriceEl) {
-                    stickyPriceEl.textContent = sizeHasPrice ? selectedPrice : (selectedSize ? 'Ask on WhatsApp' : 'Choose size');
+                    stickyPriceEl.textContent = sizeHasPrice ? selectedPrice : (selectedSize ? 'Price on Request' : 'Choose size');
                 }
                 if (deliveryInfoEl) {
                     deliveryInfoEl.textContent = `In stock - Delivery in Morocco: ${deliveryFee}`;
                 }
                 syncPriceCardState(sizeHasPrice ? selectedPrice : '');
-            } else {
-                if (addToCartBtn && selectedSize) {
-                    addToCartBtn.innerHTML = `<i class="fab fa-whatsapp"></i> Ask for Price — ${selectedSize.label}`;
-                }
             }
             if (deliveryChipEl) {
                 deliveryChipEl.innerHTML = `<i class="fas fa-truck text-brand-red"></i> Delivery fee: ${deliveryFee}`;
@@ -3043,8 +3033,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             if (productOndemandBox) productOndemandBox.removeAttribute('hidden');
             if (addToCartBtn) {
-                addToCartBtn.className = 'hidden product-whatsapp-btn';
-                addToCartBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Ask for Price on WhatsApp';
+                addToCartBtn.className = 'hidden product-cart-btn';
+                addToCartBtn.textContent = 'Add to Cart';
             }
         }
 
@@ -3081,43 +3071,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const handleAddToCart = () => {
             if (!selectedSize) return;
-            if (selectedSize.unitPrice > 0) {
-                const qty = qtyValue ? Number(qtyValue.textContent) || 1 : 1;
-                const nextItems = readCart();
-                const existingIndex = nextItems.findIndex(
-                    (item) => item.name === productName && item.brand === resolvedBrand && item.size === selectedSize.label
-                );
-                if (existingIndex >= 0) {
-                    nextItems[existingIndex].quantity = Math.min(99, Number(nextItems[existingIndex].quantity || 1) + qty);
-                } else {
-                    nextItems.unshift({
-                        id: `${canonicalProductName(productName)}-${canonicalProductName(selectedSize.label)}-${Date.now()}`,
-                        name: productName,
-                        brand: resolvedBrand,
-                        size: selectedSize.label,
-                        quantity: qty,
-                        priceText: selectedSize.priceText,
-                        unitPrice: selectedSize.unitPrice,
-                        image: defaultImage || ''
-                    });
-                }
-                writeCart(nextItems);
-                // Flash button green then back to black
-                [addToCartBtn, stickyAddToCartBtn].forEach((btn) => {
-                    if (!btn) return;
-                    btn.style.transition = 'background 0.2s ease';
-                    btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
-                    btn.textContent = '✓ Added!';
-                    setTimeout(() => {
-                        btn.style.background = '';
-                        btn.textContent = 'Add to Cart';
-                    }, 1800);
-                });
-                showAddedToCartToast(productName, selectedSize.label);
+            const qty = qtyValue ? Number(qtyValue.textContent) || 1 : 1;
+            const nextItems = readCart();
+            const existingIndex = nextItems.findIndex(
+                (item) => item.name === productName && item.brand === resolvedBrand && item.size === selectedSize.label
+            );
+            if (existingIndex >= 0) {
+                nextItems[existingIndex].quantity = Math.min(99, Number(nextItems[existingIndex].quantity || 1) + qty);
+                nextItems[existingIndex].priceText = selectedSize.priceText || '';
+                nextItems[existingIndex].unitPrice = selectedSize.unitPrice;
+                nextItems[existingIndex].pricePending = selectedSize.unitPrice <= 0;
             } else {
-                const msg = `Bonjour IPORDISE 👋%0A%0AJe suis intéressé(e) par :%0A🌸 *${productName}*%0A📦 Taille : *${selectedSize.label}*%0A%0APourriez-vous me donner le prix et les détails de livraison ? Merci !`;
-                window.open(`https://wa.me/212600000000?text=${msg}`, '_blank');
+                nextItems.unshift({
+                    id: `${canonicalProductName(productName)}-${canonicalProductName(selectedSize.label)}-${Date.now()}`,
+                    name: productName,
+                    brand: resolvedBrand,
+                    size: selectedSize.label,
+                    quantity: qty,
+                    priceText: selectedSize.priceText || '',
+                    unitPrice: selectedSize.unitPrice,
+                    pricePending: selectedSize.unitPrice <= 0,
+                    image: defaultImage || ''
+                });
             }
+            writeCart(nextItems);
+            // Flash button green then back to black
+            [addToCartBtn, stickyAddToCartBtn].forEach((btn) => {
+                if (!btn) return;
+                btn.style.transition = 'background 0.2s ease';
+                btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+                btn.textContent = '✓ Added!';
+                setTimeout(() => {
+                    btn.style.background = '';
+                    btn.textContent = 'Add to Cart';
+                }, 1800);
+            });
+            showAddedToCartToast(productName, selectedSize.label);
         };
 
         if (addToCartBtn) {
@@ -4651,16 +4640,100 @@ document.addEventListener('DOMContentLoaded', () => {
         const isLoginPage = window.location.pathname.replace(/\\/g, '/').endsWith('/pages/login.html');
         if (!isLoginPage) return;
 
-        const form = document.getElementById('loginForm') || document.querySelector('main form[action="#"]');
-        const consentCheckbox = document.getElementById('loginLegalConsent');
-        const submitButton = document.getElementById('loginSubmitBtn');
-        const messageEl = document.getElementById('loginLegalConsentMessage');
-        const passwordInput = document.getElementById('loginPasswordInput');
-        const passwordToggle = document.querySelector('[data-password-toggle]');
+        const accountStorageKey = 'ipordise-accounts';
+        const currentAccountStorageKey = 'ipordise-current-account';
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const loginConsentCheckbox = document.getElementById('loginLegalConsent');
+        const loginSubmitButton = document.getElementById('loginSubmitBtn');
+        const loginConsentMessage = document.getElementById('loginLegalConsentMessage');
+        const loginMessage = document.getElementById('loginFormMessage');
+        const loginEmailInput = document.getElementById('loginEmailInput');
+        const loginPasswordInput = document.getElementById('loginPasswordInput');
+        const loginRememberMe = document.getElementById('loginRememberMe');
+        const signupConsentCheckbox = document.getElementById('signupLegalConsent');
+        const signupSubmitButton = document.getElementById('signupSubmitBtn');
+        const signupConsentMessage = document.getElementById('signupLegalConsentMessage');
+        const signupMessage = document.getElementById('signupFormMessage');
+        const signupFirstNameInput = document.getElementById('signupFirstNameInput');
+        const signupLastNameInput = document.getElementById('signupLastNameInput');
+        const signupEmailInput = document.getElementById('signupEmailInput');
+        const signupPasswordInput = document.getElementById('signupPasswordInput');
+        const signupConfirmPasswordInput = document.getElementById('signupConfirmPasswordInput');
+        const modeButtons = Array.from(document.querySelectorAll('[data-auth-mode]'));
+        const modePanels = Array.from(document.querySelectorAll('[data-auth-panel]'));
+        const modeSwitches = Array.from(document.querySelectorAll('[data-auth-switch]'));
+        const passwordToggles = Array.from(document.querySelectorAll('[data-password-toggle]'));
 
-        if (!form || !consentCheckbox || !submitButton || !messageEl) return;
+        if (!loginForm || !signupForm || !loginConsentCheckbox || !signupConsentCheckbox || !loginSubmitButton || !signupSubmitButton) return;
 
-        if (passwordInput && passwordToggle && passwordToggle.dataset.bound !== 'true') {
+        const readAccounts = () => {
+            try {
+                const raw = JSON.parse(localStorage.getItem(accountStorageKey) || '[]');
+                return Array.isArray(raw) ? raw : [];
+            } catch (error) {
+                return [];
+            }
+        };
+
+        const writeAccounts = (accounts) => {
+            localStorage.setItem(accountStorageKey, JSON.stringify(accounts));
+        };
+
+        const writeCurrentAccount = (account, rememberMe) => {
+            const storage = rememberMe ? localStorage : sessionStorage;
+            const payload = {
+                firstName: account.firstName,
+                lastName: account.lastName,
+                email: account.email,
+                signedInAt: Date.now()
+            };
+            storage.setItem(currentAccountStorageKey, JSON.stringify(payload));
+            if (rememberMe) {
+                sessionStorage.removeItem(currentAccountStorageKey);
+            }
+        };
+
+        const setFormMessage = (element, text, tone) => {
+            if (!element) return;
+            if (!text) {
+                element.textContent = '';
+                element.classList.add('hidden');
+                element.classList.remove('is-error', 'is-success');
+                return;
+            }
+
+            element.textContent = text;
+            element.classList.remove('hidden', 'is-error', 'is-success');
+            element.classList.add(tone === 'success' ? 'is-success' : 'is-error');
+        };
+
+        const setButtonState = (button, isEnabled) => {
+            button.disabled = !isEnabled;
+            button.setAttribute('aria-disabled', String(!isEnabled));
+            button.classList.toggle('opacity-50', !isEnabled);
+            button.classList.toggle('cursor-not-allowed', !isEnabled);
+        };
+
+        const activateAuthMode = (mode) => {
+            modeButtons.forEach((button) => {
+                const isActive = button.dataset.authMode === mode;
+                button.classList.toggle('is-active', isActive);
+                button.setAttribute('aria-selected', String(isActive));
+            });
+
+            modePanels.forEach((panel) => {
+                const isActive = panel.dataset.authPanel === mode;
+                panel.classList.toggle('is-active', isActive);
+                panel.classList.toggle('hidden', !isActive);
+            });
+        };
+
+        passwordToggles.forEach((passwordToggle) => {
+            const targetSelector = passwordToggle.getAttribute('data-password-target');
+            const passwordInput = targetSelector ? document.querySelector(targetSelector) : null;
+            if (!passwordInput || passwordToggle.dataset.bound === 'true') return;
+
             passwordToggle.dataset.bound = 'true';
             passwordToggle.addEventListener('click', () => {
                 const isVisible = passwordInput.type === 'text';
@@ -4672,25 +4745,120 @@ document.addEventListener('DOMContentLoaded', () => {
                     icon.classList.toggle('fa-eye-slash', !isVisible);
                 }
             });
-        }
-
-        const syncLoginState = () => {
-            const isAccepted = consentCheckbox.checked;
-            submitButton.disabled = !isAccepted;
-            submitButton.setAttribute('aria-disabled', String(!isAccepted));
-            submitButton.classList.toggle('opacity-50', !isAccepted);
-            submitButton.classList.toggle('cursor-not-allowed', !isAccepted);
-            messageEl.classList.toggle('hidden', isAccepted);
-        };
-
-        form.addEventListener('submit', (event) => {
-            if (consentCheckbox.checked) return;
-            event.preventDefault();
-            syncLoginState();
         });
 
-        consentCheckbox.addEventListener('change', syncLoginState);
+        const syncLoginState = () => {
+            const isAccepted = loginConsentCheckbox.checked;
+            setButtonState(loginSubmitButton, isAccepted);
+            loginConsentMessage.classList.toggle('hidden', isAccepted);
+        };
+
+        const syncSignupState = () => {
+            const isAccepted = signupConsentCheckbox.checked;
+            const hasMatchingPasswords = signupPasswordInput.value.length >= 6
+                && signupPasswordInput.value === signupConfirmPasswordInput.value;
+            setButtonState(signupSubmitButton, isAccepted && hasMatchingPasswords);
+            signupConsentMessage.classList.toggle('hidden', isAccepted);
+        };
+
+        modeButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                activateAuthMode(button.dataset.authMode || 'signin');
+            });
+        });
+
+        modeSwitches.forEach((button) => {
+            button.addEventListener('click', () => {
+                activateAuthMode(button.dataset.authSwitch || 'signup');
+            });
+        });
+
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            syncLoginState();
+            setFormMessage(loginMessage, '', 'error');
+
+            if (!loginConsentCheckbox.checked) return;
+
+            const email = String(loginEmailInput.value || '').trim().toLowerCase();
+            const password = String(loginPasswordInput.value || '');
+            const accounts = readAccounts();
+            const account = accounts.find((entry) => entry.email === email);
+
+            if (!account || account.password !== password) {
+                setFormMessage(loginMessage, 'We could not match that email and password. Please try again or create a new account.', 'error');
+                return;
+            }
+
+            writeCurrentAccount(account, loginRememberMe?.checked);
+            setFormMessage(loginMessage, `Welcome back, ${account.firstName}. Redirecting to the homepage...`, 'success');
+            window.setTimeout(() => {
+                window.location.href = '../index.html';
+            }, 1200);
+        });
+
+        signupForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            syncSignupState();
+            setFormMessage(signupMessage, '', 'error');
+
+            if (!signupConsentCheckbox.checked) return;
+
+            const firstName = String(signupFirstNameInput.value || '').trim();
+            const lastName = String(signupLastNameInput.value || '').trim();
+            const email = String(signupEmailInput.value || '').trim().toLowerCase();
+            const password = String(signupPasswordInput.value || '');
+            const confirmPassword = String(signupConfirmPasswordInput.value || '');
+
+            if (!firstName || !lastName || !email) {
+                setFormMessage(signupMessage, 'Please complete all required fields.', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                setFormMessage(signupMessage, 'Your password must contain at least 6 characters.', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                setFormMessage(signupMessage, 'Passwords do not match. Please confirm your password again.', 'error');
+                return;
+            }
+
+            const accounts = readAccounts();
+            const alreadyExists = accounts.some((entry) => entry.email === email);
+            if (alreadyExists) {
+                setFormMessage(signupMessage, 'An account already exists with this email. Please sign in instead.', 'error');
+                activateAuthMode('signin');
+                loginEmailInput.value = email;
+                return;
+            }
+
+            const account = {
+                firstName,
+                lastName,
+                email,
+                password,
+                createdAt: Date.now()
+            };
+
+            accounts.push(account);
+            writeAccounts(accounts);
+            writeCurrentAccount(account, true);
+            setFormMessage(signupMessage, `Your account has been created, ${firstName}. Redirecting to the homepage...`, 'success');
+            window.setTimeout(() => {
+                window.location.href = '../index.html';
+            }, 1200);
+        });
+
+        loginConsentCheckbox.addEventListener('change', syncLoginState);
+        signupConsentCheckbox.addEventListener('change', syncSignupState);
+        signupPasswordInput.addEventListener('input', syncSignupState);
+        signupConfirmPasswordInput.addEventListener('input', syncSignupState);
+
+        activateAuthMode('signin');
         syncLoginState();
+        syncSignupState();
     };
 
     const initConsentBanner = () => {
@@ -5008,11 +5176,101 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const initNewsletterForms = () => {
+        const forms = Array.from(document.querySelectorAll('.ipordise-news-form'));
+        if (!forms.length) return;
+
+        const storageKey = 'ipordise-newsletter-subscribers';
+
+        const readSubscribers = () => {
+            try {
+                const raw = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                return Array.isArray(raw) ? raw : [];
+            } catch (error) {
+                return [];
+            }
+        };
+
+        const writeSubscribers = (subscribers) => {
+            localStorage.setItem(storageKey, JSON.stringify(subscribers));
+        };
+
+        forms.forEach((form, index) => {
+            const submitButton = form.querySelector('.ipordise-news-submit');
+            const nameInput = form.querySelector('input[type="text"]');
+            const emailInput = form.querySelector('input[type="email"]');
+            const genderInput = form.querySelector('select');
+            const consentCheckbox = form.querySelector('input[type="checkbox"]');
+
+            if (!submitButton || !emailInput) return;
+
+            let feedback = form.querySelector('.ipordise-news-feedback');
+            if (!feedback) {
+                feedback = document.createElement('p');
+                feedback.className = 'ipordise-news-feedback hidden';
+                feedback.setAttribute('aria-live', 'polite');
+                form.appendChild(feedback);
+            }
+
+            const applySubscribedState = () => {
+                submitButton.textContent = 'SUBSCRIBED';
+                submitButton.disabled = true;
+                submitButton.classList.add('is-subscribed');
+
+                [nameInput, emailInput, genderInput, consentCheckbox].forEach((field) => {
+                    if (field) field.disabled = true;
+                });
+            };
+
+            const setFeedback = (message, tone) => {
+                feedback.textContent = message;
+                feedback.classList.remove('hidden', 'is-error', 'is-success');
+                feedback.classList.add(tone === 'success' ? 'is-success' : 'is-error');
+            };
+
+            const emailKey = `ipordise-newsletter-last-email-${index}`;
+            const rememberedEmail = localStorage.getItem(emailKey);
+            if (rememberedEmail && rememberedEmail === String(emailInput.value || '').trim().toLowerCase()) {
+                applySubscribedState();
+                setFeedback('You are already subscribed to the IPORDISE newsletter.', 'success');
+            }
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                if (!form.reportValidity()) return;
+
+                const email = String(emailInput.value || '').trim().toLowerCase();
+                const name = String(nameInput?.value || '').trim();
+                const gender = String(genderInput?.value || '').trim();
+                const subscribers = readSubscribers();
+                const existingIndex = subscribers.findIndex((entry) => entry.email === email);
+                const payload = {
+                    name,
+                    email,
+                    gender,
+                    subscribedAt: Date.now()
+                };
+
+                if (existingIndex >= 0) {
+                    subscribers[existingIndex] = { ...subscribers[existingIndex], ...payload };
+                } else {
+                    subscribers.push(payload);
+                }
+
+                writeSubscribers(subscribers);
+                localStorage.setItem(emailKey, email);
+                applySubscribedState();
+                setFeedback('Subscribed successfully. Welcome to the IPORDISE newsletter.', 'success');
+            });
+        });
+    };
+
     applyOfficialHeaderFooter();
     initBrandLogoDotAnimation();
     normalizeLegacyFrenchContent();
     initLanguageSwitcher();
     initMobileSearchToggle();
+    initNewsletterForms();
     initBackgroundMusic();
     initConsentBanner();
     initLoginLegalConsent();
