@@ -736,6 +736,46 @@ document.addEventListener('DOMContentLoaded', () => {
         .replace(/[^a-z0-9]+/g, ' ')
         .trim();
 
+    const splitSizeAndPrice = (value, fallbackPriceText = '') => {
+        const normalized = String(value || '').trim();
+        const separator = normalized.includes('—') ? '—' : '-';
+        const parts = normalized.split(separator).map((part) => part.trim()).filter(Boolean);
+
+        if (parts.length >= 2) {
+            return {
+                label: parts[0],
+                priceText: parts.slice(1).join(' - ').trim()
+            };
+        }
+
+        return {
+            label: normalized,
+            priceText: String(fallbackPriceText || '').trim()
+        };
+    };
+
+    const normalizeSizeOptionEntry = (entry, fallbackPriceText = '') => {
+        if (entry && typeof entry === 'object' && !Array.isArray(entry)) {
+            const parsed = splitSizeAndPrice(entry.label || entry.size || '', '');
+            const label = String(entry.label || entry.size || parsed.label || '').trim();
+            const priceText = String(entry.priceText || entry.price || parsed.priceText || fallbackPriceText || '').trim();
+            return {
+                label,
+                priceText,
+                isDecante: /decante/i.test(label),
+                volumeLabel: label.replace(/decante\s*/i, '').trim()
+            };
+        }
+
+        const parsed = splitSizeAndPrice(entry, fallbackPriceText);
+        return {
+            label: parsed.label,
+            priceText: parsed.priceText,
+            isDecante: /decante/i.test(parsed.label),
+            volumeLabel: parsed.label.replace(/decante\s*/i, '').trim()
+        };
+    };
+
     const productDetailOverrides = {
         'bleu de chanel eau de parfum spray': {
             brand: 'CHANEL',
@@ -1158,11 +1198,11 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle: "Men's fragrance · Fruity Woody · A fresh and vibrant blend with apple, sage, and tobacco.",
             longDescription: 'Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette is a bright, modern scent that balances juicy fruit with aromatic woods. It feels fresh, energetic, and easy to wear.',
             sizes: [
-                'Decante 10ML — 110DH',
-                'Decante 20ML — 220DH',
-                'Decante 30ML — 330DH',
-                '50ML',
-                '100ML'
+                { label: 'Decante 10ML', priceText: '110DH' },
+                { label: 'Decante 20ML', priceText: '220DH' },
+                { label: 'Decante 30ML', priceText: '330DH' },
+                { label: '50ML' },
+                { label: '100ML' }
             ],
             notes: [
                 {
@@ -1837,15 +1877,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const imageEl = card.querySelector('img');
         const reviewsEl = Array.from(card.querySelectorAll('span')).find((span) => /\(\d+\)/.test(span.textContent || ''));
 
+        const name = (card.dataset.productName || nameEl?.textContent || 'Premium Product').trim();
+        const brand = (card.dataset.productBrand || brandEl?.textContent || 'IPORDISE').trim();
+
         return {
-            name: (card.dataset.productName || nameEl?.textContent || 'Premium Product').trim(),
-            brand: (card.dataset.productBrand || brandEl?.textContent || 'IPORDISE').trim(),
-            price: (card.dataset.productPrice || currentPriceEl?.textContent || '0.00 MAD').trim(),
+            name,
+            brand,
+            price: '',
             oldPrice: (card.dataset.productOldPrice || oldPriceEl?.textContent || '').trim(),
             discount: (card.dataset.productDiscount || discountEl?.textContent || '').trim(),
             reviews: (card.dataset.productReviews || (reviewsEl?.textContent || '').replace(/[^0-9]/g, '') || '0').trim(),
             image: normalizeImagePathForCurrentPage(card.dataset.productImage || imageEl?.getAttribute('src') || '')
         };
+    };
+
+    const buildProductQuery = (data) => new URLSearchParams({
+        name: data.name || '',
+        brand: data.brand || '',
+        price: data.price || '',
+        oldPrice: data.oldPrice || '',
+        discount: data.discount || '',
+        reviews: data.reviews || '',
+        image: data.image || ''
+    });
+
+    const navigateToProductPage = (data) => {
+        window.location.href = `${getProductPagePath()}?${buildProductQuery(data).toString()}`;
     };
 
     const initHeaderSearchSuggestions = () => {
@@ -1993,14 +2050,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const selected = items[index];
                 if (!selected) return;
 
-                const query = new URLSearchParams({
-                    name: selected.name,
-                    brand: selected.brand,
-                    price: selected.price || '',
-                    image: selected.image || ''
-                });
-
-                window.location.href = `${getProductPagePath()}?${query.toString()}`;
+                navigateToProductPage(selected);
             });
         });
 
@@ -2050,17 +2100,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const data = extractProductDataFromCard(card);
-                const query = new URLSearchParams({
-                    name: data.name,
-                    brand: data.brand,
-                    price: data.price,
-                    oldPrice: data.oldPrice,
-                    discount: data.discount,
-                    reviews: data.reviews,
-                    image: data.image
-                });
-
-                window.location.href = `${getProductPagePath()}?${query.toString()}`;
+                navigateToProductPage(data);
             };
 
             card.addEventListener('click', (event) => {
@@ -2308,7 +2348,26 @@ document.addEventListener('DOMContentLoaded', () => {
         return '';
     };
 
-    const extractSizeBadges = (priceText) => {
+    const extractSizeBadges = (productName, priceText) => {
+        const productOverride = productDetailOverrides[canonicalProductName(productName)] || null;
+        if (Array.isArray(productOverride?.sizes) && productOverride.sizes.length) {
+            const normalizedSizes = productOverride.sizes
+                .map((entry) => normalizeSizeOptionEntry(entry, ''))
+                .filter((entry) => entry.label);
+
+            const fullBottleSizes = normalizedSizes
+                .filter((entry) => !entry.isDecante)
+                .map((entry) => entry.volumeLabel.replace(/\s+/g, '').toUpperCase());
+            const decanteSizes = normalizedSizes
+                .filter((entry) => entry.isDecante)
+                .map((entry) => entry.volumeLabel.replace(/\s+/g, '').toUpperCase());
+            const sizeLabels = [...fullBottleSizes, ...decanteSizes].filter(Boolean);
+
+            if (sizeLabels.length) {
+                return sizeLabels.slice(0, 2);
+            }
+        }
+
         const parts = String(priceText || '')
             .split(/\s-\s|·|\||,/)
             .map((part) => part.trim())
@@ -2351,7 +2410,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         relatedTrack.innerHTML = recommendations.map((product) => {
-            const sizeBadges = extractSizeBadges(product.price);
+            const sizeBadges = extractSizeBadges(product.name, product.price);
             const sizeBadgesHtml = sizeBadges.map((size, index) => (
                 `<span class="text-[10px] font-bold border ${index === 0 ? 'border-gray-800' : 'border-gray-300 text-gray-500'} px-2 py-1 rounded">${size}</span>`
             )).join('');
@@ -2583,42 +2642,25 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        const getSizeOptionFromLabel = (label, fallbackPriceText) => {
-            const normalized = String(label || '').trim();
-            const separator = normalized.includes('—') ? '—' : '-';
-            const parts = normalized.split(separator).map((part) => part.trim()).filter(Boolean);
-            if (parts.length >= 2) {
-                return {
-                    label: parts[0],
-                    priceText: parts.slice(1).join(' - ').trim()
-                };
-            }
-
-            return {
-                label: normalized,
-                priceText: fallbackPriceText
-            };
-        };
-
         let hasPrices = parsePriceNumber(productPrice) > 0;
+        let normalizedOverrideSizes = [];
 
         if (Array.isArray(productOverride?.sizes) && productOverride.sizes.length) {
             const sizeSelector = document.getElementById('sizeSelector');
             if (sizeSelector) {
-                const allOpts = productOverride.sizes.map((s) => {
-                    const opt = getSizeOptionFromLabel(s, productPrice);
-                    return { ...opt, isDecante: /decante/i.test(opt.label) };
-                });
+                const allOpts = productOverride.sizes.map((entry) => normalizeSizeOptionEntry(entry, ''));
+                normalizedOverrideSizes = allOpts;
                 hasPrices = allOpts.some((o) => parsePriceNumber(o.priceText) > 0);
                 const decanteOpts = allOpts.filter((o) => o.isDecante);
                 const fullOpts = allOpts.filter((o) => !o.isDecante);
 
                 const buildBtn = ({ label, priceText, isDecante }) => {
                     const vol = label.replace(/decante\s*/i, '').trim();
+                    const priceLabel = priceText || 'Request price';
                     return `<button class="size-pill${isDecante ? ' is-decante' : ''}" type="button" data-label="${label}">
                         <span class="spill-indicator"></span>
                         <span class="spill-vol">${vol}</span>
-                        ${hasPrices && priceText ? `<span class="spill-price">${priceText}</span>` : ''}
+                        <span class="spill-price">${priceLabel}</span>
                     </button>`;
                 };
 
@@ -2717,16 +2759,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const sizeButtons = Array.from(document.querySelectorAll('#sizeSelector .size-pill'));
         const sizeOptions = sizeButtons.map((btn) => {
             const bLabel = btn.dataset.label || btn.textContent.trim();
-            const matchingRawSize = Array.isArray(productOverride?.sizes)
-                ? productOverride.sizes.find((raw) => getSizeOptionFromLabel(raw, productPrice).label === bLabel)
-                : bLabel;
-
-            const parsed = getSizeOptionFromLabel(matchingRawSize || bLabel, productPrice);
+            const parsed = normalizedOverrideSizes.find((entry) => entry.label === bLabel)
+                || normalizeSizeOptionEntry(bLabel, productPrice);
             return {
                 button: btn,
                 label: parsed.label,
-                priceText: parsed.priceText || productPrice,
-                unitPrice: parsePriceNumber(parsed.priceText || productPrice)
+                priceText: parsed.priceText,
+                unitPrice: parsePriceNumber(parsed.priceText)
             };
         });
 
@@ -3143,8 +3182,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="${item.image || ''}" alt="${item.name || t('product_fallback')}">
                     <div class="wishlist-item-copy">
                         <p class="wishlist-item-name">${item.name || t('product_fallback')}</p>
-                        <p class="wishlist-item-price">${item.price || ''}</p>
-                        <button class="wishlist-add-cart" type="button" data-id="${item.id}">Add to cart</button>
+                        <p class="wishlist-item-price">${item.price || 'Price on request'}</p>
+                        <button class="wishlist-add-cart" type="button" data-id="${item.id}">${item.price ? 'Add to cart' : 'View product'}</button>
                     </div>
                     <button class="wishlist-remove" type="button" aria-label="${t('wishlist_remove')}">
                         <i class="fas fa-xmark"></i>
@@ -3161,8 +3200,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const wishlistItem = readWishlist().find((item) => item.id === itemId);
                     if (!wishlistItem) return;
 
+                    if (!String(wishlistItem.price || '').trim()) {
+                        navigateToProductPage(wishlistItem);
+                        return;
+                    }
+
                     const cartItems = readCart();
                     const details = getWishlistItemCartDetails(wishlistItem.price);
+
+                    if (details.unitPrice <= 0) {
+                        navigateToProductPage(wishlistItem);
+                        return;
+                    }
 
                     const existingIndex = cartItems.findIndex((item) => (
                         item.name === wishlistItem.name
