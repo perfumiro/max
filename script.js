@@ -4829,6 +4829,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const initBackgroundMusic = () => {
+        const normalizedPath = window.location.pathname.replace(/\\/g, '/').toLowerCase();
+        const isHomePage = normalizedPath === '/' || normalizedPath.endsWith('/index.html') || normalizedPath.endsWith('/index.htm');
+        if (!isHomePage) return;
+
         const playerMountId = 'yt-player';
         const wrapperId = 'yt-bg-music';
         const toggleId = 'music-toggle-btn';
