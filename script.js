@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </button>
                                 <a href="${pagePath('login')}" class="header-icon-btn hover:text-brand-red transition" aria-label="Compte"><i class="far fa-user"></i></a>
                                 <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
-                                <a href="${pagePath('cart')}" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Panier">
+                                <a href="${pagePath('cart')}" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart">
                                     <i class="fas fa-shopping-bag"></i>
                                 </a>
                             </div>
@@ -2440,7 +2440,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${sizeBadgesHtml}
                     </div>
                     <div class="mt-3 pt-3 border-t border-gray-100">
-                        <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Ajouter au panier</button>
+                        <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
                     </div>
                 </article>
             `;
@@ -2540,6 +2540,168 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const accordDefinitions = [
+        { label: 'lavender', weight: 16, color: '#b8addf', textColor: '#233044', terms: ['lavender'] },
+        { label: 'vanilla', weight: 16, color: '#efe8c6', textColor: '#2b2b2b', terms: ['vanilla', 'tonka'] },
+        { label: 'amber', weight: 15, color: '#d4a373', textColor: '#ffffff', terms: ['amber', 'ambery', 'ambree', 'ambrofix'] },
+        { label: 'aromatic', weight: 14, color: '#61c3b1', textColor: '#163b38', terms: ['aromatic', 'sage', 'mint', 'fougere', 'fougère', 'herbal'] },
+        { label: 'woody', weight: 14, color: '#9b7a5f', textColor: '#ffffff', terms: ['woody', 'woods', 'wood', 'cedar', 'sandalwood', 'vetiver', 'patchouli'] },
+        { label: 'fresh spicy', weight: 13, color: '#b6cf84', textColor: '#26321d', terms: ['fresh spice', 'fresh spicy', 'pepper', 'cardamom', 'nutmeg', 'ginger', 'spicy'] },
+        { label: 'warm spicy', weight: 13, color: '#c2885d', textColor: '#ffffff', terms: ['warm spicy', 'spice', 'spicy', 'nutmeg', 'pepper', 'cardamom', 'ginger', 'cinnamon'] },
+        { label: 'fruity', weight: 13, color: '#e88c8b', textColor: '#ffffff', terms: ['fruity', 'apple', 'cherry', 'pineapple', 'blackcurrant', 'mandarin', 'bergamot', 'pear'] },
+        { label: 'floral', weight: 13, color: '#dfa7b8', textColor: '#402633', terms: ['floral', 'jasmine', 'rose', 'orange blossom', 'narcissus', 'iris', 'osmanthus'] },
+        { label: 'white floral', weight: 13, color: '#f2e8ef', textColor: '#533a47', terms: ['white floral', 'jasmine', 'orange blossom', 'tuberose', 'gardenia', 'narcissus'] },
+        { label: 'powdery', weight: 12, color: '#f2ede5', textColor: '#5a5350', terms: ['powdery', 'iris'] },
+        { label: 'citrus', weight: 12, color: '#e7d67a', textColor: '#413a12', terms: ['citrus', 'bergamot', 'lemon', 'mandarin'] },
+        { label: 'leather', weight: 12, color: '#7c5a46', textColor: '#ffffff', terms: ['leather', 'suede'] },
+        { label: 'tobacco', weight: 12, color: '#8b6847', textColor: '#ffffff', terms: ['tobacco'] },
+        { label: 'smoky', weight: 11, color: '#7b7b88', textColor: '#ffffff', terms: ['smoky', 'incense', 'benzoin'] },
+        { label: 'sweet', weight: 11, color: '#e3b1b2', textColor: '#ffffff', terms: ['sweet', 'caramel', 'sugar', 'gourmand', 'chestnut'] },
+        { label: 'earthy', weight: 11, color: '#8c8880', textColor: '#ffffff', terms: ['earthy', 'moss', 'soil', 'vetiver'] },
+        { label: 'fresh', weight: 11, color: '#bbddd2', textColor: '#21433c', terms: ['fresh', 'clean', 'mint', 'watery'] },
+        { label: 'boozy', weight: 11, color: '#8d5a3b', textColor: '#ffffff', terms: ['boozy', 'whisky', 'whiskey', 'rum', 'cognac', 'liqueur'] },
+        { label: 'coffee', weight: 11, color: '#6e4c39', textColor: '#ffffff', terms: ['coffee'] },
+        { label: 'salty', weight: 11, color: '#8fb8cc', textColor: '#173040', terms: ['salty', 'marine', 'sea salt'] },
+        { label: 'herbal', weight: 10, color: '#c8d5cb', textColor: '#33423a', terms: ['herbal', 'clary sage', 'sage', 'green'] },
+        { label: 'musky', weight: 10, color: '#d9d5d0', textColor: '#49433f', terms: ['musk', 'musky'] }
+    ];
+    const accordWidths = ['100%', '93%', '85%', '72%', '69%', '62%', '58%', '54%'];
+    const mainAccordCatalog = {
+        'bleu de chanel eau de parfum spray': ['citrus', 'woody', 'aromatic', 'amber', 'fresh spicy'],
+        'rabanne one million parfum': ['salty', 'white floral', 'amber', 'leather', 'warm spicy'],
+        'rabanne one million elixir intense': ['vanilla', 'sweet', 'fruity', 'warm spicy', 'amber'],
+        'givenchy gentleman society amber eau de parfum': ['amber', 'tobacco', 'woody', 'warm spicy', 'leather'],
+        'givenchy gentleman society nomade eau de parfum': ['woody', 'aromatic', 'floral', 'earthy', 'vanilla'],
+        'givenchy gentleman society extreme eau de parfum': ['aromatic', 'coffee', 'woody', 'warm spicy', 'vanilla'],
+        'gentleman private reserve eau de parfum': ['powdery', 'boozy', 'woody', 'amber', 'sweet'],
+        'jean paul gaultier scandal elixir': ['fruity', 'sweet', 'warm spicy', 'woody', 'amber'],
+        'azzaro the most wanted parfum': ['vanilla', 'amber', 'warm spicy', 'woody', 'sweet'],
+        'azzaro the most wanted eau de parfum intense': ['sweet', 'warm spicy', 'amber', 'woody', 'vanilla'],
+        'azzaro forever wanted elixir eau de parfum': ['amber', 'sweet', 'vanilla', 'woody', 'warm spicy'],
+        'valentino donna born in roma eau de parfum': ['fruity', 'white floral', 'vanilla', 'woody', 'sweet'],
+        'valentino uomo born in roma coral fantasy eau de toilette': ['fruity', 'aromatic', 'tobacco', 'woody', 'fresh spicy'],
+        'valentino born in roma extradose eau de toilette': ['woody', 'aromatic', 'fresh spicy', 'citrus', 'amber'],
+        'dior sauvage eau de parfum': ['fresh spicy', 'amber', 'vanilla', 'woody', 'citrus'],
+        'dior homme intense eau de parfum': ['powdery', 'woody', 'amber', 'musky', 'floral'],
+        'valentino born in roma uomo intense eau de parfum': ['vanilla', 'amber', 'woody', 'aromatic', 'smoky'],
+        'valentino born in roma donna intense eau de parfum': ['vanilla', 'amber', 'white floral', 'woody', 'sweet'],
+        'valentino uomo born in roma eau de toilette': ['citrus', 'aromatic', 'woody', 'fresh spicy', 'fresh'],
+        'emporio armani stronger with you intensely edp': ['vanilla', 'sweet', 'amber', 'warm spicy', 'woody'],
+        'armani stronger with you powerfully eau de parfum': ['fruity', 'aromatic', 'smoky', 'vanilla', 'amber'],
+        'armani stronger with you absolutely perfume': ['boozy', 'vanilla', 'amber', 'sweet', 'woody'],
+        'yves saint laurent y eau de parfum': ['aromatic', 'fresh spicy', 'woody', 'citrus', 'smoky'],
+        'yves saint laurent myslf eau de parfum': ['citrus', 'white floral', 'woody', 'fresh', 'amber'],
+        'yves saint laurent myslf le parfum': ['warm spicy', 'white floral', 'vanilla', 'woody', 'amber'],
+        'jean paul gaultier le male elixir eau de parfum': ['vanilla', 'aromatic', 'sweet', 'amber', 'fresh spicy'],
+        'jean paul gaultier le male le parfum eau de parfum': ['warm spicy', 'vanilla', 'woody', 'amber', 'aromatic'],
+        'jean paul gaultier le beau eau de parfum': ['fruity', 'sweet', 'vanilla', 'woody', 'amber']
+    };
+    const accordLookup = accordDefinitions.reduce((lookup, accord) => {
+        lookup[accord.label] = accord;
+        return lookup;
+    }, {});
+
+    const normalizeAccordEntries = (entries) => entries.slice(0, 8).map((entry, index) => {
+        const label = String(typeof entry === 'string' ? entry : entry?.label || '').trim().toLowerCase();
+        const configuredWidth = typeof entry === 'object' && entry?.width ? entry.width : '';
+        const accordMeta = accordLookup[label] || {
+            color: '#b59374',
+            textColor: '#ffffff'
+        };
+
+        return {
+            label,
+            color: accordMeta.color,
+            textColor: accordMeta.textColor,
+            width: configuredWidth || accordWidths[index] || '52%'
+        };
+    }).filter((accord) => accord.label);
+
+    const buildMainAccords = (productName, productOverride, subtitleText) => {
+        const explicitAccords = Array.isArray(productOverride?.mainAccords)
+            ? productOverride.mainAccords
+            : mainAccordCatalog[canonicalProductName(productName)] || [];
+
+        if (explicitAccords.length) {
+            return normalizeAccordEntries(explicitAccords);
+        }
+
+        const sourceText = normalizeSearchText([
+            productName,
+            subtitleText,
+            productOverride?.longDescription,
+            ...(Array.isArray(productOverride?.notes)
+                ? productOverride.notes.flatMap((note) => [note.title, note.text])
+                : [])
+        ].filter(Boolean).join(' '));
+
+        const matches = accordDefinitions.map((accord, index) => {
+            let score = 0;
+            accord.terms.forEach((term) => {
+                const normalizedTerm = normalizeSearchText(term);
+                if (!normalizedTerm) return;
+                if (sourceText.includes(normalizedTerm)) {
+                    score += accord.weight;
+                }
+            });
+
+            return {
+                ...accord,
+                score,
+                index
+            };
+        }).filter((accord) => accord.score > 0);
+
+        const ranked = (matches.length ? matches : accordDefinitions.slice(0, 6).map((accord, index) => ({
+            ...accord,
+            score: accord.weight - index,
+            index
+        })))
+            .sort((left, right) => right.score - left.score || left.index - right.index)
+            .slice(0, 8);
+
+        return ranked.map((accord, index) => ({
+            label: accord.label,
+            color: accord.color,
+            textColor: accord.textColor,
+            width: accordWidths[index] || '52%'
+        }));
+    };
+
+    const renderMainAccords = (productName, productOverride, subtitleText) => {
+        const targets = [
+            {
+                panel: document.getElementById('productMainAccordsPanel'),
+                list: document.getElementById('productMainAccordsList')
+            },
+            {
+                panel: document.getElementById('productMainAccordsPanelMobile'),
+                list: document.getElementById('productMainAccordsListMobile')
+            }
+        ].filter((target) => target.panel && target.list);
+
+        if (!targets.length) return;
+
+        const accords = buildMainAccords(productName, productOverride, subtitleText);
+        if (!accords.length) {
+            targets.forEach(({ panel }) => {
+                panel.setAttribute('hidden', 'hidden');
+            });
+            return;
+        }
+
+        const markup = accords.map((accord) => `
+            <div class="product-accord-row" style="--accord-width:${accord.width};--accord-bg:${accord.color};--accord-fg:${accord.textColor};">
+                <span class="product-accord-pill">${accord.label}</span>
+            </div>
+        `).join('');
+
+        targets.forEach(({ panel, list }) => {
+            list.innerHTML = markup;
+            panel.removeAttribute('hidden');
+        });
+    };
+
     const initProductDetailPage = () => {
         if (!productNameEl) return;
 
@@ -2636,6 +2798,8 @@ document.addEventListener('DOMContentLoaded', () => {
             subtitle.textContent = productOverride?.subtitle
                 || `${productName} by ${resolvedBrand}: an elegant choice crafted for a modern signature and long-lasting trail.`;
         }
+
+        renderMainAccords(productName, productOverride, subtitle?.textContent || '');
 
         const currentGender = getProductGenderKey(productName, productOverride, subtitle?.textContent || '');
         renderRelatedProducts(productName, resolvedBrand, currentGender);
@@ -4664,11 +4828,188 @@ document.addEventListener('DOMContentLoaded', () => {
         onLanguageChange(() => applyConsentState(readStoredConsent()));
     };
 
+    const initBackgroundMusic = () => {
+        const playerMountId = 'yt-player';
+        const wrapperId = 'yt-bg-music';
+        const toggleId = 'music-toggle-btn';
+        const storageKey = 'ipordise-music-muted';
+        const interactionEvents = ['touchstart', 'click', 'scroll', 'keydown', 'mousemove'];
+        const preferredVideoId = '0HDuzhQOhuM';
+
+        if (!document.body) return;
+
+        let ytPlayer = null;
+        let isReady = false;
+        let isPlaying = false;
+        let isMuted = localStorage.getItem(storageKey) !== 'false';
+
+        if (!document.getElementById(wrapperId)) {
+            const wrapper = document.createElement('div');
+            wrapper.id = wrapperId;
+            wrapper.style.position = 'fixed';
+            wrapper.style.left = '-9999px';
+            wrapper.style.top = '-9999px';
+            wrapper.style.width = '1px';
+            wrapper.style.height = '1px';
+            wrapper.style.overflow = 'hidden';
+            wrapper.style.pointerEvents = 'none';
+            wrapper.setAttribute('aria-hidden', 'true');
+            wrapper.innerHTML = `<div id="${playerMountId}"></div>`;
+            document.body.appendChild(wrapper);
+        }
+
+        if (!document.getElementById(toggleId)) {
+            const button = document.createElement('button');
+            button.id = toggleId;
+            button.className = 'music-toggle-btn';
+            button.setAttribute('aria-label', 'Toggle background music');
+            button.title = 'Background Music';
+            button.innerHTML = `
+                <span class="music-toggle-icon"><i class="fas fa-music"></i></span>
+                <span class="music-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span class="music-toggle-tooltip">Tap to hear music</span>
+            `;
+            document.body.appendChild(button);
+        }
+
+        const updateBtn = () => {
+            const btn = document.getElementById(toggleId);
+            if (!btn) return;
+
+            btn.classList.toggle('is-playing', isReady && isPlaying && !isMuted);
+            btn.classList.toggle('is-muted', !isReady || isMuted);
+            btn.setAttribute('aria-label', isMuted ? 'Unmute background music' : 'Mute background music');
+        };
+
+        const persistMutedState = () => {
+            localStorage.setItem(storageKey, String(isMuted));
+        };
+
+        const removeInteractionListeners = () => {
+            interactionEvents.forEach((eventName) => {
+                document.removeEventListener(eventName, startAndUnmuteOnInteraction);
+            });
+        };
+
+        const startAndUnmuteOnInteraction = () => {
+            if (!ytPlayer || !isReady || !isMuted) return;
+            ytPlayer.playVideo();
+            ytPlayer.unMute();
+            ytPlayer.setVolume(40);
+            isMuted = false;
+            persistMutedState();
+            updateBtn();
+            removeInteractionListeners();
+        };
+
+        const setupMusicBtn = () => {
+            const btn = document.getElementById(toggleId);
+            if (!btn || btn.dataset.musicBound === 'true') return;
+            btn.dataset.musicBound = 'true';
+
+            btn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                if (!ytPlayer || !isReady) return;
+
+                if (isMuted) {
+                    ytPlayer.playVideo();
+                    ytPlayer.unMute();
+                    ytPlayer.setVolume(40);
+                    isMuted = false;
+                    removeInteractionListeners();
+                } else {
+                    ytPlayer.mute();
+                    isMuted = true;
+                }
+
+                persistMutedState();
+                updateBtn();
+            });
+        };
+
+        const onPlayerReady = (event) => {
+            isReady = true;
+            ytPlayer = event.target;
+            ytPlayer.setVolume(40);
+
+            if (isMuted) {
+                ytPlayer.mute();
+                ytPlayer.playVideo();
+                interactionEvents.forEach((eventName) => {
+                    document.addEventListener(eventName, startAndUnmuteOnInteraction, { passive: true });
+                });
+            } else {
+                ytPlayer.unMute();
+                ytPlayer.playVideo();
+            }
+
+            updateBtn();
+        };
+
+        const onPlayerStateChange = (event) => {
+            if (event.data === 1) {
+                isPlaying = true;
+            } else if (event.data === 0 || event.data === 2) {
+                isPlaying = false;
+            }
+            updateBtn();
+        };
+
+        const createPlayer = () => {
+            if (!window.YT || !window.YT.Player || document.getElementById(playerMountId)?.dataset.playerReady === 'true') return;
+            const mount = document.getElementById(playerMountId);
+            if (!mount) return;
+            mount.dataset.playerReady = 'true';
+
+            ytPlayer = new window.YT.Player(playerMountId, {
+                videoId: preferredVideoId,
+                playerVars: {
+                    autoplay: 1,
+                    mute: isMuted ? 1 : 0,
+                    loop: 1,
+                    playlist: preferredVideoId,
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    playsinline: 1,
+                    iv_load_policy: 3,
+                    modestbranding: 1,
+                    rel: 0
+                },
+                events: {
+                    onReady: onPlayerReady,
+                    onStateChange: onPlayerStateChange
+                }
+            });
+        };
+
+        setupMusicBtn();
+        updateBtn();
+
+        if (window.YT && window.YT.Player) {
+            createPlayer();
+            return;
+        }
+
+        const previousReady = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = function () {
+            if (typeof previousReady === 'function') previousReady();
+            createPlayer();
+        };
+
+        if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+            const tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            document.head.appendChild(tag);
+        }
+    };
+
     applyOfficialHeaderFooter();
     initBrandLogoDotAnimation();
     normalizeLegacyFrenchContent();
     initLanguageSwitcher();
     initMobileSearchToggle();
+    initBackgroundMusic();
     initConsentBanner();
     initLoginLegalConsent();
     disableInspectTools();

@@ -2567,6 +2567,107 @@ button.product-favorite-btn.is-active i {
     z-index: -1;
 }
 
+.product-main-accords-panel {
+    margin-top: 1.8rem;
+}
+
+.product-main-accords-card {
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 1.25rem;
+    background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+    padding: 1.5rem 1.55rem 1.6rem;
+    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+}
+
+.product-main-accords-head {
+    margin-bottom: 1.2rem;
+}
+
+.product-main-accords-kicker {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 0.45rem;
+}
+
+.product-main-accords-title {
+    font-size: 1.45rem;
+    line-height: 1.1;
+    font-weight: 700;
+    color: #111827;
+}
+
+.product-main-accords-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.32rem;
+}
+
+.product-main-accords-panel-mobile {
+    display: none;
+    margin-bottom: 1.4rem;
+}
+
+.product-accord-row {
+    width: min(100%, var(--accord-width));
+}
+
+.product-accord-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 2.6rem;
+    padding: 0.45rem 1rem;
+    border-radius: 0 0.95rem 0.95rem 0;
+    background: var(--accord-bg);
+    color: var(--accord-fg);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-transform: lowercase;
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.24);
+}
+
+@media (max-width: 1023px) {
+    .product-main-accords-panel-desktop {
+        display: none !important;
+    }
+
+    .product-main-accords-panel-mobile {
+        display: block;
+    }
+
+    .product-main-accords-panel-mobile .product-main-accords-card {
+        padding: 1rem 1rem 1.05rem;
+        border-radius: 1rem;
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.07);
+    }
+
+    .product-main-accords-panel-mobile .product-main-accords-title {
+        font-size: 1.2rem;
+    }
+
+    .product-main-accords-panel-mobile .product-main-accords-kicker {
+        font-size: 0.62rem;
+        letter-spacing: 0.16em;
+    }
+
+    .product-main-accords-panel-mobile .product-main-accords-list {
+        gap: 0.28rem;
+    }
+
+    .product-main-accords-panel-mobile .product-accord-pill {
+        min-height: 2.35rem;
+        font-size: 0.82rem;
+        border-radius: 0 0.85rem 0.85rem 0;
+    }
+}
+
 /* Brand Banner */
 .product-brand-banner {
     background: #1a1a1a;
