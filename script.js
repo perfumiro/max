@@ -1891,6 +1891,22 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     };
 
+    const extractCurrentProductData = () => {
+        const mainImageEl = document.getElementById('productMainImage');
+        const reviewsEl = document.getElementById('productReviewsCount');
+        const params = new URLSearchParams(window.location.search);
+
+        return {
+            name: (document.getElementById('productName')?.textContent || params.get('name') || 'Premium Product').trim(),
+            brand: (document.getElementById('productBrand')?.textContent || params.get('brand') || 'IPORDISE').trim(),
+            price: '',
+            oldPrice: (document.getElementById('productOldPrice')?.textContent || params.get('oldPrice') || '').trim(),
+            discount: (document.getElementById('productDiscount')?.textContent || params.get('discount') || '').trim(),
+            reviews: ((reviewsEl?.textContent || params.get('reviews') || '').replace(/[^0-9]/g, '') || '0').trim(),
+            image: normalizeImagePathForCurrentPage(mainImageEl?.getAttribute('src') || params.get('image') || '')
+        };
+    };
+
     const buildProductQuery = (data) => new URLSearchParams({
         name: data.name || '',
         brand: data.brand || '',
@@ -3264,9 +3280,8 @@ document.addEventListener('DOMContentLoaded', () => {
             button.classList.add('product-favorite-btn');
 
             const card = findCardForFavoriteButton(button);
-            if (!card) return;
-
-            const data = extractProductDataFromCard(card);
+            const data = card ? extractProductDataFromCard(card) : extractCurrentProductData();
+            if (!data.name) return;
             const favoriteId = getFavoriteId(data);
             button.dataset.favoriteId = favoriteId;
 
