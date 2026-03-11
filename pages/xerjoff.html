@@ -725,10 +725,10 @@
                         <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
                         <p class="xerjoff-size-label">Size</p>
                         <div class="xerjoff-size-row">
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'alex-price','90 DH')">5 ML</button>
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'alex-price','160 DH')">10 ML</button>
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'alex-price','')">5 ML</button>
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'alex-price','')">10 ML</button>
                         </div>
-                        <p id="alex-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to see the price</p>
+                        <p id="alex-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to request the price</p>
                         <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
                         <div class="xerjoff-qty-row">
                             <div class="xerjoff-qty-box">
@@ -736,7 +736,7 @@
                                 <span id="alex-qty" class="xerjoff-qty-val">1</span>
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('alex-qty',1)">+</button>
                             </div>
-                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('alex','Alexandria II')">Add to Cart</button>
+                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('alex','Alexandria II')">Ask on WhatsApp</button>
                             <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
                         </div>
                         <div class="xerjoff-trust-chips">
@@ -776,10 +776,10 @@
                         <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
                         <p class="xerjoff-size-label">Size</p>
                         <div class="xerjoff-size-row">
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'erba-price','90 DH')">5 ML</button>
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'erba-price','160 DH')">10 ML</button>
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'erba-price','')">5 ML</button>
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'erba-price','')">10 ML</button>
                         </div>
-                        <p id="erba-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to see the price</p>
+                        <p id="erba-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to request the price</p>
                         <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
                         <div class="xerjoff-qty-row">
                             <div class="xerjoff-qty-box">
@@ -787,7 +787,7 @@
                                 <span id="erba-qty" class="xerjoff-qty-val">1</span>
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('erba-qty',1)">+</button>
                             </div>
-                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('erba','Erba Pura')">Add to Cart</button>
+                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('erba','Erba Pura')">Ask on WhatsApp</button>
                             <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
                         </div>
                         <div class="xerjoff-trust-chips">
@@ -827,10 +827,10 @@
                         <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
                         <p class="xerjoff-size-label">Size</p>
                         <div class="xerjoff-size-row">
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'naxos-price','90 DH')">5 ML</button>
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'naxos-price','160 DH')">10 ML</button>
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'naxos-price','')">5 ML</button>
+                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'naxos-price','')">10 ML</button>
                         </div>
-                        <p id="naxos-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to see the price</p>
+                        <p id="naxos-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to request the price</p>
                         <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
                         <div class="xerjoff-qty-row">
                             <div class="xerjoff-qty-box">
@@ -838,7 +838,7 @@
                                 <span id="naxos-qty" class="xerjoff-qty-val">1</span>
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('naxos-qty',1)">+</button>
                             </div>
-                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('naxos','Naxos')">Add to Cart</button>
+                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('naxos','Naxos')">Ask on WhatsApp</button>
                             <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
                         </div>
                         <div class="xerjoff-trust-chips">
@@ -870,11 +870,12 @@
             btn.closest('.xerjoff-size-row').querySelectorAll('.xerjoff-size-btn').forEach(function(b){ b.classList.remove('is-active'); });
             btn.classList.add('is-active');
             var el = document.getElementById(priceId);
-            el.textContent = price;
-            el.style.color = '#1a1a1a';
-            el.style.fontSize = '1.9rem';
-            el.style.fontWeight = '800';
-            el.dataset.price = price;
+            var hasPrice = !!String(price || '').trim();
+            el.textContent = hasPrice ? price : 'Price on Request';
+            el.style.color = hasPrice ? '#1a1a1a' : '#16a34a';
+            el.style.fontSize = hasPrice ? '1.9rem' : '1.1rem';
+            el.style.fontWeight = hasPrice ? '800' : '700';
+            el.dataset.price = price || '';
             el.dataset.size = btn.textContent.trim();
         }
         function xerjoffQty(qtyId, delta) {
@@ -892,8 +893,13 @@
             var priceEl = document.getElementById(prefix + '-price');
             var sizeLabel = priceEl && priceEl.dataset.size;
             var priceText = priceEl && priceEl.dataset.price;
-            if (!sizeLabel || !priceText) {
+            if (!sizeLabel) {
                 alert('Please select a size first.');
+                return;
+            }
+            if (!priceText) {
+                var msg = 'Bonjour IPORDISE 👋%0A%0AJe suis intéressé(e) par :%0A🌸 *' + encodeURIComponent(productName) + '*%0A📦 Taille : *' + encodeURIComponent(sizeLabel) + '*%0A%0APourriez-vous me donner le prix et les détails de livraison ? Merci !';
+                window.open('https://wa.me/212600000000?text=' + msg, '_blank');
                 return;
             }
             var qty = parseInt(document.getElementById(prefix + '-qty').textContent) || 1;
