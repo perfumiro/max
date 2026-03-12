@@ -811,6 +811,306 @@ document.addEventListener('DOMContentLoaded', () => {
                 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/4.jpg'
             ]
         },
+        'hugo boss the scent for him elixir': {
+            brand: 'HUGO BOSS',
+            gender: 'men',
+            fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 80, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
+            subtitle: "Men's fragrance · Amber Woody Leather · A highly concentrated elixir with spicy chili pepper, lavandin absolute, and warm sandalwood.",
+            longDescription: 'Awaken your senses with BOSS The Scent Elixir for Men, a captivating and highly concentrated intense fragrance that symbolizes the powerful alchemy between two unique partners. Taking the intensity of BOSS The Scent to new heights, this amber, woody, and leathery fragrance combines vibrant contrasts to deliver irresistible allure. The composition opens with a burst of spicy chili pepper, providing a complex and stimulating touch, while lavandin absolute adds freshness and vitality. At the base, Caledonian sandalwood infuses a warm, woody depth, leaving a deeply enveloping and unforgettable trail. BOSS The Scent Elixir for Men redefines sensuality in a sophisticated bottle lacquered in an intense red, adorned with the BOSS logo and an elegant gold cap with the Double B monogram. Its multifaceted design and vibrant hue reflect the magnetic and seductive essence of this fragrance, highlighting the many facets of an irresistible connection.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'CHILI PEPPER BURST',
+                    text: 'A vivid spicy opening that feels hot, stimulating, and immediately magnetic.'
+                },
+                {
+                    title: 'LAVANDIN ABSOLUTE',
+                    text: 'Aromatic lavandin brings freshness and balance to the heart with refined masculine clarity.'
+                },
+                {
+                    title: 'CALEDONIAN SANDALWOOD',
+                    text: 'Warm sandalwood anchors the base with creamy woody depth and a deeply sensual trail.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/1.png',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/2.png',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/3.png',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/4.png',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/5.png'
+            ]
+        },
+        'boss bottled absolu intense': {
+            brand: 'HUGO BOSS',
+            gender: 'men',
+            fragranceProfile: { longevity: 92, longevityLabel: '10-12h', sillage: 82, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
+            subtitle: "Men's fragrance · Woody Leather · A bold intense signature with toasted leather, frankincense, patchouli, myrrh, cedarwood, and davana.",
+            longDescription: 'Express ultimate sophistication with BOSS Bottled Absolu, a bold and intense fragrance with irresistible toasted notes. Modern and memorable, this distinctive scent embodies the power of the BOSS man, who brings his unique touch to every decision, every challenge, and every success. This woody fragrance with leathery notes, the third installment in the BOSS BOTTLED trilogy of intensity, instantly captivates the senses. A captivating scent from BOSS, formulated with the highest concentration in the fragrance family to date, crafted from its quintessential woody signature with absolute depth: the very essence of BOSS. BOSS Bottled Absolu, created by Annick Menardo in collaboration with Suzy Le Helley, opens smoothly with a textured leather accord with toasty facets, in harmony with the invigorating essence of frankincense. At the heart of this BOSS fragrance for men, the enveloping essence of patchouli and myrrh absolute exalt the strength and splendor of a sophisticated aroma. The warm cedarwood and fruity davana base notes leave a lasting and exquisite trail. The unique bottle of BOSS Bottled is imbued with richness, featuring a warm, luminous amber base that evokes the nobility of the tempting and exquisite fragrance within. A double lacquer finish and a gleaming gold cap complete the exquisite presentation of this woody men\'s fragrance, the perfect accessory for the positive BOSS attitude.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'TOASTED LEATHER & FRANKINCENSE',
+                    text: 'A textured opening where smooth leather meets luminous frankincense for an intense and sophisticated start.'
+                },
+                {
+                    title: 'PATCHOULI & MYRRH ABSOLUTE',
+                    text: 'A rich heart of patchouli and myrrh absolute builds depth, strength, and elegant aromatic warmth.'
+                },
+                {
+                    title: 'CEDARWOOD & DAVANA',
+                    text: 'Warm cedarwood and fruity davana create a refined base with lasting richness and a memorable trail.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/1.jpeg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/2.jpeg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/3.jpeg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/4.jpeg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/5.jpeg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/6.jpeg'
+            ]
+        },
+        'hugo boss boss bottled elixir intense': {
+            brand: 'HUGO BOSS',
+            gender: 'men',
+            fragranceProfile: { longevity: 92, longevityLabel: '10-12h', sillage: 84, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
+            subtitle: "Men's fragrance · Woody Amber · A highly concentrated elixir with incense, cardamom, vetiver, patchouli, cedar, and cistus absolute.",
+            longDescription: 'Experience intensity at its peak. A sophisticated and highly concentrated formula, BOSS Bottled Elixir inspires you to find your inner light and become your own BOSS. This exquisite men\'s fragrance, capturing a high-impact woody and amber scent of BOSS Bottled, features warm top notes of incense and cardamom, a tempting heart of vetiver and patchouli, and a base of cedar essence. Launched 25 years after the original BOSS Bottled, BOSS Bottled Elixir reinterprets a fragrance icon with a vigorous statement, promising unparalleled depth and an enveloping experience. Created by the iconic master perfumer Annick Menardo, creator of the signature BOSS Bottled fragrance, in close collaboration with perfumer Suzy le Helley, this irresistible fragrance celebrates the reinvention of a contemporary classic. The Elixir exudes an incredibly captivating fragrance, rich in highly concentrated ingredients. The essences of frankincense and cardamom radiate warmth and vitality, while the heart of vetiver and patchouli leaves an earthy and unforgettable imprint. With a base of cedar essence and cistus absolute, BOSS Bottled Elixir gives the wearer a strong charisma with woody notes and an explosion of fearless virility. The exclusive BOSS Bottled glass bottle features an intense black lacquered finish that gives way to a golden glow at the center, like a guide for the spirit of the modern BOSS man in the search for his inner light. Its glossy ceramic finish and gold-colored brushed cap further enhance the elegance of this new creation in the BOSS Bottled universe.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'INCENSE & CARDAMOM',
+                    text: 'Warm frankincense and cardamom open the scent with radiant spice, vitality, and immediate presence.'
+                },
+                {
+                    title: 'VETIVER & PATCHOULI',
+                    text: 'An earthy heart of vetiver and patchouli builds depth, structure, and an unforgettable masculine imprint.'
+                },
+                {
+                    title: 'CEDAR & CISTUS ABSOLUTE',
+                    text: 'Cedar essence and cistus absolute create a powerful woody base with strong charisma and lasting intensity.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/1.jpeg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/2.jpeg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/4.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/5.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/6.jpg'
+            ]
+        },
+        'guerlain l homme id al l intense eau de parfum': {
+            brand: 'GUERLAIN',
+            gender: 'men',
+            fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 78, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
+            subtitle: "Men's fragrance · Oriental Woody · A spicy and vigorously elegant signature with dark oriental warmth.",
+            longDescription: "The ideal man is a myth. But thanks to Guerlain, his fragrance is a reality with L'Homme Idéal L'Intense. An oriental woody fragrance, spicy and vigorously elegant. Masculine, luxurious, a unique fragrance in a square, faceted bottle entirely lacquered in black. Intensity is the high point of this new interpretation of the Ideal Man.",
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'ORIENTAL WOODY SIGNATURE',
+                    text: 'A deep oriental-woody profile that feels warm, refined, and confidently masculine.'
+                },
+                {
+                    title: 'SPICY ELEGANCE',
+                    text: 'Spiced facets bring energy and structure to the composition with vigorous sophistication.'
+                },
+                {
+                    title: 'BLACK LACQUERED INTENSITY',
+                    text: 'A luxurious, intensely styled trail mirrored by the faceted black bottle design.'
+                }
+            ],
+            images: [
+                "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'Homme%20Id%C3%A9al%20L'Intense%20Eau%20de%20Parfum/1.webp",
+                "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'Homme%20Id%C3%A9al%20L'Intense%20Eau%20de%20Parfum/2.jpg"
+            ]
+        },
+        'guerlain l homme id al extr me': {
+            brand: 'GUERLAIN',
+            gender: 'men',
+            fragranceProfile: { longevity: 86, longevityLabel: '8-10h', sillage: 76, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
+            subtitle: "Men's fragrance · Oriental Woody · A rich and elegant composition with almond, bergamot, spices, plum, woods, tobacco, and leather.",
+            longDescription: "L'homme Idéal Extrême Eau de Parfum by Guerlain. The ideal man is a myth. His cologne, a reality. It's an oriental woody perfume that will keep you looking like an extremely talented man. Your L'Homme Idéal Extrême fragrance in the iconic White Bees Bottle. In 1853, the glassmaker Pochet & du Courval made the bottle, on which is written 'aux abeilles' (for the bees), for the fragrance Eau de Cologne Impériale intended for Empress Eugénie. Its 'tiles', inspired by the dome of the Vendôme column, are adorned with 69 golden bees, symbols of the Empire. The bottle celebrates 160 years and can hold the fragrance of your choice and be personalized with the initials you wish. The color of the perfume and the label seal vary depending on the fragrance. For this new interpretation of L'Homme Idéal, Thierry Wasser, perfumer at Maison Guerlain, has chosen to explore new facets of the almond. The top notes of almond are accompanied by the effervescence of bergamot blended with pink pepper. In the heart notes, cinnamon and plum notes join heliotrope, a floral note with elegant almond accents. Finally, the charm of a woody base note of patchouli and cedar is dressed in tobacco and an intense leather note.",
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'ALMOND, BERGAMOT & PINK PEPPER',
+                    text: 'An elegant opening where almond meets sparkling bergamot and bright pink pepper for refined lift.'
+                },
+                {
+                    title: 'CINNAMON, PLUM & HELIOTROPE',
+                    text: 'A textured heart of spice, fruit, and floral almond nuances builds warmth and sophistication.'
+                },
+                {
+                    title: 'PATCHOULI, CEDAR, TOBACCO & LEATHER',
+                    text: 'A powerful woody base wrapped in tobacco and intense leather leaves a rich masculine trail.'
+                }
+            ],
+            images: [
+                "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'homme%20Id%C3%A9al%20Extr%C3%AAme/1.jpg",
+                "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'homme%20Id%C3%A9al%20Extr%C3%AAme/2.jpg"
+            ]
+        },
+        'versace eros eau de parfum': {
+            brand: 'VERSACE',
+            gender: 'men',
+            fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 82, sillageLabel: 'Strong', season: 70, seasonLabel: 'All Year' },
+            subtitle: "Men's fragrance · Aromatic Amber · A bold and sensual signature with mint, lemon, green apple, tonka bean, ambroxan, vanilla, and cedar.",
+            longDescription: 'Versace Eros Eau de Parfum is a bold statement inspired by Greek mythology and the god of love. More than a fragrance, it is the ultimate expression of strength, passion, and irresistible sensuality for the modern, charismatic man. Its fresh and vibrant opening combines mint leaves, the liveliness of Italian lemon and the fruity sweetness of green apple, instantly awakening the senses. At its heart, warm and enveloping notes of tonka bean, geranium and the modern accord of ambroxan create a subtle balance between elegance and modernity. The deep and seductive base combines Madagascar vanilla, earthy vetiver, aromatic oakmoss, and the nobility of Virginia cedar and Atlas cedar, giving this fragrance exceptional intensity and longevity. Let Versace Eros Eau de Parfum accompany you in every conquest with power and sensuality. Dare to be unforgettable.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'MINT, LEMON & GREEN APPLE',
+                    text: 'A bright and energetic opening where cool mint meets sparkling citrus and crisp fruity freshness.'
+                },
+                {
+                    title: 'TONKA, GERANIUM & AMBROXAN',
+                    text: 'A warm modern heart balances aromatic elegance with sensual depth and smooth diffusion.'
+                },
+                {
+                    title: 'VANILLA, VETIVER & CEDARS',
+                    text: 'Vanilla, earthy woods, oakmoss, and cedar create an intense base with lasting masculine allure.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Eau%20de%20Parfum/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Eau%20de%20Parfum/2.jpg'
+            ]
+        },
+        'versace eros flame eau de parfum': {
+            brand: 'VERSACE',
+            gender: 'men',
+            fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 82, sillageLabel: 'Strong', season: 65, seasonLabel: 'All Year' },
+            subtitle: "Men's fragrance · Woody Spicy · A fiery and refined signature with citrus, black pepper, rosemary, rose, woods, tonka bean, and vanilla.",
+            longDescription: 'Versace Eros Flame is an intense and emotional olfactory statement. Designed for the strong, passionate, and self-assured man, this fragrance plays with the most powerful contrasts: warmth and coolness, sweetness and spice, light and shadow. From the opening, a vibrant citrus burst of Italian lemon, mandarin and bitter orange blends with black pepper from Madagascar and wild rosemary, creating a fiery yet refreshing start. The heart reveals a masculine floral elegance with geranium, rose and a subtle spicy note of pepperwood. Finally, the base notes envelop with warmth and depth: Texas cedar, Haitian vetiver, patchouli coeur, sandalwood, tonka bean, vanilla and oakmoss, leaving a sensual, refined and long-lasting trail. Love intensely. Live with fire. Dare to feel with Eros Flame.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'CITRUS, PEPPER & ROSEMARY',
+                    text: 'A vivid opening of citrus, black pepper, and rosemary creates a fiery yet refreshing first impression.'
+                },
+                {
+                    title: 'GERANIUM, ROSE & PEPPERWOOD',
+                    text: 'The heart balances masculine floral elegance with a subtle spicy edge and modern sophistication.'
+                },
+                {
+                    title: 'CEDAR, VETIVER, TONKA & VANILLA',
+                    text: 'Warm woods, tonka bean, vanilla, and oakmoss build a sensual, deep, and long-lasting trail.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Flame%20Eau%20de%20Parfum/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Flame%20Eau%20de%20Parfum/2.jpg'
+            ]
+        },
+        'versace eros energy eau de parfum': {
+            brand: 'VERSACE',
+            gender: 'men',
+            fragranceProfile: { longevity: 84, longevityLabel: '8-10h', sillage: 76, sillageLabel: 'Strong', season: 90, seasonLabel: 'Spring/Summer' },
+            subtitle: "Men's fragrance · Citrus Aromatic · A vibrant fresh signature with bergamot, blood orange, lime, grapefruit, pink pepper, blackcurrant, amber, patchouli, and musk.",
+            longDescription: "VERSACE presents Eros Energy Eau de Parfum, a masculine fragrance that conveys vitality from its first application. VERSACE Eros Energy Eau de Parfum stands out for its citrus composition, with top notes of Italian bergamot, blood orange, Peruvian lime, green mandarin, grapefruit, and Italian lemon. The heart of VERSACE Eros Energy Eau de Parfum incorporates Orpur CO2 pink pepper and blackcurrant, contrasted with Ambrofix white amber. This aromatic combination in Eros Energy Eau de Parfum reflects the dynamic character of VERSACE. At the base, Orpur Indonesian patchouli, musk, and oakmoss add depth. The Eros Energy Eau de Parfum bottle maintains VERSACE's distinctive style, with translucent yellow glass and details like the engraved Medusa. Eros Energy Eau de Parfum is designed for those seeking a fragrance that combines freshness, contrast, and longevity, in keeping with VERSACE's identity.",
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'BERGAMOT, BLOOD ORANGE & LIME',
+                    text: 'A vivid citrus opening delivers brightness, freshness, and immediate energetic lift.'
+                },
+                {
+                    title: 'PINK PEPPER, BLACKCURRANT & WHITE AMBER',
+                    text: 'The heart blends spicy sparkle, fruity contrast, and modern amber smoothness.'
+                },
+                {
+                    title: 'PATCHOULI, MUSK & OAKMOSS',
+                    text: 'A clean but deep base of patchouli, musk, and oakmoss adds structure and lasting character.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Energy%20Eau%20de%20Parfum/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Energy%20Eau%20de%20Parfum/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Energy%20Eau%20de%20Parfum/3.jpg'
+            ]
+        },
+        'versace dylan blue eau de toilette': {
+            brand: 'VERSACE',
+            gender: 'men',
+            fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 74, sillageLabel: 'Moderate', season: 85, seasonLabel: 'All Year' },
+            subtitle: "Men's fragrance · Fresh Woody · A Mediterranean signature with bergamot, grapefruit, saffron, musk, and elegant woody depth.",
+            longDescription: 'Dylan Blue Pour Homme Eau de Toilette is a fresh, woody fragrance that captures the sensual and powerful essence of the Mediterranean. Designed for the strong, decisive, and modern man who seeks to highlight his unique personality, this olfactory composition combines fresh and spicy notes with exceptional longevity. The opening is refreshed with vibrant citrus notes of bergamot and grapefruit, enriched with unusual spicy nuances of saffron and an intense base of musk. The result is a masculine and elegant scent, ideal for any occasion. The rectangular glass bottle, in a deep blue with golden details, reflects the sophistication and strength of this fragrance. Experience the freshness and power of the Mediterranean with Dylan Blue Pour Homme. A fragrance that defines your style and character.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'BERGAMOT & GRAPEFRUIT',
+                    text: 'A crisp citrus opening brings Mediterranean freshness, brightness, and immediate energy.'
+                },
+                {
+                    title: 'SAFFRON SPICE',
+                    text: 'An unusual spicy nuance adds texture and elegant masculine character to the heart.'
+                },
+                {
+                    title: 'MUSK & WOODY DEPTH',
+                    text: 'Musk and woods create a smooth, powerful base with refined lasting presence.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Dylan%20Blue%20%20Eau%20de%20Toilette/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Dylan%20Blue%20%20Eau%20de%20Toilette/2.jpg'
+            ]
+        },
         'rabanne one million parfum': {
             brand: 'RABANNE',
             gender: 'men',
@@ -1737,6 +2037,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     productDetailOverrides['jean paul gaultier le homme elixir eau de parfum'] = productDetailOverrides['jean paul gaultier le male elixir eau de parfum'];
     productDetailOverrides['jean paul gaultier le homme le parfum eau de parfum'] = productDetailOverrides['jean paul gaultier le male le parfum eau de parfum'];
+    productDetailOverrides['guerlain l homme ideal l intense eau de parfum'] = productDetailOverrides['guerlain l homme id al l intense eau de parfum'];
+    productDetailOverrides['guerlain l homme ideal extreme'] = productDetailOverrides['guerlain l homme id al extr me'];
 
     const cartStorageKey = 'cart';
 
@@ -2731,6 +3033,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const accordWidths = ['100%', '93%', '85%', '72%', '69%', '62%', '58%', '54%'];
     const mainAccordCatalog = {
         'bleu de chanel eau de parfum spray': ['citrus', 'woody', 'aromatic', 'amber', 'fresh spicy'],
+        'hugo boss the scent for him elixir': ['warm spicy', 'aromatic', 'woody', 'amber', 'leather'],
+        'boss bottled absolu intense': ['leather', 'woody', 'warm spicy', 'resinous', 'amber'],
+        'hugo boss boss bottled elixir intense': ['woody', 'amber', 'warm spicy', 'earthy', 'resinous'],
+        'guerlain l homme id al l intense eau de parfum': ['warm spicy', 'woody', 'amber', 'oriental', 'leather'],
+        'guerlain l homme ideal l intense eau de parfum': ['warm spicy', 'woody', 'amber', 'oriental', 'leather'],
+        'guerlain l homme id al extr me': ['almond', 'warm spicy', 'woody', 'tobacco', 'leather'],
+        'guerlain l homme ideal extreme': ['almond', 'warm spicy', 'woody', 'tobacco', 'leather'],
+        'versace eros eau de parfum': ['fresh', 'vanilla', 'aromatic', 'woody', 'amber'],
+        'versace eros flame eau de parfum': ['citrus', 'warm spicy', 'woody', 'vanilla', 'aromatic'],
+        'versace eros energy eau de parfum': ['citrus', 'fresh', 'aromatic', 'musky', 'woody'],
+        'versace dylan blue eau de toilette': ['citrus', 'fresh spicy', 'musky', 'woody', 'aromatic'],
         'rabanne one million parfum': ['salty', 'white floral', 'amber', 'leather', 'warm spicy'],
         'rabanne one million elixir intense': ['vanilla', 'sweet', 'fruity', 'warm spicy', 'amber'],
         'givenchy gentleman society amber eau de parfum': ['amber', 'tobacco', 'woody', 'warm spicy', 'leather'],
