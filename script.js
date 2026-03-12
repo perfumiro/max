@@ -1868,6 +1868,126 @@ document.addEventListener('DOMContentLoaded', () => {
         return Number.isFinite(parsed) ? parsed : fallbackIndex;
     };
 
+    const toProductDataId = (value) => String(value || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+    const getPricesJsonPath = () => {
+        const normalizedPath = window.location.pathname.replace(/\\/g, '/');
+        return normalizedPath.includes('/pages/') ? '../prices.json' : 'prices.json';
+    };
+
+    const PRICE_SIZE_ORDER = ['10ml', '20ml', '30ml', '50ml', '100ml'];
+
+    const formatPriceAmount = (amount) => `${amount}DH`;
+
+    const formatSizeLabel = (sizeKey) => String(sizeKey || '').replace(/ml$/i, ' ML').toUpperCase();
+
+    let pricesJsonPromise = null;
+
+    const loadPricesJson = async () => {
+        if (!pricesJsonPromise) {
+            pricesJsonPromise = fetch(getPricesJsonPath(), { cache: 'no-store' })
+                .then((response) => {
+                    if (!response.ok) return {};
+                    return response.json();
+                })
+                .then((pricesById) => (pricesById && typeof pricesById === 'object' ? pricesById : {}))
+                .catch(() => ({}));
+        }
+
+        return pricesJsonPromise;
+    };
+
+    const getPriceTextByProductId = (productId, pricesById) => {
+        const normalizedId = String(productId || '').trim();
+        if (!normalizedId || !pricesById || typeof pricesById !== 'object') return '';
+        return typeof pricesById[normalizedId] === 'string'
+            ? pricesById[normalizedId].trim()
+            : '';
+    };
+
+    const getProductPriceMap = (productId, pricesById) => {
+        const normalizedId = String(productId || '').trim();
+        const rawPrices = normalizedId && pricesById && typeof pricesById === 'object'
+            ? pricesById[normalizedId]
+            : null;
+
+        return PRICE_SIZE_ORDER.reduce((accumulator, sizeKey) => {
+            const rawValue = rawPrices && typeof rawPrices === 'object' ? rawPrices[sizeKey] : 0;
+            const parsedValue = Number(rawValue);
+            accumulator[sizeKey] = Number.isFinite(parsedValue) && parsedValue > 0 ? parsedValue : 0;
+            return accumulator;
+        }, {});
+    };
+
+    const getAvailableSizePriceOptions = (productId, pricesById) => {
+        const productPrices = getProductPriceMap(productId, pricesById);
+
+        return PRICE_SIZE_ORDER
+            .map((sizeKey) => ({
+                sizeKey,
+                label: formatSizeLabel(sizeKey),
+                price: productPrices[sizeKey],
+                priceText: productPrices[sizeKey] > 0 ? formatPriceAmount(productPrices[sizeKey]) : '',
+                unitPrice: productPrices[sizeKey],
+                isDecante: ['10ml', '20ml', '30ml'].includes(sizeKey),
+                volumeLabel: formatSizeLabel(sizeKey)
+            }))
+            .filter((entry) => entry.price > 0);
+    };
+
+    const formatCatalogPrice = (productId, pricesById) => {
+        const sizeOptions = getAvailableSizePriceOptions(productId, pricesById);
+        return sizeOptions
+            .map((entry) => `${entry.label.replace(/\s+/g, '')} ${entry.priceText}`)
+            .join(' - ');
+    };
+
+    const ensureCardPriceElement = (card) => {
+        if (!card) return null;
+
+        const existingPriceEl = card.querySelector('.price');
+        if (existingPriceEl) return existingPriceEl;
+
+        const titleEl = card.querySelector('.product-title, .related-title, h3, h4');
+        if (!titleEl) return null;
+
+        const priceEl = document.createElement('p');
+        priceEl.className = 'price';
+        titleEl.insertAdjacentElement('afterend', priceEl);
+        return priceEl;
+    };
+
+    const initCatalogPrices = async () => {
+        const cards = Array.from(document.querySelectorAll('.js-product-link[data-id]'));
+        if (!cards.length) return;
+
+        cards.forEach((card) => {
+            ensureCardPriceElement(card);
+        });
+
+        try {
+            const pricesById = await loadPricesJson();
+
+            cards.forEach((card) => {
+                const priceEl = ensureCardPriceElement(card);
+                if (!priceEl) return;
+
+                const productId = String(card.dataset.id || '').trim();
+                const priceText = formatCatalogPrice(productId, pricesById);
+
+                priceEl.textContent = priceText;
+            });
+        } catch (error) {
+            // Keep cards unchanged if the price file is missing or invalid.
+        }
+    };
+
     const extractProductDataFromCard = (card) => {
         const nameEl = card.querySelector('h3, h4, .product-title');
         const brandEl = card.querySelector('p.text-xs');
@@ -1881,6 +2001,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const brand = (card.dataset.productBrand || brandEl?.textContent || 'IPORDISE').trim();
 
         return {
+            id: (card.dataset.id || toProductDataId(name)).trim(),
             name,
             brand,
             price: '',
@@ -1895,9 +2016,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const mainImageEl = document.getElementById('productMainImage');
         const reviewsEl = document.getElementById('productReviewsCount');
         const params = new URLSearchParams(window.location.search);
+        const name = (document.getElementById('productName')?.textContent || params.get('name') || 'Premium Product').trim();
 
         return {
-            name: (document.getElementById('productName')?.textContent || params.get('name') || 'Premium Product').trim(),
+            id: (params.get('id') || toProductDataId(name)).trim(),
+            name,
             brand: (document.getElementById('productBrand')?.textContent || params.get('brand') || 'IPORDISE').trim(),
             price: '',
             oldPrice: (document.getElementById('productOldPrice')?.textContent || params.get('oldPrice') || '').trim(),
@@ -1908,6 +2031,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const buildProductQuery = (data) => new URLSearchParams({
+        id: data.id || '',
         name: data.name || '',
         brand: data.brand || '',
         price: data.price || '',
@@ -2432,7 +2556,7 @@ document.addEventListener('DOMContentLoaded', () => {
             )).join('');
 
             return `
-                <article class="related-card js-product-link" data-product-name="${product.name}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${product.image}">
+                <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${toProductDataId(product.name)}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${product.image}">
                     <img src="${product.image}" alt="${product.name}" class="related-image">
                     <p class="related-brand">${product.brand}</p>
                     <h3 class="related-title">${product.name}</h3>
@@ -2702,13 +2826,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const initProductDetailPage = () => {
+    const initProductDetailPage = async () => {
         if (!productNameEl) return;
 
         const params = new URLSearchParams(window.location.search);
         const productName = params.get('name') || productNameEl.textContent.trim();
+        const productId = params.get('id') || toProductDataId(productName);
         const productBrand = params.get('brand') || 'IPORDISE';
-        const productPrice = params.get('price') || '/';
+        const pricesById = await loadPricesJson();
+        const productSizePriceOptions = getAvailableSizePriceOptions(productId, pricesById);
+        const productPrice = formatCatalogPrice(productId, pricesById) || params.get('price') || '/';
         const productOldPrice = params.get('oldPrice') || '';
         const productDiscount = params.get('discount') || '';
         const productReviews = params.get('reviews') || '0';
@@ -2822,42 +2949,45 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        let hasPrices = parsePriceNumber(productPrice) > 0;
-        let normalizedOverrideSizes = [];
+        let hasPrices = productSizePriceOptions.length > 0;
 
-        if (Array.isArray(productOverride?.sizes) && productOverride.sizes.length) {
-            const sizeSelector = document.getElementById('sizeSelector');
-            if (sizeSelector) {
-                const allOpts = productOverride.sizes.map((entry) => normalizeSizeOptionEntry(entry, ''));
-                normalizedOverrideSizes = allOpts;
-                hasPrices = allOpts.some((o) => parsePriceNumber(o.priceText) > 0);
-                const decanteOpts = allOpts.filter((o) => o.isDecante);
-                const fullOpts = allOpts.filter((o) => !o.isDecante);
+        const sizeSelector = document.getElementById('sizeSelector');
+        if (sizeSelector && productSizePriceOptions.length) {
+            const buildBtn = ({ sizeKey, label, priceText, isDecante }) => `
+                <button class="size-pill${isDecante ? ' is-decante' : ''}" type="button" data-size-key="${sizeKey}" data-label="${label}">
+                    <span class="spill-indicator"></span>
+                    <span class="spill-vol">${label}</span>
+                    <span class="spill-price">${priceText}</span>
+                </button>
+            `;
 
-                const buildBtn = ({ label, priceText, isDecante }) => {
-                    const vol = label.replace(/decante\s*/i, '').trim();
-                    const priceLabel = priceText || 'Request price';
-                    return `<button class="size-pill${isDecante ? ' is-decante' : ''}" type="button" data-label="${label}">
-                        <span class="spill-indicator"></span>
-                        <span class="spill-vol">${vol}</span>
-                        <span class="spill-price">${priceLabel}</span>
-                    </button>`;
-                };
+            const decanteOptions = productSizePriceOptions.filter((entry) => entry.isDecante);
+            const fullBottleOptions = productSizePriceOptions.filter((entry) => !entry.isDecante);
+            const groupMarkup = [];
 
-                if (decanteOpts.length && fullOpts.length) {
-                    sizeSelector.innerHTML =
-                        `<div class="size-group">
-                            <span class="size-group-label"><i class="fas fa-flask"></i> Décante</span>
-                            <div class="size-group-pills">${decanteOpts.map(buildBtn).join('')}</div>
+            if (decanteOptions.length) {
+                groupMarkup.push(`
+                    <div class="size-group size-group-decants">
+                        <p class="size-group-label"><i class="fas fa-flask"></i> D&eacute;cants</p>
+                        <div class="size-group-pills">
+                            ${decanteOptions.map(buildBtn).join('')}
                         </div>
-                        <div class="size-group">
-                            <span class="size-group-label"><i class="fas fa-bottle-droplet"></i> Full Bottle</span>
-                            <div class="size-group-pills">${fullOpts.map(buildBtn).join('')}</div>
-                        </div>`;
-                } else {
-                    sizeSelector.innerHTML = allOpts.map(buildBtn).join('');
-                }
+                    </div>
+                `);
             }
+
+            if (fullBottleOptions.length) {
+                groupMarkup.push(`
+                    <div class="size-group size-group-bottles">
+                        <p class="size-group-label"><i class="fas fa-bottle-droplet"></i> Full Bottles</p>
+                        <div class="size-group-pills">
+                            ${fullBottleOptions.map(buildBtn).join('')}
+                        </div>
+                    </div>
+                `);
+            }
+
+            sizeSelector.innerHTML = groupMarkup.join('');
         }
 
         const mainImage = document.getElementById('productMainImage');
@@ -2938,14 +3068,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const sizeButtons = Array.from(document.querySelectorAll('#sizeSelector .size-pill'));
         const sizeOptions = sizeButtons.map((btn) => {
-            const bLabel = btn.dataset.label || btn.textContent.trim();
-            const parsed = normalizedOverrideSizes.find((entry) => entry.label === bLabel)
-                || normalizeSizeOptionEntry(bLabel, productPrice);
+            const sizeKey = String(btn.dataset.sizeKey || '').trim().toLowerCase();
+            const matchedOption = productSizePriceOptions.find((entry) => entry.sizeKey === sizeKey);
+
             return {
                 button: btn,
-                label: parsed.label,
-                priceText: parsed.priceText,
-                unitPrice: parsePriceNumber(parsed.priceText)
+                label: matchedOption?.label || btn.dataset.label || btn.textContent.trim(),
+                priceText: matchedOption?.priceText || '',
+                unitPrice: matchedOption?.unitPrice || 0,
+                isDecante: Boolean(matchedOption?.isDecante)
             };
         });
 
@@ -2996,7 +3127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updateDisplayedPrice = () => {
             const selectedPrice = selectedSize?.priceText || '';
             const sizeHasPrice = selectedSize && selectedSize.unitPrice > 0;
-            const isDecante = /decante/i.test(selectedSize?.label || '');
+            const isDecante = Boolean(selectedSize?.isDecante);
             const deliveryFee = isDecante ? '35 MAD' : '35 MAD (VAT included)';
 
             if (hasPrices) {
@@ -3579,10 +3710,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const cardMatchesQuery = (card, query) => {
             if (!query) return true;
+                const priceText = card.querySelector('.price')?.textContent || '';
             const haystack = normalizeSearchText([
                 card.dataset.productName,
                 card.dataset.productBrand,
-                card.dataset.productPrice
+                    priceText
             ].filter(Boolean).join(' '));
             const tokens = normalizeSearchText(query).split(/\s+/).filter(Boolean);
             return tokens.every((token) => haystack.includes(token));
@@ -5279,13 +5411,14 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeroOfferRotator();
     initProductBadgeRotation();
     bindProductLinks();
-    initProductDetailPage();
+    void initProductDetailPage();
     initCartPage();
     initCheckoutPage();
     initAccountMenu();
     initWishlistButtons();
     setHeaderCartCount();
     initDiscoverFilters();
+    void initCatalogPrices();
     initHeaderSearchSuggestions();
 
     /* --- Mobile Menu --- */
