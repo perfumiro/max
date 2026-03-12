@@ -185,15 +185,17 @@
                         <h3 class="text-lg font-bold text-brand-dark mb-4">Your Order</h3>
 
                         <div class="space-y-3 text-sm text-gray-700">
-                            <div id="checkoutOrderItems"></div>
+                            <div id="checkoutOrderItems">
+                                <p class="text-sm text-gray-500 pb-3 border-b border-gray-100">No items in cart yet.</p>
+                            </div>
 
                             <div class="flex items-center justify-between">
                                 <span>Subtotal</span>
-                                <span id="checkoutSubtotal" class="font-semibold">797.50 MAD</span>
+                                <span id="checkoutSubtotal" class="font-semibold">0 MAD</span>
                             </div>
                             <div class="flex items-center justify-between">
                                 <span>Shipping</span>
-                                <span id="checkoutShipping" class="font-semibold text-green-600">35 MAD (VAT incl.)</span>
+                                <span id="checkoutShipping" class="font-semibold text-green-600">0 MAD</span>
                             </div>
                             <div class="flex items-center justify-between text-brand-red">
                                 <span>Discount</span>
@@ -203,7 +205,7 @@
 
                         <div class="my-4 border-t border-gray-100 pt-4 flex items-center justify-between">
                             <span class="text-base font-semibold text-brand-dark">Total</span>
-                            <span id="checkoutTotal" class="text-2xl font-bold text-brand-dark">701.78 MAD</span>
+                            <span id="checkoutTotal" class="text-2xl font-bold text-brand-dark">0 MAD</span>
                         </div>
 
                         <div class="space-y-3 text-sm text-gray-600 mb-5">
@@ -215,6 +217,20 @@
                                 </div>
                             </label>
                         </div>
+
+                        <label class="legal-consent-card legal-consent-card-checkout">
+                            <span class="legal-consent-check">
+                                <input id="checkoutLegalConsent" type="checkbox" class="legal-consent-input">
+                                <span class="legal-consent-box" aria-hidden="true"></span>
+                            </span>
+                            <span class="legal-consent-copy">
+                                <strong>I accept the Privacy Policy and Terms & Conditions.</strong>
+                                <span>I authorize IPORDISE to use my order details to process delivery and customer support.</span>
+                                <span><a href="privacy-policy.html">Read Privacy Policy</a> and <a href="terms.html">read Terms & Conditions</a>.</span>
+                            </span>
+                        </label>
+
+                        <p id="checkoutLegalConsentMessage" class="legal-consent-message hidden">Please accept the Privacy Policy and Terms & Conditions to place your order.</p>
 
                         <button id="placeOrderBtn" type="button" class="w-full bg-brand-red hover:bg-brand-redHover text-white font-bold py-3 rounded-xl transition duration-200 inline-flex items-center justify-center gap-2 cursor-not-allowed opacity-50" disabled aria-disabled="true">
                             Place Order <i class="fas fa-check text-xs"></i>

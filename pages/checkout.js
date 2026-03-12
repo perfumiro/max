@@ -1,6 +1,7 @@
 (function () {
     const CART_STORAGE_KEY = 'cart';
     const LEGACY_CART_STORAGE_KEY = 'ipordise-cart-items';
+    const CHECKOUT_ACCESS_KEY = 'ipordise-checkout-access';
     const ORDER_CONFIRM_PENDING_KEY = 'ipordise-order-confirm-pending';
     const ORDER_CONFIRM_LEFT_PAGE_KEY = 'ipordise-order-confirm-left-page';
     const SHIPPING_MAD = 35;
@@ -57,6 +58,13 @@
         return `${formatter.format(safe)} MAD`;
     };
 
+    const escapeHtml = (value) => String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
     const readStorageArray = (keyName) => {
         try {
             const raw = localStorage.getItem(keyName);
@@ -93,6 +101,13 @@
             localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(legacy));
         }
         return legacy;
+    };
+
+    const hasCheckoutAccess = () => sessionStorage.getItem(CHECKOUT_ACCESS_KEY) === '1';
+
+    const readCheckoutCart = () => {
+        if (!hasCheckoutAccess()) return [];
+        return readCart();
     };
 
     const summarize = (items) => {
@@ -137,15 +152,17 @@
         const totalEl = document.getElementById('checkoutTotal');
 
         const renderOrder = () => {
-            const items = readCart();
+            const items = readCheckoutCart();
 
             orderItemsEl.innerHTML = items.length
                 ? items.map((item) => {
+                    const safeName = escapeHtml(item.name);
+                    const safeSize = escapeHtml(item.size || '-');
                     return `
                         <div class="flex items-start justify-between gap-3 pb-3 border-b border-gray-100">
                             <div>
-                                <p class="font-semibold text-gray-800">${item.name}</p>
-                                <p class="text-xs text-gray-500">${item.size || '-'} · Qty ${item.qty}</p>
+                                <p class="font-semibold text-gray-800">${safeName}</p>
+                                <p class="text-xs text-gray-500">${safeSize} · Qty ${item.qty}</p>
                             </div>
                             <span class="font-semibold">${item.pricePending ? 'Pending confirmation' : formatMAD(item.price * item.qty)}</span>
                         </div>
@@ -167,7 +184,7 @@
         };
 
         const buildConfirmationPayload = () => {
-            const items = readCart();
+            const items = readCheckoutCart();
             const summary = summarize(items);
 
             const firstName = (document.getElementById('billingFirstName')?.value || '').trim();
@@ -245,7 +262,7 @@
         };
 
         const checkFormValidity = () => {
-            const cartHasItems = readCart().length > 0;
+            const cartHasItems = readCheckoutCart().length > 0;
 
             const firstName = (document.getElementById('billingFirstName')?.value || '').trim();
             const lastName = (document.getElementById('billingLastName')?.value || '').trim();
@@ -319,6 +336,11 @@
                 renderOrder();
                 checkFormValidity();
             }
+        });
+
+        window.addEventListener('pageshow', () => {
+            renderOrder();
+            checkFormValidity();
         });
 
         placeOrderBtn.addEventListener('click', () => {

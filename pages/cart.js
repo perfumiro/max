@@ -1,6 +1,7 @@
 (function () {
     const CART_STORAGE_KEY = 'cart';
     const LEGACY_CART_STORAGE_KEY = 'ipordise-cart-items';
+    const CHECKOUT_ACCESS_KEY = 'ipordise-checkout-access';
     const SHIPPING_MAD = 35;
 
     const parsePrice = (rawPrice) => {
@@ -284,9 +285,14 @@
 
         if (checkoutBtn) {
             checkoutBtn.addEventListener('click', (event) => {
-                if (readCart().length === 0) {
+                const hasItems = readCart().length > 0;
+                if (!hasItems) {
+                    sessionStorage.removeItem(CHECKOUT_ACCESS_KEY);
                     event.preventDefault();
+                    return;
                 }
+
+                sessionStorage.setItem(CHECKOUT_ACCESS_KEY, '1');
             });
         }
 
