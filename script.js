@@ -2394,43 +2394,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const onDiscoverPage = path.endsWith('/discover.html') || path.endsWith('/discover.html/');
         const discoverPath = path.includes('/pages/') ? '../discover.html' : 'discover.html';
 
-        if (!onDiscoverPage) {
-            let hasRedirected = false;
-            const redirectToDiscover = (query) => {
-                if (hasRedirected) return;
-                const trimmed = String(query || '').trim();
-                if (!trimmed) return;
-                hasRedirected = true;
-                const params = new URLSearchParams();
-                params.set('q', trimmed);
-                window.location.href = `${discoverPath}?${params.toString()}`;
-            };
-
-            searchInputs.forEach((input) => {
-                input.addEventListener('input', (event) => {
-                    redirectToDiscover(event.target.value || '');
-                });
-
-                input.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter') {
-                        event.preventDefault();
-                        redirectToDiscover(event.target.value || '');
-                    }
-                });
-
-                const wrapper = input.closest('.relative') || input.parentElement;
-                const button = wrapper ? wrapper.querySelector('button') : null;
-                if (button) {
-                    button.addEventListener('click', (event) => {
-                        event.preventDefault();
-                        redirectToDiscover(input.value || '');
-                    });
-                }
-            });
-
-            return;
-        }
-
         const productCards = Array.from(document.querySelectorAll(
             '#productCarousel > .group, #newArrivalsCarousel > article, article.group, .js-product-link'
         ));
@@ -2460,6 +2423,27 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        const featuredItems = catalog.slice(0, 5);
+        const quickLinks = [
+            { label: 'New In', meta: 'Fresh arrivals', type: 'filter', value: 'new-in' },
+            { label: 'Best Sellers', meta: 'Most wanted', type: 'filter', value: 'best-sellers' },
+            { label: 'For Men', meta: 'Daily staples', type: 'filter', value: 'for-men' },
+            { label: 'For Women', meta: 'Iconic signatures', type: 'filter', value: 'for-women' },
+            { label: 'Blue Fragrances', meta: 'Clean and modern', type: 'query', value: 'blue' },
+            { label: 'Vanilla', meta: 'Warm and addictive', type: 'query', value: 'vanilla' },
+            { label: 'Fresh Citrus', meta: 'Bright and crisp', type: 'query', value: 'citrus' },
+            { label: 'Arabian', meta: 'Rich oriental styles', type: 'filter', value: 'arabian' }
+        ];
+
+        const openDiscoverQuery = (query, filter = '') => {
+            const params = new URLSearchParams();
+            const trimmedQuery = String(query || '').trim();
+            const trimmedFilter = String(filter || '').trim();
+            if (trimmedQuery) params.set('q', trimmedQuery);
+            if (trimmedFilter) params.set('filter', trimmedFilter);
+            window.location.href = `${discoverPath}${params.toString() ? `?${params.toString()}` : ''}`;
+        };
+
         const closeAllMenus = () => {
             document.querySelectorAll('.search-suggest').forEach((menu) => {
                 menu.classList.add('hidden');
@@ -2480,22 +2464,86 @@ document.addEventListener('DOMContentLoaded', () => {
             return results.slice(0, 6);
         };
 
-        const renderMenu = (menu, items) => {
-            if (!items.length) {
-                menu.classList.add('hidden');
-                menu.innerHTML = '';
-                return;
-            }
+        const formatSearchPrice = (value) => {
+            const numeric = Number(String(value || '').replace(/[^\d.,]/g, '').replace(',', '.'));
+            if (!Number.isFinite(numeric) || numeric <= 0) return '';
+            return `${numeric.toFixed(2)} MAD`;
+        };
 
-            menu.innerHTML = items.map((item, index) => `
-                <button type="button" class="search-suggest-item" data-index="${index}">
-                    <img src="${item.image || ''}" alt="" class="search-suggest-thumb" />
-                    <span class="search-suggest-text">
-                        <span class="search-suggest-name">${item.name}</span>
-                        <span class="search-suggest-brand">${item.brand}</span>
-                    </span>
-                </button>
-            `).join('');
+        const buildQuickLinkMarkup = () => quickLinks.map((item) => `
+            <button type="button" class="search-discovery-link" data-chip-type="${item.type}" data-chip-value="${item.value}">
+                <span class="search-discovery-link-label">${item.label}</span>
+                <span class="search-discovery-link-meta">${item.meta}</span>
+            </button>
+        `).join('');
+
+        const buildFeaturedMarkup = (items) => items.map((item, index) => `
+            <button type="button" class="search-discovery-card" data-featured-index="${index}">
+                <span class="search-discovery-card-media">
+                    <img src="${item.image || ''}" alt="" class="search-discovery-card-thumb" />
+                </span>
+                <span class="search-discovery-card-copy">
+                    <span class="search-discovery-card-brand">${item.brand}</span>
+                    <span class="search-discovery-card-name">${item.name}</span>
+                    <span class="search-discovery-card-price">${formatSearchPrice(item.price)}</span>
+                </span>
+            </button>
+        `).join('');
+
+        const buildResultMarkup = (items) => items.map((item, index) => `
+            <button type="button" class="search-suggest-item search-result-row" data-index="${index}">
+                <img src="${item.image || ''}" alt="" class="search-suggest-thumb" />
+                <span class="search-suggest-text">
+                    <span class="search-suggest-name">${item.name}</span>
+                    <span class="search-suggest-brand">${item.brand}</span>
+                </span>
+            </button>
+        `).join('');
+
+        const renderMenu = (menu, items, query) => {
+            const trimmedQuery = String(query || '').trim();
+            const hasQuery = trimmedQuery.length >= 2;
+            const panelMarkup = hasQuery
+                ? `
+                    <div class="search-discovery-shell is-results">
+                        <div class="search-discovery-header-row">
+                            <div>
+                                <p class="search-discovery-kicker">Search Results</p>
+                                <h3 class="search-discovery-title">${items.length ? 'Matching fragrances' : 'No exact match yet'}</h3>
+                            </div>
+                            <button type="button" class="search-discovery-all-link" data-search-all="true">View all</button>
+                        </div>
+                        <div class="search-discovery-results">
+                            ${items.length ? buildResultMarkup(items) : '<p class="search-discovery-empty">Try a brand name, a note like vanilla, or a style like blue fragrance.</p>'}
+                        </div>
+                    </div>
+                `
+                : `
+                    <div class="search-discovery-shell">
+                        <div class="search-discovery-column search-discovery-column-links">
+                            <p class="search-discovery-kicker">Start Here</p>
+                            <h3 class="search-discovery-title">Popular searches</h3>
+                            <p class="search-discovery-copy">Jump back into the categories and scent families shoppers open most often.</p>
+                            <div class="search-discovery-link-list">
+                                ${buildQuickLinkMarkup()}
+                            </div>
+                        </div>
+                        <div class="search-discovery-column search-discovery-column-featured">
+                            <div class="search-discovery-header-row">
+                                <div>
+                                    <p class="search-discovery-kicker">Curated Picks</p>
+                                    <h3 class="search-discovery-title">Trending now</h3>
+                                </div>
+                                <button type="button" class="search-discovery-all-link" data-search-all="discover">Explore all</button>
+                            </div>
+                            <div class="search-discovery-card-grid">
+                                ${buildFeaturedMarkup(featuredItems)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+            menu.innerHTML = panelMarkup;
             menu.classList.remove('hidden');
         };
 
@@ -2513,26 +2561,86 @@ document.addEventListener('DOMContentLoaded', () => {
             input.addEventListener('input', (event) => {
                 const value = event.target.value || '';
                 const suggestions = value.length < 2 ? [] : buildSuggestions(value);
-                renderMenu(menu, suggestions);
+                renderMenu(menu, suggestions, value);
             });
 
             input.addEventListener('focus', (event) => {
                 const value = event.target.value || '';
                 const suggestions = value.length < 2 ? [] : buildSuggestions(value);
-                renderMenu(menu, suggestions);
+                renderMenu(menu, suggestions, value);
+            });
+
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    const trimmed = String(input.value || '').trim();
+                    if (onDiscoverPage && trimmed) {
+                        openDiscoverQuery(trimmed);
+                    } else if (trimmed) {
+                        openDiscoverQuery(trimmed);
+                    } else {
+                        openDiscoverQuery('', 'all');
+                    }
+                }
+                if (event.key === 'Escape') {
+                    closeAllMenus();
+                }
             });
 
             menu.addEventListener('click', (event) => {
                 const button = event.target.closest('.search-suggest-item');
-                if (!button) return;
+                if (button) {
+                    const index = Number(button.dataset.index || 0);
+                    const items = buildSuggestions(input.value || '');
+                    const selected = items[index];
+                    if (!selected) return;
+                    navigateToProductPage(selected);
+                    return;
+                }
 
-                const index = Number(button.dataset.index || 0);
-                const items = buildSuggestions(input.value || '');
-                const selected = items[index];
-                if (!selected) return;
+                const featuredCard = event.target.closest('[data-featured-index]');
+                if (featuredCard) {
+                    const index = Number(featuredCard.dataset.featuredIndex || 0);
+                    const selected = featuredItems[index];
+                    if (!selected) return;
+                    navigateToProductPage(selected);
+                    return;
+                }
 
-                navigateToProductPage(selected);
+                const chip = event.target.closest('[data-chip-value]');
+                if (chip) {
+                    const chipType = chip.dataset.chipType || 'query';
+                    const chipValue = chip.dataset.chipValue || '';
+                    if (chipType === 'filter') {
+                        openDiscoverQuery('', chipValue);
+                    } else {
+                        input.value = chipValue;
+                        renderMenu(menu, buildSuggestions(chipValue), chipValue);
+                        input.focus();
+                    }
+                    return;
+                }
+
+                const allLink = event.target.closest('[data-search-all]');
+                if (allLink) {
+                    const trimmed = String(input.value || '').trim();
+                    openDiscoverQuery(trimmed);
+                }
             });
+
+            const button = wrapper.querySelector('button');
+            if (button) {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const trimmed = String(input.value || '').trim();
+                    if (!trimmed) {
+                        renderMenu(menu, [], '');
+                        input.focus();
+                        return;
+                    }
+                    openDiscoverQuery(trimmed);
+                });
+            }
         });
 
         document.addEventListener('click', (event) => {
@@ -4457,6 +4565,78 @@ document.addEventListener('DOMContentLoaded', () => {
         if (totalEl) totalEl.textContent = formatMad(summary.total);
     };
 
+    const getCarouselSnapItems = (carousel) => {
+        if (!carousel) return [];
+
+        return Array.from(carousel.children).filter((node) => {
+            if (!(node instanceof HTMLElement)) return false;
+            if (node.offsetWidth <= 0) return false;
+            return true;
+        });
+    };
+
+    const getCenteredScrollLeftForItem = (carousel, item) => {
+        if (!carousel || !item) return 0;
+
+        const maxScrollLeft = Math.max(0, carousel.scrollWidth - carousel.clientWidth);
+        const targetLeft = item.offsetLeft - ((carousel.clientWidth - item.offsetWidth) / 2);
+        return Math.max(0, Math.min(maxScrollLeft, targetLeft));
+    };
+
+    const getNearestCarouselItemIndex = (carousel, items, bias = 0) => {
+        if (!carousel || !items.length) return -1;
+
+        const viewportCenter = carousel.scrollLeft + (carousel.clientWidth / 2) + bias;
+        let nearestIndex = 0;
+        let nearestDistance = Number.POSITIVE_INFINITY;
+
+        items.forEach((item, index) => {
+            const itemCenter = item.offsetLeft + (item.offsetWidth / 2);
+            const distance = Math.abs(itemCenter - viewportCenter);
+            if (distance < nearestDistance) {
+                nearestDistance = distance;
+                nearestIndex = index;
+            }
+        });
+
+        return nearestIndex;
+    };
+
+    const snapCarouselToNearestItem = (carousel, options = {}) => {
+        if (!carousel) return;
+
+        const items = getCarouselSnapItems(carousel);
+        if (!items.length) return;
+
+        const nearestIndex = getNearestCarouselItemIndex(carousel, items, options.bias || 0);
+        const targetItem = items[nearestIndex];
+        if (!targetItem) return;
+
+        carousel.scrollTo({
+            left: getCenteredScrollLeftForItem(carousel, targetItem),
+            behavior: options.behavior || 'smooth'
+        });
+    };
+
+    const scrollCarouselToSiblingItem = (carousel, direction) => {
+        if (!carousel) return;
+
+        const items = getCarouselSnapItems(carousel);
+        if (!items.length) return;
+
+        const directionSign = direction === 'prev' ? -1 : 1;
+        const bias = directionSign * Math.max(24, carousel.clientWidth * 0.08);
+        const currentIndex = getNearestCarouselItemIndex(carousel, items, bias);
+        const nextIndex = Math.max(0, Math.min(items.length - 1, currentIndex + directionSign));
+        const targetItem = items[nextIndex];
+        if (!targetItem) return;
+
+        carousel.scrollTo({
+            left: getCenteredScrollLeftForItem(carousel, targetItem),
+            behavior: 'smooth'
+        });
+    };
+
     const bindDragScroll = (carousel, onInteract) => {
         if (!carousel) return;
 
@@ -4464,9 +4644,21 @@ document.addEventListener('DOMContentLoaded', () => {
         let dragStartX = 0;
         let startScrollLeft = 0;
         let movedDuringDrag = false;
+        let snapTimerId = 0;
         const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
         carousel.style.cursor = isCoarsePointer ? 'auto' : 'grab';
+
+        const queueSnap = (delay = 90) => {
+            if (snapTimerId) {
+                window.clearTimeout(snapTimerId);
+            }
+
+            snapTimerId = window.setTimeout(() => {
+                snapTimerId = 0;
+                snapCarouselToNearestItem(carousel);
+            }, delay);
+        };
 
         const startDragging = (clientX) => {
             isDragging = true;
@@ -4501,11 +4693,18 @@ document.addEventListener('DOMContentLoaded', () => {
             onInteract?.();
         }, { passive: true });
 
+        carousel.addEventListener('touchend', () => {
+            queueSnap(120);
+        }, { passive: true });
+
         const stopDragging = () => {
             if (!isDragging) return;
             isDragging = false;
             carousel.style.cursor = isCoarsePointer ? 'auto' : 'grab';
             carousel.classList.remove('is-dragging-carousel');
+            if (movedDuringDrag) {
+                queueSnap(40);
+            }
         };
 
         window.addEventListener('mouseup', stopDragging);
@@ -4635,6 +4834,117 @@ document.addEventListener('DOMContentLoaded', () => {
         setupCarouselIndicator(carouselId);
     };
 
+    const initCarouselDepthEffect = (carouselId) => {
+        const carousel = document.getElementById(carouselId);
+        if (!carousel || carouselId !== 'productCarousel' || carousel.dataset.depthBound === 'true') return;
+
+        const cards = Array.from(carousel.children).filter((node) => node.nodeType === 1 && node.matches('.js-product-link'));
+        if (!cards.length) return;
+
+        carousel.dataset.depthBound = 'true';
+        carousel.classList.add('carousel-depth-ready');
+
+        const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let animationFrameId = 0;
+
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+        const resetCardDepth = (card, depthState = 'near') => {
+            card.dataset.depthState = depthState;
+            card.style.setProperty('--carousel-card-lift', '0px');
+            card.style.setProperty('--carousel-card-shift', '0px');
+            card.style.setProperty('--carousel-card-z', '0px');
+            card.style.setProperty('--carousel-card-rotate-y', '0deg');
+            card.style.setProperty('--carousel-card-rotate-x', '0deg');
+            card.style.setProperty('--carousel-card-scale', '1');
+            card.style.setProperty('--carousel-card-opacity', '1');
+            card.style.setProperty('--carousel-card-saturate', '1');
+            card.style.setProperty('--carousel-card-blur', '0px');
+            card.style.setProperty('--carousel-card-shadow-alpha', depthState === 'active' ? '0.17' : '0.1');
+            card.style.setProperty('--carousel-card-border-alpha', depthState === 'active' ? '0.14' : '0.08');
+        };
+
+        const applyDepth = () => {
+            animationFrameId = 0;
+
+            const viewportCenter = carousel.scrollLeft + (carousel.clientWidth / 2);
+            const cardMetrics = cards.map((card) => {
+                const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
+                const distance = cardCenter - viewportCenter;
+                return {
+                    card,
+                    distance,
+                    absoluteDistance: Math.abs(distance)
+                };
+            });
+
+            const activeMetric = cardMetrics.reduce((closest, metric) => {
+                if (!closest || metric.absoluteDistance < closest.absoluteDistance) return metric;
+                return closest;
+            }, null);
+
+            if (!activeMetric) return;
+
+            const activeThreshold = Math.max(220, activeMetric.card.offsetWidth * 1.12);
+
+            cardMetrics.forEach(({ card, distance, absoluteDistance }) => {
+                if (reducedMotionQuery.matches) {
+                    resetCardDepth(card, card === activeMetric.card ? 'active' : 'near');
+                    return;
+                }
+
+                const normalized = clamp(distance / Math.max(card.offsetWidth * 1.08, 1), -1.35, 1.35);
+                const focus = 1 - Math.min(Math.abs(normalized), 1);
+                const rotateY = normalized * -9.5;
+                const rotateX = Math.abs(normalized) * 2.6;
+                const lift = -11 * focus;
+                const shift = normalized * -4.5;
+                const zDepth = 28 * focus;
+                const scale = 0.955 + (focus * 0.06);
+                const opacity = 0.76 + (focus * 0.24);
+                const saturate = 0.92 + (focus * 0.14);
+                const blur = Math.max(0, (Math.abs(normalized) - 0.82) * 0.55);
+                const shadowAlpha = 0.08 + (focus * 0.07);
+                const borderAlpha = 0.07 + (focus * 0.05);
+                const depthState = absoluteDistance <= (activeThreshold * 0.42)
+                    ? 'active'
+                    : absoluteDistance <= activeThreshold
+                        ? 'near'
+                        : 'far';
+
+                card.dataset.depthState = depthState;
+                card.style.setProperty('--carousel-card-lift', `${lift.toFixed(2)}px`);
+                card.style.setProperty('--carousel-card-shift', `${shift.toFixed(2)}px`);
+                card.style.setProperty('--carousel-card-z', `${zDepth.toFixed(2)}px`);
+                card.style.setProperty('--carousel-card-rotate-y', `${rotateY.toFixed(2)}deg`);
+                card.style.setProperty('--carousel-card-rotate-x', `${rotateX.toFixed(2)}deg`);
+                card.style.setProperty('--carousel-card-scale', scale.toFixed(3));
+                card.style.setProperty('--carousel-card-opacity', opacity.toFixed(3));
+                card.style.setProperty('--carousel-card-saturate', saturate.toFixed(3));
+                card.style.setProperty('--carousel-card-blur', `${blur.toFixed(2)}px`);
+                card.style.setProperty('--carousel-card-shadow-alpha', shadowAlpha.toFixed(3));
+                card.style.setProperty('--carousel-card-border-alpha', borderAlpha.toFixed(3));
+            });
+        };
+
+        const requestDepthUpdate = () => {
+            if (animationFrameId) return;
+            animationFrameId = window.requestAnimationFrame(applyDepth);
+        };
+
+        carousel.addEventListener('scroll', requestDepthUpdate, { passive: true });
+        window.addEventListener('resize', requestDepthUpdate);
+
+        if (typeof reducedMotionQuery.addEventListener === 'function') {
+            reducedMotionQuery.addEventListener('change', requestDepthUpdate);
+        } else if (typeof reducedMotionQuery.addListener === 'function') {
+            reducedMotionQuery.addListener(requestDepthUpdate);
+        }
+
+        requestDepthUpdate();
+        window.setTimeout(requestDepthUpdate, 120);
+    };
+
     const enableCarouselAutoplay = (carouselId, step = 160, delay = 2600) => {
         const carousel = document.getElementById(carouselId);
         if (!carousel) return;
@@ -4690,9 +5000,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!carousel || !prevButton || !nextButton) return;
 
         const scrollCarousel = (direction) => {
-            const step = Math.max(240, Math.round(carousel.clientWidth * 0.7));
-            const delta = direction === 'prev' ? -step : step;
-            carousel.scrollBy({ left: delta, behavior: 'smooth' });
+            scrollCarouselToSiblingItem(carousel, direction);
         };
 
         prevButton.addEventListener('click', () => scrollCarousel('prev'));
@@ -4723,6 +5031,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     limitNewArrivalsToLatest();
     initCarousel('productCarousel');
+    initCarouselDepthEffect('productCarousel');
     initCarousel('brandCarousel');
     initCarousel('newArrivalsCarousel');
     enableCarouselAutoplay('brandCarousel', 180, 2400);
