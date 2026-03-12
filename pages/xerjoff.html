@@ -702,7 +702,7 @@
             </div>
 
             <!-- ─── Product 1: Alexandria II ─── -->
-            <div class="xerjoff-product-entry" id="product-alex">
+            <div class="xerjoff-product-entry" id="product-alex" data-product-id="alexandria-ii">
                 <div class="xerjoff-product-layout">
                     <!-- Gallery -->
                     <div>
@@ -725,8 +725,8 @@
                         <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
                         <p class="xerjoff-size-label">Size</p>
                         <div class="xerjoff-size-row">
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'alex-price','')">5 ML</button>
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'alex-price','')">10 ML</button>
+                            <button class="xerjoff-size-btn" type="button" data-size-key="5ml" onclick="xerjoffSize(this,'alex-price')">5 ML</button>
+                            <button class="xerjoff-size-btn" type="button" data-size-key="10ml" onclick="xerjoffSize(this,'alex-price')">10 ML</button>
                         </div>
                         <p id="alex-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to request the price</p>
                         <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
@@ -756,7 +756,7 @@
             </div>
 
             <!-- ─── Product 2: Erba Pura ─── -->
-            <div class="xerjoff-product-entry" id="product-erba">
+            <div class="xerjoff-product-entry" id="product-erba" data-product-id="erba-pura">
                 <div class="xerjoff-product-layout">
                     <div>
                         <div class="xerjoff-gallery-main">
@@ -776,8 +776,8 @@
                         <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
                         <p class="xerjoff-size-label">Size</p>
                         <div class="xerjoff-size-row">
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'erba-price','')">5 ML</button>
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'erba-price','')">10 ML</button>
+                            <button class="xerjoff-size-btn" type="button" data-size-key="5ml" onclick="xerjoffSize(this,'erba-price')">5 ML</button>
+                            <button class="xerjoff-size-btn" type="button" data-size-key="10ml" onclick="xerjoffSize(this,'erba-price')">10 ML</button>
                         </div>
                         <p id="erba-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to request the price</p>
                         <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
@@ -807,7 +807,7 @@
             </div>
 
             <!-- ─── Product 3: Naxos ─── -->
-            <div class="xerjoff-product-entry" id="product-naxos">
+            <div class="xerjoff-product-entry" id="product-naxos" data-product-id="naxos">
                 <div class="xerjoff-product-layout">
                     <div>
                         <div class="xerjoff-gallery-main">
@@ -827,8 +827,8 @@
                         <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
                         <p class="xerjoff-size-label">Size</p>
                         <div class="xerjoff-size-row">
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'naxos-price','')">5 ML</button>
-                            <button class="xerjoff-size-btn" onclick="xerjoffSize(this,'naxos-price','')">10 ML</button>
+                            <button class="xerjoff-size-btn" type="button" data-size-key="5ml" onclick="xerjoffSize(this,'naxos-price')">5 ML</button>
+                            <button class="xerjoff-size-btn" type="button" data-size-key="10ml" onclick="xerjoffSize(this,'naxos-price')">10 ML</button>
                         </div>
                         <p id="naxos-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to request the price</p>
                         <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
@@ -861,15 +861,58 @@
     </section>
 
     <script>
+        var xerjoffPrices = {};
+        var xerjoffPricesPromise = null;
+
+        function getXerjoffPricesPath() {
+            return '../xerjoff-prices.json';
+        }
+
+        function loadXerjoffPrices() {
+            if (xerjoffPricesPromise) return xerjoffPricesPromise;
+
+            xerjoffPricesPromise = fetch(getXerjoffPricesPath(), { cache: 'no-store' })
+                .then(function(response) {
+                    if (!response.ok) return {};
+                    return response.json();
+                })
+                .then(function(data) {
+                    xerjoffPrices = data && typeof data === 'object' ? data : {};
+                    return xerjoffPrices;
+                })
+                .catch(function() {
+                    xerjoffPrices = {};
+                    return xerjoffPrices;
+                });
+
+            return xerjoffPricesPromise;
+        }
+
+        function getXerjoffPrice(productId, sizeKey) {
+            var productPrices = xerjoffPrices && xerjoffPrices[productId];
+            if (!productPrices || typeof productPrices !== 'object') return 0;
+            var numericPrice = Number(productPrices[sizeKey]);
+            return Number.isFinite(numericPrice) && numericPrice > 0 ? numericPrice : 0;
+        }
+
+        function formatXerjoffPrice(price) {
+            return price > 0 ? price + 'DH' : '';
+        }
+
         function xerjoffGallery(mainId, thumb, url) {
             document.getElementById(mainId).src = url;
             thumb.closest('.xerjoff-gallery-thumbs').querySelectorAll('.xerjoff-gallery-thumb').forEach(function(t){ t.classList.remove('is-active'); });
             thumb.classList.add('is-active');
         }
-        function xerjoffSize(btn, priceId, price) {
+        async function xerjoffSize(btn, priceId) {
+            await loadXerjoffPrices();
             btn.closest('.xerjoff-size-row').querySelectorAll('.xerjoff-size-btn').forEach(function(b){ b.classList.remove('is-active'); });
             btn.classList.add('is-active');
             var el = document.getElementById(priceId);
+            var productEntry = btn.closest('.xerjoff-product-entry');
+            var productId = productEntry ? productEntry.getAttribute('data-product-id') : '';
+            var sizeKey = String(btn.getAttribute('data-size-key') || '').toLowerCase();
+            var price = formatXerjoffPrice(getXerjoffPrice(productId, sizeKey));
             var hasPrice = !!String(price || '').trim();
             el.textContent = hasPrice ? price : 'Price on Request';
             el.style.color = hasPrice ? '#1a1a1a' : '#16a34a';
@@ -958,6 +1001,8 @@
                 btn.disabled = false;
             }, 2000);
         }
+
+        loadXerjoffPrices();
     </script>
 
     <!-- Values -->
