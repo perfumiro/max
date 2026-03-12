@@ -1886,8 +1886,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const formatPriceAmount = (amount) => `${amount}DH`;
 
     const formatSizeLabel = (sizeKey) => String(sizeKey || '').replace(/ml$/i, ' ML').toUpperCase();
+    const PRICE_CONFIG_REFRESH_MS = 3000;
 
     let pricesJsonPromise = null;
+    let priceConfigWatcherStarted = false;
+    let lastKnownPricesSnapshot = '';
 
     const loadPricesJson = async () => {
         if (!pricesJsonPromise) {
@@ -1901,6 +1904,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         return pricesJsonPromise;
+    };
+
+    const fetchPricesJsonSnapshot = async () => {
+        try {
+            const response = await fetch(`${getPricesJsonPath()}?t=${Date.now()}`, { cache: 'no-store' });
+            if (!response.ok) return '';
+            return await response.text();
+        } catch {
+            return '';
+        }
+    };
+
+    const checkForPricesJsonUpdate = async () => {
+        const nextSnapshot = await fetchPricesJsonSnapshot();
+        if (!nextSnapshot) return;
+
+        if (!lastKnownPricesSnapshot) {
+            lastKnownPricesSnapshot = nextSnapshot;
+            return;
+        }
+
+        if (nextSnapshot !== lastKnownPricesSnapshot) {
+            lastKnownPricesSnapshot = nextSnapshot;
+            window.location.reload();
+        }
+    };
+
+    const watchPricesJsonChanges = () => {
+        if (priceConfigWatcherStarted || !document.getElementById('productPrice')) return;
+
+        priceConfigWatcherStarted = true;
+        void checkForPricesJsonUpdate();
+
+        window.setInterval(() => {
+            if (document.hidden) return;
+            void checkForPricesJsonUpdate();
+        }, PRICE_CONFIG_REFRESH_MS);
+
+        window.addEventListener('focus', () => {
+            void checkForPricesJsonUpdate();
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                void checkForPricesJsonUpdate();
+            }
+        });
     };
 
     const getPriceTextByProductId = (productId, pricesById) => {
@@ -2942,11 +2992,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const sizeSelector = document.getElementById('sizeSelector');
         if (sizeSelector && productSizePriceOptions.length) {
-            const buildBtn = ({ sizeKey, label, priceText, isDecante }) => `
+            const buildBtn = ({ sizeKey, label, priceText, isDecante, price }) => `
                 <button class="size-pill${isDecante ? ' is-decante' : ''}" type="button" data-size-key="${sizeKey}" data-label="${label}">
                     <span class="spill-indicator"></span>
                     <span class="spill-vol">${label}</span>
-                    <span class="spill-price">${priceText}</span>
+                    <span class="spill-price">${price > 0 ? priceText : 'Price on Request'}</span>
                 </button>
             `;
 
@@ -5409,6 +5459,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDiscoverFilters();
     void initCatalogPrices();
     initHeaderSearchSuggestions();
+    watchPricesJsonChanges();
 
     /* --- Mobile Menu --- */
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
