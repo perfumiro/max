@@ -1943,7 +1943,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formatCatalogPrice = (productId, pricesById) => {
         const sizeOptions = getAvailableSizePriceOptions(productId, pricesById);
-        return sizeOptions
+        const fullBottleOptions = sizeOptions.filter((entry) => !entry.isDecante);
+        const visibleOptions = fullBottleOptions.length ? fullBottleOptions : sizeOptions;
+
+        return visibleOptions
             .map((entry) => `${entry.label.replace(/\s+/g, '')} ${entry.priceText}`)
             .join(' - ');
     };
@@ -1968,24 +1971,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!cards.length) return;
 
         cards.forEach((card) => {
-            ensureCardPriceElement(card);
+            const priceEl = card.querySelector('.price');
+            if (priceEl) {
+                priceEl.remove();
+            }
         });
-
-        try {
-            const pricesById = await loadPricesJson();
-
-            cards.forEach((card) => {
-                const priceEl = ensureCardPriceElement(card);
-                if (!priceEl) return;
-
-                const productId = String(card.dataset.id || '').trim();
-                const priceText = formatCatalogPrice(productId, pricesById);
-
-                priceEl.textContent = priceText;
-            });
-        } catch (error) {
-            // Keep cards unchanged if the price file is missing or invalid.
-        }
     };
 
     const extractProductDataFromCard = (card) => {
