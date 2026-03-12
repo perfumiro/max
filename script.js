@@ -1937,12 +1937,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 unitPrice: productPrices[sizeKey],
                 isDecante: ['10ml', '20ml', '30ml'].includes(sizeKey),
                 volumeLabel: formatSizeLabel(sizeKey)
-            }))
-            .filter((entry) => entry.price > 0);
+            }));
     };
 
     const formatCatalogPrice = (productId, pricesById) => {
-        const sizeOptions = getAvailableSizePriceOptions(productId, pricesById);
+        const sizeOptions = getAvailableSizePriceOptions(productId, pricesById).filter((entry) => entry.price > 0);
         const fullBottleOptions = sizeOptions.filter((entry) => !entry.isDecante);
         const visibleOptions = fullBottleOptions.length ? fullBottleOptions : sizeOptions;
 
@@ -2939,7 +2938,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        let hasPrices = productSizePriceOptions.length > 0;
+        let hasPrices = productSizePriceOptions.some((entry) => entry.price > 0);
 
         const sizeSelector = document.getElementById('sizeSelector');
         if (sizeSelector && productSizePriceOptions.length) {
