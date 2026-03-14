@@ -1965,6 +1965,71 @@ document.addEventListener('DOMContentLoaded', () => {
                 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/4.webp'
             ]
         },
+        'jean paul gaultier le male in blue eau de parfum': {
+            brand: 'JEAN PAUL GAULTIER',
+            fragranceProfile: { longevity: 86, longevityLabel: '8-10h', sillage: 84, sillageLabel: 'Strong', season: 68, seasonLabel: 'Spring/Summer' },
+            subtitle: 'Men\'s fragrance · Aromatic Spicy · A bold blue limited edition with lavender, benzoin, and an ocean-charged trail.',
+            longDescription: 'With Le Male In Blue, a wave of aromatic and spicy freedom looms over the sea. Vaster than the horizon, stronger than a tidal wave, its intense eau de parfum immerses you in a captivating, all-encompassing blue. Gone are the gentle waves. Wearing a black sailor shirt over his deep blue torso, the boldest of sailors tattoos his case with an eccentric wave inspired by the Maison\'s archives. He provokes with his wingspan, bare torso, and lavender on his stern, and with a benzoin-drenched courage. A limited edition with a lasting trail, transforming this new wave into legend.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '75ML',
+                '125ML'
+            ],
+            notes: [
+                {
+                    title: 'AROMATIC BLUE WAVE',
+                    text: 'An aromatic and spicy opening surges forward with the energy of open sea air and a daring blue freshness.'
+                },
+                {
+                    title: 'LAVENDER STERN',
+                    text: 'Jean Paul Gaultier\'s iconic lavender signature gives the fragrance its sensual sailor identity and refined lift.'
+                },
+                {
+                    title: 'BENZOIN TRAIL',
+                    text: 'Benzoin drenches the base in warm courage, leaving a deep and lasting limited-edition signature.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20In%20Blue%20Eau%20de%20Parfum/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20In%20Blue%20Eau%20de%20Parfum/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20In%20Blue%20Eau%20de%20Parfum/3.jpg'
+            ]
+        },
+        'jean paul gaultier le male eau de toilette': {
+            brand: 'JEAN PAUL GAULTIER',
+            fragranceProfile: { longevity: 78, longevityLabel: '6-8h', sillage: 76, sillageLabel: 'Strong', season: 72, seasonLabel: 'All Year' },
+            subtitle: 'Men\'s fragrance · Fresh Amber · The iconic sailor signature balancing mint, lavender, vanilla, and sandalwood.',
+            longDescription: 'Jean Paul Gaultier Le Male EDT, a men\'s fragrance that combines freshness and warmth, inspired by the iconic sailor. Ideal for men with bold style. This perfume is an expression of modern masculinity, capturing the essence of the contemporary man who defies traditional norms. With a blend of fresh and warm notes, Le Male EDT offers an olfactory experience that is both stimulating and comforting, leaving a lasting impression. What sets Le Male EDT apart from other fragrances is its ability to balance freshness with enveloping warmth. Its top notes include mint and lavender, which provide an immediate sense of freshness. As it evolves, the fragrance reveals a heart of cinnamon and orange blossom, adding a spicy and floral touch. Finally, the base notes of vanilla and sandalwood provide a soft, sensual warmth that lingers on the skin. This perfume is designed for men seeking a distinctive fragrance that reflects their bold and confident personality. It is ideal for those who want to stand out with a scent that is both classic and modern. Perfect for everyday wear or special occasions, Le Male EDT is a versatile choice for any man looking to leave a lasting impression. Le Male EDT comes in a bottle designed in the iconic male torso shape that characterizes the Jean Paul Gaultier brand. To apply, spray a small amount on pulse points, such as the neck and wrists, for optimal fragrance diffusion. In addition to its captivating fragrance, Le Male EDT stands out for its commitment to sustainability. The brand strives to use recyclable materials in its packaging and promotes responsible production practices. This makes Le Male EDT not only an exceptional olfactory choice but also a conscious option for the modern consumer.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '75ML',
+                '125ML'
+            ],
+            notes: [
+                {
+                    title: 'MINT & LAVENDER',
+                    text: 'A fresh aromatic opening of mint and lavender gives Le Male EDT its instantly recognizable sailor signature.'
+                },
+                {
+                    title: 'CINNAMON BLOOM',
+                    text: 'Cinnamon and orange blossom create a warm spicy-floral heart that feels bold, modern, and comforting.'
+                },
+                {
+                    title: 'VANILLA WOODS',
+                    text: 'Vanilla and sandalwood settle into a smooth sensual base with lasting warmth and everyday versatility.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Le%20Male%20Eau%20de%20Toilette/1.png',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Le%20Male%20Eau%20de%20Toilette/2.png',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Le%20Male%20Eau%20de%20Toilette/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Le%20Male%20Eau%20de%20Toilette/4.jpg'
+            ]
+        },
         'jean paul gaultier le male le parfum eau de parfum': {
             brand: 'JEAN PAUL GAULTIER',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 80, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
@@ -2031,6 +2096,141 @@ document.addEventListener('DOMContentLoaded', () => {
                 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/3.jpg',
                 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/4.jpg',
                 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/5.jpg'
+            ]
+        },
+        'carolina herrera bad boy eau de toilette': {
+            brand: 'CAROLINA HERRERA',
+            gender: 'men',
+            fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 74, sillageLabel: 'Moderate-Strong', season: 68, seasonLabel: 'All Year' },
+            subtitle: "Men's fragrance · Oriental · A modern masculine signature balancing sparkling bergamot, pepper, cedarwood, sage, tonka bean, and cacao.",
+            longDescription: 'CAROLINA HERRERA Bad Boy Refillable Eau de Toilette embodies the duality between playful freshness and the warmth of nature. This Carolina Herrera perfume for men, with its oriental scent, is a manifestation of modern masculinity, intended for men who forge their own paths without fear of showing their sensitivity alongside their great strength. Bad Boy Eau de Toilette opens with a citrus burst featuring top notes of green Italian bergamot. As you explore its nuances, cedarwood and sage add warmth that settles on a base of tonka bean and cacao. It is a true statement of intent. Olfactory Family: Oriental. Top notes: Black Pepper, White Pepper and Italian Green Bergamot. Heart notes: Cedarwood and Sage. Base notes: Tonka bean and cocoa.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'PEPPER & BERGAMOT OPENING',
+                    text: 'Black pepper, white pepper, and Italian green bergamot create a bright citrus-spice opening with instant energy.'
+                },
+                {
+                    title: 'CEDARWOOD & SAGE HEART',
+                    text: 'Cedarwood and sage bring aromatic warmth through the heart, giving the scent its confident modern structure.'
+                },
+                {
+                    title: 'TONKA BEAN & CACAO BASE',
+                    text: 'Tonka bean and cacao settle into a warm oriental trail that feels sensual, smooth, and unmistakably masculine.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/1.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/2.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/3.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/4.jpg',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/5.jpg'
+            ]
+        },
+        'gucci guilty absolu de parfum pour homme': {
+            brand: 'GUCCI',
+            gender: 'men',
+            fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 77, sillageLabel: 'Strong', season: 58, seasonLabel: 'Fall/Winter' },
+            subtitle: "Men's fragrance · Woody Ambery · An intimate refined composition with rum accord, orange blossom absolute, and red chili pepper.",
+            longDescription: 'The new Gucci Guilty fragrances celebrate the art of refinement, inviting the wearer on a sensory journey into an intimate and sophisticated world. Gucci Guilty Absolu de Parfum for Men is an intense, woody, and ambery composition. At its heart, a rich rum accord brings warmth and depth, enhanced by the radiance of orange blossom absolute. A touch of red chili pepper adds dynamism, creating a striking contrast that enriches the fragrance\'s complexity.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'RUM ACCORD WARMTH',
+                    text: 'A rich rum accord shapes the heart with warmth, depth, and a smooth refined intensity.'
+                },
+                {
+                    title: 'ORANGE BLOSSOM RADIANCE',
+                    text: 'Orange blossom absolute brightens the composition with a sophisticated floral glow.'
+                },
+                {
+                    title: 'RED CHILI PEPPER CONTRAST',
+                    text: 'Red chili pepper adds a vivid spicy contrast that sharpens the scent and deepens its character.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Absolu%20de%20Parfum%20Pour%20Homme/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Absolu%20de%20Parfum%20Pour%20Homme/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Absolu%20de%20Parfum%20Pour%20Homme/3.jpg'
+            ]
+        },
+        'gucci guilty elixir pour homme': {
+            brand: 'GUCCI',
+            gender: 'men',
+            fragranceProfile: { longevity: 92, longevityLabel: '10-12h', sillage: 84, sillageLabel: 'Strong', season: 54, seasonLabel: 'Fall/Winter' },
+            subtitle: "Men's fragrance · Amber Leather · A powerful Gucci Guilty elixir with iris butter, Ambrofix, benzoin, vanillin, and smoky nutmeg.",
+            longDescription: 'Gucci Guilty Elixir de Parfum for Men is an invitation to self-love and self-acceptance. It exudes an amber and tanned fragrance with notes of patchouli, the signature ingredient of the Gucci Guilty line, whose high concentration produces an intensely powerful effect. The fragrance is presented in a vibrant bottle, designed to elegantly mirror its feminine counterpart. Eau de parfum. Olfactory family: amber and tanned notes. Key ingredients: iris butter, Ambrofix, benzoin. The original essence is amplified by the addition of vanillin extract, while iris butter, noble by nature, gives it a warm and enveloping aroma. The exhilarating Ambrofix, complemented by smoky nutmeg notes, enhances the uniqueness of the fragrance and allows it to fully express its character. Benzoin in the base note lends depth and magnetism to this fragrance. Packaging: the bottle comes in a refined green color; it is embellished with the House\'s intertwined GG detail and topped with a brushed silver cap.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'IRIS BUTTER & VANILLIN',
+                    text: 'Warm iris butter and vanillin build an enveloping amber core with rich sensual texture.'
+                },
+                {
+                    title: 'AMBROFIX & SMOKY NUTMEG',
+                    text: 'Ambrofix and smoky nutmeg sharpen the signature with modern radiance and bold character.'
+                },
+                {
+                    title: 'BENZOIN DEPTH',
+                    text: 'Benzoin anchors the base with resinous depth and lasting magnetism.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Elixir%20Pour%20Homme/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Elixir%20Pour%20Homme/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Elixir%20Pour%20Homme/3.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Elixir%20Pour%20Homme/4.webp'
+            ]
+        },
+        'montale arabians tonka': {
+            brand: 'MONTALE',
+            gender: 'unisex',
+            fragranceProfile: { longevity: 94, longevityLabel: '12h+', sillage: 88, sillageLabel: 'Powerful', season: 48, seasonLabel: 'Fall/Winter' },
+            subtitle: 'Unisex fragrance · Oriental Gourmand · An iconic bestseller blending tonka bean, rose, bergamot, oud, and leather.',
+            longDescription: 'An iconic bestseller, Arabians Tonka charms with its refined gourmand notes: smooth tonka bean, captivating rose, and the radiance of bergamot unite with oud and leather. Powerful, sweet, unforgettable.',
+            sizes: [
+                'Decante 10ML',
+                'Decante 20ML',
+                'Decante 30ML',
+                '50ML',
+                '100ML'
+            ],
+            notes: [
+                {
+                    title: 'BERGAMOT & TONKA',
+                    text: 'Radiant bergamot and smooth tonka bean open the scent with sweetness and polished lift.'
+                },
+                {
+                    title: 'CAPTIVATING ROSE',
+                    text: 'Rose adds a refined floral richness that softens the power of the composition.'
+                },
+                {
+                    title: 'OUD & LEATHER TRAIL',
+                    text: 'Oud and leather form a dark unforgettable base with bold niche presence.'
+                }
+            ],
+            images: [
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Montale%20Arabians%20Tonka/1.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Montale%20Arabians%20Tonka/2.webp',
+                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Montale%20Arabians%20Tonka/3.webp'
             ]
         }
     };
@@ -2321,10 +2521,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const cards = Array.from(document.querySelectorAll('.js-product-link[data-id]'));
         if (!cards.length) return;
 
+        const pricesById = await loadPricesJson();
+
         cards.forEach((card) => {
-            const priceEl = card.querySelector('.price');
+            const existingPriceEl = card.querySelector('.price');
+            if (existingPriceEl) existingPriceEl.remove();
+
+            const productId = card.dataset.id;
+            if (!productId) return;
+
+            const formatted = formatCatalogPrice(productId, pricesById);
+            if (!formatted) return;
+
+            const priceEl = ensureCardPriceElement(card);
             if (priceEl) {
-                priceEl.remove();
+                priceEl.textContent = formatted;
             }
         });
     };
@@ -2338,8 +2549,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const imageEl = card.querySelector('img');
         const reviewsEl = Array.from(card.querySelectorAll('span')).find((span) => /\(\d+\)/.test(span.textContent || ''));
 
-        const name = (card.dataset.productName || nameEl?.textContent || 'Premium Product').trim();
-        const brand = (card.dataset.productBrand || brandEl?.textContent || 'IPORDISE').trim();
+        const name = (card.dataset.productName || card.dataset.name || nameEl?.textContent || 'Premium Product').trim();
+        const brand = (card.dataset.productBrand || card.dataset.brand || brandEl?.textContent || 'IPORDISE').trim();
 
         return {
             id: (card.dataset.id || toProductDataId(name)).trim(),
@@ -2349,7 +2560,7 @@ document.addEventListener('DOMContentLoaded', () => {
             oldPrice: (card.dataset.productOldPrice || oldPriceEl?.textContent || '').trim(),
             discount: (card.dataset.productDiscount || discountEl?.textContent || '').trim(),
             reviews: (card.dataset.productReviews || (reviewsEl?.textContent || '').replace(/[^0-9]/g, '') || '0').trim(),
-            image: normalizeImagePathForCurrentPage(card.dataset.productImage || imageEl?.getAttribute('src') || '')
+            image: normalizeImagePathForCurrentPage(card.dataset.productImage || card.dataset.img || imageEl?.getAttribute('src') || '')
         };
     };
 
@@ -2816,6 +3027,20 @@ document.addEventListener('DOMContentLoaded', () => {
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp'
         },
         {
+            name: 'Jean Paul Gaultier Le Male In Blue Eau de Parfum',
+            brand: 'JEAN PAUL GAULTIER',
+            price: '',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20In%20Blue%20Eau%20de%20Parfum/1.jpg'
+        },
+        {
+            name: 'Jean Paul Gaultier Le Male Eau de Toilette',
+            brand: 'JEAN PAUL GAULTIER',
+            price: '',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Le%20Male%20Eau%20de%20Toilette/1.png'
+        },
+        {
             name: 'Jean Paul Gaultier Le male Le parfum Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
@@ -2898,6 +3123,34 @@ document.addEventListener('DOMContentLoaded', () => {
             price: '',
             gender: 'men',
             image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/1.jpg'
+        },
+        {
+            name: 'Carolina Herrera Bad Boy Eau de Toilette',
+            brand: 'CAROLINA HERRERA',
+            price: '',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/1.jpg'
+        },
+        {
+            name: 'Gucci Guilty Absolu de Parfum Pour Homme',
+            brand: 'GUCCI',
+            price: '',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Absolu%20de%20Parfum%20Pour%20Homme/1.webp'
+        },
+        {
+            name: 'Gucci Guilty Elixir Pour Homme',
+            brand: 'GUCCI',
+            price: '',
+            gender: 'men',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Elixir%20Pour%20Homme/1.webp'
+        },
+        {
+            name: 'Montale Arabians Tonka',
+            brand: 'MONTALE',
+            price: '',
+            gender: 'unisex',
+            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Montale%20Arabians%20Tonka/1.webp'
         }
     ];
 
@@ -2934,6 +3187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (normalizedName.includes('scandal')) return 'jpg-scandal';
         if (normalizedName.includes('one million')) return 'rabanne-one-million';
         if (normalizedName.includes('gentleman')) return 'givenchy-gentleman';
+        if (normalizedName.includes('guilty')) return 'gucci-guilty';
         return '';
     };
 
@@ -3066,6 +3320,106 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'men';
     };
 
+    const pickSeededValue = (pool, seed) => {
+        if (!Array.isArray(pool) || !pool.length) return '';
+        return pool[Math.abs(seed) % pool.length];
+    };
+
+    const buildReviewDateLabel = (baseHash, index) => {
+        const dayOffset = (baseHash + (index * 5)) % 46;
+        const reviewDate = new Date(Date.UTC(2026, 0, 12 + dayOffset));
+        return reviewDate.toISOString().slice(0, 10);
+    };
+
+    const getReviewAccentPool = (productName, productOverride) => {
+        const accordPhraseMap = {
+            amber: 'amber warmth',
+            aromatic: 'aromatic freshness',
+            boozy: 'boozy warmth',
+            citrus: 'fresh citrus opening',
+            coffee: 'dark coffee facet',
+            floral: 'floral nuance',
+            fresh: 'clean fresh opening',
+            'fresh spicy': 'peppery freshness',
+            fruity: 'fruity opening',
+            leather: 'leather trail',
+            musky: 'clean musky dry-down',
+            powdery: 'powdery elegance',
+            salty: 'salty contrast',
+            smoky: 'smoky depth',
+            sweet: 'smooth sweetness',
+            tobacco: 'tobacco richness',
+            vanilla: 'vanilla dry-down',
+            'warm spicy': 'warm spicy opening',
+            'white floral': 'white floral heart',
+            woody: 'woody dry-down'
+        };
+
+        const explicitAccords = Array.isArray(productOverride?.mainAccords)
+            ? productOverride.mainAccords
+            : mainAccordCatalog[canonicalProductName(productName)] || [];
+
+        const accordAccents = explicitAccords
+            .map((accord) => accordPhraseMap[String(accord || '').toLowerCase()] || '')
+            .filter(Boolean);
+
+        const noteAccents = Array.isArray(productOverride?.notes)
+            ? productOverride.notes
+                .map((note) => String(note?.title || '').trim())
+                .filter(Boolean)
+                .map((title) => title.toLowerCase().replace(/\s*&\s*/g, ' and '))
+            : [];
+
+        const subtitleAccents = [];
+        const subtitle = String(productOverride?.subtitle || '').toLowerCase();
+        if (subtitle.includes('oriental')) subtitleAccents.push('oriental character');
+        if (subtitle.includes('woody')) subtitleAccents.push('woody structure');
+        if (subtitle.includes('amber')) subtitleAccents.push('amber signature');
+        if (subtitle.includes('gourmand')) subtitleAccents.push('gourmand touch');
+
+        return Array.from(new Set([
+            ...accordAccents,
+            ...noteAccents,
+            ...subtitleAccents,
+            'overall balance',
+            'dry-down'
+        ].filter(Boolean)));
+    };
+
+    const buildProductReviewSet = (productName, productOverride) => {
+        const baseHash = getStableHashNumber(canonicalProductName(productName));
+        const accentPool = getReviewAccentPool(productName, productOverride);
+        const cities = ['Casablanca', 'Rabat', 'Marrakech', 'Tangier', 'Agadir', 'Fes'];
+        const openerTemplates = [
+            'The %ACCENT% is what stood out first and it feels very polished on skin.',
+            'I keep noticing the %ACCENT%, and it gives the fragrance a very distinctive identity.',
+            'The %ACCENT% makes this one feel more refined than many others in the same style.',
+            'What I liked most is the %ACCENT%; it comes through clearly without feeling too much.',
+            'From the first spray, the %ACCENT% gives the scent a clean and premium impression.'
+        ];
+        const closerTemplates = [
+            'Longevity has been very solid for me and the scent stays elegant throughout the wear.',
+            'Projection is strong at the start, then it settles into a smooth and wearable trail.',
+            'It smells authentic, well blended, and easy to reach for when I want something polished.',
+            'Bottle and packaging also look excellent in person, which made the whole order feel premium.',
+            'Delivery was quick and the fragrance arrived very well protected.',
+            'The dry-down is especially good and feels more expensive than the price suggests.'
+        ];
+
+        return Array.from({ length: 3 }, (_, index) => {
+            const accent = pickSeededValue(accentPool, baseHash + (index * 7)) || 'overall balance';
+            const opener = pickSeededValue(openerTemplates, baseHash + (index * 11)).replace('%ACCENT%', accent);
+            const closer = pickSeededValue(closerTemplates, baseHash + (index * 13));
+
+            return {
+                date: buildReviewDateLabel(baseHash, index),
+                city: pickSeededValue(cities, baseHash + (index * 3)),
+                summary: `${opener} ${closer}`,
+                detail: `${opener} ${closer}`
+            };
+        });
+    };
+
     const assignReviewerNames = (productName, productOverride) => {
         const maleNames = ['Yassine A', 'Mehdi B', 'Omar E', 'Anas F', 'Hamza K', 'Rachid M'];
         const femaleNames = ['Salma B', 'Imane E', 'Nadia H', 'Sara A', 'Khadija R', 'Aya M'];
@@ -3084,10 +3438,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const summaryNames = Array.from(document.querySelectorAll('#tab-reviews .review-card h4'));
         const detailNames = Array.from(document.querySelectorAll('.customer-review-list .customer-review-item h3'));
-        if (!summaryNames.length && !detailNames.length) return;
+        const summaryCards = Array.from(document.querySelectorAll('#tab-reviews .review-card'));
+        const detailCards = Array.from(document.querySelectorAll('.customer-review-list .customer-review-item'));
+        if (!summaryNames.length && !detailNames.length && !summaryCards.length && !detailCards.length) return;
 
         const baseHash = getStableHashNumber(canonicalProductName(productName));
         const getNameForIndex = (index) => pool[(baseHash + index) % pool.length];
+        const reviewSet = buildProductReviewSet(productName, productOverride);
 
         summaryNames.forEach((el, index) => {
             el.textContent = getNameForIndex(index);
@@ -3095,6 +3452,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         detailNames.forEach((el, index) => {
             el.textContent = getNameForIndex(index);
+        });
+
+        summaryCards.forEach((card, index) => {
+            const review = reviewSet[index % reviewSet.length];
+            const dateEl = card.querySelector('.text-xs.text-gray-500');
+            const bodyEl = card.querySelector('.text-sm.text-gray-700');
+            if (dateEl) dateEl.textContent = review.date;
+            if (bodyEl) bodyEl.textContent = review.summary;
+        });
+
+        detailCards.forEach((card, index) => {
+            const review = reviewSet[index % reviewSet.length];
+            const metaEl = card.querySelector('.text-xs.text-gray-500');
+            const bodyEl = card.querySelector('.text-sm.text-gray-700');
+            if (metaEl) metaEl.textContent = `${review.date} | ${review.city} | Verified purchase`;
+            if (bodyEl) bodyEl.textContent = review.detail;
         });
     };
 
@@ -3177,8 +3550,14 @@ document.addEventListener('DOMContentLoaded', () => {
         'yves saint laurent myslf eau de parfum': ['citrus', 'white floral', 'woody', 'fresh', 'amber'],
         'yves saint laurent myslf le parfum': ['warm spicy', 'white floral', 'vanilla', 'woody', 'amber'],
         'jean paul gaultier le male elixir eau de parfum': ['vanilla', 'aromatic', 'sweet', 'amber', 'fresh spicy'],
+        'jean paul gaultier le male in blue eau de parfum': ['aromatic', 'fresh spicy', 'amber', 'marine', 'lavender'],
+        'jean paul gaultier le male eau de toilette': ['aromatic', 'fresh spicy', 'vanilla', 'warm spicy', 'woody'],
         'jean paul gaultier le male le parfum eau de parfum': ['warm spicy', 'vanilla', 'woody', 'amber', 'aromatic'],
-        'jean paul gaultier le beau eau de parfum': ['fruity', 'sweet', 'vanilla', 'woody', 'amber']
+        'jean paul gaultier le beau eau de parfum': ['fruity', 'sweet', 'vanilla', 'woody', 'amber'],
+        'carolina herrera bad boy eau de toilette': ['warm spicy', 'citrus', 'woody', 'aromatic', 'sweet'],
+        'gucci guilty absolu de parfum pour homme': ['boozy', 'woody', 'amber', 'warm spicy', 'white floral'],
+        'gucci guilty elixir pour homme': ['amber', 'powdery', 'woody', 'smoky', 'warm spicy'],
+        'montale arabians tonka': ['sweet', 'amber', 'leather', 'woody', 'floral']
     };
     const accordLookup = accordDefinitions.reduce((lookup, accord) => {
         lookup[accord.label] = accord;
@@ -4301,11 +4680,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            const orderedVisible = activeFilter === 'new-in'
+            const orderedVisible = (activeFilter === 'new-in' || activeFilter === '2026')
                 ? visibleCards
                     .slice()
                     .sort((a, b) => getCardAddedScore(b, addedIndexMap.get(b)) - getCardAddedScore(a, addedIndexMap.get(a)))
-                    .slice(0, 15)
+                    .slice(0, activeFilter === 'new-in' ? 15 : undefined)
                 : getShuffledVisible(visibleCards);
 
             const totalPages = Math.max(1, Math.ceil(orderedVisible.length / pageSize));
@@ -4368,7 +4747,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        const allowedFilters = new Set(['all', 'new-in', 'best-sellers', 'for-men', 'for-women', 'unisex', 'niche', 'arabian', 'designer', 'discovery-sets', 'offers']);
+        const allowedFilters = new Set(['all', 'new-in', 'best-sellers', 'for-men', 'for-women', 'unisex', 'niche', 'arabian', 'designer', 'discovery-sets', 'offers', '2026']);
         const urlParams = new URLSearchParams(window.location.search);
         const urlFilterRaw = urlParams.get('filter') || '';
         const urlQueryRaw = urlParams.get('q') || '';
@@ -4612,8 +4991,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetItem = items[nearestIndex];
         if (!targetItem) return;
 
+        const targetLeft = getCenteredScrollLeftForItem(carousel, targetItem);
+        if (Math.abs(carousel.scrollLeft - targetLeft) < 1) return;
+
         carousel.scrollTo({
-            left: getCenteredScrollLeftForItem(carousel, targetItem),
+            left: targetLeft,
             behavior: options.behavior || 'smooth'
         });
     };
@@ -4645,18 +5027,68 @@ document.addEventListener('DOMContentLoaded', () => {
         let startScrollLeft = 0;
         let movedDuringDrag = false;
         let snapTimerId = 0;
+        let scrollEndTimerId = 0;
+        let touchStartX = 0;
+        let touchLastX = 0;
+        let touchStartTime = 0;
+        let touchLastTime = 0;
+        let touchGestureMoved = false;
+        let touchStartIndex = -1;
+        let pendingTouchTargetIndex = -1;
         const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
         carousel.style.cursor = isCoarsePointer ? 'auto' : 'grab';
 
+        const clearSnapTimer = () => {
+            if (!snapTimerId) return;
+            window.clearTimeout(snapTimerId);
+            snapTimerId = 0;
+        };
+
+        const clearScrollEndTimer = () => {
+            if (!scrollEndTimerId) return;
+            window.clearTimeout(scrollEndTimerId);
+            scrollEndTimerId = 0;
+        };
+
+        const snapToItemIndex = (targetIndex, behavior = 'smooth') => {
+            const items = getCarouselSnapItems(carousel);
+            if (!items.length) return;
+
+            const clampedIndex = Math.max(0, Math.min(items.length - 1, targetIndex));
+            const targetItem = items[clampedIndex];
+            if (!targetItem) return;
+
+            const targetLeft = getCenteredScrollLeftForItem(carousel, targetItem);
+            if (Math.abs(carousel.scrollLeft - targetLeft) < 1) return;
+
+            carousel.scrollTo({
+                left: targetLeft,
+                behavior
+            });
+        };
+
         const queueSnap = (delay = 90) => {
-            if (snapTimerId) {
-                window.clearTimeout(snapTimerId);
-            }
+            clearSnapTimer();
 
             snapTimerId = window.setTimeout(() => {
                 snapTimerId = 0;
+                if (pendingTouchTargetIndex >= 0) {
+                    snapToItemIndex(pendingTouchTargetIndex);
+                    pendingTouchTargetIndex = -1;
+                    return;
+                }
+
                 snapCarouselToNearestItem(carousel);
+            }, delay);
+        };
+
+        const queueSnapAfterScrollSettles = (delay = 110) => {
+            clearScrollEndTimer();
+            scrollEndTimerId = window.setTimeout(() => {
+                scrollEndTimerId = 0;
+                if (isDragging) return;
+                queueSnap(0);
             }, delay);
         };
 
@@ -4665,6 +5097,9 @@ document.addEventListener('DOMContentLoaded', () => {
             movedDuringDrag = false;
             dragStartX = clientX;
             startScrollLeft = carousel.scrollLeft;
+            pendingTouchTargetIndex = -1;
+            clearSnapTimer();
+            clearScrollEndTimer();
             carousel.style.cursor = 'grabbing';
             carousel.classList.add('is-dragging-carousel');
             onInteract?.();
@@ -4689,12 +5124,56 @@ document.addEventListener('DOMContentLoaded', () => {
             updateDragging(event.clientX);
         });
 
-        carousel.addEventListener('touchstart', () => {
+        carousel.addEventListener('touchstart', (event) => {
+            const touch = event.touches?.[0];
+            const items = getCarouselSnapItems(carousel);
+
+            touchStartX = touch?.clientX || 0;
+            touchLastX = touchStartX;
+            touchStartTime = performance.now();
+            touchLastTime = touchStartTime;
+            touchGestureMoved = false;
+            touchStartIndex = items.length ? getNearestCarouselItemIndex(carousel, items) : -1;
+            pendingTouchTargetIndex = -1;
+            clearSnapTimer();
+            clearScrollEndTimer();
             onInteract?.();
         }, { passive: true });
 
+        carousel.addEventListener('touchmove', (event) => {
+            const touch = event.touches?.[0];
+            if (!touch) return;
+
+            touchLastX = touch.clientX;
+            touchLastTime = performance.now();
+            if (Math.abs(touchLastX - touchStartX) > 10) {
+                touchGestureMoved = true;
+            }
+        }, { passive: true });
+
         carousel.addEventListener('touchend', () => {
-            queueSnap(120);
+            const items = getCarouselSnapItems(carousel);
+            const referenceItem = touchStartIndex >= 0 ? items[touchStartIndex] : items[0];
+            const itemWidth = referenceItem?.offsetWidth || carousel.clientWidth || 1;
+            const elapsed = Math.max(touchLastTime - touchStartTime, 1);
+            const deltaX = touchLastX - touchStartX;
+            const velocityX = deltaX / elapsed;
+            const shouldAdvance = Math.abs(deltaX) > Math.min(72, itemWidth * 0.2) || Math.abs(velocityX) > 0.35;
+
+            if (items.length && touchGestureMoved && shouldAdvance) {
+                const direction = deltaX < 0 ? 1 : -1;
+                const baseIndex = touchStartIndex >= 0
+                    ? touchStartIndex
+                    : getNearestCarouselItemIndex(carousel, items);
+                pendingTouchTargetIndex = Math.max(0, Math.min(items.length - 1, baseIndex + direction));
+            }
+
+            queueSnapAfterScrollSettles(130);
+        }, { passive: true });
+
+        carousel.addEventListener('touchcancel', () => {
+            pendingTouchTargetIndex = -1;
+            queueSnapAfterScrollSettles(130);
         }, { passive: true });
 
         const stopDragging = () => {
@@ -4703,12 +5182,17 @@ document.addEventListener('DOMContentLoaded', () => {
             carousel.style.cursor = isCoarsePointer ? 'auto' : 'grab';
             carousel.classList.remove('is-dragging-carousel');
             if (movedDuringDrag) {
-                queueSnap(40);
+                queueSnapAfterScrollSettles(50);
             }
         };
 
         window.addEventListener('mouseup', stopDragging);
         carousel.addEventListener('mouseleave', stopDragging);
+
+        carousel.addEventListener('scroll', () => {
+            if (isDragging) return;
+            queueSnapAfterScrollSettles(isCoarsePointer ? 120 : 90);
+        }, { passive: true });
 
         carousel.addEventListener('click', (event) => {
             if (!movedDuringDrag) return;
@@ -5029,6 +5513,246 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const populate2026Section = () => {
+        const track = document.getElementById('carousel2026');
+        if (!track) return;
+
+        // ── 2026 release catalogue ──────────────────────────────────────────
+        // Products from the site's own catalog, sorted by real-world launch date.
+        // 'added' = actual global launch month — newest first (sort is descending).
+        // Note: these are the newest products the store carries; none yet have a
+        // confirmed post-Jan 2026 global launch. Update 'added' as new 2026 stock arrives.
+        const catalog2026 = [
+            // ── ~late 2024 / early 2025 ─────────────────────────────────────
+            {
+                name: 'Jean Paul Gaultier Le Male In Blue Eau de Parfum',
+                brand: 'JEAN PAUL GAULTIER',
+                id: 'jean-paul-gaultier-le-male-in-blue-eau-de-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20In%20Blue%20Eau%20de%20Parfum/1.jpg',
+                price: '',
+                sizes: ['75 ML', '125 ML'],
+                added: '2025-01-01'
+            },
+            // ── 2024 ────────────────────────────────────────────────────────
+            {
+                name: 'Givenchy Gentleman Society Nomade Eau de Parfum',
+                brand: 'GIVENCHY',
+                id: 'givenchy-gentleman-society-nomade-eau-de-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/1.webp',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2024-09-01'
+            },
+            {
+                name: 'Valentino Born in Roma Extradose Eau de Toilette',
+                brand: 'VALENTINO',
+                id: 'valentino-born-in-roma-extradose-eau-de-toilette',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/1.jpg',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2024-02-01'
+            },
+            // ── 2023 ────────────────────────────────────────────────────────
+            {
+                name: 'Yves Saint Laurent MYSLF Le Parfum',
+                brand: 'YVES SAINT LAURENT',
+                id: 'yves-saint-laurent-myslf-le-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/1.webp',
+                price: '',
+                sizes: ['60 ML', '100 ML'],
+                added: '2023-09-01'
+            },
+            {
+                name: 'Jean Paul Gaultier Scandal Elixir',
+                brand: 'JEAN PAUL GAULTIER',
+                id: 'jean-paul-gaultier-scandal-elixir',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/1.jpg',
+                price: '',
+                sizes: ['75 ML', '125 ML'],
+                added: '2023-09-01'
+            },
+            {
+                name: 'Jean Paul Gaultier Le male Elixir Eau de Parfum',
+                brand: 'JEAN PAUL GAULTIER',
+                id: 'jean-paul-gaultier-le-male-elixir-eau-de-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp',
+                price: '',
+                sizes: ['75 ML', '125 ML'],
+                added: '2023-06-01'
+            },
+            {
+                name: 'Armani Stronger With You Absolutely Perfume',
+                brand: 'GIORGIO ARMANI',
+                id: 'armani-stronger-with-you-absolutely-perfume',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/first.webp',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2023-05-01'
+            },
+            {
+                name: 'Rabanne One Million Elixir Intense',
+                brand: 'RABANNE',
+                id: 'rabanne-one-million-elixir-intense',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/1.webp',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2023-04-01'
+            },
+            {
+                name: 'Givenchy Gentleman Society Amber Eau de Parfum',
+                brand: 'GIVENCHY',
+                id: 'givenchy-gentleman-society-amber-eau-de-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/1.jpg',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2023-04-01'
+            },
+            {
+                name: 'Givenchy Gentleman Society Extreme Eau de Parfum',
+                brand: 'GIVENCHY',
+                id: 'givenchy-gentleman-society-extreme-eau-de-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/1.webp',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2023-04-01'
+            },
+            {
+                name: 'Gentleman Private Reserve Eau de Parfum',
+                brand: 'GIVENCHY',
+                id: 'gentleman-private-reserve-eau-de-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/1.png',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2023-02-01'
+            },
+            {
+                name: 'Azzaro Forever Wanted Elixir Eau de Parfum',
+                brand: 'AZZARO',
+                id: 'azzaro-forever-wanted-elixir-eau-de-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2023-02-01'
+            },
+            // ── 2022 ────────────────────────────────────────────────────────
+            {
+                name: 'Boss Bottled Absolu Intense',
+                brand: 'HUGO BOSS',
+                id: 'boss-bottled-absolu-intense',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/1.jpeg',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2022-10-01'
+            },
+            {
+                name: 'Hugo Boss Boss Bottled Elixir Intense',
+                brand: 'HUGO BOSS',
+                id: 'hugo-boss-boss-bottled-elixir-intense',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/1.jpeg',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2022-09-01'
+            },
+            {
+                name: 'Hugo Boss The Scent For Him Elixir',
+                brand: 'HUGO BOSS',
+                id: 'hugo-boss-the-scent-for-him-elixir',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/1.png',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2022-08-01'
+            },
+            {
+                name: 'Armani Stronger With You Powerfully Eau de Parfum',
+                brand: 'GIORGIO ARMANI',
+                id: 'armani-stronger-with-you-powerfully-eau-de-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2022-05-01'
+            },
+            // ── 2021 ────────────────────────────────────────────────────────
+            {
+                name: 'Valentino Born In Roma Uomo Intense Eau de Parfum',
+                brand: 'VALENTINO',
+                id: 'valentino-born-in-roma-uomo-intense-eau-de-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/1.webp',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2021-09-01'
+            },
+            {
+                name: 'Valentino Born In Roma Donna Intense Eau de Parfum',
+                brand: 'VALENTINO',
+                id: 'valentino-born-in-roma-donna-intense-eau-de-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/1.webp',
+                price: '',
+                sizes: ['50 ML', '100 ML'],
+                added: '2021-09-01'
+            }
+        ];
+        // ── end catalogue ───────────────────────────────────────────────────
+
+        // Sort newest first
+        catalog2026.sort((a, b) => b.added.localeCompare(a.added));
+
+        const buildCard = (p, index) => {
+            const sizesHTML = p.sizes
+                .map((s) => `<span class="card-2026-size">${s}</span>`)
+                .join('');
+            const priceHTML = p.price
+                ? `<p class="card-2026-price"><i class="fas fa-tag card-2026-price-icon"></i>${p.price}</p>`
+                : '';
+            const favoriteId = `${p.id}-${p.brand.toLowerCase().replace(/\s+/g, '-')}-`;
+            return `<article class="card-2026 js-product-link cursor-pointer card-2026-init"
+                    data-product-name="${p.name}"
+                    data-product-brand="${p.brand}"
+                    data-product-image="${p.image}"
+                    data-product-price="${p.price}"
+                    data-product-old-price=""
+                    data-product-discount=""
+                    data-product-reviews="0"
+                    data-id="${p.id}"
+                    data-added="${p.added}"
+                    data-product-bound="true"
+                    tabindex="0"
+                    style="--stagger:${index}">
+                    <span class="card-2026-badge">New 2026</span>
+                    <button class="card-2026-wish js-wishlist-btn product-favorite-btn" aria-label="Add to wishlist" data-favorite-id="${favoriteId}"><i class="far fa-heart"></i></button>
+                    <div class="card-2026-img-wrap">
+                        <img src="${p.image}" alt="${p.name}" loading="lazy" width="180" height="180">
+                    </div>
+                    <p class="card-2026-brand">${p.brand}</p>
+                    <p class="card-2026-name">${p.name}</p>
+                    ${priceHTML}
+                    <div class="card-2026-sizes">${sizesHTML}</div>
+                    <div class="card-2026-footer">
+                        <button class="card-2026-btn js-add-to-cart-btn"><i class="fas fa-cart-plus" style="margin-right:0.4em;font-size:0.8em;opacity:0.85"></i>Add to Cart</button>
+                    </div>
+                </article>`;
+        };
+
+        track.innerHTML = catalog2026.map((p, i) => buildCard(p, i)).join('\n');
+
+        // Staggered entrance animation via IntersectionObserver
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        const stagger = parseInt(card.style.getPropertyValue('--stagger') || '0', 10);
+                        window.setTimeout(() => card.classList.add('card-2026-in'), Math.min(stagger * 60, 480));
+                        io.unobserve(card);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+            track.querySelectorAll('.card-2026-init').forEach((c) => io.observe(c));
+        } else {
+            track.querySelectorAll('.card-2026-init').forEach((c) => c.classList.add('card-2026-in'));
+        }
+    };
+
+    populate2026Section();
     limitNewArrivalsToLatest();
     initCarousel('productCarousel');
     initCarouselDepthEffect('productCarousel');
@@ -5037,6 +5761,43 @@ document.addEventListener('DOMContentLoaded', () => {
     enableCarouselAutoplay('brandCarousel', 180, 2400);
     bindSectionCarouselNav('flashOffersSection', 'productCarousel');
     bindSectionCarouselNav('newArrivalsSection', 'newArrivalsCarousel');
+    bindSectionCarouselNav('class2026Section', 'carousel2026');
+
+    // 2026 carousel: drag scroll + 3D mouse tilt
+    const carousel2026El = document.getElementById('carousel2026');
+    if (carousel2026El) {
+        bindDragScroll(carousel2026El);
+
+        const isTouchOnly = () => window.matchMedia('(hover: none)').matches;
+
+        carousel2026El.addEventListener('mousemove', (e) => {
+            if (isTouchOnly()) return;
+            const card = e.target.closest('.card-2026');
+            if (!card) return;
+            const rect = card.getBoundingClientRect();
+            const dx = (e.clientX - (rect.left + rect.width * 0.5)) / (rect.width * 0.5);
+            const dy = (e.clientY - (rect.top + rect.height * 0.5)) / (rect.height * 0.5);
+            card.style.setProperty('--tilt-x', `${(-dy * 7).toFixed(2)}deg`);
+            card.style.setProperty('--tilt-y', `${(dx * 9).toFixed(2)}deg`);
+            card.classList.add('is-tilting');
+        }, { passive: true });
+
+        carousel2026El.addEventListener('mouseout', (e) => {
+            const card = e.target.closest('.card-2026');
+            if (!card || card.contains(e.relatedTarget)) return;
+            card.style.setProperty('--tilt-x', '0deg');
+            card.style.setProperty('--tilt-y', '0deg');
+            card.classList.remove('is-tilting');
+        }, { passive: true });
+
+        carousel2026El.addEventListener('mouseleave', () => {
+            carousel2026El.querySelectorAll('.card-2026.is-tilting').forEach((c) => {
+                c.style.setProperty('--tilt-x', '0deg');
+                c.style.setProperty('--tilt-y', '0deg');
+                c.classList.remove('is-tilting');
+            });
+        }, { passive: true });
+    }
 
     const testimonialCarousel = document.getElementById('testimonialCarousel');
     const testimonialPrev = document.getElementById('testimonialPrev');
@@ -5405,6 +6166,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
+        const placeholder = section.querySelector('#socialVideoPlaceholder');
+
         links.forEach((link) => {
             link.addEventListener('click', (event) => {
                 event.preventDefault();
@@ -5412,6 +6175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nextVideoSrc = (link.getAttribute('data-video-src') || '').trim();
                 if (nextVideoSrc && frame.getAttribute('src') !== nextVideoSrc) {
                     frame.setAttribute('src', nextVideoSrc);
+                    if (placeholder) placeholder.style.display = 'none';
                 }
 
                 setActiveLink(link);
@@ -5798,7 +6562,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const wrapperId = 'yt-bg-music';
         const toggleId = 'music-toggle-btn';
         const storageKey = 'ipordise-music-muted';
-        const interactionEvents = ['touchstart', 'click', 'scroll', 'keydown', 'mousemove'];
         const preferredVideoId = '0HDuzhQOhuM';
 
         if (!document.body) return;
@@ -5806,7 +6569,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let ytPlayer = null;
         let isReady = false;
         let isPlaying = false;
-        let isMuted = localStorage.getItem(storageKey) !== 'false';
+        // Always start silent — only play after an explicit button click
+        let isMuted = true;
 
         if (!document.getElementById(wrapperId)) {
             const wrapper = document.createElement('div');
@@ -5850,22 +6614,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem(storageKey, String(isMuted));
         };
 
-        const removeInteractionListeners = () => {
-            interactionEvents.forEach((eventName) => {
-                document.removeEventListener(eventName, startAndUnmuteOnInteraction);
-            });
-        };
 
-        const startAndUnmuteOnInteraction = () => {
-            if (!ytPlayer || !isReady || !isMuted) return;
-            ytPlayer.playVideo();
-            ytPlayer.unMute();
-            ytPlayer.setVolume(40);
-            isMuted = false;
-            persistMutedState();
-            updateBtn();
-            removeInteractionListeners();
-        };
 
         const setupMusicBtn = () => {
             const btn = document.getElementById(toggleId);
@@ -5881,7 +6630,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     ytPlayer.unMute();
                     ytPlayer.setVolume(40);
                     isMuted = false;
-                    removeInteractionListeners();
                 } else {
                     ytPlayer.mute();
                     isMuted = true;
@@ -5896,18 +6644,9 @@ document.addEventListener('DOMContentLoaded', () => {
             isReady = true;
             ytPlayer = event.target;
             ytPlayer.setVolume(40);
-
-            if (isMuted) {
-                ytPlayer.mute();
-                ytPlayer.playVideo();
-                interactionEvents.forEach((eventName) => {
-                    document.addEventListener(eventName, startAndUnmuteOnInteraction, { passive: true });
-                });
-            } else {
-                ytPlayer.unMute();
-                ytPlayer.playVideo();
-            }
-
+            // Do NOT auto-play — wait for explicit button click
+            ytPlayer.mute();
+            ytPlayer.stopVideo();
             updateBtn();
         };
 
@@ -6130,6 +6869,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* --- Back to Top Button --- */
     const backToTopBtn = document.getElementById('backToTop');
+
+    /* --- Carousel Dot Indicators --- */
+    const initCarouselDots = (carouselId, dotsContainerId) => {
+        const carousel = document.getElementById(carouselId);
+        const dotsContainer = document.getElementById(dotsContainerId);
+        if (!carousel || !dotsContainer) return;
+
+        const dots = Array.from(dotsContainer.querySelectorAll('.carousel-dot'));
+        if (!dots.length) return;
+
+        const updateActiveDot = () => {
+            const scrollLeft = carousel.scrollLeft;
+            const cardWidth = carousel.firstElementChild?.offsetWidth || 1;
+            const totalCards = carousel.children.length;
+            const ratio = Math.min(scrollLeft / (cardWidth * (totalCards - 1)), 1);
+            const activeDotIndex = Math.min(Math.round(ratio * (dots.length - 1)), dots.length - 1);
+            dots.forEach((dot, index) => dot.classList.toggle('is-active', index === activeDotIndex));
+        };
+
+        carousel.addEventListener('scroll', updateActiveDot, { passive: true });
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                const cardWidth = carousel.firstElementChild?.offsetWidth || 0;
+                const totalCards = carousel.children.length;
+                const targetIndex = Math.round((index / (dots.length - 1)) * (totalCards - 1));
+                carousel.scrollTo({ left: targetIndex * (cardWidth + 24), behavior: 'smooth' });
+            });
+        });
+
+        updateActiveDot();
+    };
+
+    initCarouselDots('productCarousel', 'productCarouselDots');
+    initCarouselDots('newArrivalsCarousel', 'newArrivalsCarouselDots');
+    initCarouselDots('carousel2026', 'carousel2026Dots');
+
+    // 2026 product count badge
+    (() => {
+        const track = document.getElementById('carousel2026');
+        const countEl = document.getElementById('section2026Count');
+        if (track && countEl) {
+            const n = track.querySelectorAll('.card-2026').length;
+            if (n > 0) countEl.textContent = n + ' fragrances';
+        }
+    })();
+
     if (backToTopBtn) {
         window.addEventListener('scroll', () => {
             if (window.scrollY > 600) {
@@ -6322,5 +7108,20 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }, { threshold: 0.3 });
         dnaFills.forEach((fill) => dnaObserver.observe(fill));
+    }
+
+    /* --- Scroll-reveal for sect-reveal elements --- */
+    if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
+        document.querySelectorAll('.sect-reveal').forEach((el) => revealObserver.observe(el));
+    } else {
+        document.querySelectorAll('.sect-reveal').forEach((el) => el.classList.add('is-visible'));
     }
 });
