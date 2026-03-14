@@ -168,7 +168,7 @@
                                 <h2 class="font-semibold text-brand-dark text-base leading-tight mt-1">${safeName}</h2>
                                 ${safeSize ? `<p class="text-xs text-gray-500 mt-1">Size: ${safeSize}</p>` : ''}
                             </div>
-                            <button type="button" data-action="remove" data-id="${safeId}" class="text-gray-400 hover:text-brand-red transition text-sm h-fit" aria-label="Cancel item">
+                            <button type="button" data-action="remove" data-id="${safeId}" class="cart-remove-btn" aria-label="Remove item">
                                 <i class="fas fa-xmark"></i>
                             </button>
                         </div>
@@ -194,12 +194,15 @@
 
     const buildEmptyStateHtml = () => {
         return `
-            <article class="cart-card bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm text-center">
-                <p class="text-lg font-semibold text-brand-dark">Your cart is empty. Start shopping.</p>
-                <p class="text-sm text-gray-500 mt-2">Discover our latest fragrances and build your signature routine.</p>
-                <a href="../discover.html" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand-red hover:text-brand-redHover transition">
-                    <i class="fas fa-arrow-left text-xs"></i> Continue Shopping
-                </a>
+            <article class="cart-card bg-white">
+                <div class="cart-empty-state">
+                    <div class="cart-empty-icon"><i class="fas fa-shopping-bag"></i></div>
+                    <p class="text-lg font-semibold text-brand-dark">Your cart is empty</p>
+                    <p class="text-sm text-gray-500 mt-1">Discover our latest fragrances and build your signature scent.</p>
+                    <a href="../discover.html" class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-red hover:text-brand-redHover transition">
+                        <i class="fas fa-arrow-left text-xs"></i> Continue Shopping
+                    </a>
+                </div>
             </article>
         `;
     };

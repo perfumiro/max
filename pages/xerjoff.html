@@ -863,6 +863,9 @@
     <script>
         var xerjoffPrices = {};
         var xerjoffPricesPromise = null;
+        var xerjoffPricesWatcherStarted = false;
+        var lastKnownXerjoffPricesSnapshot = '';
+        var XERJOFF_PRICES_REFRESH_MS = 3000;
 
         function getXerjoffPricesPath() {
             return '../xerjoff-prices.json';
@@ -886,6 +889,55 @@
                 });
 
             return xerjoffPricesPromise;
+        }
+
+        function fetchXerjoffPricesSnapshot() {
+            return fetch(getXerjoffPricesPath() + '?t=' + Date.now(), { cache: 'no-store' })
+                .then(function(response) {
+                    if (!response.ok) return '';
+                    return response.text();
+                })
+                .catch(function() {
+                    return '';
+                });
+        }
+
+        function checkForXerjoffPricesUpdate() {
+            return fetchXerjoffPricesSnapshot().then(function(nextSnapshot) {
+                if (!nextSnapshot) return;
+
+                if (!lastKnownXerjoffPricesSnapshot) {
+                    lastKnownXerjoffPricesSnapshot = nextSnapshot;
+                    return;
+                }
+
+                if (nextSnapshot !== lastKnownXerjoffPricesSnapshot) {
+                    lastKnownXerjoffPricesSnapshot = nextSnapshot;
+                    window.location.reload();
+                }
+            });
+        }
+
+        function watchXerjoffPricesChanges() {
+            if (xerjoffPricesWatcherStarted) return;
+
+            xerjoffPricesWatcherStarted = true;
+            checkForXerjoffPricesUpdate();
+
+            window.setInterval(function() {
+                if (document.hidden) return;
+                checkForXerjoffPricesUpdate();
+            }, XERJOFF_PRICES_REFRESH_MS);
+
+            window.addEventListener('focus', function() {
+                checkForXerjoffPricesUpdate();
+            });
+
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    checkForXerjoffPricesUpdate();
+                }
+            });
         }
 
         function getXerjoffPrice(productId, sizeKey) {
@@ -1003,6 +1055,7 @@
         }
 
         loadXerjoffPrices();
+        watchXerjoffPricesChanges();
     </script>
 
     <!-- Values -->

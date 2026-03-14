@@ -1,84 +1,185 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IPORDISE - Contact Us</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script src="../script.js"></script>
-  <link rel="stylesheet" href="../style.css" />
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPORDISE - Contact Us</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../script.js"></script>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
-  <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide">
-    Complimentary gift wrapping - Code: <span class="top-announcement-code">PARFUM15</span> - <a href="#" class="top-announcement-link">SHOP NOW!</a>
-  </div>
-  <header class="bg-brand-dark text-white sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20">
-            <div class="flex-shrink-0 flex items-center">
-                <a href="../index.html" class="font-serif text-3xl font-bold tracking-widest text-white">
-                    IPORDISE<span class="text-brand-red">.</span>
-                </a>
-            </div>
 
-            <div class="flex-1 max-w-2xl mx-8 relative hidden md:block">
-                <div class="relative">
-                    <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, houses, notes...">
-                    <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red">
-                        <i class="fas fa-search"></i>
-                    </button>
+    <div class="page-announce-bar">
+        <i class="fas fa-headset mr-2" style="color:#e73c3c"></i>
+        Our team is available <strong style="color:#fff">Mon&ndash;Sat, 9am&ndash;8pm</strong> to help you.
+    </div>
+
+    <header class="bg-brand-dark text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="../index.html" class="font-serif text-3xl font-bold tracking-widest text-white flex-shrink-0">IPORDISE<span class="text-brand-red">.</span></a>
+                <div class="flex-1 max-w-2xl mx-8 relative hidden md:block">
+                    <div class="relative">
+                        <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, houses, notes...">
+                        <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red"><i class="fas fa-search"></i></button>
+                    </div>
                 </div>
-            </div>
-
-            <div class="flex items-center gap-3 md:gap-6">
-                <a href="#" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">
-                    PROMOTIONS <i class="fas fa-chevron-right ml-2 text-xs"></i>
-                </a>
-
                 <div class="flex items-center gap-2 md:gap-3 text-lg">
-                    <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
-                        <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
-                    </button>
-                    <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
-                        <i class="fas fa-search"></i>
-                    </button>
+                    <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search"><i class="fas fa-search"></i></button>
                     <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
                     <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
-                    <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart">
-                        <i class="fas fa-shopping-bag"></i>
-                    </a>
+                    <a href="cart.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Cart"><i class="fas fa-shopping-bag"></i></a>
                 </div>
             </div>
         </div>
-    </div>
+    </header>
 
-    <nav class="perfume-nav hidden md:block">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ul class="perfume-nav-list">
-                <li><a href="#" class="perfume-nav-link is-active">ALL PERFUMES</a></li>
-                <li><a href="#" class="perfume-nav-link">MEN</a></li>
-                <li><a href="#" class="perfume-nav-link">WOMEN</a></li>
-                <li><a href="#" class="perfume-nav-link">UNISEX</a></li>
-                <li><a href="#" class="perfume-nav-link">NICHE</a></li>
-                <li><a href="#" class="perfume-nav-link">ARABIAN</a></li>
-                <li><a href="#" class="perfume-nav-link">DESIGNER</a></li>
-                <li><a href="#" class="perfume-nav-link">DISCOVERY SETS</a></li>
-                <li><a href="#" class="perfume-nav-link">BEST SELLERS</a></li>
-                <li><a href="#" class="perfume-nav-link">NEW IN</a></li>
-                <li><a href="#" class="perfume-nav-link">OFFERS</a></li>
-            </ul>
+    <section class="page-hero">
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+            <p class="text-white/60 text-xs mb-4 flex items-center gap-1.5">
+                <a href="../index.html" class="hover:text-white transition">Home</a>
+                <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
+                <span class="text-white/90 font-semibold">Contact Us</span>
+            </p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight">Contact Us</h1>
+            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base">Have a question, order issue, or just want to say hello? We'd love to hear from you.</p>
         </div>
-    </nav>
-</header>
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-    <h1 class="text-3xl md:text-5xl font-serif font-bold text-brand-dark">Contact Us</h1>
-    <p class="text-gray-600 mt-3 max-w-2xl">Our beauty advisors are available for product guidance, order support, and after-sales help.</p>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-      <article class="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm"><h2 class="text-xl font-bold text-brand-dark">Reach our team</h2><div class="space-y-3 mt-4 text-sm"><p><i class="fas fa-envelope text-brand-red mr-2"></i>support@ipordise.com</p><p><i class="fas fa-phone text-brand-red mr-2"></i>+212 5 22 00 00 00</p><p><i class="fas fa-clock text-brand-red mr-2"></i>Mon-Sat, 09:00-20:00</p></div></article>
-      <article class="border border-gray-200 rounded-2xl p-6 bg-brand-light"><h2 class="text-xl font-bold text-brand-dark">Send a message</h2><form class="space-y-3 mt-4"><input class="w-full border border-gray-300 rounded-lg px-4 py-3" placeholder="Full name"/><input class="w-full border border-gray-300 rounded-lg px-4 py-3" placeholder="Email"/><textarea class="w-full border border-gray-300 rounded-lg px-4 py-3" rows="4" placeholder="How can we help?"></textarea><button type="button" class="bg-brand-dark text-white px-5 py-3 rounded-lg font-semibold">Send request</button></form></article>
-    </div>
-  </main>
-    <footer class="bg-brand-dark text-white pt-16 pb-8"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12"><div><h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3><p class="text-gray-400 text-sm mb-6">The ultimate destination for luxury perfumes, cosmetics, and beauty care online. Elevate your everyday routine.</p></div><div><h4 class="font-bold text-lg mb-4">Customer Care</h4><ul class="space-y-2 text-gray-400 text-sm"><li><a href="contact.html" class="hover:text-white transition">Contact Us</a></li><li><a href="shipping.html" class="hover:text-white transition">Shipping & Returns</a></li><li><a href="track-order.html" class="hover:text-white transition">Track Order</a></li><li><a href="faq.html" class="hover:text-white transition">FAQ</a></li></ul></div><div><h4 class="font-bold text-lg mb-4">About</h4><ul class="space-y-2 text-gray-400 text-sm"><li><a href="our-story.html" class="hover:text-white transition">Our Story</a></li><li><a href="careers.html" class="hover:text-white transition">Careers</a></li><li><a href="store-locator.html" class="hover:text-white transition">Find a Store</a></li><li><a href="terms.html" class="hover:text-white transition">Terms & Conditions</a></li></ul></div><div><h4 class="font-bold text-lg mb-4">Newsletter</h4><p class="text-gray-400 text-sm mb-4">Subscribe for new arrivals, beauty tips, and more.</p><div class="flex"><input type="email" placeholder="Your email address" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red"><a href="newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition">SUBSCRIBE</a></div></div></div><div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm"><p>&copy; 2026 IPORDISE. All rights reserved.</p></div></div></footer>
+    </section>
+
+    <main class="py-10 sm:py-14" style="background:linear-gradient(160deg,#f5f6f9 0%,#eef0f6 55%,#f5f6f9 100%)">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+                <!-- Contact info -->
+                <div class="space-y-4">
+                    <p class="faq-category-title mb-5"><i class="fas fa-address-book"></i> Get in touch</p>
+
+                    <div class="info-card flex items-center gap-4">
+                        <div class="info-card-icon" style="margin:0;flex-shrink:0"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">Email</p>
+                            <a href="mailto:support@ipordise.com" class="font-semibold text-brand-dark hover:text-brand-red transition">support@ipordise.com</a>
+                            <p class="text-xs text-gray-500 mt-0.5">We reply within 24 hours</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card flex items-center gap-4">
+                        <div class="info-card-icon" style="margin:0;flex-shrink:0;background:linear-gradient(135deg,#25d366,#128c7e)"><i class="fab fa-whatsapp"></i></div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">WhatsApp</p>
+                            <a href="https://wa.me/212600000000" target="_blank" rel="noopener noreferrer" class="font-semibold text-brand-dark hover:text-brand-red transition">+212 6 00 00 00 00</a>
+                            <p class="text-xs text-gray-500 mt-0.5">Fast responses, Mon&ndash;Sat</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card flex items-center gap-4">
+                        <div class="info-card-icon" style="margin:0;flex-shrink:0"><i class="fas fa-phone"></i></div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">Phone</p>
+                            <a href="tel:+212522000000" class="font-semibold text-brand-dark hover:text-brand-red transition">+212 5 22 00 00 00</a>
+                            <p class="text-xs text-gray-500 mt-0.5">Mon&ndash;Sat, 9:00&ndash;20:00</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card flex items-center gap-4">
+                        <div class="info-card-icon" style="margin:0;flex-shrink:0"><i class="fas fa-location-dot"></i></div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">Address</p>
+                            <p class="font-semibold text-brand-dark">Casablanca, Morocco</p>
+                            <a href="store-locator.html" class="text-xs mt-0.5 inline-flex items-center gap-1" style="color:#e73c3c">Find all stores <i class="fas fa-arrow-right text-[9px]"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact form -->
+                <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+                    <p class="faq-category-title mb-5"><i class="fas fa-paper-plane"></i> Send a message</p>
+                    <form class="space-y-4" id="contactForm">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Full Name <span style="color:#e73c3c">*</span></label>
+                                <input type="text" class="contact-input" placeholder="Your name" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Email <span style="color:#e73c3c">*</span></label>
+                                <input type="email" class="contact-input" placeholder="you@example.com" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Subject</label>
+                            <select class="contact-input">
+                                <option value="">Select a topic...</option>
+                                <option>Order issue</option>
+                                <option>Delivery question</option>
+                                <option>Return request</option>
+                                <option>Product inquiry</option>
+                                <option>General question</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Message <span style="color:#e73c3c">*</span></label>
+                            <textarea class="contact-input" rows="5" placeholder="How can we help you today?" required></textarea>
+                        </div>
+                        <button type="submit" class="contact-submit-btn w-full justify-center">Send Message <i class="fas fa-paper-plane text-sm"></i></button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Quick links -->
+            <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="faq.html" class="info-card text-center group">
+                    <i class="fas fa-circle-question text-2xl mb-2" style="color:#e73c3c"></i>
+                    <p class="font-semibold text-sm text-brand-dark">FAQ</p>
+                    <p class="text-xs text-gray-500 mt-1">Quick answers</p>
+                </a>
+                <a href="shipping.html" class="info-card text-center group">
+                    <i class="fas fa-truck-fast text-2xl mb-2" style="color:#e73c3c"></i>
+                    <p class="font-semibold text-sm text-brand-dark">Shipping</p>
+                    <p class="text-xs text-gray-500 mt-1">Delivery info</p>
+                </a>
+                <a href="returns.html" class="info-card text-center group">
+                    <i class="fas fa-rotate-left text-2xl mb-2" style="color:#e73c3c"></i>
+                    <p class="font-semibold text-sm text-brand-dark">Returns</p>
+                    <p class="text-xs text-gray-500 mt-1">Returns policy</p>
+                </a>
+                <a href="track-order.html" class="info-card text-center group">
+                    <i class="fas fa-magnifying-glass-location text-2xl mb-2" style="color:#e73c3c"></i>
+                    <p class="font-semibold text-sm text-brand-dark">Track Order</p>
+                    <p class="text-xs text-gray-500 mt-1">Live tracking</p>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-brand-dark text-white pt-12 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+                <div class="col-span-2 md:col-span-1">
+                    <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online.</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div><h4 class="footer-col-title">Customer Service</h4><ul class="footer-links"><li><a href="contact.html">Contact Us</a></li><li><a href="shipping.html">Shipping &amp; Returns</a></li><li><a href="track-order.html">Track Order</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
+                <div><h4 class="footer-col-title">About</h4><ul class="footer-links"><li><a href="our-story.html">Our Story</a></li><li><a href="careers.html">Careers</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li></ul></div>
+                <div>
+                    <h4 class="footer-col-title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals and new arrivals.</p>
+                    <div class="flex"><input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a></div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
+                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <div class="flex gap-4"><a href="terms.html" class="hover:text-white transition">Terms</a><a href="privacy-policy.html" class="hover:text-white transition">Privacy</a><a href="returns.html" class="hover:text-white transition">Returns</a></div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

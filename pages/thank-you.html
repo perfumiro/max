@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Thank You</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPORDISE - Order Confirmed!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../script.js"></script>
@@ -11,44 +13,114 @@
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <main class="bg-brand-light min-h-screen flex items-center justify-center px-4 py-12">
-        <section class="max-w-2xl w-full bg-white rounded-2xl border border-gray-100 shadow-sm p-8 sm:p-10 text-center">
-            <div class="w-16 h-16 mx-auto rounded-full bg-green-100 text-green-600 flex items-center justify-center text-2xl mb-5">
-                <i class="fas fa-check"></i>
+    <div class="page-announce-bar">
+        <i class="fas fa-party-horn mr-2" style="color:#e73c3c"></i>
+        Your order is on its way! <strong style="color:#fff">Thank you for shopping with IPORDISE.</strong>
+    </div>
+
+    <header class="bg-brand-dark text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="../index.html" class="font-serif text-3xl font-bold tracking-widest text-white flex-shrink-0">IPORDISE<span class="text-brand-red">.</span></a>
+                <div class="flex-1 max-w-2xl mx-8 relative hidden md:block">
+                    <div class="relative">
+                        <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, houses, notes...">
+                        <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 md:gap-3 text-lg">
+                    <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search"><i class="fas fa-search"></i></button>
+                    <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                    <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                    <a href="cart.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Cart"><i class="fas fa-shopping-bag"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-14 sm:py-20 min-h-[80vh]" style="background:linear-gradient(160deg,#f5f6f9 0%,#eef0f6 55%,#f5f6f9 100%)">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Thank you card -->
+            <div class="bg-white rounded-2xl border border-gray-100 p-8 sm:p-12 shadow-sm text-center mb-8">
+                <div class="thank-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-serif font-bold text-brand-dark mb-3">Order Confirmed!</h1>
+                <p class="text-gray-600 text-sm sm:text-base max-w-md mx-auto leading-relaxed">Thank you for your order. We're already preparing it for dispatch. You'll receive a confirmation via WhatsApp or email shortly.</p>
+
+                <div class="mt-6 p-4 rounded-xl text-xs text-gray-500 flex items-center justify-center gap-2" style="background:#f9fafb">
+                    <i class="fas fa-clock" style="color:#e73c3c"></i>
+                    <span>Orders are typically dispatched within <strong>24 hours</strong> and delivered in <strong>1&ndash;3 business days</strong>.</span>
+                </div>
             </div>
 
-            <p class="text-xs uppercase tracking-[0.14em] text-gray-500 font-bold mb-2">Order Confirmation</p>
-            <h1 class="text-3xl sm:text-4xl font-serif font-bold text-brand-dark">Thank You For Your Order</h1>
-            <p class="mt-3 text-gray-600" id="thankYouCopy">Your confirmation has been received. Our team will contact you shortly.</p>
+            <!-- What's next -->
+            <div class="mb-8">
+                <p class="faq-category-title mb-5 mx-auto w-fit"><i class="fas fa-list-check"></i> What happens next</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="info-card text-center">
+                        <div class="thank-step-icon mx-auto mb-3"><i class="fas fa-box-open"></i></div>
+                        <p class="font-semibold text-sm text-brand-dark">1. Packing</p>
+                        <p class="text-xs text-gray-500 mt-1">Your items are carefully checked and packed within 24 hours.</p>
+                    </div>
+                    <div class="info-card text-center">
+                        <div class="thank-step-icon mx-auto mb-3"><i class="fas fa-truck-fast"></i></div>
+                        <p class="font-semibold text-sm text-brand-dark">2. In transit</p>
+                        <p class="text-xs text-gray-500 mt-1">Handed to our courier with a tracking number sent to you.</p>
+                    </div>
+                    <div class="info-card text-center">
+                        <div class="thank-step-icon mx-auto mb-3"><i class="fas fa-house-chimney-user"></i></div>
+                        <p class="font-semibold text-sm text-brand-dark">3. Delivered</p>
+                        <p class="text-xs text-gray-500 mt-1">Door-to-door delivery. Payment on delivery accepted.</p>
+                    </div>
+                </div>
+            </div>
 
-            <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a href="../discover.html" class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-red hover:bg-brand-redHover text-white font-bold px-6 py-3 transition">
+            <!-- CTAs -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+                <a href="track-order.html" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white" style="background:#1a1a1a">
+                    <i class="fas fa-magnifying-glass-location"></i> Track my order
+                </a>
+                <a href="../discover.html" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm border border-gray-200 text-gray-700 hover:border-brand-red hover:text-brand-red transition">
                     Continue Shopping <i class="fas fa-arrow-right text-xs"></i>
                 </a>
-                <a href="track-order.html" class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 text-gray-700 font-semibold px-6 py-3 hover:bg-gray-100 transition">
-                    Track Order
-                </a>
             </div>
-        </section>
+
+            <!-- Trust strip -->
+            <div class="trust-strip mx-auto max-w-lg">
+                <span class="trust-strip-item"><i class="fas fa-lock"></i> SSL Secure</span>
+                <span class="trust-strip-item"><i class="fas fa-certificate"></i> 100% Authentic</span>
+                <span class="trust-strip-item"><i class="fas fa-rotate-left"></i> 14-day Returns</span>
+            </div>
+        </div>
     </main>
 
-    <script>
-        (function () {
-            sessionStorage.removeItem('ipordise-order-confirm-pending');
-            sessionStorage.removeItem('ipordise-order-confirm-left-page');
-
-            var copyEl = document.getElementById('thankYouCopy');
-            var channel = new URLSearchParams(window.location.search).get('channel');
-            if (!copyEl) return;
-
-            if (channel === 'whatsapp') {
-                copyEl.textContent = 'Your WhatsApp confirmation has been prepared. Our team will contact you shortly.';
-            }
-
-            if (channel === 'email') {
-                copyEl.textContent = 'Your email confirmation has been prepared. Our team will contact you shortly.';
-            }
-        })();
-    </script>
+    <footer class="bg-brand-dark text-white pt-12 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+                <div class="col-span-2 md:col-span-1">
+                    <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online.</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div><h4 class="footer-col-title">Customer Service</h4><ul class="footer-links"><li><a href="contact.html">Contact Us</a></li><li><a href="shipping.html">Shipping &amp; Returns</a></li><li><a href="track-order.html">Track Order</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
+                <div><h4 class="footer-col-title">About</h4><ul class="footer-links"><li><a href="our-story.html">Our Story</a></li><li><a href="careers.html">Careers</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li></ul></div>
+                <div>
+                    <h4 class="footer-col-title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals and new arrivals.</p>
+                    <div class="flex"><input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a></div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
+                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <div class="flex gap-4"><a href="terms.html" class="hover:text-white transition">Terms</a><a href="privacy-policy.html" class="hover:text-white transition">Privacy</a><a href="returns.html" class="hover:text-white transition">Returns</a></div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

@@ -1,9 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPORDISE - Your Cart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -14,204 +17,222 @@
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <div class="bg-brand-red text-white text-center py-2 text-sm font-medium tracking-wide">
-        Delivery fee: 35 MAD in all Morocco cities. <a href="#" class="underline hover:text-gray-200">SHOP NOW!</a>
+    <!-- Announcement Bar -->
+    <div class="page-announce-bar">
+        <i class="fas fa-truck-fast mr-2 text-brand-red" style="color:#e73c3c"></i>
+        Fixed delivery fee of <strong style="color:#fff">35 MAD</strong> anywhere in Morocco &mdash; fast & secure.
+        <a href="../discover.html" class="ml-2">SHOP NOW &rarr;</a>
     </div>
 
+    <!-- Header -->
     <header class="bg-brand-dark text-white sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20">
-            <div class="flex-shrink-0 flex items-center">
-                <a href="../index.html" class="font-serif text-3xl font-bold tracking-widest text-white">
-                    IPORDISE<span class="text-brand-red">.</span>
-                </a>
-            </div>
-
-            <div class="flex-1 max-w-2xl mx-8 relative hidden md:block">
-                <div class="relative">
-                    <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, houses, notes...">
-                    <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-3 md:gap-6">
-                <a href="#" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">
-                    PROMOTIONS <i class="fas fa-chevron-right ml-2 text-xs"></i>
-                </a>
-
-                <div class="flex items-center gap-2 md:gap-3 text-lg">
-                    <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
-                        <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
-                    </button>
-                    <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
-                    <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
-                    <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart">
-                        <i class="fas fa-shopping-bag"></i>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="../index.html" class="font-serif text-3xl font-bold tracking-widest text-white">
+                        IPORDISE<span class="text-brand-red">.</span>
                     </a>
                 </div>
+                <div class="flex-1 max-w-2xl mx-8 relative hidden md:block">
+                    <div class="relative">
+                        <input type="text" class="w-full bg-white text-gray-900 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-red" placeholder="Search for perfumes, houses, notes...">
+                        <button class="absolute right-0 top-0 mt-2.5 mr-4 text-gray-500 hover:text-brand-red"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 md:gap-3 text-lg">
+                    <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search"><i class="fas fa-search"></i></button>
+                    <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                    <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                    <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart"><i class="fas fa-shopping-bag"></i></a>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
 
-    <nav class="perfume-nav hidden md:block">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ul class="perfume-nav-list">
-                <li><a href="#" class="perfume-nav-link is-active">ALL PERFUMES</a></li>
-                <li><a href="#" class="perfume-nav-link">MEN</a></li>
-                <li><a href="#" class="perfume-nav-link">WOMEN</a></li>
-                <li><a href="#" class="perfume-nav-link">UNISEX</a></li>
-                <li><a href="#" class="perfume-nav-link">NICHE</a></li>
-                <li><a href="#" class="perfume-nav-link">ARABIAN</a></li>
-                <li><a href="#" class="perfume-nav-link">DESIGNER</a></li>
-                <li><a href="#" class="perfume-nav-link">DISCOVERY SETS</a></li>
-                <li><a href="#" class="perfume-nav-link">BEST SELLERS</a></li>
-                <li><a href="#" class="perfume-nav-link">NEW IN</a></li>
-                <li><a href="#" class="perfume-nav-link">OFFERS</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
-
+    <!-- Hero -->
     <section class="cart-hero relative overflow-hidden">
-        <div class="absolute inset-0 bg-black/50"></div>
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-            <p class="text-white/80 text-sm mb-4">
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+            <!-- Breadcrumb -->
+            <p class="text-white/60 text-xs mb-5 flex items-center gap-1.5">
                 <a href="../index.html" class="hover:text-white transition">Home</a>
-                <span class="mx-2">/</span>
-                <span class="text-white font-semibold">Cart</span>
+                <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
+                <span class="text-white/90 font-semibold">Cart</span>
             </p>
 
-            <div class="checkout-steps inline-flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm font-bold tracking-[0.12em] uppercase bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2.5 text-white">
-                <span class="text-brand-red">Cart</span>
-                <i class="fas fa-arrow-right text-[10px] opacity-70"></i>
-                <a href="checkout.html" class="opacity-80 hover:opacity-100 hover:text-white transition">Checkout</a>
-                <i class="fas fa-arrow-right text-[10px] opacity-70"></i>
-                <span class="opacity-80">Place Order</span>
+            <!-- Step indicator -->
+            <div class="page-steps mb-5">
+                <div class="page-step is-active">
+                    <span class="page-step-num">1</span>
+                    <span class="page-step-label">Cart</span>
+                </div>
+                <div class="page-step-sep"></div>
+                <div class="page-step">
+                    <span class="page-step-num">2</span>
+                    <span class="page-step-label">Checkout</span>
+                </div>
+                <div class="page-step-sep"></div>
+                <div class="page-step">
+                    <span class="page-step-num">3</span>
+                    <span class="page-step-label">Confirm</span>
+                </div>
             </div>
 
-            <h1 class="mt-5 text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight">Your Cart</h1>
-            <p class="mt-2 text-white/80 max-w-2xl text-sm sm:text-base">Review your products before proceeding to checkout and payment.</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight">Your Cart</h1>
+            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base">Review and adjust your selection before proceeding to secure checkout.</p>
         </div>
     </section>
 
-    <main class="bg-brand-light py-10 sm:py-12 min-h-[70vh]">
+    <!-- Main -->
+    <main class="py-10 sm:py-14 min-h-[70vh]" style="background: linear-gradient(160deg,#f5f6f9 0%,#eef0f6 55%,#f5f6f9 100%);">
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-8 flex flex-wrap items-center justify-between gap-3">
-                <p id="cartCountText" class="text-sm text-gray-500">3 products selected for your signature routine.</p>
-                <a href="../discover.html" class="text-sm font-semibold text-brand-red hover:text-brand-redHover transition inline-flex items-center gap-2">
+
+            <!-- Top row -->
+            <div class="mb-7 flex flex-wrap items-center justify-between gap-3">
+                <p id="cartCountText" class="text-sm text-gray-500 font-medium"></p>
+                <a href="../discover.html" class="text-sm font-semibold text-gray-600 hover:text-brand-red transition inline-flex items-center gap-2">
                     <i class="fas fa-arrow-left text-xs"></i> Continue Shopping
                 </a>
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8 items-start">
+                <!-- Cart items -->
                 <div id="cartItemsContainer" class="xl:col-span-2 space-y-4" aria-live="polite"></div>
 
+                <!-- Sidebar -->
                 <aside class="space-y-4 xl:sticky xl:top-28">
-                    <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                        <h3 class="text-lg font-bold text-brand-dark mb-4">Order Summary</h3>
 
-                        <div class="space-y-2 text-sm text-gray-600">
-                            <div class="flex items-center justify-between">
-                                <span>Subtotal</span>
-                                <span id="cartSubtotal" class="font-semibold text-gray-800">797.50 MAD</span>
+                    <!-- Order Summary -->
+                    <div class="order-summary-card">
+                        <div class="order-summary-head">
+                            <h3>Order Summary</h3>
+                            <i class="fas fa-receipt text-white/40 text-sm"></i>
+                        </div>
+                        <div class="order-summary-body">
+                            <div class="space-y-0.5 mb-3">
+                                <div class="order-line">
+                                    <span class="lbl">Subtotal</span>
+                                    <span id="cartSubtotal" class="val">â€”</span>
+                                </div>
+                                <div class="order-line">
+                                    <span class="lbl">Shipping</span>
+                                    <span id="cartShipping" class="val text-green-600">35 MAD</span>
+                                </div>
+                                <div class="order-line">
+                                    <span class="lbl">Tax</span>
+                                    <span id="cartTax" class="val">Incl.</span>
+                                </div>
+                                <div class="order-line">
+                                    <span class="lbl" style="color:#e73c3c">Discount</span>
+                                    <span id="cartPromo" class="val" style="color:#e73c3c">0 MAD</span>
+                                </div>
                             </div>
-                            <div class="flex items-center justify-between">
-                                <span>Shipping</span>
-                                <span id="cartShipping" class="font-semibold text-green-600">35 MAD (VAT incl.)</span>
+
+                            <!-- Promo code -->
+                            <div class="promo-code-row mb-4">
+                                <input type="text" placeholder="Promo code" aria-label="Promo code">
+                                <button type="button">Apply</button>
                             </div>
-                            <div class="flex items-center justify-between">
-                                <span>Estimated Tax</span>
-                                <span id="cartTax" class="font-semibold text-gray-800">Included in shipping</span>
+
+                            <div class="order-total-row mb-4">
+                                <span class="order-total-label">Total</span>
+                                <span id="cartTotal" class="order-total-value">â€”</span>
                             </div>
-                            <div class="flex items-center justify-between text-brand-red">
-                                <span>Discount</span>
-                                <span id="cartPromo" class="font-semibold">0 MAD</span>
-                            </div>
+
+                            <a id="proceedToCheckoutBtn" href="checkout.html" class="checkout-cta-btn" aria-disabled="false">
+                                Proceed to Checkout <i class="fas fa-lock text-xs"></i>
+                            </a>
                         </div>
 
-                        <div class="my-4 border-t border-gray-100 pt-4 flex items-center justify-between">
-                            <span class="text-base font-semibold text-brand-dark">Total</span>
-                            <span id="cartTotal" class="text-2xl font-bold text-brand-dark">701.78 MAD</span>
+                        <!-- Trust strip -->
+                        <div class="trust-strip">
+                            <span class="trust-strip-item"><i class="fas fa-lock"></i> Secure</span>
+                            <span class="trust-strip-item"><i class="fas fa-rotate-left"></i> 14-day return</span>
+                            <span class="trust-strip-item"><i class="fas fa-certificate"></i> 100% Authentic</span>
                         </div>
-
-                        <a id="proceedToCheckoutBtn" href="checkout.html" class="w-full bg-brand-red hover:bg-brand-redHover text-white font-bold py-3 rounded-xl transition duration-200 inline-flex items-center justify-center gap-2" aria-disabled="false">
-                            Proceed to Checkout <i class="fas fa-lock text-xs"></i>
-                        </a>
-
-                        <p class="text-[11px] text-gray-500 text-center mt-3">
-                            Secure payment by card, cash on delivery, and wallet.
-                        </p>
                     </div>
 
-                    <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                        <h3 class="text-sm font-bold text-brand-dark mb-3 tracking-wide uppercase">Delivery Policy</h3>
-                        <p class="text-sm text-gray-600">Delivery fee is fixed at 35 MAD in all Morocco cities. No promo code is required.</p>
+                    <!-- Delivery info -->
+                    <div class="sidebar-info-card">
+                        <p class="sidebar-card-title"><i class="fas fa-truck-fast"></i> Delivery</p>
+                        <p class="text-sm text-gray-600 leading-relaxed">Fixed delivery fee of <strong>35 MAD</strong> in all Morocco cities. Express shipping to major cities.</p>
                     </div>
 
-                    <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                        <h3 class="text-sm font-bold text-brand-dark mb-3 tracking-wide uppercase">Shipping Benefits</h3>
-                        <ul class="space-y-3 text-sm text-gray-600">
-                            <li class="flex items-start gap-3"><i class="fas fa-truck text-brand-red mt-0.5"></i><span>Express delivery in major cities.</span></li>
-                            <li class="flex items-start gap-3"><i class="fas fa-box-open text-brand-red mt-0.5"></i><span>Luxury-safe packaging for fragrances.</span></li>
-                            <li class="flex items-start gap-3"><i class="fas fa-rotate-left text-brand-red mt-0.5"></i><span>Easy returns within 14 days.</span></li>
+                    <!-- Benefits -->
+                    <div class="sidebar-info-card">
+                        <p class="sidebar-card-title"><i class="fas fa-shield-halved"></i> Shopping Benefits</p>
+                        <ul class="space-y-2.5 text-sm text-gray-600">
+                            <li class="flex items-start gap-2.5"><i class="fas fa-box text-brand-red mt-0.5 text-xs"></i> Luxury-safe packaging for fragrances</li>
+                            <li class="flex items-start gap-2.5"><i class="fas fa-rotate-left text-brand-red mt-0.5 text-xs"></i> Easy 14-day returns, no questions asked</li>
+                            <li class="flex items-start gap-2.5"><i class="fas fa-certificate text-brand-red mt-0.5 text-xs"></i> 100% authentic products guaranteed</li>
                         </ul>
+                    </div>
+
+                    <!-- Payment logos -->
+                    <div class="sidebar-info-card">
+                        <p class="sidebar-card-title"><i class="fas fa-credit-card"></i> We Accept</p>
+                        <div class="flex flex-wrap gap-2 mt-1">
+                            <span class="payment-icon"><i class="fab fa-cc-visa text-xl"></i></span>
+                            <span class="payment-icon"><i class="fab fa-cc-mastercard text-xl"></i></span>
+                            <span class="payment-icon"><i class="fab fa-cc-paypal text-xl"></i></span>
+                            <span class="payment-icon payment-icon-text">COD</span>
+                        </div>
                     </div>
                 </aside>
             </div>
         </section>
     </main>
 
-    <footer class="bg-brand-dark text-white pt-16 pb-8">
+    <!-- Minimal Footer -->
+    <footer class="bg-brand-dark text-white pt-12 pb-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-                <div>
-                    <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-6">The ultimate destination for luxury perfumes, cosmetics, and beauty care online. Elevate your everyday routine.</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-tiktok"></i></a>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+                <div class="col-span-2 md:col-span-1">
+                    <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online. Elevate your everyday.</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Customer Care</h4>
-                    <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="contact.html" class="hover:text-white transition">Contact Us</a></li>
-                        <li><a href="shipping.html" class="hover:text-white transition">Shipping & Returns</a></li>
-                        <li><a href="track-order.html" class="hover:text-white transition">Track Order</a></li>
-                        <li><a href="faq.html" class="hover:text-white transition">FAQ</a></li>
+                    <h4 class="footer-col-title">Customer Service</h4>
+                    <ul class="footer-links">
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="shipping.html">Shipping & Returns</a></li>
+                        <li><a href="track-order.html">Track Order</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">About</h4>
-                    <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="our-story.html" class="hover:text-white transition">Our Story</a></li>
-                        <li><a href="careers.html" class="hover:text-white transition">Careers</a></li>
-                        <li><a href="store-locator.html" class="hover:text-white transition">Find a Store</a></li>
-                        <li><a href="terms.html" class="hover:text-white transition">Terms & Conditions</a></li>
+                    <h4 class="footer-col-title">About</h4>
+                    <ul class="footer-links">
+                        <li><a href="our-story.html">Our Story</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="store-locator.html">Find a Store</a></li>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Newsletter</h4>
-                    <p class="text-gray-400 text-sm mb-4">Subscribe for new arrivals, beauty tips, and more.</p>
+                    <h4 class="footer-col-title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Subscribe for new arrivals and exclusive deals.</p>
                     <div class="flex">
-                        <input type="email" placeholder="Your email address" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">
-                        <a href="newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition">SUBSCRIBE</a>
+                        <input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10">
+                        <a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+            <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
                 <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="terms.html" class="hover:text-white transition">Terms</a>
+                    <a href="privacy-policy.html" class="hover:text-white transition">Privacy</a>
+                    <a href="returns.html" class="hover:text-white transition">Returns</a>
+                </div>
             </div>
         </div>
     </footer>
 
     <script src="cart.js" defer></script>
-
 </body>
 </html>
