@@ -6459,6 +6459,79 @@ body.consent-visible {
     border-left-color: #e73c3c;
 }
 
+/* ═══════════════════════════════════════════
+   Discover Page — Search Bar
+═══════════════════════════════════════════ */
+.ipo-discover-search-wrap {
+    width: 100%;
+}
+.ipo-discover-search-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.ipo-discover-search-icon {
+    position: absolute;
+    left: 16px;
+    color: #9ca3af;
+    font-size: 0.85rem;
+    pointer-events: none;
+    transition: color 0.2s;
+    z-index: 1;
+}
+.ipo-discover-search-input {
+    width: 100%;
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 9999px;
+    padding: 11px 44px 11px 42px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    color: #111827;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.ipo-discover-search-input::placeholder {
+    color: #9ca3af;
+    font-size: 0.85rem;
+}
+.ipo-discover-search-input:focus {
+    border-color: #e73c3c;
+    box-shadow: 0 0 0 3px rgba(231,60,60,0.10), 0 1px 4px rgba(0,0,0,0.05);
+}
+.ipo-discover-search-input:focus ~ .ipo-discover-search-icon,
+.ipo-discover-search-inner:focus-within .ipo-discover-search-icon {
+    color: #e73c3c;
+}
+.ipo-discover-search-clear {
+    position: absolute;
+    right: 12px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    border: none;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    font-size: 0.75rem;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+}
+.ipo-discover-search-clear:hover {
+    background: #e73c3c;
+    color: #fff;
+}
+.ipo-discover-search-status {
+    margin-top: 7px;
+    padding-left: 4px;
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
 /* Mobile: flip gradient to bottom-up so model shows at top, dark text area at bottom */
 @media (max-width: 639px) {
     .discover-hero {

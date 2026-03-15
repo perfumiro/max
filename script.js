@@ -5041,13 +5041,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const cardMatchesQuery = (card, query) => {
             if (!query) return true;
-                const priceText = card.querySelector('.price')?.textContent || '';
+            const priceText = card.querySelector('.price')?.textContent || '';
             const haystack = normalizeSearchText([
                 card.dataset.productName,
                 card.dataset.productBrand,
-                    priceText
+                card.dataset.id,
+                priceText
             ].filter(Boolean).join(' '));
             const tokens = normalizeSearchText(query).split(/\s+/).filter(Boolean);
+            /* each token must appear somewhere in the haystack (prefix-friendly) */
             return tokens.every((token) => haystack.includes(token));
         };
 

@@ -292,13 +292,91 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 <!-- Section header -->
-                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-5">
                     <div>
                         <h2 class="text-2xl sm:text-3xl font-bold text-brand-dark tracking-tight" data-i18n="discover.collection_title">Our Collection</h2>
                         <p class="text-sm text-gray-500 mt-1"><span data-discover-count>20</span> <span data-discover-count-label data-i18n="discover.products_label">products available</span></p>
                     </div>
                     <p class="text-xs text-gray-400 hidden sm:block">Curated. Authentic. Delivered.</p>
                 </div>
+
+                <!-- ── Discover Search Bar ── -->
+                <div class="ipo-discover-search-wrap mb-5">
+                    <div class="ipo-discover-search-inner">
+                        <i class="fas fa-magnifying-glass ipo-discover-search-icon"></i>
+                        <input
+                            type="text"
+                            id="discoverSearchBar"
+                            class="ipo-discover-search-input"
+                            placeholder="Search perfumes, brands, notes…"
+                            data-discover-search
+                            autocomplete="off"
+                            spellcheck="false"
+                        />
+                        <button type="button" id="discoverSearchClear" class="ipo-discover-search-clear" aria-label="Clear search" style="display:none;">
+                            <i class="fas fa-xmark"></i>
+                        </button>
+                    </div>
+                    <p id="discoverSearchStatus" class="ipo-discover-search-status" style="display:none;"></p>
+                </div>
+                <script>
+                (function() {
+                    var input  = document.getElementById('discoverSearchBar');
+                    var clear  = document.getElementById('discoverSearchClear');
+                    var status = document.getElementById('discoverSearchStatus');
+                    if (!input) return;
+
+                    /* show/hide clear button */
+                    function syncClear() {
+                        clear.style.display = input.value.length ? 'flex' : 'none';
+                    }
+
+                    /* update status pill */
+                    function updateStatus() {
+                        var q = input.value.trim();
+                        if (!q) { status.style.display = 'none'; return; }
+                        var count = document.querySelector('[data-discover-count]');
+                        var n = count ? count.textContent.trim() : '';
+                        if (n !== '') {
+                            status.textContent = n + ' result' + (n === '1' ? '' : 's') + ' for "' + q + '"';
+                            status.style.display = 'block';
+                        }
+                    }
+
+                    /* scroll to grid */
+                    function scrollToGrid() {
+                        var grid = document.querySelector('[data-discover-grid]');
+                        if (!grid) return;
+                        var top = grid.getBoundingClientRect().top + window.scrollY - 80;
+                        if (window.scrollY < top - 10) window.scrollTo({ top: top, behavior: 'smooth' });
+                    }
+
+                    /* debounce wrapper for status update (grid is already updated by script.js listener) */
+                    var statusTimer;
+                    input.addEventListener('input', function() {
+                        syncClear();
+                        clearTimeout(statusTimer);
+                        statusTimer = setTimeout(function() {
+                            updateStatus();
+                            if (input.value.trim()) scrollToGrid();
+                        }, 120);
+                    });
+
+                    /* watch discover-count changes to keep status in sync */
+                    var countEl = document.querySelector('[data-discover-count]');
+                    if (countEl && window.MutationObserver) {
+                        new MutationObserver(updateStatus).observe(countEl, { childList: true, subtree: true });
+                    }
+
+                    clear.addEventListener('click', function() {
+                        input.value = '';
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
+                        syncClear();
+                        status.style.display = 'none';
+                        input.focus();
+                    });
+                })();
+                </script>
 
                 <!-- Filter bar — horizontal scroll on mobile -->
                 <div class="relative mb-8">
