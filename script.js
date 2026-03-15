@@ -3131,16 +3131,6 @@ document.addEventListener('DOMContentLoaded', () => {
             menu.classList.remove('hidden');
         };
 
-        /* ── On non-discover pages: debounced redirect as user types ── */
-        let redirectTimer = null;
-        const scheduleRedirect = (query) => {
-            clearTimeout(redirectTimer);
-            if (!query.trim()) return;
-            redirectTimer = setTimeout(() => {
-                openDiscoverQuery(query.trim());
-            }, 600);
-        };
-
         searchInputs.forEach((input) => {
             const wrapper = input.closest('.relative') || input.parentElement;
             if (!wrapper) return;
@@ -3156,10 +3146,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const value = event.target.value || '';
                 const suggestions = value.length < 2 ? [] : buildSuggestions(value);
                 renderMenu(menu, suggestions, value);
-                /* On non-discover pages redirect after short pause */
-                if (!onDiscoverPage) {
-                    scheduleRedirect(value);
-                }
             });
 
             input.addEventListener('focus', (event) => {
@@ -3171,12 +3157,10 @@ document.addEventListener('DOMContentLoaded', () => {
             input.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter') {
                     event.preventDefault();
-                    clearTimeout(redirectTimer);
                     const trimmed = String(input.value || '').trim();
                     openDiscoverQuery(trimmed || '', trimmed ? '' : 'all');
                 }
                 if (event.key === 'Escape') {
-                    clearTimeout(redirectTimer);
                     closeAllMenus();
                 }
             });
@@ -5297,25 +5281,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setActiveButton(defaultButton);
         activeFilter = (defaultButton.dataset.discoverFilter || 'all').toLowerCase();
-        activeQuery = savedQuery || urlQueryRaw || '';
-        currentPage = savedPage || 1;
+        /* When arriving via a direct URL filter link, ignore any saved search query/page
+           so the user sees clean results for the chosen filter. */
+        activeQuery = hasUrlFilter ? (urlQueryRaw || '') : (savedQuery || urlQueryRaw || '');
+        currentPage = hasUrlFilter ? 1 : (savedPage || 1);
         if (activeQuery) {
             searchInputs.forEach((input) => {
                 input.value = activeQuery;
             });
-        }
-        if (searchInputs.length) {
+            /* Only open the mobile search panel and focus when there is an actual query */
             const mobileSearchPanel = document.querySelector('.header-mobile-search');
             if (mobileSearchPanel) {
                 mobileSearchPanel.classList.add('is-open');
                 mobileSearchPanel.setAttribute('aria-hidden', 'false');
             }
-
             const mobileInput = mobileSearchPanel
                 ? mobileSearchPanel.querySelector('input[type="text"]')
                 : null;
             const targetInput = mobileInput || searchInputs[0];
-
             if (targetInput) {
                 targetInput.focus({ preventScroll: true });
                 const length = targetInput.value.length;
