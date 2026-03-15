@@ -3237,6 +3237,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeAllMenus();
             }
         });
+
+        window.addEventListener('scroll', () => { closeAllMenus(); }, { passive: true });
     };
 
     const bindProductLinks = () => {
