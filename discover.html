@@ -159,50 +159,60 @@
         <section class="relative">
             <!-- Hero Banner -->
             <div class="discover-hero relative flex flex-col justify-end overflow-hidden"
-                 style="min-height: clamp(500px, 78vh, 820px); background-image: linear-gradient(to right, rgba(8,10,16,0.97) 0%, rgba(8,10,16,0.90) 28%, rgba(8,10,16,0.50) 58%, rgba(8,10,16,0.04) 100%), url('https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/assets/Herosectionphotos/DISCOVER%20PHOTO.png'); background-size: cover; background-position: center 18%;">
+                 style="min-height: clamp(480px, 78vh, 820px); background-image: linear-gradient(to right, rgba(8,10,16,0.97) 0%, rgba(8,10,16,0.90) 28%, rgba(8,10,16,0.50) 58%, rgba(8,10,16,0.04) 100%), url('https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/assets/Herosectionphotos/DISCOVER%20PHOTO.png'); background-size: cover; background-position: center 18%;">
 
-                <!-- Breadcrumb — sits at the very top -->
-                <div class="absolute top-0 left-0 right-0 pt-5 pb-3 bg-gradient-to-b from-black/50 to-transparent">
+                <!-- Breadcrumb -->
+                <div class="absolute top-0 left-0 right-0 pt-4 sm:pt-5 pb-3 bg-gradient-to-b from-black/40 to-transparent">
                     <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
-                        <p class="text-[11px] text-white/50 flex items-center gap-1.5">
-                            <a href="index.html" class="hover:text-white/90 transition" data-i18n="common.breadcrumb_home">Home</a>
-                            <i class="fas fa-chevron-right text-[7px] opacity-50"></i>
-                            <span class="text-white/70" data-i18n="discover.breadcrumb">Discover the collection</span>
+                        <p class="text-[10px] sm:text-[11px] text-white/45 flex items-center gap-1.5">
+                            <a href="index.html" class="hover:text-white/80 transition" data-i18n="common.breadcrumb_home" data-i18n-orig="Home">Home</a>
+                            <i class="fas fa-chevron-right text-[7px] opacity-40"></i>
+                            <span class="text-white/60" data-i18n="discover.breadcrumb" data-i18n-orig="Discover">Discover</span>
                         </p>
                     </div>
                 </div>
 
                 <!-- Hero content -->
-                <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pb-0 w-full">
+                <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pb-0 w-full">
 
                     <!-- Kicker badge -->
-                    <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-sm text-white/80 text-[10px] uppercase tracking-[0.25em] font-bold px-4 py-2 rounded-full mb-5 sm:mb-6">
-                        <i class="fas fa-gem text-brand-red text-[9px]"></i>
-                        <span data-i18n="discover.hero_kicker">Premium Fragrance Edit</span>
+                    <div class="inline-flex items-center gap-1.5 bg-white/[0.07] border border-white/20 backdrop-blur-sm text-white/70 uppercase font-bold rounded-full mb-3 sm:mb-6"
+                         style="font-size:9px; letter-spacing:0.20em; padding:6px 12px;">
+                        <i class="fas fa-gem text-brand-red" style="font-size:8px;"></i>
+                        <span data-i18n="discover.hero_kicker" data-i18n-orig="Premium Fragrance Edit">Premium Fragrance Edit</span>
                     </div>
 
-                    <!-- Headline with red left accent -->
-                    <h1 class="font-serif font-bold text-white leading-[1.06] max-w-xl mb-4 sm:mb-5 pl-4 border-l-2 border-brand-red"
-                        style="font-size: clamp(2.1rem, 4.5vw, 4.2rem);"
-                        data-i18n="discover.hero_title">Discover our collection</h1>
+                    <!-- Headline -->
+                    <h1 class="font-serif font-bold text-white leading-[1.05] mb-3 sm:mb-5 pl-3 sm:pl-4 border-l-[3px] border-brand-red"
+                        style="font-size: clamp(1.9rem, 8vw, 4.2rem); max-width: 22rem;"
+                        data-i18n="discover.hero_title" data-i18n-orig="Discover our collection">Discover our collection</h1>
 
-                    <!-- Sub-copy — always visible at sm+ -->
-                    <p class="hidden sm:block text-white/65 max-w-lg text-sm sm:text-[0.97rem] leading-relaxed mb-7 sm:mb-9"
-                       data-i18n="discover.hero_sub">Explore signature fragrances for every mood, season, and occasion — carefully curated for men and women.</p>
+                    <!-- Sub-copy: short on mobile, full on desktop -->
+                    <p class="text-white/55 leading-relaxed mb-4 sm:mb-9"
+                       style="font-size: clamp(0.76rem, 3.2vw, 0.97rem); max-width: 30rem;">
+                        <span class="sm:hidden">Niche, designer &amp; Arabian &mdash; curated for every mood.</span>
+                        <span class="hidden sm:inline" data-i18n="discover.hero_sub" data-i18n-orig="Explore signature fragrances for every mood, season, and occasion — carefully curated for men and women.">Explore signature fragrances for every mood, season, and occasion &mdash; carefully curated for men and women.</span>
+                    </p>
 
-                    <!-- CTA buttons -->
-                    <div class="flex flex-wrap gap-2 sm:gap-3 mb-7 sm:mb-2">
-                        <button type="button" onclick="document.querySelector('[data-discover-filter=new-in]')?.click(); document.getElementById('discover-collection')?.scrollIntoView({behavior:'smooth', block:'start'});"
-                                class="inline-flex items-center gap-2 bg-white text-gray-900 text-xs sm:text-[0.8rem] font-bold px-5 py-2.5 sm:px-7 sm:py-3.5 rounded-full hover:bg-brand-red hover:text-white active:scale-95 transition duration-200 shadow-lg">
-                            <i class="fas fa-sparkles text-[10px]"></i> New Arrivals
+                    <!-- CTA buttons: fluid sizing, no wrapping on mobile -->
+                    <div class="flex gap-2 sm:gap-3 mb-6 sm:mb-2">
+                        <button type="button"
+                                onclick="document.querySelector('[data-discover-filter=new-in]')?.click(); document.getElementById('discover-collection')?.scrollIntoView({behavior:'smooth', block:'start'});"
+                                class="inline-flex items-center gap-1.5 bg-white text-gray-900 font-bold rounded-full shadow-lg hover:bg-brand-red hover:text-white active:scale-95 transition duration-200 whitespace-nowrap"
+                                style="font-size:clamp(0.68rem,2.8vw,0.8rem); padding:clamp(8px,2.4vw,14px) clamp(14px,4.5vw,28px);">
+                            <i class="fas fa-sparkles" style="font-size:8px;"></i> New Arrivals
                         </button>
-                        <button type="button" onclick="document.querySelector('[data-discover-filter=best-sellers]')?.click(); document.getElementById('discover-collection')?.scrollIntoView({behavior:'smooth', block:'start'});"
-                                class="inline-flex items-center gap-2 bg-white/10 border border-white/30 backdrop-blur-sm text-white text-xs sm:text-[0.8rem] font-bold px-5 py-2.5 sm:px-7 sm:py-3.5 rounded-full hover:bg-white/20 active:scale-95 transition duration-200">
-                            <i class="fas fa-fire-flame-curved text-[10px]"></i> Best Sellers
+                        <button type="button"
+                                onclick="document.querySelector('[data-discover-filter=best-sellers]')?.click(); document.getElementById('discover-collection')?.scrollIntoView({behavior:'smooth', block:'start'});"
+                                class="inline-flex items-center gap-1.5 bg-white/10 border border-white/25 backdrop-blur-sm text-white font-bold rounded-full hover:bg-white/20 active:scale-95 transition duration-200 whitespace-nowrap"
+                                style="font-size:clamp(0.68rem,2.8vw,0.8rem); padding:clamp(8px,2.4vw,14px) clamp(12px,4vw,28px);">
+                            <i class="fas fa-fire-flame-curved" style="font-size:8px;"></i> Best Sellers
                         </button>
-                        <button type="button" onclick="document.querySelector('[data-discover-filter=offers]')?.click(); document.getElementById('discover-collection')?.scrollIntoView({behavior:'smooth', block:'start'});"
-                                class="inline-flex items-center gap-2 bg-brand-red text-white text-xs sm:text-[0.8rem] font-bold px-5 py-2.5 sm:px-7 sm:py-3.5 rounded-full hover:bg-brand-redHover active:scale-95 transition duration-200 shadow-md">
-                            <i class="fas fa-bolt text-[10px]"></i> Offers
+                        <button type="button"
+                                onclick="document.querySelector('[data-discover-filter=offers]')?.click(); document.getElementById('discover-collection')?.scrollIntoView({behavior:'smooth', block:'start'});"
+                                class="inline-flex items-center gap-1.5 bg-brand-red text-white font-bold rounded-full hover:bg-brand-redHover active:scale-95 transition duration-200 shadow-md whitespace-nowrap"
+                                style="font-size:clamp(0.68rem,2.8vw,0.8rem); padding:clamp(8px,2.4vw,14px) clamp(12px,4vw,24px);">
+                            <i class="fas fa-bolt" style="font-size:8px;"></i> Offers
                         </button>
                     </div>
 
@@ -214,32 +224,66 @@
                 </div>
 
                 <!-- Stats strip pinned to the hero bottom -->
-                <div class="mt-4 bg-black/55 backdrop-blur-md border-t border-white/10 w-full">
+                <div class="mt-4 w-full" style="background:linear-gradient(90deg,rgba(0,0,0,0.72) 0%,rgba(20,10,10,0.82) 100%);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(231,60,60,0.18);">
+                    <!-- red accent line -->
+                    <div style="height:2px;background:linear-gradient(90deg,transparent 0%,#e73c3c 30%,#e73c3c 70%,transparent 100%);opacity:0.55;"></div>
                     <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
-                        <div class="grid grid-cols-3 divide-x divide-white/10 py-3.5 sm:py-5">
-                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-center sm:gap-3 items-center gap-1 py-1">
-                                <i class="fas fa-spray-can-sparkles hidden sm:block text-brand-red text-base opacity-70"></i>
-                                <div class="flex flex-col items-center sm:items-start gap-0.5">
-                                    <span class="text-white font-bold text-xl sm:text-3xl leading-none tabular-nums">43</span>
-                                    <span class="text-white/45 text-[9px] sm:text-[11px] uppercase tracking-widest">Fragrances</span>
+                        <div class="grid grid-cols-3 py-4 sm:py-6" style="gap:0;">
+                            <!-- Fragrances -->
+                            <div class="flex flex-col items-center justify-center gap-1 px-2 sm:px-6" style="border-right:1px solid rgba(255,255,255,0.08);">
+                                <div class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full mb-1" style="background:rgba(231,60,60,0.12);border:1px solid rgba(231,60,60,0.25);">
+                                    <i class="fas fa-spray-can-sparkles text-brand-red" style="font-size:0.85rem;"></i>
                                 </div>
+                                <span id="stat-fragrances" class="text-white font-black tabular-nums" style="font-size:clamp(1.35rem,4vw,2.1rem);line-height:1;letter-spacing:-0.02em;">0</span>
+                                <span style="color:rgba(255,255,255,0.4);font-size:clamp(7px,2vw,10px);letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">Fragrances</span>
                             </div>
-                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-center sm:gap-3 items-center gap-1 py-1">
-                                <i class="fas fa-building hidden sm:block text-brand-red text-base opacity-70"></i>
-                                <div class="flex flex-col items-center sm:items-start gap-0.5">
-                                    <span class="text-white font-bold text-xl sm:text-3xl leading-none tabular-nums">15</span>
-                                    <span class="text-white/45 text-[9px] sm:text-[11px] uppercase tracking-widest">Brands</span>
+                            <!-- Brands -->
+                            <div class="flex flex-col items-center justify-center gap-1 px-2 sm:px-6" style="border-right:1px solid rgba(255,255,255,0.08);">
+                                <div class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full mb-1" style="background:rgba(231,60,60,0.12);border:1px solid rgba(231,60,60,0.25);">
+                                    <i class="fas fa-award text-brand-red" style="font-size:0.85rem;"></i>
                                 </div>
+                                <span id="stat-brands" class="text-white font-black tabular-nums" style="font-size:clamp(1.35rem,4vw,2.1rem);line-height:1;letter-spacing:-0.02em;">0</span>
+                                <span style="color:rgba(255,255,255,0.4);font-size:clamp(7px,2vw,10px);letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">Brands</span>
                             </div>
-                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-center sm:gap-3 items-center gap-1 py-1">
-                                <i class="fas fa-shield-halved hidden sm:block text-brand-red text-base opacity-70"></i>
-                                <div class="flex flex-col items-center sm:items-start gap-0.5">
-                                    <span class="text-white font-bold text-xl sm:text-3xl leading-none">100%</span>
-                                    <span class="text-white/45 text-[9px] sm:text-[11px] uppercase tracking-widest">Authentic</span>
+                            <!-- Authentic -->
+                            <div class="flex flex-col items-center justify-center gap-1 px-2 sm:px-6">
+                                <div class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full mb-1" style="background:rgba(231,60,60,0.12);border:1px solid rgba(231,60,60,0.25);">
+                                    <i class="fas fa-shield-halved text-brand-red" style="font-size:0.85rem;"></i>
                                 </div>
+                                <span class="text-white font-black" style="font-size:clamp(1.35rem,4vw,2.1rem);line-height:1;letter-spacing:-0.02em;">100%</span>
+                                <span style="color:rgba(255,255,255,0.4);font-size:clamp(7px,2vw,10px);letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">Authentic</span>
                             </div>
                         </div>
                     </div>
+                    <script>
+                    (function() {
+                        function countUp(el, target, duration) {
+                            var start = 0, step = target / (duration / 16);
+                            var timer = setInterval(function() {
+                                start += step;
+                                if (start >= target) { start = target; clearInterval(timer); }
+                                el.textContent = Math.round(start);
+                            }, 16);
+                        }
+                        function initStats() {
+                            var grid = document.querySelector('[data-discover-grid]');
+                            var cards = grid ? grid.querySelectorAll('.js-product-link') : [];
+                            var total = cards.length || 43;
+                            var brands = new Set();
+                            cards.forEach(function(c){ if(c.dataset.productBrand) brands.add(c.dataset.productBrand.trim().toUpperCase()); });
+                            var brandCount = brands.size || 15;
+                            var fragEl = document.getElementById('stat-fragrances');
+                            var brandEl = document.getElementById('stat-brands');
+                            if (fragEl) countUp(fragEl, total, 900);
+                            if (brandEl) countUp(brandEl, brandCount, 900);
+                        }
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', initStats);
+                        } else {
+                            initStats();
+                        }
+                    })();
+                    </script>
                 </div>
             </div>
         </section>
@@ -1181,6 +1225,98 @@
             </div>
         </div>
     </footer>
+    <!-- ═══ IPORDISE — Mobile Bottom Navigation ═══ -->
+    <nav id="ipoBottomNav" class="ipo-bnav md:hidden" aria-label="Mobile navigation">
+        <div class="ipo-bnav-inner">
+
+            <!-- Home -->
+            <a href="index.html" class="ipo-bnav-item" data-page="home" aria-label="Home">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap"><i class="fas fa-house ipo-bnav-icon"></i></span>
+                <span class="ipo-bnav-label">Home</span>
+            </a>
+
+            <!-- Discover -->
+            <a href="discover.html?filter=all" class="ipo-bnav-item" data-page="discover" aria-label="Discover">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap"><i class="fas fa-compass ipo-bnav-icon"></i></span>
+                <span class="ipo-bnav-label">Discover</span>
+            </a>
+
+            <!-- Search (raised center button) -->
+            <button class="ipo-bnav-search-wrap" id="ipoBnavSearch" aria-label="Search fragrances">
+                <span class="ipo-bnav-search-btn">
+                    <i class="fas fa-magnifying-glass"></i>
+                </span>
+                <span class="ipo-bnav-label">Search</span>
+            </button>
+
+            <!-- Offers -->
+            <a href="discover.html?filter=offers" class="ipo-bnav-item" data-page="offers" aria-label="Offers">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap"><i class="fas fa-tag ipo-bnav-icon"></i></span>
+                <span class="ipo-bnav-label">Offers</span>
+            </a>
+
+            <!-- Panier -->
+            <a href="pages/cart.html" class="ipo-bnav-item" data-page="cart" aria-label="Panier">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap"><i class="fas fa-shopping-bag ipo-bnav-icon"></i></span>
+                <span class="ipo-bnav-label">Panier</span>
+            </a>
+
+        </div>
+    </nav>
+    <script>
+    (function () {
+        var path = window.location.pathname;
+        var qs   = window.location.search;
+        var nav  = document.getElementById('ipoBottomNav');
+
+        /* ── Active tab ── */
+        document.querySelectorAll('#ipoBottomNav .ipo-bnav-item').forEach(function (el) {
+            var pg = el.dataset.page, hit = false;
+            if (pg === 'home'     && (path.endsWith('index.html') || path === '/' || path.endsWith('/'))) hit = true;
+            if (pg === 'discover' && path.includes('discover') && !qs.includes('offers'))                  hit = true;
+            if (pg === 'offers'   && qs.includes('offers'))                                                hit = true;
+            if (pg === 'cart'     && path.includes('cart'))                                                hit = true;
+            if (hit) el.classList.add('is-active');
+        });
+
+        /* ── Search button ── */
+        var searchBtn = document.getElementById('ipoBnavSearch');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function () {
+                var headerSearch = document.querySelector('.header-search-btn');
+                if (headerSearch) { headerSearch.click(); return; }
+                var overlay = document.getElementById('mobileSearchOverlay');
+                if (overlay) overlay.classList.remove('hidden');
+            });
+        }
+
+        /* ── Show nav after scrolling past the header (header is sticky so always in viewport) ── */
+        if (nav) {
+            var THRESHOLD = (document.querySelector('header') || {}).offsetHeight || 80;
+            var ticking = false;
+            function onScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(function () {
+                        if (window.scrollY > THRESHOLD) {
+                            nav.classList.add('ipo-bnav--visible');
+                        } else {
+                            nav.classList.remove('ipo-bnav--visible');
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll(); /* run once on load */
+        }
+    })();
+    </script>
+
 </body>
 </html>
 

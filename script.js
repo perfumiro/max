@@ -5122,7 +5122,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (Number.isFinite(nextPage) && nextPage >= 1 && nextPage <= totalPages) {
                         currentPage = nextPage;
                         applyFilter();
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        const gridTop = productsGrid.getBoundingClientRect().top + window.scrollY - 80;
+                        window.scrollTo({ top: gridTop, behavior: 'smooth' });
                     }
                 });
             });
@@ -5234,6 +5235,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
+        const scrollToGrid = () => {
+            const gridTop = productsGrid.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({ top: gridTop, behavior: 'smooth' });
+        };
+
         filterButtons.forEach((button) => {
             button.addEventListener('click', () => {
                 const filter = (button.dataset.discoverFilter || 'all').toLowerCase();
@@ -5241,6 +5247,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 activeFilter = filter;
                 currentPage = 1;
                 applyFilter();
+                scrollToGrid();
             });
         });
 
@@ -5309,6 +5316,9 @@ document.addEventListener('DOMContentLoaded', () => {
             window.requestAnimationFrame(() => {
                 window.scrollTo({ top: savedState.scrollY, behavior: 'auto' });
             });
+        } else if (urlFilter && allowedFilters.has(urlFilter)) {
+            // Arrived via a filter link (e.g. ?filter=2026) — scroll to the grid
+            window.requestAnimationFrame(() => scrollToGrid());
         }
 
         let scrollSaveTimer = null;
@@ -5667,23 +5677,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemWidth = referenceItem?.offsetWidth || carousel.clientWidth || 1;
             const elapsed = Math.max(touchLastTime - touchStartTime, 1);
             const deltaX = touchLastX - touchStartX;
-            const velocityX = deltaX / elapsed;
-            const shouldAdvance = Math.abs(deltaX) > Math.min(72, itemWidth * 0.2) || Math.abs(velocityX) > 0.35;
+            const velocityX = deltaX / elapsed; // px/ms
+            // Lower threshold: 40px or 15% card width, or velocity > 0.25 px/ms
+            const shouldAdvance = Math.abs(deltaX) > Math.min(40, itemWidth * 0.15) || Math.abs(velocityX) > 0.25;
 
             if (items.length && touchGestureMoved && shouldAdvance) {
                 const direction = deltaX < 0 ? 1 : -1;
                 const baseIndex = touchStartIndex >= 0
                     ? touchStartIndex
                     : getNearestCarouselItemIndex(carousel, items);
-                pendingTouchTargetIndex = Math.max(0, Math.min(items.length - 1, baseIndex + direction));
+                // Fast flick (velocity > 0.7 px/ms) → advance 2 cards at once
+                const steps = Math.abs(velocityX) > 0.7 ? 2 : 1;
+                pendingTouchTargetIndex = Math.max(0, Math.min(items.length - 1, baseIndex + direction * steps));
             }
 
-            queueSnapAfterScrollSettles(130);
+            // Reduced delay (50ms) so snap feels instant after finger lifts
+            queueSnapAfterScrollSettles(50);
         }, { passive: true });
 
         carousel.addEventListener('touchcancel', () => {
             pendingTouchTargetIndex = -1;
-            queueSnapAfterScrollSettles(130);
+            queueSnapAfterScrollSettles(50);
         }, { passive: true });
 
         const stopDragging = () => {
@@ -5701,7 +5715,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         carousel.addEventListener('scroll', () => {
             if (isDragging) return;
-            queueSnapAfterScrollSettles(isCoarsePointer ? 120 : 90);
+            queueSnapAfterScrollSettles(isCoarsePointer ? 60 : 90);
         }, { passive: true });
 
         carousel.addEventListener('click', (event) => {
@@ -6033,7 +6047,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Note: these are the newest products the store carries; none yet have a
         // confirmed post-Jan 2026 global launch. Update 'added' as new 2026 stock arrives.
         const catalog2026 = [
-            // ── ~late 2024 / early 2025 ─────────────────────────────────────
             {
                 name: 'Jean Paul Gaultier Le Male In Blue Eau de Parfum',
                 brand: 'JEAN PAUL GAULTIER',
@@ -6043,16 +6056,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 sizes: ['75 ML', '125 ML'],
                 added: '2025-01-01'
             },
-            // ── 2024 ────────────────────────────────────────────────────────
-            {
-                name: 'Givenchy Gentleman Society Nomade Eau de Parfum',
-                brand: 'GIVENCHY',
-                id: 'givenchy-gentleman-society-nomade-eau-de-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/1.webp',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2024-09-01'
-            },
             {
                 name: 'Valentino Born in Roma Extradose Eau de Toilette',
                 brand: 'VALENTINO',
@@ -6061,16 +6064,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: '',
                 sizes: ['50 ML', '100 ML'],
                 added: '2024-02-01'
-            },
-            // ── 2023 ────────────────────────────────────────────────────────
-            {
-                name: 'Yves Saint Laurent MYSLF Le Parfum',
-                brand: 'YVES SAINT LAURENT',
-                id: 'yves-saint-laurent-myslf-le-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/1.webp',
-                price: '',
-                sizes: ['60 ML', '100 ML'],
-                added: '2023-09-01'
             },
             {
                 name: 'Jean Paul Gaultier Scandal Elixir',
@@ -6082,95 +6075,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 added: '2023-09-01'
             },
             {
-                name: 'Jean Paul Gaultier Le male Elixir Eau de Parfum',
+                name: 'Jean Paul Gaultier Le Male Eau de Toilette',
                 brand: 'JEAN PAUL GAULTIER',
-                id: 'jean-paul-gaultier-le-male-elixir-eau-de-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp',
+                id: 'jean-paul-gaultier-le-male-eau-de-toilette',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Le%20Male%20Eau%20de%20Toilette/1.png',
                 price: '',
                 sizes: ['75 ML', '125 ML'],
                 added: '2023-06-01'
-            },
-            {
-                name: 'Armani Stronger With You Absolutely Perfume',
-                brand: 'GIORGIO ARMANI',
-                id: 'armani-stronger-with-you-absolutely-perfume',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/first.webp',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2023-05-01'
-            },
-            {
-                name: 'Rabanne One Million Elixir Intense',
-                brand: 'RABANNE',
-                id: 'rabanne-one-million-elixir-intense',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/1.webp',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2023-04-01'
-            },
-            {
-                name: 'Givenchy Gentleman Society Amber Eau de Parfum',
-                brand: 'GIVENCHY',
-                id: 'givenchy-gentleman-society-amber-eau-de-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/1.jpg',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2023-04-01'
-            },
-            {
-                name: 'Givenchy Gentleman Society Extreme Eau de Parfum',
-                brand: 'GIVENCHY',
-                id: 'givenchy-gentleman-society-extreme-eau-de-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/1.webp',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2023-04-01'
-            },
-            {
-                name: 'Gentleman Private Reserve Eau de Parfum',
-                brand: 'GIVENCHY',
-                id: 'gentleman-private-reserve-eau-de-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/1.png',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2023-02-01'
-            },
-            {
-                name: 'Azzaro Forever Wanted Elixir Eau de Parfum',
-                brand: 'AZZARO',
-                id: 'azzaro-forever-wanted-elixir-eau-de-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2023-02-01'
-            },
-            // ── 2022 ────────────────────────────────────────────────────────
-            {
-                name: 'Boss Bottled Absolu Intense',
-                brand: 'HUGO BOSS',
-                id: 'boss-bottled-absolu-intense',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/1.jpeg',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2022-10-01'
-            },
-            {
-                name: 'Hugo Boss Boss Bottled Elixir Intense',
-                brand: 'HUGO BOSS',
-                id: 'hugo-boss-boss-bottled-elixir-intense',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/1.jpeg',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2022-09-01'
-            },
-            {
-                name: 'Hugo Boss The Scent For Him Elixir',
-                brand: 'HUGO BOSS',
-                id: 'hugo-boss-the-scent-for-him-elixir',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/1.png',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2022-08-01'
             },
             {
                 name: 'Armani Stronger With You Powerfully Eau de Parfum',
@@ -6180,25 +6091,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: '',
                 sizes: ['50 ML', '100 ML'],
                 added: '2022-05-01'
-            },
-            // ── 2021 ────────────────────────────────────────────────────────
-            {
-                name: 'Valentino Born In Roma Uomo Intense Eau de Parfum',
-                brand: 'VALENTINO',
-                id: 'valentino-born-in-roma-uomo-intense-eau-de-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/1.webp',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2021-09-01'
-            },
-            {
-                name: 'Valentino Born In Roma Donna Intense Eau de Parfum',
-                brand: 'VALENTINO',
-                id: 'valentino-born-in-roma-donna-intense-eau-de-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/1.webp',
-                price: '',
-                sizes: ['50 ML', '100 ML'],
-                added: '2021-09-01'
             }
         ];
         // ── end catalogue ───────────────────────────────────────────────────
@@ -7638,4 +7530,65 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         document.querySelectorAll('.sect-reveal').forEach((el) => el.classList.add('is-visible'));
     }
+
+    /* --- Server Down Modal for Login --- */
+    const serverDownModal = document.createElement('div');
+    serverDownModal.id = 'serverDownModal';
+    serverDownModal.setAttribute('role', 'alertdialog');
+    serverDownModal.setAttribute('aria-modal', 'true');
+    serverDownModal.setAttribute('aria-labelledby', 'serverDownTitle');
+    serverDownModal.innerHTML = `
+        <div id="serverDownBackdrop" style="
+            position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9998;
+            display:flex;align-items:center;justify-content:center;
+            backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+        ">
+            <div style="
+                background:#1a1a1a;color:#fff;border-radius:1rem;
+                padding:2.5rem 2rem;max-width:420px;width:90%;text-align:center;
+                box-shadow:0 25px 60px rgba(0,0,0,0.5);position:relative;z-index:9999;
+                border:1px solid rgba(255,255,255,0.1);
+            ">
+                <div style="font-size:3rem;margin-bottom:1rem;">🛠️</div>
+                <h2 id="serverDownTitle" style="font-size:1.4rem;font-weight:700;margin-bottom:0.75rem;letter-spacing:0.05em;">
+                    Server Under Maintenance
+                </h2>
+                <p style="color:rgba(255,255,255,0.7);font-size:0.95rem;line-height:1.6;margin-bottom:1.75rem;">
+                    Our login servers are currently down for maintenance.<br>
+                    We apologize for the inconvenience and will be back shortly.
+                </p>
+                <button id="serverDownClose" style="
+                    background:#e73c3c;color:#fff;border:none;border-radius:999px;
+                    padding:0.65rem 2rem;font-size:0.9rem;font-weight:700;
+                    cursor:pointer;letter-spacing:0.05em;transition:background 0.2s;
+                " onmouseover="this.style.background='#c0392b'" onmouseout="this.style.background='#e73c3c'">
+                    OK, Got It
+                </button>
+            </div>
+        </div>
+    `;
+    serverDownModal.style.display = 'none';
+    document.body.appendChild(serverDownModal);
+
+    const showServerDownModal = (e) => {
+        e.preventDefault();
+        serverDownModal.style.display = 'block';
+        document.getElementById('serverDownClose').focus();
+    };
+
+    const closeServerDownModal = () => {
+        serverDownModal.style.display = 'none';
+    };
+
+    document.getElementById('serverDownClose').addEventListener('click', closeServerDownModal);
+    document.getElementById('serverDownBackdrop').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('serverDownBackdrop')) closeServerDownModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && serverDownModal.style.display !== 'none') closeServerDownModal();
+    });
+
+    document.querySelectorAll('a[href*="login.html"]').forEach((link) => {
+        link.addEventListener('click', showServerDownModal);
+    });
 });

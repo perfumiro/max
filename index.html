@@ -2124,6 +2124,98 @@
         </div>
     </footer>
 
+    <!-- ═══ IPORDISE — Mobile Bottom Navigation ═══ -->
+    <nav id="ipoBottomNav" class="ipo-bnav md:hidden" aria-label="Mobile navigation">
+        <div class="ipo-bnav-inner">
+
+            <!-- Home -->
+            <a href="index.html" class="ipo-bnav-item" data-page="home" aria-label="Home">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap"><i class="fas fa-house ipo-bnav-icon"></i></span>
+                <span class="ipo-bnav-label">Home</span>
+            </a>
+
+            <!-- Discover -->
+            <a href="discover.html?filter=all" class="ipo-bnav-item" data-page="discover" aria-label="Discover">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap"><i class="fas fa-compass ipo-bnav-icon"></i></span>
+                <span class="ipo-bnav-label">Discover</span>
+            </a>
+
+            <!-- Search (raised center button) -->
+            <button class="ipo-bnav-search-wrap" id="ipoBnavSearch" aria-label="Search fragrances">
+                <span class="ipo-bnav-search-btn">
+                    <i class="fas fa-magnifying-glass"></i>
+                </span>
+                <span class="ipo-bnav-label">Search</span>
+            </button>
+
+            <!-- Offers -->
+            <a href="discover.html?filter=offers" class="ipo-bnav-item" data-page="offers" aria-label="Offers">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap"><i class="fas fa-tag ipo-bnav-icon"></i></span>
+                <span class="ipo-bnav-label">Offers</span>
+            </a>
+
+            <!-- Panier -->
+            <a href="pages/cart.html" class="ipo-bnav-item" data-page="cart" aria-label="Panier">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap"><i class="fas fa-shopping-bag ipo-bnav-icon"></i></span>
+                <span class="ipo-bnav-label">Panier</span>
+            </a>
+
+        </div>
+    </nav>
+    <script>
+    (function () {
+        var path = window.location.pathname;
+        var qs   = window.location.search;
+        var nav  = document.getElementById('ipoBottomNav');
+
+        /* ── Active tab ── */
+        document.querySelectorAll('#ipoBottomNav .ipo-bnav-item').forEach(function (el) {
+            var pg = el.dataset.page, hit = false;
+            if (pg === 'home'     && (path.endsWith('index.html') || path === '/' || path.endsWith('/'))) hit = true;
+            if (pg === 'discover' && path.includes('discover') && !qs.includes('offers'))                  hit = true;
+            if (pg === 'offers'   && qs.includes('offers'))                                                hit = true;
+            if (pg === 'cart'     && path.includes('cart'))                                                hit = true;
+            if (hit) el.classList.add('is-active');
+        });
+
+        /* ── Search button ── */
+        var searchBtn = document.getElementById('ipoBnavSearch');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function () {
+                var headerSearch = document.querySelector('.header-search-btn');
+                if (headerSearch) { headerSearch.click(); return; }
+                var overlay = document.getElementById('mobileSearchOverlay');
+                if (overlay) overlay.classList.remove('hidden');
+            });
+        }
+
+        /* ── Show nav after scrolling past the header (header is sticky so always in viewport) ── */
+        if (nav) {
+            var THRESHOLD = (document.querySelector('header') || {}).offsetHeight || 80;
+            var ticking = false;
+            function onScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(function () {
+                        if (window.scrollY > THRESHOLD) {
+                            nav.classList.add('ipo-bnav--visible');
+                        } else {
+                            nav.classList.remove('ipo-bnav--visible');
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll(); /* run once on load */
+        }
+    })();
+    </script>
+
 </body>
 </html>
 
