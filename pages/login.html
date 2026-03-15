@@ -426,5 +426,34 @@
             </div>
         </div>
     </footer>
+
+    <!-- Server Down Overlay (direct navigation to login.html) -->
+    <div id="loginServerDownOverlay" style="
+        position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;
+        display:flex;align-items:center;justify-content:center;
+        backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+    ">
+        <div style="
+            background:#1a1a1a;color:#fff;border-radius:1rem;
+            padding:2.5rem 2rem;max-width:420px;width:90%;text-align:center;
+            box-shadow:0 25px 60px rgba(0,0,0,0.5);
+            border:1px solid rgba(255,255,255,0.1);
+        ">
+            <div style="font-size:3rem;margin-bottom:1rem;">🛠️</div>
+            <h2 style="font-size:1.4rem;font-weight:700;margin-bottom:0.75rem;letter-spacing:0.05em;">
+                Server Under Maintenance
+            </h2>
+            <p style="color:rgba(255,255,255,0.7);font-size:0.95rem;line-height:1.6;margin-bottom:1.75rem;">
+                Our login servers are currently down for maintenance.<br>
+                We apologize for the inconvenience and will be back shortly.
+            </p>
+            <a href="../index.html" style="
+                display:inline-block;background:#e73c3c;color:#fff;
+                border-radius:999px;padding:0.65rem 2rem;
+                font-size:0.9rem;font-weight:700;letter-spacing:0.05em;
+                text-decoration:none;
+            ">Back to Home</a>
+        </div>
+    </div>
 </body>
 </html>
