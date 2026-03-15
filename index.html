@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Premium Perfumes and Beauty</title>
-    <meta name="description" content="IPORDISE — Premium perfumes &amp; luxury fragrances in Morocco. Shop niche, designer &amp; Arabian scents. Free delivery from 35 MAD. 100% authentic.">
+    <title data-i18n-title="index.page_title">IPORDISE - Premium Perfumes and Beauty</title>
+    <meta name="description" content="IPORDISE ? Premium perfumes &amp; luxury fragrances in Morocco. Shop niche, designer &amp; Arabian scents. Free delivery from 35 MAD. 100% authentic.">
     <meta property="og:title" content="IPORDISE - Premium Perfumes and Beauty">
     <meta property="og:description" content="Discover exclusive fragrances from the world's finest houses. Niche, designer and Arabian perfumes with free delivery across Morocco.">
     <meta property="og:type" content="website">
@@ -18,6 +18,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="script.js"></script>
+    <script src="i18n.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
@@ -85,17 +86,17 @@
         <nav class="perfume-nav hidden md:block">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <ul class="perfume-nav-list">
-                    <li><a href="discover.html?filter=all" class="perfume-nav-link is-active">ALL PERFUMES</a></li>
-                    <li><a href="discover.html?filter=for-men" class="perfume-nav-link">MEN</a></li>
-                    <li><a href="discover.html?filter=for-women" class="perfume-nav-link">WOMEN</a></li>
-                    <li><a href="discover.html?filter=unisex" class="perfume-nav-link">UNISEX</a></li>
-                    <li><a href="discover.html?filter=niche" class="perfume-nav-link">NICHE</a></li>
-                    <li><a href="discover.html?filter=arabian" class="perfume-nav-link">ARABIAN</a></li>
-                    <li><a href="discover.html?filter=designer" class="perfume-nav-link">DESIGNER</a></li>
-                    <li><a href="discover.html?filter=discovery-sets" class="perfume-nav-link">DISCOVERY SETS</a></li>
-                    <li><a href="discover.html?filter=best-sellers" class="perfume-nav-link">BEST SELLERS</a></li>
-                    <li><a href="discover.html?filter=new-in" class="perfume-nav-link">NEW IN</a></li>
-                    <li><a href="discover.html?filter=offers" class="perfume-nav-link">OFFERS</a></li>
+                    <li><a href="discover.html?filter=all" class="perfume-nav-link is-active" data-i18n="index.nav.all" data-i18n-orig="ALL PERFUMES">ALL PERFUMES</a></li>
+                    <li><a href="discover.html?filter=for-men" class="perfume-nav-link" data-i18n="index.nav.men" data-i18n-orig="MEN">MEN</a></li>
+                    <li><a href="discover.html?filter=for-women" class="perfume-nav-link" data-i18n="index.nav.women" data-i18n-orig="WOMEN">WOMEN</a></li>
+                    <li><a href="discover.html?filter=unisex" class="perfume-nav-link" data-i18n="index.nav.unisex" data-i18n-orig="UNISEX">UNISEX</a></li>
+                    <li><a href="discover.html?filter=niche" class="perfume-nav-link" data-i18n="index.nav.niche" data-i18n-orig="NICHE">NICHE</a></li>
+                    <li><a href="discover.html?filter=arabian" class="perfume-nav-link" data-i18n="index.nav.arabian" data-i18n-orig="ARABIAN">ARABIAN</a></li>
+                    <li><a href="discover.html?filter=designer" class="perfume-nav-link" data-i18n="index.nav.designer" data-i18n-orig="DESIGNER">DESIGNER</a></li>
+                    <li><a href="discover.html?filter=discovery-sets" class="perfume-nav-link" data-i18n="index.nav.discovery" data-i18n-orig="DISCOVERY SETS">DISCOVERY SETS</a></li>
+                    <li><a href="discover.html?filter=best-sellers" class="perfume-nav-link" data-i18n="index.nav.bestsellers" data-i18n-orig="BEST SELLERS">BEST SELLERS</a></li>
+                    <li><a href="discover.html?filter=new-in" class="perfume-nav-link" data-i18n="index.nav.newin" data-i18n-orig="NEW IN">NEW IN</a></li>
+                    <li><a href="discover.html?filter=offers" class="perfume-nav-link" data-i18n="index.nav.offers" data-i18n-orig="OFFERS">OFFERS</a></li>
                 </ul>
             </div>
         </nav>
@@ -107,22 +108,22 @@
             <div class="flex items-center justify-between text-xs text-gray-600">
                 <div class="trust-bar-item flex items-center gap-2">
                     <i class="fas fa-truck-fast text-brand-red"></i>
-                    <span><strong>Free Delivery</strong> from 35 MAD</span>
+                    <span data-i18n-html="index.trust_delivery"><strong>Free Delivery</strong> from 35 MAD</span>
                 </div>
                 <div class="trust-bar-divider"></div>
                 <div class="trust-bar-item flex items-center gap-2">
                     <i class="fas fa-rotate-left text-brand-red"></i>
-                    <span><strong>14-Day Returns</strong> hassle-free</span>
+                    <span data-i18n-html="index.trust_returns"><strong>14-Day Returns</strong> hassle-free</span>
                 </div>
                 <div class="trust-bar-divider"></div>
                 <div class="trust-bar-item flex items-center gap-2">
                     <i class="fas fa-shield-halved text-brand-red"></i>
-                    <span><strong>Secure Payment</strong> & 1-click checkout</span>
+                    <span data-i18n-html="index.trust_payment"><strong>Secure Payment</strong> & 1-click checkout</span>
                 </div>
                 <div class="trust-bar-divider"></div>
                 <div class="trust-bar-item flex items-center gap-2">
                     <i class="fas fa-certificate text-brand-red"></i>
-                    <span><strong>100% Authentic</strong> products guaranteed</span>
+                    <span data-i18n-html="index.trust_authentic"><strong>100% Authentic</strong> products guaranteed</span>
                 </div>
             </div>
         </div>
@@ -146,63 +147,73 @@
             </div>
         </div>
         <ul class="mobile-menu-list">
-            <li><a href="discover.html?filter=all" class="mobile-menu-link"><i class="fas fa-spray-can-sparkles"></i> All Perfumes</a></li>
-            <li><a href="discover.html?filter=for-men" class="mobile-menu-link"><i class="fas fa-mars"></i> Men</a></li>
-            <li><a href="discover.html?filter=for-women" class="mobile-menu-link"><i class="fas fa-venus"></i> Women</a></li>
-            <li><a href="discover.html?filter=unisex" class="mobile-menu-link"><i class="fas fa-transgender-alt"></i> Unisex</a></li>
-            <li><a href="discover.html?filter=niche" class="mobile-menu-link"><i class="fas fa-gem"></i> Niche</a></li>
-            <li><a href="discover.html?filter=designer" class="mobile-menu-link"><i class="fas fa-crown"></i> Designer</a></li>
-            <li><a href="discover.html?filter=arabian" class="mobile-menu-link"><i class="fas fa-mosque"></i> Arabian</a></li>
-            <li><a href="discover.html?filter=best-sellers" class="mobile-menu-link"><i class="fas fa-fire"></i> Best Sellers</a></li>
-            <li><a href="discover.html?filter=new-in" class="mobile-menu-link"><i class="fas fa-sparkles"></i> New In</a></li>
-            <li><a href="discover.html?filter=offers" class="mobile-menu-link"><i class="fas fa-bolt"></i> Flash Offers</a></li>
+            <li><a href="discover.html?filter=all" class="mobile-menu-link"><i class="fas fa-spray-can-sparkles"></i> <span data-i18n="index.mobile.all">All Perfumes</span></a></li>
+            <li><a href="discover.html?filter=for-men" class="mobile-menu-link"><i class="fas fa-mars"></i> <span data-i18n="index.mobile.men">Men</span></a></li>
+            <li><a href="discover.html?filter=for-women" class="mobile-menu-link"><i class="fas fa-venus"></i> <span data-i18n="index.mobile.women">Women</span></a></li>
+            <li><a href="discover.html?filter=unisex" class="mobile-menu-link"><i class="fas fa-transgender-alt"></i> <span data-i18n="index.mobile.unisex">Unisex</span></a></li>
+            <li><a href="discover.html?filter=niche" class="mobile-menu-link"><i class="fas fa-gem"></i> <span data-i18n="index.mobile.niche">Niche</span></a></li>
+            <li><a href="discover.html?filter=designer" class="mobile-menu-link"><i class="fas fa-crown"></i> <span data-i18n="index.mobile.designer">Designer</span></a></li>
+            <li><a href="discover.html?filter=arabian" class="mobile-menu-link"><i class="fas fa-mosque"></i> <span data-i18n="index.mobile.arabian">Arabian</span></a></li>
+            <li><a href="discover.html?filter=best-sellers" class="mobile-menu-link"><i class="fas fa-fire"></i> <span data-i18n="index.mobile.bestsellers">Best Sellers</span></a></li>
+            <li><a href="discover.html?filter=new-in" class="mobile-menu-link"><i class="fas fa-sparkles"></i> <span data-i18n="index.mobile.newin">New In</span></a></li>
+            <li><a href="discover.html?filter=offers" class="mobile-menu-link"><i class="fas fa-bolt"></i> <span data-i18n="index.mobile.offers">Flash Offers</span></a></li>
         </ul>
         <div class="mobile-menu-footer">
-            <a href="pages/login.html" class="mobile-menu-footer-btn"><i class="fas fa-user"></i> My Account</a>
-            <a href="pages/contact.html" class="mobile-menu-footer-btn"><i class="fas fa-headset"></i> Contact Us</a>
+            <a href="pages/login.html" class="mobile-menu-footer-btn"><i class="fas fa-user"></i> <span data-i18n="index.mobile.my_account">My Account</span></a>
+            <a href="pages/contact.html" class="mobile-menu-footer-btn"><i class="fas fa-headset"></i> <span data-i18n="index.mobile.contact">Contact Us</span></a>
         </div>
     </nav>
 
     <!-- Quick Category Strip -->
     <div class="quick-cat-strip md:hidden">
         <div class="quick-cat-scroll hide-scrollbar">
-            <a href="discover.html?filter=offers" class="quick-cat-pill quick-cat-pill-hot"><i class="fas fa-bolt"></i> Flash Offers</a>
-            <a href="discover.html?filter=new-in" class="quick-cat-pill"><i class="fas fa-sparkles"></i> New In</a>
-            <a href="discover.html?filter=best-sellers" class="quick-cat-pill"><i class="fas fa-fire"></i> Best Sellers</a>
-            <a href="discover.html?filter=for-men" class="quick-cat-pill">Men</a>
-            <a href="discover.html?filter=for-women" class="quick-cat-pill">Women</a>
-            <a href="discover.html?filter=niche" class="quick-cat-pill">Niche</a>
-            <a href="discover.html?filter=designer" class="quick-cat-pill">Designer</a>
+            <a href="discover.html?filter=offers" class="quick-cat-pill quick-cat-pill-hot"><i class="fas fa-bolt"></i> <span data-i18n="index.quick.offers">Flash Offers</span></a>
+            <a href="discover.html?filter=new-in" class="quick-cat-pill"><i class="fas fa-sparkles"></i> <span data-i18n="index.quick.newin">New In</span></a>
+            <a href="discover.html?filter=best-sellers" class="quick-cat-pill"><i class="fas fa-fire"></i> <span data-i18n="index.quick.bestsellers">Best Sellers</span></a>
+            <a href="discover.html?filter=for-men" class="quick-cat-pill" data-i18n="index.quick.men">Men</a>
+            <a href="discover.html?filter=for-women" class="quick-cat-pill" data-i18n="index.quick.women">Women</a>
+            <a href="discover.html?filter=niche" class="quick-cat-pill" data-i18n="index.quick.niche">Niche</a>
+            <a href="discover.html?filter=designer" class="quick-cat-pill" data-i18n="index.quick.designer">Designer</a>
         </div>
     </div>
 
     <!-- Hero Section -->
     <section class="relative w-full hero-prime hero-bg overflow-hidden">
+        <div class="hero-slide hero-slide-man"></div>
+        <div class="hero-slide hero-slide-woman"></div>
         <div class="hero-surface"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
             <div class="hero-content-shell text-white">
                 <div class="hero-main-grid">
                     <div class="hero-left-copy">
-                        <p class="hero-kicker">Beauty Celebration Week</p>
-                        <h1 class="text-4xl sm:text-5xl md:text-6xl font-serif font-bold leading-[0.97] drop-shadow-lg">
-                            YOUR BEAUTY,<br>YOUR POWER.
-                        </h1>
+                        <div class="hero-copy-slide hero-copy-man">
+                            <p class="hero-kicker" data-i18n="index.hero_kicker">Beauty Celebration Week</p>
+                            <h1 class="text-4xl sm:text-5xl md:text-6xl font-serif font-bold leading-[0.97] drop-shadow-lg" data-i18n-html="index.hero_title">
+                                YOUR BEAUTY,<br>YOUR POWER.
+                            </h1>
+                        </div>
+                        <div class="hero-copy-slide hero-copy-woman">
+                            <p class="hero-kicker" data-i18n="index.hero_kicker_w">Feminine Luxe Edit</p>
+                            <h1 class="text-4xl sm:text-5xl md:text-6xl font-serif font-bold leading-[0.97] drop-shadow-lg" data-i18n-html="index.hero_title_w">
+                                HER SCENT,<br>HER WORLD.
+                            </h1>
+                        </div>
                     </div>
 
                     <div class="hero-offer-card p-5 md:p-6 w-full max-w-[360px] shadow-xl" data-hero-rotate>
-                        <p class="hero-offer-label">LIMITED ONLINE OFFER</p>
+                        <p class="hero-offer-label" data-i18n="index.hero_offer_label">LIMITED ONLINE OFFER</p>
                         <div class="hero-offer-text" aria-live="polite">
                             <h2 class="hero-offer-value" data-hero-title>TOP PICKS</h2>
                             <p class="hero-offer-copy" data-hero-sub>Signature scents for day,<br>night & special moments.</p>
                         </div>
-                        <p class="hero-offer-code">FREE GIFT WRAPPING INCLUDED</p>
+                        <p class="hero-offer-code" data-i18n="index.hero_offer_code">FREE GIFT WRAPPING INCLUDED</p>
                     </div>
                 </div>
 
                 <div class="hero-cta-row">
-                    <a href="discover.html?filter=all" class="hero-cta-link">PERFUMES</a>
-                    <a href="discover.html?filter=for-men" class="hero-cta-link">MEN</a>
-                    <a href="discover.html?filter=for-women" class="hero-cta-link">WOMEN</a>
+                    <a href="discover.html?filter=all" class="hero-cta-link" data-i18n="index.hero_cta_perfumes">PERFUMES</a>
+                    <a href="discover.html?filter=for-men" class="hero-cta-link" data-i18n="index.hero_cta_men">MEN</a>
+                    <a href="discover.html?filter=for-women" class="hero-cta-link" data-i18n="index.hero_cta_women">WOMEN</a>
                 </div>
             </div>
         </div>
@@ -254,18 +265,18 @@
                         <span class="flash-word flash-word-right">OFFERS</span>
                     </span>
                 </h2>
-                <p class="text-sm text-gray-500 mt-3 max-w-2xl mx-auto">
+                <p class="text-sm text-gray-500 mt-3 max-w-2xl mx-auto" data-i18n="index.flash_subtitle">
                     Discover today's most wanted perfumes, rare niche selections, and limited-edition sets. Flash offers are available for 24 hours only.
                 </p>
                 <!-- Countdown Timer -->
                 <div class="flash-countdown-bar mt-5" id="flashCountdown">
-                    <span class="flash-countdown-label">Ends in</span>
+                    <span class="flash-countdown-label" data-i18n="index.flash_ends">Ends in</span>
                     <div class="flash-countdown-units">
-                        <div class="flash-countdown-unit"><span id="flashHours">00</span><small>HRS</small></div>
+                        <div class="flash-countdown-unit"><span id="flashHours">00</span><small data-i18n="index.flash_hrs">HRS</small></div>
                         <span class="flash-countdown-sep">:</span>
-                        <div class="flash-countdown-unit"><span id="flashMinutes">00</span><small>MIN</small></div>
+                        <div class="flash-countdown-unit"><span id="flashMinutes">00</span><small data-i18n="index.flash_min">MIN</small></div>
                         <span class="flash-countdown-sep">:</span>
-                        <div class="flash-countdown-unit"><span id="flashSeconds">00</span><small>SEC</small></div>
+                        <div class="flash-countdown-unit"><span id="flashSeconds">00</span><small data-i18n="index.flash_sec">SEC</small></div>
                     </div>
                 </div>
             </div>
@@ -310,7 +321,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -342,7 +353,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -374,7 +385,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -406,13 +417,13 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
 
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300 group js-product-link relative flex flex-col h-full min-w-[260px] max-w-[260px] snap-start shrink-0"
-                        data-product-name="GUERLAIN L'homme Idéal Extrême"
+                        data-product-name="GUERLAIN L'homme Id?al Extr?me"
                         data-id="guerlain-l-homme-ideal-extreme"
                         data-product-brand="GUERLAIN"
                         data-product-price="50ML 650DH - 100ML 850DH"
@@ -426,25 +437,25 @@
                         </button>
 
                         <div class="h-48 flex items-center justify-center mt-6 mb-4">
-                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'homme%20Id%C3%A9al%20Extr%C3%AAme/1.jpg" alt="GUERLAIN L'homme Idéal Extrême" class="max-h-full object-contain group-hover:scale-105 transition duration-300" loading="lazy">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'homme%20Id%C3%A9al%20Extr%C3%AAme/1.jpg" alt="GUERLAIN L'homme Id?al Extr?me" class="max-h-full object-contain group-hover:scale-105 transition duration-300" loading="lazy">
                         </div>
 
                         <div class="flex-grow flex flex-col">
                             <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">GUERLAIN</p>
-                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">GUERLAIN L'homme Idéal Extrême</h3>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">GUERLAIN L'homme Id?al Extr?me</h3>
                             <div class="flex items-center gap-2 mb-3">
                                 <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
                                 <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
 
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300 group js-product-link relative flex flex-col h-full min-w-[260px] max-w-[260px] snap-start shrink-0"
-                        data-product-name="Guerlain L'Homme Idéal L'Intense Eau de Parfum"
+                        data-product-name="Guerlain L'Homme Id?al L'Intense Eau de Parfum"
                         data-id="guerlain-l-homme-ideal-l-intense-eau-de-parfum"
                         data-product-brand="GUERLAIN"
                         data-product-price="50ML 650DH - 100ML 850DH"
@@ -458,19 +469,19 @@
                         </button>
 
                         <div class="h-48 flex items-center justify-center mt-6 mb-4">
-                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'Homme%20Id%C3%A9al%20L'Intense%20Eau%20de%20Parfum/1.webp" alt="Guerlain L'Homme Idéal L'Intense Eau de Parfum" class="max-h-full object-contain group-hover:scale-105 transition duration-300" loading="lazy">
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'Homme%20Id%C3%A9al%20L'Intense%20Eau%20de%20Parfum/1.webp" alt="Guerlain L'Homme Id?al L'Intense Eau de Parfum" class="max-h-full object-contain group-hover:scale-105 transition duration-300" loading="lazy">
                         </div>
 
                         <div class="flex-grow flex flex-col">
                             <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">GUERLAIN</p>
-                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Guerlain L'Homme Idéal L'Intense Eau de Parfum</h3>
+                            <h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">Guerlain L'Homme Id?al L'Intense Eau de Parfum</h3>
                             <div class="flex items-center gap-2 mb-3">
                                 <span class="text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">50ML</span>
                                 <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -502,7 +513,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -534,7 +545,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -566,7 +577,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -598,7 +609,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -630,7 +641,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -662,7 +673,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -694,7 +705,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -726,7 +737,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -758,7 +769,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -790,7 +801,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -822,7 +833,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -854,7 +865,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -886,7 +897,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -918,7 +929,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -950,7 +961,7 @@
                             </div>
 
                             <div class="mt-auto pt-3 border-t border-gray-100 pb-1">
-                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                                <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -974,7 +985,42 @@
                     VIEW ALL FLASH OFFERS <i class="fas fa-arrow-right text-[10px]"></i>
                 </a>
             </div>
-            
+
+            <!-- Promo Banners -->
+            <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+
+                <!-- Banner 1 — Scandal Elixir -->
+                <a href="pages/product.html?id=jean-paul-gaultier-scandal-elixir&name=Jean+Paul+Gaultier+Scandal+Elixir&brand=JEAN+PAUL+GAULTIER&price=75ML+990DH+-+125ML+1350DH&image=https%3A%2F%2Fraw.githubusercontent.com%2Fperfumiro%2Fmax%2Frefs%2Fheads%2Fmain%2Fproducts%2FJean%2520Paul%2520Gaultier%2520Scandal%2520Elixir%2F1.jpg"
+                   class="promo-banner-card">
+                    <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/assets/Herosectionphotos/Scandal%20elixir%20section%202.png"
+                         alt="Jean Paul Gaultier Scandal Elixir" class="promo-banner-img">
+                    <div class="promo-banner-overlay">
+                        <div class="promo-banner-content">
+                            <span class="promo-banner-eyebrow">Jean Paul Gaultier</span>
+                            <p class="promo-banner-title">Scandal Elixir</p>
+                            <span class="promo-banner-cta">Shop Now <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                    <div class="promo-banner-shimmer"></div>
+                </a>
+
+                <!-- Banner 2 — Stronger With You Powerfully -->
+                <a href="pages/product.html?id=armani-stronger-with-you-powerfully-eau-de-parfum&name=Armani+Stronger+With+You+Powerfully+Eau+de+Parfum&brand=GIORGIO+ARMANI&price=50ML+650DH+-+100ML+850DH&image=https%3A%2F%2Fraw.githubusercontent.com%2Fperfumiro%2Fmax%2Frefs%2Fheads%2Fmain%2Fproducts%2FArmani%2520Stronger%2520With%2520You%2520Powerfully%2520Eau%2520de%2520Parfum%2F1.webp"
+                   class="promo-banner-card promo-banner-card--delayed">
+                    <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/assets/Herosectionphotos/stronger%20with%20you%20powerfully%20section%201.png"
+                         alt="Armani Stronger With You Powerfully" class="promo-banner-img">
+                    <div class="promo-banner-overlay">
+                        <div class="promo-banner-content">
+                            <span class="promo-banner-eyebrow">Giorgio Armani</span>
+                            <p class="promo-banner-title">Stronger With You<br>Powerfully</p>
+                            <span class="promo-banner-cta promo-banner-cta--red">Shop Now <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                    <div class="promo-banner-shimmer promo-banner-shimmer--red"></div>
+                </a>
+
+            </div>
+
             <div class="mt-12 pb-4">
                 <p class="text-xs md:text-sm uppercase tracking-[0.18em] text-gray-500 mb-5 text-center">Trusted Brands</p>
                 <div class="brand-marquee-wrap">
@@ -1015,10 +1061,10 @@
     <section class="py-16 border-b border-gray-100 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-brand-dark uppercase tracking-wide">
+                <h2 class="text-3xl font-bold text-brand-dark uppercase tracking-wide" data-i18n="index.categories_title">
                     Our categories
                 </h2>
-                <p class="text-sm text-gray-500 mt-2">Explore our collections by style</p>
+                <p class="text-sm text-gray-500 mt-2" data-i18n="index.categories_sub">Explore our collections by style</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -1027,7 +1073,7 @@
                     <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/Herosectionphotos/FOR%20HIM.png" alt="Men's Fragrances" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6">
-                        <h3 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider mb-2">MEN</h3>
+                        <h3 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider mb-2" data-i18n="index.for_him">MEN</h3>
                         <span class="inline-flex items-center text-sm font-semibold text-white/90 group-hover:text-white transition-colors">
                             Explore collection <i class="fas fa-arrow-right ml-2 text-xs transition-transform group-hover:translate-x-1"></i>
                         </span>
@@ -1039,7 +1085,7 @@
                     <img src="https://raw.githubusercontent.com/perfumiro/max/main/assets/Herosectionphotos/FOR%20HER.png" alt="Women's Fragrances" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6">
-                        <h3 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider mb-2">WOMEN</h3>
+                        <h3 class="text-2xl md:text-3xl font-bold text-white uppercase tracking-wider mb-2" data-i18n="index.for_her">WOMEN</h3>
                         <span class="inline-flex items-center text-sm font-semibold text-white/90 group-hover:text-white transition-colors">
                             Explore collection <i class="fas fa-arrow-right ml-2 text-xs transition-transform group-hover:translate-x-1"></i>
                         </span>
@@ -1058,12 +1104,12 @@
             <!-- Header -->
             <div class="section-2026-header">
                 <div class="section-2026-meta">
-                    <span class="section-2026-kicker">The Class Of</span>
+                    <span class="section-2026-kicker" data-i18n="index.class2026_kicker">The Class Of</span>
                     <h2 class="section-2026-title">2026</h2>
-                    <p class="section-2026-sub">The most coveted new fragrances of the year &mdash; handpicked &amp; just landed.</p>
+                    <p class="section-2026-sub" data-i18n="index.class2026_sub">The most coveted new fragrances of the year &mdash; handpicked &amp; just landed.</p>
                 </div>
                 <a href="discover.html?filter=2026" class="section-2026-viewall">
-                    View all <i class="fas fa-arrow-right text-xs"></i>
+                    <span data-i18n="index.class2026_viewall">View all</span> <i class="fas fa-arrow-right text-xs"></i>
                 </a>
             </div>
 
@@ -1100,9 +1146,9 @@
             <div class="flex items-end justify-between mb-6 md:mb-8 new-arrivals-header">
                 <div>
                     <p class="text-xs uppercase tracking-[0.18em] text-gray-500">Fresh Drops</p>
-                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mt-1">New Arrivals</h3>
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mt-1" data-i18n="index.new_arrivals_title">New Arrivals</h3>
                 </div>
-                <a href="discover.html?filter=new-in" class="text-sm font-semibold text-gray-600 hover:text-gray-900 transition new-arrivals-cta">View all new arrivals <i class="fas fa-arrow-right ml-1 text-xs"></i></a>
+                <a href="discover.html?filter=new-in" class="text-sm font-semibold text-gray-600 hover:text-gray-900 transition new-arrivals-cta"><span data-i18n="index.view_all_new">View all new arrivals</span> <i class="fas fa-arrow-right ml-1 text-xs"></i></a>
             </div>
 
             <div class="relative w-full carousel-shell">
@@ -1136,7 +1182,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1160,7 +1206,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1184,7 +1230,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1208,7 +1254,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1232,7 +1278,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">10ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1256,7 +1302,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">125ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1280,7 +1326,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1304,7 +1350,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1328,7 +1374,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1352,7 +1398,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1376,7 +1422,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1400,7 +1446,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1424,7 +1470,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1448,7 +1494,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1472,7 +1518,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1496,7 +1542,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1520,7 +1566,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1544,7 +1590,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1568,7 +1614,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
 
@@ -1592,7 +1638,7 @@
                             <span class="text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">100ML</span>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button>
                         </div>
                     </article>
                 </div>
@@ -1638,7 +1684,7 @@
     <!-- Featured Brand Section -->
     <section class="bg-[#111111] text-white py-16 aether-cinematic-section">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-center text-sm font-bold tracking-[0.2em] mb-10 uppercase text-gray-300 aether-kicker">THE HOUSE OF XERJOFF</h2>
+            <h2 class="text-center text-sm font-bold tracking-[0.2em] mb-10 uppercase text-gray-300 aether-kicker" data-i18n="index.xerjoff_kicker">THE HOUSE OF XERJOFF</h2>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-6">
                 <!-- Main Image -->
@@ -1648,11 +1694,11 @@
                 
                 <!-- Text Area -->
                 <div class="text-center px-8 lg:px-16 aether-copy-zone">
-                    <h3 class="text-2xl lg:text-3xl font-serif font-bold mb-4 aether-title">ITALIAN HAUTE PARFUMERIE.</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-8 aether-subcopy">
+                    <h3 class="text-2xl lg:text-3xl font-serif font-bold mb-4 aether-title" data-i18n="index.xerjoff_title">ITALIAN HAUTE PARFUMERIE.</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-8 aether-subcopy" data-i18n="index.xerjoff_copy">
                         Born in Turin, crafted with obsession. XERJOFF perfumes are masterpieces of rare ingredients, golden artistry, and uncompromising luxury — where every bottle tells a story of Italian excellence.
                     </p>
-                    <a href="pages/xerjoff.html" class="inline-block border-b border-white pb-1 font-semibold text-sm hover:text-brand-red hover:border-brand-red transition duration-300 aether-discover-link">
+                    <a href="pages/xerjoff.html" class="inline-block border-b border-white pb-1 font-semibold text-sm hover:text-brand-red hover:border-brand-red transition duration-300 aether-discover-link" data-i18n="index.xerjoff_link">
                         Explore the Collection
                     </a>
                 </div>
@@ -1672,28 +1718,28 @@
                     <i class="fas fa-gem text-2xl"></i>
                     <div>
                         <p class="metric-value">4.9/5</p>
-                        <p class="metric-label">Average Rating</p>
+                        <p class="metric-label" data-i18n="index.metric_rating">Average Rating</p>
                     </div>
                 </div>
                 <div class="metric-item">
                     <i class="fas fa-box-open text-2xl"></i>
                     <div>
                         <p class="metric-value">+400</p>
-                        <p class="metric-label">Orders delivered</p>
+                        <p class="metric-label" data-i18n="index.metric_orders">Orders delivered</p>
                     </div>
                 </div>
                 <div class="metric-item">
                     <i class="fas fa-users text-2xl"></i>
                     <div>
                         <p class="metric-value">370</p>
-                        <p class="metric-label">Happy clients</p>
+                        <p class="metric-label" data-i18n="index.metric_clients">Happy clients</p>
                     </div>
                 </div>
                 <div class="metric-item">
                     <i class="fas fa-shield-heart text-2xl"></i>
                     <div>
                         <p class="metric-value">100%</p>
-                        <p class="metric-label">Authentic products</p>
+                        <p class="metric-label" data-i18n="index.metric_authentic">Authentic products</p>
                     </div>
                 </div>
             </div>
@@ -1701,8 +1747,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                 <div class="lg:col-span-4 text-white">
                     <span class="testimonial-kicker"></span>
-                    <h2 class="text-4xl md:text-5xl font-bold leading-tight mt-4">What clients love about IPORDISE</h2>
-                    <p class="text-white/70 text-sm md:text-base mt-4 max-w-md">From luxury packaging to long-lasting fragrances, our community shares real feedback after every order.</p>
+                    <h2 class="text-4xl md:text-5xl font-bold leading-tight mt-4" data-i18n="index.proof_title">What clients love about IPORDISE</h2>
+                    <p class="text-white/70 text-sm md:text-base mt-4 max-w-md" data-i18n="index.proof_sub">From luxury packaging to long-lasting fragrances, our community shares real feedback after every order.</p>
 
                     <div class="flex items-center gap-3 mt-8">
                         <button id="testimonialPrev" class="testimonial-control-btn" aria-label="Previous testimonials">
@@ -1720,39 +1766,39 @@
                             <div class="flex items-center justify-between mb-4">
                                 <div>
                                     <h3 class="font-bold text-lg text-slate-800">Sara A.</h3>
-                                    <p class="text-xs text-slate-500">Customer - Casablanca</p>
+                                    <p class="text-xs text-slate-500" data-i18n="index.proof_customer_casa">Customer - Casablanca</p>
                                 </div>
                                 <div class="text-[#d4af37] text-xs tracking-wide">
                                     <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                                 </div>
                             </div>
-                            <p class="text-slate-600 leading-relaxed">The perfume was exactly as described, elegant and long-lasting. Delivery was very fast and the packaging felt premium from the first touch.</p>
+                            <p class="text-slate-600 leading-relaxed" data-i18n="index.proof_review_sara">The perfume was exactly as described, elegant and long-lasting. Delivery was very fast and the packaging felt premium from the first touch.</p>
                         </article>
 
                         <article class="testimonial-card min-w-[88%] sm:min-w-[70%] lg:min-w-[48%] snap-start">
                             <div class="flex items-center justify-between mb-4">
                                 <div>
                                     <h3 class="font-bold text-lg text-slate-800">Youssef M.</h3>
-                                    <p class="text-xs text-slate-500">Customer - Rabat</p>
+                                    <p class="text-xs text-slate-500" data-i18n="index.proof_customer_rabat">Customer - Rabat</p>
                                 </div>
                                 <div class="text-[#d4af37] text-xs tracking-wide">
                                     <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                                 </div>
                             </div>
-                            <p class="text-slate-600 leading-relaxed">I ordered two perfumes, both authentic with excellent longevity. Customer service answered all my questions within minutes.</p>
+                            <p class="text-slate-600 leading-relaxed" data-i18n="index.proof_review_youssef">I ordered two perfumes, both authentic with excellent longevity. Customer service answered all my questions within minutes.</p>
                         </article>
 
                         <article class="testimonial-card min-w-[88%] sm:min-w-[70%] lg:min-w-[48%] snap-start">
                             <div class="flex items-center justify-between mb-4">
                                 <div>
                                     <h3 class="font-bold text-lg text-slate-800">Imane R.</h3>
-                                    <p class="text-xs text-slate-500">Customer - Tangier</p>
+                                    <p class="text-xs text-slate-500" data-i18n="index.proof_customer_tangier">Customer - Tangier</p>
                                 </div>
                                 <div class="text-[#d4af37] text-xs tracking-wide">
                                     <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                                 </div>
                             </div>
-                            <p class="text-slate-600 leading-relaxed">Beautiful selection and fair pricing. The scent recommendation I received matched my style perfectly and I already placed a second order.</p>
+                            <p class="text-slate-600 leading-relaxed" data-i18n="index.proof_review_imane">Beautiful selection and fair pricing. The scent recommendation I received matched my style perfectly and I already placed a second order.</p>
                         </article>
                     </div>
                 </div>
@@ -1774,47 +1820,47 @@
         </div>
 
         <div class="scent-finder-inner">
-            <span class="scent-finder-kicker">Personalized For You</span>
+            <span class="scent-finder-kicker" data-i18n="index.sf_kicker" data-i18n-orig="Personalized For You">Personalized For You</span>
             <span class="scent-finder-diamond" aria-hidden="true"></span>
-            <h2 class="scent-finder-title">Find Your<br><em>Signature Scent</em></h2>
-            <p class="scent-finder-sub">From woody orientals to fresh citrus &mdash; discover fragrances curated to match your mood, personality, and every occasion.</p>
+            <h2 class="scent-finder-title" data-i18n-html="index.sf_title" data-i18n-orig-html="Find Your&lt;br&gt;&lt;em&gt;Signature Scent&lt;/em&gt;">Find Your<br><em>Signature Scent</em></h2>
+            <p class="scent-finder-sub" data-i18n="index.sf_sub" data-i18n-orig="From woody orientals to fresh citrus — discover fragrances curated to match your mood, personality, and every occasion.">From woody orientals to fresh citrus &mdash; discover fragrances curated to match your mood, personality, and every occasion.</p>
 
             <div class="scent-finder-actions">
                 <a href="discover.html?filter=all" class="scent-finder-btn-primary">
-                    <i class="fas fa-compass"></i> Explore Collection
+                    <i class="fas fa-compass"></i> <span data-i18n="index.sf_btn_explore" data-i18n-orig="Explore Collection">Explore Collection</span>
                 </a>
                 <a href="discover.html?filter=best-sellers" class="scent-finder-btn-secondary">
-                    <i class="fas fa-fire-flame-curved"></i> Best Sellers
+                    <i class="fas fa-fire-flame-curved"></i> <span data-i18n="index.sf_btn_best" data-i18n-orig="Best Sellers">Best Sellers</span>
                 </a>
             </div>
 
             <div class="scent-tags">
-                <a href="discover.html?filter=for-men" class="scent-tag"><i class="fas fa-mars"></i> For Him</a>
-                <a href="discover.html?filter=for-women" class="scent-tag"><i class="fas fa-venus"></i> For Her</a>
-                <a href="discover.html?filter=niche" class="scent-tag"><i class="fas fa-gem"></i> Niche</a>
-                <a href="discover.html?filter=arabian" class="scent-tag"><i class="fas fa-moon"></i> Arabian</a>
-                <a href="discover.html?filter=designer" class="scent-tag"><i class="fas fa-crown"></i> Designer</a>
-                <a href="discover.html?filter=unisex" class="scent-tag"><i class="fas fa-infinity"></i> Unisex</a>
-                <a href="discover.html?filter=discovery-sets" class="scent-tag"><i class="fas fa-boxes-stacked"></i> Discovery Sets</a>
+                <a href="discover.html?filter=for-men" class="scent-tag"><i class="fas fa-mars"></i> <span data-i18n="index.sf_tag_him" data-i18n-orig="For Him">For Him</span></a>
+                <a href="discover.html?filter=for-women" class="scent-tag"><i class="fas fa-venus"></i> <span data-i18n="index.sf_tag_her" data-i18n-orig="For Her">For Her</span></a>
+                <a href="discover.html?filter=niche" class="scent-tag"><i class="fas fa-gem"></i> <span data-i18n="index.sf_tag_niche" data-i18n-orig="Niche">Niche</span></a>
+                <a href="discover.html?filter=arabian" class="scent-tag"><i class="fas fa-moon"></i> <span data-i18n="index.sf_tag_arabian" data-i18n-orig="Arabian">Arabian</span></a>
+                <a href="discover.html?filter=designer" class="scent-tag"><i class="fas fa-crown"></i> <span data-i18n="index.sf_tag_designer" data-i18n-orig="Designer">Designer</span></a>
+                <a href="discover.html?filter=unisex" class="scent-tag"><i class="fas fa-infinity"></i> <span data-i18n="index.sf_tag_unisex" data-i18n-orig="Unisex">Unisex</span></a>
+                <a href="discover.html?filter=discovery-sets" class="scent-tag"><i class="fas fa-boxes-stacked"></i> <span data-i18n="index.sf_tag_sets" data-i18n-orig="Discovery Sets">Discovery Sets</span></a>
             </div>
 
             <!-- Stats strip -->
             <div class="scent-stats" aria-label="Why shop at IPORDISE">
                 <div class="scent-stat-item">
                     <span class="scent-stat-value">500+</span>
-                    <span class="scent-stat-label">Fragrances</span>
+                    <span class="scent-stat-label" data-i18n="index.sf_stat_fragrances" data-i18n-orig="Fragrances">Fragrances</span>
                 </div>
                 <div class="scent-stat-item">
                     <span class="scent-stat-value">60+</span>
-                    <span class="scent-stat-label">Brands</span>
+                    <span class="scent-stat-label" data-i18n="index.sf_stat_brands" data-i18n-orig="Brands">Brands</span>
                 </div>
                 <div class="scent-stat-item">
                     <span class="scent-stat-value">100%</span>
-                    <span class="scent-stat-label">Authentic</span>
+                    <span class="scent-stat-label" data-i18n="index.sf_stat_authentic" data-i18n-orig="Authentic">Authentic</span>
                 </div>
                 <div class="scent-stat-item">
                     <span class="scent-stat-value">4.9<span style="font-size:1rem;opacity:0.6">/5</span></span>
-                    <span class="scent-stat-label">Customer Rating</span>
+                    <span class="scent-stat-label" data-i18n="index.sf_stat_rating" data-i18n-orig="Customer Rating">Customer Rating</span>
                 </div>
             </div>
         </div>
@@ -1825,9 +1871,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10 items-center">
                 <div class="lg:col-span-2">
-                    <p class="text-xs font-bold uppercase tracking-[0.22em] text-brand-red mb-3">Social Media</p>
-                    <h2 class="text-3xl sm:text-4xl font-serif font-bold text-brand-dark leading-tight">Watch Our Latest Video</h2>
-                    <p class="mt-4 text-sm sm:text-base text-gray-600 leading-relaxed">
+                    <p class="text-xs font-bold uppercase tracking-[0.22em] text-brand-red mb-3" data-i18n="index.social_kicker">Social Media</p>
+                    <h2 class="text-3xl sm:text-4xl font-serif font-bold text-brand-dark leading-tight" data-i18n="index.social_title">Watch Our Latest Video</h2>
+                    <p class="mt-4 text-sm sm:text-base text-gray-600 leading-relaxed" data-i18n="index.social_sub">
                         Discover our newest post, fragrance highlights, and behind-the-scenes moments from IPORDISE.
                     </p>
                     <div class="mt-6 flex flex-wrap gap-3" data-social-video-links>
@@ -1860,7 +1906,7 @@
                                 <i class="fab fa-tiktok"></i>
                                 <i class="fab fa-youtube"></i>
                             </div>
-                            <p class="text-white/70 text-sm font-medium text-center px-6">Select a platform above to watch our latest content</p>
+                            <p class="text-white/70 text-sm font-medium text-center px-6" data-i18n="index.social_placeholder">Select a platform above to watch our latest content</p>
                         </div>
                     </div>
                 </div>
@@ -1871,9 +1917,9 @@
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
-                <p class="text-xs uppercase tracking-[0.24em] text-gray-500 font-semibold mb-3">Visit Us</p>
-                <h2 class="text-3xl md:text-4xl font-bold text-brand-dark">Our Store in Tangier</h2>
-                <p class="text-sm text-gray-500 mt-3 max-w-2xl mx-auto">Find IPORDISE in Tangier, Morocco. Stop by for personalized fragrance advice and in-store exclusives.</p>
+                <p class="text-xs uppercase tracking-[0.24em] text-gray-500 font-semibold mb-3" data-i18n="index.store_kicker">Visit Us</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-dark" data-i18n="index.store_title">Our Store in Tangier</h2>
+                <p class="text-sm text-gray-500 mt-3 max-w-2xl mx-auto" data-i18n="index.store_sub">Find IPORDISE in Tangier, Morocco. Stop by for personalized fragrance advice and in-store exclusives.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
@@ -1892,13 +1938,13 @@
                         <h3 class="text-xl font-semibold text-brand-dark">IPORDISE Tangier</h3>
                         <p class="text-sm text-gray-500 mt-2">Tangier, Morocco</p>
                         <div class="mt-5 space-y-3 text-sm text-gray-600">
-                            <p class="flex items-center gap-2"><i class="fas fa-location-dot text-brand-red"></i>City Center, Tangier</p>
-                            <p class="flex items-center gap-2"><i class="fas fa-clock text-brand-red"></i>Every day: 10:00 - 21:00</p>
+                            <p class="flex items-center gap-2"><i class="fas fa-location-dot text-brand-red"></i><span data-i18n="index.store_address">City Center, Tangier</span></p>
+                            <p class="flex items-center gap-2"><i class="fas fa-clock text-brand-red"></i><span data-i18n="index.store_hours">Every day: 10:00 - 21:00</span></p>
                             <p class="flex items-center gap-2"><i class="fas fa-phone text-brand-red"></i>+212 600-000-000</p>
                         </div>
                     </div>
                     <a href="https://www.google.com/maps?q=Tangier%2C%20Morocco" target="_blank" rel="noopener" class="mt-6 inline-flex items-center justify-center rounded-full bg-brand-dark text-white text-sm font-semibold py-3 px-6 hover:bg-black transition">
-                        Get Directions <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        <span data-i18n="index.store_directions">Get Directions</span> <i class="fas fa-arrow-right ml-2 text-xs"></i>
                     </a>
                 </div>
             </div>
@@ -1911,8 +1957,8 @@
             
             <!-- Advantages -->
             <div class="text-center mb-10">
-                <p class="ipordise-adv-title">WHY CHOOSE IPORDISE</p>
-                <h3 class="text-2xl md:text-3xl font-serif font-bold text-gray-900 mt-2">The IPORDISE Difference</h3>
+                <p class="ipordise-adv-title" data-i18n="index.adv_kicker">WHY CHOOSE IPORDISE</p>
+                <h3 class="text-2xl md:text-3xl font-serif font-bold text-gray-900 mt-2" data-i18n="index.adv_title">The IPORDISE Difference</h3>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 text-center ipordise-adv-grid">
@@ -1921,8 +1967,8 @@
                         <i class="fas fa-truck-fast"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-sm ipordise-adv-heading">Free Delivery</h4>
-                        <p class="text-xs mt-1 ipordise-adv-copy">Starting from 35 MAD — fast & reliable</p>
+                        <h4 class="font-bold text-sm ipordise-adv-heading" data-i18n="index.adv_delivery_h">Free Delivery</h4>
+                        <p class="text-xs mt-1 ipordise-adv-copy" data-i18n="index.adv_delivery_p">Starting from 35 MAD ? fast &amp; reliable</p>
                     </div>
                 </div>
                 <div class="flex flex-col items-center justify-center space-y-4 ipordise-adv-item sect-reveal sect-reveal-d2">
@@ -1930,8 +1976,8 @@
                         <i class="fas fa-rotate-left"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-sm ipordise-adv-heading">Money-back Guarantee</h4>
-                        <p class="text-xs mt-1 ipordise-adv-copy">14-day hassle-free returns, no questions asked</p>
+                        <h4 class="font-bold text-sm ipordise-adv-heading" data-i18n="index.adv_returns_h">Money-back Guarantee</h4>
+                        <p class="text-xs mt-1 ipordise-adv-copy" data-i18n="index.adv_returns_p">14-day hassle-free returns, no questions asked</p>
                     </div>
                 </div>
                 <div class="flex flex-col items-center justify-center space-y-4 ipordise-adv-item sect-reveal sect-reveal-d3">
@@ -1939,33 +1985,33 @@
                         <i class="fas fa-shield-halved"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-sm ipordise-adv-heading">Secure Payment & 1-Click Shop</h4>
-                        <p class="text-xs mt-1 ipordise-adv-copy">100% secure checkout, no hidden fees</p>
+                        <h4 class="font-bold text-sm ipordise-adv-heading" data-i18n="index.adv_payment_h">Secure Payment &amp; 1-Click Shop</h4>
+                        <p class="text-xs mt-1 ipordise-adv-copy" data-i18n="index.adv_payment_p">100% secure checkout, no hidden fees</p>
                     </div>
                 </div>
             </div>
 
             <!-- Newsletter Form -->
             <div class="max-w-4xl mx-auto text-center ipordise-newsletter-shell">
-                <p class="text-lg text-gray-700 mb-2 ipordise-news-title">Subscribe to our newsletter for new arrivals and fragrance tips.</p>
-                <p class="text-lg font-bold text-gray-800 mb-8 ipordise-news-subtitle">Stay connected with IPORDISE.</p>
+                <p class="text-lg text-gray-700 mb-2 ipordise-news-title" data-i18n="index.news_title">Subscribe to our newsletter for new arrivals and fragrance tips.</p>
+                <p class="text-lg font-bold text-gray-800 mb-8 ipordise-news-subtitle" data-i18n="index.news_subtitle">Stay connected with IPORDISE.</p>
 
                 <form class="space-y-6 ipordise-news-form">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="text-left">
-                            <input type="text" placeholder="Name *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
-                            <p class="text-[10px] text-gray-500 mt-1">* Required fields</p>
+                            <input type="text" data-i18n-placeholder="index.news_ph_name" placeholder="Name *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
+                            <p class="text-[10px] text-gray-500 mt-1" data-i18n="index.news_required">* Required fields</p>
                         </div>
                         <div class="text-left">
-                            <input type="email" placeholder="Email address *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
+                            <input type="email" data-i18n-placeholder="index.news_ph_email" placeholder="Email address *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
                         </div>
                         <div class="text-left">
                             <div class="relative">
                                 <select required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-gray-500 text-sm appearance-none ipordise-news-input">
-                                    <option value="" disabled selected>Gender *</option>
-                                    <option value="female">Female</option>
-                                    <option value="male">Male</option>
-                                    <option value="other">Other</option>
+                                    <option value="" disabled selected data-i18n="index.news_gender_ph">Gender *</option>
+                                    <option value="female" data-i18n="index.news_gender_female">Female</option>
+                                    <option value="male" data-i18n="index.news_gender_male">Male</option>
+                                    <option value="other" data-i18n="index.news_gender_other">Other</option>
                                 </select>
                                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
                                     <i class="fas fa-chevron-down text-xs"></i>
@@ -1976,10 +2022,10 @@
 
                     <div class="flex items-center justify-center space-x-2 text-sm text-gray-600 ipordise-privacy-row">
                         <input type="checkbox" id="privacy" required class="w-4 h-4 text-brand-red rounded border-gray-300 focus:ring-brand-red cursor-pointer">
-                        <label for="privacy" class="cursor-pointer">I have read the <a href="pages/privacy-policy.html" class="text-blue-500 hover:text-blue-700 underline transition ipordise-privacy-link">privacy policy</a> and want to subscribe to the IPORDISE newsletter. *</label>
+                        <label for="privacy" class="cursor-pointer" data-i18n-html="index.news_privacy">I have read the <a href="pages/privacy-policy.html" class="text-blue-500 hover:text-blue-700 underline transition ipordise-privacy-link">privacy policy</a> and want to subscribe to the IPORDISE newsletter. *</label>
                     </div>
 
-                    <button type="submit" class="text-white font-bold py-3 px-12 rounded-full transition duration-300 shadow-md uppercase tracking-wide text-sm mt-4 ipordise-news-submit">
+                    <button type="submit" class="text-white font-bold py-3 px-12 rounded-full transition duration-300 shadow-md uppercase tracking-wide text-sm mt-4 ipordise-news-submit" data-i18n="index.news_submit">
                         SUBSCRIBE
                     </button>
                 </form>
@@ -2004,7 +2050,7 @@
             <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
                 <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-6">The ultimate destination for luxury perfumes and beauty online. Elevate your everyday.</p>
+                    <p class="text-gray-400 text-sm mb-6" data-i18n="footer.tagline">The ultimate destination for luxury perfumes and beauty online. Elevate your everyday.</p>
                     <div class="flex space-x-3">
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
@@ -2013,40 +2059,40 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Customer Service</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.customer_service">Customer Service</h4>
                     <ul class="footer-links">
-                        <li><a href="pages/contact.html">Contact Us</a></li>
-                        <li><a href="pages/shipping.html">Shipping & Returns</a></li>
-                        <li><a href="pages/track-order.html">Track Order</a></li>
-                        <li><a href="pages/faq.html">FAQ</a></li>
-                        <li><a href="pages/support.html">Support Center</a></li>
+                        <li><a href="pages/contact.html" data-i18n="footer.contact">Contact Us</a></li>
+                        <li><a href="pages/shipping.html" data-i18n="footer.shipping_returns">Shipping &amp; Returns</a></li>
+                        <li><a href="pages/track-order.html" data-i18n="footer.track_order">Track Order</a></li>
+                        <li><a href="pages/faq.html" data-i18n="footer.faq">FAQ</a></li>
+                        <li><a href="pages/support.html" data-i18n="footer.support">Support Center</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">About IPORDISE</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.about">About IPORDISE</h4>
                     <ul class="footer-links">
-                        <li><a href="pages/our-story.html">Our Story</a></li>
-                        <li><a href="pages/careers.html">Careers</a></li>
-                        <li><a href="pages/store-locator.html">Find a Store</a></li>
-                        <li><a href="pages/terms.html">Terms & Conditions</a></li>
-                        <li><a href="pages/privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="pages/our-story.html" data-i18n="footer.our_story">Our Story</a></li>
+                        <li><a href="pages/careers.html" data-i18n="footer.careers">Careers</a></li>
+                        <li><a href="pages/store-locator.html" data-i18n="footer.find_store">Find a Store</a></li>
+                        <li><a href="pages/terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a></li>
+                        <li><a href="pages/privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Promotions</h4>
+                    <h4 class="footer-col-title" data-i18n="index.promotions_title">Promotions</h4>
                     <ul class="footer-links">
-                        <li><a href="discover.html?filter=offers">Flash Offers</a></li>
-                        <li><a href="discover.html?filter=new-in">New Arrivals</a></li>
-                        <li><a href="discover.html?filter=best-sellers">Best Sellers</a></li>
-                        <li><a href="discover.html?filter=niche">Niche Collection</a></li>
-                        <li><a href="discover.html?filter=designer">Designer Collection</a></li>
+                        <li><a href="discover.html?filter=offers" data-i18n="footer.promo_flash">Flash Offers</a></li>
+                        <li><a href="discover.html?filter=new-in" data-i18n="footer.promo_newin">New Arrivals</a></li>
+                        <li><a href="discover.html?filter=best-sellers" data-i18n="footer.promo_bestsellers">Best Sellers</a></li>
+                        <li><a href="discover.html?filter=niche" data-i18n="footer.promo_niche">Niche Collection</a></li>
+                        <li><a href="discover.html?filter=designer" data-i18n="footer.promo_designer">Designer Collection</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Newsletter</h4>
-                    <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals, new arrivals, and fragrance tips.</p>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4" data-i18n="footer.newsletter_desc">Subscribe for exclusive deals, new arrivals, and fragrance tips.</p>
                     <div class="flex">
-                        <input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10">
+                        <input type="email" placeholder="Your email" data-i18n-placeholder="footer.newsletter_placeholder" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10">
                         <a href="pages/newsletter.html" class="bg-brand-red px-5 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm whitespace-nowrap">GO</a>
                     </div>
                 </div>
@@ -2055,7 +2101,7 @@
             <!-- Payment Methods -->
             <div class="border-t border-white/10 pt-8 pb-6">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                    <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Accepted Payment Methods</p>
+                    <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold" data-i18n="footer.payment_methods">Accepted Payment Methods</p>
                     <div class="flex items-center gap-3 flex-wrap justify-center">
                         <span class="payment-icon"><i class="fab fa-cc-visa text-xl"></i></span>
                         <span class="payment-icon"><i class="fab fa-cc-mastercard text-xl"></i></span>
@@ -2068,11 +2114,11 @@
             </div>
 
             <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
-                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <p data-i18n="footer.copyright">&copy; 2026 IPORDISE. All rights reserved.</p>
                 <div class="flex gap-4">
-                    <a href="pages/terms.html" class="hover:text-white transition">Terms</a>
-                    <a href="pages/privacy-policy.html" class="hover:text-white transition">Privacy</a>
-                    <a href="pages/returns.html" class="hover:text-white transition">Returns</a>
+                    <a href="pages/terms.html" class="hover:text-white transition" data-i18n="footer.terms">Terms</a>
+                    <a href="pages/privacy-policy.html" class="hover:text-white transition" data-i18n="footer.privacy">Privacy</a>
+                    <a href="pages/returns.html" class="hover:text-white transition" data-i18n="footer.returns">Returns</a>
                 </div>
             </div>
         </div>
@@ -2080,6 +2126,7 @@
 
 </body>
 </html>
+
 
 
 
