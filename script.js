@@ -2993,7 +2993,9 @@ document.addEventListener('DOMContentLoaded', () => {
             catalog.push(data);
         });
 
-        if (!catalog.length && Array.isArray(relatedProductCatalog)) {
+        /* Always merge the full relatedProductCatalog so every product is searchable
+           on every page, not just discover.html */
+        if (Array.isArray(relatedProductCatalog)) {
             relatedProductCatalog.forEach((item) => {
                 const key = `${normalizeSearchText(item.name)}|${normalizeSearchText(item.brand)}`;
                 if (!item.name || seenKeys.has(key)) return;
@@ -3040,12 +3042,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!normalizedQuery) return [];
 
             const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
-            const results = catalog.filter((item) => {
-                const haystack = normalizeSearchText(`${item.name} ${item.brand}`);
-                return tokens.every((token) => haystack.includes(token));
-            });
+            const scored = catalog
+                .map((item) => {
+                    const haystack = normalizeSearchText(`${item.name} ${item.brand}`);
+                    if (!tokens.every((token) => haystack.includes(token))) return null;
+                    /* score: starts-with match ranks higher than contains */
+                    const score = tokens.every((token) => haystack.startsWith(token)
+                        || normalizeSearchText(item.brand).startsWith(token)
+                        || normalizeSearchText(item.name).startsWith(token)) ? 1 : 0;
+                    return { item, score };
+                })
+                .filter(Boolean)
+                .sort((a, b) => b.score - a.score)
+                .map(({ item }) => item);
 
-            return results.slice(0, 6);
+            return scored.slice(0, 8);
         };
 
         const formatSearchPrice = (value) => {
@@ -3144,13 +3155,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             input.addEventListener('input', (event) => {
                 const value = event.target.value || '';
-                const suggestions = value.length < 2 ? [] : buildSuggestions(value);
+                const suggestions = value.length < 1 ? [] : buildSuggestions(value);
                 renderMenu(menu, suggestions, value);
             });
 
             input.addEventListener('focus', (event) => {
                 const value = event.target.value || '';
-                const suggestions = value.length < 2 ? [] : buildSuggestions(value);
+                const suggestions = value.length < 1 ? [] : buildSuggestions(value);
                 renderMenu(menu, suggestions, value);
             });
 
