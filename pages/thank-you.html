@@ -1,19 +1,19 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Order Confirmed!</title>
+    <title data-i18n-title="thankyou.page_title">IPORDISE - Order Confirmed!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../script.js"></script>
+    <script src="../script.js"></script>`n    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <div class="page-announce-bar">
+    <div class="page-announce-bar" data-i18n-html="thankyou.announce">
         <i class="fas fa-party-horn mr-2" style="color:#e73c3c"></i>
         Your order is on its way! <strong style="color:#fff">Thank you for shopping with IPORDISE.</strong>
     </div>
@@ -46,8 +46,8 @@
                 <div class="thank-icon">
                     <i class="fas fa-check"></i>
                 </div>
-                <h1 class="text-2xl sm:text-3xl font-serif font-bold text-brand-dark mb-3">Order Confirmed!</h1>
-                <p class="text-gray-600 text-sm sm:text-base max-w-md mx-auto leading-relaxed">Thank you for your order. We're already preparing it for dispatch. You'll receive a confirmation via WhatsApp or email shortly.</p>
+                <h1 class="text-2xl sm:text-3xl font-serif font-bold text-brand-dark mb-3" data-i18n="thankyou.h1">Order Confirmed!</h1>
+                <p class="text-gray-600 text-sm sm:text-base max-w-md mx-auto leading-relaxed" data-i18n="thankyou.p">Thank you for your order. We're already preparing it for dispatch. You'll receive a confirmation via WhatsApp or email shortly.</p>
 
                 <div class="mt-6 p-4 rounded-xl text-xs text-gray-500 flex items-center justify-center gap-2" style="background:#f9fafb">
                     <i class="fas fa-clock" style="color:#e73c3c"></i>
@@ -61,18 +61,18 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="info-card text-center">
                         <div class="thank-step-icon mx-auto mb-3"><i class="fas fa-box-open"></i></div>
-                        <p class="font-semibold text-sm text-brand-dark">1. Packing</p>
-                        <p class="text-xs text-gray-500 mt-1">Your items are carefully checked and packed within 24 hours.</p>
+                    <p class="font-semibold text-sm text-brand-dark" data-i18n="thankyou.step1_h">1. Packing</p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="thankyou.step1_p">Your items are carefully checked and packed within 24 hours.</p>
                     </div>
                     <div class="info-card text-center">
                         <div class="thank-step-icon mx-auto mb-3"><i class="fas fa-truck-fast"></i></div>
-                        <p class="font-semibold text-sm text-brand-dark">2. In transit</p>
-                        <p class="text-xs text-gray-500 mt-1">Handed to our courier with a tracking number sent to you.</p>
+                    <p class="font-semibold text-sm text-brand-dark" data-i18n="thankyou.step2_h">2. In transit</p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="thankyou.step2_p">Handed to our courier with a tracking number sent to you.</p>
                     </div>
                     <div class="info-card text-center">
                         <div class="thank-step-icon mx-auto mb-3"><i class="fas fa-house-chimney-user"></i></div>
-                        <p class="font-semibold text-sm text-brand-dark">3. Delivered</p>
-                        <p class="text-xs text-gray-500 mt-1">Door-to-door delivery. Payment on delivery accepted.</p>
+                    <p class="font-semibold text-sm text-brand-dark" data-i18n="thankyou.step3_h">3. Delivered</p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="thankyou.step3_p">Door-to-door delivery. Payment on delivery accepted.</p>
                     </div>
                 </div>
             </div>
@@ -80,10 +80,10 @@
             <!-- CTAs -->
             <div class="flex flex-col sm:flex-row gap-3 justify-center mb-8">
                 <a href="track-order.html" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white" style="background:#1a1a1a">
-                    <i class="fas fa-magnifying-glass-location"></i> Track my order
+                    <i class="fas fa-magnifying-glass-location"></i> <span data-i18n="thankyou.track_btn">Track my order</span>
                 </a>
                 <a href="../discover.html" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm border border-gray-200 text-gray-700 hover:border-brand-red hover:text-brand-red transition">
-                    Continue Shopping <i class="fas fa-arrow-right text-xs"></i>
+                    <span data-i18n="thankyou.continue_btn">Continue Shopping</span> <i class="fas fa-arrow-right text-xs"></i>
                 </a>
             </div>
 
@@ -101,17 +101,17 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                 <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online.</p>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online.</p>
                     <div class="flex space-x-3">
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
-                <div><h4 class="footer-col-title">Customer Service</h4><ul class="footer-links"><li><a href="contact.html">Contact Us</a></li><li><a href="shipping.html">Shipping &amp; Returns</a></li><li><a href="track-order.html">Track Order</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
-                <div><h4 class="footer-col-title">About</h4><ul class="footer-links"><li><a href="our-story.html">Our Story</a></li><li><a href="careers.html">Careers</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4><ul class="footer-links"><li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li><li><a href="shipping.html">Shipping &amp; Returns</a></li><li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li><li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about">About</h4><ul class="footer-links"><li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li><li><a href="careers.html" data-i18n="footer.careers">Careers</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li></ul></div>
                 <div>
-                    <h4 class="footer-col-title">Newsletter</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
                     <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals and new arrivals.</p>
                     <div class="flex"><input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a></div>
                 </div>
@@ -124,3 +124,4 @@
     </footer>
 </body>
 </html>
+

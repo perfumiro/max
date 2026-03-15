@@ -1,19 +1,20 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Contact Us</title>
+    <title data-i18n-title="contact.page_title">IPORDISE - Contact Us</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../script.js"></script>
+    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <div class="page-announce-bar">
+    <div class="page-announce-bar" data-i18n-html="contact.announce">
         <i class="fas fa-headset mr-2" style="color:#e73c3c"></i>
         Our team is available <strong style="color:#fff">Mon&ndash;Sat, 9am&ndash;8pm</strong> to help you.
     </div>
@@ -43,10 +44,10 @@
             <p class="text-white/60 text-xs mb-4 flex items-center gap-1.5">
                 <a href="../index.html" class="hover:text-white transition">Home</a>
                 <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
-                <span class="text-white/90 font-semibold">Contact Us</span>
+                <span class="text-white/90 font-semibold" data-i18n="contact.breadcrumb">Contact Us</span>
             </p>
-            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight">Contact Us</h1>
-            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base">Have a question, order issue, or just want to say hello? We'd love to hear from you.</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight" data-i18n="contact.h1">Contact Us</h1>
+            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base" data-i18n="contact.subtitle">Have a question, order issue, or just want to say hello? We'd love to hear from you.</p>
         </div>
     </section>
 
@@ -56,75 +57,75 @@
 
                 <!-- Contact info -->
                 <div class="space-y-4">
-                    <p class="faq-category-title mb-5"><i class="fas fa-address-book"></i> Get in touch</p>
+                    <p class="faq-category-title mb-5"><i class="fas fa-address-book"></i> <span data-i18n="contact.get_in_touch">Get in touch</span></p>
 
                     <div class="info-card flex items-center gap-4">
                         <div class="info-card-icon" style="margin:0;flex-shrink:0"><i class="fas fa-envelope"></i></div>
                         <div>
-                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">Email</p>
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5" data-i18n="contact.email_label">Email</p>
                             <a href="mailto:support@ipordise.com" class="font-semibold text-brand-dark hover:text-brand-red transition">support@ipordise.com</a>
-                            <p class="text-xs text-gray-500 mt-0.5">We reply within 24 hours</p>
+                            <p class="text-xs text-gray-500 mt-0.5" data-i18n="contact.email_response">We reply within 24 hours</p>
                         </div>
                     </div>
 
                     <div class="info-card flex items-center gap-4">
                         <div class="info-card-icon" style="margin:0;flex-shrink:0;background:linear-gradient(135deg,#25d366,#128c7e)"><i class="fab fa-whatsapp"></i></div>
                         <div>
-                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">WhatsApp</p>
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5" data-i18n="contact.whatsapp_label">WhatsApp</p>
                             <a href="https://wa.me/212600000000" target="_blank" rel="noopener noreferrer" class="font-semibold text-brand-dark hover:text-brand-red transition">+212 6 00 00 00 00</a>
-                            <p class="text-xs text-gray-500 mt-0.5">Fast responses, Mon&ndash;Sat</p>
+                            <p class="text-xs text-gray-500 mt-0.5" data-i18n="contact.whatsapp_response">Fast responses, Mon&ndash;Sat</p>
                         </div>
                     </div>
 
                     <div class="info-card flex items-center gap-4">
                         <div class="info-card-icon" style="margin:0;flex-shrink:0"><i class="fas fa-phone"></i></div>
                         <div>
-                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">Phone</p>
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5" data-i18n="contact.phone_label">Phone</p>
                             <a href="tel:+212522000000" class="font-semibold text-brand-dark hover:text-brand-red transition">+212 5 22 00 00 00</a>
-                            <p class="text-xs text-gray-500 mt-0.5">Mon&ndash;Sat, 9:00&ndash;20:00</p>
+                            <p class="text-xs text-gray-500 mt-0.5" data-i18n="contact.phone_response">Mon&ndash;Sat, 9:00&ndash;20:00</p>
                         </div>
                     </div>
 
                     <div class="info-card flex items-center gap-4">
                         <div class="info-card-icon" style="margin:0;flex-shrink:0"><i class="fas fa-location-dot"></i></div>
                         <div>
-                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">Address</p>
-                            <p class="font-semibold text-brand-dark">Casablanca, Morocco</p>
-                            <a href="store-locator.html" class="text-xs mt-0.5 inline-flex items-center gap-1" style="color:#e73c3c">Find all stores <i class="fas fa-arrow-right text-[9px]"></i></a>
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5" data-i18n="contact.address_label">Address</p>
+                            <p class="font-semibold text-brand-dark" data-i18n="contact.address_value">Casablanca, Morocco</p>
+                            <a href="store-locator.html" class="text-xs mt-0.5 inline-flex items-center gap-1" style="color:#e73c3c"><span data-i18n="contact.find_stores">Find all stores</span> <i class="fas fa-arrow-right text-[9px]"></i></a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Contact form -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
-                    <p class="faq-category-title mb-5"><i class="fas fa-paper-plane"></i> Send a message</p>
+                    <p class="faq-category-title mb-5"><i class="fas fa-paper-plane"></i> <span data-i18n="contact.send_message">Send a message</span></p>
                     <form class="space-y-4" id="contactForm">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Full Name <span style="color:#e73c3c">*</span></label>
-                                <input type="text" class="contact-input" placeholder="Your name" required>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1.5"><span data-i18n="contact.fullname_label">Full Name</span> <span style="color:#e73c3c">*</span></label>
+                                <input type="text" class="contact-input" placeholder="Your name" data-i18n-placeholder="contact.fullname_ph" required>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Email <span style="color:#e73c3c">*</span></label>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1.5"><span data-i18n="contact.email_form_label">Email</span> <span style="color:#e73c3c">*</span></label>
                                 <input type="email" class="contact-input" placeholder="you@example.com" required>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Subject</label>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5"><span data-i18n="contact.subject_label">Subject</span></label>
                             <select class="contact-input">
-                                <option value="">Select a topic...</option>
-                                <option>Order issue</option>
-                                <option>Delivery question</option>
-                                <option>Return request</option>
-                                <option>Product inquiry</option>
-                                <option>General question</option>
+                                <option value="" data-i18n="contact.subject_ph">Select a topic...</option>
+                                <option data-i18n="contact.subject_order">Order issue</option>
+                                <option data-i18n="contact.subject_delivery">Delivery question</option>
+                                <option data-i18n="contact.subject_return">Return request</option>
+                                <option data-i18n="contact.subject_product">Product inquiry</option>
+                                <option data-i18n="contact.subject_general">General question</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Message <span style="color:#e73c3c">*</span></label>
-                            <textarea class="contact-input" rows="5" placeholder="How can we help you today?" required></textarea>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5"><span data-i18n="contact.message_label">Message</span> <span style="color:#e73c3c">*</span></label>
+                            <textarea class="contact-input" rows="5" placeholder="How can we help you today?" data-i18n-placeholder="contact.message_ph" required></textarea>
                         </div>
-                        <button type="submit" class="contact-submit-btn w-full justify-center">Send Message <i class="fas fa-paper-plane text-sm"></i></button>
+                        <button type="submit" class="contact-submit-btn w-full justify-center"><span data-i18n="contact.submit_btn">Send Message</span> <i class="fas fa-paper-plane text-sm"></i></button>
                     </form>
                 </div>
             </div>
@@ -133,23 +134,23 @@
             <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
                 <a href="faq.html" class="info-card text-center group">
                     <i class="fas fa-circle-question text-2xl mb-2" style="color:#e73c3c"></i>
-                    <p class="font-semibold text-sm text-brand-dark">FAQ</p>
-                    <p class="text-xs text-gray-500 mt-1">Quick answers</p>
+                    <p class="font-semibold text-sm text-brand-dark" data-i18n="contact.faq_title">FAQ</p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="contact.faq_sub">Quick answers</p>
                 </a>
                 <a href="shipping.html" class="info-card text-center group">
                     <i class="fas fa-truck-fast text-2xl mb-2" style="color:#e73c3c"></i>
-                    <p class="font-semibold text-sm text-brand-dark">Shipping</p>
-                    <p class="text-xs text-gray-500 mt-1">Delivery info</p>
+                    <p class="font-semibold text-sm text-brand-dark" data-i18n="contact.shipping_title">Shipping</p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="contact.shipping_sub">Delivery info</p>
                 </a>
                 <a href="returns.html" class="info-card text-center group">
                     <i class="fas fa-rotate-left text-2xl mb-2" style="color:#e73c3c"></i>
-                    <p class="font-semibold text-sm text-brand-dark">Returns</p>
-                    <p class="text-xs text-gray-500 mt-1">Returns policy</p>
+                    <p class="font-semibold text-sm text-brand-dark" data-i18n="contact.returns_title">Returns</p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="contact.returns_sub">Returns policy</p>
                 </a>
                 <a href="track-order.html" class="info-card text-center group">
                     <i class="fas fa-magnifying-glass-location text-2xl mb-2" style="color:#e73c3c"></i>
-                    <p class="font-semibold text-sm text-brand-dark">Track Order</p>
-                    <p class="text-xs text-gray-500 mt-1">Live tracking</p>
+                    <p class="font-semibold text-sm text-brand-dark" data-i18n="contact.track_title">Track Order</p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="contact.track_sub">Live tracking</p>
                 </a>
             </div>
         </div>
@@ -160,24 +161,24 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                 <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online.</p>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed" data-i18n="footer.tagline"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online.</p>
                     <div class="flex space-x-3">
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
-                <div><h4 class="footer-col-title">Customer Service</h4><ul class="footer-links"><li><a href="contact.html">Contact Us</a></li><li><a href="shipping.html">Shipping &amp; Returns</a></li><li><a href="track-order.html">Track Order</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
-                <div><h4 class="footer-col-title">About</h4><ul class="footer-links"><li><a href="our-story.html">Our Story</a></li><li><a href="careers.html">Careers</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4><ul class="footer-links"><li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li><li><a href="shipping.html" data-i18n="footer.shipping_returns">Shipping &amp; Returns</a></li><li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li><li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about" data-i18n="footer.about">About</h4><ul class="footer-links"><li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li><li><a href="careers.html" data-i18n="footer.careers">Careers</a></li><li><a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li></ul></div>
                 <div>
-                    <h4 class="footer-col-title">Newsletter</h4>
-                    <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals and new arrivals.</p>
-                    <div class="flex"><input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a></div>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4" data-i18n="footer.newsletter_desc">Subscribe for exclusive deals and new arrivals.</p>
+                    <div class="flex"><input type="email" placeholder="Your email" data-i18n-placeholder="footer.newsletter_placeholder" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a></div>
                 </div>
             </div>
             <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
-                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
-                <div class="flex gap-4"><a href="terms.html" class="hover:text-white transition">Terms</a><a href="privacy-policy.html" class="hover:text-white transition">Privacy</a><a href="returns.html" class="hover:text-white transition">Returns</a></div>
+                <p data-i18n="footer.copyright">&copy; 2026 IPORDISE. All rights reserved.</p>
+                <div class="flex gap-4"><a href="terms.html" class="hover:text-white transition" data-i18n="footer.terms">Terms</a><a href="privacy-policy.html" class="hover:text-white transition" data-i18n="footer.privacy">Privacy</a><a href="returns.html" class="hover:text-white transition" data-i18n="footer.returns">Returns</a></div>
             </div>
         </div>
     </footer>

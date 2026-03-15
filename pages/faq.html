@@ -1,19 +1,20 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - FAQ</title>
+    <title data-i18n-title="faq.page_title">IPORDISE - FAQ</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../script.js"></script>
+    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <div class="page-announce-bar">
+    <div class="page-announce-bar" data-i18n-html="faq.announce">
         <i class="fas fa-truck-fast mr-2" style="color:#e73c3c"></i>
         Fixed delivery fee of <strong style="color:#fff">35 MAD</strong> anywhere in Morocco.
         <a href="../discover.html" class="ml-2">SHOP NOW &rarr;</a>
@@ -46,8 +47,8 @@
                 <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
                 <span class="text-white/90 font-semibold">FAQ</span>
             </p>
-            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight">Frequently Asked Questions</h1>
-            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base">Everything you need to know about ordering, shipping, products and returns.</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight" data-i18n="faq.h1">Frequently Asked Questions</h1>
+            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base" data-i18n="faq.subtitle">Everything you need to know about ordering, shipping, products and returns.</p>
         </div>
     </section>
 
@@ -56,103 +57,103 @@
 
             <!-- Orders -->
             <div class="mb-8">
-                <p class="faq-category-title mb-4"><i class="fas fa-bag-shopping"></i> Orders</p>
+                <p class="faq-category-title mb-4"><i class="fas fa-bag-shopping"></i> <span data-i18n="faq.orders_cat">Orders</span></p>
                 <div class="space-y-3">
                     <details class="faq-item">
-                        <summary class="faq-question">How do I place an order?
+                        <summary class="faq-question"><span data-i18n="faq.q_place_order">How do I place an order?</span>
                             <span class="faq-icon"><i class="fas fa-plus"></i></span>
                         </summary>
-                        <div class="faq-answer">Browse our catalogue, add items to your cart, then go to checkout. Fill in your delivery details and place your order. You'll receive a confirmation via WhatsApp or email.</div>
+                        <div class="faq-answer" data-i18n="faq.a_place_order">Browse our catalogue, add items to your cart, then go to checkout. Fill in your delivery details and place your order. You'll receive a confirmation via WhatsApp or email.</div>
                     </details>
                     <details class="faq-item">
-                        <summary class="faq-question">Can I modify or cancel an order after placing it?
+                        <summary class="faq-question"><span data-i18n="faq.q_modify_cancel">Can I modify or cancel an order after placing it?</span>
                             <span class="faq-icon"><i class="fas fa-plus"></i></span>
                         </summary>
-                        <div class="faq-answer">Modifications or cancellations are possible within 1 hour of placing the order. After that, the order enters processing and cannot be changed. Contact us immediately via WhatsApp for urgent requests.</div>
+                        <div class="faq-answer" data-i18n="faq.a_modify_cancel">Modifications or cancellations are possible within 1 hour of placing the order. After that, the order enters processing and cannot be changed. Contact us immediately via WhatsApp for urgent requests.</div>
                     </details>
                     <details class="faq-item">
-                        <summary class="faq-question">What payment methods are accepted?
+                        <summary class="faq-question"><span data-i18n="faq.q_payment">What payment methods are accepted?</span>
                             <span class="faq-icon"><i class="fas fa-plus"></i></span>
                         </summary>
-                        <div class="faq-answer">We currently accept Cash on Delivery (COD) for all domestic orders in Morocco. Additional payment methods are being introduced — stay tuned.</div>
+                        <div class="faq-answer" data-i18n="faq.a_payment">We currently accept Cash on Delivery (COD) for all domestic orders in Morocco. Additional payment methods are being introduced � stay tuned.</div>
                     </details>
                 </div>
             </div>
 
             <!-- Shipping -->
             <div class="mb-8">
-                <p class="faq-category-title mb-4"><i class="fas fa-truck-fast"></i> Shipping</p>
+                <p class="faq-category-title mb-4"><i class="fas fa-truck-fast"></i> <span data-i18n="faq.shipping_cat">Shipping</span></p>
                 <div class="space-y-3">
                     <details class="faq-item">
-                        <summary class="faq-question">How much does shipping cost?
+                        <summary class="faq-question"><span data-i18n="faq.q_shipping_cost">How much does shipping cost?</span>
                             <span class="faq-icon"><i class="fas fa-plus"></i></span>
                         </summary>
-                        <div class="faq-answer">Shipping is a flat rate of <strong>35 MAD</strong> for all cities across Morocco, with no hidden fees or surprises at your door.</div>
+                        <div class="faq-answer" data-i18n-html="faq.a_shipping_cost">Shipping is a flat rate of <strong>35 MAD</strong> for all cities across Morocco, with no hidden fees or surprises at your door.</div>
                     </details>
                     <details class="faq-item">
-                        <summary class="faq-question">How long does delivery take?
+                        <summary class="faq-question"><span data-i18n="faq.q_delivery_time">How long does delivery take?</span>
                             <span class="faq-icon"><i class="fas fa-plus"></i></span>
                         </summary>
-                        <div class="faq-answer">Most domestic orders are delivered within 24 to 72 hours from the time of dispatch. Remote areas may take slightly longer. International orders take 3&ndash;7 business days.</div>
+                        <div class="faq-answer" data-i18n="faq.a_delivery_time">Most domestic orders are delivered within 24 to 72 hours from the time of dispatch. Remote areas may take slightly longer. International orders take 3&ndash;7 business days.</div>
                     </details>
                     <details class="faq-item">
-                        <summary class="faq-question">Can I track my order?
+                        <summary class="faq-question"><span data-i18n="faq.q_track">Can I track my order?</span>
                             <span class="faq-icon"><i class="fas fa-plus"></i></span>
                         </summary>
-                        <div class="faq-answer">Yes. Once your order is dispatched, you'll receive a tracking number. You can also use our <a href="track-order.html" style="color:#e73c3c;font-weight:600">Track Order</a> page to check delivery status at any time.</div>
+                        <div class="faq-answer" data-i18n-html="faq.a_track">Yes. Once your order is dispatched, you'll receive a tracking number. You can also use our <a href="track-order.html" style="color:#e73c3c;font-weight:600">Track Order</a> page to check delivery status at any time.</div>
                     </details>
                 </div>
             </div>
 
             <!-- Products -->
             <div class="mb-8">
-                <p class="faq-category-title mb-4"><i class="fas fa-spray-can-sparkles"></i> Products</p>
+                <p class="faq-category-title mb-4"><i class="fas fa-spray-can-sparkles"></i> <span data-i18n="faq.products_cat">Products</span></p>
                 <div class="space-y-3">
                     <details class="faq-item">
-                        <summary class="faq-question">Are all products 100% authentic?
+                        <summary class="faq-question"><span data-i18n="faq.q_authentic">Are all products 100% authentic?</span>
                             <span class="faq-icon"><i class="fas fa-plus"></i></span>
                         </summary>
-                        <div class="faq-answer">Absolutely. Every perfume and beauty product sold on IPORDISE is sourced from authorised distributors and is 100% authentic. We do not sell imitations or testers.</div>
+                        <div class="faq-answer" data-i18n="faq.a_authentic">Absolutely. Every perfume and beauty product sold on IPORDISE is sourced from authorised distributors and is 100% authentic. We do not sell imitations or testers.</div>
                     </details>
                     <details class="faq-item">
-                        <summary class="faq-question">Are samples or discovery sets available?
+                        <summary class="faq-question"><span data-i18n="faq.q_samples">Are samples or discovery sets available?</span>
                             <span class="faq-icon"><i class="fas fa-plus"></i></span>
                         </summary>
-                        <div class="faq-answer">Yes! We offer Discovery Sets that let you explore multiple fragrances before committing to a full bottle. Browse our Discovery Sets collection to find your signature.</div>
+                        <div class="faq-answer" data-i18n="faq.a_samples">Yes! We offer Discovery Sets that let you explore multiple fragrances before committing to a full bottle. Browse our Discovery Sets collection to find your signature.</div>
                     </details>
                     <details class="faq-item">
-                        <summary class="faq-question">How should I store my perfume?
+                        <summary class="faq-question"><span data-i18n="faq.q_store">How should I store my perfume?</span>
                             <span class="faq-icon"><i class="fas fa-plus"></i></span>
                         </summary>
-                        <div class="faq-answer">Keep perfumes away from direct sunlight, heat, and humidity. Store in a cool, dry place — ideally in their original box. Avoid bathrooms where temperature fluctuates.</div>
+                        <div class="faq-answer" data-i18n="faq.a_store">Keep perfumes away from direct sunlight, heat, and humidity. Store in a cool, dry place � ideally in their original box. Avoid bathrooms where temperature fluctuates.</div>
                     </details>
                 </div>
             </div>
 
             <!-- Returns -->
             <div class="mb-10">
-                <p class="faq-category-title mb-4"><i class="fas fa-rotate-left"></i> Returns</p>
+                <p class="faq-category-title mb-4"><i class="fas fa-rotate-left"></i> <span data-i18n="faq.returns_cat">Returns</span></p>
                 <div class="space-y-3">
                     <details class="faq-item">
-                        <summary class="faq-question">What is the return policy?
+                        <summary class="faq-question"><span data-i18n="faq.q_return_policy">What is the return policy?</span>
                             <span class="faq-icon"><i class="fas fa-plus"></i></span>
                         </summary>
-                        <div class="faq-answer">You may return eligible items within <strong>14 days</strong> of delivery, provided they are unopened, unused, and in original packaging. See our full <a href="returns.html" style="color:#e73c3c;font-weight:600">Returns Policy</a>.</div>
+                        <div class="faq-answer" data-i18n-html="faq.a_return_policy">You may return eligible items within <strong>14 days</strong> of delivery, provided they are unopened, unused, and in original packaging. See our full <a href="returns.html" style="color:#e73c3c;font-weight:600">Returns Policy</a>.</div>
                     </details>
                     <details class="faq-item">
-                        <summary class="faq-question">How long do refunds take?
+                        <summary class="faq-question"><span data-i18n="faq.q_refund_time">How long do refunds take?</span>
                             <span class="faq-icon"><i class="fas fa-plus"></i></span>
                         </summary>
-                        <div class="faq-answer">Once your return is inspected and approved (typically 1&ndash;2 business days), a refund is processed within 3&ndash;5 business days depending on your bank.</div>
+                        <div class="faq-answer" data-i18n="faq.a_refund_time">Once your return is inspected and approved (typically 1&ndash;2 business days), a refund is processed within 3&ndash;5 business days depending on your bank.</div>
                     </details>
                 </div>
             </div>
 
             <!-- Still have questions CTA -->
             <div class="text-center bg-white rounded-2xl border border-gray-100 py-8 px-4 shadow-sm">
-                <p class="font-semibold text-brand-dark mb-1">Still have a question?</p>
-                <p class="text-sm text-gray-500 mb-4">Our team is happy to help you Monday to Saturday, 9am&ndash;8pm.</p>
-                <a href="contact.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm text-white" style="background:#e73c3c">Contact Support <i class="fas fa-arrow-right text-xs"></i></a>
+                <p class="font-semibold text-brand-dark mb-1" data-i18n="faq.still_q">Still have a question?</p>
+                <p class="text-sm text-gray-500 mb-4" data-i18n="faq.still_q_sub">Our team is happy to help you Monday to Saturday, 9am&ndash;8pm.</p>
+                <a href="contact.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm text-white" style="background:#e73c3c"><span data-i18n="faq.contact_support">Contact Support</span> <i class="fas fa-arrow-right text-xs"></i></a>
             </div>
         </div>
     </main>
@@ -162,24 +163,24 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                 <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online.</p>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed" data-i18n="footer.tagline"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online.</p>
                     <div class="flex space-x-3">
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
-                <div><h4 class="footer-col-title">Customer Service</h4><ul class="footer-links"><li><a href="contact.html">Contact Us</a></li><li><a href="shipping.html">Shipping &amp; Returns</a></li><li><a href="track-order.html">Track Order</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
-                <div><h4 class="footer-col-title">About</h4><ul class="footer-links"><li><a href="our-story.html">Our Story</a></li><li><a href="careers.html">Careers</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4><ul class="footer-links"><li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li><li><a href="shipping.html" data-i18n="footer.shipping_returns">Shipping &amp; Returns</a></li><li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li><li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about" data-i18n="footer.about">About</h4><ul class="footer-links"><li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li><li><a href="careers.html" data-i18n="footer.careers">Careers</a></li><li><a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li></ul></div>
                 <div>
-                    <h4 class="footer-col-title">Newsletter</h4>
-                    <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals and new arrivals.</p>
-                    <div class="flex"><input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a></div>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4" data-i18n="footer.newsletter_desc">Subscribe for exclusive deals and new arrivals.</p>
+                    <div class="flex"><input type="email" placeholder="Your email" data-i18n-placeholder="footer.newsletter_placeholder" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a></div>
                 </div>
             </div>
             <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
-                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
-                <div class="flex gap-4"><a href="terms.html" class="hover:text-white transition">Terms</a><a href="privacy-policy.html" class="hover:text-white transition">Privacy</a><a href="returns.html" class="hover:text-white transition">Returns</a></div>
+                <p data-i18n="footer.copyright">&copy; 2026 IPORDISE. All rights reserved.</p>
+                <div class="flex gap-4"><a href="terms.html" class="hover:text-white transition" data-i18n="footer.terms">Terms</a><a href="privacy-policy.html" class="hover:text-white transition" data-i18n="footer.privacy">Privacy</a><a href="returns.html" class="hover:text-white transition" data-i18n="footer.returns">Returns</a></div>
             </div>
         </div>
     </footer>

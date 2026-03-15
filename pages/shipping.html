@@ -1,20 +1,20 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Shipping & Delivery</title>
+    <title data-i18n-title="shipping.page_title">IPORDISE - Shipping & Delivery</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../script.js"></script>
+    <script src="../script.js"></script>`n    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <div class="page-announce-bar">
+    <div class="page-announce-bar" data-i18n-html="shipping.announce">
         <i class="fas fa-truck-fast mr-2" style="color:#e73c3c"></i>
         Fixed delivery fee of <strong style="color:#fff">35 MAD</strong> anywhere in Morocco &mdash; fast &amp; secure.
         <a href="../discover.html" class="ml-2">SHOP NOW &rarr;</a>
@@ -45,10 +45,10 @@
             <p class="text-white/60 text-xs mb-4 flex items-center gap-1.5">
                 <a href="../index.html" class="hover:text-white transition">Home</a>
                 <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
-                <span class="text-white/90 font-semibold">Shipping &amp; Delivery</span>
+                <span class="text-white/90 font-semibold" data-i18n="shipping.breadcrumb">Shipping &amp; Delivery</span>
             </p>
-            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight">Shipping &amp; Delivery</h1>
-            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base">Clear timelines, transparent fees, and a seamless delivery experience across Morocco.</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight" data-i18n="shipping.h1">Shipping &amp; Delivery</h1>
+            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base" data-i18n="shipping.subtitle">Clear timelines, transparent fees, and a seamless delivery experience across Morocco.</p>
         </div>
     </section>
 
@@ -57,49 +57,49 @@
 
             <!-- Perks strip -->
             <div class="page-perks-strip mb-10">
-                <span class="page-perk-item"><i class="fas fa-tag"></i> Flat 35 MAD fee</span>
-                <span class="page-perk-item"><i class="fas fa-clock"></i> 24&ndash;72h delivery</span>
-                <span class="page-perk-item"><i class="fas fa-map-location-dot"></i> All Morocco cities</span>
-                <span class="page-perk-item"><i class="fas fa-shield-check"></i> Safe &amp; insured</span>
-                <span class="page-perk-item"><i class="fas fa-rotate-left"></i> 14-day returns</span>
+                <span class="page-perk-item"><i class="fas fa-tag"></i> <span data-i18n="shipping.perk_fee">Flat 35 MAD fee</span></span>
+                <span class="page-perk-item"><i class="fas fa-clock"></i> <span data-i18n="shipping.perk_time">24&ndash;72h delivery</span></span>
+                <span class="page-perk-item"><i class="fas fa-map-location-dot"></i> <span data-i18n="shipping.perk_cities">All Morocco cities</span></span>
+                <span class="page-perk-item"><i class="fas fa-shield-check"></i> <span data-i18n="shipping.perk_safe">Safe &amp; insured</span></span>
+                <span class="page-perk-item"><i class="fas fa-rotate-left"></i> <span data-i18n="shipping.perk_returns">14-day returns</span></span>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
 
                 <!-- Shipping process -->
                 <div>
-                    <p class="faq-category-title mb-4"><i class="fas fa-box-open"></i> How it works</p>
+                    <p class="faq-category-title mb-4"><i class="fas fa-box-open"></i> <span data-i18n="shipping.how_title">How it works</span></p>
                     <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
 
                         <div class="shipping-step">
                             <div class="shipping-step-num">1</div>
                             <div>
-                                <h3 class="font-semibold text-brand-dark">Order placed</h3>
-                                <p class="text-sm text-gray-500 mt-1">You place your order and our team receives a confirmation instantly.</p>
+                                <h3 class="font-semibold text-brand-dark" data-i18n="shipping.step1_h">Order placed</h3>
+                                <p class="text-sm text-gray-500 mt-1" data-i18n="shipping.step1_p">You place your order and our team receives a confirmation instantly.</p>
                             </div>
                         </div>
 
                         <div class="shipping-step">
                             <div class="shipping-step-num">2</div>
                             <div>
-                                <h3 class="font-semibold text-brand-dark">Processing &amp; packaging</h3>
-                                <p class="text-sm text-gray-500 mt-1">Your order is carefully verified, packed, and prepared for dispatch within 24 hours.</p>
+                                <h3 class="font-semibold text-brand-dark" data-i18n="shipping.step2_h">Processing &amp; packaging</h3>
+                                <p class="text-sm text-gray-500 mt-1" data-i18n="shipping.step2_p">Your order is carefully verified, packed, and prepared for dispatch within 24 hours.</p>
                             </div>
                         </div>
 
                         <div class="shipping-step">
                             <div class="shipping-step-num">3</div>
                             <div>
-                                <h3 class="font-semibold text-brand-dark">Handover to courier</h3>
-                                <p class="text-sm text-gray-500 mt-1">Your shipment is handed to our trusted local courier partner with a tracking number.</p>
+                                <h3 class="font-semibold text-brand-dark" data-i18n="shipping.step3_h">Handover to courier</h3>
+                                <p class="text-sm text-gray-500 mt-1" data-i18n="shipping.step3_p">Your shipment is handed to our trusted local courier partner with a tracking number.</p>
                             </div>
                         </div>
 
                         <div class="shipping-step">
                             <div class="shipping-step-num">4</div>
                             <div>
-                                <h3 class="font-semibold text-brand-dark">Delivered to your door</h3>
-                                <p class="text-sm text-gray-500 mt-1">Door-to-door delivery in 1&ndash;3 business days. Payment on delivery accepted.</p>
+                                <h3 class="font-semibold text-brand-dark" data-i18n="shipping.step4_h">Delivered to your door</h3>
+                                <p class="text-sm text-gray-500 mt-1" data-i18n="shipping.step4_p">Door-to-door delivery in 1&ndash;3 business days. Payment on delivery accepted.</p>
                             </div>
                         </div>
                     </div>
@@ -107,19 +107,19 @@
 
                 <!-- Fees & timelines -->
                 <div class="space-y-5">
-                    <p class="faq-category-title mb-4"><i class="fas fa-money-bill-wave"></i> Fees &amp; timelines</p>
+                    <p class="faq-category-title mb-4"><i class="fas fa-money-bill-wave"></i> <span data-i18n="shipping.fees_title">Fees &amp; timelines</span></p>
 
                     <div class="info-card">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="info-card-icon"><i class="fas fa-location-dot"></i></div>
                             <div>
-                                <h3 class="font-bold text-brand-dark">Domestic &mdash; All Morocco</h3>
-                                <p class="text-xs text-gray-500">Any city, any region</p>
+                                <h3 class="font-bold text-brand-dark" data-i18n="shipping.domestic_title">Domestic &mdash; All Morocco</h3>
+                                <p class="text-xs text-gray-500" data-i18n="shipping.domestic_sub">Any city, any region</p>
                             </div>
                         </div>
                         <div class="flex items-center justify-between border-t border-gray-50 pt-3 mt-1">
                             <span class="text-2xl font-bold font-serif text-brand-dark">35 <span class="text-lg text-gray-500">MAD</span></span>
-                            <span class="text-sm text-gray-600 font-medium">1&ndash;3 business days</span>
+                            <span class="text-sm text-gray-600 font-medium" data-i18n="shipping.domestic_time">1&ndash;3 business days</span>
                         </div>
                     </div>
 
@@ -127,13 +127,13 @@
                         <div class="flex items-center gap-3 mb-3">
                             <div class="info-card-icon"><i class="fas fa-globe"></i></div>
                             <div>
-                                <h3 class="font-bold text-brand-dark">International</h3>
-                                <p class="text-xs text-gray-500">Europe, Gulf &amp; beyond</p>
+                                <h3 class="font-bold text-brand-dark" data-i18n="shipping.intl_title">International</h3>
+                                <p class="text-xs text-gray-500" data-i18n="shipping.intl_sub">Europe, Gulf &amp; beyond</p>
                             </div>
                         </div>
                         <div class="flex items-center justify-between border-t border-gray-50 pt-3 mt-1">
-                            <span class="text-sm font-semibold text-gray-700">Calculated at checkout</span>
-                            <span class="text-sm text-gray-600 font-medium">3&ndash;7 business days</span>
+                            <span class="text-sm font-semibold text-gray-700" data-i18n="shipping.intl_calc">Calculated at checkout</span>
+                            <span class="text-sm text-gray-600 font-medium" data-i18n="shipping.intl_time">3&ndash;7 business days</span>
                         </div>
                     </div>
 
@@ -141,9 +141,9 @@
                         <div class="flex items-start gap-3">
                             <div class="info-card-icon" style="background:#fef2f2;color:#e73c3c;box-shadow:none;border:1.5px solid #fecaca"><i class="fas fa-rotate-left"></i></div>
                             <div>
-                                <h3 class="font-bold text-brand-dark">Returns &amp; refunds</h3>
-                                <p class="text-sm text-gray-600 mt-1">Eligible unopened products can be returned within <strong>14 days</strong> of delivery. Refunds are processed after quality inspection.</p>
-                                <a href="returns.html" class="mt-3 inline-flex items-center gap-1 text-xs font-semibold" style="color:#e73c3c">View returns policy <i class="fas fa-arrow-right text-[10px]"></i></a>
+                                <h3 class="font-bold text-brand-dark" data-i18n="shipping.returns_title">Returns &amp; refunds</h3>
+                                <p class="text-sm text-gray-600 mt-1" data-i18n-html="shipping.returns_desc">Eligible unopened products can be returned within <strong>14 days</strong> of delivery. Refunds are processed after quality inspection.</p>
+                                <a href="returns.html" class="mt-3 inline-flex items-center gap-1 text-xs font-semibold" style="color:#e73c3c"><span data-i18n="shipping.view_returns">View returns policy</span> <i class="fas fa-arrow-right text-[10px]"></i></a>
                             </div>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                 <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online. Elevate your everyday.</p>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed" data-i18n="footer.tagline"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online. Elevate your everyday.</p>
                     <div class="flex space-x-3">
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
@@ -171,25 +171,25 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Customer Service</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4>
                     <ul class="footer-links">
-                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li>
                         <li><a href="shipping.html">Shipping &amp; Returns</a></li>
-                        <li><a href="track-order.html">Track Order</a></li>
-                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li>
+                        <li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">About</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about">About</h4>
                     <ul class="footer-links">
-                        <li><a href="our-story.html">Our Story</a></li>
-                        <li><a href="careers.html">Careers</a></li>
+                        <li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li>
+                        <li><a href="careers.html" data-i18n="footer.careers">Careers</a></li>
                         <li><a href="terms.html">Terms &amp; Conditions</a></li>
-                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Newsletter</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
                     <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals and new arrivals.</p>
                     <div class="flex">
                         <input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10">
@@ -210,3 +210,4 @@
 
 </body>
 </html>
+

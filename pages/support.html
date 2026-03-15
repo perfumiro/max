@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Customer Care & Company</title>
+    <title data-i18n-title="support.page_title">IPORDISE - Customer Care & Company</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../script.js"></script>
+    <script src="../script.js"></script>`n    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide">
+    <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide" data-i18n-html="support.announce">
         Complimentary gift wrapping - Code: <span class="top-announcement-code">PARFUM15</span> - <a href="#" class="top-announcement-link">SHOP NOW!</a>
     </div>
 
@@ -80,18 +80,18 @@
                 <p class="text-xs text-gray-500 mb-4">
                     <a href="../index.html" class="hover:text-brand-red">Home</a>
                     <span class="mx-2">/</span>
-                    <span class="text-gray-700">Customer Care & Company</span>
+                    <span class="text-gray-700" data-i18n="support.breadcrumb">Customer Care &amp; Company</span>
                 </p>
-                <h1 class="text-3xl md:text-5xl font-serif font-bold text-brand-dark">Customer Care & Company</h1>
-                <p class="text-sm md:text-base text-gray-600 mt-4 max-w-3xl">Everything in one place: support, order tracking, shipping, returns, story, careers, legal information, and newsletter.</p>
+                <h1 class="text-3xl md:text-5xl font-serif font-bold text-brand-dark" data-i18n="support.h1">Customer Care &amp; Company</h1>
+                <p class="text-sm md:text-base text-gray-600 mt-4 max-w-3xl" data-i18n="support.subtitle">Everything in one place: support, order tracking, shipping, returns, story, careers, legal information, and newsletter.</p>
             </div>
         </section>
 
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14" id="contact">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <article class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                    <h2 class="text-2xl font-bold text-brand-dark">Contact Us</h2>
-                    <p class="text-sm text-gray-600 mt-2">Our fragrance advisors answer quickly for product help, delivery, and orders.</p>
+                    <h2 class="text-2xl font-bold text-brand-dark" data-i18n="support.contact_h">Contact Us</h2>
+                    <p class="text-sm text-gray-600 mt-2" data-i18n="support.contact_p">Our fragrance advisors answer quickly for product help, delivery, and orders.</p>
                     <div class="mt-5 space-y-3 text-sm text-gray-700">
                         <p><i class="fas fa-envelope text-brand-red mr-2"></i> support@ipordise.com</p>
                         <p><i class="fas fa-phone text-brand-red mr-2"></i> +212 5 22 00 00 00</p>
@@ -99,12 +99,12 @@
                     </div>
                 </article>
                 <article class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm" id="track">
-                    <h2 class="text-2xl font-bold text-brand-dark">Track Order</h2>
-                    <p class="text-sm text-gray-600 mt-2">Enter your order details to check the delivery status in real time.</p>
+                    <h2 class="text-2xl font-bold text-brand-dark" data-i18n="support.track_h">Track Order</h2>
+                    <p class="text-sm text-gray-600 mt-2" data-i18n="support.track_p">Enter your order details to check the delivery status in real time.</p>
                     <form class="mt-5 space-y-3">
-                        <input type="text" placeholder="Order number" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red" />
-                        <input type="email" placeholder="Email address" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red" />
-                        <button type="button" class="bg-brand-dark hover:bg-black text-white px-5 py-3 rounded-lg text-sm font-semibold transition">Check status</button>
+                        <input type="text" data-i18n-placeholder="track.order_ph" placeholder="Order number" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red" />
+                        <input type="email" data-i18n-placeholder="support.email_ph" placeholder="Email address" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red" />
+                        <button type="button" class="bg-brand-dark hover:bg-black text-white px-5 py-3 rounded-lg text-sm font-semibold transition" data-i18n="track.submit_btn">Check status</button>
                     </form>
                 </article>
             </div>
@@ -113,7 +113,7 @@
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 md:pb-14" id="shipping">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <article class="bg-brand-light border border-gray-200 rounded-2xl p-6">
-                    <h3 class="text-xl font-bold text-brand-dark">Shipping & Returns</h3>
+                    <h3 class="text-xl font-bold text-brand-dark" data-i18n="support.shipping_h">Shipping &amp; Returns</h3>
                     <ul class="mt-4 space-y-2 text-sm text-gray-700 list-disc pl-5">
                         <li>Fast domestic delivery and secure international shipping.</li>
                         <li>Free shipping applies once the minimum order value is reached.</li>
@@ -122,7 +122,7 @@
                     </ul>
                 </article>
                 <article class="bg-brand-light border border-gray-200 rounded-2xl p-6" id="faq">
-                    <h3 class="text-xl font-bold text-brand-dark">FAQ</h3>
+                    <h3 class="text-xl font-bold text-brand-dark" data-i18n="support.faq_h">FAQ</h3>
                     <div class="mt-4 space-y-3 text-sm text-gray-700">
                         <p><strong>Are products authentic?</strong> Yes, every product is 100% authentic.</p>
                         <p><strong>Can I change an order?</strong> Yes, during the preparation window.</p>
@@ -135,23 +135,23 @@
         <section class="bg-brand-dark/95 py-10 md:py-14 text-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-6">
                 <article class="rounded-2xl border border-white/15 p-6" id="story">
-                    <h3 class="text-xl font-bold">Our Story</h3>
-                    <p class="text-sm text-gray-300 mt-3">IPORDISE was built to make luxury fragrance discovery simple, trusted, and inspiring for every client.</p>
+                    <h3 class="text-xl font-bold" data-i18n="support.story_h">Our Story</h3>
+                    <p class="text-sm text-gray-300 mt-3" data-i18n="support.story_p">IPORDISE was built to make luxury fragrance discovery simple, trusted, and inspiring for every client.</p>
                 </article>
                 <article class="rounded-2xl border border-white/15 p-6" id="careers">
-                    <h3 class="text-xl font-bold">Careers</h3>
-                    <p class="text-sm text-gray-300 mt-3">Subscribe our fast-growing beauty team in retail, e-commerce, logistics, and customer success.</p>
+                    <h3 class="text-xl font-bold" data-i18n="support.careers_h">Careers</h3>
+                    <p class="text-sm text-gray-300 mt-3" data-i18n="support.careers_p">Subscribe our fast-growing beauty team in retail, e-commerce, logistics, and customer success.</p>
                 </article>
                 <article class="rounded-2xl border border-white/15 p-6" id="stores">
-                    <h3 class="text-xl font-bold">Find a Store</h3>
-                    <p class="text-sm text-gray-300 mt-3">Visit us in Casablanca, Rabat, Marrakech, and Tangier for in-store fragrance consultations.</p>
+                    <h3 class="text-xl font-bold" data-i18n="support.stores_h">Find a Store</h3>
+                    <p class="text-sm text-gray-300 mt-3" data-i18n="support.stores_p">Visit us in Casablanca, Rabat, Marrakech, and Tangier for in-store fragrance consultations.</p>
                 </article>
             </div>
         </section>
 
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14" id="terms">
-            <h2 class="text-2xl font-bold text-brand-dark">Terms & Conditions</h2>
-            <p class="text-sm text-gray-600 mt-3 max-w-5xl">By using IPORDISE services, you accept our policies covering payment, shipping, returns, and account use. Visuals and stock may change based on availability. For legal assistance, contact our support team.</p>
+            <h2 class="text-2xl font-bold text-brand-dark" data-i18n="support.terms_h">Terms &amp; Conditions</h2>
+            <p class="text-sm text-gray-600 mt-3 max-w-5xl" data-i18n="support.terms_p">By using IPORDISE services, you accept our policies covering payment, shipping, returns, and account use. Visuals and stock may change based on availability. For legal assistance, contact our support team.</p>
         </section>
 
         <section class="ipordise-adv-news py-12 border-t border-gray-200" id="newsletter">
@@ -203,7 +203,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                 <div>
                     <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-6">The ultimate destination for luxury perfumes, cosmetics, and beauty care online. Elevate your everyday routine.</p>
+                    <p class="text-gray-400 text-sm mb-6"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes, cosmetics, and beauty care online. Elevate your everyday routine.</p>
                     <div class="flex space-x-4">
                         <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-facebook-f"></i></a>
@@ -220,7 +220,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">About</h4>
+                    <h4 class="font-bold text-lg mb-4" data-i18n="footer.about" data-i18n="footer.about">About</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
                         <li><a href="our-story.html" class="hover:text-white transition">Our Story</a></li>
                         <li><a href="careers.html" class="hover:text-white transition">Careers</a></li>
@@ -229,7 +229,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Newsletter</h4>
+                    <h4 class="font-bold text-lg mb-4" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
                     <p class="text-gray-400 text-sm mb-4">Subscribe for new arrivals, beauty tips, and more.</p>
                     <div class="flex">
                         <input type="email" placeholder="Your email address" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">
@@ -245,3 +245,4 @@
 
 </body>
 </html>
+

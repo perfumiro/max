@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Secure Checkout</title>
+    <title data-i18n-title="checkout.page_title">IPORDISE - Secure Checkout</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,12 +13,13 @@
         window.__IPORDISE_DEDICATED_CHECKOUT__ = true;
     </script>
     <script src="../script.js"></script>
+    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
     <!-- Announcement Bar -->
-    <div class="page-announce-bar">
+    <div class="page-announce-bar" data-i18n-html="checkout.announce">
         <i class="fas fa-lock mr-2" style="color:#e73c3c"></i>
         <strong style="color:#fff">Secure Checkout</strong> &mdash; your data is protected end-to-end.
         <a href="cart.html" class="ml-2">&larr; Back to Cart</a>
@@ -54,33 +55,33 @@
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
             <!-- Breadcrumb -->
             <p class="text-white/60 text-xs mb-5 flex items-center gap-1.5">
-                <a href="../index.html" class="hover:text-white transition">Home</a>
+                <a href="../index.html" class="hover:text-white transition" data-i18n="common.breadcrumb_home">Home</a>
                 <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
-                <a href="cart.html" class="hover:text-white transition">Cart</a>
+                <a href="cart.html" class="hover:text-white transition" data-i18n="checkout.breadcrumb_cart">Cart</a>
                 <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
-                <span class="text-white/90 font-semibold">Checkout</span>
+                <span class="text-white/90 font-semibold" data-i18n="checkout.breadcrumb">Checkout</span>
             </p>
 
             <!-- Step indicator -->
             <div class="page-steps mb-5">
                 <div class="page-step is-done">
                     <span class="page-step-num"><i class="fas fa-check text-[9px]"></i></span>
-                    <span class="page-step-label">Cart</span>
+                    <span class="page-step-label" data-i18n="checkout.step1">Cart</span>
                 </div>
                 <div class="page-step-sep"></div>
                 <div class="page-step is-active">
                     <span class="page-step-num">2</span>
-                    <span class="page-step-label">Checkout</span>
+                    <span class="page-step-label" data-i18n="checkout.step2">Checkout</span>
                 </div>
                 <div class="page-step-sep"></div>
                 <div class="page-step">
                     <span class="page-step-num">3</span>
-                    <span class="page-step-label">Confirm</span>
+                    <span class="page-step-label" data-i18n="checkout.step3">Confirm</span>
                 </div>
             </div>
 
-            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight">Secure Checkout</h1>
-            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base">Finalize your details and review your order before placing it.</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight" data-i18n="checkout.h1">Secure Checkout</h1>
+            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base" data-i18n="checkout.subtitle">Finalize your details and review your order before placing it.</p>
         </div>
     </section>
 
@@ -95,8 +96,8 @@
                     <!-- Returning customer -->
                     <div class="sidebar-info-card flex items-center gap-3">
                         <i class="fas fa-user-circle text-2xl text-gray-300"></i>
-                        <p class="text-sm text-gray-600">Returning customer?
-                            <a href="login.html" class="font-semibold ml-1" style="color:#e73c3c">Sign in to auto-fill your details &rarr;</a>
+                        <p class="text-sm text-gray-600"><span data-i18n="checkout.returning">Returning customer?</span>
+                            <a href="login.html" class="font-semibold ml-1" style="color:#e73c3c" data-i18n="checkout.signin">Sign in to auto-fill your details &rarr;</a>
                         </p>
                     </div>
 
@@ -105,42 +106,42 @@
                         <div class="checkout-form-head">
                             <div class="flex items-start justify-between gap-3">
                                 <div>
-                                    <h2 class="text-xl sm:text-2xl font-serif font-bold text-brand-dark">Billing Details</h2>
-                                    <p class="text-xs text-gray-500 mt-1">Fields marked <span style="color:#e73c3c">*</span> are required.</p>
+                                    <h2 class="text-xl sm:text-2xl font-serif font-bold text-brand-dark" data-i18n="checkout.billing_title">Billing Details</h2>
+                                    <p class="text-xs text-gray-500 mt-1" data-i18n="checkout.required">Fields marked <span style="color:#e73c3c">*</span> are required.</p>
                                 </div>
-                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full border" style="border-color:rgba(231,60,60,0.25);color:#e73c3c;background:#fff5f5">* Required</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full border" style="border-color:rgba(231,60,60,0.25);color:#e73c3c;background:#fff5f5" data-i18n="checkout.required_badge">* Required</span>
                             </div>
                         </div>
 
                         <!-- Identity -->
                         <div class="checkout-billing-panel">
-                            <h3 class="checkout-panel-title"><i class="far fa-user fa-fw mr-1"></i>Identity</h3>
+                            <h3 class="checkout-panel-title"><i class="far fa-user fa-fw mr-1"></i><span data-i18n="checkout.identity">Identity</span></h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <label class="checkout-field">
-                                    <span>First Name <span style="color:#e73c3c">*</span></span>
-                                    <input id="billingFirstName" name="firstName" type="text" placeholder="Your first name" autocomplete="given-name" required>
+                                    <span><span data-i18n="checkout.first_name">First Name</span> <span style="color:#e73c3c">*</span></span>
+                                    <input id="billingFirstName" name="firstName" type="text" placeholder="Your first name" data-i18n-placeholder="checkout.first_name_ph" autocomplete="given-name" required>
                                 </label>
                                 <label class="checkout-field">
-                                    <span>Last Name <span style="color:#e73c3c">*</span></span>
-                                    <input id="billingLastName" name="lastName" type="text" placeholder="Your last name" autocomplete="family-name" required>
+                                    <span><span data-i18n="checkout.last_name">Last Name</span> <span style="color:#e73c3c">*</span></span>
+                                    <input id="billingLastName" name="lastName" type="text" placeholder="Your last name" data-i18n-placeholder="checkout.last_name_ph" autocomplete="family-name" required>
                                 </label>
                             </div>
                         </div>
 
                         <!-- Address -->
                         <div class="checkout-billing-panel">
-                            <h3 class="checkout-panel-title"><i class="fas fa-location-dot fa-fw mr-1"></i>Delivery Address</h3>
+                            <h3 class="checkout-panel-title"><i class="fas fa-location-dot fa-fw mr-1"></i><span data-i18n="checkout.delivery_address">Delivery Address</span></h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <label class="checkout-field sm:col-span-2">
-                                    <span>Address <span style="color:#e73c3c">*</span></span>
-                                    <input id="billingAddress" name="address" type="text" placeholder="Street, district, building" autocomplete="street-address" required>
+                                    <span><span data-i18n="checkout.address">Address</span> <span style="color:#e73c3c">*</span></span>
+                                    <input id="billingAddress" name="address" type="text" placeholder="Street, district, building" data-i18n-placeholder="checkout.address_ph" autocomplete="street-address" required>
                                 </label>
                                 <label class="checkout-field">
-                                    <span>City <span style="color:#e73c3c">*</span></span>
-                                    <input id="billingCity" name="city" type="text" placeholder="e.g. Casablanca" autocomplete="address-level2" required>
+                                    <span><span data-i18n="checkout.city">City</span> <span style="color:#e73c3c">*</span></span>
+                                    <input id="billingCity" name="city" type="text" placeholder="e.g. Casablanca" data-i18n-placeholder="checkout.city_ph" autocomplete="address-level2" required>
                                 </label>
                                 <label class="checkout-field">
-                                    <span>Country / Region</span>
+                                    <span data-i18n="checkout.country">Country / Region</span>
                                     <input type="text" value="Morocco" readonly>
                                 </label>
                             </div>
@@ -148,14 +149,14 @@
 
                         <!-- Contact -->
                         <div class="checkout-billing-panel">
-                            <h3 class="checkout-panel-title"><i class="fas fa-phone fa-fw mr-1"></i>Contact</h3>
+                            <h3 class="checkout-panel-title"><i class="fas fa-phone fa-fw mr-1"></i><span data-i18n="checkout.contact_section">Contact</span></h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <label class="checkout-field">
-                                    <span>Phone <span style="color:#e73c3c">*</span></span>
+                                    <span><span data-i18n="checkout.phone">Phone</span> <span style="color:#e73c3c">*</span></span>
                                     <input id="billingPhone" name="phone" type="tel" placeholder="+212 6XX-XXXXXX" autocomplete="tel" required>
                                 </label>
                                 <label class="checkout-field">
-                                    <span>Email <span class="text-gray-400 font-normal">(optional)</span></span>
+                                    <span><span data-i18n="checkout.email_label">Email</span> <span class="text-gray-400 font-normal" data-i18n="checkout.optional">(optional)</span></span>
                                     <input id="billingEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email">
                                 </label>
                             </div>
@@ -163,10 +164,10 @@
 
                         <!-- Notes -->
                         <div class="checkout-form-footer">
-                            <p id="checkoutValidationMessage" class="text-sm text-gray-500 mb-4">Complete the required fields above to unlock Place Order.</p>
+                            <p id="checkoutValidationMessage" class="text-sm text-gray-500 mb-4" data-i18n="checkout.validation_msg">Complete the required fields above to unlock Place Order.</p>
                             <label class="checkout-field">
-                                <span><i class="fas fa-pen-to-square mr-1 text-gray-400"></i>Order Notes <span class="text-gray-400 font-normal">(optional)</span></span>
-                                <textarea rows="3" placeholder="Special instructions, fragrance gift note, preferred delivery time…"></textarea>
+                                <span><i class="fas fa-pen-to-square mr-1 text-gray-400"></i><span data-i18n="checkout.notes_label">Order Notes</span> <span class="text-gray-400 font-normal" data-i18n="checkout.optional">(optional)</span></span>
+                                <textarea rows="3" data-i18n-placeholder="checkout.notes_ph" placeholder="Special instructions, fragrance gift note, preferred delivery time�"></textarea>
                             </label>
                         </div>
                     </form>
@@ -176,7 +177,7 @@
                 <aside class="space-y-4 xl:sticky xl:top-28">
                     <div class="order-summary-card">
                         <div class="order-summary-head">
-                            <h3>Your Order</h3>
+                            <h3 data-i18n="checkout.order_summary">Your Order</h3>
                             <i class="fas fa-bag-shopping text-white/40 text-sm"></i>
                         </div>
                         <div class="order-summary-body">
@@ -188,32 +189,32 @@
 
                             <div class="space-y-0.5 mb-3">
                                 <div class="order-line">
-                                    <span class="lbl">Subtotal</span>
+                                    <span class="lbl" data-i18n="checkout.subtotal">Subtotal</span>
                                     <span id="checkoutSubtotal" class="val">0 MAD</span>
                                 </div>
                                 <div class="order-line">
-                                    <span class="lbl">Shipping</span>
+                                    <span class="lbl" data-i18n="checkout.shipping">Shipping</span>
                                     <span id="checkoutShipping" class="val text-green-600">0 MAD</span>
                                 </div>
                                 <div class="order-line">
-                                    <span class="lbl" style="color:#e73c3c">Discount</span>
+                                    <span class="lbl" style="color:#e73c3c" data-i18n="checkout.discount">Discount</span>
                                     <span id="checkoutPromo" class="val" style="color:#e73c3c">0 MAD</span>
                                 </div>
                             </div>
 
                             <div class="order-total-row mb-5">
-                                <span class="order-total-label">Total</span>
+                                <span class="order-total-label" data-i18n="checkout.total">Total</span>
                                 <span id="checkoutTotal" class="order-total-value">0 MAD</span>
                             </div>
 
                             <!-- Payment -->
                             <div class="mb-4">
-                                <p class="sidebar-card-title mb-2"><i class="fas fa-credit-card"></i> Payment Method</p>
+                                <p class="sidebar-card-title mb-2"><i class="fas fa-credit-card"></i> <span data-i18n="checkout.payment_method">Payment Method</span></p>
                                 <label class="checkout-payment">
                                     <input type="radio" name="payment" checked>
                                     <div>
-                                        <p class="font-semibold text-sm text-gray-800"><i class="fas fa-money-bill-wave text-green-600 mr-1.5"></i>Cash on Delivery</p>
-                                        <p class="text-xs text-gray-500 mt-0.5">Pay securely when your package arrives at your door.</p>
+                                        <p class="font-semibold text-sm text-gray-800"><i class="fas fa-money-bill-wave text-green-600 mr-1.5"></i><span data-i18n="checkout.cash_on_delivery">Cash on Delivery</span></p>
+                                        <p class="text-xs text-gray-500 mt-0.5" data-i18n="checkout.cod_desc">Pay securely when your package arrives at your door.</p>
                                     </div>
                                 </label>
                             </div>
@@ -225,50 +226,50 @@
                                     <span class="legal-consent-box" aria-hidden="true"></span>
                                 </span>
                                 <span class="legal-consent-copy">
-                                    <strong>I accept the Privacy Policy and Terms & Conditions.</strong>
-                                    <span>I authorize IPORDISE to use my order details to process delivery and support.</span>
-                                    <span><a href="privacy-policy.html">Privacy Policy</a> &bull; <a href="terms.html">Terms & Conditions</a></span>
+                                    <strong data-i18n="checkout.consent_title">I accept the Privacy Policy and Terms & Conditions.</strong>
+                                    <span data-i18n="checkout.consent_body">I authorize IPORDISE to use my order details to process delivery and support.</span>
+                                    <span><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> &bull; <a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a></span>
                                 </span>
                             </label>
-                            <p id="checkoutLegalConsentMessage" class="legal-consent-message hidden mt-2 text-xs" style="color:#e73c3c">Please accept the Privacy Policy and Terms & Conditions to place your order.</p>
+                            <p id="checkoutLegalConsentMessage" class="legal-consent-message hidden mt-2 text-xs" style="color:#e73c3c" data-i18n="checkout.consent_error">Please accept the Privacy Policy and Terms & Conditions to place your order.</p>
 
                             <!-- Place order -->
                             <button id="placeOrderBtn" type="button"
                                 class="checkout-cta-btn mt-4 cursor-not-allowed opacity-50"
                                 disabled aria-disabled="true">
-                                Place Order <i class="fas fa-check-circle text-sm"></i>
+                                <span data-i18n="checkout.place_order">Place Order</span> <i class="fas fa-check-circle text-sm"></i>
                             </button>
 
-                            <p class="text-xs text-gray-400 mt-3 text-center">Your confirmation options appear once all details are complete.</p>
+                            <p class="text-xs text-gray-400 mt-3 text-center" data-i18n="checkout.confirm_hint">Your confirmation options appear once all details are complete.</p>
 
                             <!-- Confirm options (shown after form complete) -->
                             <div id="orderConfirmOptions" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 hidden">
                                 <a id="confirmWhatsApp" href="https://wa.me/212600000000?text=Hello%20IPORDISE%2C%20I%20want%20to%20confirm%20my%20order." target="_blank" rel="noopener noreferrer"
                                     class="inline-flex items-center justify-center gap-2 py-2.5 font-semibold text-sm rounded-xl border transition">
-                                    <i class="fab fa-whatsapp text-base"></i> Confirm via WhatsApp
+                                    <i class="fab fa-whatsapp text-base"></i> <span data-i18n="checkout.confirm_whatsapp">Confirm via WhatsApp</span>
                                 </a>
                                 <a id="confirmEmail" href="mailto:orders@ipordise.com?subject=Order%20Confirmation"
                                     class="inline-flex items-center justify-center gap-2 py-2.5 font-semibold text-sm rounded-xl border transition">
-                                    <i class="fas fa-envelope text-base"></i> Confirm via Email
+                                    <i class="fas fa-envelope text-base"></i> <span data-i18n="checkout.confirm_email">Confirm via Email</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Trust strip -->
                         <div class="trust-strip">
-                            <span class="trust-strip-item"><i class="fas fa-lock"></i> SSL Secure</span>
-                            <span class="trust-strip-item"><i class="fas fa-shield-halved"></i> Safe & Private</span>
-                            <span class="trust-strip-item"><i class="fas fa-certificate"></i> 100% Authentic</span>
+                            <span class="trust-strip-item"><i class="fas fa-lock"></i> <span data-i18n="checkout.trust_secure">SSL Secure</span></span>
+                            <span class="trust-strip-item"><i class="fas fa-shield-halved"></i> <span data-i18n="checkout.trust_return">Safe & Private</span></span>
+                            <span class="trust-strip-item"><i class="fas fa-certificate"></i> <span data-i18n="checkout.trust_authentic">100% Authentic</span></span>
                         </div>
                     </div>
 
                     <!-- Delivery summary -->
                     <div class="sidebar-info-card">
-                        <p class="sidebar-card-title"><i class="fas fa-truck-fast"></i> Delivery</p>
+                        <p class="sidebar-card-title"><i class="fas fa-truck-fast"></i> <span data-i18n="checkout.delivery_title">Delivery</span></p>
                         <div class="space-y-2 text-sm text-gray-600">
-                            <p class="flex items-center gap-2"><i class="fas fa-location-dot text-brand-red text-xs"></i> All Morocco cities — fixed <strong>35 MAD</strong></p>
-                            <p class="flex items-center gap-2"><i class="fas fa-clock text-brand-red text-xs"></i> 24–72 hours estimated delivery</p>
-                            <p class="flex items-center gap-2"><i class="fas fa-rotate-left text-brand-red text-xs"></i> 14-day easy returns</p>
+                            <p class="flex items-center gap-2"><i class="fas fa-location-dot text-brand-red text-xs"></i> <span data-i18n-html="checkout.delivery_morocco">All Morocco cities &#8212; fixed <strong>35 MAD</strong></span></p>
+                            <p class="flex items-center gap-2"><i class="fas fa-clock text-brand-red text-xs"></i> <span data-i18n="checkout.delivery_time">24&#8211;72 hours estimated delivery</span></p>
+                            <p class="flex items-center gap-2"><i class="fas fa-rotate-left text-brand-red text-xs"></i> <span data-i18n="checkout.delivery_returns">14-day easy returns</span></p>
                         </div>
                     </div>
                 </aside>
@@ -282,7 +283,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                 <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online. Elevate your everyday.</p>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online. Elevate your everyday.</p>
                     <div class="flex space-x-3">
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
@@ -290,26 +291,26 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Customer Service</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4>
                     <ul class="footer-links">
-                        <li><a href="contact.html">Contact Us</a></li>
-                        <li><a href="shipping.html">Shipping & Returns</a></li>
-                        <li><a href="track-order.html">Track Order</a></li>
-                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li>
+                        <li><a href="shipping.html" data-i18n="footer.shipping_returns">Shipping &amp; Returns</a></li>
+                        <li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li>
+                        <li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">About</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about">About</h4>
                     <ul class="footer-links">
-                        <li><a href="our-story.html">Our Story</a></li>
-                        <li><a href="careers.html">Careers</a></li>
-                        <li><a href="terms.html">Terms & Conditions</a></li>
-                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li>
+                        <li><a href="careers.html" data-i18n="footer.careers">Careers</a></li>
+                        <li><a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a></li>
+                        <li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Newsletter</h4>
-                    <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals and new arrivals.</p>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4" data-i18n="footer.newsletter_desc">Subscribe for exclusive deals and new arrivals.</p>
                     <div class="flex">
                         <input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10">
                         <a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a>
@@ -317,11 +318,11 @@
                 </div>
             </div>
             <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
-                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <p data-i18n="footer.copyright">&copy; 2026 IPORDISE. All rights reserved.</p>
                 <div class="flex gap-4">
-                    <a href="terms.html" class="hover:text-white transition">Terms</a>
-                    <a href="privacy-policy.html" class="hover:text-white transition">Privacy</a>
-                    <a href="returns.html" class="hover:text-white transition">Returns</a>
+                    <a href="terms.html" class="hover:text-white transition" data-i18n="footer.terms">Terms</a>
+                    <a href="privacy-policy.html" class="hover:text-white transition" data-i18n="footer.privacy">Privacy</a>
+                    <a href="returns.html" class="hover:text-white transition" data-i18n="footer.returns">Returns</a>
                 </div>
             </div>
         </div>
@@ -329,3 +330,4 @@
 
 </body>
 </html>
+

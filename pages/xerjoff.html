@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - XERJOFF Collection | Italian Haute Parfumerie</title>
+    <title data-i18n-title="xerjoff.page_title">IPORDISE - XERJOFF Collection | Italian Haute Parfumerie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../script.js"></script>
+    <script src="../script.js"></script>`n    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
     <style>
-        /* ── XERJOFF Page Styles ── */
+        /* -- XERJOFF Page Styles -- */
         .xerjoff-hero {
             position: relative;
             min-height: 70vh;
@@ -105,7 +105,7 @@
             color: rgba(244, 180, 109, 0.7);
         }
 
-        /* ── Story Section ── */
+        /* -- Story Section -- */
         .xerjoff-story {
             background: #fff;
             padding: 5rem 0;
@@ -166,7 +166,7 @@
             line-height: 1.8;
         }
 
-        /* ── Perfume Cards ── */
+        /* -- Perfume Cards -- */
         .xerjoff-collection {
             background: #f9f9f9;
             padding: 5rem 0;
@@ -312,7 +312,7 @@
             background: #e73c3c;
         }
 
-        /* ── Values Strip ── */
+        /* -- Values Strip -- */
         .xerjoff-values {
             background: #0a0a0a;
             padding: 3rem 0;
@@ -354,7 +354,7 @@
             color: rgba(255,255,255,0.45);
         }
 
-        /* ── CTA Section ── */
+        /* -- CTA Section -- */
         .xerjoff-cta {
             background: #fff;
             padding: 4rem 0;
@@ -396,7 +396,7 @@
             background: #e73c3c;
         }
 
-        /* ── Product Entries ── */
+        /* -- Product Entries -- */
         .xerjoff-product-entry {
             padding: 3.5rem 0;
             border-bottom: 1px solid #e5e7eb;
@@ -663,12 +663,12 @@
             <img src="https://scentira.in/cdn/shop/files/xerjoff.png?v=1725455132&width=1920" alt="XERJOFF Collection">
         </div>
         <div class="xerjoff-hero-content">
-            <span class="xerjoff-hero-kicker">Italian Haute Parfumerie</span>
+            <span class="xerjoff-hero-kicker" data-i18n="xerjoff.hero_kicker">Italian Haute Parfumerie</span>
             <h1 class="xerjoff-hero-title">XERJOFF</h1>
-            <p class="xerjoff-hero-sub">
+            <p class="xerjoff-hero-sub" data-i18n="xerjoff.hero_sub">
                 Founded in Turin in 2003 by Sergio Momo, XERJOFF is an Italian luxury house where rare ingredients, Murano glass artistry, and uncompromising craftsmanship converge to create some of the world's most coveted fragrances.
             </p>
-            <span class="xerjoff-hero-badge"><i class="fas fa-crown"></i> Exclusive Niche Collection</span>
+            <span class="xerjoff-hero-badge"><i class="fas fa-crown"></i> <span data-i18n="xerjoff.hero_badge">Exclusive Niche Collection</span></span>
         </div>
     </section>
 
@@ -680,9 +680,9 @@
                     <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/assets/XERJOFFFALEXANDERIPHOTOSECTION/second%20one.png" alt="XERJOFF Craftsmanship">
                 </div>
                 <div>
-                    <p class="xerjoff-story-label">The House</p>
-                    <h2 class="xerjoff-story-title">Where Perfumery Meets Art</h2>
-                    <p class="xerjoff-story-text">
+                    <p class="xerjoff-story-label" data-i18n="xerjoff.story_label">The House</p>
+                    <h2 class="xerjoff-story-title" data-i18n="xerjoff.story_title">Where Perfumery Meets Art</h2>
+                    <p class="xerjoff-story-text" data-i18n-html="xerjoff.story_text">
                         Every XERJOFF fragrance is a masterpiece born from the marriage of Italy's finest traditions: the art of perfumery, the mastery of Murano glasswork, and an unwavering devotion to the rarest raw materials from every corner of the globe.
                         <br><br>
                         From the golden amber of Alexandria II to the timeless warmth of Naxos and the luminous freshness of Erba Pura, each creation tells a story of obsessive craftsmanship, luxury without compromise, and the Italian pursuit of eternal beauty.
@@ -696,12 +696,12 @@
     <section class="xerjoff-collection">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="xerjoff-collection-header">
-                <p class="xerjoff-collection-label">The Collection</p>
-                <h2 class="xerjoff-collection-title">Our XERJOFF Selection</h2>
-                <p style="font-size:0.85rem;color:#6b7280;margin-top:0.5rem;">All fragrances available as premium decants &mdash; <strong>5 ML</strong> &amp; <strong>10 ML</strong></p>
+                <p class="xerjoff-collection-label" data-i18n="xerjoff.collection_label">The Collection</p>
+                <h2 class="xerjoff-collection-title" data-i18n="xerjoff.collection_title">Our XERJOFF Selection</h2>
+                <p style="font-size:0.85rem;color:#6b7280;margin-top:0.5rem;" data-i18n-html="xerjoff.collection_sub">All fragrances available as premium decants &mdash; <strong>5 ML</strong> &amp; <strong>10 ML</strong></p>
             </div>
 
-            <!-- ─── Product 1: Alexandria II ─── -->
+            <!-- --- Product 1: Alexandria II --- -->
             <div class="xerjoff-product-entry" id="product-alex" data-product-id="alexandria-ii">
                 <div class="xerjoff-product-layout">
                     <!-- Gallery -->
@@ -719,43 +719,43 @@
                     </div>
                     <!-- Info -->
                     <div>
-                        <p class="xerjoff-product-brand-tag">XERJOFF &middot; Eau de Parfum</p>
+                        <p class="xerjoff-product-brand-tag" data-i18n="xerjoff.brand_tag">XERJOFF &middot; Eau de Parfum</p>
                         <h3 class="xerjoff-product-name">Alexandria II</h3>
-                        <p class="xerjoff-product-subtitle">Unisex &middot; Amber Oud &middot; An iconic monument of Italian niche perfumery, born in XERJOFF&rsquo;s storied Cachemire collection. Rich oud, warm vanilla, and golden amber create an unforgettable trail of timeless opulence and regal presence.</p>
-                        <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
-                        <p class="xerjoff-size-label">Size</p>
+                        <p class="xerjoff-product-subtitle" data-i18n="xerjoff.alex_subtitle">Unisex &middot; Amber Oud &middot; An iconic monument of Italian niche perfumery, born in XERJOFF&rsquo;s storied Cachemire collection. Rich oud, warm vanilla, and golden amber create an unforgettable trail of timeless opulence and regal presence.</p>
+                        <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> <span data-i18n="xerjoff.decante_badge">Decante &mdash; Choose your size</span></span>
+                        <p class="xerjoff-size-label" data-i18n="xerjoff.size_label">Size</p>
                         <div class="xerjoff-size-row">
                             <button class="xerjoff-size-btn" type="button" data-size-key="5ml" onclick="xerjoffSize(this,'alex-price')">5 ML</button>
                             <button class="xerjoff-size-btn" type="button" data-size-key="10ml" onclick="xerjoffSize(this,'alex-price')">10 ML</button>
                         </div>
-                        <p id="alex-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to request the price</p>
-                        <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
+                        <p id="alex-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;" data-i18n="xerjoff.price_choose">Choose a size to request the price</p>
+                        <p class="xerjoff-price-note" data-i18n="xerjoff.price_note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
                         <div class="xerjoff-qty-row">
                             <div class="xerjoff-qty-box">
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('alex-qty',-1)">&#8722;</button>
                                 <span id="alex-qty" class="xerjoff-qty-val">1</span>
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('alex-qty',1)">+</button>
                             </div>
-                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('alex','Alexandria II')">Add to Cart</button>
-                            <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
+                            <button class="xerjoff-cart-btn" data-i18n="xerjoff.add_to_cart" onclick="xerjoffAddToCart('alex','Alexandria II')">Add to Cart</button>
+                            <button class="xerjoff-wish-btn" data-i18n-aria="xerjoff.wishlist_aria" aria-label="Wishlist"><i class="far fa-heart"></i></button>
                         </div>
                         <div class="xerjoff-trust-chips">
-                            <div class="xerjoff-trust-chip"><i class="fas fa-truck" style="color:#e73c3c"></i> Delivery: 35 MAD</div>
-                            <div class="xerjoff-trust-chip"><i class="fas fa-shield-heart" style="color:#e73c3c"></i> 100% Authentic</div>
-                            <div class="xerjoff-trust-chip"><i class="fas fa-flask" style="color:#e73c3c"></i> Premium Decante</div>
-                            <div class="xerjoff-trust-chip"><i class="fas fa-rotate-left" style="color:#e73c3c"></i> Easy Returns</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-truck" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_delivery">Delivery: 35 MAD</span></div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-shield-heart" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_authentic">100% Authentic</span></div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-flask" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_decante">Premium Decante</span></div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-rotate-left" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_returns">Easy Returns</span></div>
                         </div>
-                        <button class="xerjoff-notes-toggle" onclick="xerjoffToggleNotes(this)">Fragrance Notes <i class="fas fa-chevron-down"></i></button>
+                        <button class="xerjoff-notes-toggle" onclick="xerjoffToggleNotes(this)"><span data-i18n="xerjoff.notes_toggle">Fragrance Notes</span> <i class="fas fa-chevron-down"></i></button>
                         <div class="xerjoff-notes-body">
-                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-wind"></i> Top Notes</p><p class="xerjoff-note-tier-value">Grapefruit &middot; Bergamot &middot; Cardamom</p></div>
-                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-heart"></i> Heart Notes</p><p class="xerjoff-note-tier-value">Rose &middot; Oud &middot; Neroli &middot; Black Pepper</p></div>
-                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-mountain"></i> Base Notes</p><p class="xerjoff-note-tier-value">Amber &middot; Vanilla &middot; Sandalwood &middot; White Musk</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-wind"></i> <span data-i18n="xerjoff.top_notes">Top Notes</span></p><p class="xerjoff-note-tier-value">Grapefruit &middot; Bergamot &middot; Cardamom</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-heart"></i> <span data-i18n="xerjoff.heart_notes">Heart Notes</span></p><p class="xerjoff-note-tier-value">Rose &middot; Oud &middot; Neroli &middot; Black Pepper</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-mountain"></i> <span data-i18n="xerjoff.base_notes">Base Notes</span></p><p class="xerjoff-note-tier-value">Amber &middot; Vanilla &middot; Sandalwood &middot; White Musk</p></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ─── Product 2: Erba Pura ─── -->
+            <!-- --- Product 2: Erba Pura --- -->
             <div class="xerjoff-product-entry" id="product-erba" data-product-id="erba-pura">
                 <div class="xerjoff-product-layout">
                     <div>
@@ -770,43 +770,43 @@
                         </div>
                     </div>
                     <div>
-                        <p class="xerjoff-product-brand-tag">XERJOFF &middot; Eau de Parfum</p>
+                        <p class="xerjoff-product-brand-tag" data-i18n="xerjoff.brand_tag">XERJOFF &middot; Eau de Parfum</p>
                         <h3 class="xerjoff-product-name">Erba Pura</h3>
-                        <p class="xerjoff-product-subtitle">Unisex &middot; Fruity Citrus Musk &middot; A radiant explosion of Sicilian citrus, juicy fruits, and white musk. XERJOFF&rsquo;s celebration of Mediterranean freshness and sunlit joy &mdash; luminous, addictive, and perfect for any season.</p>
-                        <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
-                        <p class="xerjoff-size-label">Size</p>
+                        <p class="xerjoff-product-subtitle" data-i18n="xerjoff.erba_subtitle">Unisex &middot; Fruity Citrus Musk &middot; A radiant explosion of Sicilian citrus, juicy fruits, and white musk. XERJOFF&rsquo;s celebration of Mediterranean freshness and sunlit joy &mdash; luminous, addictive, and perfect for any season.</p>
+                        <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> <span data-i18n="xerjoff.decante_badge">Decante &mdash; Choose your size</span></span>
+                        <p class="xerjoff-size-label" data-i18n="xerjoff.size_label">Size</p>
                         <div class="xerjoff-size-row">
                             <button class="xerjoff-size-btn" type="button" data-size-key="5ml" onclick="xerjoffSize(this,'erba-price')">5 ML</button>
                             <button class="xerjoff-size-btn" type="button" data-size-key="10ml" onclick="xerjoffSize(this,'erba-price')">10 ML</button>
                         </div>
-                        <p id="erba-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to request the price</p>
-                        <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
+                        <p id="erba-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;" data-i18n="xerjoff.price_choose">Choose a size to request the price</p>
+                        <p class="xerjoff-price-note" data-i18n="xerjoff.price_note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
                         <div class="xerjoff-qty-row">
                             <div class="xerjoff-qty-box">
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('erba-qty',-1)">&#8722;</button>
                                 <span id="erba-qty" class="xerjoff-qty-val">1</span>
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('erba-qty',1)">+</button>
                             </div>
-                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('erba','Erba Pura')">Add to Cart</button>
-                            <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
+                            <button class="xerjoff-cart-btn" data-i18n="xerjoff.add_to_cart" onclick="xerjoffAddToCart('erba','Erba Pura')">Add to Cart</button>
+                            <button class="xerjoff-wish-btn" data-i18n-aria="xerjoff.wishlist_aria" aria-label="Wishlist"><i class="far fa-heart"></i></button>
                         </div>
                         <div class="xerjoff-trust-chips">
-                            <div class="xerjoff-trust-chip"><i class="fas fa-truck" style="color:#e73c3c"></i> Delivery: 35 MAD</div>
-                            <div class="xerjoff-trust-chip"><i class="fas fa-shield-heart" style="color:#e73c3c"></i> 100% Authentic</div>
-                            <div class="xerjoff-trust-chip"><i class="fas fa-flask" style="color:#e73c3c"></i> Premium Decante</div>
-                            <div class="xerjoff-trust-chip"><i class="fas fa-rotate-left" style="color:#e73c3c"></i> Easy Returns</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-truck" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_delivery">Delivery: 35 MAD</span></div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-shield-heart" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_authentic">100% Authentic</span></div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-flask" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_decante">Premium Decante</span></div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-rotate-left" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_returns">Easy Returns</span></div>
                         </div>
-                        <button class="xerjoff-notes-toggle" onclick="xerjoffToggleNotes(this)">Fragrance Notes <i class="fas fa-chevron-down"></i></button>
+                        <button class="xerjoff-notes-toggle" onclick="xerjoffToggleNotes(this)"><span data-i18n="xerjoff.notes_toggle">Fragrance Notes</span> <i class="fas fa-chevron-down"></i></button>
                         <div class="xerjoff-notes-body">
-                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-wind"></i> Top Notes</p><p class="xerjoff-note-tier-value">Sicilian Lemon &middot; White Grapefruit &middot; Calabrian Bergamot</p></div>
-                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-heart"></i> Heart Notes</p><p class="xerjoff-note-tier-value">Fruits &middot; Jasmine &middot; White Flowers</p></div>
-                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-mountain"></i> Base Notes</p><p class="xerjoff-note-tier-value">White Musk &middot; Sandalwood &middot; Amber &middot; Vanilla</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-wind"></i> <span data-i18n="xerjoff.top_notes">Top Notes</span></p><p class="xerjoff-note-tier-value">Sicilian Lemon &middot; White Grapefruit &middot; Calabrian Bergamot</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-heart"></i> <span data-i18n="xerjoff.heart_notes">Heart Notes</span></p><p class="xerjoff-note-tier-value">Fruits &middot; Jasmine &middot; White Flowers</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-mountain"></i> <span data-i18n="xerjoff.base_notes">Base Notes</span></p><p class="xerjoff-note-tier-value">White Musk &middot; Sandalwood &middot; Amber &middot; Vanilla</p></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ─── Product 3: Naxos ─── -->
+            <!-- --- Product 3: Naxos --- -->
             <div class="xerjoff-product-entry" id="product-naxos" data-product-id="naxos">
                 <div class="xerjoff-product-layout">
                     <div>
@@ -821,37 +821,37 @@
                         </div>
                     </div>
                     <div>
-                        <p class="xerjoff-product-brand-tag">XERJOFF &middot; Eau de Parfum</p>
+                        <p class="xerjoff-product-brand-tag" data-i18n="xerjoff.brand_tag">XERJOFF &middot; Eau de Parfum</p>
                         <h3 class="xerjoff-product-name">Naxos</h3>
-                        <p class="xerjoff-product-subtitle">Unisex &middot; Amber Foug&egrave;re &middot; Inspired by the sun-drenched Greek island, Naxos blends Sicilian honey, tobacco leaf, and aromatic lavender into a composition of Mediterranean warmth and Italian sophistication.</p>
-                        <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> Decante &mdash; Choose your size</span>
-                        <p class="xerjoff-size-label">Size</p>
+                        <p class="xerjoff-product-subtitle" data-i18n="xerjoff.naxos_subtitle">Unisex &middot; Amber Foug&egrave;re &middot; Inspired by the sun-drenched Greek island, Naxos blends Sicilian honey, tobacco leaf, and aromatic lavender into a composition of Mediterranean warmth and Italian sophistication.</p>
+                        <span class="xerjoff-decante-badge"><i class="fas fa-flask"></i> <span data-i18n="xerjoff.decante_badge">Decante &mdash; Choose your size</span></span>
+                        <p class="xerjoff-size-label" data-i18n="xerjoff.size_label">Size</p>
                         <div class="xerjoff-size-row">
                             <button class="xerjoff-size-btn" type="button" data-size-key="5ml" onclick="xerjoffSize(this,'naxos-price')">5 ML</button>
                             <button class="xerjoff-size-btn" type="button" data-size-key="10ml" onclick="xerjoffSize(this,'naxos-price')">10 ML</button>
                         </div>
-                        <p id="naxos-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to request the price</p>
-                        <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
+                        <p id="naxos-price" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;" data-i18n="xerjoff.price_choose">Choose a size to request the price</p>
+                        <p class="xerjoff-price-note" data-i18n="xerjoff.price_note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
                         <div class="xerjoff-qty-row">
                             <div class="xerjoff-qty-box">
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('naxos-qty',-1)">&#8722;</button>
                                 <span id="naxos-qty" class="xerjoff-qty-val">1</span>
                                 <button class="xerjoff-qty-btn" onclick="xerjoffQty('naxos-qty',1)">+</button>
                             </div>
-                            <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('naxos','Naxos')">Add to Cart</button>
-                            <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
+                            <button class="xerjoff-cart-btn" data-i18n="xerjoff.add_to_cart" onclick="xerjoffAddToCart('naxos','Naxos')">Add to Cart</button>
+                            <button class="xerjoff-wish-btn" data-i18n-aria="xerjoff.wishlist_aria" aria-label="Wishlist"><i class="far fa-heart"></i></button>
                         </div>
                         <div class="xerjoff-trust-chips">
-                            <div class="xerjoff-trust-chip"><i class="fas fa-truck" style="color:#e73c3c"></i> Delivery: 35 MAD</div>
-                            <div class="xerjoff-trust-chip"><i class="fas fa-shield-heart" style="color:#e73c3c"></i> 100% Authentic</div>
-                            <div class="xerjoff-trust-chip"><i class="fas fa-flask" style="color:#e73c3c"></i> Premium Decante</div>
-                            <div class="xerjoff-trust-chip"><i class="fas fa-rotate-left" style="color:#e73c3c"></i> Easy Returns</div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-truck" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_delivery">Delivery: 35 MAD</span></div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-shield-heart" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_authentic">100% Authentic</span></div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-flask" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_decante">Premium Decante</span></div>
+                            <div class="xerjoff-trust-chip"><i class="fas fa-rotate-left" style="color:#e73c3c"></i> <span data-i18n="xerjoff.trust_returns">Easy Returns</span></div>
                         </div>
-                        <button class="xerjoff-notes-toggle" onclick="xerjoffToggleNotes(this)">Fragrance Notes <i class="fas fa-chevron-down"></i></button>
+                        <button class="xerjoff-notes-toggle" onclick="xerjoffToggleNotes(this)"><span data-i18n="xerjoff.notes_toggle">Fragrance Notes</span> <i class="fas fa-chevron-down"></i></button>
                         <div class="xerjoff-notes-body">
-                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-wind"></i> Top Notes</p><p class="xerjoff-note-tier-value">Bergamot &middot; Lavender &middot; Lemon</p></div>
-                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-heart"></i> Heart Notes</p><p class="xerjoff-note-tier-value">Tobacco Flower &middot; Honey &middot; Heliotrope &middot; Cinnamon</p></div>
-                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-mountain"></i> Base Notes</p><p class="xerjoff-note-tier-value">Sandalwood &middot; Tonka Bean &middot; White Musk &middot; Labdanum</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-wind"></i> <span data-i18n="xerjoff.top_notes">Top Notes</span></p><p class="xerjoff-note-tier-value">Bergamot &middot; Lavender &middot; Lemon</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-heart"></i> <span data-i18n="xerjoff.heart_notes">Heart Notes</span></p><p class="xerjoff-note-tier-value">Tobacco Flower &middot; Honey &middot; Heliotrope &middot; Cinnamon</p></div>
+                            <div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-mountain"></i> <span data-i18n="xerjoff.base_notes">Base Notes</span></p><p class="xerjoff-note-tier-value">Sandalwood &middot; Tonka Bean &middot; White Musk &middot; Labdanum</p></div>
                         </div>
                     </div>
                 </div>
@@ -966,7 +966,8 @@
             var sizeKey = String(btn.getAttribute('data-size-key') || '').toLowerCase();
             var price = formatXerjoffPrice(getXerjoffPrice(productId, sizeKey));
             var hasPrice = !!String(price || '').trim();
-            el.textContent = hasPrice ? price : 'Price on Request';
+            var curLang = localStorage.getItem('ipordise-language') || 'en';
+            el.textContent = hasPrice ? price : (curLang === 'fr' ? 'Prix sur demande' : 'Price on Request');
             el.style.color = hasPrice ? '#1a1a1a' : '#16a34a';
             el.style.fontSize = hasPrice ? '1.9rem' : '1.1rem';
             el.style.fontWeight = hasPrice ? '800' : '700';
@@ -989,7 +990,8 @@
             var sizeLabel = priceEl && priceEl.dataset.size;
             var priceText = priceEl && priceEl.dataset.price;
             if (!sizeLabel) {
-                alert('Please select a size first.');
+                var lang = localStorage.getItem('ipordise-language') || 'en';
+                alert(lang === 'fr' ? 'Veuillez sélectionner une taille.' : 'Please select a size first.');
                 return;
             }
             var qty = parseInt(document.getElementById(prefix + '-qty').textContent) || 1;
@@ -1044,11 +1046,12 @@
             });
             // Show confirmation on the button — no redirect
             var btn = document.querySelector('#product-' + prefix + ' .xerjoff-cart-btn');
-            btn.textContent = '✓ Added to Cart';
+            var lang = localStorage.getItem('ipordise-language') || 'en';
+            btn.textContent = lang === 'fr' ? '✓ Ajouté au panier' : '✓ Added to Cart';
             btn.style.background = '#16a34a';
             btn.disabled = true;
             setTimeout(function() {
-                btn.textContent = 'Add to Cart';
+                btn.textContent = lang === 'fr' ? 'Ajouter au panier' : 'Add to Cart';
                 btn.style.background = '';
                 btn.disabled = false;
             }, 2000);
@@ -1064,23 +1067,23 @@
             <div class="xerjoff-values-grid">
                 <div class="xerjoff-value-item">
                     <div class="xerjoff-value-icon"><i class="fas fa-gem"></i></div>
-                    <p class="xerjoff-value-title">Rare Ingredients</p>
-                    <p class="xerjoff-value-text">Sourced from the world's finest regions</p>
+                    <p class="xerjoff-value-title" data-i18n="xerjoff.val_ingredients_title">Rare Ingredients</p>
+                    <p class="xerjoff-value-text" data-i18n="xerjoff.val_ingredients_text">Sourced from the world's finest regions</p>
                 </div>
                 <div class="xerjoff-value-item">
                     <div class="xerjoff-value-icon"><i class="fas fa-flask"></i></div>
-                    <p class="xerjoff-value-title">Master Perfumers</p>
-                    <p class="xerjoff-value-text">Crafted by Italy's top noses</p>
+                    <p class="xerjoff-value-title" data-i18n="xerjoff.val_perfumers_title">Master Perfumers</p>
+                    <p class="xerjoff-value-text" data-i18n="xerjoff.val_perfumers_text">Crafted by Italy's top noses</p>
                 </div>
                 <div class="xerjoff-value-item">
                     <div class="xerjoff-value-icon"><i class="fas fa-certificate"></i></div>
-                    <p class="xerjoff-value-title">100% Authentic</p>
-                    <p class="xerjoff-value-text">Guaranteed genuine products</p>
+                    <p class="xerjoff-value-title" data-i18n="xerjoff.val_authentic_title">100% Authentic</p>
+                    <p class="xerjoff-value-text" data-i18n="xerjoff.val_authentic_text">Guaranteed genuine products</p>
                 </div>
                 <div class="xerjoff-value-item">
                     <div class="xerjoff-value-icon"><i class="fas fa-truck"></i></div>
-                    <p class="xerjoff-value-title">Fast Delivery</p>
-                    <p class="xerjoff-value-text">Secure packaging & swift shipping</p>
+                    <p class="xerjoff-value-title" data-i18n="xerjoff.val_delivery_title">Fast Delivery</p>
+                    <p class="xerjoff-value-text" data-i18n="xerjoff.val_delivery_text">Secure packaging & swift shipping</p>
                 </div>
             </div>
         </div>
@@ -1089,9 +1092,9 @@
     <!-- CTA -->
     <section class="xerjoff-cta">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="xerjoff-cta-title">Interested in XERJOFF?</h2>
-            <p class="xerjoff-cta-text">Contact us for pricing, availability, and to discover decants and full bottles from the XERJOFF collection.</p>
-            <a href="contact.html" class="xerjoff-cta-btn">Contact Us <i class="fas fa-arrow-right ml-2"></i></a>
+            <h2 class="xerjoff-cta-title" data-i18n="xerjoff.cta_title">Interested in XERJOFF?</h2>
+            <p class="xerjoff-cta-text" data-i18n="xerjoff.cta_text">Contact us for pricing, availability, and to discover decants and full bottles from the XERJOFF collection.</p>
+            <a href="contact.html" class="xerjoff-cta-btn"><span data-i18n="xerjoff.cta_btn">Contact Us</span> <i class="fas fa-arrow-right ml-2"></i></a>
         </div>
     </section>
 
@@ -1102,36 +1105,37 @@
                     <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Customer Care</h4>
+                    <h4 class="font-bold text-lg mb-4" data-i18n="xerjoff.footer_care_title">Customer Care</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="contact.html" class="hover:text-white transition">Contact Us</a></li>
-                        <li><a href="shipping.html" class="hover:text-white transition">Shipping & Returns</a></li>
-                        <li><a href="track-order.html" class="hover:text-white transition">Track Order</a></li>
-                        <li><a href="faq.html" class="hover:text-white transition">FAQ</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition" data-i18n="xerjoff.footer_contact">Contact Us</a></li>
+                        <li><a href="shipping.html" class="hover:text-white transition" data-i18n="xerjoff.footer_shipping">Shipping & Returns</a></li>
+                        <li><a href="track-order.html" class="hover:text-white transition" data-i18n="xerjoff.footer_track">Track Order</a></li>
+                        <li><a href="faq.html" class="hover:text-white transition" data-i18n="xerjoff.footer_faq">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">About</h4>
+                    <h4 class="font-bold text-lg mb-4" data-i18n="footer.about">About</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="our-story.html" class="hover:text-white transition">Our Story</a></li>
-                        <li><a href="careers.html" class="hover:text-white transition">Careers</a></li>
-                        <li><a href="store-locator.html" class="hover:text-white transition">Find a Store</a></li>
-                        <li><a href="terms.html" class="hover:text-white transition">Terms & Conditions</a></li>
+                        <li><a href="our-story.html" class="hover:text-white transition" data-i18n="footer.our_story">Our Story</a></li>
+                        <li><a href="careers.html" class="hover:text-white transition" data-i18n="footer.careers">Careers</a></li>
+                        <li><a href="store-locator.html" class="hover:text-white transition" data-i18n="footer.find_store">Find a Store</a></li>
+                        <li><a href="terms.html" class="hover:text-white transition" data-i18n="footer.terms">Terms & Conditions</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Newsletter</h4>
+                    <h4 class="font-bold text-lg mb-4" data-i18n="footer.newsletter_title">Newsletter</h4>
                     <div class="flex">
-                        <input type="email" placeholder="Your email address" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">
-                        <a href="newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition">SUBSCRIBE</a>
+                        <input type="email" data-i18n-placeholder="footer.newsletter_ph2" placeholder="Your email address" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">
+                        <a href="newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition" data-i18n="footer.subscribe_btn">SUBSCRIBE</a>
                     </div>
                 </div>
             </div>
             <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
-                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <p data-i18n="footer.copyright">&copy; 2026 IPORDISE. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
 </body>
 </html>
+

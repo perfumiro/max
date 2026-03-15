@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Sign In</title>
+    <title data-i18n-title="login.page_title">IPORDISE - Sign In</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../script.js"></script>
+    <script src="../script.js"></script>`n    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide">
+    <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide" data-i18n-html="login.announce">
         Complimentary gift wrapping - Code: <span class="top-announcement-code">PARFUM15</span> - <a href="#" class="top-announcement-link">SHOP NOW!</a>
     </div>
 
@@ -81,68 +81,68 @@
                     <p class="login-breadcrumbs text-sm mb-5 sm:mb-6">
                         <a href="../index.html" class="hover:text-white transition">Home</a>
                         <span class="mx-2 opacity-60">/</span>
-                        <span class="font-semibold">Account Sign In</span>
+                        <span class="font-semibold" data-i18n="login.breadcrumb">Account Sign In</span>
                     </p>
-                    <span class="login-hero-kicker">Private member access</span>
-                    <h1 class="login-hero-title">Enter your private fragrance space.</h1>
-                    <p class="login-hero-text">Sign in to access saved selections, track deliveries, continue checkout faster, and keep your personal perfume archive in one elevated account experience.</p>
+                    <span class="login-hero-kicker" data-i18n="login.kicker">Private member access</span>
+                    <h1 class="login-hero-title" data-i18n="login.h1">Enter your private fragrance space.</h1>
+                    <p class="login-hero-text" data-i18n="login.text">Sign in to access saved selections, track deliveries, continue checkout faster, and keep your personal perfume archive in one elevated account experience.</p>
 
                     <div class="login-hero-metrics">
                         <article class="login-hero-metric">
-                            <strong>1-click</strong>
-                            <span>reorders for your signature picks</span>
+                            <strong data-i18n="login.metric1_strong">1-click</strong>
+                            <span data-i18n="login.metric1_span">reorders for your signature picks</span>
                         </article>
                         <article class="login-hero-metric">
-                            <strong>Live</strong>
-                            <span>tracking on every active order</span>
+                            <strong data-i18n="login.metric2_strong">Live</strong>
+                            <span data-i18n="login.metric2_span">tracking on every active order</span>
                         </article>
                         <article class="login-hero-metric">
-                            <strong>24/7</strong>
+                            <strong data-i18n="login.metric3_strong">24/7</strong>
                             <span>access to your wishlist and profile</span>
                         </article>
                     </div>
                 </div>
 
                 <div class="login-hero-mini-card">
-                    <span>Concierge access</span>
-                    <strong>Mon - Sat · 09:00 - 20:00</strong>
-                    <p>Account support, order help, and fragrance guidance from our client care team.</p>
-                    <a href="contact.html">Talk to an advisor <i class="fas fa-arrow-right text-xs"></i></a>
+                    <span data-i18n="login.concierge_title">Concierge access</span>
+                    <strong data-i18n="login.concierge_hours">Mon - Sat � 09:00 - 20:00</strong>
+                    <p data-i18n="login.concierge_desc">Account support, order help, and fragrance guidance from our client care team.</p>
+                    <a href="contact.html" data-i18n="login.concierge_link">Talk to an advisor <i class="fas fa-arrow-right text-xs"></i></a>
                 </div>
             </div>
 
             <div class="login-shell">
                 <aside class="login-aside text-white">
                     <div class="login-aside-inner">
-                        <span class="login-panel-kicker">Member experience</span>
-                        <h2 class="login-panel-title">Luxury access designed for returning clients.</h2>
-                        <p class="login-panel-text">From wishlist curation to delivery follow-up, your IPORDISE account keeps every part of your perfume journey elegant, secure, and fast.</p>
+                        <span class="login-panel-kicker" data-i18n="login.aside_kicker">Member experience</span>
+                        <h2 class="login-panel-title" data-i18n="login.aside_h">Luxury access designed for returning clients.</h2>
+                        <p class="login-panel-text" data-i18n="login.aside_p">From wishlist curation to delivery follow-up, your IPORDISE account keeps every part of your perfume journey elegant, secure, and fast.</p>
 
                         <div class="login-showcase-card">
                             <div class="login-showcase-head">
-                                <span>Inside your account</span>
-                                <strong>Premium profile control</strong>
+                                <span data-i18n="login.card_title">Inside your account</span>
+                                <strong data-i18n="login.card_subtitle">Premium profile control</strong>
                             </div>
                             <div class="login-showcase-list">
                                 <div class="login-showcase-item">
                                     <i class="fas fa-heart"></i>
                                     <div>
-                                        <strong>Saved favorites</strong>
-                                        <span>Keep your best-loved bottles and decants ready to revisit.</span>
+                                        <strong data-i18n="login.feat1_h">Saved favorites</strong>
+                                        <span data-i18n="login.feat1_p">Keep your best-loved bottles and decants ready to revisit.</span>
                                     </div>
                                 </div>
                                 <div class="login-showcase-item">
                                     <i class="fas fa-truck-fast"></i>
                                     <div>
-                                        <strong>Tracked delivery</strong>
-                                        <span>Follow every shipment from confirmation to doorstep.</span>
+                                        <strong data-i18n="login.feat2_h">Tracked delivery</strong>
+                                        <span data-i18n="login.feat2_p">Follow every shipment from confirmation to doorstep.</span>
                                     </div>
                                 </div>
                                 <div class="login-showcase-item">
                                     <i class="fas fa-bag-shopping"></i>
                                     <div>
-                                        <strong>Faster checkout</strong>
-                                        <span>Return with your profile details and place orders in less time.</span>
+                                        <strong data-i18n="login.feat3_h">Faster checkout</strong>
+                                        <span data-i18n="login.feat3_p">Return with your profile details and place orders in less time.</span>
                                     </div>
                                 </div>
                             </div>
@@ -150,20 +150,20 @@
 
                         <div class="login-stat-grid">
                             <article class="login-stat-card">
-                                <strong>Personal dashboard</strong>
-                                <span>Review orders, favorites, and account details from one place.</span>
+                                <strong data-i18n="login.stat1_h">Personal dashboard</strong>
+                                <span data-i18n="login.stat1_p">Review orders, favorites, and account details from one place.</span>
                             </article>
                             <article class="login-stat-card">
-                                <strong>Protected access</strong>
-                                <span>Secure sign in backed by encrypted session handling.</span>
+                                <strong data-i18n="login.stat2_h">Protected access</strong>
+                                <span data-i18n="login.stat2_p">Secure sign in backed by encrypted session handling.</span>
                             </article>
                             <article class="login-stat-card">
-                                <strong>Luxury follow-up</strong>
-                                <span>Stay updated on deliveries, returns, and concierge support.</span>
+                                <strong data-i18n="login.stat3_h">Luxury follow-up</strong>
+                                <span data-i18n="login.stat3_p">Stay updated on deliveries, returns, and concierge support.</span>
                             </article>
                             <article class="login-stat-card">
-                                <strong>Faster discovery</strong>
-                                <span>Come back to collections you viewed and perfumes you loved.</span>
+                                <strong data-i18n="login.stat4_h">Faster discovery</strong>
+                                <span data-i18n="login.stat4_p">Come back to collections you viewed and perfumes you loved.</span>
                             </article>
                         </div>
 
@@ -183,9 +183,9 @@
                         </div>
 
                         <div class="login-meta-card">
-                            <p class="text-xs uppercase tracking-[0.2em] font-bold text-[#f3dca5]">Client support</p>
-                            <p class="text-sm text-white/78 mt-2">Need help signing in or checking an order? Our advisors assist with account access, order follow-up, and product guidance.</p>
-                            <a href="contact.html" class="inline-flex items-center mt-4 text-sm font-semibold text-white hover:text-[#f3dca5] transition">
+                            <p class="text-xs uppercase tracking-[0.2em] font-bold text-[#f3dca5]" data-i18n="login.meta_title">Client support</p>
+                                <p class="text-sm text-white/78 mt-2" data-i18n="login.meta_p">Need help signing in or checking an order? Our advisors assist with account access, order follow-up, and product guidance.</p>
+                                <a href="contact.html" class="inline-flex items-center mt-4 text-sm font-semibold text-white hover:text-[#f3dca5] transition" data-i18n="login.meta_link">
                                 Contact customer care <i class="fas fa-arrow-right ml-2 text-xs"></i>
                             </a>
                         </div>
@@ -195,11 +195,11 @@
                 <div class="login-form-panel">
                     <div class="login-form-head">
                         <div class="login-form-badge-row">
-                            <span class="login-form-kicker">Secure sign in</span>
-                            <span class="login-form-badge"><i class="fas fa-shield-check"></i> Trusted account access</span>
+                            <span class="login-form-kicker" data-i18n="login.form_kicker">Secure sign in</span>
+                            <span class="login-form-badge"><i class="fas fa-shield-check"></i> <span data-i18n="login.form_badge">Trusted account access</span></span>
                         </div>
-                        <h2 class="login-form-title">Welcome back.</h2>
-                        <p class="login-form-subtitle">Use your email and password to continue to your account, recover your favorites, and return to checkout with a smooth premium experience.</p>
+                        <h2 class="login-form-title" data-i18n="login.form_title">Welcome back.</h2>
+                        <p class="login-form-subtitle" data-i18n="login.form_subtitle">Use your email and password to continue to your account, recover your favorites, and return to checkout with a smooth premium experience.</p>
                     </div>
 
                     <div class="login-security-note">
@@ -214,26 +214,26 @@
                     </div>
 
                     <div class="login-auth-toggle" role="tablist" aria-label="Account access mode">
-                        <button type="button" class="login-auth-tab is-active" data-auth-mode="signin" aria-selected="true">Sign in</button>
-                        <button type="button" class="login-auth-tab" data-auth-mode="signup" aria-selected="false">Create account</button>
+                        <button type="button" class="login-auth-tab is-active" data-auth-mode="signin" aria-selected="true" data-i18n="login.tab_signin">Sign in</button>
+                        <button type="button" class="login-auth-tab" data-auth-mode="signup" aria-selected="false" data-i18n="login.tab_signup">Create account</button>
                     </div>
 
                     <div class="login-auth-panels mt-7">
                         <section class="login-auth-panel is-active" data-auth-panel="signin">
                             <form id="loginForm" class="space-y-4" action="#" method="post">
                                 <label class="login-field">
-                                    <span>Email address</span>
+                                    <span data-i18n="login.email_label">Email address</span>
                                     <div class="login-input-wrap">
                                         <i class="far fa-envelope login-input-icon"></i>
-                                        <input id="loginEmailInput" class="login-input-control" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+                                        <input id="loginEmailInput" class="login-input-control" type="email" name="email" placeholder="you@example.com" data-i18n-placeholder="login.email_ph" autocomplete="email" required>
                                     </div>
                                 </label>
 
                                 <label class="login-field">
-                                    <span>Password</span>
+                                    <span data-i18n="login.password_label">Password</span>
                                     <div class="login-input-wrap">
                                         <i class="fas fa-lock login-input-icon"></i>
-                                        <input id="loginPasswordInput" class="login-input-control pr-14" type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+                                        <input id="loginPasswordInput" class="login-input-control pr-14" type="password" name="password" placeholder="Enter your password" data-i18n-placeholder="login.password_ph" autocomplete="current-password" required>
                                         <button type="button" class="login-password-toggle" data-password-toggle data-password-target="#loginPasswordInput" aria-label="Show password">
                                             <i class="far fa-eye"></i>
                                         </button>
@@ -243,9 +243,9 @@
                                 <div class="login-utility-row">
                                     <label class="login-remember-option">
                                         <input id="loginRememberMe" type="checkbox" class="rounded border-gray-300 text-brand-red focus:ring-brand-red">
-                                        <span>Stay signed in on this device</span>
+                                        <span data-i18n="login.remember_me">Stay signed in on this device</span>
                                     </label>
-                                    <a href="support.html" class="login-forgot-link">Forgot password?</a>
+                                    <a href="support.html" class="login-forgot-link" data-i18n="login.forgot_pw">Forgot password?</a>
                                 </div>
 
                                 <label class="legal-consent-card legal-consent-card-login">
@@ -256,16 +256,16 @@
                                     <span class="legal-consent-copy">
                                         <strong>I accept the Privacy Policy and Terms & Conditions.</strong>
                                         <span>By signing in, I agree to the processing of my account data according to IPORDISE policies.</span>
-                                        <span><a href="privacy-policy.html">Privacy Policy</a> and <a href="terms.html">Terms & Conditions</a>.</span>
+                                        <span><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> and <a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a>.</span>
                                     </span>
                                 </label>
 
                                 <p id="loginLegalConsentMessage" class="legal-consent-message hidden">Please accept the Privacy Policy and Terms & Conditions to continue.</p>
                                 <p id="loginFormMessage" class="login-form-message hidden" aria-live="polite"></p>
 
-                                <button id="loginSubmitBtn" type="submit" class="login-submit-btn opacity-50 cursor-not-allowed" disabled aria-disabled="true">Sign in securely</button>
+                                <button id="loginSubmitBtn" type="submit" class="login-submit-btn opacity-50 cursor-not-allowed" disabled aria-disabled="true" data-i18n="login.submit_btn">Sign in securely</button>
 
-                                <button type="button" class="login-secondary-btn" data-auth-switch="signup">Create a new account</button>
+                                <button type="button" class="login-secondary-btn" data-auth-switch="signup" data-i18n="login.create_account_btn">Create a new account</button>
                             </form>
                         </section>
 
@@ -327,16 +327,16 @@
                                     <span class="legal-consent-copy">
                                         <strong>I accept the Privacy Policy and Terms & Conditions.</strong>
                                         <span>By creating an account, I agree to the processing of my account data according to IPORDISE policies.</span>
-                                        <span><a href="privacy-policy.html">Privacy Policy</a> and <a href="terms.html">Terms & Conditions</a>.</span>
+                                        <span><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> and <a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a>.</span>
                                     </span>
                                 </label>
 
                                 <p id="signupLegalConsentMessage" class="legal-consent-message hidden">Please accept the Privacy Policy and Terms & Conditions to create your account.</p>
                                 <p id="signupFormMessage" class="login-form-message hidden" aria-live="polite"></p>
 
-                                <button id="signupSubmitBtn" type="submit" class="login-submit-btn opacity-50 cursor-not-allowed" disabled aria-disabled="true">Create account</button>
+                                <button id="signupSubmitBtn" type="submit" class="login-submit-btn opacity-50 cursor-not-allowed" disabled aria-disabled="true" data-i18n="login.signup_btn">Create account</button>
 
-                                <button type="button" class="login-secondary-btn" data-auth-switch="signin">I already have an account</button>
+                                <button type="button" class="login-secondary-btn" data-auth-switch="signin" data-i18n="login.existing_account_btn">I already have an account</button>
                             </form>
                         </section>
                     </div>
@@ -374,7 +374,7 @@
                     </div>
 
                     <div class="login-bottom-row">
-                        <p>Don’t have an account yet?</p>
+                        <p>Don�t have an account yet?</p>
                         <button type="button" class="login-inline-action" data-auth-switch="signup">Create one now</button>
                     </div>
                 </div>
@@ -387,7 +387,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                 <div>
                     <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-6">The ultimate destination for luxury perfumes, cosmetics, and beauty care online. Elevate your everyday routine.</p>
+                    <p class="text-gray-400 text-sm mb-6"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes, cosmetics, and beauty care online. Elevate your everyday routine.</p>
                     <div class="flex space-x-4">
                         <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-facebook-f"></i></a>
@@ -404,7 +404,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">About</h4>
+                    <h4 class="font-bold text-lg mb-4" data-i18n="footer.about" data-i18n="footer.about">About</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
                         <li><a href="our-story.html" class="hover:text-white transition">Our Story</a></li>
                         <li><a href="careers.html" class="hover:text-white transition">Careers</a></li>
@@ -413,7 +413,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Newsletter</h4>
+                    <h4 class="font-bold text-lg mb-4" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
                     <p class="text-gray-400 text-sm mb-4">Subscribe for new arrivals, beauty tips, and more.</p>
                     <div class="flex">
                         <input type="email" placeholder="Your email address" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">

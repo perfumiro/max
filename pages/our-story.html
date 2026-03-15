@@ -1,19 +1,19 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Our Story</title>
+    <title data-i18n-title="story.page_title">IPORDISE - Our Story</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../script.js"></script>
+    <script src="../script.js"></script>`n    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <div class="page-announce-bar">
+    <div class="page-announce-bar" data-i18n-html="story.announce">
         <i class="fas fa-star mr-2" style="color:#e73c3c"></i>
         <strong style="color:#fff">Discover the story</strong> behind Morocco's favourite fragrance destination.
     </div>
@@ -43,10 +43,10 @@
             <p class="text-white/60 text-xs mb-4 flex items-center gap-1.5">
                 <a href="../index.html" class="hover:text-white transition">Home</a>
                 <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
-                <span class="text-white/90 font-semibold">Our Story</span>
+                <span class="text-white/90 font-semibold" data-i18n="story.breadcrumb">Our Story</span>
             </p>
-            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight max-w-2xl">Born from a Passion <br><em class="not-italic" style="color:#e73c3c">for Luxury Fragrance</em></h1>
-            <p class="mt-3 text-white/65 max-w-xl text-sm sm:text-base leading-relaxed">IPORDISE began with a simple mission: make the world's finest fragrances accessible to everyone in Morocco &mdash; with trust, elegance, and speed.</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight max-w-2xl" data-i18n-html="story.h1">Born from a Passion <br><em class="not-italic" style="color:#e73c3c">for Luxury Fragrance</em></h1>
+            <p class="mt-3 text-white/65 max-w-xl text-sm sm:text-base leading-relaxed" data-i18n="story.subtitle">IPORDISE began with a simple mission: make the world's finest fragrances accessible to everyone in Morocco &mdash; with trust, elegance, and speed.</p>
         </div>
     </section>
 
@@ -56,60 +56,60 @@
             <!-- Mission -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 items-center">
                 <div>
-                    <p class="faq-category-title mb-4"><i class="fas fa-bullseye"></i> Our Mission</p>
-                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-brand-dark mb-4">Luxury perfume, <br>within everyone's reach</h2>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-4">We believe every person deserves to wear a fragrance that tells their story. That is why we curate only the finest niche and designer perfumes &mdash; authenticated, beautifully packaged, and delivered to your door across Morocco.</p>
-                    <p class="text-gray-600 text-sm leading-relaxed">From our first sale in 2019 to serving thousands of fragrance lovers today, our commitment remains the same: authenticity, exceptional service, and a love of all things olfactory.</p>
+                    <p class="faq-category-title mb-4"><i class="fas fa-bullseye"></i> <span data-i18n="story.mission_cat">Our Mission</span></p>
+                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-brand-dark mb-4" data-i18n-html="story.mission_h">Luxury perfume, <br>within everyone's reach</h2>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4" data-i18n="story.mission_p1">We believe every person deserves to wear a fragrance that tells their story. That is why we curate only the finest niche and designer perfumes &mdash; authenticated, beautifully packaged, and delivered to your door across Morocco.</p>
+                    <p class="text-gray-600 text-sm leading-relaxed" data-i18n="story.mission_p2">From our first sale in 2019 to serving thousands of fragrance lovers today, our commitment remains the same: authenticity, exceptional service, and a love of all things olfactory.</p>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="info-card text-center">
                         <p class="text-3xl font-bold font-serif" style="color:#e73c3c">500+</p>
-                        <p class="text-sm text-gray-600 mt-1">Fragrances</p>
+                        <p class="text-sm text-gray-600 mt-1" data-i18n="story.fragrances">Fragrances</p>
                     </div>
                     <div class="info-card text-center">
                         <p class="text-3xl font-bold font-serif" style="color:#e73c3c">60+</p>
-                        <p class="text-sm text-gray-600 mt-1">Brands</p>
+                        <p class="text-sm text-gray-600 mt-1" data-i18n="story.brands">Brands</p>
                     </div>
                     <div class="info-card text-center">
                         <p class="text-3xl font-bold font-serif" style="color:#e73c3c">10K+</p>
-                        <p class="text-sm text-gray-600 mt-1">Happy Customers</p>
+                        <p class="text-sm text-gray-600 mt-1" data-i18n="story.customers">Happy Customers</p>
                     </div>
                     <div class="info-card text-center">
                         <p class="text-3xl font-bold font-serif" style="color:#e73c3c">4.9</p>
-                        <p class="text-sm text-gray-600 mt-1">Average Rating</p>
+                        <p class="text-sm text-gray-600 mt-1" data-i18n="story.rating">Average Rating</p>
                     </div>
                 </div>
             </div>
 
             <!-- Timeline -->
             <div class="mb-12">
-                <p class="faq-category-title mb-6"><i class="fas fa-timeline"></i> Our Journey</p>
+                <p class="faq-category-title mb-6"><i class="fas fa-timeline"></i> <span data-i18n="story.journey_cat">Our Journey</span></p>
                 <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
                     <div class="story-timeline">
                         <div class="story-node">
                             <p class="story-year">2019</p>
-                            <h3 class="font-bold text-brand-dark">The beginning</h3>
-                            <p class="text-sm text-gray-600 mt-1 max-w-lg">IPORDISE launched with a carefully hand-picked selection of 50 fragrances from the world's most prestigious houses, shipped from Casablanca.</p>
+                            <h3 class="font-bold text-brand-dark" data-i18n="story.2019_h">The beginning</h3>
+                            <p class="text-sm text-gray-600 mt-1 max-w-lg" data-i18n="story.2019_p">IPORDISE launched with a carefully hand-picked selection of 50 fragrances from the world's most prestigious houses, shipped from Casablanca.</p>
                         </div>
                         <div class="story-node">
                             <p class="story-year">2021</p>
-                            <h3 class="font-bold text-brand-dark">Expanding horizons</h3>
-                            <p class="text-sm text-gray-600 mt-1 max-w-lg">We grew our catalogue to include niche and Arabian oud perfumes, meeting demand for exclusive, hard-to-find scents not available in local stores.</p>
+                            <h3 class="font-bold text-brand-dark" data-i18n="story.2021_h">Expanding horizons</h3>
+                            <p class="text-sm text-gray-600 mt-1 max-w-lg" data-i18n="story.2021_p">We grew our catalogue to include niche and Arabian oud perfumes, meeting demand for exclusive, hard-to-find scents not available in local stores.</p>
                         </div>
                         <div class="story-node">
                             <p class="story-year">2022</p>
-                            <h3 class="font-bold text-brand-dark">Beauty &amp; wellness</h3>
-                            <p class="text-sm text-gray-600 mt-1 max-w-lg">Extended into luxury makeup, skincare, and beauty essentials, becoming a one-stop destination for the conscious beauty lover.</p>
+                            <h3 class="font-bold text-brand-dark" data-i18n="story.2022_h">Beauty &amp; wellness</h3>
+                            <p class="text-sm text-gray-600 mt-1 max-w-lg" data-i18n="story.2022_p">Extended into luxury makeup, skincare, and beauty essentials, becoming a one-stop destination for the conscious beauty lover.</p>
                         </div>
                         <div class="story-node">
                             <p class="story-year">2025</p>
-                            <h3 class="font-bold text-brand-dark">Discovery Sets launch</h3>
-                            <p class="text-sm text-gray-600 mt-1 max-w-lg">We introduced our popular Discovery Sets &mdash; curated samplers that let customers explore new fragrances before investing in a full bottle.</p>
+                            <h3 class="font-bold text-brand-dark" data-i18n="story.2025_h">Discovery Sets launch</h3>
+                            <p class="text-sm text-gray-600 mt-1 max-w-lg" data-i18n="story.2025_p">We introduced our popular Discovery Sets &mdash; curated samplers that let customers explore new fragrances before investing in a full bottle.</p>
                         </div>
                         <div class="story-node">
                             <p class="story-year">2026</p>
-                            <h3 class="font-bold text-brand-dark">Today &amp; beyond</h3>
-                            <p class="text-sm text-gray-600 mt-1 max-w-lg">Serving tens of thousands of fragrance lovers across Morocco, with same-day dispatch and a growing community of passionate scent enthusiasts.</p>
+                            <h3 class="font-bold text-brand-dark" data-i18n="story.2026_h">Today &amp; beyond</h3>
+                            <p class="text-sm text-gray-600 mt-1 max-w-lg" data-i18n="story.2026_p">Serving tens of thousands of fragrance lovers across Morocco, with same-day dispatch and a growing community of passionate scent enthusiasts.</p>
                         </div>
                     </div>
                 </div>
@@ -117,22 +117,22 @@
 
             <!-- Values -->
             <div>
-                <p class="faq-category-title mb-6"><i class="fas fa-heart"></i> Our Values</p>
+                <p class="faq-category-title mb-6"><i class="fas fa-heart"></i> <span data-i18n="story.values_cat">Our Values</span></p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <div class="info-card">
                         <div class="info-card-icon"><i class="fas fa-certificate"></i></div>
-                        <h3 class="font-bold text-brand-dark mb-2">100% Authentic</h3>
-                        <p class="text-sm text-gray-600">Every product is sourced from authorised distributors. We never sell imitations, grey market goods, or tester bottles.</p>
+                        <h3 class="font-bold text-brand-dark mb-2" data-i18n="story.val1_h">100% Authentic</h3>
+                        <p class="text-sm text-gray-600" data-i18n="story.val1_p">Every product is sourced from authorised distributors. We never sell imitations, grey market goods, or tester bottles.</p>
                     </div>
                     <div class="info-card">
                         <div class="info-card-icon"><i class="fas fa-heart"></i></div>
-                        <h3 class="font-bold text-brand-dark mb-2">Customer First</h3>
-                        <p class="text-sm text-gray-600">Our team is driven by a genuine desire to help you find your perfect fragrance. Your satisfaction is our measure of success.</p>
+                        <h3 class="font-bold text-brand-dark mb-2" data-i18n="story.val2_h">Customer First</h3>
+                        <p class="text-sm text-gray-600" data-i18n="story.val2_p">Our team is driven by a genuine desire to help you find your perfect fragrance. Your satisfaction is our measure of success.</p>
                     </div>
                     <div class="info-card">
                         <div class="info-card-icon"><i class="fas fa-leaf"></i></div>
-                        <h3 class="font-bold text-brand-dark mb-2">Responsible Commerce</h3>
-                        <p class="text-sm text-gray-600">We partner with ethical suppliers, minimise packaging waste, and are committed to running a responsible luxury business.</p>
+                        <h3 class="font-bold text-brand-dark mb-2" data-i18n="story.val3_h">Responsible Commerce</h3>
+                        <p class="text-sm text-gray-600" data-i18n="story.val3_p">We partner with ethical suppliers, minimise packaging waste, and are committed to running a responsible luxury business.</p>
                     </div>
                 </div>
             </div>
@@ -144,17 +144,17 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                 <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online.</p>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online.</p>
                     <div class="flex space-x-3">
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
-                <div><h4 class="footer-col-title">Customer Service</h4><ul class="footer-links"><li><a href="contact.html">Contact Us</a></li><li><a href="shipping.html">Shipping &amp; Returns</a></li><li><a href="track-order.html">Track Order</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
-                <div><h4 class="footer-col-title">About</h4><ul class="footer-links"><li><a href="our-story.html">Our Story</a></li><li><a href="careers.html">Careers</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4><ul class="footer-links"><li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li><li><a href="shipping.html">Shipping &amp; Returns</a></li><li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li><li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about">About</h4><ul class="footer-links"><li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li><li><a href="careers.html" data-i18n="footer.careers">Careers</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li></ul></div>
                 <div>
-                    <h4 class="footer-col-title">Newsletter</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
                     <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals and new arrivals.</p>
                     <div class="flex"><input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a></div>
                 </div>
@@ -167,3 +167,4 @@
     </footer>
 </body>
 </html>
+

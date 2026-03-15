@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Product Details</title>
+    <title data-i18n-title="product.page_title">IPORDISE - Product Details</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../script.js"></script>
+    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
@@ -79,13 +80,13 @@
     <!-- Trust Bar -->
     <div class="trust-bar">
         <div class="max-w-7xl mx-auto px-4 flex items-center justify-center gap-6 md:gap-10 flex-wrap">
-            <span class="trust-bar-item"><i class="fas fa-truck-fast text-brand-red"></i> Fast Delivery</span>
+            <span class="trust-bar-item"><i class="fas fa-truck-fast text-brand-red"></i> <span data-i18n="product.trust_fast_delivery">Fast Delivery</span></span>
             <span class="trust-bar-divider"></span>
-            <span class="trust-bar-item"><i class="fas fa-shield-heart text-brand-red"></i> 100 % Authentic</span>
+            <span class="trust-bar-item"><i class="fas fa-shield-heart text-brand-red"></i> <span data-i18n="product.trust_authentic">100 % Authentic</span></span>
             <span class="trust-bar-divider"></span>
-            <span class="trust-bar-item"><i class="fas fa-rotate-left text-brand-red"></i> Easy Returns</span>
+            <span class="trust-bar-item"><i class="fas fa-rotate-left text-brand-red"></i> <span data-i18n="product.trust_returns">Easy Returns</span></span>
             <span class="trust-bar-divider"></span>
-            <span class="trust-bar-item"><i class="fas fa-lock text-brand-red"></i> Secure Payment</span>
+            <span class="trust-bar-item"><i class="fas fa-lock text-brand-red"></i> <span data-i18n="product.trust_secure_pay">Secure Payment</span></span>
         </div>
     </div>
 
@@ -97,7 +98,7 @@
             <span class="font-serif text-xl font-bold tracking-widest">IPORDISE<span class="text-brand-red">.</span></span>
             <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu"><i class="fas fa-times"></i></button>
         </div>
-        <div class="px-5 py-3"><input type="text" placeholder="Search perfumes…" class="mobile-menu-search"></div>
+        <div class="px-5 py-3"><input type="text" placeholder="Search perfumes�" class="mobile-menu-search"></div>
         <ul class="mobile-menu-list">
             <li><a href="../index.html" class="mobile-menu-link"><i class="fas fa-home w-5 text-center mr-3 text-brand-red"></i> Home</a></li>
             <li><a href="../discover.html" class="mobile-menu-link"><i class="fas fa-spray-can-sparkles w-5 text-center mr-3 text-brand-red"></i> All Perfumes</a></li>
@@ -121,9 +122,9 @@
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 product-detail-section">
             <nav class="text-sm text-gray-500 mb-6 md:mb-8" aria-label="Breadcrumb">
                 <ol class="flex flex-wrap items-center gap-2">
-                    <li><a href="../index.html" class="hover:text-gray-900">Home</a></li>
+                    <li><a href="../index.html" class="hover:text-gray-900" data-i18n="common.breadcrumb_home">Home</a></li>
                     <li><i class="fas fa-chevron-right text-xs"></i></li>
-                    <li><a href="../discover.html" class="hover:text-gray-900">Perfumes</a></li>
+                    <li><a href="../discover.html" class="hover:text-gray-900" data-i18n="product.bc_perfumes">Perfumes</a></li>
                     <li><i class="fas fa-chevron-right text-xs"></i></li>
                     <li class="text-gray-900 font-semibold" id="productBreadcrumb">Product</li>
                 </ol>
@@ -134,26 +135,14 @@
                     <div class="product-gallery-shell product-gallery-v2">
                         <!-- Main Image Area -->
                         <div class="product-main-image-wrap product-zoom-wrap" id="productZoomContainer">
-                            <img id="productMainImage" src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp" alt="Product image" class="product-main-image">
+                            <img id="productMainImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Product image" class="product-main-image">
                             <button class="gallery-share-btn" type="button" aria-label="Share"><i class="fas fa-share-nodes"></i></button>
-                            <span class="product-zoom-hint"><i class="fas fa-search-plus"></i> Hover to zoom</span>
+                            <span class="product-zoom-hint"><i class="fas fa-search-plus"></i> <span data-i18n="product.zoom_hint">Hover to zoom</span></span>
                         </div>
                         <!-- Thumbnails Strip -->
                         <div class="product-thumbs-strip">
                             <button class="thumbs-arrow thumbs-arrow-left" type="button" aria-label="Previous thumbnails"><i class="fas fa-chevron-left"></i></button>
                             <div class="product-thumbs-row hide-scrollbar" id="productThumbs">
-                                <button class="product-thumb-btn is-active" type="button" data-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp">
-                                    <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp" alt="Thumb 1" class="product-thumb-image">
-                                </button>
-                                <button class="product-thumb-btn" type="button" data-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/2.webp">
-                                    <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/2.webp" alt="Thumb 2" class="product-thumb-image">
-                                </button>
-                                <button class="product-thumb-btn" type="button" data-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/3.webp">
-                                    <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/3.webp" alt="Thumb 3" class="product-thumb-image">
-                                </button>
-                                <button class="product-thumb-btn" type="button" data-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/4.webp">
-                                    <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/4.webp" alt="Thumb 4" class="product-thumb-image">
-                                </button>
                             </div>
                             <button class="thumbs-arrow thumbs-arrow-right" type="button" aria-label="Next thumbnails"><i class="fas fa-chevron-right"></i></button>
                         </div>
@@ -162,8 +151,8 @@
                     <section class="product-main-accords-panel product-main-accords-panel-desktop hidden lg:block" id="productMainAccordsPanel" hidden>
                         <div class="product-main-accords-card">
                             <div class="product-main-accords-head">
-                                <span class="product-main-accords-kicker">Olfactive Signature</span>
-                                <h2 class="product-main-accords-title">Main accords</h2>
+                                <span class="product-main-accords-kicker" data-i18n="product.accords_kicker">Olfactive Signature</span>
+                                <h2 class="product-main-accords-title" data-i18n="product.accords_title">Main accords</h2>
                             </div>
                             <div class="product-main-accords-list" id="productMainAccordsList"></div>
                         </div>
@@ -177,7 +166,7 @@
                             <span class="product-badge">Limited</span>
                         </div>
                         <h1 id="productName" class="text-3xl md:text-4xl font-bold text-brand-dark mt-2">Emporio Armani Stronger With You Intensely EDP</h1>
-                        <p id="productSubtitle" class="text-sm text-gray-600 mt-3 max-w-xl">Men's fragrance · Oriental Fougère · A bold, addictive signature with pink pepper, vanilla, and ambery woods.</p>
+                        <p id="productSubtitle" class="text-sm text-gray-600 mt-3 max-w-xl">Men's fragrance � Oriental Foug�re � A bold, addictive signature with pink pepper, vanilla, and ambery woods.</p>
 
                         <div class="flex items-center gap-3 mt-4 product-rating-row">
                             <div class="text-yellow-400 text-sm" aria-label="Rating">
@@ -196,19 +185,19 @@
                             <p id="productDeliveryInfo" class="text-sm text-gray-500 mt-1">In stock - Delivery in Morocco: 35 MAD (VAT included)</p>
                         </div>
 
-                        <!-- Shown when no prices — item can still be added while pricing stays pending -->
+                        <!-- Shown when no prices � item can still be added while pricing stays pending -->
                         <div class="mt-6 pt-6 border-t border-gray-200" id="productOndemandBox" hidden>
                             <div class="product-ondemand-box">
                                 <div class="product-ondemand-icon"><i class="fas fa-bag-shopping"></i></div>
                                 <div>
-                                    <p class="product-ondemand-title">Price on Request</p>
-                                    <p class="product-ondemand-sub">Select your size and add it to cart. We will confirm the price with you before finalizing the order.</p>
+                                    <p class="product-ondemand-title" data-i18n="product.ondemand_title">Price on Request</p>
+                                    <p class="product-ondemand-sub" data-i18n="product.ondemand_sub">Select your size and add it to cart. We will confirm the price with you before finalizing the order.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mt-6">
-                            <p class="text-sm font-semibold text-gray-700 mb-3 product-size-label">Size</p>
+                            <p class="text-sm font-semibold text-gray-700 mb-3 product-size-label" data-i18n="product.size">Size</p>
                             <div id="sizeSelector" class="size-selector-grid">
                                 <div class="size-group size-group-decants">
                                     <p class="size-group-label"><i class="fas fa-flask"></i> D&eacute;cants</p>
@@ -264,26 +253,26 @@
 
                         <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 product-trust-grid">
                             <div id="productDeliveryChip" class="detail-chip"><i class="fas fa-truck text-brand-red"></i> Delivery fee: 35 MAD (VAT included)</div>
-                            <div class="detail-chip"><i class="fas fa-shield-heart text-brand-red"></i> 100% authentic</div>
-                            <div class="detail-chip"><i class="fas fa-rotate-left text-brand-red"></i> Easy returns</div>
+                            <div class="detail-chip"><i class="fas fa-shield-heart text-brand-red"></i> <span data-i18n="product.chip_authentic">100% authentic</span></div>
+                            <div class="detail-chip"><i class="fas fa-rotate-left text-brand-red"></i> <span data-i18n="product.chip_returns">Easy returns</span></div>
                         </div>
 
                         <!-- Fragrance Profile -->
                         <div class="mt-6 pt-6 border-t border-gray-200" id="fragranceProfile">
-                            <p class="text-sm font-semibold text-gray-700 mb-4 product-size-label">Fragrance Profile</p>
+                            <p class="text-sm font-semibold text-gray-700 mb-4 product-size-label" data-i18n="product.fragrance_profile">Fragrance Profile</p>
                             <div class="space-y-3">
                                 <div class="product-dna-row">
-                                    <span class="product-dna-label"><i class="fas fa-clock text-brand-red"></i> Longevity</span>
+                                    <span class="product-dna-label"><i class="fas fa-clock text-brand-red"></i> <span data-i18n="product.dna_longevity">Longevity</span></span>
                                     <div class="product-dna-bar"><div class="product-dna-fill" style="width: 85%"></div></div>
                                     <span class="product-dna-value">8-10h</span>
                                 </div>
                                 <div class="product-dna-row">
-                                    <span class="product-dna-label"><i class="fas fa-wind text-brand-red"></i> Sillage</span>
+                                    <span class="product-dna-label"><i class="fas fa-wind text-brand-red"></i> <span data-i18n="product.dna_sillage">Sillage</span></span>
                                     <div class="product-dna-bar"><div class="product-dna-fill" style="width: 75%"></div></div>
                                     <span class="product-dna-value">Strong</span>
                                 </div>
                                 <div class="product-dna-row">
-                                    <span class="product-dna-label"><i class="fas fa-sun text-brand-red"></i> Season</span>
+                                    <span class="product-dna-label"><i class="fas fa-sun text-brand-red"></i> <span data-i18n="product.dna_season">Season</span></span>
                                     <div class="product-dna-bar"><div class="product-dna-fill" style="width: 90%"></div></div>
                                     <span class="product-dna-value">All Year</span>
                                 </div>
@@ -296,22 +285,22 @@
                                 <div class="product-premium-trust-item">
                                     <i class="fas fa-certificate text-brand-red text-lg"></i>
                                     <div>
-                                        <p class="font-semibold text-sm text-gray-900">Authenticity Guaranteed</p>
-                                        <p class="text-xs text-gray-500">Sourced from official distributors</p>
+                                        <p class="font-semibold text-sm text-gray-900" data-i18n="product.trust_auth_title">Authenticity Guaranteed</p>
+                                        <p class="text-xs text-gray-500" data-i18n="product.trust_auth_sub">Sourced from official distributors</p>
                                     </div>
                                 </div>
                                 <div class="product-premium-trust-item">
                                     <i class="fas fa-gift text-brand-red text-lg"></i>
                                     <div>
-                                        <p class="font-semibold text-sm text-gray-900">Premium Packaging</p>
-                                        <p class="text-xs text-gray-500">Luxury gift-ready presentation</p>
+                                        <p class="font-semibold text-sm text-gray-900" data-i18n="product.trust_pack_title">Premium Packaging</p>
+                                        <p class="text-xs text-gray-500" data-i18n="product.trust_pack_sub">Luxury gift-ready presentation</p>
                                     </div>
                                 </div>
                                 <div class="product-premium-trust-item">
                                     <i class="fas fa-headset text-brand-red text-lg"></i>
                                     <div>
-                                        <p class="font-semibold text-sm text-gray-900">Expert Support</p>
-                                        <p class="text-xs text-gray-500">Fragrance advice available</p>
+                                        <p class="font-semibold text-sm text-gray-900" data-i18n="product.trust_support_title">Expert Support</p>
+                                        <p class="text-xs text-gray-500" data-i18n="product.trust_support_sub">Fragrance advice available</p>
                                     </div>
                                 </div>
                             </div>
@@ -319,7 +308,7 @@
 
                         <!-- Share -->
                         <div class="mt-5 flex items-center gap-3">
-                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Share</span>
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider" data-i18n="product.share">Share</span>
                             <div class="flex items-center gap-2">
                                 <button class="product-share-btn" type="button" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></button>
                                 <button class="product-share-btn" type="button" aria-label="Share on Instagram"><i class="fab fa-instagram"></i></button>
@@ -335,10 +324,10 @@
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
             <div class="border-b border-gray-200">
                 <div class="flex flex-wrap gap-2 md:gap-4" id="productTabs" role="tablist" aria-label="Product information tabs">
-                    <button class="tab-btn is-active" type="button" data-tab="details" role="tab" aria-selected="true">Details</button>
-                    <button class="tab-btn" type="button" data-tab="notes" role="tab" aria-selected="false">Notes</button>
-                    <button class="tab-btn" type="button" data-tab="ingredients" role="tab" aria-selected="false">Ingredients</button>
-                    <button class="tab-btn" type="button" data-tab="reviews" role="tab" aria-selected="false">Reviews</button>
+                    <button class="tab-btn is-active" type="button" data-tab="details" role="tab" aria-selected="true" data-i18n="product.tab_details">Details</button>
+                    <button class="tab-btn" type="button" data-tab="notes" role="tab" aria-selected="false" data-i18n="product.tab_notes">Notes</button>
+                    <button class="tab-btn" type="button" data-tab="ingredients" role="tab" aria-selected="false" data-i18n="product.tab_ingredients">Ingredients</button>
+                    <button class="tab-btn" type="button" data-tab="reviews" role="tab" aria-selected="false" data-i18n="product.tab_reviews">Reviews</button>
                 </div>
             </div>
 
@@ -346,8 +335,8 @@
                 <section class="product-main-accords-panel product-main-accords-panel-mobile lg:hidden" id="productMainAccordsPanelMobile" hidden>
                     <div class="product-main-accords-card">
                         <div class="product-main-accords-head">
-                            <span class="product-main-accords-kicker">Olfactive Signature</span>
-                            <h2 class="product-main-accords-title">Main accords</h2>
+                            <span class="product-main-accords-kicker" data-i18n="product.accords_kicker">Olfactive Signature</span>
+                            <h2 class="product-main-accords-title" data-i18n="product.accords_title">Main accords</h2>
                         </div>
                         <div class="product-main-accords-list" id="productMainAccordsListMobile"></div>
                     </div>
@@ -364,25 +353,25 @@
                         <article class="note-card pyramid-level pyramid-top">
                             <div class="pyramid-icon"><i class="fas fa-wind"></i></div>
                             <div class="pyramid-content">
-                                <h3 class="font-bold text-brand-dark text-lg">Top Notes</h3>
+                                <h3 class="font-bold text-brand-dark text-lg" data-i18n="product.notes_top">Top Notes</h3>
                                 <p class="text-sm text-gray-600 mt-2">Bergamot, pear blossom, pink pepper</p>
-                                <span class="pyramid-duration">First impression · 15-30 min</span>
+                                <span class="pyramid-duration">First impression � 15-30 min</span>
                             </div>
                         </article>
                         <article class="note-card pyramid-level pyramid-heart">
                             <div class="pyramid-icon"><i class="fas fa-heart"></i></div>
                             <div class="pyramid-content">
-                                <h3 class="font-bold text-brand-dark text-lg">Heart Notes</h3>
+                                <h3 class="font-bold text-brand-dark text-lg" data-i18n="product.notes_heart">Heart Notes</h3>
                                 <p class="text-sm text-gray-600 mt-2">Jasmine sambac, iris, rose petals</p>
-                                <span class="pyramid-duration">Character · 2-4 hours</span>
+                                <span class="pyramid-duration">Character � 2-4 hours</span>
                             </div>
                         </article>
                         <article class="note-card pyramid-level pyramid-base">
                             <div class="pyramid-icon"><i class="fas fa-mountain"></i></div>
                             <div class="pyramid-content">
-                                <h3 class="font-bold text-brand-dark text-lg">Base Notes</h3>
+                                <h3 class="font-bold text-brand-dark text-lg" data-i18n="product.notes_base">Base Notes</h3>
                                 <p class="text-sm text-gray-600 mt-2">Sandalwood, amber, white musk</p>
-                                <span class="pyramid-duration">Lasting signature · 6+ hours</span>
+                                <span class="pyramid-duration">Lasting signature � 6+ hours</span>
                             </div>
                         </article>
                     </div>
@@ -398,7 +387,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                         <div class="lg:col-span-4 review-summary">
                             <p class="text-5xl font-bold text-brand-dark">4.8</p>
-                            <p class="text-sm text-gray-500 mt-1">Based on 69 verified reviews</p>
+                            <p class="text-sm text-gray-500 mt-1" data-i18n="product.reviews_count">Based on 69 verified reviews</p>
                             <div class="text-yellow-400 mt-3">
                                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                             </div>
@@ -429,12 +418,12 @@
         <section class="bg-brand-light py-12 md:py-14">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between gap-4 mb-6">
-                    <h2 class="text-2xl md:text-3xl font-bold text-brand-dark">You may also like</h2>
-                    <a href="../discover.html" class="text-sm font-semibold text-gray-600 hover:text-gray-900">Explore more <i class="fas fa-arrow-right ml-1 text-xs"></i></a>
+                    <h2 class="text-2xl md:text-3xl font-bold text-brand-dark" data-i18n="product.related_title">You may also like</h2>
+                    <a href="../discover.html" class="text-sm font-semibold text-gray-600 hover:text-gray-900" data-i18n="product.related_link">Explore more <i class="fas fa-arrow-right ml-1 text-xs"></i></a>
                 </div>
 
                 <div class="related-track flex overflow-x-auto gap-5 pb-2 hide-scrollbar snap-x snap-mandatory scroll-smooth">
-                    <article class="related-card js-product-link" data-product-name="Emporio Armani Stronger With You Intensely EDP" data-id="emporio-armani-stronger-with-you-intensely-edp" data-product-brand="GIORGIO ARMANI" data-product-price="50ML 650DH · 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp">
+                    <article class="related-card js-product-link" data-product-name="Emporio Armani Stronger With You Intensely EDP" data-id="emporio-armani-stronger-with-you-intensely-edp" data-product-brand="GIORGIO ARMANI" data-product-price="50ML 650DH � 100ML 850DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp">
                         <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp" alt="Emporio Armani Stronger With You Intensely EDP" class="related-image">
                         <p class="related-brand">GIORGIO ARMANI</p>
                         <h3 class="related-title">Emporio Armani Stronger With You Intensely EDP</h3>
@@ -447,7 +436,7 @@
                         </div>
                     </article>
 
-                    <article class="related-card js-product-link" data-product-name="Jean Paul Gaultier Le male Elixir Eau de Parfum" data-id="jean-paul-gaultier-le-male-elixir-eau-de-parfum" data-product-brand="JEAN PAUL GAULTIER" data-product-price="75ML 990DH · 125ML 1350DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp">
+                    <article class="related-card js-product-link" data-product-name="Jean Paul Gaultier Le male Elixir Eau de Parfum" data-id="jean-paul-gaultier-le-male-elixir-eau-de-parfum" data-product-brand="JEAN PAUL GAULTIER" data-product-price="75ML 990DH � 125ML 1350DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp">
                         <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp" alt="Jean Paul Gaultier Le male Elixir Eau de Parfum" class="related-image">
                         <p class="related-brand">JEAN PAUL GAULTIER</p>
                         <h3 class="related-title">Jean Paul Gaultier Le male Elixir Eau de Parfum</h3>
@@ -460,7 +449,7 @@
                         </div>
                     </article>
 
-                    <article class="related-card js-product-link" data-product-name="Jean Paul Gaultier Le male Le parfum Eau de Parfum" data-id="jean-paul-gaultier-le-male-le-parfum-eau-de-parfum" data-product-brand="JEAN PAUL GAULTIER" data-product-price="75ML 950DH · 125ML 1290DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp">
+                    <article class="related-card js-product-link" data-product-name="Jean Paul Gaultier Le male Le parfum Eau de Parfum" data-id="jean-paul-gaultier-le-male-le-parfum-eau-de-parfum" data-product-brand="JEAN PAUL GAULTIER" data-product-price="75ML 950DH � 125ML 1290DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp">
                         <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp" alt="Jean Paul Gaultier Le male Le parfum Eau de Parfum" class="related-image">
                         <p class="related-brand">JEAN PAUL GAULTIER</p>
                         <h3 class="related-title">Jean Paul Gaultier Le male Le parfum Eau de Parfum</h3>
@@ -473,7 +462,7 @@
                         </div>
                     </article>
 
-                    <article class="related-card js-product-link" data-product-name="Jean Paul Gaultier Le Beau Eau de Parfum" data-id="jean-paul-gaultier-le-beau-eau-de-parfum" data-product-brand="JEAN PAUL GAULTIER" data-product-price="75ML 980DH · 125ML 1320DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp">
+                    <article class="related-card js-product-link" data-product-name="Jean Paul Gaultier Le Beau Eau de Parfum" data-id="jean-paul-gaultier-le-beau-eau-de-parfum" data-product-brand="JEAN PAUL GAULTIER" data-product-price="75ML 980DH � 125ML 1320DH" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp">
                         <img src="https://raw.githubusercontent.com/perfumiro/max/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp" alt="Jean Paul Gaultier Le Beau Eau de Parfum" class="related-image">
                         <p class="related-brand">JEAN PAUL GAULTIER</p>
                         <h3 class="related-title">Jean Paul Gaultier Le Beau Eau de Parfum</h3>
@@ -490,7 +479,7 @@
         </section>
 
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
-            <h2 class="text-2xl md:text-3xl font-bold text-brand-dark mb-6">More reviews</h2>
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-dark mb-6" data-i18n="product.more_reviews">More reviews</h2>
 
             <div class="customer-reviews-grid">
                 <aside class="customer-rating-panel">
@@ -524,12 +513,12 @@
                         </div>
                     </div>
 
-                    <p class="customer-rating-footnote">Calculated from verified customer ratings.</p>
+                    <p class="customer-rating-footnote" data-i18n="product.rating_footnote">Calculated from verified customer ratings.</p>
                 </aside>
 
                 <div class="customer-reviews-panel">
                     <div class="customer-reviews-toolbar">
-                        <p class="text-sm font-semibold text-gray-800">5 star · 69 reviews</p>
+                        <p class="text-sm font-semibold text-gray-800">5 star � 69 reviews</p>
                         <button class="text-sm text-gray-600 hover:text-gray-900" type="button">Sort by: Most relevant <i class="fas fa-chevron-down text-xs ml-1"></i></button>
                     </div>
 
@@ -561,52 +550,52 @@
 
         <section class="ipordise-adv-news py-16 border-t border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h3 class="text-center text-xl font-bold text-gray-800 mb-10 ipordise-adv-title">IPORDISE Advantages</h3>
+                <h3 class="text-center text-xl font-bold text-gray-800 mb-10 ipordise-adv-title" data-i18n="product.adv_title">IPORDISE Advantages</h3>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 text-center ipordise-adv-grid">
                     <div class="flex flex-col items-center justify-center space-y-3 ipordise-adv-item">
                         <i class="fas fa-truck-fast text-3xl text-gray-600 ipordise-adv-icon"></i>
                         <div>
-                            <h4 class="font-bold text-sm text-gray-800 ipordise-adv-heading">Delivery in Morocco</h4>
-                            <p class="text-xs text-gray-500 mt-1 ipordise-adv-copy">Fixed fee: 35 MAD</p>
+                            <h4 class="font-bold text-sm text-gray-800 ipordise-adv-heading" data-i18n="product.adv_delivery_h">Delivery in Morocco</h4>
+                            <p class="text-xs text-gray-500 mt-1 ipordise-adv-copy" data-i18n="product.adv_delivery_p">Fixed fee: 35 MAD</p>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center space-y-3 ipordise-adv-item">
                         <i class="fas fa-box-open text-3xl text-gray-600 ipordise-adv-icon"></i>
                         <div>
-                            <h4 class="font-bold text-sm text-gray-800 ipordise-adv-heading">Money-back Guarantee</h4>
-                            <p class="text-xs text-gray-500 mt-1 ipordise-adv-copy">14 days for returns, subject to stated conditions</p>
+                            <h4 class="font-bold text-sm text-gray-800 ipordise-adv-heading" data-i18n="product.adv_returns_h">Money-back Guarantee</h4>
+                            <p class="text-xs text-gray-500 mt-1 ipordise-adv-copy" data-i18n="product.adv_returns_p">14 days for returns, subject to stated conditions</p>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center space-y-3 ipordise-adv-item">
                         <i class="fas fa-lock text-3xl text-gray-600 ipordise-adv-icon"></i>
                         <div>
-                            <h4 class="font-bold text-sm text-gray-800 ipordise-adv-heading">Secure Payment & 1-Click Shop</h4>
-                            <p class="text-xs text-gray-500 mt-1 ipordise-adv-copy">Fast, secure and no hidden fees</p>
+                            <h4 class="font-bold text-sm text-gray-800 ipordise-adv-heading" data-i18n="product.adv_payment_h">Secure Payment & 1-Click Shop</h4>
+                            <p class="text-xs text-gray-500 mt-1 ipordise-adv-copy" data-i18n="product.adv_payment_p">Fast, secure and no hidden fees</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="max-w-4xl mx-auto text-center ipordise-newsletter-shell">
-                    <p class="text-lg text-gray-700 mb-2 ipordise-news-title">Subscribe to our newsletter to receive new product updates and beauty tips.</p>
-                    <p class="text-lg font-bold text-gray-800 mb-8 ipordise-news-subtitle">Don't miss our exclusive offers!</p>
+                    <p class="text-lg text-gray-700 mb-2 ipordise-news-title" data-i18n="product.news_title">Subscribe to our newsletter to receive new product updates and beauty tips.</p>
+                    <p class="text-lg font-bold text-gray-800 mb-8 ipordise-news-subtitle" data-i18n="product.news_subtitle">Don't miss our exclusive offers!</p>
 
                     <form class="space-y-6 ipordise-news-form">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div class="text-left">
-                                <input type="text" placeholder="Name *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
-                                <p class="text-[10px] text-gray-500 mt-1">* Required fields</p>
+                                <input type="text" data-i18n-placeholder="index.news_ph_name" placeholder="Name *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
+                                <p class="text-[10px] text-gray-500 mt-1" data-i18n="index.news_required">* Required fields</p>
                             </div>
                             <div class="text-left">
-                                <input type="email" placeholder="Email address *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
+                                <input type="email" data-i18n-placeholder="index.news_ph_email" placeholder="Email address *" required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-sm ipordise-news-input">
                             </div>
                             <div class="text-left">
                                 <div class="relative">
                                     <select required class="w-full border border-gray-300 px-4 py-3 rounded focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red bg-white text-gray-500 text-sm appearance-none ipordise-news-input">
-                                        <option value="" disabled selected>Gender *</option>
-                                        <option value="female">Female</option>
-                                        <option value="male">Male</option>
-                                        <option value="other">Other</option>
+                                        <option value="" disabled selected data-i18n="index.news_gender_ph">Gender *</option>
+                                        <option value="female" data-i18n="index.news_gender_female">Female</option>
+                                        <option value="male" data-i18n="index.news_gender_male">Male</option>
+                                        <option value="other" data-i18n="index.news_gender_other">Other</option>
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
                                         <i class="fas fa-chevron-down text-xs"></i>
@@ -617,10 +606,10 @@
 
                         <div class="flex items-center justify-center space-x-2 text-sm text-gray-600 ipordise-privacy-row">
                             <input type="checkbox" id="privacy" required class="w-4 h-4 text-brand-red rounded border-gray-300 focus:ring-brand-red cursor-pointer">
-                            <label for="privacy" class="cursor-pointer">I have read the <a href="privacy-policy.html" class="text-blue-500 hover:text-blue-700 underline transition ipordise-privacy-link">privacy policy</a> and I want to subscribe to the IPORDISE newsletter. *</label>
+                            <label for="privacy" class="cursor-pointer" data-i18n-html="index.news_privacy">I have read the <a href="privacy-policy.html" class="text-blue-500 hover:text-blue-700 underline transition ipordise-privacy-link">privacy policy</a> and I want to subscribe to the IPORDISE newsletter. *</label>
                         </div>
 
-                        <button type="submit" class="text-white font-bold py-3 px-12 rounded-full transition duration-300 shadow-md uppercase tracking-wide text-sm mt-4 ipordise-news-submit">
+                        <button type="submit" class="text-white font-bold py-3 px-12 rounded-full transition duration-300 shadow-md uppercase tracking-wide text-sm mt-4 ipordise-news-submit" data-i18n="index.news_submit">
                             SUBSCRIBE
                         </button>
                     </form>
@@ -634,7 +623,7 @@
             <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
                 <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-6">The ultimate destination for luxury perfumes online. Elevate your everyday routine.</p>
+                    <p class="text-gray-400 text-sm mb-6"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online. Elevate your everyday routine.</p>
                     <div class="flex space-x-4">
                         <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition"><i class="fab fa-facebook-f"></i></a>
@@ -643,35 +632,35 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Customer Care</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.customer_service">Customer Care</h4>
                     <ul class="footer-links">
-                        <li><a href="contact.html">Contact Us</a></li>
-                        <li><a href="shipping.html">Shipping &amp; Delivery</a></li>
-                        <li><a href="returns.html">Returns &amp; Refunds</a></li>
-                        <li><a href="track-order.html">Track Order</a></li>
-                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li>
+                        <li><a href="shipping.html" data-i18n="footer.shipping_returns">Shipping &amp; Delivery</a></li>
+                        <li><a href="returns.html" data-i18n="footer.returns">Returns &amp; Refunds</a></li>
+                        <li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li>
+                        <li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">About IPORDISE</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.about">About IPORDISE</h4>
                     <ul class="footer-links">
-                        <li><a href="our-story.html">Our Story</a></li>
-                        <li><a href="careers.html">Careers</a></li>
-                        <li><a href="store-locator.html">Find a Store</a></li>
-                        <li><a href="support.html">Support</a></li>
+                        <li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li>
+                        <li><a href="careers.html" data-i18n="footer.careers">Careers</a></li>
+                        <li><a href="store-locator.html" data-i18n="footer.find_store">Find a Store</a></li>
+                        <li><a href="support.html" data-i18n="footer.support">Support</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Legal</h4>
+                    <h4 class="footer-col-title" data-i18n="product.footer_legal">Legal</h4>
                     <ul class="footer-links">
-                        <li><a href="terms.html">Terms &amp; Conditions</a></li>
-                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                        <li><a href="shipping.html">Shipping Policy</a></li>
+                        <li><a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a></li>
+                        <li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li>
+                        <li><a href="shipping.html" data-i18n="product.footer_ship_policy">Shipping Policy</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Newsletter</h4>
-                    <p class="text-gray-400 text-sm mb-4">Subscribe to receive news &amp; exclusive offers.</p>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4" data-i18n="footer.newsletter_desc">Subscribe to receive news &amp; exclusive offers.</p>
                     <div class="flex">
                         <input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red text-sm">
                         <a href="newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition text-sm">GO</a>
@@ -680,7 +669,7 @@
             </div>
 
             <div class="border-t border-white/10 pt-8 mb-6">
-                <p class="text-center text-xs text-gray-500 uppercase tracking-wider mb-4">Secure Payment Methods</p>
+                <p class="text-center text-xs text-gray-500 uppercase tracking-wider mb-4" data-i18n="footer.payment_methods">Secure Payment Methods</p>
                 <div class="flex items-center justify-center flex-wrap gap-3">
                     <span class="payment-icon"><i class="fab fa-cc-visa text-xl"></i></span>
                     <span class="payment-icon"><i class="fab fa-cc-mastercard text-xl"></i></span>
@@ -692,11 +681,11 @@
             </div>
 
             <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-gray-500 text-xs">
-                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <p data-i18n="footer.copyright">&copy; 2026 IPORDISE. All rights reserved.</p>
                 <div class="flex items-center gap-4">
-                    <a href="terms.html" class="hover:text-white transition">Terms</a>
-                    <a href="privacy-policy.html" class="hover:text-white transition">Privacy</a>
-                    <a href="contact.html" class="hover:text-white transition">Contact</a>
+                    <a href="terms.html" class="hover:text-white transition" data-i18n="footer.terms">Terms</a>
+                    <a href="privacy-policy.html" class="hover:text-white transition" data-i18n="footer.privacy">Privacy</a>
+                    <a href="contact.html" class="hover:text-white transition" data-i18n="footer.contact">Contact</a>
                 </div>
             </div>
         </div>

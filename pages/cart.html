@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Your Cart</title>
+    <title data-i18n-title="cart.page_title">IPORDISE - Your Cart</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,12 +13,13 @@
         window.__IPORDISE_DEDICATED_CART__ = true;
     </script>
     <script src="../script.js"></script>
+    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
     <!-- Announcement Bar -->
-    <div class="page-announce-bar">
+    <div class="page-announce-bar" data-i18n-html="cart.announce">
         <i class="fas fa-truck-fast mr-2 text-brand-red" style="color:#e73c3c"></i>
         Fixed delivery fee of <strong style="color:#fff">35 MAD</strong> anywhere in Morocco &mdash; fast & secure.
         <a href="../discover.html" class="ml-2">SHOP NOW &rarr;</a>
@@ -54,31 +55,31 @@
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
             <!-- Breadcrumb -->
             <p class="text-white/60 text-xs mb-5 flex items-center gap-1.5">
-                <a href="../index.html" class="hover:text-white transition">Home</a>
+                <a href="../index.html" class="hover:text-white transition" data-i18n="common.breadcrumb_home">Home</a>
                 <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
-                <span class="text-white/90 font-semibold">Cart</span>
+                <span class="text-white/90 font-semibold" data-i18n="cart.breadcrumb">Cart</span>
             </p>
 
             <!-- Step indicator -->
             <div class="page-steps mb-5">
                 <div class="page-step is-active">
                     <span class="page-step-num">1</span>
-                    <span class="page-step-label">Cart</span>
+                    <span class="page-step-label" data-i18n="cart.step1">Cart</span>
                 </div>
                 <div class="page-step-sep"></div>
                 <div class="page-step">
                     <span class="page-step-num">2</span>
-                    <span class="page-step-label">Checkout</span>
+                    <span class="page-step-label" data-i18n="cart.step2">Checkout</span>
                 </div>
                 <div class="page-step-sep"></div>
                 <div class="page-step">
                     <span class="page-step-num">3</span>
-                    <span class="page-step-label">Confirm</span>
+                    <span class="page-step-label" data-i18n="cart.step3">Confirm</span>
                 </div>
             </div>
 
-            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight">Your Cart</h1>
-            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base">Review and adjust your selection before proceeding to secure checkout.</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight" data-i18n="cart.h1">Your Cart</h1>
+            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base" data-i18n="cart.subtitle">Review and adjust your selection before proceeding to secure checkout.</p>
         </div>
     </section>
 
@@ -90,7 +91,7 @@
             <div class="mb-7 flex flex-wrap items-center justify-between gap-3">
                 <p id="cartCountText" class="text-sm text-gray-500 font-medium"></p>
                 <a href="../discover.html" class="text-sm font-semibold text-gray-600 hover:text-brand-red transition inline-flex items-center gap-2">
-                    <i class="fas fa-arrow-left text-xs"></i> Continue Shopping
+                    <i class="fas fa-arrow-left text-xs"></i> <span data-i18n="cart.continue">Continue Shopping</span>
                 </a>
             </div>
 
@@ -104,72 +105,72 @@
                     <!-- Order Summary -->
                     <div class="order-summary-card">
                         <div class="order-summary-head">
-                            <h3>Order Summary</h3>
+                            <h3 data-i18n="cart.order_summary">Order Summary</h3>
                             <i class="fas fa-receipt text-white/40 text-sm"></i>
                         </div>
                         <div class="order-summary-body">
                             <div class="space-y-0.5 mb-3">
                                 <div class="order-line">
-                                    <span class="lbl">Subtotal</span>
-                                    <span id="cartSubtotal" class="val">â€”</span>
+                                    <span class="lbl" data-i18n="cart.subtotal">Subtotal</span>
+                                    <span id="cartSubtotal" class="val">—</span>
                                 </div>
                                 <div class="order-line">
-                                    <span class="lbl">Shipping</span>
+                                    <span class="lbl" data-i18n="cart.shipping">Shipping</span>
                                     <span id="cartShipping" class="val text-green-600">35 MAD</span>
                                 </div>
                                 <div class="order-line">
-                                    <span class="lbl">Tax</span>
+                                    <span class="lbl" data-i18n="cart.tax">Tax</span>
                                     <span id="cartTax" class="val">Incl.</span>
                                 </div>
                                 <div class="order-line">
-                                    <span class="lbl" style="color:#e73c3c">Discount</span>
+                                    <span class="lbl" style="color:#e73c3c" data-i18n="cart.discount">Discount</span>
                                     <span id="cartPromo" class="val" style="color:#e73c3c">0 MAD</span>
                                 </div>
                             </div>
 
                             <!-- Promo code -->
                             <div class="promo-code-row mb-4">
-                                <input type="text" placeholder="Promo code" aria-label="Promo code">
-                                <button type="button">Apply</button>
+                                <input type="text" placeholder="Promo code" aria-label="Promo code" data-i18n-placeholder="cart.promo_ph">
+                                <button type="button" data-i18n="cart.apply">Apply</button>
                             </div>
 
                             <div class="order-total-row mb-4">
-                                <span class="order-total-label">Total</span>
-                                <span id="cartTotal" class="order-total-value">â€”</span>
+                                <span class="order-total-label" data-i18n="cart.total">Total</span>
+                                <span id="cartTotal" class="order-total-value">—</span>
                             </div>
 
                             <a id="proceedToCheckoutBtn" href="checkout.html" class="checkout-cta-btn" aria-disabled="false">
-                                Proceed to Checkout <i class="fas fa-lock text-xs"></i>
+                                <span data-i18n="cart.checkout_btn">Proceed to Checkout</span> <i class="fas fa-lock text-xs"></i>
                             </a>
                         </div>
 
                         <!-- Trust strip -->
                         <div class="trust-strip">
-                            <span class="trust-strip-item"><i class="fas fa-lock"></i> Secure</span>
-                            <span class="trust-strip-item"><i class="fas fa-rotate-left"></i> 14-day return</span>
-                            <span class="trust-strip-item"><i class="fas fa-certificate"></i> 100% Authentic</span>
+                            <span class="trust-strip-item"><i class="fas fa-lock"></i> <span data-i18n="cart.trust_secure">Secure</span></span>
+                            <span class="trust-strip-item"><i class="fas fa-rotate-left"></i> <span data-i18n="cart.trust_return">14-day return</span></span>
+                            <span class="trust-strip-item"><i class="fas fa-certificate"></i> <span data-i18n="cart.trust_authentic">100% Authentic</span></span>
                         </div>
                     </div>
 
                     <!-- Delivery info -->
                     <div class="sidebar-info-card">
-                        <p class="sidebar-card-title"><i class="fas fa-truck-fast"></i> Delivery</p>
-                        <p class="text-sm text-gray-600 leading-relaxed">Fixed delivery fee of <strong>35 MAD</strong> in all Morocco cities. Express shipping to major cities.</p>
+                        <p class="sidebar-card-title"><i class="fas fa-truck-fast"></i> <span data-i18n="cart.delivery_title">Delivery</span></p>
+                        <p class="text-sm text-gray-600 leading-relaxed" data-i18n-html="cart.delivery_desc">Fixed delivery fee of <strong>35 MAD</strong> in all Morocco cities. Express shipping to major cities.</p>
                     </div>
 
                     <!-- Benefits -->
                     <div class="sidebar-info-card">
-                        <p class="sidebar-card-title"><i class="fas fa-shield-halved"></i> Shopping Benefits</p>
+                        <p class="sidebar-card-title"><i class="fas fa-shield-halved"></i> <span data-i18n="cart.benefits_title">Shopping Benefits</span></p>
                         <ul class="space-y-2.5 text-sm text-gray-600">
-                            <li class="flex items-start gap-2.5"><i class="fas fa-box text-brand-red mt-0.5 text-xs"></i> Luxury-safe packaging for fragrances</li>
-                            <li class="flex items-start gap-2.5"><i class="fas fa-rotate-left text-brand-red mt-0.5 text-xs"></i> Easy 14-day returns, no questions asked</li>
-                            <li class="flex items-start gap-2.5"><i class="fas fa-certificate text-brand-red mt-0.5 text-xs"></i> 100% authentic products guaranteed</li>
+                            <li class="flex items-start gap-2.5"><i class="fas fa-box text-brand-red mt-0.5 text-xs"></i> <span data-i18n="cart.benefit1">Luxury-safe packaging for fragrances</span></li>
+                            <li class="flex items-start gap-2.5"><i class="fas fa-rotate-left text-brand-red mt-0.5 text-xs"></i> <span data-i18n="cart.benefit2">Easy 14-day returns, no questions asked</span></li>
+                            <li class="flex items-start gap-2.5"><i class="fas fa-certificate text-brand-red mt-0.5 text-xs"></i> <span data-i18n="cart.benefit3">100% authentic products guaranteed</span></li>
                         </ul>
                     </div>
 
                     <!-- Payment logos -->
                     <div class="sidebar-info-card">
-                        <p class="sidebar-card-title"><i class="fas fa-credit-card"></i> We Accept</p>
+                        <p class="sidebar-card-title"><i class="fas fa-credit-card"></i> <span data-i18n="cart.we_accept">We Accept</span></p>
                         <div class="flex flex-wrap gap-2 mt-1">
                             <span class="payment-icon"><i class="fab fa-cc-visa text-xl"></i></span>
                             <span class="payment-icon"><i class="fab fa-cc-mastercard text-xl"></i></span>
@@ -188,7 +189,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                 <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online. Elevate your everyday.</p>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online. Elevate your everyday.</p>
                     <div class="flex space-x-3">
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
@@ -196,26 +197,26 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Customer Service</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4>
                     <ul class="footer-links">
-                        <li><a href="contact.html">Contact Us</a></li>
-                        <li><a href="shipping.html">Shipping & Returns</a></li>
-                        <li><a href="track-order.html">Track Order</a></li>
-                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li>
+                        <li><a href="shipping.html" data-i18n="footer.shipping_returns">Shipping &amp; Returns</a></li>
+                        <li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li>
+                        <li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">About</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about">About</h4>
                     <ul class="footer-links">
-                        <li><a href="our-story.html">Our Story</a></li>
-                        <li><a href="careers.html">Careers</a></li>
-                        <li><a href="store-locator.html">Find a Store</a></li>
-                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li>
+                        <li><a href="careers.html" data-i18n="footer.careers">Careers</a></li>
+                        <li><a href="store-locator.html" data-i18n="footer.find_store">Find a Store</a></li>
+                        <li><a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-col-title">Newsletter</h4>
-                    <p class="text-gray-400 text-sm mb-4">Subscribe for new arrivals and exclusive deals.</p>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4" data-i18n="footer.newsletter_desc">Subscribe for new arrivals and exclusive deals.</p>
                     <div class="flex">
                         <input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10">
                         <a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a>
@@ -223,11 +224,11 @@
                 </div>
             </div>
             <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
-                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <p data-i18n="footer.copyright">&copy; 2026 IPORDISE. All rights reserved.</p>
                 <div class="flex gap-4">
-                    <a href="terms.html" class="hover:text-white transition">Terms</a>
-                    <a href="privacy-policy.html" class="hover:text-white transition">Privacy</a>
-                    <a href="returns.html" class="hover:text-white transition">Returns</a>
+                    <a href="terms.html" class="hover:text-white transition" data-i18n="footer.terms">Terms</a>
+                    <a href="privacy-policy.html" class="hover:text-white transition" data-i18n="footer.privacy">Privacy</a>
+                    <a href="returns.html" class="hover:text-white transition" data-i18n="footer.returns">Returns</a>
                 </div>
             </div>
         </div>
@@ -236,3 +237,4 @@
     <script src="cart.js" defer></script>
 </body>
 </html>
+

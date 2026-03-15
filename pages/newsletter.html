@@ -1,19 +1,19 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Newsletter</title>
+    <title data-i18n-title="newsletter.page_title">IPORDISE - Newsletter</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../script.js"></script>
+    <script src="../script.js"></script>`n    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <div class="page-announce-bar">
+    <div class="page-announce-bar" data-i18n-html="newsletter.announce">
         <i class="fas fa-envelope-open-text mr-2" style="color:#e73c3c"></i>
         Join <strong style="color:#fff">12,000+ subscribers</strong> who get exclusive scent drops first.
     </div>
@@ -43,10 +43,10 @@
             <p class="text-white/60 text-xs mb-4 flex items-center gap-1.5">
                 <a href="../index.html" class="hover:text-white transition">Home</a>
                 <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
-                <span class="text-white/90 font-semibold">Newsletter</span>
+                <span class="text-white/90 font-semibold" data-i18n="newsletter.breadcrumb">Newsletter</span>
             </p>
-            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight">Stay in the Loop</h1>
-            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base">Be the first to know about exclusive offers, new fragrance launches, and beauty tips.</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight" data-i18n="newsletter.h1">Stay in the Loop</h1>
+            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base" data-i18n="newsletter.subtitle">Be the first to know about exclusive offers, new fragrance launches, and beauty tips.</p>
         </div>
     </section>
 
@@ -56,31 +56,31 @@
             <!-- Hero subscribe card -->
             <div class="news-hero-card mb-8">
                 <div class="relative z-10">
-                    <p class="faq-category-title mb-4 mx-auto w-fit" style="background:rgba(231,60,60,0.2);color:#f87171"><i class="fas fa-envelope"></i> Subscribe now</p>
-                    <h2 class="text-2xl sm:text-3xl font-serif font-bold text-white mb-3">Your fragrance journey starts here</h2>
-                    <p class="text-white/65 text-sm mb-8 max-w-lg mx-auto">Get exclusive access to new arrivals, members-only discounts, and curated scent guides delivered straight to your inbox.</p>
+                    <p class="faq-category-title mb-4 mx-auto w-fit" style="background:rgba(231,60,60,0.2);color:#f87171"><i class="fas fa-envelope"></i> <span data-i18n="newsletter.subscribe_cat">Subscribe now</span></p>
+                    <h2 class="text-2xl sm:text-3xl font-serif font-bold text-white mb-3" data-i18n="newsletter.card_h">Your fragrance journey starts here</h2>
+                    <p class="text-white/65 text-sm mb-8 max-w-lg mx-auto" data-i18n="newsletter.card_p">Get exclusive access to new arrivals, members-only discounts, and curated scent guides delivered straight to your inbox.</p>
 
                     <form class="max-w-xl mx-auto" id="newsletterForm">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-                            <input type="text" placeholder="First name *" required class="contact-input sm:col-span-1">
-                            <input type="email" placeholder="Email address *" required class="contact-input sm:col-span-2">
+                            <input type="text" placeholder="First name *" required class="contact-input sm:col-span-1" data-i18n-placeholder="newsletter.fname_ph">
+                            <input type="email" placeholder="Email address *" required class="contact-input sm:col-span-2" data-i18n-placeholder="newsletter.email_ph">
                         </div>
                         <div class="mb-4">
                             <select class="contact-input">
-                                <option value="">I'm interested in... (optional)</option>
-                                <option>Men's fragrances</option>
-                                <option>Women's fragrances</option>
-                                <option>Unisex &amp; niche</option>
-                                <option>Arabian &amp; oud</option>
-                                <option>Discovery sets</option>
-                                <option>Offers &amp; promotions</option>
+                                <option value="" data-i18n="newsletter.interest_ph">I'm interested in... (optional)</option>
+                                <option data-i18n="newsletter.opt_men">Men's fragrances</option>
+                                <option data-i18n="newsletter.opt_women">Women's fragrances</option>
+                                <option data-i18n="newsletter.opt_unisex">Unisex &amp; niche</option>
+                                <option data-i18n="newsletter.opt_arabian">Arabian &amp; oud</option>
+                                <option data-i18n="newsletter.opt_discovery">Discovery sets</option>
+                                <option data-i18n="newsletter.opt_offers">Offers &amp; promotions</option>
                             </select>
                         </div>
                         <label class="flex items-start gap-2 text-xs text-white/60 mb-5 cursor-pointer">
                             <input type="checkbox" required class="mt-0.5 accent-red-500">
-                            <span>I agree to receive marketing emails from IPORDISE. I can unsubscribe at any time. See our <a href="privacy-policy.html" class="underline text-white/80">Privacy Policy</a>.</span>
+                            <span data-i18n-html="newsletter.consent">I agree to receive marketing emails from IPORDISE. I can unsubscribe at any time. See our <a href="privacy-policy.html" class="underline text-white/80">Privacy Policy</a>.</span>
                         </label>
-                        <button type="submit" class="contact-submit-btn mx-auto justify-center" style="min-width:200px">Subscribe &mdash; It's Free <i class="fas fa-envelope text-sm"></i></button>
+                        <button type="submit" class="contact-submit-btn mx-auto justify-center" style="min-width:200px"><span data-i18n="newsletter.submit_btn">Subscribe &mdash; It's Free</span> <i class="fas fa-envelope text-sm"></i></button>
                     </form>
                 </div>
             </div>
@@ -89,22 +89,22 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
                 <div class="info-card text-center">
                     <i class="fas fa-bolt text-2xl mb-2" style="color:#e73c3c"></i>
-                    <h3 class="font-bold text-sm text-brand-dark">First access</h3>
-                    <p class="text-xs text-gray-500 mt-1">New arrivals and limited editions land in your inbox before the public.</p>
+                    <h3 class="font-bold text-sm text-brand-dark" data-i18n="newsletter.perk1_h">First access</h3>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="newsletter.perk1_p">New arrivals and limited editions land in your inbox before the public.</p>
                 </div>
                 <div class="info-card text-center">
                     <i class="fas fa-percent text-2xl mb-2" style="color:#e73c3c"></i>
-                    <h3 class="font-bold text-sm text-brand-dark">Exclusive discounts</h3>
-                    <p class="text-xs text-gray-500 mt-1">Subscriber-only promo codes and flash sales you won't find anywhere else.</p>
+                    <h3 class="font-bold text-sm text-brand-dark" data-i18n="newsletter.perk2_h">Exclusive discounts</h3>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="newsletter.perk2_p">Subscriber-only promo codes and flash sales you won't find anywhere else.</p>
                 </div>
                 <div class="info-card text-center">
                     <i class="fas fa-book-open text-2xl mb-2" style="color:#e73c3c"></i>
-                    <h3 class="font-bold text-sm text-brand-dark">Scent guides</h3>
-                    <p class="text-xs text-gray-500 mt-1">Curated fragrance guides, layering tips, and seasonal picks from our experts.</p>
+                    <h3 class="font-bold text-sm text-brand-dark" data-i18n="newsletter.perk3_h">Scent guides</h3>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="newsletter.perk3_p">Curated fragrance guides, layering tips, and seasonal picks from our experts.</p>
                 </div>
             </div>
 
-            <p class="text-center text-xs text-gray-400">We respect your inbox &mdash; no spam, no more than 2 emails per week. Unsubscribe anytime.</p>
+            <p class="text-center text-xs text-gray-400" data-i18n="newsletter.no_spam">We respect your inbox &mdash; no spam, no more than 2 emails per week. Unsubscribe anytime.</p>
         </div>
     </main>
 
@@ -113,26 +113,27 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                 <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online.</p>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online.</p>
                     <div class="flex space-x-3">
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
-                <div><h4 class="footer-col-title">Customer Service</h4><ul class="footer-links"><li><a href="contact.html">Contact Us</a></li><li><a href="shipping.html">Shipping &amp; Returns</a></li><li><a href="track-order.html">Track Order</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
-                <div><h4 class="footer-col-title">About</h4><ul class="footer-links"><li><a href="our-story.html">Our Story</a></li><li><a href="careers.html">Careers</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4><ul class="footer-links"><li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li><li><a href="shipping.html" data-i18n="footer.shipping_returns">Shipping &amp; Returns</a></li><li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li><li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about">About</h4><ul class="footer-links"><li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li><li><a href="careers.html" data-i18n="footer.careers">Careers</a></li><li><a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li></ul></div>
                 <div>
-                    <h4 class="footer-col-title">Newsletter</h4>
-                    <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals and new arrivals.</p>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4" data-i18n="footer.newsletter_desc">Subscribe for exclusive deals and new arrivals.</p>
                     <div class="flex"><input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a></div>
                 </div>
             </div>
             <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
-                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
-                <div class="flex gap-4"><a href="terms.html" class="hover:text-white transition">Terms</a><a href="privacy-policy.html" class="hover:text-white transition">Privacy</a><a href="returns.html" class="hover:text-white transition">Returns</a></div>
+                <p data-i18n="footer.copyright">&copy; 2026 IPORDISE. All rights reserved.</p>
+                <div class="flex gap-4"><a href="terms.html" class="hover:text-white transition" data-i18n="footer.terms">Terms</a><a href="privacy-policy.html" class="hover:text-white transition" data-i18n="footer.privacy">Privacy</a><a href="returns.html" class="hover:text-white transition" data-i18n="footer.returns">Returns</a></div>
             </div>
         </div>
     </footer>
 </body>
 </html>
+

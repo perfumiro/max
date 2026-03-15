@@ -1,19 +1,19 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPORDISE - Returns &amp; Refunds</title>
+    <title data-i18n-title="returns.page_title">IPORDISE - Returns &amp; Refunds</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../script.js"></script>
+    <script src="../script.js"></script>`n    <script src="../i18n.js"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <div class="page-announce-bar">
+    <div class="page-announce-bar" data-i18n-html="returns.announce">
         <i class="fas fa-rotate-left mr-2" style="color:#e73c3c"></i>
         <strong style="color:#fff">14-day returns</strong> &mdash; simple, transparent, and hassle-free.
         <a href="../discover.html" class="ml-2">SHOP NOW &rarr;</a>
@@ -44,10 +44,10 @@
             <p class="text-white/60 text-xs mb-4 flex items-center gap-1.5">
                 <a href="../index.html" class="hover:text-white transition">Home</a>
                 <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
-                <span class="text-white/90 font-semibold">Returns &amp; Refunds</span>
+                <span class="text-white/90 font-semibold" data-i18n="returns.breadcrumb">Returns &amp; Refunds</span>
             </p>
-            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight">Returns &amp; Refunds</h1>
-            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base">Need to send something back? We keep the process simple, transparent, and stress-free.</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight" data-i18n="returns.h1">Returns &amp; Refunds</h1>
+            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base" data-i18n="returns.subtitle">Need to send something back? We keep the process simple, transparent, and stress-free.</p>
         </div>
     </section>
 
@@ -56,34 +56,34 @@
 
             <!-- How to return -->
             <div>
-                <p class="faq-category-title mb-4"><i class="fas fa-list-check"></i> How to return</p>
+                <p class="faq-category-title mb-4"><i class="fas fa-list-check"></i> <span data-i18n="returns.how_title">How to return</span></p>
                 <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                     <div class="shipping-step">
                         <div class="shipping-step-num">1</div>
                         <div>
-                            <h3 class="font-semibold text-brand-dark">Contact us within 14 days</h3>
-                            <p class="text-sm text-gray-500 mt-1">Email <a href="mailto:support@ipordise.com" style="color:#e73c3c">support@ipordise.com</a> or reach us on WhatsApp. Include your order number and reason.</p>
+                            <h3 class="font-semibold text-brand-dark" data-i18n="returns.step1_h">Contact us within 14 days</h3>
+                            <p class="text-sm text-gray-500 mt-1" data-i18n-html="returns.step1_p">Email <a href="mailto:support@ipordise.com" style="color:#e73c3c">support@ipordise.com</a> or reach us on WhatsApp. Include your order number and reason.</p>
                         </div>
                     </div>
                     <div class="shipping-step">
                         <div class="shipping-step-num">2</div>
                         <div>
-                            <h3 class="font-semibold text-brand-dark">Get your return label</h3>
-                            <p class="text-sm text-gray-500 mt-1">Our team will send you a return label and instructions within 24 hours of your request.</p>
+                            <h3 class="font-semibold text-brand-dark" data-i18n="returns.step2_h">Get your return label</h3>
+                            <p class="text-sm text-gray-500 mt-1" data-i18n="returns.step2_p">Our team will send you a return label and instructions within 24 hours of your request.</p>
                         </div>
                     </div>
                     <div class="shipping-step">
                         <div class="shipping-step-num">3</div>
                         <div>
-                            <h3 class="font-semibold text-brand-dark">Pack &amp; send the item</h3>
-                            <p class="text-sm text-gray-500 mt-1">Place the item in its original packaging, sealed and unused. Drop it off at the designated courier point.</p>
+                            <h3 class="font-semibold text-brand-dark" data-i18n="returns.step3_h">Pack &amp; send the item</h3>
+                            <p class="text-sm text-gray-500 mt-1" data-i18n="returns.step3_p">Place the item in its original packaging, sealed and unused. Drop it off at the designated courier point.</p>
                         </div>
                     </div>
                     <div class="shipping-step">
                         <div class="shipping-step-num">4</div>
                         <div>
-                            <h3 class="font-semibold text-brand-dark">Refund processed</h3>
-                            <p class="text-sm text-gray-500 mt-1">Once received and inspected, your refund is processed within 3&ndash;5 business days.</p>
+                            <h3 class="font-semibold text-brand-dark" data-i18n="returns.step4_h">Refund processed</h3>
+                            <p class="text-sm text-gray-500 mt-1" data-i18n="returns.step4_p">Once received and inspected, your refund is processed within 3&ndash;5 business days.</p>
                         </div>
                     </div>
                 </div>
@@ -93,28 +93,28 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div class="info-card">
                     <div class="info-card-icon"><i class="fas fa-calendar-check"></i></div>
-                    <h3 class="font-bold text-brand-dark mb-1">14-day window</h3>
-                    <p class="text-sm text-gray-600">Return requests must be submitted within 14 days of the delivery date.</p>
+                    <h3 class="font-bold text-brand-dark mb-1" data-i18n="returns.window_title">14-day window</h3>
+                    <p class="text-sm text-gray-600" data-i18n="returns.window_desc">Return requests must be submitted within 14 days of the delivery date.</p>
                 </div>
                 <div class="info-card">
                     <div class="info-card-icon"><i class="fas fa-box"></i></div>
-                    <h3 class="font-bold text-brand-dark mb-1">Original condition</h3>
-                    <p class="text-sm text-gray-600">Items must be completely unopened, unused, and returned in original packaging with seals intact.</p>
+                    <h3 class="font-bold text-brand-dark mb-1" data-i18n="returns.condition_title">Original condition</h3>
+                    <p class="text-sm text-gray-600" data-i18n="returns.condition_desc">Items must be completely unopened, unused, and returned in original packaging with seals intact.</p>
                 </div>
                 <div class="info-card">
                     <div class="info-card-icon"><i class="fas fa-ban"></i></div>
-                    <h3 class="font-bold text-brand-dark mb-1">Non-returnable items</h3>
-                    <p class="text-sm text-gray-600">Opened perfumes, personalised orders, and gift sets cannot be returned for hygiene reasons.</p>
+                    <h3 class="font-bold text-brand-dark mb-1" data-i18n="returns.nonreturn_title">Non-returnable items</h3>
+                    <p class="text-sm text-gray-600" data-i18n="returns.nonreturn_desc">Opened perfumes, personalised orders, and gift sets cannot be returned for hygiene reasons.</p>
                 </div>
             </div>
 
             <!-- Contact CTA -->
             <div class="text-center bg-white rounded-2xl border border-gray-100 py-8 px-4 shadow-sm">
-                <p class="font-semibold text-brand-dark mb-1">Questions about your return?</p>
-                <p class="text-sm text-gray-500 mb-4">Our support team is available Mon&ndash;Sat, 9am&ndash;8pm.</p>
+                <p class="font-semibold text-brand-dark mb-1" data-i18n="returns.questions">Questions about your return?</p>
+                <p class="text-sm text-gray-500 mb-4" data-i18n="returns.questions_sub">Our support team is available Mon&ndash;Sat, 9am&ndash;8pm.</p>
                 <div class="flex flex-wrap gap-3 justify-center">
-                    <a href="contact.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm text-white" style="background:#e73c3c">Contact Support <i class="fas fa-arrow-right text-xs"></i></a>
-                    <a href="faq.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm border border-gray-200 text-gray-700 hover:border-brand-red hover:text-brand-red transition">Browse FAQ</a>
+                    <a href="contact.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm text-white" style="background:#e73c3c"><span data-i18n="returns.contact_btn">Contact Support</span> <i class="fas fa-arrow-right text-xs"></i></a>
+                    <a href="faq.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm border border-gray-200 text-gray-700 hover:border-brand-red hover:text-brand-red transition" data-i18n="returns.browse_faq">Browse FAQ</a>
                 </div>
             </div>
         </div>
@@ -125,17 +125,17 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
                 <div class="col-span-2 md:col-span-1">
                     <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
-                    <p class="text-gray-400 text-sm mb-5 leading-relaxed">The ultimate destination for luxury perfumes online.</p>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online.</p>
                     <div class="flex space-x-3">
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
-                <div><h4 class="footer-col-title">Customer Service</h4><ul class="footer-links"><li><a href="contact.html">Contact Us</a></li><li><a href="shipping.html">Shipping &amp; Returns</a></li><li><a href="track-order.html">Track Order</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
-                <div><h4 class="footer-col-title">About</h4><ul class="footer-links"><li><a href="our-story.html">Our Story</a></li><li><a href="careers.html">Careers</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4><ul class="footer-links"><li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li><li><a href="shipping.html">Shipping &amp; Returns</a></li><li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li><li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about">About</h4><ul class="footer-links"><li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li><li><a href="careers.html" data-i18n="footer.careers">Careers</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li></ul></div>
                 <div>
-                    <h4 class="footer-col-title">Newsletter</h4>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
                     <p class="text-gray-400 text-sm mb-4">Subscribe for exclusive deals and new arrivals.</p>
                     <div class="flex"><input type="email" placeholder="Your email" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm">GO</a></div>
                 </div>
@@ -148,3 +148,4 @@
     </footer>
 </body>
 </html>
+
