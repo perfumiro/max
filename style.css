@@ -2298,8 +2298,8 @@ button.product-favorite-btn.is-active {
 #newArrivalsCarousel,
 #brandCarousel,
 .related-track {
-    /* Horizontal-only panning so the browser commits immediately to the swipe */
-    touch-action: pan-x;
+    /* Allow both axes: horizontal for carousel swipe, vertical for page scroll */
+    touch-action: pan-x pan-y;
     scroll-padding-inline: 0.75rem;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
