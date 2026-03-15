@@ -3131,6 +3131,16 @@ document.addEventListener('DOMContentLoaded', () => {
             menu.classList.remove('hidden');
         };
 
+        /* ── On non-discover pages: debounced redirect as user types ── */
+        let redirectTimer = null;
+        const scheduleRedirect = (query) => {
+            clearTimeout(redirectTimer);
+            if (!query.trim()) return;
+            redirectTimer = setTimeout(() => {
+                openDiscoverQuery(query.trim());
+            }, 600);
+        };
+
         searchInputs.forEach((input) => {
             const wrapper = input.closest('.relative') || input.parentElement;
             if (!wrapper) return;
@@ -3146,6 +3156,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const value = event.target.value || '';
                 const suggestions = value.length < 2 ? [] : buildSuggestions(value);
                 renderMenu(menu, suggestions, value);
+                /* On non-discover pages redirect after short pause */
+                if (!onDiscoverPage) {
+                    scheduleRedirect(value);
+                }
             });
 
             input.addEventListener('focus', (event) => {
@@ -3157,16 +3171,12 @@ document.addEventListener('DOMContentLoaded', () => {
             input.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter') {
                     event.preventDefault();
+                    clearTimeout(redirectTimer);
                     const trimmed = String(input.value || '').trim();
-                    if (onDiscoverPage && trimmed) {
-                        openDiscoverQuery(trimmed);
-                    } else if (trimmed) {
-                        openDiscoverQuery(trimmed);
-                    } else {
-                        openDiscoverQuery('', 'all');
-                    }
+                    openDiscoverQuery(trimmed || '', trimmed ? '' : 'all');
                 }
                 if (event.key === 'Escape') {
+                    clearTimeout(redirectTimer);
                     closeAllMenus();
                 }
             });

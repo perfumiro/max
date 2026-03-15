@@ -338,7 +338,7 @@
                         var count = document.querySelector('[data-discover-count]');
                         var n = count ? count.textContent.trim() : '';
                         if (n !== '') {
-                            status.textContent = n + ' result' + (n === '1' ? '' : 's') + ' for "' + q + '"';
+                            status.textContent = n + ' result' + (n === '1' ? '' : 's') + ' for \u201c' + q + '\u201d';
                             status.style.display = 'block';
                         }
                     }
@@ -375,6 +375,15 @@
                         status.style.display = 'none';
                         input.focus();
                     });
+
+                    /* If page loaded with ?q= param, sync clear button and scroll to grid */
+                    if (input.value.trim()) {
+                        syncClear();
+                        setTimeout(function() {
+                            updateStatus();
+                            scrollToGrid();
+                        }, 300);
+                    }
                 })();
                 </script>
 
