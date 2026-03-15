@@ -2298,11 +2298,12 @@ button.product-favorite-btn.is-active {
 #newArrivalsCarousel,
 #brandCarousel,
 .related-track {
-    /* Allow both horizontal and vertical scrolling on touch devices */
-    touch-action: pan-x pan-y pinch-zoom;
+    /* Horizontal-only panning so the browser commits immediately to the swipe */
+    touch-action: pan-x;
     scroll-padding-inline: 0.75rem;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
+    will-change: scroll-position;
 }
 
 #productCarousel {
@@ -2312,7 +2313,8 @@ button.product-favorite-btn.is-active {
 
 #productCarousel,
 #newArrivalsCarousel {
-    scroll-snap-type: x proximity;
+    /* mandatory = always snaps to a card, never stops between two cards */
+    scroll-snap-type: x mandatory;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -2321,6 +2323,7 @@ button.product-favorite-btn.is-active {
     #brandCarousel,
     .related-track {
         touch-action: auto;
+        will-change: auto;
     }
 }
 
@@ -2660,6 +2663,7 @@ button.product-favorite-btn.is-active {
 #productCarousel > .group,
 #newArrivalsCarousel > article {
     scroll-snap-stop: always;
+    scroll-snap-align: center;   /* match the JS centering logic */
     flex: 0 0 82vw !important;
     min-width: 82vw !important;
     max-width: 82vw !important;
@@ -2669,7 +2673,10 @@ button.product-favorite-btn.is-active {
     #productCarousel,
     #newArrivalsCarousel,
     #brandCarousel {
-        scroll-snap-type: x proximity;
+        /* mandatory for crisp one-card-at-a-time snapping on mobile */
+        scroll-snap-type: x mandatory;
+        /* centre padding so half a card peeks on each side */
+        scroll-padding-inline: 9vw;
     }
 }
 
