@@ -272,7 +272,7 @@
         'index.seo_eyebrow':      { fr: 'La Première Destination Parfumerie du Maroc' },
         'index.seo_title':        { fr: 'Le Meilleur Endroit pour Acheter des Parfums de Luxe au Maroc' },
         'index.seo_body1':        { fr: 'IPORDISE a été fondée à Tanger en 2019 avec une seule mission : donner aux amateurs de parfums marocains un accès authentique aux plus belles fragrances du monde. Aujourd’hui, nous servons plus de 400 clients satisfaits à travers le Maroc avec des <a href="discover.html?filter=niche">fragrances niche</a>, des <a href="discover.html?filter=designer">parfums designer</a> et des <a href="discover.html?filter=arabian">ouds arabiques authentiques</a>, tous livrés à tarif fixe de 35&amp;nbsp;MAD partout au pays.' },
-        'index.seo_body2':        { fr: 'Chaque flacon de notre catalogue est 100% authentique et sourcé directement auprès de distributeurs autorisés. Nous proposons <a href="xerjoff.html">Xerjoff</a>, <a href="valentino.html">Valentino</a> et <a href="discover.html?filter=unique-luxury">Unique Luxury</a> aux côtés de <a href="discover.html?filter=for-men">fragrances pour homme</a>, <a href="discover.html?filter=for-women">fragrances pour femme</a> et <a href="discover.html?filter=unisex">collections unisexes</a>.' },
+        'index.seo_body2':        { fr: 'Chaque flacon de notre catalogue est 100% authentique et sourcé directement auprès de distributeurs autorisés. Nous proposons <a href="pages/xerjoff.html">Xerjoff</a>, <a href="pages/valentino.html">Valentino</a> et <a href="discover.html?filter=unique-luxury">Unique Luxury</a> aux côtés de <a href="discover.html?filter=for-men">fragrances pour homme</a>, <a href="discover.html?filter=for-women">fragrances pour femme</a> et <a href="discover.html?filter=unisex">collections unisexes</a>.' },
         'index.seo_body3':        { fr: 'Acheter chez IPORDISE, c’est bénéficier du <strong>paiement à la livraison</strong>, d’une politique de retour de 7 jours, du support WhatsApp en temps réel (lun—sam, 9h—20h), et de la certitude que ce qui arrive à votre porte est exactement ce que vous avez commandé.' },
         'index.seo_link_best':    { fr: 'Meilleures Ventes' },
         'index.seo_link_new':     { fr: 'Nouvelles Arrivées' },
@@ -304,7 +304,7 @@
         'index.news_gender_female': { fr: 'Femme' },
         'index.news_gender_male':   { fr: 'Homme' },
         'index.news_gender_other':  { fr: 'Autre' },
-        'index.news_privacy':       { fr: 'J’ai lu la <a href="privacy-policy.html" class="text-blue-500 hover:text-blue-700 underline transition ipordise-privacy-link">politique de confidentialité</a> et souhaite m’abonner à la newsletter IPORDISE. *' },
+        'index.news_privacy':       { fr: 'J’ai lu la <a href="pages/privacy-policy.html" class="text-blue-500 hover:text-blue-700 underline transition ipordise-privacy-link">politique de confidentialité</a> et souhaite m’abonner à la newsletter IPORDISE. *' },
         'index.news_submit':        { fr: 'S’ABONNER' },
 
         'index.view_all_new': { fr: 'Voir toutes les nouveautés' },
@@ -390,7 +390,7 @@
         'faq.q_delivery_time': { fr: 'Combien de temps prend la livraison ?' },
         'faq.a_delivery_time': { fr: "La plupart des commandes nationales sont livrées dans les 24 à 72 heures suivant l'expédition. Les zones éloignées peuvent prendre légèrement plus de temps. Les commandes internationales prennent 3 à 7 jours ouvrables." },
         'faq.q_track': { fr: 'Puis-je suivre ma commande ?' },
-        'faq.a_track': { fr: 'Oui. Une fois votre commande expédiée, vous recevrez un numéro de suivi. Vous pouvez utiliser notre page <a href="track-order.html" style="color:#e73c3c;font-weight:600">Suivi de commande</a> à tout moment.' },
+        'faq.a_track': { fr: 'Oui. Une fois votre commande expédiée, vous recevrez un numéro de suivi. Vous pouvez utiliser notre page <a href="pages/track-order.html" style="color:#e73c3c;font-weight:600">Suivi de commande</a> à tout moment.' },
         'faq.products_cat': { fr: 'Produits' },
         'faq.q_authentic': { fr: 'Tous les produits sont-ils 100% authentiques ?' },
         'faq.a_authentic': { fr: "Absolument. Chaque parfum et produit de beauté vendu sur IPORDISE provient de distributeurs agréés et est 100% authentique. Nous ne vendons pas d'imitations ni de testeurs." },
@@ -400,7 +400,7 @@
         'faq.a_store': { fr: "Conservez vos parfums à l'abri de la lumière directe, de la chaleur et de l'humidité. Rangez-les dans un endroit frais et sec, idéalement dans leur boîte d'origine." },
         'faq.returns_cat': { fr: 'Retours' },
         'faq.q_return_policy': { fr: 'Quelle est la politique de retour ?' },
-        'faq.a_return_policy': { fr: 'Vous pouvez retourner les articles éligibles dans les <strong>14 jours</strong> suivant la livraison, à condition qu\'ils soient non ouverts, non utilisés et dans leur emballage d\'origine. Voir notre <a href="returns.html" style="color:#e73c3c;font-weight:600">Politique de retour</a>.' },
+        'faq.a_return_policy': { fr: 'Vous pouvez retourner les articles éligibles dans les <strong>14 jours</strong> suivant la livraison, à condition qu\'ils soient non ouverts, non utilisés et dans leur emballage d\'origine. Voir notre <a href="pages/returns.html" style="color:#e73c3c;font-weight:600">Politique de retour</a>.' },
         'faq.q_refund_time': { fr: 'Combien de temps prend le remboursement ?' },
         'faq.a_refund_time': { fr: "Une fois votre retour inspecté et approuvé (généralement 1 à 2 jours ouvrables), le remboursement est traité dans les 3 à 5 jours ouvrables." },
         'faq.still_q': { fr: 'Vous avez encore une question ?' },
@@ -1089,7 +1089,7 @@
         'index.announce1': { fr: 'De la niche au créateur, trouvez votre parfum signature aujourd\'hui. <a href="discover.html?filter=all" class="top-announcement-link" data-announcement-target="all">DÉCOUVRIR</a>' },
         'index.announce2': { fr: 'De nouvelles fragrances viennent d\'arriver dans notre sélection. <a href="discover.html?filter=new-in" class="top-announcement-link" data-announcement-target="new-in">EXPLORER</a>' },
         'index.announce3': { fr: 'Livraison partout au Maroc &mdash; commandes à partir de 35 MAD. <a href="discover.html?filter=best-sellers" class="top-announcement-link">MEILLEURES VENTES</a>' },
-        'index.announce4': { fr: 'Parfums 100% authentiques &mdash; chaque flacon vérifié. <a href="our-story.html" class="top-announcement-link">NOTRE HISTOIRE</a>' },
+        'index.announce4': { fr: 'Parfums 100% authentiques &mdash; chaque flacon vérifié. <a href="pages/our-story.html" class="top-announcement-link">NOTRE HISTOIRE</a>' },
 
         /* ===== INDEX — TRUST BAR RATING ===== */
         'index.trust_rating': { fr: '<strong>4,9/5</strong>&ensp;&middot;&ensp;+400 Commandes' },
@@ -1119,7 +1119,7 @@
         'terms.s3_h':       { fr: 'Livraison' },
         'terms.s3_p':       { fr: 'Nous nous efforçons d\'expédier les commandes dans les 24 heures. Les délais de livraison sont des estimations et peuvent varier. IPORDISE n\'est pas responsable des retards causés par les transporteurs ou les cas de force majeure.' },
         'terms.s4_h':       { fr: 'Retours &amp; remboursements' },
-        'terms.s4_p':       { fr: 'Les retours sont acceptés dans les 14 jours suivant la livraison pour les articles éligibles non ouverts et dans leur emballage d\'origine. Consultez notre <a href="returns.html" class="font-semibold hover:underline" style="color:#e73c3c">Politique de retour</a> pour tous les détails. Les parfums ouverts ne peuvent être retournés pour des raisons d\'hygiène.' },
+        'terms.s4_p':       { fr: 'Les retours sont acceptés dans les 14 jours suivant la livraison pour les articles éligibles non ouverts et dans leur emballage d\'origine. Consultez notre <a href="pages/returns.html" class="font-semibold hover:underline" style="color:#e73c3c">Politique de retour</a> pour tous les détails. Les parfums ouverts ne peuvent être retournés pour des raisons d\'hygiène.' },
         'terms.s5_h':       { fr: 'Propriété intellectuelle' },
         'terms.s5_p':       { fr: 'Tout le contenu d\'IPORDISE &mdash; images, textes, logos et actifs de marque &mdash; reste la propriété d\'IPORDISE ou de ses ayants droit. Aucun contenu ne peut être reproduit sans permission écrite préalable.' },
         'terms.s6_h':       { fr: 'Limitation de responsabilité' },
@@ -1196,7 +1196,7 @@
         'discover.announce1': { fr: 'De la niche au créateur, trouvez votre parfum signature aujourd\'hui. <a href="discover.html?filter=all" class="top-announcement-link" data-announcement-target="all">DÉCOUVRIR</a>' },
         'discover.announce2': { fr: 'De nouvelles fragrances viennent d\'arriver dans notre sélection. <a href="discover.html?filter=new-in" class="top-announcement-link" data-announcement-target="new-in">EXPLORER</a>' },
         'discover.announce3': { fr: 'Livraison partout au Maroc &mdash; commandes à partir de 35 MAD. <a href="discover.html?filter=best-sellers" class="top-announcement-link">MEILLEURES VENTES</a>' },
-        'discover.announce4': { fr: 'Parfums 100% authentiques &mdash; chaque flacon vérifié. <a href="our-story.html" class="top-announcement-link">NOTRE HISTOIRE</a>' },
+        'discover.announce4': { fr: 'Parfums 100% authentiques &mdash; chaque flacon vérifié. <a href="pages/our-story.html" class="top-announcement-link">NOTRE HISTOIRE</a>' },
 
         /* ===== LOGIN PAGE — MISSING ITEMS ===== */
         'login.security_note':             { fr: 'Votre session est protégée par un chiffrement sécurisé.' },

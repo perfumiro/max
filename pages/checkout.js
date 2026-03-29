@@ -127,7 +127,7 @@
     };
 
     const initCheckoutPage = () => {
-        const isCheckoutPage = window.location.pathname.replace(/\\/g, '/').endsWith('/checkout.html');
+        const isCheckoutPage = window.location.pathname.replace(/\\/g, '/').endsWith('/pages/checkout.html');
         if (!isCheckoutPage) return;
 
         const form = document.getElementById('checkoutBillingForm');
