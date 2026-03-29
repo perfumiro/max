@@ -6,7 +6,7 @@
  *   - External CDN resources → Stale-While-Revalidate
  */
 
-const CACHE_VERSION = 'v6';
+const CACHE_VERSION = 'v7';
 const STATIC_CACHE  = `ipordise-static-${CACHE_VERSION}`;
 const HTML_CACHE    = `ipordise-pages-${CACHE_VERSION}`;
 const CDN_CACHE     = `ipordise-cdn-${CACHE_VERSION}`;
