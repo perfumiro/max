@@ -6800,26 +6800,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const elapsed = Math.max(touchLastTime - touchStartTime, 1);
             const deltaX = touchLastX - touchStartX;
             const velocityX = deltaX / elapsed; // px/ms
-            // Lower threshold: 40px or 15% card width, or velocity > 0.25 px/ms
-            const shouldAdvance = Math.abs(deltaX) > Math.min(40, itemWidth * 0.15) || Math.abs(velocityX) > 0.25;
+            // Lower threshold: 30px or 12% card width, or velocity > 0.18 px/ms
+            const shouldAdvance = Math.abs(deltaX) > Math.min(30, itemWidth * 0.12) || Math.abs(velocityX) > 0.18;
 
             if (items.length && touchGestureMoved && shouldAdvance) {
                 const direction = deltaX < 0 ? 1 : -1;
                 const baseIndex = touchStartIndex >= 0
                     ? touchStartIndex
                     : getNearestCarouselItemIndex(carousel, items);
-                // Fast flick (velocity > 0.7 px/ms) → advance 2 cards at once
-                const steps = Math.abs(velocityX) > 0.7 ? 2 : 1;
+                // Fast flick (velocity > 0.6 px/ms) → advance 2 cards at once
+                const steps = Math.abs(velocityX) > 0.6 ? 2 : 1;
                 pendingTouchTargetIndex = Math.max(0, Math.min(items.length - 1, baseIndex + direction * steps));
             }
 
-            // Reduced delay (50ms) so snap feels instant after finger lifts
-            queueSnapAfterScrollSettles(50);
+            // 20ms delay so snap fires immediately after finger lifts
+            queueSnapAfterScrollSettles(20);
         }, { passive: true });
 
         carousel.addEventListener('touchcancel', () => {
             pendingTouchTargetIndex = -1;
-            queueSnapAfterScrollSettles(50);
+            queueSnapAfterScrollSettles(20);
         }, { passive: true });
 
         const stopDragging = () => {
@@ -6828,7 +6828,7 @@ document.addEventListener('DOMContentLoaded', () => {
             carousel.style.cursor = isCoarsePointer ? 'auto' : 'grab';
             carousel.classList.remove('is-dragging-carousel');
             if (movedDuringDrag) {
-                queueSnapAfterScrollSettles(50);
+                queueSnapAfterScrollSettles(20);
             }
         };
 
@@ -6837,7 +6837,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         carousel.addEventListener('scroll', () => {
             if (isDragging) return;
-            queueSnapAfterScrollSettles(isCoarsePointer ? 60 : 90);
+            queueSnapAfterScrollSettles(isCoarsePointer ? 30 : 60);
         }, { passive: true });
 
         carousel.addEventListener('click', (event) => {

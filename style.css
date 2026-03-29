@@ -7070,12 +7070,15 @@ body.consent-visible {
     padding: 1.25rem 1rem 2.25rem;
     scroll-snap-type: x mandatory;
     scroll-snap-stop: always;
-    touch-action: pan-x pan-y;
+    touch-action: pan-x;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
     -ms-overflow-style: none;
     scrollbar-width: none;
     align-items: stretch;
+    will-change: scroll-position;
+    scroll-behavior: auto;
+    -webkit-scroll-snap-type: x mandatory;
 }
 .section-2026-track::-webkit-scrollbar { display: none; }
 @media (min-width: 768px) { .section-2026-track { gap: 1.3rem; padding-inline: 1.25rem; } }
@@ -10319,10 +10322,12 @@ footer .flex.space-x-3 a:hover {
 
 /* â”€â”€ Mobile peek â”€â”€ */
 @media (max-width: 559px) {
-    .card-2026 { flex-basis: 72vw !important; min-width: 72vw !important; max-width: 72vw !important; }
+    .section-2026-track { padding-inline: calc((100vw - 78vw) / 2); gap: 0.85rem; }
+    .card-2026 { flex-basis: 78vw !important; min-width: 78vw !important; max-width: 78vw !important; }
 }
 @media (min-width: 400px) and (max-width: 559px) {
-    .card-2026 { flex-basis: 68vw !important; min-width: 68vw !important; max-width: 68vw !important; }
+    .section-2026-track { padding-inline: calc((100vw - 74vw) / 2); }
+    .card-2026 { flex-basis: 74vw !important; min-width: 74vw !important; max-width: 74vw !important; }
 }
 
 /* â”€â”€ Card entrance animation â”€â”€ */
@@ -20617,7 +20622,8 @@ html, body {
 @media (min-width: 1024px) { .card-2026 { flex: 0 0 19.8rem !important; min-width: 19.8rem !important; max-width: 19.8rem !important; min-height: 29rem !important; } }
 @media (min-width: 1280px) { .card-2026 { flex: 0 0 20.8rem !important; min-width: 20.8rem !important; max-width: 20.8rem !important; min-height: 30rem !important; } }
 @media (max-width: 479px)  {
-    .card-2026 { flex: 0 0 80vw !important; min-width: 80vw !important; max-width: 80vw !important; min-height: 25rem !important; }
+    .section-2026-track { padding-inline: calc((100vw - 78vw) / 2); gap: 0.85rem; }
+    .card-2026 { flex: 0 0 78vw !important; min-width: 78vw !important; max-width: 78vw !important; min-height: 25rem !important; }
     .card-2026-img-wrap { height: 11.5rem !important; }
     .card-2026-btn { min-height: 2.85rem !important; }
 }
