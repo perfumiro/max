@@ -6861,39 +6861,41 @@ body.consent-visible {
 /* â”€â”€ Section wrapper â”€â”€ */
 .section-2026 {
     position: relative;
-    background: #0a090d;
-    padding: 5.5rem 0 4.5rem;
+    background: #060408;
+    padding: 6rem 0 5rem;
     overflow: hidden;
     isolation: isolate;
 }
 
-/* Deep red-to-dark ambient overlay */
+/* Rich multi-layer ambient — deep crimson pools */
 .section-2026::before {
     content: '';
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse 70% 55% at 15% 80%, rgba(231,60,60,0.08) 0%, transparent 55%),
-        radial-gradient(ellipse 80% 50% at 85% 20%, rgba(180,40,40,0.06) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 40% at 50% 110%, rgba(100,15,15,0.18) 0%, transparent 55%);
+        radial-gradient(ellipse 90% 60% at 10% 90%, rgba(200,30,30,0.14) 0%, transparent 52%),
+        radial-gradient(ellipse 75% 55% at 88% 15%, rgba(160,20,20,0.10) 0%, transparent 50%),
+        radial-gradient(ellipse 55% 45% at 50% 120%, rgba(120,10,10,0.22) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 30% at 50% 50%, rgba(80,5,5,0.08) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
 }
 
-/* Red shimmer accent line at section top */
+/* Glowing top accent line */
 .section-2026::after {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 2px;
+    height: 3px;
     background: linear-gradient(90deg,
         transparent 0%,
-        rgba(231,60,60,0.0) 10%,
-        rgba(231,60,60,0.65) 35%,
-        rgba(255,90,90,0.80) 50%,
-        rgba(231,60,60,0.65) 65%,
-        rgba(231,60,60,0.0) 90%,
+        rgba(231,60,60,0.0) 8%,
+        rgba(231,60,60,0.55) 30%,
+        rgba(255,80,80,1.00) 50%,
+        rgba(231,60,60,0.55) 70%,
+        rgba(231,60,60,0.0) 92%,
         transparent 100%);
+    filter: blur(0.5px);
     z-index: 1;
 }
 
@@ -6902,24 +6904,28 @@ body.consent-visible {
     z-index: 2;
 }
 
-/* Ghost year watermark */
+/* Ghost year watermark — more presence */
 .section-2026-year-bg {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: clamp(8rem, 26vw, 20rem);
+    font-size: clamp(9rem, 30vw, 22rem);
     font-weight: 900;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
     color: transparent;
-    -webkit-text-stroke: 1px rgba(231,60,60,0.07);
+    -webkit-text-stroke: 1px rgba(231,60,60,0.11);
+    text-shadow:
+        0 0 120px rgba(200,30,30,0.08),
+        0 0 60px rgba(231,60,60,0.04);
     white-space: nowrap;
     pointer-events: none;
     user-select: none;
     z-index: 0;
     line-height: 1;
     font-family: 'Playfair Display', serif;
-    animation: c26YearGlow 6s ease-in-out infinite;
+    animation: c26YearGlow 7s ease-in-out infinite;
+    opacity: 0.9;
 }
 
 /* â”€â”€ Header â”€â”€ */
@@ -6958,32 +6964,34 @@ body.consent-visible {
 
 .section-2026-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-size: clamp(3.2rem, 9vw, 6rem);
     font-weight: 900;
-    letter-spacing: -0.02em;
-    line-height: 0.88;
+    letter-spacing: -0.025em;
+    line-height: 0.86;
     margin: 0;
     background: linear-gradient(135deg,
         #ffffff 0%,
-        #f5c5c5 25%,
-        #e73c3c 52%,
-        #c42020 75%,
+        #ffd0d0 20%,
+        #ff5050 45%,
+        #e73c3c 55%,
+        #c42020 72%,
         #ffffff 100%);
-    background-size: 250% auto;
+    background-size: 280% auto;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 18px rgba(231,60,60,0.18));
     animation:
-        c26GoldShimmer 6s ease infinite,
+        c26GoldShimmer 5s ease infinite,
         c26RevealText  0.85s cubic-bezier(0.22,1,0.36,1) 0.2s both;
 }
 
 .section-2026-sub {
-    font-size: 0.88rem;
-    color: rgba(255,255,255,0.40);
-    margin-top: 0.85rem;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.50);
+    margin-top: 0.9rem;
     max-width: 34rem;
-    line-height: 1.65;
+    line-height: 1.7;
     animation: c26RevealText 0.8s cubic-bezier(0.22,1,0.36,1) 0.35s both;
 }
 
@@ -7139,15 +7147,19 @@ body.consent-visible {
 }
 .card-2026:hover::before { opacity: 1; }
 
-/* Inner light vignette */
+/* Inner light vignette + bottom fade */
 .card-2026::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(160deg,
-        rgba(255,255,255,0.032) 0%,
-        rgba(255,255,255,0.009) 30%,
-        transparent 55%);
+    background:
+        linear-gradient(160deg,
+            rgba(255,255,255,0.045) 0%,
+            rgba(255,255,255,0.012) 30%,
+            transparent 52%),
+        linear-gradient(to top,
+            rgba(0,0,0,0.35) 0%,
+            transparent 40%);
     pointer-events: none;
     border-radius: inherit;
     z-index: 1;
@@ -7163,14 +7175,15 @@ body.consent-visible {
 .card-2026-img-wrap {
     position: relative;
     z-index: 2;
-    height: 12rem;
+    height: 13rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1.25rem 1.25rem 0.75rem;
-    background: radial-gradient(ellipse 80% 65% at 50% 55%,
-        rgba(231,60,60,0.06) 0%,
-        rgba(0,0,0,0.22) 100%);
+    padding: 1.4rem 1.4rem 0.8rem;
+    background:
+        radial-gradient(ellipse 75% 60% at 50% 55%,
+            rgba(231,60,60,0.09) 0%,
+            rgba(0,0,0,0.25) 100%);
     flex-shrink: 0;
     margin-top: 2.5rem;
 }
@@ -7200,16 +7213,16 @@ body.consent-visible {
 .card-2026-brand {
     font-size: 0.58rem;
     font-weight: 800;
-    letter-spacing: 0.26em;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: rgba(231,60,60,0.75);
-    margin-bottom: 0.3rem;
+    color: rgba(255,90,90,0.85);
+    margin-bottom: 0.35rem;
 }
 .card-2026-name {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #000000;
-    line-height: 1.38;
+    color: rgba(255,255,255,0.88);
+    line-height: 1.4;
     min-height: 2.65rem;
     flex-grow: 1;
     margin-bottom: 0.7rem;
@@ -7256,41 +7269,49 @@ body.consent-visible {
 /* â”€â”€ CTA footer â”€â”€ */
 .card-2026-footer {
     margin-top: auto;
-    padding-top: 0.85rem;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 0.9rem;
+    border-top: 1px solid rgba(255,255,255,0.07);
 }
 .card-2026-btn {
     width: 100%;
-    background: linear-gradient(135deg, #e73c3c 0%, #b22020 100%);
+    background: linear-gradient(135deg, #e73c3c 0%, #c02020 60%, #a01818 100%);
     color: #ffffff;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 0.7rem 1rem;
-    border-radius: 0.6rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.7rem;
     border: none;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 16px rgba(231,60,60,0.30);
+    box-shadow:
+        0 4px 18px rgba(231,60,60,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.12);
     transition: background 0.22s, transform 0.18s, box-shadow 0.22s;
 }
 .card-2026-btn::before {
     content: '';
     position: absolute;
     top: 0; left: -100%;
-    width: 55%;
+    width: 60%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
-    transition: left 0.45s ease;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+    transition: left 0.50s ease;
     pointer-events: none;
 }
-.card-2026-btn:hover::before { left: 160%; }
+.card-2026-btn:hover::before { left: 170%; }
 .card-2026-btn:hover {
-    background: linear-gradient(135deg, #ff4d4d 0%, #c92828 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(231,60,60,0.48);
+    background: linear-gradient(135deg, #ff5252 0%, #d42828 60%, #b01c1c 100%);
+    transform: translateY(-2px);
+    box-shadow:
+        0 10px 28px rgba(231,60,60,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.card-2026-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 14px rgba(231,60,60,0.30);
 }
 
 /* â”€â”€ Badge â”€â”€ */
@@ -7375,9 +7396,9 @@ body.consent-visible {
 .section-2026-count {
     font-size: 0.58rem;
     font-weight: 800;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: rgba(231,60,60,0.45);
+    color: rgba(255,90,90,0.55);
     white-space: nowrap;
 }
 
@@ -10180,10 +10201,10 @@ footer .flex.space-x-3 a:hover {
 .card-2026-name {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #000000;
+    color: rgba(255,255,255,0.88);
 }
 .card-2026:hover .card-2026-name {
-    color: #000000;
+    color: #ffffff;
     transition: color 0.28s ease;
 }
 
