@@ -6,31 +6,18 @@
  *   - External CDN resources → Stale-While-Revalidate
  */
 
-const CACHE_VERSION = 'v9';
+const CACHE_VERSION = 'v10';
 const STATIC_CACHE  = `ipordise-static-${CACHE_VERSION}`;
-const HTML_CACHE    = `ipordise-pages-${CACHE_VERSION}`;
 const CDN_CACHE     = `ipordise-cdn-${CACHE_VERSION}`;
 
 /* ── Assets to pre-cache on install ── */
 const PRECACHE_ASSETS = [
-    '/',
-    '/index.html',
-    '/discover.html',
     '/style.css',
     '/script.js',
     '/i18n.js',
-    '/pages/cart.html',
-    '/pages/checkout.html',
-    '/pages/product.html',
-    '/pages/login.html',
-    '/pages/contact.html',
-    '/pages/track-order.html',
-    '/pages/our-story.html',
-    '/pages/faq.html',
     '/pages/cart.js',
     '/pages/checkout.js',
     '/assets/favicon.svg',
-    '/assets/img_1.png',
     '/manifest.json',
     '/offline.html',
     '/404.html'
@@ -59,7 +46,7 @@ self.addEventListener('message', (event) => {
 
 /* ───────── ACTIVATE ───────── */
 self.addEventListener('activate', (event) => {
-    const allowedCaches = [STATIC_CACHE, HTML_CACHE, CDN_CACHE];
+    const allowedCaches = [STATIC_CACHE, CDN_CACHE];
     event.waitUntil(
         caches.keys().then((keys) =>
             Promise.all(
@@ -136,12 +123,21 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // HTML pages → Network-First with offline fallback
+    // HTML pages → ALWAYS fetch from network, never cache
+    // This ensures users always see the latest version after any deployment
     if (
         url.origin === self.location.origin &&
         (request.destination === 'document' || url.pathname.endsWith('.html') || url.pathname === '/')
     ) {
-        event.respondWith(networkFirst(HTML_CACHE, request));
+        event.respondWith(
+            fetch(request).catch(async () => {
+                // Only fall back to offline page if network is unreachable
+                const offline = await caches.match(OFFLINE_URL);
+                return offline || new Response('<h1>You are offline</h1>', {
+                    headers: { 'Content-Type': 'text/html' }
+                });
+            })
+        );
         return;
     }
 });
@@ -169,7 +165,6 @@ async function networkFirst(cacheName, request) {
             cache.put(request, response.clone());
             return response;
         }
-        // Server returned 404 (or other error) → serve our branded 404 page
         if (response.status === 404) {
             const notFound = await caches.match('/404.html');
             if (notFound) return notFound;
@@ -178,7 +173,6 @@ async function networkFirst(cacheName, request) {
     } catch {
         const cached = await cache.match(request);
         if (cached) return cached;
-        // Return offline page for navigation requests
         const offline = await caches.match(OFFLINE_URL);
         return offline || new Response('<h1>You are offline</h1>', {
             headers: { 'Content-Type': 'text/html' }
