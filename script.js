@@ -6629,6 +6629,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!targetItem) return;
 
         const targetLeft = getCenteredScrollLeftForItem(carousel, targetItem);
+        // Restore CSS snap type after JS has decided the target
+        carousel.style.scrollSnapType = '';
         if (Math.abs(carousel.scrollLeft - targetLeft) < 1) return;
 
         carousel.scrollTo({
@@ -6705,6 +6707,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!targetItem) return;
 
             const targetLeft = getCenteredScrollLeftForItem(carousel, targetItem);
+            // Restore scrollSnapType before scrollTo so browser and JS agree
+            carousel.style.scrollSnapType = '';
             if (Math.abs(carousel.scrollLeft - targetLeft) < 1) return;
 
             carousel.scrollTo({
@@ -6785,6 +6789,8 @@ document.addEventListener('DOMContentLoaded', () => {
             pendingTouchTargetIndex = -1;
             clearSnapTimer();
             clearScrollEndTimer();
+            // Disable any CSS snap during the drag so it can't fight the JS snap
+            carousel.style.scrollSnapType = 'none';
             onInteract?.();
         }, { passive: true });
 

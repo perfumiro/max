@@ -7068,8 +7068,6 @@ body.consent-visible {
     overflow-y: hidden;
     gap: 1.1rem;
     padding: 1.25rem 1rem 2.25rem;
-    scroll-snap-type: x mandatory;
-    scroll-snap-stop: always;
     touch-action: pan-x pan-y;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
@@ -7077,8 +7075,6 @@ body.consent-visible {
     scrollbar-width: none;
     align-items: stretch;
     will-change: scroll-position;
-    scroll-behavior: auto;
-    -webkit-scroll-snap-type: x mandatory;
 }
 .section-2026-track::-webkit-scrollbar { display: none; }
 @media (min-width: 768px) { .section-2026-track { gap: 1.3rem; padding-inline: 1.25rem; } }
@@ -7089,7 +7085,6 @@ body.consent-visible {
     flex: 0 0 min(82vw, 21rem);
     min-width: min(82vw, 21rem);
     max-width: min(82vw, 21rem);
-    scroll-snap-align: center;
     background: #12080e;
     border: 1px solid rgba(231,60,60,0.12);
     border-radius: 1.35rem;
