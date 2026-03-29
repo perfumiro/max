@@ -223,12 +223,12 @@ Tawk_API.onLoad=function(){
   wrap.innerHTML='\
     <button id="ipo-tawk-btn" aria-label="Chat with us">\
       <i id="ipo-tawk-img" class="fab fa-whatsapp"></i>\
-      <div id="ipo-tawk-dot"></div>\
+      <div id="ipo-tawk-dot">1</div>\
     </button>';
   document.body.appendChild(wrap);
   document.getElementById('ipo-tawk-btn').addEventListener('click',function(){
-    var b=document.getElementById('ipo-tawk-badge');
-    if(b){b.style.animation='none';b.style.opacity='0';b.style.transform='scale(0)';setTimeout(function(){b.remove();},200);}
+    var b=document.getElementById('ipo-tawk-dot');
+    if(b){b.style.transition='transform .2s,opacity .2s';b.style.transform='scale(0)';b.style.opacity='0';setTimeout(function(){b.style.display='none';},220);}
     Tawk_API.maximize();
   });
 

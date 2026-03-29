@@ -82,36 +82,42 @@ Tawk_API.onLoad=function(){
     }\
     #ipo-tawk-dot{\
       position:absolute;\
-      top:3px;right:3px;\
-      width:13px;height:13px;\
-      background:#fff;\
-      border-radius:50%;\
-      border:2px solid #25D366;\
-      z-index:2;\
-    }\
-    #ipo-tawk-badge{\
-      position:absolute;\
-      top:-7px;right:-7px;\
-      min-width:20px;height:20px;\
+      top:-5px;right:-5px;\
+      width:22px;height:22px;\
       background:#ef4444;\
       color:#fff;\
-      font-size:11px;\
-      font-weight:800;\
+      font-size:12px;\
+      font-weight:900;\
       font-family:Inter,system-ui,sans-serif;\
-      border-radius:10px;\
+      border-radius:50%;\
       display:flex;\
       align-items:center;\
       justify-content:center;\
       border:2.5px solid #fff;\
       z-index:4;\
-      padding:0 3px;\
-      box-shadow:0 2px 8px rgba(239,68,68,.45);\
-      animation:ipo-badge-in .45s cubic-bezier(.34,1.56,.64,1) 2s both;\
+      box-shadow:0 2px 10px rgba(239,68,68,.6);\
+      animation:ipo-dot-pop .5s cubic-bezier(.34,1.56,.64,1) 1.2s both;\
+      pointer-events:none;\
+      line-height:1;\
+    }\
+    #ipo-tawk-dot::after{\
+      content:"";\
+      position:absolute;\
+      inset:-4px;\
+      border-radius:50%;\
+      background:rgba(239,68,68,.35);\
+      animation:ipo-dot-ping 1.8s ease-out 2s infinite;\
       pointer-events:none;\
     }\
-    @keyframes ipo-badge-in{\
+    @keyframes ipo-dot-pop{\
       from{transform:scale(0);opacity:0;}\
+      60%{transform:scale(1.25);}\
       to{transform:scale(1);opacity:1;}\
+    }\
+    @keyframes ipo-dot-ping{\
+      0%{transform:scale(.85);opacity:.8;}\
+      70%{transform:scale(1.7);opacity:0;}\
+      100%{transform:scale(1.7);opacity:0;}\
     }\
     @media(prefers-reduced-motion:reduce){\
       #ipo-tawk-wrap{animation:none;}\
@@ -127,12 +133,12 @@ Tawk_API.onLoad=function(){
   wrap.innerHTML='\
     <button id="ipo-tawk-btn" aria-label="Chat with us">\
       <i id="ipo-tawk-img" class="fab fa-whatsapp"></i>\
-      <div id="ipo-tawk-dot"></div>\
+      <div id="ipo-tawk-dot">1</div>\
     </button>';
   document.body.appendChild(wrap);
   document.getElementById('ipo-tawk-btn').addEventListener('click',function(){
-    var b=document.getElementById('ipo-tawk-badge');
-    if(b){b.style.animation='none';b.style.opacity='0';b.style.transform='scale(0)';setTimeout(function(){b.remove();},200);}
+    var b=document.getElementById('ipo-tawk-dot');
+    if(b){b.style.transition='transform .2s,opacity .2s';b.style.transform='scale(0)';b.style.opacity='0';setTimeout(function(){b.style.display='none';},220);}
     Tawk_API.maximize();
   });
 
