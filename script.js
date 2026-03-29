@@ -4726,32 +4726,42 @@ document.addEventListener('DOMContentLoaded', () => {
         const accentPool = getReviewAccentPool(productName, productOverride);
         const cities = ['Casablanca', 'Rabat', 'Marrakech', 'Tangier', 'Agadir', 'Fes'];
         const openerTemplates = currentLanguage === 'fr' ? [
-            'Le %ACCENT% est ce qui a retenu mon attention en premier et cela se sent très raffiné sur la peau.',
-            'Je remarque constamment le %ACCENT%, et cela donne au parfum une identité très distinctive.',
-            'Le %ACCENT% rend ce parfum plus raffiné que beaucoup d\'autres dans le même style.',
-            'Ce que j\'ai le plus apprécié, c\'est le %ACCENT% ; il se dégage clairement sans être excessif.',
-            'Dès le premier jet, le %ACCENT% donne au parfum une impression propre et premium.'
+            'Le %ACCENT% est ce qui m\'a immédiatement accroché — très naturel et bien intégré.',
+            'Honnêtement, le %ACCENT% est bien mieux que ce à quoi je m\'attendais pour ce prix.',
+            'On sent clairement le %ACCENT% dès l\'application, sans que ce soit écrasant.',
+            'Ce qui distingue ce parfum, c\'est vraiment le %ACCENT% — il persiste longtemps.',
+            'J\'ai commandé après avoir lu des avis et le %ACCENT% est exactement comme décrit.',
+            'Le %ACCENT% donne au parfum une vraie personnalité, pas générique du tout.',
+            'Mon entourage m\'a complimenté sur le %ACCENT% sans que je leur dise ce que je portais.',
+            'Le %ACCENT% ressort bien sur ma peau et tient facilement toute la journée.'
         ] : [
-            'The %ACCENT% is what stood out first and it feels very polished on skin.',
-            'I keep noticing the %ACCENT%, and it gives the fragrance a very distinctive identity.',
-            'The %ACCENT% makes this one feel more refined than many others in the same style.',
-            'What I liked most is the %ACCENT%; it comes through clearly without feeling too much.',
-            'From the first spray, the %ACCENT% gives the scent a clean and premium impression.'
+            'Honestly the %ACCENT% surprised me — very natural and nothing like the cheaper versions I tried before.',
+            'The %ACCENT% comes through really well on my skin, not synthetic at all.',
+            'I ordered based on reviews and the %ACCENT% is exactly as described — no disappointment.',
+            'What sets this apart is the %ACCENT%, it sticks around for hours without becoming annoying.',
+            'People around me noticed the %ACCENT% before I even mentioned what I was wearing.',
+            'The %ACCENT% gives it a real character — nothing generic about this one.',
+            'First time trying this and the %ACCENT% blew me away, very well blended.',
+            'I was skeptical at first but the %ACCENT% won me over within the first hour.'
         ];
         const closerTemplates = currentLanguage === 'fr' ? [
-            'La longévité a été très solide pour moi et le parfum reste élégant tout au long du port.',
-            'La projection est forte au départ, puis elle se stabilise en un sillage lisse et agréable.',
-            'Il sent authentique, bien mélangé et facile à utiliser quand je veux quelque chose de raffiné.',
-            'Le flacon et l\'emballage sont également excellents en personne, ce qui a rendu toute la commande premium.',
-            'La livraison a été rapide et le parfum est arrivé très bien protégé.',
-            'Le séchage est particulièrement bon et semble plus cher que le prix ne le suggère.'
+            'La livraison à Casablanca était rapide et l\'emballage était impeccable. Je repasserai commande.',
+            'Ça tient facilement 8 à 10 heures sur moi, ce qui est rare à ce prix.',
+            'L\'emballage à la réception était soigné et le flacon correspond exactement aux photos.',
+            'La sillage est présent sans être agressif — parfait pour le bureau ou les sorties.',
+            'Le rapport qualité-prix est franchement bon, je recommande sans hésiter.',
+            'Je l\'offre aussi en cadeau maintenant, la présentation est vraiment classe.',
+            'Commande reçue en 2 jours, parfum authentique, très satisfied de l\'expérience globale.',
+            'C\'est devenu mon parfum de référence — je suis revenu commander un deuxième flacon.'
         ] : [
-            'Longevity has been very solid for me and the scent stays elegant throughout the wear.',
-            'Projection is strong at the start, then it settles into a smooth and wearable trail.',
-            'It smells authentic, well blended, and easy to reach for when I want something polished.',
-            'Bottle and packaging also look excellent in person, which made the whole order feel premium.',
-            'Delivery was quick and the fragrance arrived very well protected.',
-            'The dry-down is especially good and feels more expensive than the price suggests.'
+            'Delivery to me was fast and the packaging was solid — no damage at all.',
+            'It easily lasts 8 to 10 hours on my skin, which is hard to find at this price.',
+            'The bottle looks exactly like the photos, really premium in person.',
+            'The sillage is noticeable without being aggressive, great for work or a night out.',
+            'Value for money here is genuinely good — I have no complaints at all.',
+            'I already gifted one to a friend and they loved it too.',
+            'Got it in 2 days, completely authentic, very happy with the whole experience.',
+            'This has become my go-to — already came back to order a second bottle.'
         ];
 
         return Array.from({ length: 3 }, (_, index) => {
@@ -4817,6 +4827,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const bodyEl = card.querySelector('.text-sm.text-gray-700');
             if (dateEl) dateEl.textContent = review.date;
             if (bodyEl) bodyEl.textContent = review.summary;
+            const nameEl   = card.querySelector('h4');
+            const avatarEl = card.querySelector('img');
+            if (nameEl && avatarEl) {
+                const isFemale = femaleNames.includes(nameEl.textContent.trim());
+                const imgPool  = isFemale ? femaleAvatarImgs : maleAvatarImgs;
+                const imgId    = imgPool[(baseHash + index * 4) % imgPool.length];
+                avatarEl.src = 'https://randomuser.me/api/portraits/' + imgId + '.jpg';
+                avatarEl.alt = nameEl.textContent;
+            }
         });
 
         detailCards.forEach((card, index) => {
