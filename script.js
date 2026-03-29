@@ -4773,20 +4773,13 @@ document.addEventListener('DOMContentLoaded', () => {
                              'Karim D',   'Bilal H', 'Tarik N', 'Zakaria L', 'Soufiane R', 'Adil C'];
         const femaleNames = ['Salma B', 'Imane E', 'Nadia H', 'Sara A', 'Khadija R', 'Aya M',
                              'Fatima Z', 'Hind K',  'Meryem O', 'Amina S',  'Loubna T',   'Zineb F'];
-        const avatarGradients = [
-            'linear-gradient(135deg,#1f2937,#374151)',   // dark grey
-            'linear-gradient(135deg,#c9a227,#e8c84a)',   // gold
-            'linear-gradient(135deg,#6366f1,#8b5cf6)',   // purple
-            'linear-gradient(135deg,#0f766e,#14b8a6)',   // teal
-            'linear-gradient(135deg,#b45309,#d97706)',   // amber/brown
-            'linear-gradient(135deg,#be185d,#ec4899)',   // rose
-            'linear-gradient(135deg,#1d4ed8,#60a5fa)',   // blue
-            'linear-gradient(135deg,#064e3b,#10b981)',   // emerald
-            'linear-gradient(135deg,#7c3aed,#c084fc)',   // violet
-            'linear-gradient(135deg,#9f1239,#fb7185)',   // red-pink
-            'linear-gradient(135deg,#854d0e,#ca8a04)',   // dark gold
-            'linear-gradient(135deg,#134e4a,#2dd4bf)',   // dark teal
-        ];
+        // randomuser.me portrait IDs selected for MENA/Moroccan appearance
+        const maleAvatarImgs   = ['men/7',  'men/10', 'men/22', 'men/27', 'men/33',
+                                   'men/40', 'men/52', 'men/55', 'men/66', 'men/70',
+                                   'men/75', 'men/80'];
+        const femaleAvatarImgs = ['women/5',  'women/9',  'women/11', 'women/18',
+                                   'women/21', 'women/25', 'women/44', 'women/55',
+                                   'women/60', 'women/65', 'women/70', 'women/75'];
         const audience = inferFragranceAudience(productName, productOverride);
 
         let pool = maleNames;
@@ -4842,15 +4835,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (bodyEl) bodyEl.textContent = '\u201C' + review.detail + '\u201D';
             if (nameEl && avatarEl) {
-                var gradIdx = (baseHash + index * 4) % avatarGradients.length;
-                avatarEl.style.background = avatarGradients[gradIdx];
-                // Use dark text for light/gold gradients
-                var isLight = gradIdx === 1 || gradIdx === 4 || gradIdx === 10;
-                var textColor = isLight ? '#78350f' : '#ffffff';
-                avatarEl.style.color = textColor;
-                if (initialEl) {
-                    initialEl.textContent = nameEl.textContent.trim().charAt(0).toUpperCase();
-                    initialEl.style.color = textColor;
+                const isFemale = femaleNames.includes(nameEl.textContent.trim());
+                const imgPool  = isFemale ? femaleAvatarImgs : maleAvatarImgs;
+                const imgId    = imgPool[(baseHash + index * 4) % imgPool.length];
+                const avatarWrap = avatarEl.closest('.rev-avatar-wrap') || avatarEl.parentElement;
+                if (avatarWrap) {
+                    avatarWrap.innerHTML = '<img src="https://randomuser.me/api/portraits/' + imgId + '.jpg" alt="' + (nameEl.textContent || '') + '" class="rev-avatar" style="object-fit:cover;border-radius:50%;width:48px;height:48px;" loading="lazy">';
                 }
             }
             if (footerEl) {
