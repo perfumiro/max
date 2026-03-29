@@ -521,6 +521,45 @@ s0.parentNode.insertBefore(s1,s0);
     white-space: nowrap !important;
     padding: 0.45rem 1rem !important;
 }
+
+/* ── 15. Balanced cards — equal height, aligned content ── */
+#newArrivalsCarousel,
+#productCarousel {
+    align-items: stretch !important;
+}
+/* Cards stretch to tallest sibling */
+#newArrivalsCarousel > article.js-product-link,
+#productCarousel > div.js-product-link {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    align-self: stretch !important;
+}
+/* Image area: fixed height so all images align */
+#newArrivalsCarousel > article.js-product-link > div.h-44 {
+    flex-shrink: 0 !important;
+}
+/* Product name: fixed min-height so title area is always same size */
+#newArrivalsCarousel > article.js-product-link > h4,
+#productCarousel > div.js-product-link h3.product-title {
+    min-height: 2.8rem !important;
+    flex: 1 !important;
+}
+/* Hide injected price paragraph — already shown in size buttons + cart */
+#newArrivalsCarousel p.price,
+#productCarousel p.price {
+    display: none !important;
+}
+/* Push size badges + CTA to bottom of card */
+#newArrivalsCarousel > article.js-product-link > div.flex.items-center.gap-2.mt-2,
+#productCarousel > div.js-product-link div.flex.items-center.gap-2 {
+    margin-top: auto !important;
+}
+/* CTA button container always at card bottom */
+#newArrivalsCarousel > article.js-product-link > div.mt-3,
+#productCarousel > div.js-product-link > div.flex-grow > div.mt-auto {
+    margin-top: 0 !important;
+}
 </style>
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
