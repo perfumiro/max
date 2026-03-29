@@ -13,7 +13,7 @@
       gtag('config', 'G-70NCC2RZM6');
     </script>
     <title data-i18n-title="xerjoff.page_title">IPORDISE - XERJOFF Collection | Italian Haute Parfumerie</title>
-    <meta name="description" content="Explore the exclusive XERJOFF collection at IPORDISE Morocco. Italian haute parfumerie — Naxos, Erba Pura, Alexandria II and more. 100% authentic. Free delivery 35 MAD.">
+    <meta name="description" content="Explore the exclusive XERJOFF collection at IPORDISE Morocco. Italian haute parfumerie â€” Naxos, Erba Pura, Alexandria II and more. 100% authentic. Free delivery 35 MAD.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../script.js"></script>
@@ -643,7 +643,7 @@
                     </a>
                 </div>
 
-                <!-- Search trigger — opens full overlay on click -->
+                <!-- Search trigger â€” opens full overlay on click -->
                 <div class="flex-1 max-w-2xl mx-8 hidden md:block">
                     <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
                         <i class="fas fa-search ipo-search-trigger-icon"></i>
@@ -1051,7 +1051,7 @@
             var priceText = priceEl && priceEl.dataset.price;
             if (!sizeLabel) {
                 var lang = localStorage.getItem('ipordise-language') || 'en';
-                alert(lang === 'fr' ? 'Veuillez sélectionner une taille.' : 'Please select a size first.');
+                alert(lang === 'fr' ? 'Veuillez sÃ©lectionner une taille.' : 'Please select a size first.');
                 return;
             }
             var qty = parseInt(document.getElementById(prefix + '-qty').textContent) || 1;
@@ -1104,10 +1104,10 @@
                     badge.remove();
                 }
             });
-            // Show confirmation on the button — no redirect
+            // Show confirmation on the button â€” no redirect
             var btn = document.querySelector('#product-' + prefix + ' .xerjoff-cart-btn');
             var lang = localStorage.getItem('ipordise-language') || 'en';
-            btn.textContent = lang === 'fr' ? '? Ajouté au panier' : '? Added to Cart';
+            btn.textContent = lang === 'fr' ? '? AjoutÃ© au panier' : '? Added to Cart';
             btn.style.background = '#16a34a';
             btn.disabled = true;
             setTimeout(function() {
@@ -1227,5 +1227,6 @@
             <div class="ipo-search-overlay-body" id="ipoSearchOverlayBody"></div>
         </div>
     </div>
+<script src="../chat.js"></script>
 </body>
 </html>
