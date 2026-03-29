@@ -1443,9 +1443,29 @@ s0.parentNode.insertBefore(s1,s0);
             }
         } catch(e) {}
 
-        /* -- Show nav always on product page -- */
+        /* -- Hide on scroll, show on pause -- */
         if (nav) {
             nav.classList.add('ipo-bnav--visible');
+            var hideTimer = null;
+            var lastY = window.scrollY;
+            var ticking = false;
+            window.addEventListener('scroll', function () {
+                if (!ticking) {
+                    requestAnimationFrame(function () {
+                        var currentY = window.scrollY;
+                        if (Math.abs(currentY - lastY) > 4) {
+                            nav.classList.remove('ipo-bnav--visible');
+                        }
+                        lastY = currentY;
+                        ticking = false;
+                        clearTimeout(hideTimer);
+                        hideTimer = setTimeout(function () {
+                            nav.classList.add('ipo-bnav--visible');
+                        }, 400);
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
         }
     })();
     </script>
