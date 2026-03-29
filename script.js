@@ -5457,13 +5457,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const updateWhatsAppBtn = () => {
             if (!whatsappInquiryBtn) return;
-            if (selectedSize) {
-                let msg;
-                if (hasPrices && selectedSize.unitPrice > 0) {
-                    msg = `Bonjour IPORDISE,\n\nJe souhaite commander le produit suivant :\n\n- Produit : ${productName}\n- Marque : ${resolvedBrand}\n- Taille : ${selectedSize.label}\n- Prix : ${selectedSize.priceText}\n\nMerci !`;
-                } else {
-                    msg = `Bonjour IPORDISE,\n\nJe suis intéressé(e) par le produit suivant et j'aimerais connaître le prix et la disponibilité :\n\n- Produit : ${productName}\n- Marque : ${resolvedBrand}\n- Taille : ${selectedSize.label}\n\nMerci !`;
-                }
+            if (!hasPrices && selectedSize) {
+                const msg = `Bonjour IPORDISE,\n\nJe suis intéressé(e) par le produit suivant et j'aimerais connaître le prix et la disponibilité :\n\n- Produit : ${productName}\n- Marque : ${resolvedBrand}\n- Taille : ${selectedSize.label}\n\nMerci !`;
                 whatsappInquiryBtn.href = `https://wa.me/212663750210?text=${encodeURIComponent(msg)}`;
                 whatsappInquiryBtn.classList.remove('hidden');
             } else {
