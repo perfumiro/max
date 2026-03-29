@@ -6832,13 +6832,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 pendingTouchTargetIndex = Math.max(0, Math.min(items.length - 1, baseIndex + direction * steps));
             }
 
-            // 20ms delay so snap fires immediately after finger lifts
-            queueSnapAfterScrollSettles(20);
+            if (pendingTouchTargetIndex >= 0) {
+                // Velocity-based advance: use JS scrollTo so we land on exact card
+                queueSnapAfterScrollSettles(20);
+            } else {
+                // Slow swipe or no swipe: restore CSS snap immediately so
+                // browser momentum + CSS snap handle the final position naturally
+                carousel.style.scrollSnapType = '';
+            }
         }, { passive: true });
 
         carousel.addEventListener('touchcancel', () => {
             pendingTouchTargetIndex = -1;
-            queueSnapAfterScrollSettles(20);
+            carousel.style.scrollSnapType = '';
         }, { passive: true });
 
         const stopDragging = () => {

@@ -7076,23 +7076,31 @@ body.consent-visible {
     overflow-y: hidden;
     gap: 1.1rem;
     padding: 1.25rem 1rem 2.25rem;
-    touch-action: pan-x pan-y;
+    /* pan-x: browser handles horizontal scroll natively; vertical swipe passes to page */
+    touch-action: pan-x;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
+    overscroll-behavior-y: none;
     -ms-overflow-style: none;
     scrollbar-width: none;
     align-items: stretch;
-    will-change: scroll-position;
+    /* GPU-accelerated scroll */
+    will-change: transform;
+    transform: translateZ(0);
+    /* CSS snap — JS disables this on touchstart, re-enables after touchend */
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1rem;
 }
 .section-2026-track::-webkit-scrollbar { display: none; }
-@media (min-width: 768px) { .section-2026-track { gap: 1.3rem; padding-inline: 1.25rem; } }
-@media (min-width: 1024px) { .section-2026-track { gap: 1.6rem; padding-inline: 1.5rem; padding-bottom: 2.5rem; } }
+@media (min-width: 768px) { .section-2026-track { gap: 1.3rem; padding-inline: 1.25rem; scroll-padding-inline: 1.25rem; } }
+@media (min-width: 1024px) { .section-2026-track { gap: 1.6rem; padding-inline: 1.5rem; padding-bottom: 2.5rem; scroll-padding-inline: 1.5rem; } }
 
 /* â”€â”€ Card â”€â”€ */
 .card-2026 {
     flex: 0 0 min(82vw, 21rem);
     min-width: min(82vw, 21rem);
     max-width: min(82vw, 21rem);
+    scroll-snap-align: center;
     background: #12080e;
     border: 1px solid rgba(231,60,60,0.12);
     border-radius: 1.35rem;
