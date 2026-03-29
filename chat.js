@@ -12,7 +12,7 @@
   'use strict';
 
   /* ── 1. CONFIG ──────────────────────────────────────────────── */
-  var GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY';
+  var GEMINI_API_KEY = 'AIzaSyB3Ziukucy6Su21T8DPRTjr5qZFDzgrhV8';
   var MODEL          = 'gemini-1.5-flash';
   var API_URL        = 'https://generativelanguage.googleapis.com/v1beta/models/'
                      + MODEL + ':generateContent?key=' + GEMINI_API_KEY;
