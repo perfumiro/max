@@ -7405,7 +7405,7 @@ body.consent-visible {
 .back-to-top {
     position: fixed;
     bottom: 2rem;
-    right: 2rem;
+    left: 2rem;
     width: 2.8rem;
     height: 2.8rem;
     border-radius: 9999px;
@@ -14988,7 +14988,7 @@ nav[aria-label="Breadcrumb"] ol {
 .back-to-top {
     position: fixed;
     bottom: 2rem;
-    right: 1.5rem;
+    left: 1.5rem;
     width: 2.9rem;
     height: 2.9rem;
     border-radius: 999px;
@@ -17375,7 +17375,7 @@ select {
 @media (max-width: 767px) {
     .back-to-top {
         bottom: 5.5rem !important;
-        right: 1rem !important;
+        left: 1rem !important;
     }
 }
 
