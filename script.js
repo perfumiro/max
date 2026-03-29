@@ -7210,6 +7210,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: '',
                 sizes: ['50ML', '100ML'],
                 added: '2026-01-10'
+            },
+            {
+                name: 'Azzaro Forever Wanted Elixir Eau de Parfum',
+                brand: 'AZZARO',
+                id: 'azzaro-forever-wanted-elixir-eau-de-parfum',
+                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg',
+                price: '',
+                sizes: ['50ML', '100ML'],
+                added: '2026-02-01'
             }
         ];
         // ── end catalogue ───────────────────────────────────────────────────
