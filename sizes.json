@@ -1,0 +1,352 @@
+{
+  "_comment":  "================================================================",
+  "_comment2": "  IPORDISE — Bottle Sizes Configuration",
+  "_comment3": "",
+  "_comment4": "  SECTION 1 — 'sizes': master size list.",
+  "_comment5": "  'key'      = internal ID used in the products section below.",
+  "_comment6": "  'label'    = text shown to customers on the button.",
+  "_comment7": "  'priceKey' = field name to read from prices.json.",
+  "_comment8": "  'type'     = 'decant' (small sample) or 'bottle' (full bottle).",
+  "_comment9": "",
+  "_comment10": "  HOW TO RENAME A SIZE SAFELY:",
+  "_comment11": "  Change only 'label' — e.g. from '50 ML' to '60 ML'.",
+  "_comment12": "  Keep 'key' and 'priceKey' the same so prices still work.",
+  "_comment13": "",
+  "_comment14": "  SECTION 2 — 'products': per-product size lists.",
+  "_comment15": "  List size keys from SECTION 1. Remove a key to hide that size.",
+  "_comment16": "================================================================",
+
+  "sizes": [
+    {
+      "key": "5ml",
+      "label": "5 ML",
+      "priceKey": "5ml",
+      "type": "decant"
+    },
+    {
+      "key": "10ml",
+      "label": "10 ML",
+      "priceKey": "10ml",
+      "type": "decant"
+    },
+    {
+      "key": "15ml",
+      "label": "15 ML",
+      "priceKey": "15ml",
+      "type": "decant"
+    },
+    {
+      "key": "20ml",
+      "label": "20 ML",
+      "priceKey": "20ml",
+      "type": "decant"
+    },
+    {
+      "key": "25ml",
+      "label": "25 ML",
+      "priceKey": "25ml",
+      "type": "decant"
+    },
+    {
+      "key": "30ml",
+      "label": "30 ML",
+      "priceKey": "30ml",
+      "type": "decant"
+    },
+    {
+      "key": "35ml",
+      "label": "35 ML",
+      "priceKey": "35ml",
+      "type": "decant"
+    },
+    {
+      "key": "50ml",
+      "label": "50 ML",
+      "priceKey": "50ml",
+      "type": "bottle"
+    },
+    {
+      "key": "60ml",
+      "label": "60 ML",
+      "priceKey": "60ml",
+      "type": "bottle"
+    },
+    {
+      "key": "100ml",
+      "label": "100 ML",
+      "priceKey": "100ml",
+      "type": "bottle"
+    },
+    {
+      "key": "150ml",
+      "label": "150 ML",
+      "priceKey": "150ml",
+      "type": "bottle"
+    },
+    {
+      "key": "200ml",
+      "label": "200 ML",
+      "priceKey": "200ml",
+      "type": "bottle"
+    }
+  ],
+
+  "products": {
+    "_note": "Per-product size overrides. Key = product slug (same as prices.json). Value = array of size keys to show.",
+
+    "bleu-de-chanel-eau-de-parfum-spray": {
+      "name": "BLEU DE CHANEL Eau de Parfum Spray",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml", "150ml"]
+    },
+
+    "dior-sauvage-eau-de-parfum": {
+      "name": "Dior Sauvage Eau de Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "dior-homme-intense-eau-de-parfum": {
+      "name": "Dior Homme Intense Eau de Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "gucci-guilty-absolu-de-parfum-pour-homme": {
+      "name": "Gucci Guilty Absolu de Parfum Pour Homme",
+      "sizes": ["10ml", "20ml", "30ml", "60ml", "100ml"]
+    },
+
+    "armani-stronger-with-you-absolutely-perfume": {
+      "name": "Armani Stronger With You Absolutely",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "armani-stronger-with-you-powerfully-eau-de-parfum": {
+      "name": "Armani Stronger With You Powerfully",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "emporio-armani-stronger-with-you-intensely-edp": {
+      "name": "Emporio Armani Stronger With You Intensely",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "boss-bottled-absolu-intense": {
+      "name": "Boss Bottled Absolu Intense",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "hugo-boss-boss-bottled-elixir-intense": {
+      "name": "Hugo Boss Bottled Elixir Intense",
+      "sizes": ["10ml", "20ml"]
+    },
+
+    "hugo-boss-the-scent-for-him-elixir": {
+      "name": "Hugo Boss The Scent For Him Elixir",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "carolina-herrera-bad-boy-eau-de-toilette": {
+      "name": "Carolina Herrera Bad Boy Eau de Toilette",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "azzaro-the-most-wanted-eau-de-parfum-intense": {
+      "name": "Azzaro The Most Wanted Eau de Parfum Intense",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "azzaro-the-most-wanted-parfum": {
+      "name": "Azzaro The Most Wanted Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "azzaro-forever-wanted-elixir-eau-de-parfum": {
+      "name": "Azzaro Forever Wanted Elixir",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "versace-dylan-blue-eau-de-toilette": {
+      "name": "Versace Dylan Blue Eau de Toilette",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "versace-eros-flame-eau-de-parfum": {
+      "name": "Versace Eros Flame Eau de Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "givenchy-gentleman-society-amber-eau-de-parfum": {
+      "name": "Givenchy Gentleman Society Amber",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "guerlain-l-homme-ideal-l-intense-eau-de-parfum": {
+      "name": "Guerlain L'Homme Idéal L'Intense",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "guerlain-l-homme-ideal-extreme": {
+      "name": "Guerlain L'Homme Idéal Extrême",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "gentleman-private-reserve-eau-de-parfum": {
+      "name": "Givenchy Gentleman Private Reserve",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "gucci-guilty-elixir-pour-homme": {
+      "name": "Gucci Guilty Elixir Pour Homme",
+      "sizes": ["10ml", "20ml", "30ml", "60ml", "100ml"]
+    },
+
+    "montale-arabians-tonka": {
+      "name": "Montale Arabians Tonka",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "givenchy-gentleman-society-extreme-eau-de-parfum": {
+      "name": "Givenchy Gentleman Society Extreme",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "givenchy-gentleman-society-nomade-eau-de-parfum": {
+      "name": "Givenchy Gentleman Society Nomade",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "jean-paul-gaultier-le-beau-eau-de-parfum": {
+      "name": "Jean Paul Gaultier Le Beau Eau de Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "versace-eros-eau-de-parfum": {
+      "name": "Versace Eros Eau de Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "versace-eros-energy-eau-de-parfum": {
+      "name": "Versace Eros Energy Eau de Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "jean-paul-gaultier-le-male-elixir-eau-de-parfum": {
+      "name": "Jean Paul Gaultier Le Male Elixir",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "jean-paul-gaultier-le-male-in-blue-eau-de-parfum": {
+      "name": "Jean Paul Gaultier Le Male In Blue",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "jean-paul-gaultier-le-male-eau-de-toilette": {
+      "name": "Jean Paul Gaultier Le Male Eau de Toilette",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "jean-paul-gaultier-le-male-le-parfum-eau-de-parfum": {
+      "name": "Jean Paul Gaultier Le Male Le Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "jean-paul-gaultier-scandal-elixir": {
+      "name": "Jean Paul Gaultier Scandal Elixir",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "jean-paul-gaultier-scandal-intense-eau-de-parfum": {
+      "name": "Jean Paul Gaultier Scandal Intense",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "rabanne-one-million-elixir-intense": {
+      "name": "Rabanne One Million Elixir Intense",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "rabanne-one-million-parfum": {
+      "name": "Rabanne One Million Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "prada-luna-rossa-ocean-eau-de-parfum": {
+      "name": "Prada Luna Rossa Ocean Eau de Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "prada-luna-rossa-carbon-edt": {
+      "name": "Prada Luna Rossa Carbon EDT",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "prada-luna-rossa-black-eau-de-parfum": {
+      "name": "Prada Luna Rossa Black Eau de Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "prada-l-homme-edt": {
+      "name": "Prada L'Homme EDT",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "prada-paradigme-eau-de-parfum": {
+      "name": "Prada Paradigme Eau de Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "prada-luna-rossa-men-edt": {
+      "name": "Prada Luna Rossa Men EDT",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "valentino-born-in-roma-donna-intense-eau-de-parfum": {
+      "name": "Valentino Born In Roma Donna Intense",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "valentino-born-in-roma-extradose-eau-de-toilette": {
+      "name": "Valentino Born In Roma Extradose EDT",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "valentino-born-in-roma-uomo-intense-eau-de-parfum": {
+      "name": "Valentino Born In Roma Uomo Intense",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "valentino-donna-born-in-roma-eau-de-parfum": {
+      "name": "Valentino Donna Born In Roma",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette": {
+      "name": "Valentino Uomo Born In Roma Coral Fantasy",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette": {
+      "name": "Valentino Uomo Born In Roma Purple Melancholia",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "valentino-uomo-born-in-roma-eau-de-toilette": {
+      "name": "Valentino Uomo Born In Roma EDT",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "yves-saint-laurent-myslf-eau-de-parfum": {
+      "name": "YSL MYSLF Eau de Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "yves-saint-laurent-myslf-le-parfum": {
+      "name": "YSL MYSLF Le Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    },
+
+    "yves-saint-laurent-y-eau-de-parfum": {
+      "name": "YSL Y Eau de Parfum",
+      "sizes": ["10ml", "20ml", "30ml", "50ml", "100ml"]
+    }
+  }
+}

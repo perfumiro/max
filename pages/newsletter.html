@@ -1,0 +1,386 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-70NCC2RZM6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-70NCC2RZM6');
+    </script>
+    <title data-i18n-title="newsletter.page_title">IPORDISE - Newsletter</title>
+    <meta name="description" content="Subscribe to the IPORDISE newsletter for exclusive fragrance launches, flash offers, and curated perfume tips delivered straight to your inbox.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../script.js"></script>
+    <script src="../i18n.js"></script>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body class="bg-white text-gray-800 font-sans antialiased">
+
+    <div class="page-announce-bar" data-i18n-html="newsletter.announce">
+        <i class="fas fa-envelope-open-text mr-2" style="color:#e73c3c"></i>
+        Join <strong style="color:#fff">400+ customers</strong> who get exclusive scent drops first.
+    </div>
+
+    <header class="bg-brand-dark text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Mobile Menu Toggle -->
+                <button id="mobileMenuToggle" class="md:hidden header-icon-btn hover:text-brand-red transition" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="../index.html" aria-label="IPORDISE Home">
+                        <img
+                            src="../assets/logo-wordmark.svg"
+                            alt="IPORDISE Luxury Perfumes"
+                            class="site-logo-img"
+                            fetchpriority="high"
+                            loading="eager"
+                            decoding="async"
+                        >
+                    </a>
+                </div>
+
+                <!-- Search trigger — opens full overlay on click -->
+                <div class="flex-1 max-w-2xl mx-8 hidden md:block">
+                    <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
+                        <i class="fas fa-search ipo-search-trigger-icon"></i>
+                        <span class="ipo-search-trigger-text">Search perfumes, brands, notes...</span>
+                    </button>
+                </div>
+
+                <!-- Actions & Icons -->
+                <div class="flex items-center gap-3 md:gap-6">
+                    <a href="../discover.html?filter=all" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">
+                        PROMOTIONS <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                    </a>
+
+                    <div class="flex items-center gap-2 md:gap-3 text-lg">
+                        <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
+                            <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                        </button>
+                        <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                        <div class="header-wishlist-wrap relative">
+                            <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                        </div>
+                        <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart" id="cartIconLink">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="header-cart-badge absolute hidden" id="cartBadge" aria-live="polite"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar (toggled by .header-search-btn click) -->
+        <div class="header-mobile-search md:hidden" aria-hidden="true" role="search">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="mobile-search-inner">
+                    <input
+                        type="text"
+                        class="mobile-search-input"
+                        placeholder="Search perfumes, brands, notes..."
+                        aria-label="Search"
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                    >
+                    <button class="mobile-search-submit" aria-label="Submit search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Categories -->
+        <nav class="perfume-nav hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <ul class="perfume-nav-list">
+                    <li><a href="../discover.html?filter=all" class="perfume-nav-link" data-i18n="index.nav.all" data-i18n-orig="ALL PERFUMES">ALL PERFUMES</a></li>
+                    <li><a href="../discover.html?filter=for-men" class="perfume-nav-link" data-i18n="index.nav.men" data-i18n-orig="MEN">MEN</a></li>
+                    <li><a href="../discover.html?filter=for-women" class="perfume-nav-link" data-i18n="index.nav.women" data-i18n-orig="WOMEN">WOMEN</a></li>
+                    <li><a href="../discover.html?filter=unisex" class="perfume-nav-link" data-i18n="index.nav.unisex" data-i18n-orig="UNISEX">UNISEX</a></li>
+                    <li><a href="../discover.html?filter=niche" class="perfume-nav-link" data-i18n="index.nav.niche" data-i18n-orig="NICHE">NICHE</a></li>
+                    <li><a href="../discover.html?filter=arabian" class="perfume-nav-link" data-i18n="index.nav.arabian" data-i18n-orig="ARABIAN">ARABIAN</a></li>
+                    <li><a href="../discover.html?filter=designer" class="perfume-nav-link" data-i18n="index.nav.designer" data-i18n-orig="DESIGNER">DESIGNER</a></li>
+                    <li><a href="../discover.html?filter=discovery-sets" class="perfume-nav-link" data-i18n="index.nav.discovery" data-i18n-orig="DISCOVERY SETS">DISCOVERY SETS</a></li>
+                    <li><a href="../discover.html?filter=best-sellers" class="perfume-nav-link" data-i18n="index.nav.bestsellers" data-i18n-orig="BEST SELLERS">BEST SELLERS</a></li>
+                    <li><a href="../discover.html?filter=new-in" class="perfume-nav-link" data-i18n="index.nav.newin" data-i18n-orig="NEW IN">NEW IN</a></li>
+                    <li><a href="../discover.html?filter=offers" class="perfume-nav-link" data-i18n="index.nav.offers" data-i18n-orig="OFFERS">OFFERS</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="page-hero">
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+            <p class="text-white/60 text-xs mb-4 flex items-center gap-1.5">
+                <a href="/" class="hover:text-white transition" data-i18n="common.home_breadcrumb">Home</a>
+                <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
+                <span class="text-white/90 font-semibold" data-i18n="newsletter.breadcrumb">Newsletter</span>
+            </p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight" data-i18n="newsletter.h1">Stay in the Loop</h1>
+            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base" data-i18n="newsletter.subtitle">Be the first to know about exclusive offers, new fragrance launches, and beauty tips.</p>
+        </div>
+    </section>
+
+    <main class="py-10 sm:py-14" style="background:linear-gradient(160deg,#f5f6f9 0%,#eef0f6 55%,#f5f6f9 100%)">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Hero subscribe card -->
+            <div class="news-hero-card mb-8">
+                <div class="relative z-10">
+                    <p class="faq-category-title mb-4 mx-auto w-fit" style="background:rgba(231,60,60,0.2);color:#f87171"><i class="fas fa-envelope"></i> <span data-i18n="newsletter.subscribe_cat">Subscribe now</span></p>
+                    <h2 class="text-2xl sm:text-3xl font-serif font-bold text-white mb-3" data-i18n="newsletter.card_h">Your fragrance journey starts here</h2>
+                    <p class="text-white/65 text-sm mb-8 max-w-lg mx-auto" data-i18n="newsletter.card_p">Get exclusive access to new arrivals, members-only discounts, and curated scent guides delivered straight to your inbox.</p>
+
+                    <form class="max-w-xl mx-auto" id="newsletterForm" novalidate>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                            <input type="text" name="from_name" placeholder="First name *" required class="contact-input sm:col-span-1" data-i18n-placeholder="newsletter.fname_ph" autocomplete="given-name">
+                            <input id="nlEmailInput" type="email" name="from_email" placeholder="Email address *" required class="contact-input sm:col-span-2" data-i18n-placeholder="newsletter.email_ph" autocomplete="email">
+                        </div>
+                        <div class="mb-4">
+                            <select name="interest" class="contact-input">
+                                <option value="" data-i18n="newsletter.interest_ph">I'm interested in... (optional)</option>
+                                <option data-i18n="newsletter.opt_men">Men's fragrances</option>
+                                <option data-i18n="newsletter.opt_women">Women's fragrances</option>
+                                <option data-i18n="newsletter.opt_unisex">Unisex &amp; niche</option>
+                                <option data-i18n="newsletter.opt_arabian">Arabian &amp; oud</option>
+                                <option data-i18n="newsletter.opt_discovery">Discovery sets</option>
+                                <option data-i18n="newsletter.opt_offers">Offers &amp; promotions</option>
+                            </select>
+                        </div>
+                        <label class="flex items-start gap-2 text-xs text-white/60 mb-5 cursor-pointer">
+                            <input type="checkbox" required class="mt-0.5 accent-red-500">
+                            <span data-i18n-html="newsletter.consent">I agree to receive marketing emails from IPORDISE. I can unsubscribe at any time. See our <a href="privacy-policy.html" class="underline text-white/80">Privacy Policy</a>.</span>
+                        </label>
+                        <button type="submit" id="newsletterBtn" class="contact-submit-btn ipordise-news-submit mx-auto justify-center" style="min-width:200px">
+                            <span id="newsletterBtnTxt">Subscribe &mdash; It's Free</span>
+                            <i id="newsletterBtnIcon" class="fas fa-envelope text-sm"></i>
+                        </button>
+                    </form>
+
+                    <!-- Feedback messages -->
+                    <div id="nlSuccess" style="display:none" class="mt-5 max-w-xl mx-auto flex items-center gap-3 rounded-xl px-5 py-4 text-sm font-semibold" style="background:rgba(5,150,105,0.25);border:1px solid rgba(52,211,153,0.4);color:#6ee7b7">
+                        <i class="fas fa-check-circle text-lg flex-shrink-0" style="color:#34d399"></i>
+                        <span>You're in! Welcome to IPORDISE. Check your inbox.</span>
+                    </div>
+                    <div id="nlError" style="display:none" class="mt-5 max-w-xl mx-auto flex items-center gap-3 rounded-xl px-5 py-4 text-sm font-semibold" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);color:#fca5a5">
+                        <i class="fas fa-exclamation-circle text-lg flex-shrink-0" style="color:#f87171"></i>
+                        <span>Something went wrong. Please try again or email <a href="mailto:ipordiseparfums@gmail.com" class="underline">ipordiseparfums@gmail.com</a></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What you get -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+                <div class="info-card text-center">
+                    <i class="fas fa-bolt text-2xl mb-2" style="color:#e73c3c"></i>
+                    <h3 class="font-bold text-sm text-brand-dark" data-i18n="newsletter.perk1_h">First access</h3>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="newsletter.perk1_p">New arrivals and limited editions land in your inbox before the public.</p>
+                </div>
+                <div class="info-card text-center">
+                    <i class="fas fa-percent text-2xl mb-2" style="color:#e73c3c"></i>
+                    <h3 class="font-bold text-sm text-brand-dark" data-i18n="newsletter.perk2_h">Exclusive discounts</h3>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="newsletter.perk2_p">Subscriber-only promo codes and flash sales you won't find anywhere else.</p>
+                </div>
+                <div class="info-card text-center">
+                    <i class="fas fa-book-open text-2xl mb-2" style="color:#e73c3c"></i>
+                    <h3 class="font-bold text-sm text-brand-dark" data-i18n="newsletter.perk3_h">Scent guides</h3>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="newsletter.perk3_p">Curated fragrance guides, layering tips, and seasonal picks from our experts.</p>
+                </div>
+            </div>
+
+            <!-- Recent topics preview -->
+            <div class="mb-8">
+                <p class="faq-category-title mb-4"><i class="fas fa-newspaper"></i> <span data-i18n="newsletter.recent_cat">Recent newsletter topics</span></p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="info-card py-4 px-5">
+                        <p class="text-[10px] uppercase tracking-wider font-semibold text-gray-400 mb-1" data-i18n="newsletter.issue_label">Mar&nbsp;2026</p>
+                        <p class="text-sm font-bold text-brand-dark" data-i18n="newsletter.issue1">&ldquo;Spring Fragrances: 5 Scents to Refresh Your Rotation&rdquo;</p>
+                    </div>
+                    <div class="info-card py-4 px-5">
+                        <p class="text-[10px] uppercase tracking-wider font-semibold text-gray-400 mb-1" data-i18n="newsletter.issue2_label">Feb&nbsp;2026</p>
+                        <p class="text-sm font-bold text-brand-dark" data-i18n="newsletter.issue2">&ldquo;The Art of Layering: How to Build Your Signature Scent&rdquo;</p>
+                    </div>
+                    <div class="info-card py-4 px-5">
+                        <p class="text-[10px] uppercase tracking-wider font-semibold text-gray-400 mb-1" data-i18n="newsletter.issue3_label">Jan&nbsp;2026</p>
+                        <p class="text-sm font-bold text-brand-dark" data-i18n="newsletter.issue3">&ldquo;Niche vs Designer: Which Path Suits Your Nose?&rdquo;</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subscriber testimonial -->
+            <div class="mb-8 bg-white rounded-2xl border border-gray-100 p-6 shadow-sm text-center">
+                <div class="flex justify-center gap-1 mb-3">
+                    <i class="fas fa-star text-sm" style="color:#f59e0b"></i>
+                    <i class="fas fa-star text-sm" style="color:#f59e0b"></i>
+                    <i class="fas fa-star text-sm" style="color:#f59e0b"></i>
+                    <i class="fas fa-star text-sm" style="color:#f59e0b"></i>
+                    <i class="fas fa-star text-sm" style="color:#f59e0b"></i>
+                </div>
+                <blockquote class="text-sm italic text-gray-600 max-w-lg mx-auto" data-i18n="newsletter.testimonial">&ldquo;The IPORDISE newsletter introduced me to Xerjoff &mdash; a brand I never would have found on my own. Now it's my daily signature. Worth every email.&rdquo;</blockquote>
+                <p class="mt-3 text-xs font-semibold text-gray-400" data-i18n="newsletter.testimonial_author">&mdash; Youssef, Casablanca</p>
+            </div>
+
+            <p class="text-center text-xs text-gray-400" data-i18n="newsletter.no_spam">We respect your inbox &mdash; no spam, no more than 2 emails per week. Unsubscribe anytime.</p>
+        </div>
+    </main>
+
+    <footer class="bg-brand-dark text-white pt-12 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+                <div class="col-span-2 md:col-span-1">
+                    <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online.</p>
+                    <div class="flex space-x-3">
+                        <a href="https://www.instagram.com/ipordise_parfums/" target="_blank" rel="noopener noreferrer" aria-label="IPORDISE on Instagram" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=61563285998567&ref=NONE_xav_ig_profile_page_web#" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.tiktok.com/@ipordise_parfume?_r=1&_t=ZS-94xrj0k1Pjp" target="_blank" rel="noopener noreferrer" aria-label="IPORDISE on TikTok" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
+                                            </div>
+                </div>
+                <div><h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4><ul class="footer-links"><li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li><li><a href="shipping.html" data-i18n="footer.shipping_returns">Shipping &amp; Returns</a></li><li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li><li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li><li><a href="how-to-order.html">How to Order</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about">About</h4><ul class="footer-links"><li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li><li><a href="careers.html" data-i18n="footer.careers">Careers</a></li><li><a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li></ul></div>
+                <div>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4" data-i18n="footer.newsletter_desc">Subscribe for exclusive deals and new arrivals.</p>
+                    <div class="flex"><input type="email" placeholder="Your email" data-i18n-placeholder="footer.newsletter_placeholder" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm" data-i18n="footer.newsletter_go">GO</a></div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
+                <p data-i18n="footer.copyright">&copy; 2026 IPORDISE. All rights reserved.</p>
+                <div class="flex gap-4"><a href="terms.html" class="hover:text-white transition" data-i18n="footer.terms">Terms</a><a href="privacy-policy.html" class="hover:text-white transition" data-i18n="footer.privacy">Privacy</a><a href="returns.html" class="hover:text-white transition" data-i18n="footer.returns">Returns</a></div>
+            </div>
+        </div>
+    </footer>
+
+<script>
+/* Pre-fill email from URL param (e.g. ?email=user@example.com from footer GO button) */
+(function () {
+    try {
+        var email = new URLSearchParams(window.location.search).get('email');
+        if (email) {
+            var el = document.getElementById('nlEmailInput');
+            if (el) { el.value = decodeURIComponent(email); el.focus(); }
+        }
+    } catch(e) {}
+}());
+</script>
+
+<script>
+(function () {
+    var ENDPOINT = 'https://formspree.io/f/meerdrqy';
+    var form = document.getElementById('newsletterForm');
+    var btn = document.getElementById('newsletterBtn');
+    var btnTxt = document.getElementById('newsletterBtnTxt');
+    var btnIcon = document.getElementById('newsletterBtnIcon');
+    var success = document.getElementById('nlSuccess');
+    var error = document.getElementById('nlError');
+
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var nameInput = form.querySelector('input[type="text"]');
+        var emailInput = form.querySelector('input[type="email"]');
+        var checkbox = form.querySelector('input[type="checkbox"]');
+
+        if (!nameInput.value.trim()) {
+            nameInput.focus();
+            return;
+        }
+        if (!emailInput.value.trim() || !emailInput.checkValidity()) {
+            emailInput.focus();
+            return;
+        }
+        if (!checkbox.checked) {
+            checkbox.focus();
+            return;
+        }
+
+        success.style.display = 'none';
+        error.style.display = 'none';
+        btn.disabled = true;
+        btnTxt.textContent = 'Sending...';
+        btnIcon.className = 'fas fa-spinner fa-spin text-sm';
+
+        var payload = {
+            _replyto: emailInput.value.trim().toLowerCase(),
+            _subject: '[IPORDISE Newsletter] New subscriber - ' + nameInput.value.trim(),
+            formType: 'newsletter',
+            name: nameInput.value.trim(),
+            email: emailInput.value.trim().toLowerCase(),
+            interest: form.querySelector('select').value || 'Not specified',
+            subscribedAt: new Date().toISOString()
+        };
+
+        fetch(ENDPOINT, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+            .then(function (res) {
+                if (!res.ok) throw new Error('Formspree error');
+                success.style.display = 'flex';
+                form.reset();
+                btnTxt.textContent = 'Subscribed';
+                btnIcon.className = 'fas fa-check text-sm';
+                btn.classList.add('is-subscribed');
+            })
+            .catch(function () {
+                error.style.display = 'flex';
+                btn.disabled = false;
+                btnTxt.textContent = 'Subscribe - It\'s Free';
+                btnIcon.className = 'fas fa-envelope text-sm';
+            });
+    });
+}());
+</script>
+
+
+    <!-- IPO Search Overlay -->
+    <div class="ipo-search-overlay" id="ipoSearchOverlay" role="dialog" aria-label="Search" aria-modal="true" aria-hidden="true">
+        <div class="ipo-search-overlay-backdrop" id="ipoSearchOverlayBackdrop"></div>
+        <div class="ipo-search-overlay-panel" id="ipoSearchOverlayPanel">
+            <!-- Input bar -->
+            <div class="ipo-search-overlay-bar">
+                <div class="ipo-search-overlay-input-wrap">
+                    <i class="fas fa-search ipo-search-overlay-search-icon"></i>
+                    <input
+                        type="text"
+                        class="ipo-search-overlay-input"
+                        id="ipoSearchOverlayInput"
+                        placeholder="Search perfumes, brands, notes..."
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        aria-label="Search"
+                    >
+                    <button type="button" class="ipo-search-overlay-clear" id="ipoSearchOverlayClear" aria-label="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <button type="button" class="ipo-search-overlay-close-btn" id="ipoSearchOverlayClose" aria-label="Close search">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Dynamic body (popular searches + products / live results) -->
+            <div class="ipo-search-overlay-body" id="ipoSearchOverlayBody"></div>
+        </div>
+    </div>
+</body>
+</html>

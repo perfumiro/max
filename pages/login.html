@@ -1,0 +1,552 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-70NCC2RZM6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-70NCC2RZM6');
+    </script>
+    <title data-i18n-title="login.page_title">Sign In | IPORDISE Morocco</title>
+    <meta name="description" content="Sign in to your IPORDISE account to track orders, save favourites, and enjoy a personalised fragrance shopping experience in Morocco.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#1a1a1a">
+    <link rel="icon" type="image/png" href="../assets/logo.png">
+    <link rel="apple-touch-icon" href="../assets/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../script.js"></script>
+    <script src="../i18n.js"></script>
+    <link rel="stylesheet" href="../style.css">
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/logo-mark.svg">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="IPORDISE">
+    <meta name="msapplication-TileColor" content="#1a1a1a">
+    <meta name="msapplication-TileImage" content="../assets/logo-mark.svg"></head>
+<body class="bg-white text-gray-800 font-sans antialiased">
+
+    <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide" data-i18n-html="login.announce">
+        Complimentary gift wrapping - Code: <span class="top-announcement-code">PARFUM15</span> - <a href="#" class="top-announcement-link">SHOP NOW!</a>
+    </div>
+
+    <header class="bg-brand-dark text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Mobile Menu Toggle -->
+                <button id="mobileMenuToggle" class="md:hidden header-icon-btn hover:text-brand-red transition" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="../index.html" aria-label="IPORDISE Home">
+                        <img
+                            src="../assets/logo-wordmark.svg"
+                            alt="IPORDISE Luxury Perfumes"
+                            class="site-logo-img"
+                            fetchpriority="high"
+                            loading="eager"
+                            decoding="async"
+                        >
+                    </a>
+                </div>
+
+                <!-- Search trigger — opens full overlay on click -->
+                <div class="flex-1 max-w-2xl mx-8 hidden md:block">
+                    <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
+                        <i class="fas fa-search ipo-search-trigger-icon"></i>
+                        <span class="ipo-search-trigger-text">Search perfumes, brands, notes...</span>
+                    </button>
+                </div>
+
+                <!-- Actions & Icons -->
+                <div class="flex items-center gap-3 md:gap-6">
+                    <a href="../discover.html?filter=all" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">
+                        PROMOTIONS <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                    </a>
+
+                    <div class="flex items-center gap-2 md:gap-3 text-lg">
+                        <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
+                            <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                        </button>
+                        <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                        <div class="header-wishlist-wrap relative">
+                            <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                        </div>
+                        <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart" id="cartIconLink">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="header-cart-badge absolute hidden" id="cartBadge" aria-live="polite"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar (toggled by .header-search-btn click) -->
+        <div class="header-mobile-search md:hidden" aria-hidden="true" role="search">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="mobile-search-inner">
+                    <input
+                        type="text"
+                        class="mobile-search-input"
+                        placeholder="Search perfumes, brands, notes..."
+                        aria-label="Search"
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                    >
+                    <button class="mobile-search-submit" aria-label="Submit search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Categories -->
+        <nav class="perfume-nav hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <ul class="perfume-nav-list">
+                    <li><a href="../discover.html?filter=all" class="perfume-nav-link" data-i18n="index.nav.all" data-i18n-orig="ALL PERFUMES">ALL PERFUMES</a></li>
+                    <li><a href="../discover.html?filter=for-men" class="perfume-nav-link" data-i18n="index.nav.men" data-i18n-orig="MEN">MEN</a></li>
+                    <li><a href="../discover.html?filter=for-women" class="perfume-nav-link" data-i18n="index.nav.women" data-i18n-orig="WOMEN">WOMEN</a></li>
+                    <li><a href="../discover.html?filter=unisex" class="perfume-nav-link" data-i18n="index.nav.unisex" data-i18n-orig="UNISEX">UNISEX</a></li>
+                    <li><a href="../discover.html?filter=niche" class="perfume-nav-link" data-i18n="index.nav.niche" data-i18n-orig="NICHE">NICHE</a></li>
+                    <li><a href="../discover.html?filter=arabian" class="perfume-nav-link" data-i18n="index.nav.arabian" data-i18n-orig="ARABIAN">ARABIAN</a></li>
+                    <li><a href="../discover.html?filter=designer" class="perfume-nav-link" data-i18n="index.nav.designer" data-i18n-orig="DESIGNER">DESIGNER</a></li>
+                    <li><a href="../discover.html?filter=discovery-sets" class="perfume-nav-link" data-i18n="index.nav.discovery" data-i18n-orig="DISCOVERY SETS">DISCOVERY SETS</a></li>
+                    <li><a href="../discover.html?filter=best-sellers" class="perfume-nav-link" data-i18n="index.nav.bestsellers" data-i18n-orig="BEST SELLERS">BEST SELLERS</a></li>
+                    <li><a href="../discover.html?filter=new-in" class="perfume-nav-link" data-i18n="index.nav.newin" data-i18n-orig="NEW IN">NEW IN</a></li>
+                    <li><a href="../discover.html?filter=offers" class="perfume-nav-link" data-i18n="index.nav.offers" data-i18n-orig="OFFERS">OFFERS</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="login-page-wrap py-10 sm:py-14 md:py-16 min-h-[78vh]">
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="login-hero-row">
+                <div>
+                    <p class="login-breadcrumbs text-sm mb-5 sm:mb-6">
+                        <a href="/" class="hover:text-white transition" data-i18n="common.home_breadcrumb">Home</a>
+                        <span class="mx-2 opacity-60">/</span>
+                        <span class="font-semibold" data-i18n="login.breadcrumb">Account Sign In</span>
+                    </p>
+                    <span class="login-hero-kicker" data-i18n="login.kicker">Private member access</span>
+                    <h1 class="login-hero-title" data-i18n="login.h1">Enter your private fragrance space.</h1>
+                    <p class="login-hero-text" data-i18n="login.text">Sign in to access saved selections, track deliveries, continue checkout faster, and keep your personal perfume archive in one elevated account experience.</p>
+
+                    <div class="login-hero-metrics">
+                        <article class="login-hero-metric">
+                            <strong data-i18n="login.metric1_strong">1-click</strong>
+                            <span data-i18n="login.metric1_span">reorders for your signature picks</span>
+                        </article>
+                        <article class="login-hero-metric">
+                            <strong data-i18n="login.metric2_strong">Live</strong>
+                            <span data-i18n="login.metric2_span">tracking on every active order</span>
+                        </article>
+                        <article class="login-hero-metric">
+                            <strong data-i18n="login.metric3_strong">24/7</strong>
+                            <span data-i18n="login.metric3_span">access to your wishlist and profile</span>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="login-hero-mini-card">
+                    <span data-i18n="login.concierge_title">Concierge access</span>
+                    <strong data-i18n="login.concierge_hours">Mon - Sat ? 09:00 - 20:00</strong>
+                    <p data-i18n="login.concierge_desc">Account support, order help, and fragrance guidance from our client care team.</p>
+                    <a href="contact.html" data-i18n="login.concierge_link">Talk to an advisor <i class="fas fa-arrow-right text-xs"></i></a>
+                </div>
+            </div>
+
+            <div class="login-shell">
+                <aside class="login-aside text-white">
+                    <div class="login-aside-inner">
+                        <span class="login-panel-kicker" data-i18n="login.aside_kicker">Member experience</span>
+                        <h2 class="login-panel-title" data-i18n="login.aside_h">Luxury access designed for returning clients.</h2>
+                        <p class="login-panel-text" data-i18n="login.aside_p">From wishlist curation to delivery follow-up, your IPORDISE account keeps every part of your perfume journey elegant, secure, and fast.</p>
+
+                        <div class="login-showcase-card">
+                            <div class="login-showcase-head">
+                                <span data-i18n="login.card_title">Inside your account</span>
+                                <strong data-i18n="login.card_subtitle">Premium profile control</strong>
+                            </div>
+                            <div class="login-showcase-list">
+                                <div class="login-showcase-item">
+                                    <i class="fas fa-heart"></i>
+                                    <div>
+                                        <strong data-i18n="login.feat1_h">Saved favorites</strong>
+                                        <span data-i18n="login.feat1_p">Keep your best-loved bottles and decants ready to revisit.</span>
+                                    </div>
+                                </div>
+                                <div class="login-showcase-item">
+                                    <i class="fas fa-truck-fast"></i>
+                                    <div>
+                                        <strong data-i18n="login.feat2_h">Tracked delivery</strong>
+                                        <span data-i18n="login.feat2_p">Follow every shipment from confirmation to doorstep.</span>
+                                    </div>
+                                </div>
+                                <div class="login-showcase-item">
+                                    <i class="fas fa-bag-shopping"></i>
+                                    <div>
+                                        <strong data-i18n="login.feat3_h">Faster checkout</strong>
+                                        <span data-i18n="login.feat3_p">Return with your profile details and place orders in less time.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="login-stat-grid">
+                            <article class="login-stat-card">
+                                <strong data-i18n="login.stat1_h">Personal dashboard</strong>
+                                <span data-i18n="login.stat1_p">Review orders, favorites, and account details from one place.</span>
+                            </article>
+                            <article class="login-stat-card">
+                                <strong data-i18n="login.stat2_h">Protected access</strong>
+                                <span data-i18n="login.stat2_p">Secure sign in backed by encrypted session handling.</span>
+                            </article>
+                            <article class="login-stat-card">
+                                <strong data-i18n="login.stat3_h">Luxury follow-up</strong>
+                                <span data-i18n="login.stat3_p">Stay updated on deliveries, returns, and concierge support.</span>
+                            </article>
+                            <article class="login-stat-card">
+                                <strong data-i18n="login.stat4_h">Faster discovery</strong>
+                                <span data-i18n="login.stat4_p">Come back to collections you viewed and perfumes you loved.</span>
+                            </article>
+                        </div>
+
+                        <div class="login-benefits-cluster">
+                            <div class="login-benefit-item">
+                                <i class="fas fa-sparkles"></i>
+                                <span data-i18n="login.benefit1">Personalized fragrance recommendations for your profile</span>
+                            </div>
+                            <div class="login-benefit-item">
+                                <i class="fas fa-box-open"></i>
+                                <span data-i18n="login.benefit2">Fast order history and delivery follow-up</span>
+                            </div>
+                            <div class="login-benefit-item">
+                                <i class="fas fa-shield-heart"></i>
+                                <span data-i18n="login.benefit3">Secure account flow with trusted data protection</span>
+                            </div>
+                        </div>
+
+                        <div class="login-meta-card">
+                            <p class="text-xs uppercase tracking-[0.2em] font-bold text-[#f3dca5]" data-i18n="login.meta_title">Client support</p>
+                                <p class="text-sm text-white/78 mt-2" data-i18n="login.meta_p">Need help signing in or checking an order? Our advisors assist with account access, order follow-up, and product guidance.</p>
+                                <a href="contact.html" class="inline-flex items-center mt-4 text-sm font-semibold text-white hover:text-[#f3dca5] transition" data-i18n="login.meta_link">
+                                Contact customer care <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="login-form-panel">
+                    <div class="login-form-head">
+                        <div class="login-form-badge-row">
+                            <span class="login-form-kicker" data-i18n="login.form_kicker">Secure sign in</span>
+                            <span class="login-form-badge"><i class="fas fa-shield-check"></i> <span data-i18n="login.form_badge">Trusted account access</span></span>
+                        </div>
+                        <h2 class="login-form-title" data-i18n="login.form_title">Welcome back.</h2>
+                        <p class="login-form-subtitle" data-i18n="login.form_subtitle">Use your email and password to continue to your account, recover your favorites, and return to checkout with a smooth premium experience.</p>
+                    </div>
+
+                    <div class="login-security-note">
+                        <i class="fas fa-lock"></i>
+                        <span data-i18n="login.security_note">Your session is protected with secure encryption.</span>
+                    </div>
+
+                    <div class="login-form-feature-strip">
+                        <div class="login-form-feature"><i class="fas fa-heart-circle-check"></i><span data-i18n="login.feature_wishlist">Wishlist sync</span></div>
+                        <div class="login-form-feature"><i class="fas fa-location-dot"></i><span data-i18n="login.feature_delivery">Saved delivery details</span></div>
+                        <div class="login-form-feature"><i class="fas fa-receipt"></i><span data-i18n="login.feature_history">Order history</span></div>
+                    </div>
+
+                    <div class="login-auth-toggle" role="tablist" aria-label="Account access mode">
+                        <button type="button" class="login-auth-tab is-active" data-auth-mode="signin" aria-selected="true" data-i18n="login.tab_signin">Sign in</button>
+                        <button type="button" class="login-auth-tab" data-auth-mode="signup" aria-selected="false" data-i18n="login.tab_signup">Create account</button>
+                    </div>
+
+                    <div class="login-auth-panels mt-7">
+                        <section class="login-auth-panel is-active" data-auth-panel="signin">
+                            <form id="loginForm" class="space-y-4" action="#" method="post">
+                                <label class="login-field">
+                                    <span data-i18n="login.email_label">Email address</span>
+                                    <div class="login-input-wrap">
+                                        <i class="far fa-envelope login-input-icon"></i>
+                                        <input id="loginEmailInput" class="login-input-control" type="email" name="email" placeholder="you@example.com" data-i18n-placeholder="login.email_ph" autocomplete="email" required>
+                                    </div>
+                                </label>
+
+                                <label class="login-field">
+                                    <span data-i18n="login.password_label">Password</span>
+                                    <div class="login-input-wrap">
+                                        <i class="fas fa-lock login-input-icon"></i>
+                                        <input id="loginPasswordInput" class="login-input-control pr-14" type="password" name="password" placeholder="Enter your password" data-i18n-placeholder="login.password_ph" autocomplete="current-password" required>
+                                        <button type="button" class="login-password-toggle" data-password-toggle data-password-target="#loginPasswordInput" aria-label="Show password">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </label>
+
+                                <div class="login-utility-row">
+                                    <label class="login-remember-option">
+                                        <input id="loginRememberMe" type="checkbox" class="rounded border-gray-300 text-brand-red focus:ring-brand-red">
+                                        <span data-i18n="login.remember_me">Stay signed in on this device</span>
+                                    </label>
+                                    <a href="support.html" class="login-forgot-link" data-i18n="login.forgot_pw">Forgot password?</a>
+                                </div>
+
+                                <label class="legal-consent-card legal-consent-card-login">
+                                    <span class="legal-consent-check">
+                                        <input id="loginLegalConsent" type="checkbox" class="legal-consent-input">
+                                        <span class="legal-consent-box" aria-hidden="true"></span>
+                                    </span>
+                                    <span class="legal-consent-copy">
+                                        <strong data-i18n="login.legal_accept">I accept the Privacy Policy and Terms & Conditions.</strong>
+                                        <span data-i18n="login.legal_signin_agree">By signing in, I agree to the processing of my account data according to IPORDISE policies.</span>
+                                        <span><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> and <a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a>.</span>
+                                    </span>
+                                </label>
+
+                                <p id="loginLegalConsentMessage" class="legal-consent-message hidden" data-i18n="login.legal_required_msg">Please accept the Privacy Policy and Terms & Conditions to continue.</p>
+                                <p id="loginFormMessage" class="login-form-message hidden" aria-live="polite"></p>
+
+                                <button id="loginSubmitBtn" type="submit" class="login-submit-btn opacity-50 cursor-not-allowed" disabled aria-disabled="true" data-i18n="login.submit_btn">Sign in securely</button>
+
+                                <button type="button" class="login-secondary-btn" data-auth-switch="signup" data-i18n="login.create_account_btn">Create a new account</button>
+                            </form>
+                        </section>
+
+                        <section class="login-auth-panel hidden" data-auth-panel="signup">
+                            <form id="signupForm" class="space-y-4" action="#" method="post">
+                                <div class="login-form-grid-2">
+                                    <label class="login-field">
+                                        <span data-i18n="login.signup_firstname_label">First name</span>
+                                        <div class="login-input-wrap">
+                                            <i class="far fa-user login-input-icon"></i>
+                                            <input id="signupFirstNameInput" class="login-input-control" type="text" name="firstName" placeholder="First name" data-i18n-placeholder="login.signup_firstname_ph" autocomplete="given-name" required>
+                                        </div>
+                                    </label>
+
+                                    <label class="login-field">
+                                        <span data-i18n="login.signup_lastname_label">Last name</span>
+                                        <div class="login-input-wrap">
+                                            <i class="far fa-user login-input-icon"></i>
+                                            <input id="signupLastNameInput" class="login-input-control" type="text" name="lastName" placeholder="Last name" data-i18n-placeholder="login.signup_lastname_ph" autocomplete="family-name" required>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <label class="login-field">
+                                    <span data-i18n="login.signup_email_label">Email address</span>
+                                    <div class="login-input-wrap">
+                                        <i class="far fa-envelope login-input-icon"></i>
+                                        <input id="signupEmailInput" class="login-input-control" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+                                    </div>
+                                </label>
+
+                                <label class="login-field">
+                                    <span data-i18n="login.signup_create_pw_label">Create password</span>
+                                    <div class="login-input-wrap">
+                                        <i class="fas fa-lock login-input-icon"></i>
+                                        <input id="signupPasswordInput" class="login-input-control pr-14" type="password" name="password" placeholder="Minimum 6 characters" data-i18n-placeholder="login.signup_min_pw_ph" autocomplete="new-password" minlength="6" required>
+                                        <button type="button" class="login-password-toggle" data-password-toggle data-password-target="#signupPasswordInput" aria-label="Show password">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </label>
+
+                                <label class="login-field">
+                                    <span data-i18n="login.signup_confirm_pw_label">Confirm password</span>
+                                    <div class="login-input-wrap">
+                                        <i class="fas fa-lock login-input-icon"></i>
+                                        <input id="signupConfirmPasswordInput" class="login-input-control pr-14" type="password" name="confirmPassword" placeholder="Repeat your password" data-i18n-placeholder="login.signup_repeat_pw_ph" autocomplete="new-password" minlength="6" required>
+                                        <button type="button" class="login-password-toggle" data-password-toggle data-password-target="#signupConfirmPasswordInput" aria-label="Show password">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </label>
+
+                                <label class="legal-consent-card legal-consent-card-login">
+                                    <span class="legal-consent-check">
+                                        <input id="signupLegalConsent" type="checkbox" class="legal-consent-input">
+                                        <span class="legal-consent-box" aria-hidden="true"></span>
+                                    </span>
+                                    <span class="legal-consent-copy">
+                                        <strong data-i18n="login.legal_accept">I accept the Privacy Policy and Terms & Conditions.</strong>
+                                        <span data-i18n="login.legal_signup_agree">By creating an account, I agree to the processing of my account data according to IPORDISE policies.</span>
+                                        <span><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> and <a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a>.</span>
+                                    </span>
+                                </label>
+
+                                <p id="signupLegalConsentMessage" class="legal-consent-message hidden" data-i18n="login.legal_required_signup_msg">Please accept the Privacy Policy and Terms & Conditions to create your account.</p>
+                                <p id="signupFormMessage" class="login-form-message hidden" aria-live="polite"></p>
+
+                                <button id="signupSubmitBtn" type="submit" class="login-submit-btn opacity-50 cursor-not-allowed" disabled aria-disabled="true" data-i18n="login.signup_btn">Create account</button>
+
+                                <button type="button" class="login-secondary-btn" data-auth-switch="signin" data-i18n="login.existing_account_btn">I already have an account</button>
+                            </form>
+                        </section>
+                    </div>
+
+                    <div class="login-divider-row">
+                        <span class="h-px flex-1 bg-gray-200"></span>
+                        <span data-i18n="login.or_continue">Or continue with</span>
+                        <span class="h-px flex-1 bg-gray-200"></span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                        <button type="button" class="social-login-btn" aria-label="Continue with Google">
+                            <i class="fab fa-google text-red-500"></i>
+                            <span>Google</span>
+                        </button>
+                        <button type="button" class="social-login-btn" aria-label="Continue with Facebook">
+                            <i class="fab fa-facebook-f text-blue-600"></i>
+                            <span>Facebook</span>
+                        </button>
+                    </div>
+
+                    <div class="login-assistance-row">
+                        <article class="login-assistance-card">
+                            <span class="login-assistance-label" data-i18n="login.assist_new_label">New client</span>
+                            <strong data-i18n="login.assist_new_h">Create your account</strong>
+                            <p data-i18n="login.assist_new_p">Save favorites, speed up checkout, and keep your fragrance history organized.</p>
+                            <button type="button" class="login-inline-action" data-auth-switch="signup" data-i18n-html="login.assist_new_btn">Register now <i class="fas fa-arrow-right text-xs"></i></button>
+                        </article>
+                        <article class="login-assistance-card">
+                            <span class="login-assistance-label" data-i18n="login.assist_support_label">Need support?</span>
+                            <strong data-i18n="login.assist_support_h">Account assistance</strong>
+                            <p data-i18n="login.assist_support_p">Get help with sign in, password recovery, order access, and customer care.</p>
+                            <a href="support.html" data-i18n-html="login.assist_support_link">Visit support <i class="fas fa-arrow-right text-xs"></i></a>
+                        </article>
+                    </div>
+
+                    <div class="login-bottom-row">
+                        <p data-i18n="login.no_account">Don?t have an account yet?</p>
+                        <button type="button" class="login-inline-action" data-auth-switch="signup" data-i18n="login.create_now">Create one now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-brand-dark text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
+                    <p class="text-gray-400 text-sm mb-6"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes, cosmetics, and beauty care online. Elevate your everyday routine.</p>
+                    <div class="flex space-x-3">
+                        <a href="https://www.instagram.com/ipordise_parfums/" target="_blank" rel="noopener noreferrer" aria-label="IPORDISE on Instagram" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=61563285998567&ref=NONE_xav_ig_profile_page_web#" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.tiktok.com/@ipordise_parfume?_r=1&_t=ZS-94xrj0k1Pjp" target="_blank" rel="noopener noreferrer" aria-label="IPORDISE on TikTok" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
+                                            </div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4" data-i18n="footer.customer_service">Customer Care</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="contact.html" class="hover:text-white transition" data-i18n="footer.contact">Contact Us</a></li>
+                        <li><a href="shipping.html" class="hover:text-white transition" data-i18n="footer.shipping_returns">Shipping & Returns</a></li>
+                        <li><a href="track-order.html" class="hover:text-white transition" data-i18n="footer.track_order">Track Order</a></li>
+                        <li><a href="faq.html" class="hover:text-white transition" data-i18n="footer.faq">FAQ</a></li>
+                        <li><a href="how-to-order.html" class="hover:text-white transition">How to Order</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4" data-i18n="footer.about" data-i18n="footer.about">About</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="our-story.html" class="hover:text-white transition" data-i18n="footer.our_story">Our Story</a></li>
+                        <li><a href="careers.html" class="hover:text-white transition" data-i18n="footer.careers">Careers</a></li>
+                        <li><a href="store-locator.html" class="hover:text-white transition" data-i18n="footer.find_store">Find a Store</a></li>
+                        <li><a href="terms.html" class="hover:text-white transition" data-i18n="footer.terms">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4" data-i18n="support.footer_news_desc">Subscribe for new arrivals, beauty tips, and more.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email address" data-i18n-placeholder="support.footer_email_ph" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">
+                        <a href="newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition" data-i18n="support.footer_sub_btn">SUBSCRIBE</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <p class="mt-1">Created by <a href="https://wa.me/212699289568" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Zakaria Zemzami</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Server Down Overlay (direct navigation to login.html) -->
+    <div id="loginServerDownOverlay" style="
+        position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;
+        display:flex;align-items:center;justify-content:center;
+        backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+    ">
+        <div style="
+            background:#1a1a1a;color:#fff;border-radius:1rem;
+            padding:2.5rem 2rem;max-width:420px;width:90%;text-align:center;
+            box-shadow:0 25px 60px rgba(0,0,0,0.5);
+            border:1px solid rgba(255,255,255,0.1);
+        ">
+            <div style="font-size:3rem;margin-bottom:1rem;">???</div>
+            <h2 style="font-size:1.4rem;font-weight:700;margin-bottom:0.75rem;letter-spacing:0.05em;">
+                Server Under Maintenance
+            </h2>
+            <p style="color:rgba(255,255,255,0.7);font-size:0.95rem;line-height:1.6;margin-bottom:1.75rem;">
+                Our login servers are currently down for maintenance.<br>
+                We apologize for the inconvenience and will be back shortly.
+            </p>
+            <a href="/" style="
+                display:inline-block;background:#e73c3c;color:#fff;
+                border-radius:999px;padding:0.65rem 2rem;
+                font-size:0.9rem;font-weight:700;letter-spacing:0.05em;
+                text-decoration:none;
+            ">Back to Home</a>
+        </div>
+    </div>
+
+    <!-- IPO Search Overlay -->
+    <div class="ipo-search-overlay" id="ipoSearchOverlay" role="dialog" aria-label="Search" aria-modal="true" aria-hidden="true">
+        <div class="ipo-search-overlay-backdrop" id="ipoSearchOverlayBackdrop"></div>
+        <div class="ipo-search-overlay-panel" id="ipoSearchOverlayPanel">
+            <!-- Input bar -->
+            <div class="ipo-search-overlay-bar">
+                <div class="ipo-search-overlay-input-wrap">
+                    <i class="fas fa-search ipo-search-overlay-search-icon"></i>
+                    <input
+                        type="text"
+                        class="ipo-search-overlay-input"
+                        id="ipoSearchOverlayInput"
+                        placeholder="Search perfumes, brands, notes..."
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        aria-label="Search"
+                    >
+                    <button type="button" class="ipo-search-overlay-clear" id="ipoSearchOverlayClear" aria-label="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <button type="button" class="ipo-search-overlay-close-btn" id="ipoSearchOverlayClose" aria-label="Close search">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Dynamic body (popular searches + products / live results) -->
+            <div class="ipo-search-overlay-body" id="ipoSearchOverlayBody"></div>
+        </div>
+    </div>
+</body>
+</html>

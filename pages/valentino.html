@@ -1,0 +1,1123 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-i18n-title="valentino.page_title" data-i18n-orig-title="IPORDISE — Valentino Fragrances | Luxury Perfumes">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-70NCC2RZM6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-70NCC2RZM6');
+    </script>
+    <title>IPORDISE — Valentino Fragrances | Luxury Perfumes</title>
+    <meta name="description" content="Explore the full Valentino fragrance collection — from Voce Viva to Born in Roma, for men and women. Available exclusively at IPORDISE Morocco.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../script.js"></script>
+    <script src="../i18n.js"></script>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        /* -- VALENTINO PAGE STYLES -- */
+
+        /* Hero */
+        .val-hero {
+            position: relative;
+            min-height: 88vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #0c0507;
+        }
+        .val-hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .val-hero-bg video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            filter: brightness(0.32) saturate(1.2);
+            animation: valHeroKen 28s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+        @keyframes valHeroKen {
+            0%   { transform: scale(1)    translate(0, 0); }
+            100% { transform: scale(1.07) translate(-1.5%, 1%); }
+        }
+        .val-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(160deg, rgba(90,0,20,0.55) 0%, transparent 55%),
+                linear-gradient(0deg, rgba(10,3,6,0.85) 0%, rgba(10,3,6,0.0) 40%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .val-hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 4rem 1.5rem 3rem;
+            max-width: 820px;
+        }
+        .val-hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.38em;
+            text-transform: uppercase;
+            color: rgba(255,210,165,0.95);
+            border: 1px solid rgba(255,200,150,0.28);
+            padding: 0.46rem 1.6rem;
+            border-radius: 1px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(4px);
+            background: rgba(255,255,255,0.04);
+        }
+        .val-hero-kicker i { font-size: 0.5rem; opacity: 0.8; }
+        /* decorative rule flanking the title */
+        .val-hero-rule {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.6rem;
+        }
+        .val-hero-rule::before,
+        .val-hero-rule::after {
+            content: '';
+            flex: 1;
+            max-width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,200,150,0.55));
+        }
+        .val-hero-rule::after {
+            background: linear-gradient(90deg, rgba(255,200,150,0.55), transparent);
+        }
+        .val-hero-rule span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255,200,150,0.65);
+        }
+        .val-hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3.8rem, 12vw, 8rem);
+            font-weight: 900;
+            letter-spacing: 0.22em;
+            color: #fff;
+            text-transform: uppercase;
+            line-height: 0.95;
+            margin-bottom: 0;
+            text-shadow:
+                0 2px 0 rgba(0,0,0,0.4),
+                0 8px 28px rgba(0,0,0,0.65),
+                0 24px 56px rgba(80,0,20,0.45);
+        }
+        .val-hero-tagline {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1.05rem, 2.6vw, 1.55rem);
+            color: rgba(255,215,185,0.88);
+            margin: 1.1rem 0 1.8rem;
+            letter-spacing: 0.06em;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+        }
+        .val-hero-divider {
+            width: 42px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,200,150,0.7), transparent);
+            margin: 0 auto 1.6rem;
+        }
+        .val-hero-sub {
+            font-size: 0.92rem;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.85;
+            max-width: 500px;
+            margin: 0 auto 2.5rem;
+            letter-spacing: 0.01em;
+        }
+
+        .val-hero-scroll-hint {
+            position: absolute;
+            bottom: 2.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            color: rgba(255,255,255,0.35);
+            font-size: 0.58rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+        .val-hero-scroll-hint i {
+            animation: scrollBounce 1.8s ease-in-out infinite;
+        }
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateY(0); opacity: 0.4; }
+            50%       { transform: translateY(6px); opacity: 0.8; }
+        }
+
+        /* Gender tabs */
+        .val-tabs-strip {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+        }
+        .val-tabs-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+        }
+        .val-tab-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 1.25rem 1rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #9ca3af;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: color 0.22s, border-color 0.22s, background 0.22s;
+            position: relative;
+            bottom: -1px;
+        }
+        .val-tab-btn.is-active {
+            color: #8b0025;
+            border-bottom-color: #8b0025;
+            background: #fff5f7;
+        }
+        .val-tab-btn:hover:not(.is-active) { color: #374151; background: #f9f9f9; }
+        .val-tab-btn i { font-size: 0.9rem; }
+        .val-tab-badge {
+            font-size: 0.55rem;
+            font-weight: 800;
+            padding: 0.18rem 0.5rem;
+            border-radius: 999px;
+            margin-left: 0.25rem;
+            letter-spacing: 0;
+        }
+        .val-tab-badge.men-badge  { background: #0f172a; color: #e2e8f0; }
+        .val-tab-badge.women-badge { background: #fce4ec; color: #8b0025; }
+
+        /* Section wrapper */
+        .val-section { display: none; }
+        .val-section.is-active { display: block; }
+
+        /* Story band */
+        .val-story {
+            background: #fff;
+            padding: 5rem 0 4rem;
+        }
+        .val-story-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        @media (min-width: 768px) {
+            .val-story-grid { grid-template-columns: 1fr 1fr; gap: 4rem; }
+        }
+        .val-story-img {
+            border-radius: 4px;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            background: #f3f4f6;
+        }
+        .val-story-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            transition: transform 0.7s ease;
+        }
+        .val-story-img:hover img { transform: scale(1.04); }
+        .val-story-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #8b0025;
+            margin-bottom: 0.7rem;
+        }
+        .val-story-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-weight: 900;
+            color: #0f0507;
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+        }
+        .val-story-text {
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.85;
+        }
+        .val-story-stat-row {
+            display: flex;
+            gap: 2.5rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #f3f4f6;
+        }
+        .val-story-stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #8b0025;
+            line-height: 1;
+        }
+        .val-story-stat-lbl {
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin-top: 0.2rem;
+        }
+
+        /* Perfume grid */
+        .val-grid-section {
+            padding: 4rem 0 5rem;
+        }
+        .val-grid-section.bg-warm { background: #fdf8f6; }
+        .val-grid-section.bg-white { background: #ffffff; }
+        .val-grid-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .val-grid-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #8b0025;
+            margin-bottom: 0.4rem;
+        }
+        .val-grid-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 2.8vw, 2rem);
+            font-weight: 900;
+            color: #0f0507;
+            line-height: 1.15;
+        }
+        .val-grid-count {
+            font-size: 0.72rem;
+            color: #9ca3af;
+            font-weight: 600;
+        }
+        .val-perfume-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 480px)  { .val-perfume-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 768px)  { .val-perfume-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1024px) { .val-perfume-grid { grid-template-columns: repeat(4, 1fr); } }
+
+        /* Card */
+        .val-card {
+            background: #fff;
+            border: 1px solid #ede8e6;
+            border-radius: 0.85rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.32s ease, transform 0.32s ease;
+            cursor: pointer;
+        }
+        .val-card:hover {
+            box-shadow: 0 16px 42px rgba(139,0,37,0.12), 0 4px 12px rgba(0,0,0,0.06);
+            transform: translateY(-5px);
+        }
+        .val-card-img {
+            aspect-ratio: 1 / 1;
+            background: linear-gradient(145deg, #fff5f2 0%, #f7f0ee 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+        .val-card-img img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            transition: transform 0.55s ease;
+        }
+        .val-card:hover .val-card-img img { transform: scale(1.08); }
+        .val-card-gender-badge {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.28rem 0.65rem;
+            border-radius: 2px;
+        }
+        .val-card-gender-badge.men  { background: #0f172a; color: #e2e8f0; }
+        .val-card-gender-badge.women { background: #8b0025; color: #ffe4ed; }
+        .val-card-gender-badge.unisex { background: #1a1a1a; color: #d4c5be; }
+        .val-card-body {
+            padding: 1.2rem 1.25rem 1.35rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .val-card-brand {
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #8b0025;
+            margin-bottom: 0.3rem;
+        }
+        .val-card-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #0f0507;
+            line-height: 1.3;
+            margin-bottom: 0.4rem;
+            flex: 1;
+        }
+        .val-card-family {
+            font-size: 0.67rem;
+            color: #9ca3af;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.85rem;
+        }
+        .val-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            border-top: 1px solid #f3f0ef;
+            padding-top: 0.85rem;
+        }
+        .val-card-price {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #0f0507;
+        }
+        .val-card-cta {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #fff;
+            background: #8b0025;
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.25s;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .val-card-cta:hover { background: #a80030; }
+
+        /* Values strip */
+        .val-values {
+            background: #0c0507;
+            padding: 3.5rem 0;
+        }
+        .val-values-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+        @media (min-width: 640px) { .val-values-grid { grid-template-columns: repeat(4, 1fr); } }
+        .val-value-item { text-align: center; }
+        .val-value-icon {
+            font-size: 1.4rem;
+            color: rgba(255,180,160,0.75);
+            margin-bottom: 0.75rem;
+        }
+        .val-value-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+        .val-value-text { font-size: 0.7rem; color: rgba(255,255,255,0.38); }
+
+
+
+        /* Animations */
+        @keyframes valFadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .val-anim { animation: valFadeUp 0.55s ease both; }
+
+        /* Responsive header tweak */
+        @media (max-width: 767px) {
+            .val-hero { min-height: 70vh; }
+            .val-hero-title { letter-spacing: 0.1em; }
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#1a1a1a',
+                            red: '#e73c3c',
+                            redHover: '#c0392b',
+                            light: '#f9f9f9',
+                            gray: '#f3f4f6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter','ui-sans-serif','system-ui','-apple-system','sans-serif'],
+                        serif: ['Playfair Display','ui-serif','Georgia','serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/logo-mark.svg">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="IPORDISE">
+    <meta name="msapplication-TileColor" content="#1a1a1a">
+    <meta name="msapplication-TileImage" content="../assets/logo-mark.svg"></head>
+<body class="bg-white text-gray-800 font-sans antialiased">
+
+    <!-- Announcement -->
+    <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide">
+        <div class="top-announcement-marquee">
+            <span class="top-announcement-marquee-item" data-i18n-html="valentino.announce1">Valentino — Born in Roma, Made for You. <a href="#valentino-women" class="top-announcement-link">SHOP WOMEN</a></span>
+            <span class="top-announcement-marquee-item" data-i18n-html="valentino.announce2">Uomo, Uomo Intense, Born in Roma Uomo — <a href="#valentino-men" class="top-announcement-link">SHOP MEN</a></span>
+            <span class="top-announcement-marquee-item" aria-hidden="true" data-i18n-html="valentino.announce1">Valentino — Born in Roma, Made for You. <a href="#valentino-women" class="top-announcement-link">SHOP WOMEN</a></span>
+            <span class="top-announcement-marquee-item" aria-hidden="true" data-i18n-html="valentino.announce2">Uomo, Uomo Intense, Born in Roma Uomo — <a href="#valentino-men" class="top-announcement-link">SHOP MEN</a></span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-brand-dark text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Mobile Menu Toggle -->
+                <button id="mobileMenuToggle" class="md:hidden header-icon-btn hover:text-brand-red transition" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="../index.html" aria-label="IPORDISE Home">
+                        <img
+                            src="../assets/logo-wordmark.svg"
+                            alt="IPORDISE Luxury Perfumes"
+                            class="site-logo-img"
+                            fetchpriority="high"
+                            loading="eager"
+                            decoding="async"
+                        >
+                    </a>
+                </div>
+
+                <!-- Search trigger — opens full overlay on click -->
+                <div class="flex-1 max-w-2xl mx-8 hidden md:block">
+                    <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
+                        <i class="fas fa-search ipo-search-trigger-icon"></i>
+                        <span class="ipo-search-trigger-text">Search perfumes, brands, notes...</span>
+                    </button>
+                </div>
+
+                <!-- Actions & Icons -->
+                <div class="flex items-center gap-3 md:gap-6">
+                    <a href="../discover.html?filter=all" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">
+                        PROMOTIONS <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                    </a>
+
+                    <div class="flex items-center gap-2 md:gap-3 text-lg">
+                        <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
+                            <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                        </button>
+                        <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                        <div class="header-wishlist-wrap relative">
+                            <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                        </div>
+                        <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart" id="cartIconLink">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="header-cart-badge absolute hidden" id="cartBadge" aria-live="polite"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar (toggled by .header-search-btn click) -->
+        <div class="header-mobile-search md:hidden" aria-hidden="true" role="search">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="mobile-search-inner">
+                    <input
+                        type="text"
+                        class="mobile-search-input"
+                        placeholder="Search perfumes, brands, notes..."
+                        aria-label="Search"
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                    >
+                    <button class="mobile-search-submit" aria-label="Submit search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Categories -->
+        <nav class="perfume-nav hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <ul class="perfume-nav-list">
+                    <li><a href="../discover.html?filter=all" class="perfume-nav-link" data-i18n="index.nav.all" data-i18n-orig="ALL PERFUMES">ALL PERFUMES</a></li>
+                    <li><a href="../discover.html?filter=for-men" class="perfume-nav-link" data-i18n="index.nav.men" data-i18n-orig="MEN">MEN</a></li>
+                    <li><a href="../discover.html?filter=for-women" class="perfume-nav-link" data-i18n="index.nav.women" data-i18n-orig="WOMEN">WOMEN</a></li>
+                    <li><a href="../discover.html?filter=unisex" class="perfume-nav-link" data-i18n="index.nav.unisex" data-i18n-orig="UNISEX">UNISEX</a></li>
+                    <li><a href="../discover.html?filter=niche" class="perfume-nav-link" data-i18n="index.nav.niche" data-i18n-orig="NICHE">NICHE</a></li>
+                    <li><a href="../discover.html?filter=arabian" class="perfume-nav-link" data-i18n="index.nav.arabian" data-i18n-orig="ARABIAN">ARABIAN</a></li>
+                    <li><a href="../discover.html?filter=designer" class="perfume-nav-link" data-i18n="index.nav.designer" data-i18n-orig="DESIGNER">DESIGNER</a></li>
+                    <li><a href="../discover.html?filter=discovery-sets" class="perfume-nav-link" data-i18n="index.nav.discovery" data-i18n-orig="DISCOVERY SETS">DISCOVERY SETS</a></li>
+                    <li><a href="../discover.html?filter=best-sellers" class="perfume-nav-link" data-i18n="index.nav.bestsellers" data-i18n-orig="BEST SELLERS">BEST SELLERS</a></li>
+                    <li><a href="../discover.html?filter=new-in" class="perfume-nav-link" data-i18n="index.nav.newin" data-i18n-orig="NEW IN">NEW IN</a></li>
+                    <li><a href="../discover.html?filter=offers" class="perfume-nav-link" data-i18n="index.nav.offers" data-i18n-orig="OFFERS">OFFERS</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- -- HERO -- -->
+    <section class="val-hero">
+        <div class="val-hero-bg">
+            <video autoplay muted loop playsinline preload="metadata" aria-label="Valentino fragrance campaign video">
+                <source src="https://www.dropbox.com/scl/fi/vxgx20l1x3fcxkcj3j84g/YTDown.com_YouTube_Valentino-Perfume-3D-Product-Animation-B_Media_dDH_cz3w1TU_001_1080p.mp4?rlkey=sg55ay10o5anssgqorehfntl4&st=dkw8os15&raw=1" type="video/mp4">
+            </video>
+        </div>
+        <div class="val-hero-content">
+            <span class="val-hero-kicker"><i class="fas fa-star"></i> <span data-i18n="valentino.hero_kicker">Designer Luxury Collection</span></span>
+            <div class="val-hero-rule"><span></span></div>
+            <h1 class="val-hero-title">VALENTINO</h1>
+            <p class="val-hero-tagline" data-i18n="valentino.hero_tagline">Born in Roma. Made for You.</p>
+            <div class="val-hero-divider"></div>
+            <p class="val-hero-sub" data-i18n="valentino.hero_sub">
+                Discover the iconic fragrance universe of Valentino — passionate, bold, and unapologetically luxurious. From the vibrant Voce Viva to the timeless Born in Roma saga, each scent is a love letter to Rome.
+            </p>
+
+        </div>
+        <div class="val-hero-scroll-hint">
+            <span data-i18n="valentino.scroll_hint">Scroll</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- -- GENDER TABS -- -->
+    <div class="val-tabs-strip" id="valTabs">
+        <div class="val-tabs-inner max-w-7xl mx-auto">
+            <button class="val-tab-btn is-active" data-tab="men" id="tabMen">
+                <i class="fas fa-person" style="font-size:1rem;"></i> <span data-i18n="valentino.tab_him">For Him</span>
+                <span id="menCount" class="val-tab-badge men-badge">5</span>
+            </button>
+            <button class="val-tab-btn" data-tab="women" id="tabWomen">
+                <i class="fas fa-person-dress" style="font-size:1rem;"></i> <span data-i18n="valentino.tab_her">For Her</span>
+                <span id="womenCount" class="val-tab-badge women-badge">2</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ------------------------------------------
+         WOMEN SECTION
+    ------------------------------------------ -->
+    <div class="val-section" id="valentino-women">
+
+        <!-- Story: Women -->
+        <section class="val-story">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="val-story-grid">
+                    <div class="val-story-img">
+                        <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/assets/Herosectionphotos/for%20her%20valentino.png"
+                             alt="Valentino Women Fragrances">
+                    </div>
+                    <div>
+                        <p class="val-story-label" data-i18n="valentino.women_story_label">For Her</p>
+                        <h2 class="val-story-title" data-i18n-html="valentino.women_story_title">The Scent of a<br>Modern Valentina</h2>
+                        <p class="val-story-text" data-i18n-html="valentino.women_story_text">
+                            Valentino's women's fragrances celebrate the spirit of the modern woman: free, passionate, and radiantly alive. From the sparkling lightness of Voce Viva to the deep sensuality of Born in Roma Coral Fantasy, each bottle is a manifesto of feminine strength and elegance.
+                            <br><br>
+                            Crafted in Rome — a city of passion, marble, and eternal beauty — these scents carry the DNA of la dolce vita and translate it into an intimate, wearable art form.
+                        </p>
+                        <div class="val-story-stat-row">
+                            <div>
+                                <div class="val-story-stat-num">2</div>
+                                <div class="val-story-stat-lbl" data-i18n="valentino.women_stat1_lbl">Women's Fragrances</div>
+                            </div>
+                            <div>
+                                <div class="val-story-stat-num">1960</div>
+                                <div class="val-story-stat-lbl" data-i18n="valentino.women_stat2_lbl">House Founded</div>
+                            </div>
+                            <div>
+                                <div class="val-story-stat-num">100%</div>
+                                <div class="val-story-stat-lbl" data-i18n="valentino.women_stat3_lbl">Authentic</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Women Perfumes Grid -->
+        <section class="val-grid-section bg-warm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="val-grid-header">
+                    <div>
+                        <p class="val-grid-label" data-i18n="valentino.women_grid_label">Valentino Women</p>
+                        <h2 class="val-grid-title" data-i18n="valentino.women_grid_title">Her Collection</h2>
+                    </div>
+                    <span class="val-grid-count" data-i18n="valentino.women_count">2 fragrances</span>
+                </div>
+                <div class="val-perfume-grid" id="womenGrid">
+
+                    <!-- 1. Born in Roma Donna Intense EDP -->
+                    <div class="val-card js-product-link"
+                         data-id="valentino-born-in-roma-donna-intense-eau-de-parfum"
+                         data-name="Valentino Born in Roma Donna Intense Eau de Parfum"
+                         data-brand="VALENTINO"
+                         data-gender="women"
+                         data-price=""
+                         data-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/1.webp">
+                        <div class="val-card-img">
+                            <span class="val-card-gender-badge women" data-i18n="valentino.badge_women">For Her</span>
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/1.webp"
+                                 alt="Valentino Born in Roma Donna Intense EDP" loading="lazy">
+                        </div>
+                        <div class="val-card-body">
+                            <p class="val-card-brand">Valentino</p>
+                            <p class="val-card-name">Born in Roma Donna Intense</p>
+                            <p class="val-card-family" data-i18n="valentino.family_donna_intense">Floral Woody Musk — Rose — Musk — Sandalwood</p>
+                            <div class="val-card-footer">
+                                <span class="val-card-price" data-i18n="valentino.view_price">View Price</span>
+                                <span class="val-card-cta" data-i18n="valentino.add_to_cart">Add to Cart</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Donna Born in Roma EDP -->
+                    <div class="val-card js-product-link"
+                         data-id="valentino-donna-born-in-roma-eau-de-parfum"
+                         data-name="Valentino Donna Born in Roma Eau de Parfum"
+                         data-brand="VALENTINO"
+                         data-gender="women"
+                         data-price=""
+                         data-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/1.webp">
+                        <div class="val-card-img">
+                            <span class="val-card-gender-badge women" data-i18n="valentino.badge_women">For Her</span>
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/1.webp"
+                                 alt="Valentino Donna Born in Roma EDP" loading="lazy">
+                        </div>
+                        <div class="val-card-body">
+                            <p class="val-card-brand">Valentino</p>
+                            <p class="val-card-name">Donna Born in Roma</p>
+                            <p class="val-card-family" data-i18n="valentino.family_donna_bir">Floral Woody — Jasmine — Orris — Cashmeran</p>
+                            <div class="val-card-footer">
+                                <span class="val-card-price" data-i18n="valentino.view_price">View Price</span>
+                                <span class="val-card-cta" data-i18n="valentino.add_to_cart">Add to Cart</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /womenGrid -->
+            </div>
+        </section>
+
+    </div><!-- /valentino-women -->
+
+    <!-- ------------------------------------------
+         MEN SECTION
+    ------------------------------------------ -->
+    <div class="val-section is-active" id="valentino-men">
+
+        <!-- Story: Men -->
+        <section class="val-story">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="val-story-grid">
+                    <div class="val-story-img">
+                        <img src="https://preview.redd.it/best-favorite-valentino-in-your-opinion-v0-mlr78mokckzc1.jpeg?width=1080&crop=smart&auto=webp&s=fa6a5fdbebe17766283429512632c1f033ebc32c"
+                             alt="Valentino Men Fragrances">
+                    </div>
+                    <div>
+                        <p class="val-story-label" data-i18n="valentino.men_story_label">For Him</p>
+                        <h2 class="val-story-title" data-i18n-html="valentino.men_story_title">The Roman Man.<br>Bold. Timeless. Free.</h2>
+                        <p class="val-story-text" data-i18n-html="valentino.men_story_text">
+                            Valentino's men's fragrances embody the duality of the modern man — equal parts gentleman and rebel, rooted in Roman heritage yet restlessly forward-looking. From the virile depth of Uomo Intense to the urban freshness of Born in Roma Uomo, these are scents for those who leave a mark wherever they go.
+                            <br><br>
+                            Each bottle carries the gravitas of Italian couture — sharp lines, powerful silhouettes, and an undeniable presence that lingers long after you've left the room.
+                        </p>
+                        <div class="val-story-stat-row">
+                            <div>
+                                <div class="val-story-stat-num">5</div>
+                                <div class="val-story-stat-lbl" data-i18n="valentino.men_stat1_lbl">Men's Fragrances</div>
+                            </div>
+                            <div>
+                                <div class="val-story-stat-num">Roma</div>
+                                <div class="val-story-stat-lbl" data-i18n="valentino.men_stat2_lbl">Born &amp; Made</div>
+                            </div>
+                            <div>
+                                <div class="val-story-stat-num">100%</div>
+                                <div class="val-story-stat-lbl" data-i18n="valentino.men_stat3_lbl">Authentic</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Men Perfumes Grid -->
+        <section class="val-grid-section bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="val-grid-header">
+                    <div>
+                        <p class="val-grid-label" data-i18n="valentino.men_grid_label">Valentino Men</p>
+                        <h2 class="val-grid-title" data-i18n="valentino.men_grid_title">His Collection</h2>
+                    </div>
+                    <span class="val-grid-count" data-i18n="valentino.men_count">5 fragrances</span>
+                </div>
+                <div class="val-perfume-grid" id="menGrid">
+
+                    <!-- 1. Born in Roma Uomo Intense EDP -->
+                    <div class="val-card js-product-link"
+                         data-id="valentino-born-in-roma-uomo-intense-eau-de-parfum"
+                         data-name="Valentino Born in Roma Uomo Intense Eau de Parfum"
+                         data-brand="VALENTINO"
+                         data-gender="men"
+                         data-price=""
+                         data-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/1.webp">
+                        <div class="val-card-img">
+                            <span class="val-card-gender-badge men" data-i18n="valentino.badge_men">For Him</span>
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/1.webp"
+                                 alt="Valentino Born in Roma Uomo Intense EDP" loading="lazy">
+                        </div>
+                        <div class="val-card-body">
+                            <p class="val-card-brand">Valentino</p>
+                            <p class="val-card-name">Born in Roma Uomo Intense</p>
+                            <p class="val-card-family" data-i18n="valentino.family_uomo_intense">Amber Woody — Lavender — Tonka — Leather</p>
+                            <div class="val-card-footer">
+                                <span class="val-card-price" data-i18n="valentino.view_price">View Price</span>
+                                <span class="val-card-cta" data-i18n="valentino.add_to_cart">Add to Cart</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Uomo Born in Roma Coral Fantasy EDT -->
+                    <div class="val-card js-product-link"
+                         data-id="valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette"
+                         data-name="Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette"
+                         data-brand="VALENTINO"
+                         data-gender="men"
+                         data-price=""
+                         data-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/1.webp">
+                        <div class="val-card-img">
+                            <span class="val-card-gender-badge men" data-i18n="valentino.badge_men">For Him</span>
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/1.webp"
+                                 alt="Valentino Uomo Born in Roma Coral Fantasy" loading="lazy">
+                        </div>
+                        <div class="val-card-body">
+                            <p class="val-card-brand">Valentino</p>
+                            <p class="val-card-name">Uomo Born in Roma Coral Fantasy</p>
+                            <p class="val-card-family" data-i18n="valentino.family_uomo_coral">Aromatic Aquatic — Sea Salt — Driftwood — Musk</p>
+                            <div class="val-card-footer">
+                                <span class="val-card-price" data-i18n="valentino.view_price">View Price</span>
+                                <span class="val-card-cta" data-i18n="valentino.add_to_cart">Add to Cart</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Uomo Born in Roma EDT -->
+                    <div class="val-card js-product-link"
+                         data-id="valentino-uomo-born-in-roma-eau-de-toilette"
+                         data-name="Valentino Uomo Born in Roma Eau de Toilette"
+                         data-brand="VALENTINO"
+                         data-gender="men"
+                         data-price=""
+                         data-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/1.jpg">
+                        <div class="val-card-img">
+                            <span class="val-card-gender-badge men" data-i18n="valentino.badge_men">For Him</span>
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/1.jpg"
+                                 alt="Valentino Uomo Born in Roma EDT" loading="lazy">
+                        </div>
+                        <div class="val-card-body">
+                            <p class="val-card-brand">Valentino</p>
+                            <p class="val-card-name">Uomo Born in Roma</p>
+                            <p class="val-card-family" data-i18n="valentino.family_uomo_bir">Aromatic Fougère — Lavender — Tonka — Sandalwood</p>
+                            <div class="val-card-footer">
+                                <span class="val-card-price" data-i18n="valentino.view_price">View Price</span>
+                                <span class="val-card-cta" data-i18n="valentino.add_to_cart">Add to Cart</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Uomo Born In Roma Purple Melancholia EDT -->
+                    <div class="val-card js-product-link"
+                         data-id="valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette"
+                         data-name="Valentino Uomo Born In Roma Purple Melancholia Eau de Toilette"
+                         data-brand="VALENTINO"
+                         data-gender="men"
+                         data-price=""
+                         data-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Purple%20Melancholia%20Eau%20de%20Toilette/1.jpg">
+                        <div class="val-card-img">
+                            <span class="val-card-gender-badge men" data-i18n="valentino.badge_men">For Him</span>
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Purple%20Melancholia%20Eau%20de%20Toilette/1.jpg"
+                                 alt="Valentino Uomo Born In Roma Purple Melancholia Eau de Toilette" loading="lazy">
+                        </div>
+                        <div class="val-card-body">
+                            <p class="val-card-brand">Valentino</p>
+                            <p class="val-card-name">Uomo Born In Roma Purple Melancholia</p>
+                            <p class="val-card-family" data-i18n="valentino.family_uomo_purple">Spicy Aromatic — Cardamom — Lavandin — Amber Woods</p>
+                            <div class="val-card-footer">
+                                <span class="val-card-price" data-i18n="valentino.view_price">View Price</span>
+                                <span class="val-card-cta" data-i18n="valentino.add_to_cart">Add to Cart</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Born in Roma Extradose EDT -->
+                    <div class="val-card js-product-link"
+                         data-id="valentino-born-in-roma-extradose-eau-de-toilette"
+                         data-name="Valentino Born in Roma Extradose Eau de Toilette"
+                         data-brand="VALENTINO"
+                         data-gender="men"
+                         data-price=""
+                         data-image="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/1.jpg">
+                        <div class="val-card-img">
+                            <span class="val-card-gender-badge men" data-i18n="valentino.badge_men">For Him</span>
+                            <img src="https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/1.jpg"
+                                 alt="Valentino Born in Roma Extradose EDT" loading="lazy">
+                        </div>
+                        <div class="val-card-body">
+                            <p class="val-card-brand">Valentino</p>
+                            <p class="val-card-name">Born in Roma Extradose</p>
+                            <p class="val-card-family" data-i18n="valentino.family_bir_extradose">Woody Aromatic — Fresh Spice — Aromatic Heart — Woods</p>
+                            <div class="val-card-footer">
+                                <span class="val-card-price" data-i18n="valentino.view_price">View Price</span>
+                                <span class="val-card-cta" data-i18n="valentino.add_to_cart">Add to Cart</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /menGrid -->
+            </div>
+        </section>
+
+    </div><!-- /valentino-men -->
+
+    <!-- -- Values Strip -- -->
+    <section class="val-values">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="val-values-grid">
+                <div class="val-value-item">
+                    <div class="val-value-icon"><i class="fas fa-certificate"></i></div>
+                    <p class="val-value-title" data-i18n="valentino.val1_title">100% Authentic</p>
+                    <p class="val-value-text" data-i18n="valentino.val1_text">Certified genuine Valentino products</p>
+                </div>
+                <div class="val-value-item">
+                    <div class="val-value-icon"><i class="fas fa-truck-fast"></i></div>
+                    <p class="val-value-title" data-i18n="valentino.val2_title">Fast Delivery</p>
+                    <p class="val-value-text" data-i18n="valentino.val2_text">Delivered across Morocco from 35 MAD</p>
+                </div>
+                <div class="val-value-item">
+                    <div class="val-value-icon"><i class="fas fa-rotate-left"></i></div>
+                    <p class="val-value-title" data-i18n="valentino.val3_title">14-Day Returns</p>
+                    <p class="val-value-text" data-i18n="valentino.val3_text">Easy, no-hassle return policy</p>
+                </div>
+                <div class="val-value-item">
+                    <div class="val-value-icon"><i class="fas fa-headset"></i></div>
+                    <p class="val-value-title" data-i18n="valentino.val4_title">Expert Advice</p>
+                    <p class="val-value-text" data-i18n="valentino.val4_text">Fragrance specialists at your service</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-white py-12 mt-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <a href="/" class="font-serif text-2xl font-bold tracking-widest text-white">
+                    IPORDISE<span class="text-brand-red">.</span>
+                </a>
+                <p class="text-gray-400 text-sm mt-3" data-i18n="valentino.footer_tagline">Premium Fragrances &amp; Luxury Beauty — Morocco</p>
+                <div class="flex justify-center gap-6 mt-6 text-sm text-gray-400">
+                    <a href="privacy-policy.html" class="hover:text-white transition" data-i18n="valentino.footer_privacy">Privacy</a>
+                    <a href="terms.html" class="hover:text-white transition" data-i18n="valentino.footer_terms">Terms</a>
+                    <a href="contact.html" class="hover:text-white transition" data-i18n="valentino.footer_contact">Contact</a>
+                    <a href="shipping.html" class="hover:text-white transition" data-i18n="valentino.footer_shipping">Shipping</a>
+                </div>
+                <p class="text-gray-600 text-xs mt-6" data-i18n="valentino.footer_copyright">— 2026 IPORDISE. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // -- Tab switching --
+        const tabs       = document.querySelectorAll('.val-tab-btn');
+        const sections   = document.querySelectorAll('.val-section');
+        const heroMenBtn = document.getElementById('heroMenBtn');
+        const heroWomenBtn = document.getElementById('heroWomenBtn');
+
+        function switchTab(target) {
+            tabs.forEach(t => t.classList.toggle('is-active', t.dataset.tab === target));
+            sections.forEach(s => s.classList.toggle('is-active', s.id === 'valentino-' + target));
+            // Scroll to tabs strip smoothly
+            const strip = document.getElementById('valTabs');
+            if (strip) {
+                const top = strip.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({ top, behavior: 'smooth' });
+            }
+        }
+
+        tabs.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+
+        if (heroMenBtn) heroMenBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchTab('men');
+        });
+        if (heroWomenBtn) heroWomenBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchTab('women');
+        });
+
+        // -- Handle URL hash on load (#valentino-men / #valentino-women) --
+        (function () {
+            const hash = window.location.hash;
+            if (hash === '#valentino-men') switchTab('men');
+        })();
+
+        // -- Card click / Add to Cart ? product page --
+        function goToProduct(card) {
+            const data = {
+                id:    card.dataset.id    || '',
+                name:  card.dataset.name  || 'Valentino',
+                brand: card.dataset.brand || 'VALENTINO',
+                price: card.dataset.price || '',
+                image: card.dataset.image || ''
+            };
+            try { sessionStorage.setItem('lastCatalogUrl', window.location.href); } catch(_) {}
+            if (typeof navigateToProductPage === 'function') {
+                navigateToProductPage(data);
+            } else {
+                const params = new URLSearchParams(data);
+                window.location.href = 'product.html?' + params.toString();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.val-card.js-product-link').forEach(card => {
+                // Clicking the "Add to Cart" span inside the card
+                const ctaBtn = card.querySelector('.val-card-cta');
+                if (ctaBtn) {
+                    ctaBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        goToProduct(card);
+                    });
+                }
+                // Clicking anywhere else on the card (but not on links)
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('a')) return;
+                    goToProduct(card);
+                });
+            });
+        });
+
+        // -- Intersection Observer: fade-in cards as they enter viewport --
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = (i % 4) * 0.07 + 's';
+                    entry.target.classList.add('val-anim');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08 });
+
+        document.querySelectorAll('.val-card').forEach(card => io.observe(card));
+    </script>
+
+    <!-- IPO Search Overlay -->
+    <div class="ipo-search-overlay" id="ipoSearchOverlay" role="dialog" aria-label="Search" aria-modal="true" aria-hidden="true">
+        <div class="ipo-search-overlay-backdrop" id="ipoSearchOverlayBackdrop"></div>
+        <div class="ipo-search-overlay-panel" id="ipoSearchOverlayPanel">
+            <!-- Input bar -->
+            <div class="ipo-search-overlay-bar">
+                <div class="ipo-search-overlay-input-wrap">
+                    <i class="fas fa-search ipo-search-overlay-search-icon"></i>
+                    <input
+                        type="text"
+                        class="ipo-search-overlay-input"
+                        id="ipoSearchOverlayInput"
+                        placeholder="Search perfumes, brands, notes..."
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        aria-label="Search"
+                    >
+                    <button type="button" class="ipo-search-overlay-clear" id="ipoSearchOverlayClear" aria-label="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <button type="button" class="ipo-search-overlay-close-btn" id="ipoSearchOverlayClose" aria-label="Close search">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Dynamic body (popular searches + products / live results) -->
+            <div class="ipo-search-overlay-body" id="ipoSearchOverlayBody"></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-70NCC2RZM6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-70NCC2RZM6');
+    </script>
+    <title>Page Not Found – IPORDISE</title>
+    <meta name="description" content="The page you are looking for does not exist. Discover luxury perfumes at IPORDISE Morocco – niche, designer and Arabian fragrances.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://www.ipordise.com/404.html">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Page Not Found – IPORDISE">
+    <meta property="og:description" content="The page you are looking for could not be found. Browse our luxury perfume collection.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.ipordise.com/404.html">
+    <meta property="og:site_name" content="IPORDISE">
+    <meta property="og:image" content="https://raw.githubusercontent.com/perfumiro/max/main/assets/Herosectionphotos/FOR%20HIM.png">
+    <!-- Theme -->
+    <meta name="theme-color" content="#1a1a1a">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind (shared) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js"></script>
+    <script src="i18n.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ── 404 page-specific styles ── */
+        :root {
+            --brand-dark: #1a1a1a;
+            --brand-red: #e73c3c;
+            --gold: #b8955c;
+            --gold-light: #f5df8a;
+        }
+
+        /* Page background with subtle grain */
+        .nf-page {
+            background: var(--brand-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Central stage ── */
+        .nf-stage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(3rem, 8vw, 6rem) 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ambient orb behind the 404 */
+        .nf-stage::before {
+            content: '';
+            position: absolute;
+            width: min(80vw, 600px);
+            height: min(80vw, 600px);
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 50%,
+                rgba(184, 149, 92, 0.12) 0%,
+                rgba(184, 149, 92, 0.04) 50%,
+                transparent 70%);
+            pointer-events: none;
+            animation: nfOrbBreath 7s ease-in-out infinite;
+        }
+        .nf-stage::after {
+            content: '';
+            position: absolute;
+            width: min(60vw, 440px);
+            height: min(60vw, 440px);
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 50%,
+                rgba(231, 60, 60, 0.1) 0%,
+                transparent 65%);
+            pointer-events: none;
+            animation: nfOrbBreath 9s ease-in-out infinite reverse 1.5s;
+        }
+
+        @keyframes nfOrbBreath {
+            0%, 100% { transform: scale(1)   translateY(0);   opacity: 0.7; }
+            50%       { transform: scale(1.1) translateY(-12px); opacity: 1; }
+        }
+
+        /* ── 404 number ── */
+        .nf-number {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(7rem, 22vw, 14rem);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+            /* Gold gradient text */
+            background: linear-gradient(135deg,
+                var(--gold) 0%,
+                var(--gold-light) 40%,
+                var(--gold) 68%,
+                #e8c545 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: nfGoldShimmer 4s linear infinite;
+            /* Red underline accent */
+            text-decoration: none;
+            margin-bottom: 0;
+        }
+        @keyframes nfGoldShimmer {
+            0%   { background-position: 120% center; }
+            100% { background-position: -80% center; }
+        }
+
+        /* Floating bottle illustration (pure CSS) */
+        .nf-bottle {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.07;
+            font-size: clamp(5rem, 16vw, 11rem);
+            color: var(--gold);
+            pointer-events: none;
+            animation: nfBottleFloat 6s ease-in-out infinite;
+            right: clamp(1rem, 5vw, 8rem);
+            bottom: 15%;
+        }
+        @keyframes nfBottleFloat {
+            0%, 100% { transform: translateY(0) rotate(-6deg); }
+            50%       { transform: translateY(-18px) rotate(-4deg); }
+        }
+
+        /* Red thin rule */
+        .nf-rule {
+            width: 3rem;
+            height: 2.5px;
+            background: var(--brand-red);
+            border-radius: 2px;
+            margin: 1.25rem auto;
+            position: relative;
+            z-index: 1;
+            animation: nfRuleGrow 1s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
+            transform-origin: center;
+        }
+        @keyframes nfRuleGrow {
+            from { transform: scaleX(0); opacity: 0; }
+            to   { transform: scaleX(1); opacity: 1; }
+        }
+
+        /* Headline */
+        .nf-headline {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(1.5rem, 4vw, 2.4rem);
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: nfFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+        }
+        /* Subtext */
+        .nf-sub {
+            font-family: Inter, ui-sans-serif, sans-serif;
+            font-size: clamp(0.9rem, 2.2vw, 1.05rem);
+            color: rgba(255, 255, 255, 0.52);
+            text-align: center;
+            max-width: 42ch;
+            line-height: 1.7;
+            margin-top: 0.75rem;
+            position: relative;
+            z-index: 1;
+            animation: nfFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+        }
+        /* URL blame line */
+        .nf-url-blame {
+            display: inline-block;
+            margin-top: 0.65rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            padding: 0.28rem 0.9rem;
+            word-break: break-all;
+            max-width: 46ch;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: nfFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+        }
+
+        @keyframes nfFadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Action buttons ── */
+        .nf-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            justify-content: center;
+            margin-top: 2.5rem;
+            position: relative;
+            z-index: 1;
+            animation: nfFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both;
+        }
+        .nf-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.75rem;
+            border-radius: 999px;
+            font-family: Inter, ui-sans-serif, sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+            cursor: pointer;
+            border: none;
+        }
+        .nf-btn:hover {
+            transform: translateY(-3px);
+        }
+        .nf-btn:active {
+            transform: translateY(0) scale(0.97);
+        }
+        .nf-btn--primary {
+            background: var(--brand-red);
+            color: #fff;
+            box-shadow: 0 6px 22px rgba(231, 60, 60, 0.38);
+        }
+        .nf-btn--primary:hover {
+            background: #c0392b;
+            box-shadow: 0 10px 32px rgba(231, 60, 60, 0.52);
+        }
+        .nf-btn--outline {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.75);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+        }
+        .nf-btn--outline:hover {
+            border-color: rgba(255, 255, 255, 0.55);
+            color: #fff;
+        }
+        .nf-btn--gold {
+            background: transparent;
+            color: var(--gold);
+            border: 1.5px solid rgba(184, 149, 92, 0.4);
+        }
+        .nf-btn--gold:hover {
+            border-color: var(--gold);
+            background: rgba(184, 149, 92, 0.08);
+            box-shadow: 0 8px 22px rgba(184, 149, 92, 0.2);
+        }
+
+        /* ── Search bar ── */
+        .nf-search-wrap {
+            display: flex;
+            align-items: center;
+            width: min(100%, 420px);
+            margin-top: 2.25rem;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            overflow: hidden;
+            transition: border-color 0.22s ease, box-shadow 0.22s ease;
+            position: relative;
+            z-index: 1;
+            animation: nfFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.68s both;
+        }
+        .nf-search-wrap:focus-within {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(184, 149, 92, 0.15);
+        }
+        .nf-search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 0.75rem 1.1rem;
+            font-family: Inter, ui-sans-serif, sans-serif;
+            font-size: 0.88rem;
+            color: #fff;
+        }
+        .nf-search-input::placeholder { color: rgba(255,255,255,0.32); }
+        .nf-search-btn {
+            padding: 0 1.25rem;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: color 0.18s ease;
+        }
+        .nf-search-btn:hover { color: var(--gold); }
+
+        /* ── Quick links ── */
+        .nf-quick {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            justify-content: center;
+            margin-top: 1.35rem;
+            position: relative;
+            z-index: 1;
+            animation: nfFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both;
+        }
+        .nf-quick-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.38rem 0.9rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.55);
+            text-decoration: none;
+            letter-spacing: 0.04em;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+        .nf-quick-pill:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border-color: rgba(255,255,255,0.22);
+        }
+        .nf-quick-pill i { font-size: 0.68rem; opacity: 0.7; }
+
+        /* ── Mini footer strip ── */
+        .nf-footer {
+            padding: 1.2rem 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .nf-footer p {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.28);
+            font-family: Inter, ui-sans-serif, sans-serif;
+        }
+        .nf-footer-links {
+            display: flex;
+            gap: 1.1rem;
+        }
+        .nf-footer-links a {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.32);
+            text-decoration: none;
+            font-family: Inter, ui-sans-serif, sans-serif;
+            transition: color 0.18s ease;
+        }
+        .nf-footer-links a:hover { color: var(--gold); }
+
+        /* ── prefers-reduced-motion ── */
+        @media (prefers-reduced-motion: reduce) {
+            .nf-stage::before,
+            .nf-stage::after,
+            .nf-number,
+            .nf-bottle { animation: none !important; }
+            .nf-bottle { opacity: 0.05 !important; }
+            .nf-rule, .nf-headline, .nf-sub, .nf-url-blame,
+            .nf-actions, .nf-search-wrap, .nf-quick {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="nf-page">
+
+    <!-- Minimal header -->
+    <header class="bg-brand-dark text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Mobile Menu Toggle -->
+                <button id="mobileMenuToggle" class="md:hidden header-icon-btn hover:text-brand-red transition" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="index.html" aria-label="IPORDISE Home">
+                        <img src="assets/logo-wordmark.svg"
+                             alt="IPORDISE Luxury Perfumes"
+                             class="site-logo-img"
+                             fetchpriority="high" loading="eager" decoding="async">
+                    </a>
+                </div>
+                <!-- Search trigger -->
+                <div class="flex-1 max-w-2xl mx-8 hidden md:block">
+                    <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
+                        <i class="fas fa-search ipo-search-trigger-icon"></i>
+                        <span class="ipo-search-trigger-text">Search perfumes, brands, notes...</span>
+                    </button>
+                </div>
+                <!-- Icons -->
+                <div class="flex items-center gap-3 md:gap-6">
+                    <a href="discover.html?filter=all" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">
+                        PROMOTIONS <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                    </a>
+                    <div class="flex items-center gap-2 md:gap-3 text-lg">
+                        <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
+                            <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                        </button>
+                        <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a href="pages/login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                        <div class="header-wishlist-wrap relative">
+                            <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                        </div>
+                        <a href="pages/cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart" id="cartIconLink">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="header-cart-badge absolute hidden" id="cartBadge" aria-live="polite"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Search -->
+        <div class="header-mobile-search md:hidden" aria-hidden="true" role="search">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="mobile-search-inner">
+                    <input type="text" class="mobile-search-input" placeholder="Search perfumes, brands, notes..."
+                           aria-label="Search" autocomplete="off" autocorrect="off" spellcheck="false">
+                    <button class="mobile-search-submit" aria-label="Submit search"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile nav drawer (required by script.js) -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay" aria-hidden="true"></div>
+    <nav id="mobileMenuDrawer" class="mobile-menu-drawer" aria-label="Mobile navigation">
+        <div class="mobile-menu-header">
+            <span class="font-serif text-xl font-bold tracking-widest">IPORDISE<span class="text-brand-red">.</span></span>
+            <button id="mobileMenuClose" class="mobile-menu-close" aria-label="Close menu"><i class="fas fa-xmark"></i></button>
+        </div>
+        <ul class="mobile-menu-list">
+            <li><a href="discover.html?filter=all"          class="mobile-menu-link"><i class="fas fa-spray-can-sparkles"></i> All Perfumes</a></li>
+            <li><a href="discover.html?filter=for-men"      class="mobile-menu-link"><i class="fas fa-mars"></i> Men</a></li>
+            <li><a href="discover.html?filter=for-women"    class="mobile-menu-link"><i class="fas fa-venus"></i> Women</a></li>
+            <li><a href="discover.html?filter=niche"        class="mobile-menu-link"><i class="fas fa-gem"></i> Niche</a></li>
+            <li><a href="discover.html?filter=best-sellers" class="mobile-menu-link"><i class="fas fa-fire"></i> Best Sellers</a></li>
+            <li><a href="discover.html?filter=new-in"       class="mobile-menu-link"><i class="fas fa-sparkles"></i> New In</a></li>
+            <li><a href="discover.html?filter=offers"       class="mobile-menu-link"><i class="fas fa-bolt"></i> Flash Offers</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+            <a href="pages/login.html"   class="mobile-menu-footer-btn"><i class="fas fa-user"></i> My Account</a>
+            <a href="pages/contact.html" class="mobile-menu-footer-btn"><i class="fas fa-headset"></i> Contact Us</a>
+        </div>
+    </nav>
+
+    <!-- ── Main 404 stage ── -->
+    <main class="nf-stage" role="main" aria-labelledby="nfHeadline">
+
+        <!-- Floating perfume icon (decorative) -->
+        <i class="fas fa-spray-can-sparkles nf-bottle" aria-hidden="true"></i>
+
+        <!-- The big 404 -->
+        <p class="nf-number" aria-hidden="true">404</p>
+
+        <!-- Red divider rule -->
+        <span class="nf-rule" aria-hidden="true"></span>
+
+        <!-- Heading -->
+        <h1 class="nf-headline" id="nfHeadline">
+            This page doesn't exist
+        </h1>
+
+        <!-- Sub-message -->
+        <p class="nf-sub">
+            The page you're looking for couldn't be found. It may have been moved, renamed, or never existed at all.
+        </p>
+
+        <!-- URL blame — filled by JS -->
+        <span class="nf-url-blame" id="nfUrlBlame" aria-live="polite"></span>
+
+        <!-- Action buttons -->
+        <div class="nf-actions" role="navigation" aria-label="Recovery options">
+            <a href="index.html" class="nf-btn nf-btn--primary">
+                <i class="fas fa-house"></i>
+                Back to Home
+            </a>
+            <a href="discover.html?filter=all" class="nf-btn nf-btn--gold">
+                <i class="fas fa-spray-can-sparkles"></i>
+                Shop All Perfumes
+            </a>
+            <button type="button" class="nf-btn nf-btn--outline" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i>
+                Go Back
+            </button>
+        </div>
+
+        <!-- Inline search -->
+        <form class="nf-search-wrap" role="search" aria-label="Search the site"
+              onsubmit="nfSearch(event)">
+            <input type="search"
+                   class="nf-search-input"
+                   id="nfSearchInput"
+                   placeholder="Search perfumes, brands, notes…"
+                   aria-label="Search perfumes"
+                   autocomplete="off"
+                   spellcheck="false">
+            <button type="submit" class="nf-search-btn" aria-label="Submit search">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+
+        <!-- Quick browsing pills -->
+        <nav class="nf-quick" aria-label="Popular categories">
+            <a href="discover.html?filter=for-men"      class="nf-quick-pill"><i class="fas fa-mars"></i> Men</a>
+            <a href="discover.html?filter=for-women"    class="nf-quick-pill"><i class="fas fa-venus"></i> Women</a>
+            <a href="discover.html?filter=niche"        class="nf-quick-pill"><i class="fas fa-gem"></i> Niche</a>
+            <a href="discover.html?filter=best-sellers" class="nf-quick-pill"><i class="fas fa-fire"></i> Best Sellers</a>
+            <a href="discover.html?filter=new-in"       class="nf-quick-pill"><i class="fas fa-sparkles"></i> New In</a>
+            <a href="discover.html?filter=arabian"      class="nf-quick-pill"><i class="fas fa-mosque"></i> Arabian</a>
+            <a href="discover.html?filter=offers"       class="nf-quick-pill"><i class="fas fa-bolt"></i> Offers</a>
+        </nav>
+
+    </main>
+
+    <!-- ── Mini footer ── -->
+    <footer class="nf-footer">
+        <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+        <nav class="nf-footer-links" aria-label="Footer links">
+            <a href="pages/contact.html">Contact</a>
+            <a href="pages/faq.html">FAQ</a>
+            <a href="pages/privacy-policy.html">Privacy</a>
+            <a href="pages/terms.html">Terms</a>
+        </nav>
+    </footer>
+
+    <!-- IPO Search Overlay (shared, required by script.js) -->
+    <div class="ipo-search-overlay" id="ipoSearchOverlay" role="dialog" aria-label="Search"
+         aria-modal="true" aria-hidden="true">
+        <div class="ipo-search-overlay-backdrop" id="ipoSearchOverlayBackdrop"></div>
+        <div class="ipo-search-overlay-panel" id="ipoSearchOverlayPanel">
+            <div class="ipo-search-overlay-header">
+                <input type="search" id="ipoSearchOverlayInput" class="ipo-search-overlay-input"
+                       placeholder="Search perfumes, brands, notes..."
+                       aria-label="Search" autocomplete="off" autocorrect="off" spellcheck="false">
+                <button class="ipo-search-overlay-close" id="ipoSearchOverlayClose" aria-label="Close search">
+                    <i class="fas fa-xmark"></i>
+                </button>
+            </div>
+            <div class="ipo-search-overlay-results" id="ipoSearchOverlayResults"></div>
+        </div>
+    </div>
+
+    <script>
+        // Show the bad URL in the blame badge
+        (function () {
+            var blame = document.getElementById('nfUrlBlame');
+            if (!blame) return;
+            var path = window.location.pathname + window.location.search;
+            if (path && path !== '/404.html' && path !== '/404' && path.length > 1) {
+                blame.textContent = path.length > 52
+                    ? path.slice(0, 49) + '…'
+                    : path;
+                blame.style.display = 'inline-block';
+            } else {
+                blame.style.display = 'none';
+            }
+        })();
+
+        // Redirect inline form to discover search
+        function nfSearch(e) {
+            e.preventDefault();
+            var q = document.getElementById('nfSearchInput').value.trim();
+            if (q) {
+                window.location.href = 'discover.html?q=' + encodeURIComponent(q);
+            }
+        }
+    </script>
+</body>
+</html>

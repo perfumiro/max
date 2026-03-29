@@ -1,0 +1,382 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-70NCC2RZM6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-70NCC2RZM6');
+    </script>
+    <title data-i18n-title="careers.page_title">IPORDISE - Careers</title>
+    <meta name="description" content="Join the IPORDISE team in Morocco. We're looking for passionate people to help bring authentic luxury fragrances to our customers. View open positions.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../script.js"></script>
+    <script src="../i18n.js"></script>
+    <link rel="stylesheet" href="../style.css">
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/logo-mark.svg">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="IPORDISE">
+    <meta name="msapplication-TileColor" content="#1a1a1a">
+    <meta name="msapplication-TileImage" content="../assets/logo-mark.svg"></head>
+<body class="bg-white text-gray-800 font-sans antialiased">
+
+    <div class="page-announce-bar" data-i18n-html="careers.announce">
+        <i class="fas fa-briefcase mr-2" style="color:#e73c3c"></i>
+        Join a passionate team building Morocco's <strong style="color:#fff">leading fragrance brand</strong>.
+    </div>
+
+    <header class="bg-brand-dark text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Mobile Menu Toggle -->
+                <button id="mobileMenuToggle" class="md:hidden header-icon-btn hover:text-brand-red transition" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="../index.html" aria-label="IPORDISE Home">
+                        <img
+                            src="../assets/logo-wordmark.svg"
+                            alt="IPORDISE Luxury Perfumes"
+                            class="site-logo-img"
+                            fetchpriority="high"
+                            loading="eager"
+                            decoding="async"
+                        >
+                    </a>
+                </div>
+
+                <!-- Search trigger — opens full overlay on click -->
+                <div class="flex-1 max-w-2xl mx-8 hidden md:block">
+                    <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
+                        <i class="fas fa-search ipo-search-trigger-icon"></i>
+                        <span class="ipo-search-trigger-text">Search perfumes, brands, notes...</span>
+                    </button>
+                </div>
+
+                <!-- Actions & Icons -->
+                <div class="flex items-center gap-3 md:gap-6">
+                    <a href="../discover.html?filter=all" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">
+                        PROMOTIONS <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                    </a>
+
+                    <div class="flex items-center gap-2 md:gap-3 text-lg">
+                        <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
+                            <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                        </button>
+                        <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                        <div class="header-wishlist-wrap relative">
+                            <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                        </div>
+                        <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart" id="cartIconLink">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="header-cart-badge absolute hidden" id="cartBadge" aria-live="polite"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar (toggled by .header-search-btn click) -->
+        <div class="header-mobile-search md:hidden" aria-hidden="true" role="search">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="mobile-search-inner">
+                    <input
+                        type="text"
+                        class="mobile-search-input"
+                        placeholder="Search perfumes, brands, notes..."
+                        aria-label="Search"
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                    >
+                    <button class="mobile-search-submit" aria-label="Submit search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Categories -->
+        <nav class="perfume-nav hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <ul class="perfume-nav-list">
+                    <li><a href="../discover.html?filter=all" class="perfume-nav-link" data-i18n="index.nav.all" data-i18n-orig="ALL PERFUMES">ALL PERFUMES</a></li>
+                    <li><a href="../discover.html?filter=for-men" class="perfume-nav-link" data-i18n="index.nav.men" data-i18n-orig="MEN">MEN</a></li>
+                    <li><a href="../discover.html?filter=for-women" class="perfume-nav-link" data-i18n="index.nav.women" data-i18n-orig="WOMEN">WOMEN</a></li>
+                    <li><a href="../discover.html?filter=unisex" class="perfume-nav-link" data-i18n="index.nav.unisex" data-i18n-orig="UNISEX">UNISEX</a></li>
+                    <li><a href="../discover.html?filter=niche" class="perfume-nav-link" data-i18n="index.nav.niche" data-i18n-orig="NICHE">NICHE</a></li>
+                    <li><a href="../discover.html?filter=arabian" class="perfume-nav-link" data-i18n="index.nav.arabian" data-i18n-orig="ARABIAN">ARABIAN</a></li>
+                    <li><a href="../discover.html?filter=designer" class="perfume-nav-link" data-i18n="index.nav.designer" data-i18n-orig="DESIGNER">DESIGNER</a></li>
+                    <li><a href="../discover.html?filter=discovery-sets" class="perfume-nav-link" data-i18n="index.nav.discovery" data-i18n-orig="DISCOVERY SETS">DISCOVERY SETS</a></li>
+                    <li><a href="../discover.html?filter=best-sellers" class="perfume-nav-link" data-i18n="index.nav.bestsellers" data-i18n-orig="BEST SELLERS">BEST SELLERS</a></li>
+                    <li><a href="../discover.html?filter=new-in" class="perfume-nav-link" data-i18n="index.nav.newin" data-i18n-orig="NEW IN">NEW IN</a></li>
+                    <li><a href="../discover.html?filter=offers" class="perfume-nav-link" data-i18n="index.nav.offers" data-i18n-orig="OFFERS">OFFERS</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="page-hero">
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+            <p class="text-white/60 text-xs mb-4 flex items-center gap-1.5">
+                <a href="/" class="hover:text-white transition" data-i18n="common.home_breadcrumb">Home</a>
+                <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
+                <span class="text-white/90 font-semibold" data-i18n="careers.breadcrumb">Careers</span>
+            </p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight" data-i18n="careers.h1">Join Our Team</h1>
+            <p class="mt-3 text-white/65 max-w-xl text-sm sm:text-base" data-i18n="careers.subtitle">We're building Morocco's most loved fragrance brand. Come help us shape the future of luxury e-commerce.</p>
+        </div>
+    </section>
+
+    <main class="py-10 sm:py-14" style="background:linear-gradient(160deg,#f5f6f9 0%,#eef0f6 55%,#f5f6f9 100%)">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Benefits -->
+            <div class="mb-10">
+                <p class="faq-category-title mb-5"><i class="fas fa-gift"></i> <span data-i18n="careers.why_cat">Why work with us</span></p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="info-card text-center">
+                        <i class="fas fa-spray-can-sparkles text-2xl mb-2" style="color:#e73c3c"></i>
+                        <p class="font-semibold text-sm text-brand-dark" data-i18n="careers.perk1_h">Fragrance perks</p>
+                        <p class="text-xs text-gray-500 mt-1" data-i18n="careers.perk1_p">Staff discounts on all products</p>
+                    </div>
+                    <div class="info-card text-center">
+                        <i class="fas fa-chart-line text-2xl mb-2" style="color:#e73c3c"></i>
+                        <p class="font-semibold text-sm text-brand-dark" data-i18n="careers.perk2_h">Career growth</p>
+                        <p class="text-xs text-gray-500 mt-1" data-i18n="careers.perk2_p">Clear progression paths</p>
+                    </div>
+                    <div class="info-card text-center">
+                        <i class="fas fa-laptop-code text-2xl mb-2" style="color:#e73c3c"></i>
+                        <p class="font-semibold text-sm text-brand-dark" data-i18n="careers.perk3_h">Flexible working</p>
+                        <p class="text-xs text-gray-500 mt-1" data-i18n="careers.perk3_p">Remote &amp; hybrid options</p>
+                    </div>
+                    <div class="info-card text-center">
+                        <i class="fas fa-users text-2xl mb-2" style="color:#e73c3c"></i>
+                        <p class="font-semibold text-sm text-brand-dark" data-i18n="careers.perk4_h">Great culture</p>
+                        <p class="text-xs text-gray-500 mt-1" data-i18n="careers.perk4_p">Collaborative, creative &amp; welcoming</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Open roles -->
+            <div>
+                <p class="faq-category-title mb-5"><i class="fas fa-door-open"></i> <span data-i18n="careers.positions_cat">Open positions</span></p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                    <div class="career-card">
+                        <div class="flex items-start justify-between gap-3">
+                            <h3 class="font-bold text-brand-dark text-base" data-i18n="careers.job1_h">Store Advisor</h3>
+                            <span class="career-badge"><i class="fas fa-map-marker-alt"></i> <span data-i18n="careers.badge_onsite">On-site</span></span>
+                        </div>
+                        <p class="text-sm text-gray-600 leading-relaxed" data-i18n="careers.job1_p">Guide customers to their perfect signature fragrance. You'll be the face of IPORDISE in our physical locations, providing expert olfactory consultations.</p>
+                        <ul class="text-xs text-gray-500 space-y-1 list-disc pl-4">
+                            <li data-i18n="careers.job1_li1">Passion for fragrance &amp; beauty</li>
+                            <li data-i18n="careers.job1_li2">Strong interpersonal skills</li>
+                            <li data-i18n="careers.job1_li3">Arabic &amp; French required</li>
+                        </ul>
+                        <a href="contact.html" class="career-apply-btn" data-i18n-html="careers.apply_btn">Apply now <i class="fas fa-arrow-right text-xs"></i></a>
+                    </div>
+
+                    <div class="career-card">
+                        <div class="flex items-start justify-between gap-3">
+                            <h3 class="font-bold text-brand-dark text-base" data-i18n="careers.job2_h">E-commerce Coordinator</h3>
+                            <span class="career-badge"><i class="fas fa-laptop"></i> <span data-i18n="careers.badge_hybrid">Hybrid</span></span>
+                        </div>
+                        <p class="text-sm text-gray-600 leading-relaxed" data-i18n="careers.job2_p">Manage product launches, inventory updates, and digital campaigns. You'll be the engine driving our online catalogue and promotional strategy.</p>
+                        <ul class="text-xs text-gray-500 space-y-1 list-disc pl-4">
+                            <li data-i18n="careers.job2_li1">Experience with e-commerce platforms</li>
+                            <li data-i18n="careers.job2_li2">Data-driven mindset</li>
+                            <li data-i18n="careers.job2_li3">Strong written communication</li>
+                        </ul>
+                        <a href="contact.html" class="career-apply-btn" data-i18n-html="careers.apply_btn">Apply now <i class="fas fa-arrow-right text-xs"></i></a>
+                    </div>
+
+                    <div class="career-card">
+                        <div class="flex items-start justify-between gap-3">
+                            <h3 class="font-bold text-brand-dark text-base" data-i18n="careers.job3_h">Content &amp; Social Media Creator</h3>
+                            <span class="career-badge"><i class="fas fa-wifi"></i> <span data-i18n="careers.badge_remote">Remote</span></span>
+                        </div>
+                        <p class="text-sm text-gray-600 leading-relaxed" data-i18n="careers.job3_p">Create compelling visual content for Instagram, TikTok, and YouTube. Bring our fragrance world to life through stories, reels, and reviews.</p>
+                        <ul class="text-xs text-gray-500 space-y-1 list-disc pl-4">
+                            <li data-i18n="careers.job3_li1">Portfolio of creative content</li>
+                            <li data-i18n="careers.job3_li2">Knowledge of fragrance a plus</li>
+                            <li data-i18n="careers.job3_li3">Video editing skills required</li>
+                        </ul>
+                        <a href="contact.html" class="career-apply-btn" data-i18n-html="careers.apply_btn">Apply now <i class="fas fa-arrow-right text-xs"></i></a>
+                    </div>
+
+                    <div class="career-card">
+                        <div class="flex items-start justify-between gap-3">
+                            <h3 class="font-bold text-brand-dark text-base" data-i18n="careers.job4_h">Logistics &amp; Fulfilment Specialist</h3>
+                            <span class="career-badge"><i class="fas fa-warehouse"></i> <span data-i18n="careers.badge_onsite">On-site</span></span>
+                        </div>
+                        <p class="text-sm text-gray-600 leading-relaxed" data-i18n="careers.job4_p">Oversee order packing, carrier coordination, and stock management. Ensure every order reaches the customer perfectly and on time.</p>
+                        <ul class="text-xs text-gray-500 space-y-1 list-disc pl-4">
+                            <li data-i18n="careers.job4_li1">Logistics or warehouse experience</li>
+                            <li data-i18n="careers.job4_li2">Detail-orientated</li>
+                            <li data-i18n="careers.job4_li3">Available for early morning shifts</li>
+                        </ul>
+                        <a href="contact.html" class="career-apply-btn" data-i18n-html="careers.apply_btn">Apply now <i class="fas fa-arrow-right text-xs"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Life at IPORDISE -->
+            <div class="mt-10 mb-10">
+                <p class="faq-category-title mb-5"><i class="fas fa-heart"></i> <span data-i18n="careers.life_cat">Life at IPORDISE</span></p>
+                <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <div>
+                            <h3 class="text-xl font-serif font-bold text-brand-dark mb-3" data-i18n="careers.life_h">More than a job &mdash; a fragrance family</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed mb-3" data-i18n="careers.life_p1">At IPORDISE, every team member is a fragrance enthusiast. We share a passion for helping people discover scents that define their identity. Our culture is built on trust, creativity, and mutual respect.</p>
+                            <p class="text-sm text-gray-600 leading-relaxed" data-i18n="careers.life_p2">From morning coffee catch-ups to after-work fragrance testing sessions, we believe in work that inspires and a team that feels like home.</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="info-card text-center py-4">
+                                <p class="text-2xl font-bold font-serif" style="color:#e73c3c">30%</p>
+                                <p class="text-xs text-gray-500 mt-1" data-i18n="careers.stat1">Staff fragrance discount</p>
+                            </div>
+                            <div class="info-card text-center py-4">
+                                <p class="text-2xl font-bold font-serif" style="color:#e73c3c">5</p>
+                                <p class="text-xs text-gray-500 mt-1" data-i18n="careers.stat2">Team members</p>
+                            </div>
+                            <div class="info-card text-center py-4">
+                                <p class="text-2xl font-bold font-serif" style="color:#e73c3c">1</p>
+                                <p class="text-xs text-gray-500 mt-1" data-i18n="careers.stat3">City we work in</p>
+                            </div>
+                            <div class="info-card text-center py-4">
+                                <p class="text-2xl font-bold font-serif" style="color:#e73c3c">100%</p>
+                                <p class="text-xs text-gray-500 mt-1" data-i18n="careers.stat4">Passion for fragrance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hiring process -->
+            <div class="mb-10">
+                <p class="faq-category-title mb-5"><i class="fas fa-clipboard-list"></i> <span data-i18n="careers.process_cat">Our hiring process</span></p>
+                <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                    <div class="shipping-step">
+                        <div class="shipping-step-num">1</div>
+                        <div>
+                            <h3 class="font-semibold text-brand-dark" data-i18n="careers.proc1_h">Apply</h3>
+                            <p class="text-sm text-gray-500 mt-1" data-i18n="careers.proc1_p">Send your CV and a brief cover letter via our contact form or email. Tell us why you love fragrance.</p>
+                        </div>
+                    </div>
+                    <div class="shipping-step">
+                        <div class="shipping-step-num">2</div>
+                        <div>
+                            <h3 class="font-semibold text-brand-dark" data-i18n="careers.proc2_h">Initial chat</h3>
+                            <p class="text-sm text-gray-500 mt-1" data-i18n="careers.proc2_p">A short 15-minute call with our team lead to learn more about you and answer your questions.</p>
+                        </div>
+                    </div>
+                    <div class="shipping-step">
+                        <div class="shipping-step-num">3</div>
+                        <div>
+                            <h3 class="font-semibold text-brand-dark" data-i18n="careers.proc3_h">Skills assessment</h3>
+                            <p class="text-sm text-gray-500 mt-1" data-i18n="careers.proc3_p">A practical task relevant to the role &mdash; nothing too long, just a chance to show your skills.</p>
+                        </div>
+                    </div>
+                    <div class="shipping-step">
+                        <div class="shipping-step-num">4</div>
+                        <div>
+                            <h3 class="font-semibold text-brand-dark" data-i18n="careers.proc4_h">Welcome aboard</h3>
+                            <p class="text-sm text-gray-500 mt-1" data-i18n="careers.proc4_p">Offer made, onboarding begins, and you get your first IPORDISE fragrance on day one.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team quote -->
+            <div class="mb-8 bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm text-center">
+                <i class="fas fa-quote-left text-3xl mb-4" style="color:#e73c3c;opacity:0.3"></i>
+                <blockquote class="text-lg font-serif italic text-brand-dark max-w-2xl mx-auto leading-relaxed" data-i18n="careers.quote">&ldquo;Working at IPORDISE means being surrounded by extraordinary scents and extraordinary people. Every day, I help someone find their signature fragrance &mdash; and that never gets old.&rdquo;</blockquote>
+                <p class="mt-4 text-sm font-semibold text-gray-500" data-i18n="careers.quote_author">&mdash; Store Advisor, Tanger</p>
+            </div>
+
+            <!-- Open application -->
+            <div class="text-center bg-white rounded-2xl border border-gray-100 py-8 px-4 shadow-sm">
+                <p class="font-semibold text-brand-dark mb-1" data-i18n="careers.open_app_h">Don't see your role?</p>
+                <p class="text-sm text-gray-500 mb-4" data-i18n="careers.open_app_p">Send us your CV and a short note. We're always open to exceptional talent.</p>
+                <a href="contact.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm text-white" style="background:#e73c3c"><span data-i18n="careers.open_app_btn">Send open application</span> <i class="fas fa-paper-plane text-xs"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-brand-dark text-white pt-12 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+                <div class="col-span-2 md:col-span-1">
+                    <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online.</p>
+                    <div class="flex space-x-3">
+                        <a href="https://www.instagram.com/ipordise_parfums/" target="_blank" rel="noopener noreferrer" aria-label="IPORDISE on Instagram" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=61563285998567&ref=NONE_xav_ig_profile_page_web#" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.tiktok.com/@ipordise_parfume?_r=1&_t=ZS-94xrj0k1Pjp" target="_blank" rel="noopener noreferrer" aria-label="IPORDISE on TikTok" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
+                                            </div>
+                </div>
+                <div><h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4><ul class="footer-links"><li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li><li><a href="shipping.html" data-i18n="footer.shipping_returns">Shipping &amp; Returns</a></li><li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li><li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li><li><a href="how-to-order.html">How to Order</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about">About</h4><ul class="footer-links"><li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li><li><a href="careers.html" data-i18n="footer.careers">Careers</a></li><li><a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li></ul></div>
+                <div>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4" data-i18n="footer.newsletter_desc">Subscribe for exclusive deals and new arrivals.</p>
+                    <div class="flex"><input type="email" placeholder="Your email" data-i18n-placeholder="footer.newsletter_placeholder" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm" data-i18n="footer.newsletter_go">GO</a></div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
+                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <div class="flex gap-4"><a href="terms.html" class="hover:text-white transition">Terms</a><a href="privacy-policy.html" class="hover:text-white transition">Privacy</a><a href="returns.html" class="hover:text-white transition">Returns</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- IPO Search Overlay -->
+    <div class="ipo-search-overlay" id="ipoSearchOverlay" role="dialog" aria-label="Search" aria-modal="true" aria-hidden="true">
+        <div class="ipo-search-overlay-backdrop" id="ipoSearchOverlayBackdrop"></div>
+        <div class="ipo-search-overlay-panel" id="ipoSearchOverlayPanel">
+            <!-- Input bar -->
+            <div class="ipo-search-overlay-bar">
+                <div class="ipo-search-overlay-input-wrap">
+                    <i class="fas fa-search ipo-search-overlay-search-icon"></i>
+                    <input
+                        type="text"
+                        class="ipo-search-overlay-input"
+                        id="ipoSearchOverlayInput"
+                        placeholder="Search perfumes, brands, notes..."
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        aria-label="Search"
+                    >
+                    <button type="button" class="ipo-search-overlay-clear" id="ipoSearchOverlayClear" aria-label="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <button type="button" class="ipo-search-overlay-close-btn" id="ipoSearchOverlayClose" aria-label="Close search">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Dynamic body (popular searches + products / live results) -->
+            <div class="ipo-search-overlay-body" id="ipoSearchOverlayBody"></div>
+        </div>
+    </div>
+</body>
+</html>

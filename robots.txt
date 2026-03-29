@@ -1,0 +1,21 @@
+# IPORDISE — robots.txt
+# https://www.ipordise.com
+
+User-agent: *
+Allow: /
+
+# Block checkout, cart, account, and thank-you pages from indexing
+Disallow: /pages/cart.html
+Disallow: /pages/checkout.html
+Disallow: /pages/thank-you.html
+Disallow: /pages/login.html
+
+# Block internal assets and scripts
+Disallow: /download_assets.ps1
+Disallow: /download_assets2.ps1
+
+# Sitemap location
+Sitemap: https://www.ipordise.com/sitemap.xml
+
+# Crawl delay (courtesy for bots other than Googlebot)
+Crawl-delay: 1

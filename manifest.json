@@ -1,0 +1,21 @@
+{
+  "name": "IPORDISE – Luxury Perfumes",
+  "short_name": "IPORDISE",
+  "description": "Morocco's premier destination for authentic luxury fragrances.",
+  "id": "/",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#e73c3c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/logo-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "lang": "en"
+}

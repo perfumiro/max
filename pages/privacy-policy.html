@@ -1,0 +1,320 @@
+﻿
+?<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-70NCC2RZM6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-70NCC2RZM6');
+    </script>
+    <title data-i18n-title="privacy.page_title">IPORDISE - Privacy Policy</title>
+    <meta name="description" content="Read the IPORDISE privacy policy to understand how we collect, use, and protect your personal data when you shop with us in Morocco.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../script.js"></script>
+    <script src="../i18n.js"></script>
+    <link rel="stylesheet" href="../style.css">
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/logo-mark.svg">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="IPORDISE">
+    <meta name="msapplication-TileColor" content="#1a1a1a">
+    <meta name="msapplication-TileImage" content="../assets/logo-mark.svg"></head>
+<body class="bg-white text-gray-800 font-sans antialiased">
+
+    <div class="page-announce-bar" data-i18n-html="privacy.announce">
+        <i class="fas fa-shield-halved mr-2" style="color:#e73c3c"></i>
+        Your data is <strong style="color:#fff">always safe</strong> with IPORDISE. We never sell your personal information.
+    </div>
+
+    <header class="bg-brand-dark text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Mobile Menu Toggle -->
+                <button id="mobileMenuToggle" class="md:hidden header-icon-btn hover:text-brand-red transition" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="../index.html" aria-label="IPORDISE Home">
+                        <img
+                            src="../assets/logo-wordmark.svg"
+                            alt="IPORDISE Luxury Perfumes"
+                            class="site-logo-img"
+                            fetchpriority="high"
+                            loading="eager"
+                            decoding="async"
+                        >
+                    </a>
+                </div>
+
+                <!-- Search trigger — opens full overlay on click -->
+                <div class="flex-1 max-w-2xl mx-8 hidden md:block">
+                    <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
+                        <i class="fas fa-search ipo-search-trigger-icon"></i>
+                        <span class="ipo-search-trigger-text">Search perfumes, brands, notes...</span>
+                    </button>
+                </div>
+
+                <!-- Actions & Icons -->
+                <div class="flex items-center gap-3 md:gap-6">
+                    <a href="../discover.html?filter=all" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">
+                        PROMOTIONS <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                    </a>
+
+                    <div class="flex items-center gap-2 md:gap-3 text-lg">
+                        <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
+                            <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                        </button>
+                        <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                        <div class="header-wishlist-wrap relative">
+                            <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                        </div>
+                        <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart" id="cartIconLink">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="header-cart-badge absolute hidden" id="cartBadge" aria-live="polite"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar (toggled by .header-search-btn click) -->
+        <div class="header-mobile-search md:hidden" aria-hidden="true" role="search">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="mobile-search-inner">
+                    <input
+                        type="text"
+                        class="mobile-search-input"
+                        placeholder="Search perfumes, brands, notes..."
+                        aria-label="Search"
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                    >
+                    <button class="mobile-search-submit" aria-label="Submit search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Categories -->
+        <nav class="perfume-nav hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <ul class="perfume-nav-list">
+                    <li><a href="../discover.html?filter=all" class="perfume-nav-link" data-i18n="index.nav.all" data-i18n-orig="ALL PERFUMES">ALL PERFUMES</a></li>
+                    <li><a href="../discover.html?filter=for-men" class="perfume-nav-link" data-i18n="index.nav.men" data-i18n-orig="MEN">MEN</a></li>
+                    <li><a href="../discover.html?filter=for-women" class="perfume-nav-link" data-i18n="index.nav.women" data-i18n-orig="WOMEN">WOMEN</a></li>
+                    <li><a href="../discover.html?filter=unisex" class="perfume-nav-link" data-i18n="index.nav.unisex" data-i18n-orig="UNISEX">UNISEX</a></li>
+                    <li><a href="../discover.html?filter=niche" class="perfume-nav-link" data-i18n="index.nav.niche" data-i18n-orig="NICHE">NICHE</a></li>
+                    <li><a href="../discover.html?filter=arabian" class="perfume-nav-link" data-i18n="index.nav.arabian" data-i18n-orig="ARABIAN">ARABIAN</a></li>
+                    <li><a href="../discover.html?filter=designer" class="perfume-nav-link" data-i18n="index.nav.designer" data-i18n-orig="DESIGNER">DESIGNER</a></li>
+                    <li><a href="../discover.html?filter=discovery-sets" class="perfume-nav-link" data-i18n="index.nav.discovery" data-i18n-orig="DISCOVERY SETS">DISCOVERY SETS</a></li>
+                    <li><a href="../discover.html?filter=best-sellers" class="perfume-nav-link" data-i18n="index.nav.bestsellers" data-i18n-orig="BEST SELLERS">BEST SELLERS</a></li>
+                    <li><a href="../discover.html?filter=new-in" class="perfume-nav-link" data-i18n="index.nav.newin" data-i18n-orig="NEW IN">NEW IN</a></li>
+                    <li><a href="../discover.html?filter=offers" class="perfume-nav-link" data-i18n="index.nav.offers" data-i18n-orig="OFFERS">OFFERS</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="page-hero">
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+            <p class="text-white/60 text-xs mb-4 flex items-center gap-1.5">
+                <a href="/" class="hover:text-white transition" data-i18n="common.home_breadcrumb">Home</a>
+                <i class="fas fa-chevron-right text-[8px] opacity-50"></i>
+                <span class="text-white/90 font-semibold" data-i18n="privacy.breadcrumb">Privacy Policy</span>
+            </p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight" data-i18n="privacy.h1">Privacy Policy</h1>
+            <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base" data-i18n="privacy.subtitle">How IPORDISE collects, uses, and protects your personal information.</p>
+            <p class="mt-3 text-white/40 text-xs" data-i18n="privacy.last_updated">Last updated: March 4, 2026</p>
+        </div>
+    </section>
+
+    <main class="py-10 sm:py-14" style="background:linear-gradient(160deg,#f5f6f9 0%,#eef0f6 55%,#f5f6f9 100%)">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-10 shadow-lg" style="border-top:3.5px solid #e73c3c">
+
+                <!-- Table of contents -->
+                <nav class="mb-8 rounded-xl overflow-hidden border border-gray-100" aria-label="Document contents">
+                    <div class="flex items-center gap-2 px-5 py-3 border-b border-gray-100" style="background:#f8f9fb">
+                        <i class="fas fa-list-ul text-xs" style="color:#e73c3c"></i>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Contents</span>
+                    </div>
+                    <ol class="list-none p-0 m-0 divide-y divide-gray-50 text-sm">
+                        <li><a href="#priv-1" class="flex items-center gap-3 px-5 py-2.5 text-gray-700 hover:bg-red-50 transition-colors" data-i18n="privacy.s1_h"><span class="font-bold text-xs flex-shrink-0" style="color:#e73c3c;min-width:1.5rem">01</span>Information we collect</a></li>
+                        <li><a href="#priv-2" class="flex items-center gap-3 px-5 py-2.5 text-gray-700 hover:bg-red-50 transition-colors" data-i18n="privacy.s2_h"><span class="font-bold text-xs flex-shrink-0" style="color:#e73c3c;min-width:1.5rem">02</span>How we use your data</a></li>
+                        <li><a href="#priv-3" class="flex items-center gap-3 px-5 py-2.5 text-gray-700 hover:bg-red-50 transition-colors" data-i18n="privacy.s3_h"><span class="font-bold text-xs flex-shrink-0" style="color:#e73c3c;min-width:1.5rem">03</span>Information sharing</a></li>
+                        <li><a href="#priv-4" class="flex items-center gap-3 px-5 py-2.5 text-gray-700 hover:bg-red-50 transition-colors" data-i18n="privacy.s4_h"><span class="font-bold text-xs flex-shrink-0" style="color:#e73c3c;min-width:1.5rem">04</span>Cookies &amp; Analytics</a></li>
+                        <li><a href="#priv-5" class="flex items-center gap-3 px-5 py-2.5 text-gray-700 hover:bg-red-50 transition-colors" data-i18n="privacy.s5_h"><span class="font-bold text-xs flex-shrink-0" style="color:#e73c3c;min-width:1.5rem">05</span>Data retention &amp; security</a></li>
+                        <li><a href="#priv-6" class="flex items-center gap-3 px-5 py-2.5 text-gray-700 hover:bg-red-50 transition-colors" data-i18n="privacy.s6_h"><span class="font-bold text-xs flex-shrink-0" style="color:#e73c3c;min-width:1.5rem">06</span>Your rights</a></li>
+                        <li><a href="#priv-7" class="flex items-center gap-3 px-5 py-2.5 text-gray-700 hover:bg-red-50 transition-colors" data-i18n="privacy.s7_h"><span class="font-bold text-xs flex-shrink-0" style="color:#e73c3c;min-width:1.5rem">07</span>Contact us about privacy</a></li>
+                        <li><a href="#priv-8" class="flex items-center gap-3 px-5 py-2.5 text-gray-700 hover:bg-red-50 transition-colors" data-i18n="privacy.s8_h"><span class="font-bold text-xs flex-shrink-0" style="color:#e73c3c;min-width:1.5rem">08</span>Cookie categories</a></li>
+                        <li><a href="#priv-9" class="flex items-center gap-3 px-5 py-2.5 text-gray-700 hover:bg-red-50 transition-colors" data-i18n="privacy.s9_h"><span class="font-bold text-xs flex-shrink-0" style="color:#e73c3c;min-width:1.5rem">09</span>Data subject rights</a></li>
+                    </ol>
+                </nav>
+
+                <div class="policy-section" id="priv-1">
+                    <h2 class="text-xl font-bold text-brand-dark flex items-center gap-3 mb-3"><span class="inline-flex w-8 h-8 rounded-full text-sm font-bold items-center justify-center text-white flex-shrink-0" style="background:#e73c3c">1</span> <span data-i18n="privacy.s1_h">Information we collect</span></h2>
+                    <p class="text-sm text-gray-600 leading-relaxed" data-i18n="privacy.s1_p">We may collect information such as your name, email address, phone number, shipping address, billing details, and order history when you place an order, create an account, or submit a form on our website.</p>
+                </div>
+
+                <div class="policy-section" id="priv-2">
+                    <h2 class="text-xl font-bold text-brand-dark flex items-center gap-3 mb-3"><span class="inline-flex w-8 h-8 rounded-full text-sm font-bold items-center justify-center text-white flex-shrink-0" style="background:#e73c3c">2</span> <span data-i18n="privacy.s2_h">How we use your data</span></h2>
+                    <p class="text-sm text-gray-600 mb-3" data-i18n="privacy.s2_p">We use your information to:</p>
+                    <ul class="text-sm text-gray-600 space-y-2 list-none pl-0">
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-xs mt-0.5" style="color:#e73c3c"></i> <span data-i18n="privacy.s2_li1">Process and deliver your orders.</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-xs mt-0.5" style="color:#e73c3c"></i> <span data-i18n="privacy.s2_li2">Provide order updates and customer support.</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-xs mt-0.5" style="color:#e73c3c"></i> <span data-i18n="privacy.s2_li3">Improve website experience and product recommendations.</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-xs mt-0.5" style="color:#e73c3c"></i> <span data-i18n="privacy.s2_li4">Send newsletters only when you have explicitly subscribed.</span></li>
+                    </ul>
+                </div>
+
+                <div class="policy-section" id="priv-3">
+                    <h2 class="text-xl font-bold text-brand-dark flex items-center gap-3 mb-3"><span class="inline-flex w-8 h-8 rounded-full text-sm font-bold items-center justify-center text-white flex-shrink-0" style="background:#e73c3c">3</span> <span data-i18n="privacy.s3_h">Information sharing</span></h2>
+                    <p class="text-sm text-gray-600 leading-relaxed" data-i18n="privacy.s3_p">We do not sell your personal data to any third parties. Information is shared only with trusted service providers &mdash; such as delivery and payment partners &mdash; when strictly necessary to fulfil your order and operate the service.</p>
+                </div>
+
+                <div class="policy-section" id="priv-4">
+                    <h2 class="text-xl font-bold text-brand-dark flex items-center gap-3 mb-3"><span class="inline-flex w-8 h-8 rounded-full text-sm font-bold items-center justify-center text-white flex-shrink-0" style="background:#e73c3c">4</span> <span data-i18n="privacy.s4_h">Cookies &amp; Analytics</span></h2>
+                    <p class="text-sm text-gray-600 leading-relaxed" data-i18n="privacy.s4_p">Our website may use cookies and similar tools to remember your preferences, improve performance, and understand visitor behaviour. You can control cookie settings at any time through your browser preferences.</p>
+                </div>
+
+                <div class="policy-section" id="priv-5">
+                    <h2 class="text-xl font-bold text-brand-dark flex items-center gap-3 mb-3"><span class="inline-flex w-8 h-8 rounded-full text-sm font-bold items-center justify-center text-white flex-shrink-0" style="background:#e73c3c">5</span> <span data-i18n="privacy.s5_h">Data retention &amp; security</span></h2>
+                    <p class="text-sm text-gray-600 leading-relaxed" data-i18n="privacy.s5_p">We retain personal data only for as long as required for operational, legal, and support purposes. We apply reasonable technical and organisational safeguards &mdash; including encrypted storage and access controls &mdash; to protect your information from unauthorised access.</p>
+                </div>
+
+                <div class="policy-section" id="priv-6">
+                    <h2 class="text-xl font-bold text-brand-dark flex items-center gap-3 mb-3"><span class="inline-flex w-8 h-8 rounded-full text-sm font-bold items-center justify-center text-white flex-shrink-0" style="background:#e73c3c">6</span> <span data-i18n="privacy.s6_h">Your rights</span></h2>
+                    <p class="text-sm text-gray-600 leading-relaxed" data-i18n="privacy.s6_p">You may at any time request access to, correction of, or deletion of your personal information. You can also unsubscribe from marketing emails using the link in any email we send, or by contacting us directly.</p>
+                </div>
+
+                <div class="policy-section" id="priv-7">
+                    <h2 class="text-xl font-bold text-brand-dark flex items-center gap-3 mb-3"><span class="inline-flex w-8 h-8 rounded-full text-sm font-bold items-center justify-center text-white flex-shrink-0" style="background:#e73c3c">7</span> <span data-i18n="privacy.s7_h">Contact us about privacy</span></h2>
+                    <p class="text-sm text-gray-600 leading-relaxed" data-i18n-html="privacy.s7_p">For any privacy-related question or request, contact us at <a href="mailto:ipordiseparfums@gmail.com" class="font-semibold hover:underline" style="color:#e73c3c">ipordiseparfums@gmail.com</a> or by phone at <a href="tel:+212663750210" class="font-semibold hover:underline" style="color:#e73c3c">+212 6 63 75 02 10</a>.</p>
+                </div>
+
+                <div class="policy-section" id="priv-8">
+                    <h2 class="text-xl font-bold text-brand-dark flex items-center gap-3 mb-3"><span class="inline-flex w-8 h-8 rounded-full text-sm font-bold items-center justify-center text-white flex-shrink-0" style="background:#e73c3c">8</span> <span data-i18n="privacy.s8_h">Cookie categories</span></h2>
+                    <p class="text-sm text-gray-600 leading-relaxed mb-3" data-i18n="privacy.s8_p">We use the following types of cookies:</p>
+                    <ul class="text-sm text-gray-600 space-y-2 list-none pl-0">
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-xs mt-0.5" style="color:#e73c3c"></i> <span data-i18n="privacy.s8_li1"><strong>Essential:</strong> Required for the website to function (login sessions, cart).</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-xs mt-0.5" style="color:#e73c3c"></i> <span data-i18n="privacy.s8_li2"><strong>Preferences:</strong> Remember your language, region, and display settings.</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-xs mt-0.5" style="color:#e73c3c"></i> <span data-i18n="privacy.s8_li3"><strong>Analytics:</strong> Help us understand how visitors use the site to improve functionality.</span></li>
+                    </ul>
+                    <p class="text-sm text-gray-600 mt-2" data-i18n="privacy.s8_manage">You can manage your cookie preferences at any time via the &ldquo;Privacy settings&rdquo; link in the footer.</p>
+                </div>
+
+                <div class="policy-section" id="priv-9">
+                    <h2 class="text-xl font-bold text-brand-dark flex items-center gap-3 mb-3"><span class="inline-flex w-8 h-8 rounded-full text-sm font-bold items-center justify-center text-white flex-shrink-0" style="background:#e73c3c">9</span> <span data-i18n="privacy.s9_h">Data subject rights</span></h2>
+                    <p class="text-sm text-gray-600 leading-relaxed mb-3" data-i18n="privacy.s9_p">Under applicable law, you have the right to:</p>
+                    <ul class="text-sm text-gray-600 space-y-2 list-none pl-0">
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-xs mt-0.5" style="color:#e73c3c"></i> <span data-i18n="privacy.s9_li1">Request a copy of the personal data we hold about you.</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-xs mt-0.5" style="color:#e73c3c"></i> <span data-i18n="privacy.s9_li2">Request correction of any inaccurate or incomplete data.</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-xs mt-0.5" style="color:#e73c3c"></i> <span data-i18n="privacy.s9_li3">Request deletion of your data (&ldquo;right to be forgotten&rdquo;).</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-xs mt-0.5" style="color:#e73c3c"></i> <span data-i18n="privacy.s9_li4">Withdraw consent for marketing communications at any time.</span></li>
+                    </ul>
+                    <p class="text-sm text-gray-600 mt-2" data-i18n="privacy.s9_how">To exercise any of these rights, email <a href="mailto:ipordiseparfums@gmail.com" class="font-semibold hover:underline" style="color:#e73c3c">ipordiseparfums@gmail.com</a> with &ldquo;Privacy Request&rdquo; in the subject line. We will respond within 30 days.</p>
+                </div>
+
+                <div class="mt-8">
+                    <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Related Documents</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+                        <a href="terms.html" class="flex items-center gap-2.5 p-3.5 rounded-xl border border-gray-100 hover:border-red-200 hover:bg-red-50 transition">
+                            <i class="fas fa-scale-balanced text-sm flex-shrink-0" style="color:#e73c3c"></i>
+                            <span class="text-sm font-semibold text-gray-600">Terms &amp; Conditions</span>
+                        </a>
+                        <a href="returns.html" class="flex items-center gap-2.5 p-3.5 rounded-xl border border-gray-100 hover:border-red-200 hover:bg-red-50 transition">
+                            <i class="fas fa-rotate-left text-sm flex-shrink-0" style="color:#e73c3c"></i>
+                            <span class="text-sm font-semibold text-gray-600">Returns Policy</span>
+                        </a>
+                        <a href="shipping.html" class="flex items-center gap-2.5 p-3.5 rounded-xl border border-gray-100 hover:border-red-200 hover:bg-red-50 transition">
+                            <i class="fas fa-truck-fast text-sm flex-shrink-0" style="color:#e73c3c"></i>
+                            <span class="text-sm font-semibold text-gray-600">Shipping Info</span>
+                        </a>
+                    </div>
+                    <div class="p-4 rounded-xl flex items-start gap-3" style="background:linear-gradient(135deg,#fef2f2,#fff5f5);border:1px solid rgba(231,60,60,0.14)" data-i18n-html="privacy.review_note">
+                        <i class="fas fa-clock text-sm flex-shrink-0 mt-0.5" style="color:#e73c3c"></i>
+                        <p class="text-sm text-gray-600">This Privacy Policy was last reviewed on <strong>March 4, 2026</strong>. Material changes will be communicated via email or a prominent website notice at least 14 days before taking effect.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-brand-dark text-white pt-12 pb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+                <div class="col-span-2 md:col-span-1">
+                    <h3 class="font-serif text-2xl font-bold mb-4">IPORDISE<span class="text-brand-red">.</span></h3>
+                    <p class="text-gray-400 text-sm mb-5 leading-relaxed"><span data-i18n="footer.tagline">The ultimate destination for luxury perfumes online.</p>
+                    <div class="flex space-x-3">
+                        <a href="https://www.instagram.com/ipordise_parfums/" target="_blank" rel="noopener noreferrer" aria-label="IPORDISE on Instagram" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=61563285998567&ref=NONE_xav_ig_profile_page_web#" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.tiktok.com/@ipordise_parfume?_r=1&_t=ZS-94xrj0k1Pjp" target="_blank" rel="noopener noreferrer" aria-label="IPORDISE on TikTok" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
+                                            </div>
+                </div>
+                <div><h4 class="footer-col-title" data-i18n="footer.customer_service" data-i18n="footer.customer_service">Customer Service</h4><ul class="footer-links"><li><a href="contact.html" data-i18n="footer.contact">Contact Us</a></li><li><a href="shipping.html" data-i18n="footer.shipping_returns">Shipping &amp; Returns</a></li><li><a href="track-order.html" data-i18n="footer.track_order">Track Order</a></li><li><a href="faq.html" data-i18n="footer.faq">FAQ</a></li><li><a href="how-to-order.html">How to Order</a></li></ul></div>
+                <div><h4 class="footer-col-title" data-i18n="footer.about" data-i18n="footer.about">About</h4><ul class="footer-links"><li><a href="our-story.html" data-i18n="footer.our_story">Our Story</a></li><li><a href="careers.html" data-i18n="footer.careers">Careers</a></li><li><a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a></li></ul></div>
+                <div>
+                    <h4 class="footer-col-title" data-i18n="footer.newsletter_title" data-i18n="footer.newsletter_title">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4" data-i18n="footer.newsletter_desc">Subscribe for exclusive deals and new arrivals.</p>
+                    <div class="flex"><input type="email" placeholder="Your email" data-i18n-placeholder="footer.newsletter_placeholder" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-l-lg w-full text-sm focus:outline-none focus:ring-1 focus:ring-brand-red border border-white/10"><a href="newsletter.html" class="bg-brand-red px-4 py-2.5 rounded-r-lg font-bold hover:bg-brand-redHover transition text-sm" data-i18n="footer.newsletter_go">GO</a></div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-gray-500 text-xs">
+                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <div class="flex gap-4"><a href="terms.html" class="hover:text-white transition">Terms</a><a href="privacy-policy.html" class="hover:text-white transition">Privacy</a><a href="returns.html" class="hover:text-white transition">Returns</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- IPO Search Overlay -->
+    <div class="ipo-search-overlay" id="ipoSearchOverlay" role="dialog" aria-label="Search" aria-modal="true" aria-hidden="true">
+        <div class="ipo-search-overlay-backdrop" id="ipoSearchOverlayBackdrop"></div>
+        <div class="ipo-search-overlay-panel" id="ipoSearchOverlayPanel">
+            <!-- Input bar -->
+            <div class="ipo-search-overlay-bar">
+                <div class="ipo-search-overlay-input-wrap">
+                    <i class="fas fa-search ipo-search-overlay-search-icon"></i>
+                    <input
+                        type="text"
+                        class="ipo-search-overlay-input"
+                        id="ipoSearchOverlayInput"
+                        placeholder="Search perfumes, brands, notes..."
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        aria-label="Search"
+                    >
+                    <button type="button" class="ipo-search-overlay-clear" id="ipoSearchOverlayClear" aria-label="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <button type="button" class="ipo-search-overlay-close-btn" id="ipoSearchOverlayClose" aria-label="Close search">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Dynamic body (popular searches + products / live results) -->
+            <div class="ipo-search-overlay-body" id="ipoSearchOverlayBody"></div>
+        </div>
+    </div>
+</body>
+</html>

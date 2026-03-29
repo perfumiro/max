@@ -1,0 +1,360 @@
+{
+  "armani-stronger-with-you-absolutely-perfume": {
+    "10ml": 100,
+    "20ml": 180,
+    "30ml": 270,
+    "50ml": 450,
+    "100ml": 750
+  },
+  "armani-stronger-with-you-powerfully-eau-de-parfum": {
+    "10ml": 120,
+    "20ml": 230,
+    "30ml": 330,
+    "50ml": 550,
+    "100ml": 1000
+  },
+  "azzaro-forever-wanted-elixir-eau-de-parfum": {
+    "10ml": 130,
+    "20ml": 260,
+    "30ml": 390,
+    "50ml": 650,
+    "100ml": 1000
+  },
+  "azzaro-the-most-wanted-eau-de-parfum-intense": {
+    "10ml": 100,
+    "20ml": 200,
+    "30ml": 300,
+    "50ml": 500,
+    "100ml": 800
+  },
+  "azzaro-the-most-wanted-parfum": {
+    "10ml": 100,
+    "20ml": 200,
+    "30ml": 300,
+    "50ml": 500,
+    "100ml": 800
+  },
+  "bleu-de-chanel-eau-de-parfum-spray": {
+    "10ml": 120,
+    "20ml": 240,
+    "30ml": 360,
+    "50ml": 600,
+    "100ml": 1350,
+    "150ml": 1900
+  },
+  "boss-bottled-absolu-intense": {
+    "10ml": 130,
+    "20ml": 260,
+    "30ml": 375,
+    "50ml": 625,
+    "100ml": 1000
+  },
+  "carolina-herrera-bad-boy-eau-de-toilette": {
+    "10ml": 100,
+    "20ml": 200,
+    "30ml": 300,
+    "50ml": 500,
+    "100ml": 870
+  },
+  "gucci-guilty-absolu-de-parfum-pour-homme": {
+    "10ml": 180,
+    "20ml": 360,
+    "30ml": 540,
+    "60ml": 0,
+    "100ml": 0
+  },
+  "gucci-guilty-elixir-pour-homme": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "60ml":  0,
+    "100ml": 0
+  },
+  "hugo-boss-boss-bottled-elixir-intense": {
+    "10ml": 130,
+    "20ml": 130,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "montale-arabians-tonka": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "dior-homme-intense-eau-de-parfum": {
+    "10ml": 110,
+    "20ml": 220,
+    "30ml": 300,
+    "50ml": 500,
+    "100ml": 1050
+  },
+  "dior-sauvage-eau-de-parfum": {
+    "10ml": 130,
+    "20ml": 250,
+    "30ml": 375,
+    "50ml": 625,
+    "100ml": 1100
+  },
+  "emporio-armani-stronger-with-you-intensely-edp": {
+    "10ml": 95,
+    "20ml": 190,
+    "30ml": 270,
+    "50ml": 450,
+    "100ml": 800
+  },
+  "gentleman-private-reserve-eau-de-parfum": {
+    "10ml": 100,
+    "20ml": 200,
+    "30ml": 300,
+    "50ml": 500,
+    "100ml": 950
+  },
+  "guerlain-l-homme-ideal-l-intense-eau-de-parfum": {
+    "10ml": 150,
+    "20ml": 300,
+    "30ml": 450,
+    "50ml": 650,
+    "100ml": 1250
+  },
+  "guerlain-l-homme-ideal-extreme": {
+    "10ml": 150,
+    "20ml": 300,
+    "30ml": 450,
+    "50ml": 650,
+    "100ml": 1250
+  },
+  "hugo-boss-the-scent-for-him-elixir": {
+    "10ml": 140,
+    "20ml": 280,
+    "30ml": 390,
+    "50ml": 650,
+    "100ml": 1100
+  },
+  "givenchy-gentleman-society-amber-eau-de-parfum": {
+    "10ml": 100,
+    "20ml": 200,
+    "30ml": 300,
+    "50ml": 500,
+    "100ml": 900
+  },
+  "givenchy-gentleman-society-extreme-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "givenchy-gentleman-society-nomade-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "jean-paul-gaultier-le-beau-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "versace-eros-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "versace-eros-energy-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "versace-dylan-blue-eau-de-toilette": {
+    "10ml": 100,
+    "20ml": 185,
+    "30ml": 270,
+    "50ml": 450,
+    "100ml": 850
+  },
+  "versace-eros-flame-eau-de-parfum": {
+    "10ml": 100,
+    "20ml": 185,
+    "30ml": 270,
+    "50ml": 450,
+    "100ml": 850
+  },
+  "jean-paul-gaultier-le-male-elixir-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "jean-paul-gaultier-le-male-in-blue-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "jean-paul-gaultier-le-male-eau-de-toilette": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "jean-paul-gaultier-le-male-le-parfum-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "jean-paul-gaultier-scandal-elixir": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "jean-paul-gaultier-scandal-intense-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "rabanne-one-million-elixir-intense": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "rabanne-one-million-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "prada-luna-rossa-ocean-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "prada-luna-rossa-carbon-edt": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "prada-luna-rossa-black-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "prada-l-homme-edt": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "prada-paradigme-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "prada-luna-rossa-men-edt": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "valentino-born-in-roma-donna-intense-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "valentino-born-in-roma-extradose-eau-de-toilette": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "valentino-born-in-roma-uomo-intense-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "valentino-donna-born-in-roma-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "valentino-uomo-born-in-roma-eau-de-toilette": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "yves-saint-laurent-myslf-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "yves-saint-laurent-myslf-le-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  },
+  "yves-saint-laurent-y-eau-de-parfum": {
+    "10ml": 0,
+    "20ml": 0,
+    "30ml": 0,
+    "50ml": 0,
+    "100ml": 0
+  }
+}
