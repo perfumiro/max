@@ -1,0 +1,27 @@
+# IDE & editor settings
+.vscode/
+
+# Backup files
+*.backup
+*.bak
+
+# Dev scripts
+download_assets.ps1
+download_assets2.ps1
+
+# Build tools
+tailwindcss.exe
+
+# VS Code extensions
+*.vsix
+
+# Dev artifacts
+"Attached HTML and CSS Context.txt"
+SEO-STRATEGY.md
+
+# Admin (keep local only)
+admin.html
+
+# OS files
+.DS_Store
+Thumbs.db
