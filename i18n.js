@@ -887,6 +887,7 @@
         'product.accords_title':       { fr: 'Accords principaux' },
         'product.ondemand_title':      { fr: 'Prix sur demande' },
         'product.ondemand_sub':        { fr: 'Sélectionnez votre taille et ajoutez-la au panier. Nous vous confirmerons le prix avant de finaliser la commande.' },
+        'product.ask_whatsapp':        { fr: 'Demander sur WhatsApp' },
         'product.chip_authentic':      { fr: '100% authentique' },
         'product.chip_returns':        { fr: 'Retours faciles' },
         'product.fragrance_profile':   { fr: 'Profil olfactif' },
