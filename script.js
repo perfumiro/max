@@ -261,11 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const getPolicyPageHref = (page) => {
-        const isPagesView = window.location.pathname.includes('/pages/');
-        if (isPagesView) return `${page}.html`;
-        return `pages/${page}.html`;
-    };
+    const getPolicyPageHref = (page) => `${page}.html`;
 
     let currentLanguage = supportedLanguages.includes(localStorage.getItem(languageStorageKey))
         ? localStorage.getItem(languageStorageKey)
@@ -283,8 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const applyStaticLanguage = () => {
         document.documentElement.lang = currentLanguage;
-        const newArrivalsHref = window.location.pathname.includes('/pages/') ? '../index.html#newArrivalsCarousel' : '#newArrivalsCarousel';
-        const discoverPath = window.location.pathname.includes('/pages/') ? '../discover.html' : 'discover.html';
+        const isHome = ['/', '/index.html', '/index'].some(p => window.location.pathname.endsWith(p));
+        const newArrivalsHref = isHome ? '#newArrivalsCarousel' : 'index.html#newArrivalsCarousel';
+        const discoverPath = 'discover.html';
 
         document.querySelectorAll('.header-lang-btn > span:first-child').forEach((label) => {
             label.textContent = t('lang_label');
@@ -401,13 +398,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const applyOfficialHeaderFooter = () => {
-        const path = window.location.pathname.replace(/\\/g, '/');
-        const inPagesFolder = path.includes('/pages/');
-        const rootPrefix = inPagesFolder ? '../' : '';
-
-        const indexPath = `${rootPrefix}index.html`;
-        const discoverPath = `${rootPrefix}discover.html`;
-        const pagePath = (pageName) => (inPagesFolder ? `${pageName}.html` : `pages/${pageName}.html`);
+        const indexPath = 'index.html';
+        const discoverPath = 'discover.html';
+        const pagePath = (pageName) => `${pageName}.html`;
 
         const announcementHtml = `
             <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide">
@@ -884,10 +877,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return imageSrc;
         }
 
-        const inPagesFolder = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
+        const inPagesFolder = false;
 
         if (inPagesFolder && imageSrc.startsWith('assets/')) {
-            return `../${imageSrc}`;
+            return imageSrc;
         }
 
         if (!inPagesFolder && imageSrc.startsWith('../assets/')) {
@@ -897,10 +890,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return imageSrc;
     };
 
-    const getProductPagePath = () => {
-        const inPagesFolder = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
-        return inPagesFolder ? 'product.html' : 'pages/product.html';
-    };
+    const getProductPagePath = () => 'product.html';
 
     const canonicalProductName = (name) => (name || '')
         .toLowerCase()
@@ -3117,7 +3107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const ariaLabel = (button.getAttribute('aria-label') || '').toLowerCase();
             const href = (button.getAttribute('href') || '').toLowerCase();
             const hasCartLabel = ariaLabel === 'cart' || ariaLabel === 'panier';
-            const hasCartHref = href.endsWith('/cart.html') || href.endsWith('cart.html') || href.includes('pages/cart.html');
+            const hasCartHref = href.endsWith('/cart.html') || href.endsWith('cart.html');
             const hasCartIcon = Boolean(button.querySelector('.fa-shopping-bag'));
             return hasCartLabel || hasCartHref || hasCartIcon;
         });
@@ -3213,10 +3203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })} DH`;
     };
 
-    const getCartPagePath = () => {
-        const inPagesFolder = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
-        return inPagesFolder ? 'cart.html' : 'pages/cart.html';
-    };
+    const getCartPagePath = () => 'cart.html';
 
     const normalizeSearchText = (value) => String(value || '')
         .toLowerCase()
@@ -3248,10 +3235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
-    const getPricesJsonPath = () => {
-        const normalizedPath = window.location.pathname.replace(/\\/g, '/');
-        return normalizedPath.includes('/pages/') ? '../prices.json' : 'prices.json';
-    };
+    const getPricesJsonPath = () => 'prices.json';
 
     // ─────────────────────────────────────────────────────────────────────────
     //  SIZES.JSON  –  Dynamic size configuration
@@ -3265,10 +3249,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //  The "key" must match the key used in prices.json  (e.g. "50ml", "100ml")
     // ─────────────────────────────────────────────────────────────────────────
 
-    const getSizesJsonPath = () => {
-        const p = window.location.pathname.replace(/\\/g, '/');
-        return p.includes('/pages/') ? '../sizes.json' : 'sizes.json';
-    };
+    const getSizesJsonPath = () => 'sizes.json';
 
     let sizesJsonPromise         = null;
     let lastKnownSizesSnapshot   = '';
@@ -3836,7 +3817,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const path = window.location.pathname.replace(/\\/g, '/');
         const onDiscoverPage = path.endsWith('/discover.html') || path.endsWith('/discover.html/');
-        const discoverPath = path.includes('/pages/') ? '../discover.html' : 'discover.html';
+        const discoverPath = 'discover.html';
 
         const productCards = Array.from(document.querySelectorAll(
             '#productCarousel > .group, #newArrivalsCarousel > article, article.group, .js-product-link'
@@ -6503,7 +6484,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const initCartPage = () => {
         if (window.__IPORDISE_DEDICATED_CART__) return;
 
-        const isCartPage = window.location.pathname.replace(/\\/g, '/').endsWith('/pages/cart.html');
+        const isCartPage = window.location.pathname.replace(/\\/g, '/').endsWith('/cart.html');
         if (!isCartPage) return;
 
         const cartItemsContainer = document.getElementById('cartItemsContainer');
@@ -6546,7 +6527,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const initCheckoutPage = () => {
         if (window.__IPORDISE_DEDICATED_CHECKOUT__) return;
 
-        const isCheckoutPage = window.location.pathname.replace(/\\/g, '/').endsWith('/pages/checkout.html');
+        const isCheckoutPage = window.location.pathname.replace(/\\/g, '/').endsWith('/checkout.html');
         if (!isCheckoutPage) return;
 
         const orderItemsEl = document.getElementById('checkoutOrderItems');
@@ -7699,7 +7680,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!overlay || !input) return;
 
         const pagePath = window.location.pathname.replace(/\\/g, '/');
-        const discoverPath = pagePath.includes('/pages/') ? '../discover.html' : 'discover.html';
+        const discoverPath = 'discover.html';
 
         const goDiscover = (query, filter) => {
             const params = new URLSearchParams();
@@ -8129,7 +8110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const initLoginLegalConsent = () => {
-        const isLoginPage = window.location.pathname.replace(/\\/g, '/').endsWith('/pages/login.html');
+        const isLoginPage = window.location.pathname.replace(/\\/g, '/').endsWith('/login.html');
         if (!isLoginPage) return;
 
         const accountStorageKey = 'ipordise-accounts';

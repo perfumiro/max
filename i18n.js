@@ -1,4 +1,4 @@
-/**
+﻿/**
  * IPORDISE – Full site French / English translation engine
  * Reads data-i18n, data-i18n-html, data-i18n-placeholder attributes
  * and wires into the existing language-switcher in script.js
@@ -272,7 +272,7 @@
         'index.seo_eyebrow':      { fr: 'La Première Destination Parfumerie du Maroc' },
         'index.seo_title':        { fr: 'Le Meilleur Endroit pour Acheter des Parfums de Luxe au Maroc' },
         'index.seo_body1':        { fr: 'IPORDISE a été fondée à Tanger en 2019 avec une seule mission : donner aux amateurs de parfums marocains un accès authentique aux plus belles fragrances du monde. Aujourd’hui, nous servons plus de 400 clients satisfaits à travers le Maroc avec des <a href="discover.html?filter=niche">fragrances niche</a>, des <a href="discover.html?filter=designer">parfums designer</a> et des <a href="discover.html?filter=arabian">ouds arabiques authentiques</a>, tous livrés à tarif fixe de 35&amp;nbsp;MAD partout au pays.' },
-        'index.seo_body2':        { fr: 'Chaque flacon de notre catalogue est 100% authentique et sourcé directement auprès de distributeurs autorisés. Nous proposons <a href="pages/xerjoff.html">Xerjoff</a>, <a href="pages/valentino.html">Valentino</a> et <a href="discover.html?filter=unique-luxury">Unique Luxury</a> aux côtés de <a href="discover.html?filter=for-men">fragrances pour homme</a>, <a href="discover.html?filter=for-women">fragrances pour femme</a> et <a href="discover.html?filter=unisex">collections unisexes</a>.' },
+        'index.seo_body2':        { fr: 'Chaque flacon de notre catalogue est 100% authentique et sourcé directement auprès de distributeurs autorisés. Nous proposons <a href="xerjoff.html">Xerjoff</a>, <a href="valentino.html">Valentino</a> et <a href="discover.html?filter=unique-luxury">Unique Luxury</a> aux côtés de <a href="discover.html?filter=for-men">fragrances pour homme</a>, <a href="discover.html?filter=for-women">fragrances pour femme</a> et <a href="discover.html?filter=unisex">collections unisexes</a>.' },
         'index.seo_body3':        { fr: 'Acheter chez IPORDISE, c’est bénéficier du <strong>paiement à la livraison</strong>, d’une politique de retour de 7 jours, du support WhatsApp en temps réel (lun—sam, 9h—20h), et de la certitude que ce qui arrive à votre porte est exactement ce que vous avez commandé.' },
         'index.seo_link_best':    { fr: 'Meilleures Ventes' },
         'index.seo_link_new':     { fr: 'Nouvelles Arrivées' },
@@ -304,7 +304,7 @@
         'index.news_gender_female': { fr: 'Femme' },
         'index.news_gender_male':   { fr: 'Homme' },
         'index.news_gender_other':  { fr: 'Autre' },
-        'index.news_privacy':       { fr: 'J’ai lu la <a href="pages/privacy-policy.html" class="text-blue-500 hover:text-blue-700 underline transition ipordise-privacy-link">politique de confidentialité</a> et souhaite m’abonner à la newsletter IPORDISE. *' },
+        'index.news_privacy':       { fr: 'J’ai lu la <a href="privacy-policy.html" class="text-blue-500 hover:text-blue-700 underline transition ipordise-privacy-link">politique de confidentialité</a> et souhaite m’abonner à la newsletter IPORDISE. *' },
         'index.news_submit':        { fr: 'S’ABONNER' },
 
         'index.view_all_new': { fr: 'Voir toutes les nouveautés' },
@@ -1089,7 +1089,7 @@
         'index.announce1': { fr: 'De la niche au créateur, trouvez votre parfum signature aujourd\'hui. <a href="discover.html?filter=all" class="top-announcement-link" data-announcement-target="all">DÉCOUVRIR</a>' },
         'index.announce2': { fr: 'De nouvelles fragrances viennent d\'arriver dans notre sélection. <a href="discover.html?filter=new-in" class="top-announcement-link" data-announcement-target="new-in">EXPLORER</a>' },
         'index.announce3': { fr: 'Livraison partout au Maroc &mdash; commandes à partir de 35 MAD. <a href="discover.html?filter=best-sellers" class="top-announcement-link">MEILLEURES VENTES</a>' },
-        'index.announce4': { fr: 'Parfums 100% authentiques &mdash; chaque flacon vérifié. <a href="pages/our-story.html" class="top-announcement-link">NOTRE HISTOIRE</a>' },
+        'index.announce4': { fr: 'Parfums 100% authentiques &mdash; chaque flacon vérifié. <a href="our-story.html" class="top-announcement-link">NOTRE HISTOIRE</a>' },
 
         /* ===== INDEX — TRUST BAR RATING ===== */
         'index.trust_rating': { fr: '<strong>4,9/5</strong>&ensp;&middot;&ensp;+400 Commandes' },
@@ -1196,7 +1196,7 @@
         'discover.announce1': { fr: 'De la niche au créateur, trouvez votre parfum signature aujourd\'hui. <a href="discover.html?filter=all" class="top-announcement-link" data-announcement-target="all">DÉCOUVRIR</a>' },
         'discover.announce2': { fr: 'De nouvelles fragrances viennent d\'arriver dans notre sélection. <a href="discover.html?filter=new-in" class="top-announcement-link" data-announcement-target="new-in">EXPLORER</a>' },
         'discover.announce3': { fr: 'Livraison partout au Maroc &mdash; commandes à partir de 35 MAD. <a href="discover.html?filter=best-sellers" class="top-announcement-link">MEILLEURES VENTES</a>' },
-        'discover.announce4': { fr: 'Parfums 100% authentiques &mdash; chaque flacon vérifié. <a href="pages/our-story.html" class="top-announcement-link">NOTRE HISTOIRE</a>' },
+        'discover.announce4': { fr: 'Parfums 100% authentiques &mdash; chaque flacon vérifié. <a href="our-story.html" class="top-announcement-link">NOTRE HISTOIRE</a>' },
 
         /* ===== LOGIN PAGE — MISSING ITEMS ===== */
         'login.security_note':             { fr: 'Votre session est protégée par un chiffrement sécurisé.' },

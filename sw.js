@@ -1,4 +1,4 @@
-/**
+﻿/**
  * IPORDISE – Service Worker
  * Strategy:
  *   - Static assets (CSS, JS, fonts, images) → Cache-First
@@ -19,16 +19,16 @@ const PRECACHE_ASSETS = [
     '/style.css',
     '/script.js',
     '/i18n.js',
-    '/pages/cart.html',
-    '/pages/checkout.html',
-    '/pages/product.html',
-    '/pages/login.html',
-    '/pages/contact.html',
-    '/pages/track-order.html',
-    '/pages/our-story.html',
-    '/pages/faq.html',
-    '/pages/cart.js',
-    '/pages/checkout.js',
+    '/cart.html',
+    '/checkout.html',
+    '/product.html',
+    '/login.html',
+    '/contact.html',
+    '/track-order.html',
+    '/our-story.html',
+    '/faq.html',
+    '/cart.js',
+    '/checkout.js',
     '/assets/favicon.svg',
     '/assets/img_1.png',
     '/manifest.json',
