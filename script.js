@@ -7203,31 +7203,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 added: '2026-01-01'
             },
             {
-                name: 'Jean Paul Gaultier Scandal Elixir',
-                brand: 'JEAN PAUL GAULTIER',
-                id: 'jean-paul-gaultier-scandal-elixir',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/1.jpg',
-                price: '',
-                sizes: ['75ML', '125ML'],
-                added: '2025-11-01'
-            },
-            {
-                name: 'Jean Paul Gaultier Le Male Eau de Toilette',
-                brand: 'JEAN PAUL GAULTIER',
-                id: 'jean-paul-gaultier-le-male-eau-de-toilette',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Le%20Male%20Eau%20de%20Toilette/1.png',
-                price: '',
-                sizes: ['75ML', '125ML'],
-                added: '2025-09-01'
-            },
-            {
                 name: 'Armani Stronger With You Powerfully Eau de Parfum',
                 brand: 'GIORGIO ARMANI',
                 id: 'armani-stronger-with-you-powerfully-eau-de-parfum',
                 image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp',
                 price: '',
                 sizes: ['50ML', '100ML'],
-                added: '2025-08-01'
+                added: '2026-01-10'
             }
         ];
         // ── end catalogue ───────────────────────────────────────────────────
