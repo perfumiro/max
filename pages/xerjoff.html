@@ -646,7 +646,7 @@ Tawk_API.onLoad=function(){
       cursor:pointer;\
       border:none;\
       padding:0;\
-      overflow:hidden;\
+      overflow:visible;\
       -webkit-tap-highlight-color:transparent;\
       display:flex;\
       align-items:center;\
@@ -674,6 +674,30 @@ Tawk_API.onLoad=function(){
       border:2px solid #25D366;\
       z-index:2;\
     }\
+    #ipo-tawk-badge{\
+      position:absolute;\
+      top:-7px;right:-7px;\
+      min-width:20px;height:20px;\
+      background:#ef4444;\
+      color:#fff;\
+      font-size:11px;\
+      font-weight:800;\
+      font-family:Inter,system-ui,sans-serif;\
+      border-radius:10px;\
+      display:flex;\
+      align-items:center;\
+      justify-content:center;\
+      border:2.5px solid #fff;\
+      z-index:4;\
+      padding:0 3px;\
+      box-shadow:0 2px 8px rgba(239,68,68,.45);\
+      animation:ipo-badge-in .45s cubic-bezier(.34,1.56,.64,1) 2s both;\
+      pointer-events:none;\
+    }\
+    @keyframes ipo-badge-in{\
+      from{transform:scale(0);opacity:0;}\
+      to{transform:scale(1);opacity:1;}\
+    }\
     @media(prefers-reduced-motion:reduce){\
       #ipo-tawk-wrap{animation:none;}\
     }\
@@ -692,6 +716,8 @@ Tawk_API.onLoad=function(){
     </button>';
   document.body.appendChild(wrap);
   document.getElementById('ipo-tawk-btn').addEventListener('click',function(){
+    var b=document.getElementById('ipo-tawk-badge');
+    if(b){b.style.animation='none';b.style.opacity='0';b.style.transform='scale(0)';setTimeout(function(){b.remove();},200);}
     Tawk_API.maximize();
   });
 
