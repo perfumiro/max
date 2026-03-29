@@ -62,30 +62,43 @@
     '',
     'KEY STORE FACTS:',
     '- Delivery: 35 MAD flat-rate anywhere in Morocco, Cash on Delivery (COD)',
-    '- WhatsApp orders: +212 664-318181',
-    '- Website: www.ipordise.com | Physical store in Tangier',
-    '- Brands: Valentino, Azzaro, Jean Paul Gaultier, Armani, Xerjoff, Xerjoff Naxos, and more',
-    '- Top 2026 arrivals for men: Azzaro Forever Wanted Elixir, JPG Le Male In Blue, Armani Stronger With You Powerfully',
-    '- Top picks for women: Valentino Born in Roma Extradose, Valentino Donna Born in Roma Intense',
+    '- WhatsApp orders & support: +212 664-318181',
+    '- Website: www.ipordise.com | Physical store in Tangier, Morocco',
+    '- Brands: Valentino, Azzaro, Jean Paul Gaultier (JPG), Armani, Xerjoff, Narciso Rodriguez, Paco Rabanne, Carolina Herrera, and more',
+    '- New 2026 arrivals: Azzaro Forever Wanted Elixir (men), JPG Le Male In Blue (men), Armani Stronger With You Powerfully (men), Valentino Born in Roma Extradose (women)',
+    '- Payment: Cash on Delivery only. No online payment needed.',
+    '- Delivery time: 2-4 working days across Morocco',
     '',
-    'WHEN RECOMMENDING PERFUMES:',
-    '- Give 2-3 specific product names from the IPORDISE catalog',
-    '- Mention the scent style (fresh, woody, floral, sweet, oriental, etc.)',
-    '- Mention 2-3 key notes',
-    '- Keep it concise — 3-5 lines per recommendation',
-    '- Always end with: "Order on WhatsApp +212 664-318181 or visit www.ipordise.com"',
+    'PERFUME EDUCATION — you know everything about:',
+    '- Fragrance families: floral, oriental, woody, fresh, gourmand, fougere, chypre, aquatic, spicy, powdery, leather',
+    '- Notes pyramid: top notes (first 15-30 min), heart/middle notes (30 min - 3h), base notes (3h+)',
+    '- Concentration: Parfum/Extrait = 20-30% (longest lasting 12h+), EDP = 15-20% (8-10h), EDT = 5-15% (4-6h), EDC = 2-4% (2-3h)',
+    '- Longevity & sillage (projection) factors: skin type, humidity, application spots',
+    '- Best spots to apply: wrists, neck, behind ears, inner elbows, chest',
+    '- Layering: how to combine scents for a signature fragrance',
+    '- Seasons: fresh/aquatic/citrus = summer & spring; oriental/woody/spicy = fall & winter; florals = spring',
+    '- Occasions: office = light EDT; date night = intense EDP/Extrait; casual = fresh/aquatic',
+    '- Niche vs designer: niche = artistic, exclusive, higher concentration; designer = mass-market, accessible',
     '',
-    'LANGUAGE RULES (CRITICAL — follow exactly):',
-    '- Detect the language of EACH user message',
-    '- Arabic Darija (Moroccan): respond fully in Darija (mix of Arabic/French words as spoken in Morocco)',
-    '- Standard Arabic: respond in Standard Arabic',
-    '- French: respond entirely in French',
-    '- English: respond entirely in English',
-    '- Any other language: match it exactly',
-    '- NEVER mix languages or switch unless the user switches first',
+    'ANSWERING RULES:',
+    '- Answer ANY question the customer asks — perfume, general knowledge, lifestyle, advice, anything',
+    '- NEVER refuse to answer a general question by saying you only know perfume',
+    '- Be genuinely helpful like a knowledgeable friend',
+    '- When recommending products mention: name, scent style, key notes, and why it suits them',
+    '- For all order/price/availability questions always give WhatsApp: +212 664-318181',
     '',
-    'TONE: Warm, knowledgeable, luxurious yet approachable. Be concise. Max ~120 words per reply.',
-    'You can answer ANY question, not just perfume — be genuinely helpful.'
+    'LANGUAGE RULES (CRITICAL):',
+    '- ALWAYS reply in the EXACT language the user writes in — detect it per message',
+    '- Moroccan Darija: write naturally as Moroccans speak — mixing Arabic + French is fine e.g. "wach kayn delivery?", "bghit parfum fresh"',
+    '- Standard Arabic (فصحى): reply in formal Arabic',
+    '- French: reply entirely in French',
+    '- English: reply entirely in English',
+    '- Any other language (Spanish, German, Italian...): match it exactly',
+    '- Never switch language unless the user does first',
+    '- Darija recognition cues: wach/واش, kifach/كيفاش, bghit/بغيت, zwin/زوين, bzaf/بزاف, mzyan/مزيان, ghali/غالي, daba/دابا',
+    '',
+    'TONE: Warm, natural, helpful — like a knowledgeable friend, not a corporate bot.',
+    'LENGTH: Match the question. One-word question → brief answer. Complex question → full explanation.'
   ].join('\n');
 
   /* ═══════════════════════════════════════════════════════════════
@@ -479,31 +492,127 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     SMART RECOMMENDATION  (client-side fast path, no API call)
+     LOCAL KNOWLEDGE BASE  — answers instantly, no API call needed
+     Covers ~80% of common customer questions
+  ═══════════════════════════════════════════════════════════════ */
+  var LOCAL_KB = [
+    /* DELIVERY */
+    {
+      patterns: [/livra|delivery|توصيل|توصيله|كم.*سعر.*توصيل|سعر.*توصيل|prix.*livr|combien.*livr|تكلفة.*توصيل|wach.*kayn.*delivery|كيفاش.*يوصل/i],
+      reply: '🚚 Delivery is a flat **35 MAD** anywhere in Morocco — Cash on Delivery (COD), no prepayment needed!\n\nDelivery time: 2-4 working days.\n\n📲 Order on WhatsApp: +212 664-318181'
+    },
+    /* ORDER HOW */
+    {
+      patterns: [/كيفاش.*نطلب|kifach.*ntelb|comment.*command|how.*order|comment.*passer|كيف.*أطلب|how do i.*buy|how to.*order/i],
+      reply: '📦 To order — it\'s super easy:\n\n1. Choose your perfume on www.ipordise.com\n2. Send us a WhatsApp: +212 664-318181\n3. Give us your name + address\n4. We deliver in 2-4 days 🚚\n5. Pay cash when you receive it — no prepayment!\n\nThat\'s it! 😊'
+    },
+    /* WHATSAPP / CONTACT */
+    {
+      patterns: [/whatsapp|واتساب|contact|تواصل|numéro|رقم|phone|téléphone|joindre|reach.*you|how.*contact/i],
+      reply: '📲 You can reach IPORDISE on WhatsApp: **+212 664-318181**\n\nWe\'re available every day to help you choose, order, or answer any question!'
+    },
+    /* PRICE / PRIX */
+    {
+      patterns: [/prix|price|sعر|ثمن|كم.*ثمن|combien.*coûte|how much|غالي|bhal qaddach|قداش/i],
+      reply: '💰 Our perfume prices vary by brand and size. To get the exact price of a specific perfume, check www.ipordise.com or ask directly on WhatsApp: +212 664-318181\n\nDelivery is always 35 MAD flat anywhere in Morocco! 🚚'
+    },
+    /* AUTHENTICITY */
+    {
+      patterns: [/authentic|original|genuine|أصلي|أصلية|original.*ou.*copie|vraie|originale|real or fake|تقليد|مزور/i],
+      reply: '✅ All perfumes at IPORDISE are **100% authentic and original** — directly sourced from authorised distributors.\n\nNo copies, no fakes. Your satisfaction is guaranteed! 🌟'
+    },
+    /* RETURN */
+    {
+      patterns: [/return|retour|رجوع|إرجاع|رد.*البضاعة|échange|exchange|remboursement|refund/i],
+      reply: '↩️ If there\'s an issue with your order, contact us on WhatsApp within 24h of receiving it: +212 664-318181\n\nWe\'ll find the best solution for you!'
+    },
+    /* STORE LOCATION */
+    {
+      patterns: [/where.*shop|magasin|محل|متجر|boutique|tangier|tanger|adresse|address|عنوان|وين.*كاينين/i],
+      reply: '📍 IPORDISE has a physical store in **Tangier, Morocco** and ships everywhere in Morocco.\n\nWebsite: www.ipordise.com\nWhatsApp: +212 664-318181'
+    },
+    /* BRANDS LIST */
+    {
+      patterns: [/what brand|which brand|brands|marques|ماركات|عندكم.*شي|عندكم.*ماركة|what.*have|what.*sell|quelles.*marques/i],
+      reply: '✨ At IPORDISE we carry:\n\n🖤 Valentino  🔵 JPG (Jean Paul Gaultier)\n💚 Azzaro  🔶 Armani\n💎 Xerjoff (niche)  🌹 Narciso Rodriguez\n🟡 Paco Rabanne  🌸 Carolina Herrera\n...and many more!\n\nBrowse the full collection: www.ipordise.com'
+    },
+    /* EDP vs EDT */
+    {
+      patterns: [/edt.*edp|edp.*edt|difference.*edt|difference.*edp|قرق.*بين|فرق.*بين|what is.*edp|what is.*edt|c'est quoi.*edp|c'est quoi.*edt/i],
+      reply: '🧪 **EDT vs EDP:**\n\n• **EDT** (Eau de Toilette) = 5-15% concentration → lasts ~4-6 hours, lighter scent\n• **EDP** (Eau de Parfum) = 15-20% concentration → lasts ~6-10 hours, more intense\n• **Extrait/Elixir** = 20-30% → lasts 10-14 hours, strongest\n\n👉 For everyday use: EDT. For evenings or long days: EDP or Extrait.'
+    },
+    /* HOW TO APPLY */
+    {
+      patterns: [/how.*apply|how.*wear|where.*spray|apply.*perfume|كيفاش.*نحط|كيفاش.*نرش|comment.*mettre|mettre.*parfum|appliquer/i],
+      reply: '🌸 **Best spots to apply perfume:**\n\n✅ Wrists (pulse points)\n✅ Neck & behind ears\n✅ Inner elbows\n✅ Chest\n\n💡 Tips:\n• Don\'t rub wrists together — it breaks the molecules\n• Apply right after shower on moisturised skin for longer lasting scent\n• Don\'t spray on clothes — it can stain'
+    },
+    /* LONGEVITY */
+    {
+      patterns: [/how long|combien.*temps|يدوم|يبقى.*قد|last.*long|longevity|tenue.*parfum|يومي|sillage/i],
+      reply: '⏱️ **Perfume longevity depends on:**\n\n• **Concentration:** Extrait > EDP > EDT > EDC\n• **Skin type:** Oily skin holds scent longer\n• **Application:** Pulse points and moisturised skin = better projection\n• **Storage:** Keep away from heat & light\n\nExtrait/Elixirs can last 10-14h, EDP 6-10h, EDT 4-6h.'
+    },
+    /* SUMMER / SEASON */
+    {
+      patterns: [/summer|été|صيف|shriten|hot weather|chaleur|spring|printemps|ربيع|which.*season|quelle.*saison/i],
+      reply: '☀️ **For summer / warm weather:**\n\n• Fresh citrus: aquatic, green, aromatic scents\n• Light florals\n• Avoid heavy orientals/ouds in extreme heat\n\n🌸 **Our summer picks:**\n1. JPG Le Male In Blue — Fresh marine\n2. Azzaro Wanted Girl Tonic — Light & fruity\n\nAsk for more on WhatsApp: +212 664-318181'
+    },
+    /* WINTER */
+    {
+      patterns: [/winter|hiver|شتاء|شتا|cold|froid|berd|autumn|fall|automne|خريف/i],
+      reply: '❄️ **For winter / cold weather:**\n\n• Oriental, woody, spicy, gourmand fragrances\n• Ouds, ambers, vanillas — they bloom in cold air\n\n🔥 **Our winter picks:**\n1. Armani Stronger With You Powerfully — Warm spicy\n2. Azzaro Forever Wanted Elixir — Intense woody\n3. Xerjoff Naxos — Luxurious sweet tobacco\n\nOrder: +212 664-318181'
+    },
+    /* GIFT */
+    {
+      patterns: [/gift|cadeau|هدية|هدية|present|offrir|for.*gift|idea.*gift|هدية لـ/i],
+      reply: '🎁 **Perfect gift ideas from IPORDISE:**\n\n• For HIM: Armani Stronger With You, JPG Le Male In Blue, Azzaro Forever Wanted Elixir\n• For HER: Valentino Born in Roma Extradose, Valentino Donna Born in Roma\n\nAll orders packed with care 🌹\n\n📲 Order on WhatsApp: +212 664-318181\nWe can help you choose the perfect one!'
+    }
+  ];
+
+  /* Response cache to avoid re-asking the same question */
+  var _cache = {};
+
+  function tryLocalAnswer(text) {
+    var t = text.trim();
+    /* Check cache first */
+    var cacheKey = t.toLowerCase().replace(/\s+/g, ' ').substring(0, 80);
+    if (_cache[cacheKey]) return _cache[cacheKey];
+
+    for (var i = 0; i < LOCAL_KB.length; i++) {
+      var entry = LOCAL_KB[i];
+      for (var j = 0; j < entry.patterns.length; j++) {
+        if (entry.patterns[j].test(t)) {
+          return entry.reply;
+        }
+      }
+    }
+    return null;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SMART RECOMMENDATION  (for explicit "recommend me a perfume" requests)
   ═══════════════════════════════════════════════════════════════ */
   var REC_TRIGGERS = {
-    men :   /\b(men|man|him|homme|رجال|رجل|ذكر|ولد|son|frère|boys?)\b/i,
-    women : /\b(women|woman|her|femme|نساء|مرأة|بنت|fille?|sœur|girls?)\b/i
+    men   : /\b(for him|for men|for man|pour homme|لرجل|للرجال|للراجل|رجالي|ولد|son|frère)\b/i,
+    women : /\b(for her|for women|for woman|pour femme|للمرأة|للنساء|للبنت|نسائي|bint|sœur)\b/i
   };
+  /* Only trigger if the message is clearly asking for a suggestion */
+  var REQ_TRIGGER = /\b(recommend|suggest|best|top pick|help.*choose|help me.*find|what.*buy|what.*get|conseil|conseille|قترح|نصح|شنو.*زوين|شنو.*مزيان|اقترح|نصيحة)\b/i;
 
   function buildRecommendationText(gender) {
     var products = CATALOG[gender].slice(0, 3);
-    var lines = ['✨ Here are my top picks:\n'];
+    var lines = [gender === 'men' ? '✨ Top picks for him:' : '✨ Top picks for her:', ''];
     products.forEach(function(p, i) {
-      lines.push((i + 1) + '. ' + p.name);
-      lines.push('   Style: ' + p.style);
-      lines.push('   Notes: ' + p.notes);
+      lines.push((i + 1) + '. **' + p.name + '**');
+      lines.push('   Style: ' + p.style + ' | Notes: ' + p.notes);
       lines.push('');
     });
-    lines.push('👉 Order on WhatsApp: +212 664-318181 or shop at www.ipordise.com');
+    lines.push('📲 Order on WhatsApp: +212 664-318181\n🛍️ Browse all: www.ipordise.com');
     return lines.join('\n');
   }
 
-  /* Returns a local recommendation string if message clearly asks for one, else null */
   function tryLocalRecommendation(text) {
-    var lower = text.toLowerCase();
-    var isRecommendRequest = /\b(recommend|suggestion|suggest|best|top|good|nice|popular|نصيح|قترح|recommande|meilleur|parfum|perfume|fragrance)\b/i.test(text);
-    if (!isRecommendRequest) return null;
+    /* Only intercept if BOTH a recommend trigger AND gender are present */
+    if (!REQ_TRIGGER.test(text)) return null;
     if (REC_TRIGGERS.men.test(text))   return buildRecommendationText('men');
     if (REC_TRIGGERS.women.test(text)) return buildRecommendationText('women');
     return null;
@@ -638,30 +747,47 @@
     setLoading(true);
     showTyping();
 
-    /* 1. Try fast local recommendation before hitting the API */
-    var localReply = tryLocalRecommendation(userText);
-    if (localReply) {
+    /* 1. Try local FAQ knowledge base (instant, no API) */
+    var localFAQ = tryLocalAnswer(userText);
+    if (localFAQ) {
       setTimeout(function() {
         removeTyping();
         setLoading(false);
-        state.history.push({ role: 'model', parts: [{ text: localReply }] });
-        addBubble(localReply, 'bot');
-      }, 420);
+        var cacheKey = userText.trim().toLowerCase().replace(/\s+/g, ' ').substring(0, 80);
+        _cache[cacheKey] = localFAQ;
+        state.history.push({ role: 'model', parts: [{ text: localFAQ }] });
+        addBubble(localFAQ, 'bot');
+      }, 300);
       return;
     }
 
-    /* 2. Call Gemini API */
+    /* 2. Try smart product recommendation (instant, no API) */
+    var localRec = tryLocalRecommendation(userText);
+    if (localRec) {
+      setTimeout(function() {
+        removeTyping();
+        setLoading(false);
+        state.history.push({ role: 'model', parts: [{ text: localRec }] });
+        addBubble(localRec, 'bot');
+      }, 300);
+      return;
+    }
+
+    /* 3. Call Gemini API for everything else */
     callGemini(userText, function(err, reply) {
       removeTyping();
       setLoading(false);
 
       if (err) {
-        state.history.pop(); // remove failed user message from history
+        state.history.pop();
         var friendlyMsg = getFriendlyError(err.message || '');
         addBubble(friendlyMsg, 'bot', true);
         return;
       }
 
+      /* Cache the API reply so the same question never hits the API twice */
+      var ck = userText.trim().toLowerCase().replace(/\s+/g, ' ').substring(0, 80);
+      _cache[ck] = reply;
       state.history.push({ role: 'model', parts: [{ text: reply }] });
       addBubble(reply, 'bot');
     });
