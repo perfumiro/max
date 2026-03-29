@@ -6833,8 +6833,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (pendingTouchTargetIndex >= 0) {
-                // Velocity-based advance: use JS scrollTo so we land on exact card
-                queueSnapAfterScrollSettles(20);
+                // Velocity-based advance: wait for momentum to settle before JS snap
+                queueSnapAfterScrollSettles(140);
             } else {
                 // Slow swipe or no swipe: restore CSS snap immediately so
                 // browser momentum + CSS snap handle the final position naturally
@@ -6862,7 +6862,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         carousel.addEventListener('scroll', () => {
             if (isDragging) return;
-            queueSnapAfterScrollSettles(isCoarsePointer ? 30 : 60);
+            queueSnapAfterScrollSettles(isCoarsePointer ? 120 : 60);
         }, { passive: true });
 
         carousel.addEventListener('click', (event) => {

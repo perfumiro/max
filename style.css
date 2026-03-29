@@ -7048,9 +7048,6 @@ body.consent-visible {
     -ms-overflow-style: none;
     scrollbar-width: none;
     align-items: stretch;
-    /* GPU-accelerated scroll */
-    will-change: transform;
-    transform: translateZ(0);
     /* CSS snap — JS disables this on touchstart, re-enables after touchend */
     scroll-snap-type: x mandatory;
     scroll-padding-inline: 1rem;
