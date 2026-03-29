@@ -6672,9 +6672,12 @@ document.addEventListener('DOMContentLoaded', () => {
         let scrollEndTimerId = 0;
         let touchStartX = 0;
         let touchLastX = 0;
+        let touchStartY = 0;
+        let touchLastY = 0;
         let touchStartTime = 0;
         let touchLastTime = 0;
         let touchGestureMoved = false;
+        let touchIsVertical = false;
         let touchStartIndex = -1;
         let pendingTouchTargetIndex = -1;
         const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
@@ -6772,9 +6775,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             touchStartX = touch?.clientX || 0;
             touchLastX = touchStartX;
+            touchStartY = touch?.clientY || 0;
+            touchLastY = touchStartY;
             touchStartTime = performance.now();
             touchLastTime = touchStartTime;
             touchGestureMoved = false;
+            touchIsVertical = false;
             touchStartIndex = items.length ? getNearestCarouselItemIndex(carousel, items) : -1;
             pendingTouchTargetIndex = -1;
             clearSnapTimer();
@@ -6787,8 +6793,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!touch) return;
 
             touchLastX = touch.clientX;
+            touchLastY = touch.clientY;
             touchLastTime = performance.now();
-            if (Math.abs(touchLastX - touchStartX) > 10) {
+            const absDx = Math.abs(touchLastX - touchStartX);
+            const absDy = Math.abs(touchLastY - touchStartY);
+            // Lock direction on first meaningful movement
+            if (!touchGestureMoved && !touchIsVertical && (absDx > 8 || absDy > 8)) {
+                touchIsVertical = absDy > absDx;
+            }
+            if (!touchIsVertical && absDx > 10) {
                 touchGestureMoved = true;
             }
         }, { passive: true });
@@ -6803,7 +6816,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Lower threshold: 30px or 12% card width, or velocity > 0.18 px/ms
             const shouldAdvance = Math.abs(deltaX) > Math.min(30, itemWidth * 0.12) || Math.abs(velocityX) > 0.18;
 
-            if (items.length && touchGestureMoved && shouldAdvance) {
+            if (items.length && touchGestureMoved && !touchIsVertical && shouldAdvance) {
                 const direction = deltaX < 0 ? 1 : -1;
                 const baseIndex = touchStartIndex >= 0
                     ? touchStartIndex

@@ -7070,7 +7070,7 @@ body.consent-visible {
     padding: 1.25rem 1rem 2.25rem;
     scroll-snap-type: x mandatory;
     scroll-snap-stop: always;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
     -ms-overflow-style: none;
