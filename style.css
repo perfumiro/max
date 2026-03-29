@@ -1,4 +1,4 @@
-﻿/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════
    Scroll Progress Bar — class-based (JS: .scroll-progress)
    ═══════════════════════════════════════════ */
 .scroll-progress {
@@ -673,8 +673,6 @@ body {
     color: #D4AF37;
 }
 
-.top-announcement:hover .top-announcement-marquee {
-}
 
 @keyframes topAnnouncementMarquee {
     0% {
@@ -2626,6 +2624,7 @@ body {
     color: #111827;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -7042,11 +7041,10 @@ body.consent-visible {
     overflow-y: hidden;
     gap: 1.1rem;
     padding: 1.25rem 1rem 2.25rem;
-    /* pan-x: browser handles horizontal scroll natively; vertical swipe passes to page */
-    touch-action: pan-x;
+    /* pan-x pan-y: horizontal swipe scrolls carousel; vertical swipe passes to page */
+    touch-action: pan-x pan-y;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
-    overscroll-behavior-y: none;
     -ms-overflow-style: none;
     scrollbar-width: none;
     align-items: stretch;
@@ -7337,9 +7335,6 @@ body.consent-visible {
 
 /* â”€â”€ Entrance animation â”€â”€ */
 .card-2026.card-2026-init { opacity: 1; }
-.card-2026.card-2026-in {
-}
-
 /* â”€â”€ Footer row: dots + count â”€â”€ */
 .section-2026-footer-row {
     display: flex;
@@ -9750,8 +9745,6 @@ footer .flex.space-x-3 a:hover {
     will-change: transform;
 }
 
-.brand-marquee-wrap:hover .brand-marquee-track {
-}
 
 @keyframes brandMarqueeScroll {
     from { transform: translateX(0); }

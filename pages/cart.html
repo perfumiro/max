@@ -100,21 +100,29 @@ Tawk_API.onLoad=function(){
       border:3px solid #fff;\
       z-index:5;\
       box-shadow:0 0 0 0 rgba(239,68,68,.75),0 4px 18px rgba(196,0,0,.60);\
-      animation:ipo-bdg-pop .55s cubic-bezier(.34,1.56,.64,1) 1.5s both,ipo-bdg-pulse 2s ease-out 2.6s infinite;\
+      animation:ipo-bdg-pop .6s cubic-bezier(.34,1.56,.64,1) 1.5s both,ipo-bdg-pulse 2.2s ease-out 2.5s infinite,ipo-bdg-shake 5s ease-in-out 6s infinite;\
       pointer-events:none;\
       line-height:1;\
       letter-spacing:-.5px;\
     }\
     @keyframes ipo-bdg-pop{\
-      0%{transform:scale(0) rotate(-15deg);opacity:0;}\
-      55%{transform:scale(1.35) rotate(5deg);opacity:1;}\
-      75%{transform:scale(.92) rotate(-2deg);}\
+      0%{transform:scale(0) rotate(-30deg);opacity:0;filter:blur(4px);}\
+      40%{transform:scale(1.6) rotate(12deg);opacity:1;filter:blur(0);}\
+      60%{transform:scale(.82) rotate(-6deg);}\
+      80%{transform:scale(1.15) rotate(3deg);}\
       100%{transform:scale(1) rotate(0deg);opacity:1;}\
     }\
     @keyframes ipo-bdg-pulse{\
-      0%{box-shadow:0 0 0 0 rgba(239,68,68,.75),0 4px 18px rgba(196,0,0,.60);}\
-      65%{box-shadow:0 0 0 11px rgba(239,68,68,0),0 4px 18px rgba(196,0,0,.60);}\
-      100%{box-shadow:0 0 0 0 rgba(239,68,68,0),0 4px 18px rgba(196,0,0,.60);}\
+      0%{box-shadow:0 0 0 0 rgba(239,68,68,.9),0 0 0 0 rgba(239,68,68,.45),0 4px 18px rgba(196,0,0,.60);}\
+      50%{box-shadow:0 0 0 14px rgba(239,68,68,0),0 0 0 7px rgba(239,68,68,.22),0 4px 18px rgba(196,0,0,.60);}\
+      100%{box-shadow:0 0 0 0 rgba(239,68,68,0),0 0 0 0 rgba(239,68,68,0),0 4px 18px rgba(196,0,0,.60);}\
+    }\
+    @keyframes ipo-bdg-shake{\
+      0%,85%,100%{transform:scale(1) rotate(0deg);}\
+      88%{transform:scale(1.2) rotate(-12deg);}\
+      91%{transform:scale(1.2) rotate(12deg);}\
+      94%{transform:scale(1.1) rotate(-7deg);}\
+      97%{transform:scale(1.1) rotate(7deg);}\
     }\
     @media(prefers-reduced-motion:reduce){\
       #ipo-tawk-wrap{animation:none;}\
