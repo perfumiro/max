@@ -625,7 +625,7 @@ Tawk_API.onLoad=function(){
   style.textContent='\
     #ipo-tawk-btn{\
       position:fixed;\
-      bottom:calc(1.5rem + env(safe-area-inset-bottom,0px));\
+      bottom:calc(72px + 0.75rem + env(safe-area-inset-bottom,0px));\
       right:1.25rem;\
       width:62px;height:62px;\
       border-radius:50%;\
@@ -667,7 +667,7 @@ Tawk_API.onLoad=function(){
   ';
   document.head.appendChild(style);
   var wrap=document.createElement('div');
-  wrap.style.cssText='position:fixed;bottom:calc(1.5rem + env(safe-area-inset-bottom,0px));right:1.25rem;z-index:99999;';
+  wrap.style.cssText='position:fixed;bottom:calc(72px + 0.75rem + env(safe-area-inset-bottom,0px));right:1.25rem;z-index:99999;';
   wrap.innerHTML='\
     <button id="ipo-tawk-btn" aria-label="Chat with us">\
       <img src="../assets/chatbot logo.png" alt="Chat" loading="lazy"/>\
