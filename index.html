@@ -378,93 +378,7 @@ s0.parentNode.insertBefore(s1,s0);
     letter-spacing: 0.05em !important;
 }
 
-/* ── 6. New Arrivals cards ── */
-#newArrivalsCarousel > article.js-product-link {
-    min-width: calc(50vw - 16px) !important;
-    max-width: calc(50vw - 16px) !important;
-    padding: 0 !important;
-    border-radius: 14px !important;
-    border: 1px solid #ede8e4 !important;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.07) !important;
-    overflow: hidden !important;
-}
-@media (min-width: 640px) {
-    #newArrivalsCarousel > article.js-product-link {
-        min-width: 210px !important;
-        max-width: 210px !important;
-    }
-}
-@media (min-width: 1024px) {
-    #newArrivalsCarousel > article.js-product-link {
-        min-width: 230px !important;
-        max-width: 230px !important;
-    }
-}
-/* NEW badge */
-#newArrivalsCarousel > article.js-product-link > span.inline-block {
-    display: block !important;
-    width: fit-content !important;
-    margin: 10px 10px 0 !important;
-    font-size: 9px !important;
-    padding: 2px 7px !important;
-    border-radius: 4px !important;
-}
-/* Image box */
-#newArrivalsCarousel > article.js-product-link > div.h-44 {
-    height: 160px !important;
-    margin: 6px 10px 0 !important;
-    border-radius: 10px !important;
-    background: #f5f1ee !important;
-    width: calc(100% - 20px) !important;
-}
-/* Brand */
-#newArrivalsCarousel > article.js-product-link > p.text-xs {
-    padding: 8px 12px 0 !important;
-    margin: 0 !important;
-    font-size: 0.6rem !important;
-    letter-spacing: 0.14em !important;
-}
-/* Name */
-#newArrivalsCarousel > article.js-product-link > h4 {
-    padding: 2px 12px 0 !important;
-    margin-top: 2px !important;
-    min-height: unset !important;
-    font-size: 0.78rem !important;
-    font-weight: 600 !important;
-}
-/* Size buttons */
-#newArrivalsCarousel > article.js-product-link > div.flex.items-center.gap-2.mt-2 {
-    padding: 5px 12px !important;
-    margin: 0 !important;
-}
-/* CTA footer */
-#newArrivalsCarousel > article.js-product-link > div.mt-3 {
-    padding: 6px 12px 12px !important;
-    margin: 0 !important;
-}
-#newArrivalsCarousel > article.js-product-link button.js-card-add-btn {
-    border-radius: 8px !important;
-    font-size: 0.65rem !important;
-    font-weight: 700 !important;
-    padding-top: 0.55rem !important;
-    padding-bottom: 0.55rem !important;
-}
-
-/* ── 7. New Arrivals section header ── */
-#newArrivalsSection {
-    background: #faf8f5 !important;
-    padding-top: 2.5rem !important;
-    padding-bottom: 2.5rem !important;
-}
-#newArrivalsSection .max-w-7xl {
-    max-width: 100% !important;
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-}
-#newArrivalsSection h3 {
-    font-family: 'Playfair Display', serif !important;
-    letter-spacing: 0.02em !important;
-}
+/* ── 7. New Arrivals section header ── (style kept original) */
 
 /* ── 8. Promo banners ── */
 .promo-banner-card {
@@ -528,37 +442,24 @@ s0.parentNode.insertBefore(s1,s0);
     align-items: stretch !important;
 }
 /* Cards stretch to tallest sibling */
-#newArrivalsCarousel > article.js-product-link,
 #productCarousel > div.js-product-link {
     display: flex !important;
     flex-direction: column !important;
     height: auto !important;
     align-self: stretch !important;
 }
-/* Image area: fixed height so all images align */
-#newArrivalsCarousel > article.js-product-link > div.h-44 {
-    flex-shrink: 0 !important;
-}
 /* Product name: fixed min-height so title area is always same size */
-#newArrivalsCarousel > article.js-product-link > h4,
 #productCarousel > div.js-product-link h3.product-title {
     min-height: 2.8rem !important;
     flex: 1 !important;
 }
-/* Hide injected price paragraph — already shown in size buttons + cart */
-#newArrivalsCarousel p.price,
+/* Hide injected price paragraph */
 #productCarousel p.price {
     display: none !important;
 }
 /* Push size badges + CTA to bottom of card */
-#newArrivalsCarousel > article.js-product-link > div.flex.items-center.gap-2.mt-2,
 #productCarousel > div.js-product-link div.flex.items-center.gap-2 {
     margin-top: auto !important;
-}
-/* CTA button container always at card bottom */
-#newArrivalsCarousel > article.js-product-link > div.mt-3,
-#productCarousel > div.js-product-link > div.flex-grow > div.mt-auto {
-    margin-top: 0 !important;
 }
 </style>
 </head>
