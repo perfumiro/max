@@ -50,116 +50,62 @@ Tawk_API.onLoad=function(){
       display:flex;\
       align-items:center;\
       justify-content:center;\
-      animation:ipo-slide-in .55s cubic-bezier(.34,1.56,.64,1) both;\
+      animation:ipo-pop-in .4s cubic-bezier(.34,1.56,.64,1) both;\
     }\
-    @keyframes ipo-slide-in{\
-      from{opacity:0;transform:translateY(32px) scale(.7);}\
-      to{opacity:1;transform:translateY(0) scale(1);}\
+    @keyframes ipo-pop-in{\
+      from{opacity:0;transform:scale(.6);}\
+      to{opacity:1;transform:scale(1);}\
     }\
     #ipo-tawk-btn{\
       position:relative;\
-      width:62px;height:62px;\
+      width:60px;height:60px;\
       border-radius:50%;\
       background:#25D366;\
-      box-shadow:0 6px 28px rgba(37,211,102,.45),0 0 0 2.5px rgba(37,211,102,.6);\
+      box-shadow:0 8px 30px rgba(0,0,0,.28);\
       cursor:pointer;\
       border:none;\
       padding:0;\
-      overflow:visible;\
+      overflow:hidden;\
       -webkit-tap-highlight-color:transparent;\
-      animation:ipo-float 3.6s ease-in-out infinite;\
-      transition:transform .15s ease,box-shadow .15s ease;\
-    }\
-    @keyframes ipo-float{\
-      0%,100%{transform:translateY(0);}\
-      50%{transform:translateY(-6px);}\
-    }\
-    #ipo-tawk-btn:hover{\
-      animation:none;\
-      transform:scale(1.12);\
-      box-shadow:0 12px 36px rgba(37,211,102,.55),0 0 0 3.5px rgba(37,211,102,.9);\
-    }\
-    #ipo-tawk-btn:active{\
-      transform:scale(.93);\
-      box-shadow:0 4px 14px rgba(0,0,0,.4);\
-    }\
-    #ipo-tawk-img{\
-      width:38px;height:38px;\
       display:flex;\
       align-items:center;\
       justify-content:center;\
-      pointer-events:none;\
+      transition:transform .18s ease,box-shadow .18s ease;\
+    }\
+    #ipo-tawk-btn:hover{\
+      transform:scale(1.1);\
+      box-shadow:0 12px 38px rgba(0,0,0,.32);\
+    }\
+    #ipo-tawk-btn:active{transform:scale(.92);}\
+    #ipo-tawk-img{\
       color:#fff;\
-      font-size:32px;\
+      font-size:34px;\
       line-height:1;\
-    }\
-    .ipo-ring{\
-      position:absolute;\
-      inset:-1px;\
-      border-radius:50%;\
-      border:2.5px solid rgba(37,211,102,.7);\
-      animation:ipo-ring-out 2.8s ease-out infinite;\
       pointer-events:none;\
-    }\
-    .ipo-ring:nth-child(2){animation-delay:.9s;}\
-    .ipo-ring:nth-child(3){animation-delay:1.8s;}\
-    @keyframes ipo-ring-out{\
-      0%{transform:scale(1);opacity:.8;}\
-      100%{transform:scale(1.75);opacity:0;}\
+      display:block;\
     }\
     #ipo-tawk-dot{\
       position:absolute;\
-      top:1px;right:1px;\
-      width:14px;height:14px;\
-      background:#4ade80;\
+      top:3px;right:3px;\
+      width:13px;height:13px;\
+      background:#fff;\
       border-radius:50%;\
-      border:2.5px solid #ffffff;\
-      animation:ipo-dot-beat 2s ease-in-out infinite;\
+      border:2px solid #25D366;\
       z-index:2;\
     }\
-    @keyframes ipo-dot-beat{\
-      0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(74,222,128,.6);}\
-      50%{transform:scale(1.25);box-shadow:0 0 0 5px rgba(74,222,128,0);}\
-    }\
-    #ipo-tawk-label{\
-      position:absolute;\
-      right:calc(100% + 10px);\
-      top:50%;\
-      transform:translateY(-50%);\
-      background:#1a1a1a;\
-      color:#c9a84c;\
-      font-size:.72rem;\
-      font-weight:600;\
-      font-family:Inter,system-ui,sans-serif;\
-      padding:.3rem .7rem;\
-      border-radius:2rem;\
-      white-space:nowrap;\
-      box-shadow:0 4px 14px rgba(0,0,0,.3);\
-      pointer-events:none;\
-      animation:ipo-label-show .4s ease .9s both;\
-      transition:opacity .3s ease;\
-    }\
-    @keyframes ipo-label-show{\
-      from{opacity:0;transform:translateY(-50%) translateX(8px);}\
-      to{opacity:1;transform:translateY(-50%) translateX(0);}\
-    }\
     @media(prefers-reduced-motion:reduce){\
-      #ipo-tawk-btn,#ipo-tawk-dot,.ipo-ring,#ipo-tawk-wrap,#ipo-tawk-label{animation:none!important;}\
+      #ipo-tawk-wrap{animation:none;}\
     }\
     @media(min-width:640px){\
       #ipo-tawk-wrap{bottom:2rem;right:2rem;}\
-      #ipo-tawk-btn{width:66px;height:66px;}\
+      #ipo-tawk-btn{width:64px;height:64px;}\
     }\
   ';
   document.head.appendChild(style);
   var wrap=document.createElement('div');
   wrap.id='ipo-tawk-wrap';
   wrap.innerHTML='\
-    <span id="ipo-tawk-label">Chat with us 💬</span>\
     <button id="ipo-tawk-btn" aria-label="Chat with us">\
-      <div class="ipo-ring"></div>\
-      <div class="ipo-ring"></div>\
-      <div class="ipo-ring"></div>\
       <i id="ipo-tawk-img" class="fab fa-whatsapp"></i>\
       <div id="ipo-tawk-dot"></div>\
     </button>';
@@ -167,16 +113,7 @@ Tawk_API.onLoad=function(){
   document.getElementById('ipo-tawk-btn').addEventListener('click',function(){
     Tawk_API.maximize();
   });
-  var _ipoST;
-  window.addEventListener('scroll',function(){
-    var lbl=document.getElementById('ipo-tawk-label');
-    if(lbl){lbl.style.opacity='0';}
-    clearTimeout(_ipoST);
-    _ipoST=setTimeout(function(){
-      var lbl=document.getElementById('ipo-tawk-label');
-      if(lbl){lbl.style.opacity='';}
-    },1200);
-  },{passive:true});
+
 };
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
