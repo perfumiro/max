@@ -355,8 +355,7 @@
       '<button class="ipo-qr" data-q="Recommend a perfume for women">🌸 For her</button>' +
       '<button class="ipo-qr" data-q="كيفاش نطلب البارفان؟">📦 كيفاش نطلب؟</button>' +
       '<button class="ipo-qr" data-q="Comment commander?">🇫🇷 Commander</button>' +
-      '<button class="ipo-qr" data-q="Quel est le prix de livraison?">🚚 Livraison</button>' +
-    '</div>' +
+      '<button class="ipo-qr" data-q="Quel est le prix de livraison?">🚚 Livraison</button>' +      '<button class="ipo-qr ipo-qr-human" id="ipo-qr-human">👤 Talk to human</button>' +    '</div>' +
     '<form id="ipo-chat-form" autocomplete="off" novalidate>' +
       '<textarea id="ipo-chat-input" rows="1"' +
         ' placeholder="Ask anything... / أي سؤال... / Posez..."' +
@@ -387,6 +386,47 @@
   var sendBtn    = document.getElementById('ipo-chat-send');
   var statusText = document.getElementById('ipo-status-text');
   var quickEl    = document.getElementById('ipo-quick');
+
+  /* Track consecutive API failures for Tawk.to handoff */
+  var _failCount = 0;
+
+  /* Open Tawk.to live chat */
+  function openTawkTo() {
+    try {
+      if (window.Tawk_API && typeof window.Tawk_API.maximize === 'function') {
+        window.Tawk_API.maximize();
+      } else {
+        /* Tawk.to not loaded yet — open WhatsApp as fallback */
+        window.open('https://wa.me/212664318181', '_blank');
+      }
+    } catch(e) {
+      window.open('https://wa.me/212664318181', '_blank');
+    }
+  }
+
+  /* Show a handoff card with a "Chat with us live" button */
+  function showHandoffBubble(reason) {
+    var row  = document.createElement('div');
+    row.className = 'ipo-msg-row ipo-row-bot';
+
+    var card = document.createElement('div');
+    card.className = 'ipo-msg ipo-msg-bot ipo-handoff-card';
+    card.innerHTML =
+      '<div class="ipo-handoff-text">' +
+        (reason || 'Let me connect you with our team for the best help! 🤝') +
+      '</div>' +
+      '<button class="ipo-handoff-btn" aria-label="Start live chat">' +
+        '💬 Chat with us live' +
+      '</button>';
+
+    card.querySelector('.ipo-handoff-btn').addEventListener('click', function() {
+      openTawkTo();
+    });
+
+    row.appendChild(card);
+    msgsEl.appendChild(row);
+    scrollToBottom();
+  }
 
   /* ═══════════════════════════════════════════════════════════════
      UTILITIES
@@ -780,10 +820,15 @@
 
       if (err) {
         state.history.pop();
+        _failCount++;
         var friendlyMsg = getFriendlyError(err.message || '');
         addBubble(friendlyMsg, 'bot', true);
+        /* After 1 failure, offer live agent */
+        showHandoffBubble('Need immediate help? Our team is available right now! 👋');
         return;
       }
+      /* Reset fail counter on success */
+      _failCount = 0;
 
       /* Cache the API reply so the same question never hits the API twice */
       var ck = userText.trim().toLowerCase().replace(/\s+/g, ' ').substring(0, 80);
@@ -792,6 +837,28 @@
       addBubble(reply, 'bot');
     });
   }
+
+  /* ═══════════════════════════════════════════════════════════════
+     HANDOFF CSS (injected inline)
+  ═══════════════════════════════════════════════════════════════ */
+  (function() {
+    var s = document.createElement('style');
+    s.textContent =
+      '.ipo-qr-human{background:linear-gradient(135deg,#1a1a1a,#333)!important;color:#c9a84c!important;border-color:#1a1a1a!important;font-weight:600;}' +
+      '.ipo-qr-human:hover{background:#000!important;color:#e8cc6a!important;}' +
+      '.ipo-handoff-card{padding:.75rem!important;display:flex;flex-direction:column;gap:.6rem!important;}' +
+      '.ipo-handoff-text{font-size:.83rem;color:#374151;line-height:1.5;}' +
+      '.ipo-handoff-btn{' +
+        'display:inline-flex;align-items:center;justify-content:center;gap:.4rem;' +
+        'background:linear-gradient(135deg,#1a1a1a,#333);color:#c9a84c;' +
+        'border:none;border-radius:2rem;padding:.48rem 1.1rem;' +
+        'font-size:.8rem;font-weight:600;font-family:Inter,system-ui,sans-serif;' +
+        'cursor:pointer;transition:transform .15s,opacity .15s;width:100%;' +
+        'animation:ipo-fade-in .25s ease;' +
+      '}' +
+      '.ipo-handoff-btn:hover{opacity:.88;transform:scale(1.02);}';
+    document.head.appendChild(s);
+  })();
 
   /* Map known API errors to friendly messages */
   function getFriendlyError(msg) {
@@ -867,10 +934,14 @@
   /* Quick reply chips */
   quickEl.addEventListener('click', function(e) {
     var qr = e.target.closest('.ipo-qr');
-    if (qr) {
-      var q = qr.getAttribute('data-q');
-      if (q) sendMessage(q);
+    if (!qr) return;
+    /* "Talk to human" chip opens Tawk.to directly */
+    if (qr.id === 'ipo-qr-human') {
+      openTawkTo();
+      return;
     }
+    var q = qr.getAttribute('data-q');
+    if (q) sendMessage(q);
   });
 
   /* Close on Escape */
