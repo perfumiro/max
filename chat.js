@@ -17,15 +17,24 @@
   ═══════════════════════════════════════════════════════════════ */
   var CFG = {
     apiKey  : 'AIzaSyB3Ziukucy6Su21T8DPRTjr5qZFDzgrhV8',
-    model   : 'gemini-2.0-flash',          // ← fixed: was gemini-1.5-flash
+    /* Model fallback chain — tries each in order until one works */
+    models  : [
+      'gemini-2.0-flash-lite',   // fastest, lightest rate limits
+      'gemini-2.0-flash',        // standard
+      'gemini-1.5-flash-latest', // reliable fallback
+      'gemini-1.5-flash-8b'      // last resort — very low quota usage
+    ],
     apiBase : 'https://generativelanguage.googleapis.com/v1beta/models/',
-    maxTokens   : 600,
+    maxTokens   : 512,
     temperature : 0.75,
-    historyLimit: 20   // keep last N messages to avoid context overflow
+    historyLimit: 16
   };
 
-  /* Build endpoint URL once */
-  var API_URL = CFG.apiBase + CFG.model + ':generateContent?key=' + CFG.apiKey;
+  /* Track which model index is currently working */
+  var _modelIndex = 0;
+  function getApiUrl() {
+    return CFG.apiBase + CFG.models[_modelIndex] + ':generateContent?key=' + CFG.apiKey;
+  }
 
   /* ═══════════════════════════════════════════════════════════════
      PRODUCT CATALOG  (used for smart recommendations)
@@ -414,8 +423,7 @@
       '</div>';
     msgsEl.appendChild(row);
     scrollToBottom();
-    /* update header status */
-    if (statusText) statusText.textContent = 'Yasmine is typing...';
+    if (statusText) statusText.textContent = 'Yasmine is typing…';
   }
 
   function removeTyping() {
@@ -504,17 +512,32 @@
   /* ═══════════════════════════════════════════════════════════════
      API CALL  — Gemini 2.0 Flash
   ═══════════════════════════════════════════════════════════════ */
+  /* One request at a time — queue if another is already in flight */
+  var _requestInFlight = false;
+  var _requestQueue    = [];
+
+  function drainQueue() {
+    if (_requestInFlight || _requestQueue.length === 0) return;
+    var next = _requestQueue.shift();
+    next();
+  }
+
   function callGemini(userText, callback) {
+    /* Enqueue if busy */
+    if (_requestInFlight) {
+      _requestQueue.push(function() { callGemini(userText, callback); });
+      return;
+    }
+    _requestInFlight = true;
+
     var payload = {
-      system_instruction: {
-        parts: [{ text: SYSTEM_PROMPT }]
-      },
+      system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
       contents: getTrimmedHistory(),
       generationConfig: {
-        temperature       : CFG.temperature,
-        maxOutputTokens   : CFG.maxTokens,
-        topP              : 0.92,
-        candidateCount    : 1
+        temperature    : CFG.temperature,
+        maxOutputTokens: CFG.maxTokens,
+        topP           : 0.92,
+        candidateCount : 1
       },
       safetySettings: [
         { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_ONLY_HIGH' },
@@ -524,40 +547,82 @@
       ]
     };
 
-    var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var timeoutId  = setTimeout(function() {
-      if (controller) controller.abort();
-    }, 20000); // 20s timeout
+    /* Retry with backoff, then try next model in fallback chain */
+    var MAX_RETRIES   = 2;  // retries per model
+    var retryCount    = 0;
+    var retryDelays   = [1500, 4000]; // ms between retries
 
-    fetch(API_URL, {
-      method : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body   : JSON.stringify(payload),
-      signal : controller ? controller.signal : undefined
-    })
-    .then(function(res) {
-      clearTimeout(timeoutId);
-      if (!res.ok) {
-        return res.json().then(function(errData) {
-          throw new Error(errData.error ? errData.error.message : 'HTTP ' + res.status);
-        });
-      }
-      return res.json();
-    })
-    .then(function(data) {
-      var reply = '';
-      try {
-        reply = data.candidates[0].content.parts[0].text.trim();
-      } catch (e) {
-        throw new Error('Unexpected response format from API.');
-      }
-      if (!reply) throw new Error('Empty response from AI.');
-      callback(null, reply);
-    })
-    .catch(function(err) {
-      clearTimeout(timeoutId);
-      callback(err, null);
-    });
+    function attempt() {
+      var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      var timeoutId  = setTimeout(function() {
+        if (controller) controller.abort();
+      }, 22000);
+
+      fetch(getApiUrl(), {
+        method : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body   : JSON.stringify(payload),
+        signal : controller ? controller.signal : undefined
+      })
+      .then(function(res) {
+        clearTimeout(timeoutId);
+
+        /* 429 rate-limit — retry or try next model */
+        if (res.status === 429) {
+          if (retryCount < MAX_RETRIES) {
+            var delay = retryDelays[retryCount] || 5000;
+            retryCount++;
+            setTimeout(attempt, delay);
+            return;
+          }
+          /* All retries for this model exhausted — try next model */
+          if (_modelIndex < CFG.models.length - 1) {
+            _modelIndex++;
+            retryCount = 0;
+            setTimeout(attempt, 800);
+            return;
+          }
+          /* All models exhausted */
+          done(new Error('quota'), null);
+          return;
+        }
+
+        if (!res.ok) {
+          return res.json().then(function(d) {
+            done(new Error(d.error ? d.error.message : 'HTTP ' + res.status), null);
+          })['catch'](function() {
+            done(new Error('HTTP ' + res.status), null);
+          });
+        }
+        return res.json();
+      })
+      .then(function(data) {
+        if (!data) return; // already handled above
+        var reply = '';
+        try { reply = data.candidates[0].content.parts[0].text.trim(); }
+        catch(e) { done(new Error('parse'), null); return; }
+        if (!reply) { done(new Error('empty'), null); return; }
+        done(null, reply);
+      })
+      ['catch'](function(err) {
+        clearTimeout(timeoutId);
+        /* Network / abort error — retry once */
+        if (retryCount < 1) {
+          retryCount++;
+          setTimeout(attempt, 2000);
+          return;
+        }
+        done(err, null);
+      });
+    }
+
+    function done(err, reply) {
+      _requestInFlight = false;
+      setTimeout(drainQueue, 200);
+      callback(err, reply);
+    }
+
+    attempt();
   }
 
   /* ═══════════════════════════════════════════════════════════════
@@ -604,15 +669,17 @@
 
   /* Map known API errors to friendly messages */
   function getFriendlyError(msg) {
-    var m = msg.toLowerCase();
+    var m = (msg || '').toLowerCase();
+    if (m === 'quota' || m.indexOf('quota') !== -1 || m.indexOf('429') !== -1 || m.indexOf('resource') !== -1)
+      return '🙏 Sorry, I\'m a bit busy right now. Please send your message again in a few seconds — I\'ll be right with you!';
+    if (m === 'parse' || m === 'empty')
+      return '🤔 I didn\'t quite get a response. Please try again!';
     if (m.indexOf('api key') !== -1 || m.indexOf('api_key') !== -1)
-      return '⚙️ API key issue. Please contact IPORDISE support on WhatsApp: +212 664-318181';
-    if (m.indexOf('quota') !== -1 || m.indexOf('429') !== -1)
-      return '⏳ I\'m receiving too many requests right now. Please try again in a moment.';
+      return '⚙️ There\'s a configuration issue. Please contact IPORDISE on WhatsApp: +212 664-318181';
     if (m.indexOf('abort') !== -1 || m.indexOf('timeout') !== -1)
       return '⏱️ The response took too long. Please check your connection and try again.';
     if (m.indexOf('not found') !== -1 || m.indexOf('404') !== -1)
-      return '⚠️ AI service temporarily unavailable. Try again or contact us on WhatsApp: +212 664-318181';
+      return '⚠️ AI service temporarily unavailable. Contact us on WhatsApp: +212 664-318181';
     if (m.indexOf('network') !== -1 || m.indexOf('fetch') !== -1)
       return '📶 Network error. Please check your internet connection.';
     return '❌ Something went wrong. Please try again or reach us on WhatsApp: +212 664-318181';
