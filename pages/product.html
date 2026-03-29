@@ -1352,5 +1352,102 @@ s0.parentNode.insertBefore(s1,s0);
         });
     })();
     </script>
+
+    <!-- Bottom Navigation -->
+    <nav id="ipoBottomNav" class="ipo-bnav md:hidden" aria-label="Mobile navigation">
+        <div class="ipo-bnav-inner">
+
+            <!-- Home -->
+            <a href="../index.html" class="ipo-bnav-item" data-page="home" aria-label="Home">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap"><i class="fas fa-house ipo-bnav-icon"></i></span>
+                <span class="ipo-bnav-label">Home</span>
+            </a>
+
+            <!-- Discover -->
+            <a href="../discover.html?filter=all" class="ipo-bnav-item" data-page="discover" aria-label="Discover">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap"><i class="fas fa-compass ipo-bnav-icon"></i></span>
+                <span class="ipo-bnav-label">Discover</span>
+            </a>
+
+            <!-- Search (raised center button) -->
+            <button class="ipo-bnav-search-wrap" id="ipoBnavSearch" aria-label="Search fragrances">
+                <span class="ipo-bnav-search-btn">
+                    <i class="fas fa-magnifying-glass"></i>
+                </span>
+                <span class="ipo-bnav-label">Search</span>
+            </button>
+
+            <!-- Offers -->
+            <a href="../discover.html?filter=offers" class="ipo-bnav-item" data-page="offers" aria-label="Offers">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap"><i class="fas fa-tag ipo-bnav-icon"></i></span>
+                <span class="ipo-bnav-label">Offers</span>
+            </a>
+
+            <!-- Panier -->
+            <a href="cart.html" class="ipo-bnav-item" data-page="cart" aria-label="Panier">
+                <span class="ipo-bnav-bar"></span>
+                <span class="ipo-bnav-icon-wrap" style="position:relative;">
+                    <i class="fas fa-shopping-bag ipo-bnav-icon"></i>
+                    <span id="ipoBnavCartBadge" style="display:none;position:absolute;top:-6px;right:-8px;min-width:16px;height:16px;padding:0 4px;border-radius:9999px;font-size:10px;font-weight:700;line-height:16px;text-align:center;background:#e73c3c;color:#fff;box-shadow:0 0 0 2px rgba(10,10,12,0.92);"></span>
+                </span>
+                <span class="ipo-bnav-label">Panier</span>
+            </a>
+
+        </div>
+    </nav>
+    <script>
+    (function () {
+        var path = window.location.pathname;
+        var qs   = window.location.search;
+        var nav  = document.getElementById('ipoBottomNav');
+
+        /* -- Active tab -- */
+        document.querySelectorAll('#ipoBottomNav .ipo-bnav-item').forEach(function (el) {
+            var pg = el.dataset.page, hit = false;
+            if (pg === 'home'     && (path.endsWith('index.html') || path === '/' || path.endsWith('/'))) hit = true;
+            if (pg === 'discover' && path.includes('discover') && !qs.includes('offers'))                  hit = true;
+            if (pg === 'offers'   && qs.includes('offers'))                                                hit = true;
+            if (pg === 'cart'     && path.includes('cart'))                                                hit = true;
+            if (hit) el.classList.add('is-active');
+        });
+
+        /* -- Search button -- */
+        var searchBtn = document.getElementById('ipoBnavSearch');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function () {
+                if (typeof window.ipoOpenSearchOverlay === 'function') {
+                    window.ipoOpenSearchOverlay();
+                    return;
+                }
+                var mobileSearch = document.querySelector('.header-mobile-search');
+                var mobileInput  = document.querySelector('.header-mobile-search input[type="text"]');
+                if (mobileSearch && mobileInput) {
+                    mobileSearch.classList.add('is-open');
+                    mobileSearch.setAttribute('aria-hidden', 'false');
+                    try { mobileInput.focus(); } catch (e) {}
+                }
+            });
+        }
+
+        /* -- Cart badge -- */
+        try {
+            var cart = JSON.parse(localStorage.getItem('ipoCart') || '[]');
+            var count = cart.reduce(function(s, i){ return s + (parseInt(i.qty) || 1); }, 0);
+            var badge = document.getElementById('ipoBnavCartBadge');
+            if (badge && count > 0) {
+                badge.textContent = count > 99 ? '99+' : count;
+                badge.style.display = 'block';
+            }
+        } catch(e) {}
+
+        /* -- Show nav always on product page -- */
+        if (nav) {
+            nav.classList.add('ipo-bnav--visible');
+        }
+    })();
+    </script>
 </body>
 </html>
