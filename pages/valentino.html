@@ -588,36 +588,35 @@ Tawk_API.onLoad=function(){
     }\
     #ipo-tawk-dot{\
       position:absolute;\
-      top:3px;right:3px;\
-      width:13px;height:13px;\
-      background:#fff;\
-      border-radius:50%;\
-      border:2px solid #25D366;\
-      z-index:2;\
-    }\
-    #ipo-tawk-badge{\
-      position:absolute;\
-      top:-7px;right:-7px;\
-      min-width:20px;height:20px;\
-      background:#ef4444;\
+      top:-11px;right:-11px;\
+      width:26px;height:26px;\
+      background:linear-gradient(135deg,#ff2525 0%,#c40000 100%);\
       color:#fff;\
-      font-size:11px;\
-      font-weight:800;\
+      font-size:13px;\
+      font-weight:900;\
       font-family:Inter,system-ui,sans-serif;\
-      border-radius:10px;\
+      border-radius:50%;\
       display:flex;\
       align-items:center;\
       justify-content:center;\
-      border:2.5px solid #fff;\
-      z-index:4;\
-      padding:0 3px;\
-      box-shadow:0 2px 8px rgba(239,68,68,.45);\
-      animation:ipo-badge-in .45s cubic-bezier(.34,1.56,.64,1) 2s both;\
+      border:3px solid #fff;\
+      z-index:5;\
+      box-shadow:0 0 0 0 rgba(239,68,68,.75),0 4px 18px rgba(196,0,0,.60);\
+      animation:ipo-bdg-pop .55s cubic-bezier(.34,1.56,.64,1) 1.5s both,ipo-bdg-pulse 2s ease-out 2.6s infinite;\
       pointer-events:none;\
+      line-height:1;\
+      letter-spacing:-.5px;\
     }\
-    @keyframes ipo-badge-in{\
-      from{transform:scale(0);opacity:0;}\
-      to{transform:scale(1);opacity:1;}\
+    @keyframes ipo-bdg-pop{\
+      0%{transform:scale(0) rotate(-15deg);opacity:0;}\
+      55%{transform:scale(1.35) rotate(5deg);opacity:1;}\
+      75%{transform:scale(.92) rotate(-2deg);}\
+      100%{transform:scale(1) rotate(0deg);opacity:1;}\
+    }\
+    @keyframes ipo-bdg-pulse{\
+      0%{box-shadow:0 0 0 0 rgba(239,68,68,.75),0 4px 18px rgba(196,0,0,.60);}\
+      65%{box-shadow:0 0 0 11px rgba(239,68,68,0),0 4px 18px rgba(196,0,0,.60);}\
+      100%{box-shadow:0 0 0 0 rgba(239,68,68,0),0 4px 18px rgba(196,0,0,.60);}\
     }\
     @media(prefers-reduced-motion:reduce){\
       #ipo-tawk-wrap{animation:none;}\
