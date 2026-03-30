@@ -5631,6 +5631,96 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        /* ── Inject Product structured data (JSON-LD) for Google Rich Results ── */
+        (() => {
+            // Remove any existing product JSON-LD injected by this script to prevent duplicates
+            document.querySelectorAll('script[type="application/ld+json"][data-schema="product-dynamic"]')
+                .forEach((el) => el.remove());
+
+            // Convert any image path to an absolute URL
+            const toAbsoluteUrl = (src) => {
+                if (!src) return '';
+                if (/^https?:\/\//.test(src)) return src;
+                if (src.startsWith('//')) return 'https:' + src;
+                const base = window.location.origin;
+                return src.startsWith('/')
+                    ? base + src
+                    : base + '/pages/' + src.replace(/^\.\.\//, '');
+            };
+
+            // Pick the lowest positive price across all available sizes (bonus: smallest price)
+            const pricedOptions = productSizePriceOptions.filter((entry) => entry.unitPrice > 0);
+            const cheapestOption = pricedOptions.reduce(
+                (min, entry) => (!min || entry.unitPrice < min.unitPrice) ? entry : min,
+                null
+            );
+
+            // Build the plain-text description (strip any HTML tags)
+            const rawDesc = productOverride?.longDescription
+                || `${productName} by ${resolvedBrand}: an elegant luxury fragrance crafted for a modern, long-lasting trail.`;
+            const plainDesc = rawDesc.replace(/<[^>]+>/g, ' ').replace(/\s{2,}/g, ' ').trim();
+
+            // Absolute image URL for structured data
+            const schemaImageUrl = toAbsoluteUrl(defaultImage);
+
+            // Canonical page URL with product identity embedded
+            const schemaUrl = `${window.location.origin}/pages/product.html?id=${encodeURIComponent(productId)}&name=${encodeURIComponent(productName)}`;
+
+            const schema = {
+                '@context': 'https://schema.org/',
+                '@type': 'Product',
+                'name': productName || 'Luxury Perfume',
+                'image': schemaImageUrl ? [schemaImageUrl] : undefined,
+                'description': plainDesc,
+                'brand': {
+                    '@type': 'Brand',
+                    'name': resolvedBrand || 'IPORDISE'
+                },
+                'aggregateRating': {
+                    '@type': 'AggregateRating',
+                    'ratingValue': String(honestRating),
+                    'reviewCount': String(honestReviews),
+                    'bestRating': '5',
+                    'worstRating': '1'
+                }
+            };
+
+            // Include Offer only when a real price is known (required by Google when price is shown)
+            if (cheapestOption) {
+                schema['offers'] = {
+                    '@type': 'Offer',
+                    'url': schemaUrl,
+                    'priceCurrency': 'MAD',
+                    'price': String(cheapestOption.unitPrice),
+                    'availability': 'https://schema.org/InStock',
+                    'itemCondition': 'https://schema.org/NewCondition',
+                    'seller': {
+                        '@type': 'Organization',
+                        'name': 'IPORDISE'
+                    }
+                };
+            } else {
+                // No price loaded yet — still satisfy the requirement via aggregateRating alone,
+                // but still include the Offer shell so crawlers know the product is available
+                schema['offers'] = {
+                    '@type': 'Offer',
+                    'url': schemaUrl,
+                    'availability': 'https://schema.org/InStock',
+                    'itemCondition': 'https://schema.org/NewCondition',
+                    'seller': {
+                        '@type': 'Organization',
+                        'name': 'IPORDISE'
+                    }
+                };
+            }
+
+            const ldScript = document.createElement('script');
+            ldScript.type = 'application/ld+json';
+            ldScript.dataset.schema = 'product-dynamic';
+            ldScript.textContent = JSON.stringify(schema);
+            document.head.appendChild(ldScript);
+        })();
+
         /* ── Re-render all language-sensitive content on language switch ── */
         onLanguageChange(() => {
             // Subtitle
