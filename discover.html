@@ -275,28 +275,141 @@ s0.parentNode.insertBefore(s1,s0);
     </header>
 
     <!-- Trust Bar -->
-    <div class="trust-bar bg-white border-b border-gray-200 py-2.5 block">
-        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 overflow-x-auto scrollbar-hide">
-            <div class="flex items-center justify-between text-xs text-gray-600 min-w-max gap-4 sm:gap-0">
-                <div class="trust-bar-item flex items-center gap-1.5 sm:gap-2">
-                    <i class="fas fa-truck-fast text-brand-red"></i>
+    <style>
+        @keyframes ipoTbScroll { 0% { transform:translateX(0) } 100% { transform:translateX(-50%) } }
+
+        #ipo-trust {
+            width: 100%;
+            background: #fff !important;
+            border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+            padding: 0.55rem 0 !important;
+            overflow: hidden;
+        }
+        .ipo-tb-item {
+            display: -webkit-inline-box !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.4rem !important;
+            font-size: 0.73rem !important;
+            color: #4b5563 !important;
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+        }
+        .ipo-tb-item i { color: #e73c3c !important; font-size: 0.7rem !important; flex-shrink: 0 !important; }
+        .ipo-tb-item strong { color: #111827 !important; font-weight: 600 !important; }
+
+        /* ── Mobile: marquee ── */
+        @media (max-width: 767px) {
+            #ipo-trust {
+                -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+                mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+                padding: 0.6rem 0 !important;
+            }
+            #ipo-tb-track {
+                display: -webkit-box !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 1.2rem !important;
+                width: max-content !important;
+                animation: ipoTbScroll 22s linear infinite !important;
+            }
+            #ipo-tb-track:hover { animation-play-state: paused !important; }
+            .ipo-tb-sep { display: none !important; }
+            .ipo-tb-dot {
+                display: inline-block !important;
+                width: 3px !important; height: 3px !important;
+                border-radius: 50% !important;
+                background: #d1d5db !important;
+                flex-shrink: 0 !important;
+                vertical-align: middle !important;
+            }
+        }
+
+        /* ── Desktop: static justified row ── */
+        @media (min-width: 768px) {
+            #ipo-tb-wrap {
+                max-width: 80rem;
+                margin: 0 auto;
+                padding: 0 1.5rem;
+            }
+            #ipo-tb-track {
+                display: -webkit-box !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 0 !important;
+                width: 100% !important;
+                animation: none !important;
+            }
+            .ipo-tb-sep {
+                display: block !important;
+                width: 1px !important;
+                height: 1.1rem !important;
+                background: #e5e7eb !important;
+                flex-shrink: 0 !important;
+            }
+            .ipo-tb-dot { display: none !important; }
+            .ipo-tb-dup { display: none !important; }
+        }
+    </style>
+
+    <div id="ipo-trust">
+        <div id="ipo-tb-wrap">
+            <div id="ipo-tb-track">
+
+                <!-- item 1 -->
+                <div class="ipo-tb-item">
+                    <i class="fas fa-truck-fast"></i>
                     <span data-i18n-html="index.trust_delivery"><strong>Free Delivery</strong> from 35 MAD</span>
                 </div>
-                <div class="trust-bar-divider hidden sm:block"></div>
-                <div class="trust-bar-item flex items-center gap-1.5 sm:gap-2">
-                    <i class="fas fa-gift text-brand-red"></i>
+                <span class="ipo-tb-sep" aria-hidden="true"></span>
+                <span class="ipo-tb-dot" aria-hidden="true"></span>
+
+                <!-- item 2 -->
+                <div class="ipo-tb-item">
+                    <i class="fas fa-gift"></i>
                     <span data-i18n-html="index.trust_returns"><strong>Gift Packed</strong></span>
                 </div>
-                <div class="trust-bar-divider hidden sm:block"></div>
-                <div class="trust-bar-item flex items-center gap-1.5 sm:gap-2">
-                    <i class="fas fa-shield-halved text-brand-red"></i>
-                    <span data-i18n-html="index.trust_payment"><strong>Secure Payment</strong> & 1-click checkout</span>
+                <span class="ipo-tb-sep" aria-hidden="true"></span>
+                <span class="ipo-tb-dot" aria-hidden="true"></span>
+
+                <!-- item 3 -->
+                <div class="ipo-tb-item">
+                    <i class="fas fa-shield-halved"></i>
+                    <span data-i18n-html="index.trust_payment"><strong>Secure Payment</strong> &amp; 1-click checkout</span>
                 </div>
-                <div class="trust-bar-divider hidden sm:block"></div>
-                <div class="trust-bar-item flex items-center gap-1.5 sm:gap-2">
-                    <i class="fas fa-certificate text-brand-red"></i>
+                <span class="ipo-tb-sep" aria-hidden="true"></span>
+                <span class="ipo-tb-dot" aria-hidden="true"></span>
+
+                <!-- item 4 -->
+                <div class="ipo-tb-item">
+                    <i class="fas fa-certificate"></i>
                     <span data-i18n-html="index.trust_authentic"><strong>100% Authentic</strong> products guaranteed</span>
                 </div>
+                <span class="ipo-tb-dot" aria-hidden="true"></span>
+
+                <!-- duplicate set for seamless mobile loop -->
+                <div class="ipo-tb-item ipo-tb-dup" aria-hidden="true">
+                    <i class="fas fa-truck-fast"></i>
+                    <span data-i18n-html="index.trust_delivery"><strong>Free Delivery</strong> from 35 MAD</span>
+                </div>
+                <span class="ipo-tb-dot ipo-tb-dup" aria-hidden="true"></span>
+                <div class="ipo-tb-item ipo-tb-dup" aria-hidden="true">
+                    <i class="fas fa-gift"></i>
+                    <span data-i18n-html="index.trust_returns"><strong>Gift Packed</strong></span>
+                </div>
+                <span class="ipo-tb-dot ipo-tb-dup" aria-hidden="true"></span>
+                <div class="ipo-tb-item ipo-tb-dup" aria-hidden="true">
+                    <i class="fas fa-shield-halved"></i>
+                    <span data-i18n-html="index.trust_payment"><strong>Secure Payment</strong> &amp; 1-click checkout</span>
+                </div>
+                <span class="ipo-tb-dot ipo-tb-dup" aria-hidden="true"></span>
+                <div class="ipo-tb-item ipo-tb-dup" aria-hidden="true">
+                    <i class="fas fa-certificate"></i>
+                    <span data-i18n-html="index.trust_authentic"><strong>100% Authentic</strong> products guaranteed</span>
+                </div>
+                <span class="ipo-tb-dot ipo-tb-dup" aria-hidden="true"></span>
+
             </div>
         </div>
     </div>

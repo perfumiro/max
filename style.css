@@ -10470,12 +10470,12 @@ footer .flex.space-x-3 a:hover {
     transition: opacity 0.2s;
     color: rgba(255,255,255,0.55);
 }
-/* Push page content above the bar */
+/* Push page content above the bar — only on pages that actually have the bottom nav */
 @media (max-width: 767px) {
-    body {
+    body:has(.ipo-bnav) {
         padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
     }
-    body > footer:last-of-type {
+    body:has(.ipo-bnav) > footer:last-of-type {
         padding-bottom: calc(2rem + 64px + env(safe-area-inset-bottom, 0px));
     }
 }
@@ -24944,3 +24944,49 @@ button.product-favorite-btn:not(.is-active) i.fa-heart {
 .related-card .mt-3.pt-3 {
     margin-top: auto !important;
 }
+
+/* ── Trust Bar: Mobile Marquee ─────────────────────────────── */
+.trust-bar-marquee-wrap {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+}
+.trust-bar-marquee-track {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    width: max-content;
+    animation: tbMarquee 22s linear infinite;
+}
+.trust-bar-marquee-track:hover {
+    animation-play-state: paused;
+}
+@keyframes tbMarquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+.tb-m-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+    font-size: 0.72rem;
+    color: #4b5563;
+}
+.tb-m-item i {
+    color: #e73c3c;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+}
+.tb-m-item strong {
+    color: #111827;
+}
+.tb-m-dot {
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #d1d5db;
+    flex-shrink: 0;
+}
+
