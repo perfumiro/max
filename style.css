@@ -24892,3 +24892,55 @@ button.product-favorite-btn:not(.is-active) i.fa-heart {
 .product-zoom-wrap {
     cursor: crosshair !important;
 }
+
+/* ================================================================
+   RELATED PRODUCTS — BALANCED CARDS
+   Equal card heights with title clamped + CTA pinned to bottom
+   ================================================================ */
+
+/* Make the scroll row align card tops and stretch to equal height */
+.related-track {
+    align-items: stretch !important;
+}
+
+/* Card: flex column so content fills height and CTA stays at bottom */
+.related-card {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Image: fixed height — consistent across all cards */
+.related-card .related-image {
+    width: 100% !important;
+    height: 190px !important;
+    flex-shrink: 0 !important;
+}
+
+/* Brand label: fixed top spacing */
+.related-card .related-brand {
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.2rem !important;
+}
+
+/* Title: exactly 2 lines, never more — keeps cards the same height */
+.related-card .related-title {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    min-height: 2.6em !important;   /* reserves space even for 1-line titles */
+    line-height: 1.3 !important;
+}
+
+/* Size badges row: fixed height so the row never shifts */
+.related-card .flex.items-center.gap-2 {
+    min-height: 2rem !important;
+    flex-wrap: nowrap !important;
+    overflow: hidden !important;
+}
+
+/* CTA row: push to bottom of card, always flush */
+.related-card .mt-3.pt-3 {
+    margin-top: auto !important;
+}
