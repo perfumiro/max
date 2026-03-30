@@ -9668,6 +9668,85 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+/* ── IPORDISE Motion Layer ──────────────────────────────────
+   1) Scroll fade-in via IntersectionObserver
+   2) Button click bounce via event delegation
+   ─────────────────────────────────────────────────────────── */
+(function () {
+    'use strict';
+
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ── 1. Scroll fade-in ── */
+    var REVEAL_SELECTORS = [
+        '.card-2026',
+        '.related-card',
+        '.faq-item',
+        '.trust-bar-item',
+        'section > .max-w-7xl > *',
+        'main > section',
+        '.hto-step-card',
+        '.hto-perk'
+    ].join(',');
+
+    function initReveal() {
+        if (reduced) return;
+        var targets = document.querySelectorAll(REVEAL_SELECTORS);
+        if (!targets.length || !('IntersectionObserver' in window)) {
+            // fallback: just show everything
+            targets.forEach(function (el) { el.classList.add('ipo-visible'); });
+            return;
+        }
+
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('ipo-visible');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+        targets.forEach(function (el) {
+            // Don't re-animate already-visible above-the-fold elements
+            var rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.92) {
+                el.classList.add('ipo-visible');
+            } else {
+                el.classList.add('ipo-reveal');
+                io.observe(el);
+            }
+        });
+    }
+
+    /* Run after layout has settled */
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initReveal);
+    } else {
+        initReveal();
+    }
+    /* Re-run when script.js injects new cards (discover page) */
+    document.addEventListener('ipo:cards-rendered', initReveal);
+
+    /* ── 2. Button click bounce (event delegation) ── */
+    if (!reduced) {
+        document.addEventListener('pointerdown', function (e) {
+            var btn = e.target.closest(
+                '.js-card-add-btn, .bg-brand-red, [class*="add-to-cart"], .card-2026-btn, .hto-cta-btn, .checkout-btn'
+            );
+            if (!btn) return;
+            btn.classList.remove('ipo-btn-bounce');
+            // force reflow so re-clicking restarts the animation
+            void btn.offsetWidth;
+            btn.classList.add('ipo-btn-bounce');
+            btn.addEventListener('animationend', function handler() {
+                btn.classList.remove('ipo-btn-bounce');
+                btn.removeEventListener('animationend', handler);
+            });
+        }, { passive: true });
+    }
+}());
+
 /* ── Service Worker registration with auto-update ── */
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

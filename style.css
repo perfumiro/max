@@ -24945,6 +24945,89 @@ button.product-favorite-btn:not(.is-active) i.fa-heart {
     margin-top: auto !important;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   IPORDISE MOTION LAYER — button bounce · card hover · scroll fade
+   Uses will-change sparingly; respects prefers-reduced-motion
+   ══════════════════════════════════════════════════════════════ */
+
+/* 1 ── Scroll fade-in ──────────────────────────────────────── */
+.ipo-reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.52s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ipo-reveal.ipo-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* stagger siblings */
+.ipo-reveal:nth-child(2) { transition-delay: 0.06s; }
+.ipo-reveal:nth-child(3) { transition-delay: 0.12s; }
+.ipo-reveal:nth-child(4) { transition-delay: 0.18s; }
+.ipo-reveal:nth-child(5) { transition-delay: 0.24s; }
+.ipo-reveal:nth-child(6) { transition-delay: 0.30s; }
+
+/* 2 ── Product card hover scale ────────────────────────────── */
+.card-2026 {
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.28s ease !important;
+    will-change: transform;
+}
+.card-2026:hover {
+    transform: translateY(-5px) scale(1.022) !important;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.13) !important;
+    z-index: 2;
+}
+.card-2026-img-wrap img {
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+.card-2026:hover .card-2026-img-wrap img {
+    transform: scale(1.06) !important;
+}
+.related-card {
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.28s ease !important;
+    will-change: transform;
+}
+.related-card:hover {
+    transform: translateY(-4px) scale(1.018) !important;
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.11) !important;
+    z-index: 2;
+}
+.related-image {
+    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+.related-card:hover .related-image {
+    transform: scale(1.06) !important;
+}
+
+/* 3 ── Button click bounce ─────────────────────────────────── */
+@keyframes ipoBtnBounce {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(0.90); }
+    65%  { transform: scale(1.07); }
+    85%  { transform: scale(0.97); }
+    100% { transform: scale(1); }
+}
+.ipo-btn-bounce {
+    animation: ipoBtnBounce 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+/* only bg-brand-red buttons get the bounce class via JS */
+
+/* Disable all motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    .ipo-reveal,
+    .card-2026,
+    .card-2026-img-wrap img,
+    .related-card,
+    .related-image {
+        transition: none !important;
+        animation: none !important;
+    }
+    .ipo-reveal { opacity: 1 !important; transform: none !important; }
+}
+
 /* ── Trust Bar: Mobile Marquee ─────────────────────────────── */
 .trust-bar-marquee-wrap {
     overflow: hidden;
