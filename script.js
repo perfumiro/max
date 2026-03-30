@@ -523,7 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <li><a href="${pagePath('shipping')}" class="hover:text-white transition" data-i18n="footer.shipping_returns">Shipping &amp; Returns</a></li>
                                 <li><a href="${pagePath('track-order')}" class="hover:text-white transition" data-i18n="footer.track_order">Track Order</a></li>
                                 <li><a href="${pagePath('faq')}" class="hover:text-white transition" data-i18n="footer.faq">FAQ</a></li>
-                                <li><a href="${pagePath('how-to-order')}" class="hover:text-white transition">How to Order</a></li>
+                                <li><a href="${pagePath('how-to-order')}" class="hover:text-white transition" data-i18n="footer.how_to_order">How to Order</a></li>
                             </ul>
                         </div>
                         <div>
