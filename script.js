@@ -5631,13 +5631,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        /* ── Inject Product structured data (JSON-LD) for Google Rich Results ── */
+        /* ── Inject Product structured data (JSON-LD) — Google Merchant Listings compliant ── */
         (() => {
-            // Remove any existing product JSON-LD injected by this script to prevent duplicates
+            // Remove any previously injected block to prevent duplicates
             document.querySelectorAll('script[type="application/ld+json"][data-schema="product-dynamic"]')
                 .forEach((el) => el.remove());
 
-            // Convert any image path to an absolute URL
+            // Resolve any relative/protocol-relative path to a full https:// URL
             const toAbsoluteUrl = (src) => {
                 if (!src) return '';
                 if (/^https?:\/\//.test(src)) return src;
@@ -5648,29 +5648,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     : base + '/pages/' + src.replace(/^\.\.\//, '');
             };
 
-            // Pick the lowest positive price across all available sizes (bonus: smallest price)
+            // priceValidUntil: end of the current calendar year (updates automatically each year)
+            const priceValidUntil = `${new Date().getFullYear()}-12-31`;
+
+            // Canonical product page URL
+            const schemaUrl = `${window.location.origin}/pages/product.html?id=${encodeURIComponent(productId)}&name=${encodeURIComponent(productName)}`;
+
+            // Absolute primary image URL — required by Merchant listings
+            const schemaImageUrl = toAbsoluteUrl(defaultImage);
+
+            // Plain-text description (strip HTML tags from longDescription if present)
+            const rawDesc = productOverride?.longDescription
+                || `${productName} by ${resolvedBrand}: an elegant luxury fragrance crafted for a modern, long-lasting trail.`;
+            const plainDesc = rawDesc.replace(/<[^>]+>/g, ' ').replace(/\s{2,}/g, ' ').trim();
+
+            // Pick the lowest positive price (smallest size = entry-level price shown in listings)
             const pricedOptions = productSizePriceOptions.filter((entry) => entry.unitPrice > 0);
             const cheapestOption = pricedOptions.reduce(
                 (min, entry) => (!min || entry.unitPrice < min.unitPrice) ? entry : min,
                 null
             );
 
-            // Build the plain-text description (strip any HTML tags)
-            const rawDesc = productOverride?.longDescription
-                || `${productName} by ${resolvedBrand}: an elegant luxury fragrance crafted for a modern, long-lasting trail.`;
-            const plainDesc = rawDesc.replace(/<[^>]+>/g, ' ').replace(/\s{2,}/g, ' ').trim();
-
-            // Absolute image URL for structured data
-            const schemaImageUrl = toAbsoluteUrl(defaultImage);
-
-            // Canonical page URL with product identity embedded
-            const schemaUrl = `${window.location.origin}/pages/product.html?id=${encodeURIComponent(productId)}&name=${encodeURIComponent(productName)}`;
-
+            // Base schema — always present
             const schema = {
                 '@context': 'https://schema.org/',
                 '@type': 'Product',
                 'name': productName || 'Luxury Perfume',
-                'image': schemaImageUrl ? [schemaImageUrl] : undefined,
                 'description': plainDesc,
                 'brand': {
                     '@type': 'Brand',
@@ -5685,31 +5688,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // Include Offer only when a real price is known (required by Google when price is shown)
+            // image must be an array of absolute URLs (Google requires ≥1)
+            if (schemaImageUrl) schema['image'] = [schemaImageUrl];
+
+            // offers — required for Merchant listings; price + priceCurrency mandatory when price is known
             if (cheapestOption) {
                 schema['offers'] = {
                     '@type': 'Offer',
                     'url': schemaUrl,
                     'priceCurrency': 'MAD',
                     'price': String(cheapestOption.unitPrice),
+                    'priceValidUntil': priceValidUntil,
                     'availability': 'https://schema.org/InStock',
                     'itemCondition': 'https://schema.org/NewCondition',
                     'seller': {
                         '@type': 'Organization',
-                        'name': 'IPORDISE'
+                        'name': 'IPORDISE',
+                        'url': window.location.origin
                     }
                 };
             } else {
-                // No price loaded yet — still satisfy the requirement via aggregateRating alone,
-                // but still include the Offer shell so crawlers know the product is available
+                // Price not yet available — omit price/priceCurrency so Google
+                // does not flag a price-present-but-invalid error; keep availability
                 schema['offers'] = {
                     '@type': 'Offer',
                     'url': schemaUrl,
+                    'priceValidUntil': priceValidUntil,
                     'availability': 'https://schema.org/InStock',
                     'itemCondition': 'https://schema.org/NewCondition',
                     'seller': {
                         '@type': 'Organization',
-                        'name': 'IPORDISE'
+                        'name': 'IPORDISE',
+                        'url': window.location.origin
                     }
                 };
             }
