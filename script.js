@@ -4636,8 +4636,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return fixedReviewCounts[canonicalName];
         }
 
-        const hash = getStableHashNumber(canonicalName);
-        return 4 + (hash % 23);
+        const countPool = [3, 4, 5, 7];
+        return countPool[Math.floor(Math.random() * countPool.length)];
     };
 
     const getHonestRatingValue = (productName) => {
