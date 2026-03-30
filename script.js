@@ -5633,6 +5633,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         /* ── Inject Product structured data (JSON-LD) — Google Merchant Listings compliant ── */
         (() => {
+            // Guard: only inject on the product detail page — never on category/discover pages
+            const _pagePath = window.location.pathname.replace(/\\/g, '/').toLowerCase();
+            const _isProductPage = _pagePath.endsWith('/product.html') || _pagePath.endsWith('/product')
+                || (new URLSearchParams(window.location.search).has('id') && _pagePath.includes('product'));
+            if (!_isProductPage) return;
+
             // Remove any previously injected block to prevent duplicates
             document.querySelectorAll('script[type="application/ld+json"][data-schema="product-dynamic"]')
                 .forEach((el) => el.remove());
