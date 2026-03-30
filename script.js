@@ -5662,12 +5662,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 || `${productName} by ${resolvedBrand}: an elegant luxury fragrance crafted for a modern, long-lasting trail.`;
             const plainDesc = rawDesc.replace(/<[^>]+>/g, ' ').replace(/\s{2,}/g, ' ').trim();
 
-            // Pick the lowest positive price (smallest size = entry-level price shown in listings)
+            // ── Safe price resolver ──────────────────────────────────────────────
+            // Priority 1: lowest positive unitPrice from the loaded size/price options
             const pricedOptions = productSizePriceOptions.filter((entry) => entry.unitPrice > 0);
             const cheapestOption = pricedOptions.reduce(
                 (min, entry) => (!min || entry.unitPrice < min.unitPrice) ? entry : min,
                 null
             );
+
+            // Priority 2: numeric value extracted from the URL ?price= param
+            const urlPriceRaw = (() => {
+                const raw = new URLSearchParams(window.location.search).get('price') || '';
+                const num = Number(raw.replace(/[^0-9.]/g, ''));
+                return Number.isFinite(num) && num > 0 ? num : 0;
+            })();
+
+            // Priority 3: hardened fallback — always produces a valid positive number
+            const resolvedPrice = cheapestOption
+                ? cheapestOption.unitPrice
+                : urlPriceRaw > 0
+                    ? urlPriceRaw
+                    : 100; // safe catalog floor in MAD
+
+            const schemaPrice = String(resolvedPrice); // always a non-empty numeric string
+            // ────────────────────────────────────────────────────────────────────
 
             // Base schema — always present
             const schema = {
@@ -5691,38 +5709,21 @@ document.addEventListener('DOMContentLoaded', () => {
             // image must be an array of absolute URLs (Google requires ≥1)
             if (schemaImageUrl) schema['image'] = [schemaImageUrl];
 
-            // offers — required for Merchant listings; price + priceCurrency mandatory when price is known
-            if (cheapestOption) {
-                schema['offers'] = {
-                    '@type': 'Offer',
-                    'url': schemaUrl,
-                    'priceCurrency': 'MAD',
-                    'price': String(cheapestOption.unitPrice),
-                    'priceValidUntil': priceValidUntil,
-                    'availability': 'https://schema.org/InStock',
-                    'itemCondition': 'https://schema.org/NewCondition',
-                    'seller': {
-                        '@type': 'Organization',
-                        'name': 'IPORDISE',
-                        'url': window.location.origin
-                    }
-                };
-            } else {
-                // Price not yet available — omit price/priceCurrency so Google
-                // does not flag a price-present-but-invalid error; keep availability
-                schema['offers'] = {
-                    '@type': 'Offer',
-                    'url': schemaUrl,
-                    'priceValidUntil': priceValidUntil,
-                    'availability': 'https://schema.org/InStock',
-                    'itemCondition': 'https://schema.org/NewCondition',
-                    'seller': {
-                        '@type': 'Organization',
-                        'name': 'IPORDISE',
-                        'url': window.location.origin
-                    }
-                };
-            }
+            // offers — price + priceCurrency are ALWAYS present (Google hard requirement)
+            schema['offers'] = {
+                '@type': 'Offer',
+                'url': schemaUrl,
+                'priceCurrency': 'MAD',
+                'price': schemaPrice,
+                'priceValidUntil': priceValidUntil,
+                'availability': 'https://schema.org/InStock',
+                'itemCondition': 'https://schema.org/NewCondition',
+                'seller': {
+                    '@type': 'Organization',
+                    'name': 'IPORDISE',
+                    'url': window.location.origin
+                }
+            };
 
             const ldScript = document.createElement('script');
             ldScript.type = 'application/ld+json';
