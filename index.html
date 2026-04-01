@@ -295,13 +295,160 @@ s0.parentNode.insertBefore(s1,s0);
     font-size: 0.8rem !important;
 }
 
-/* ── 3. Countdown bar ── */
-.flash-countdown-bar {
-    background: #0c0507 !important;
-    border-radius: 12px !important;
-    border: none !important;
-    padding: 10px 22px !important;
+/* ── 3. Live Viewer Pill ── */
+@keyframes lvcIn {
+    0%   { opacity: 0; transform: translateY(14px) scale(0.88); filter: blur(4px); }
+    60%  { opacity: 1; filter: blur(0); }
+    80%  { transform: translateY(-3px) scale(1.03); }
+    100% { transform: translateY(0) scale(1); }
+}
+@keyframes lvcDotPing {
+    0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.85); }
+    40%  { box-shadow: 0 0 0 7px rgba(22,163,74,0); }
+    55%  { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
+    72%  { box-shadow: 0 0 0 0 rgba(22,163,74,0.50); }
+    92%  { box-shadow: 0 0 0 4px rgba(22,163,74,0); }
+    100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
+}
+@keyframes lvcDotBreath {
+    0%,100% { transform: scale(1);   opacity: 1; }
+    50%     { transform: scale(1.25); opacity: 0.85; }
+}
+@keyframes lvcGleam {
+    0%, 70%  { left: -90%; opacity: 0; }
+    74%      { opacity: 1; }
+    100%     { left: 130%; opacity: 0; }
+}
+@keyframes lvcNumOut {
+    0%   { opacity:1; transform: translateY(0)    scale(1);    filter:blur(0px); }
+    100% { opacity:0; transform: translateY(-13px) scale(0.72); filter:blur(5px); }
+}
+@keyframes lvcNumIn {
+    0%   { opacity:0; transform: translateY(15px) scale(0.72); filter:blur(5px); }
+    55%  { filter:blur(0px); }
+    80%  { transform: translateY(-2px) scale(1.06); }
+    100% { opacity:1; transform: translateY(0) scale(1);    filter:blur(0px); }
+}
+@keyframes lvcPillBump {
+    0%,100% { box-shadow: 0 4px 24px rgba(22,163,74,0.08), 0 1px 4px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(22,163,74,0.06); }
+    45%     { box-shadow: 0 4px 28px rgba(22,163,74,0.28), 0 1px 8px rgba(22,163,74,0.12), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(22,163,74,0.10); }
+}
+/* Live viewer pill */
+.lvc-pill {
     display: inline-flex !important;
+    align-items: center !important;
+    gap: 9px !important;
+    background: rgba(255,255,255,0.90) !important;
+    backdrop-filter: blur(12px) saturate(1.6) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(1.6) !important;
+    border: 1px solid rgba(22,163,74,0.22) !important;
+    border-radius: 100px !important;
+    padding: 8px 18px 8px 13px !important;
+    box-shadow:
+        0 4px 24px rgba(22,163,74,0.08),
+        0 1px 4px rgba(0,0,0,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.95),
+        inset 0 -1px 0 rgba(22,163,74,0.06) !important;
+    animation: lvcIn 0.75s cubic-bezier(0.34,1.4,0.64,1) 0.35s both !important;
+    position: relative !important;
+    overflow: hidden !important;
+    cursor: default !important;
+}
+/* Top highlight line */
+.lvc-pill::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important; left: 12% !important;
+    width: 76% !important; height: 1px !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9) 50%, transparent) !important;
+    pointer-events: none !important;
+}
+/* Gleam sweep */
+.lvc-pill::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important; left: -90% !important;
+    width: 50% !important; height: 100% !important;
+    background: linear-gradient(105deg, transparent 15%, rgba(255,255,255,0.60) 50%, transparent 85%) !important;
+    animation: lvcGleam 7s ease-in-out 2.5s infinite !important;
+    pointer-events: none !important;
+}
+/* Live dot wrapper — green glow ring */
+.lvc-dot-wrap {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0 !important;
+    border-radius: 50% !important;
+    background: rgba(22,163,74,0.10) !important;
+}
+/* Pulsing green dot */
+.lvc-dot {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle at 35% 35%, #4ade80, #16a34a) !important;
+    flex-shrink: 0 !important;
+    display: inline-block !important;
+    box-shadow: 0 0 0 0 rgba(22,163,74,0.7) !important;
+    animation: lvcDotPing 2.4s ease-out infinite, lvcDotBreath 2.4s ease-in-out infinite !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+/* LIVE label */
+.lvc-live-label {
+    font-size: 0.55rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em !important;
+    color: #16a34a !important;
+    text-transform: uppercase !important;
+    font-family: inherit !important;
+    line-height: 1 !important;
+    opacity: 0.85 !important;
+}
+/* Divider */
+.lvc-sep {
+    width: 1px !important;
+    height: 12px !important;
+    background: rgba(22,163,74,0.20) !important;
+    flex-shrink: 0 !important;
+    border-radius: 1px !important;
+}
+/* Viewer count text */
+.lvc-text {
+    font-size: 0.74rem !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+    letter-spacing: 0.012em !important;
+    white-space: nowrap !important;
+    font-family: inherit !important;
+    display: inline-flex !important;
+    align-items: baseline !important;
+    gap: 0 !important;
+}
+/* Animated number */
+.lvc-num {
+    display: inline-block !important;
+    font-size: 0.82rem !important;
+    font-weight: 800 !important;
+    color: #15803d !important;
+    font-variant-numeric: tabular-nums !important;
+    min-width: 1.5ch !important;
+    text-align: right !important;
+    margin-right: 0.28em !important;
+    line-height: 1 !important;
+}
+.lvc-num.lvc-flip-out {
+    animation: lvcNumOut 0.20s ease-in forwards !important;
+}
+.lvc-num.lvc-flip-in {
+    animation: lvcNumIn 0.38s cubic-bezier(0.34,1.5,0.64,1) forwards !important;
+}
+.lvc-pill.lvc-pulse {
+    animation: lvcPillBump 0.45s ease-out !important;
 }
 
 /* ── 4. Carousel gap tighter on mobile ── */
@@ -898,16 +1045,16 @@ s0.parentNode.insertBefore(s1,s0);
                 <p class="text-sm text-gray-500 mt-3 max-w-2xl mx-auto" data-i18n="index.flash_subtitle">
                     Discover today's most wanted perfumes, rare niche selections, and limited-edition sets. Flash offers are available for 24 hours only.
                 </p>
-                <!-- Countdown Timer -->
-                <div class="flash-countdown-bar mt-5" id="flashCountdown">
-                    <span class="flash-countdown-label" data-i18n="index.flash_ends">Ends in</span>
-                    <div class="flash-countdown-units">
-                        <div class="flash-countdown-unit"><span id="flashHours">00</span><small data-i18n="index.flash_hrs">HRS</small></div>
-                        <span class="flash-countdown-sep">:</span>
-                        <div class="flash-countdown-unit"><span id="flashMinutes">00</span><small data-i18n="index.flash_min">MIN</small></div>
-                        <span class="flash-countdown-sep">:</span>
-                        <div class="flash-countdown-unit"><span id="flashSeconds">00</span><small data-i18n="index.flash_sec">SEC</small></div>
-                    </div>
+                <!-- Live Viewer Pill -->
+                <div class="lvc-pill mt-5" id="flashStockBar" aria-live="polite" aria-atomic="true">
+                    <span class="lvc-dot-wrap" aria-hidden="true">
+                        <span class="lvc-dot"></span>
+                    </span>
+                    <span class="lvc-live-label" aria-hidden="true">Live</span>
+                    <span class="lvc-sep" aria-hidden="true"></span>
+                    <span class="lvc-text" id="flashViewersText">
+                        <span class="lvc-num" id="flashViewersNum">14</span><span id="flashViewersLabel"> people viewing right now</span>
+                    </span>
                 </div>
             </div>
 

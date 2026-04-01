@@ -7040,46 +7040,104 @@ document.addEventListener('DOMContentLoaded', () => {
         updateIndicator();
     };
 
-    const shuffleFlashOffersDaily = () => {
+    /* ── Flash Offers daily rotation ─────────────────────────────────────────
+     *  Every 24 hours a new seed-shuffled set of priced products is shown.
+     *  Products are ONLY included when prices.json has at least one price > 0.
+     *  If JS / prices fail, the static HTML fallback remains untouched.
+     * ────────────────────────────────────────────────────────────────────── */
+    const initFlashOffersRotation = async () => {
         const carousel = document.getElementById('productCarousel');
         if (!carousel) return;
 
-        const cards = Array.from(carousel.children).filter((node) => node.nodeType === 1);
-        if (!cards.length) return;
+        /* ── Complete catalog with metadata ───────────────────────────────── */
+        const FLASH_POOL = [
+            { id: 'armani-stronger-with-you-absolutely-perfume',
+              name: 'Armani Stronger With You Absolutely Perfume', brand: 'GIORGIO ARMANI',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/first.webp',
+              badge: 'NEW', badgeRotate: 'NEW|BEST OFFER|TOP TREND', reviews: 5 },
+            { id: 'armani-stronger-with-you-powerfully-eau-de-parfum',
+              name: 'Armani Stronger With You Powerfully Eau de Parfum', brand: 'GIORGIO ARMANI',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp',
+              badge: 'HOT PICK', badgeRotate: 'NEW|HOT PICK|BEST SELLER', reviews: 6 },
+            { id: 'azzaro-forever-wanted-elixir-eau-de-parfum',
+              name: 'Azzaro Forever Wanted Elixir Eau de Parfum', brand: 'AZZARO',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg',
+              badge: 'NEW', badgeRotate: 'NEW|ELIXIR|LIMITED', reviews: 9 },
+            { id: 'azzaro-the-most-wanted-eau-de-parfum-intense',
+              name: 'Azzaro The Most Wanted Eau de Parfum Intense', brand: 'AZZARO',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/1.webp',
+              badge: 'NEW', badgeRotate: 'NEW|INTENSE|MUST HAVE', reviews: 11 },
+            { id: 'azzaro-the-most-wanted-parfum',
+              name: 'Azzaro The Most Wanted Parfum', brand: 'AZZARO',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/1.webp',
+              badge: 'NEW', badgeRotate: 'NEW|TOP PICK|LUXURY', reviews: 7 },
+            { id: 'bleu-de-chanel-eau-de-parfum-spray',
+              name: 'BLEU DE CHANEL Eau de Parfum spray', brand: 'CHANEL',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/1.jpg',
+              badge: 'ICONIC', badgeRotate: 'ICONIC|BEST SELLER|CLASSIC', reviews: 24 },
+            { id: 'boss-bottled-absolu-intense',
+              name: 'Boss Bottled Absolu Intense', brand: 'HUGO BOSS',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/1.jpeg',
+              badge: 'NEW', badgeRotate: 'NEW|INTENSE|JUST LANDED', reviews: 11 },
+            { id: 'carolina-herrera-bad-boy-eau-de-toilette',
+              name: 'Carolina Herrera Bad Boy Eau de Toilette', brand: 'CAROLINA HERRERA',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/1.jpg',
+              badge: 'NEW', badgeRotate: 'NEW|BAD BOY|BOLD', reviews: 14 },
+            { id: 'gucci-guilty-absolu-de-parfum-pour-homme',
+              name: 'Gucci Guilty Absolu de Parfum Pour Homme', brand: 'GUCCI',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Absolu%20de%20Parfum%20Pour%20Homme/1.webp',
+              badge: 'LUXURY', badgeRotate: 'LUXURY|GUILTY|TOP PICK', reviews: 8 },
+            { id: 'hugo-boss-boss-bottled-elixir-intense',
+              name: 'Hugo Boss Boss Bottled Elixir Intense', brand: 'HUGO BOSS',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/1.jpeg',
+              badge: 'NEW', badgeRotate: 'NEW|ELIXIR|JUST LANDED', reviews: 9 },
+            { id: 'dior-homme-intense-eau-de-parfum',
+              name: 'DIOR HOMME INTENSE Eau de Parfum', brand: 'DIOR',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/1.jpg',
+              badge: 'INTENSE', badgeRotate: 'INTENSE|DIOR|ICONIC', reviews: 16 },
+            { id: 'dior-sauvage-eau-de-parfum',
+              name: 'DIOR SAUVAGE Eau de Parfum', brand: 'DIOR',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Dior%20SAUVAGE%20Eau%20de%20Parfum/1.jpg',
+              badge: 'NEW', badgeRotate: 'NEW|SAUVAGE|BEST SELLER', reviews: 28 },
+            { id: 'emporio-armani-stronger-with-you-intensely-edp',
+              name: 'Emporio Armani Stronger With You Intensely EDP', brand: 'GIORGIO ARMANI',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/2.webp',
+              badge: 'BEST OFFER', badgeRotate: 'NEW|BEST SELLER|BEST OFFER', reviews: 13 },
+            { id: 'gentleman-private-reserve-eau-de-parfum',
+              name: 'Gentleman Private Reserve Eau de Parfum', brand: 'GIVENCHY',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/1.png',
+              badge: 'RARE', badgeRotate: 'RARE|LUXURY|LIMITED', reviews: 7 },
+            { id: 'guerlain-l-homme-ideal-l-intense-eau-de-parfum',
+              name: "Guerlain L'Homme Id\u00e9al L'Intense Eau de Parfum", brand: 'GUERLAIN',
+              image: "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'Homme%20Id%C3%A9al%20L'Intense%20Eau%20de%20Parfum/1.webp",
+              badge: 'NEW', badgeRotate: 'NEW|INTENSE|LUXURY', reviews: 13 },
+            { id: 'guerlain-l-homme-ideal-extreme',
+              name: "GUERLAIN L'homme Id\u00e9al Extr\u00eame", brand: 'GUERLAIN',
+              image: "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'homme%20Id%C3%A9al%20Extr%C3%AAme/1.jpg",
+              badge: 'NEW', badgeRotate: 'NEW|EXTREME|LUXURY', reviews: 14 },
+            { id: 'hugo-boss-the-scent-for-him-elixir',
+              name: 'Hugo Boss The Scent For Him Elixir', brand: 'HUGO BOSS',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/1.png',
+              badge: 'NEW', badgeRotate: 'NEW|HOT PICK|JUST LANDED', reviews: 8 },
+            { id: 'givenchy-gentleman-society-amber-eau-de-parfum',
+              name: 'Givenchy Gentleman Society Amber Eau de Parfum', brand: 'GIVENCHY',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/1.jpg',
+              badge: 'NEW', badgeRotate: 'NEW|AMBER|LUXURY', reviews: 10 },
+            { id: 'versace-dylan-blue-eau-de-toilette',
+              name: 'Versace Dylan Blue Eau de Toilette', brand: 'VERSACE',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Dylan%20Blue%20%20Eau%20de%20Toilette/1.jpg',
+              badge: 'NEW', badgeRotate: 'NEW|BLUE|MEDITERRANEAN', reviews: 18 },
+            { id: 'versace-eros-flame-eau-de-parfum',
+              name: 'Versace Eros Flame Eau de Parfum', brand: 'VERSACE',
+              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Flame%20Eau%20de%20Parfum/1.jpg',
+              badge: 'NEW', badgeRotate: 'NEW|FLAME|SEDUCTIVE', reviews: 16 },
+        ];
 
-        const dateKey = new Date().toISOString().slice(0, 10);
-        const storageKey = `ipordise-flash-offers-order-${dateKey}`;
-        const getCardKey = (card) => {
-            const nameKey = canonicalProductName(card.dataset.productName || card.textContent || '');
-            const brandKey = canonicalProductName(card.dataset.productBrand || '');
-            return `${nameKey}|${brandKey}`;
-        };
-
-        const tryGetStoredOrder = () => {
-            try {
-                const raw = localStorage.getItem(storageKey);
-                return raw ? JSON.parse(raw) : null;
-            } catch (error) {
-                return null;
-            }
-        };
-
-        const saveOrder = (order) => {
-            try {
-                localStorage.setItem(storageKey, JSON.stringify(order));
-            } catch (error) {
-                // Ignore storage errors (private mode or blocked storage).
-            }
-        };
-
+        /* ── Seeded deterministic shuffle (same result for same date) ─────── */
         const seededShuffle = (items, seedText) => {
-            let seed = 0;
-            for (let index = 0; index < seedText.length; index += 1) {
-                seed = ((seed << 5) - seed) + seedText.charCodeAt(index);
-                seed |= 0;
-            }
-
-            let t = Math.abs(seed) + 0x6D2B79F5;
+            let s = 0;
+            for (let i = 0; i < seedText.length; i++) { s = ((s << 5) - s) + seedText.charCodeAt(i); s |= 0; }
+            let t = Math.abs(s) + 0x6D2B79F5;
             const rand = () => {
                 t += 0x6D2B79F5;
                 let r = t;
@@ -7087,31 +7145,114 @@ document.addEventListener('DOMContentLoaded', () => {
                 r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
                 return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
             };
-
-            const shuffled = items.slice();
-            for (let index = shuffled.length - 1; index > 0; index -= 1) {
-                const swapIndex = Math.floor(rand() * (index + 1));
-                [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+            const arr = items.slice();
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(rand() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
             }
-            return shuffled;
+            return arr;
         };
 
-        const cardMap = new Map(cards.map((card) => [getCardKey(card), card]));
-        const storedOrder = tryGetStoredOrder();
+        /* ── Load prices and filter pool to products with real prices ─────── */
+        let pricesById = {};
+        try { pricesById = await loadPricesJson(); } catch (_) { /* keep empty */ }
 
-        let orderedCards = [];
-        if (Array.isArray(storedOrder) && storedOrder.length) {
-            orderedCards = storedOrder.map((key) => cardMap.get(key)).filter(Boolean);
-            const missing = cards.filter((card) => !storedOrder.includes(getCardKey(card)));
-            orderedCards = orderedCards.concat(missing);
-        } else {
-            orderedCards = seededShuffle(cards, dateKey);
-            saveOrder(orderedCards.map((card) => getCardKey(card)));
+        const validProducts = FLASH_POOL.filter((product) => {
+            const formatted = formatCatalogPrice(product.id, pricesById);
+            return typeof formatted === 'string' && formatted.trim().length > 0;
+        });
+
+        // If nothing priced, do not touch the existing static HTML
+        if (!validProducts.length) return;
+
+        /* ── Pick today's set (persist in localStorage for consistency) ───── */
+        const dateKey   = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        const storeKey  = `ipordise-flash-rotation-${dateKey}`;
+        const SHOW_COUNT = 10;
+
+        let todayProducts = null;
+        try {
+            const stored = localStorage.getItem(storeKey);
+            if (stored) {
+                const storedIds = JSON.parse(stored);
+                const validMap  = new Map(validProducts.map((p) => [p.id, p]));
+                const PINNED_LAST_ID = 'gucci-guilty-absolu-de-parfum-pour-homme';
+                let restored = storedIds.map((id) => validMap.get(id)).filter(Boolean);
+                // Ensure pinned product is always last
+                const pinnedIdx = restored.findIndex((p) => p.id === PINNED_LAST_ID);
+                if (pinnedIdx > -1 && pinnedIdx !== restored.length - 1) {
+                    const [pinned] = restored.splice(pinnedIdx, 1);
+                    restored.push(pinned);
+                }
+                if (restored.length >= Math.min(SHOW_COUNT, validProducts.length)) todayProducts = restored;
+            }
+        } catch (_) { /* ignore */ }
+
+        if (!todayProducts) {
+            // Pin Gucci Guilty Absolu as the last card — always
+            const PINNED_LAST_ID = 'gucci-guilty-absolu-de-parfum-pour-homme';
+            const pinnedProduct  = validProducts.find((p) => p.id === PINNED_LAST_ID);
+            const shufflePool    = validProducts.filter((p) => p.id !== PINNED_LAST_ID);
+            const shuffled       = seededShuffle(shufflePool, dateKey).slice(0, pinnedProduct ? SHOW_COUNT - 1 : SHOW_COUNT);
+            todayProducts = pinnedProduct ? [...shuffled, pinnedProduct] : shuffled;
+            try { localStorage.setItem(storeKey, JSON.stringify(todayProducts.map((p) => p.id))); } catch (_) { /* ignore */ }
         }
 
-        orderedCards.forEach((card) => {
-            carousel.appendChild(card);
-        });
+        // Purge old rotation keys (anything not today)
+        try {
+            Object.keys(localStorage)
+                .filter((k) => k.startsWith('ipordise-flash-rotation-') && k !== storeKey)
+                .forEach((k) => localStorage.removeItem(k));
+            // Also clean legacy shuffle keys
+            Object.keys(localStorage)
+                .filter((k) => k.startsWith('ipordise-flash-offers-order-'))
+                .forEach((k) => localStorage.removeItem(k));
+        } catch (_) { /* ignore */ }
+
+        /* ── Build card HTML for each product ────────────────────────────── */
+        const esc = (str) => String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+        const buildFlashCard = (product) => {
+            const priceText  = formatCatalogPrice(product.id, pricesById);
+            const sizeLabels = getCatalogCardSizeLabels(product.name, product.id, priceText, pricesById, []);
+
+            // Strip brand prefix from display name (brand is shown separately)
+            const displayName = product.name
+                .replace(new RegExp('^' + (product.brand || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*', 'i'), '')
+                .trim() || product.name;
+
+            const favId = `${product.id}-${(product.brand || '').toLowerCase().replace(/\s+/g, '-')}`;
+
+            const sizeBadgesHTML = sizeLabels.slice(0, 2)
+                .map((label, i) =>
+                    `<span class="card-size-badge text-[10px] font-bold border ${i === 0 ? 'border-gray-800' : 'border-gray-300 text-gray-500'} px-2 py-1 rounded">${esc(label)}</span>`
+                ).join('');
+
+            return `<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300 group js-product-link relative flex flex-col h-full min-w-[260px] max-w-[260px] snap-start shrink-0 cursor-pointer lux-reveal" data-product-name="${esc(product.name)}" data-id="${esc(product.id)}" data-product-brand="${esc(product.brand)}" data-product-price="${esc(priceText)}" data-product-old-price="" data-product-discount="" data-product-reviews="${product.reviews || 8}" data-product-image="${esc(product.image)}" tabindex="0" data-product-sizes="${esc(sizeLabels.join('|'))}"><span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded product-rotating-badge badge-state-new" data-badge-rotate="${esc(product.badgeRotate || 'NEW|FLASH|LIMITED')}">${esc(product.badge || 'NEW')}</span><button class="product-favorite-btn absolute top-4 right-4" data-favorite-id="${esc(favId)}"><i class="far fa-heart"></i></button><div class="h-48 flex items-center justify-center mt-6 mb-4"><img src="${esc(product.image)}" alt="${esc(product.name)}" class="max-h-full object-contain group-hover:scale-105 transition duration-300" loading="lazy" decoding="async"></div><div class="flex-grow flex flex-col"><p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">${esc(product.brand)}</p><h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">${esc(displayName)}</h3><p class="price">${esc(priceText)}</p><div class="flex items-center gap-2 mb-3 catalog-size-badges">${sizeBadgesHTML}</div><div class="mt-auto pt-3 border-t border-gray-100 pb-1"><button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button></div></div></div>`;
+        };
+
+        /* ── Inject into carousel with smooth fade ────────────────────────── */
+        carousel.style.transition = 'opacity 0.28s ease';
+        carousel.style.opacity = '0';
+
+        setTimeout(() => {
+            carousel.innerHTML = todayProducts.map(buildFlashCard).join('');
+            carousel.style.opacity = '1';
+
+            // Re-bind interactive behaviors on the fresh set of cards
+            bindProductLinks();
+            initProductBadgeRotation();
+            initWishlistButtons();
+
+            // Trigger entrance animation on all new cards
+            requestAnimationFrame(() => {
+                Array.from(carousel.querySelectorAll('.lux-reveal'))
+                    .forEach((card) => card.classList.add('lux-reveal--visible'));
+            });
+
+            // Reset scroll to start
+            carousel.scrollLeft = 0;
+        }, 290);
     };
 
     const initCarousel = (carouselId) => {
@@ -7299,7 +7440,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nextButton.addEventListener('click', () => scrollCarousel('next'));
     };
 
-    shuffleFlashOffersDaily();
+    void initFlashOffersRotation();
     const limitNewArrivalsToLatest = () => {
         const carousel = document.getElementById('newArrivalsCarousel');
         if (!carousel) return;
@@ -8910,27 +9051,212 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeMobileMenu);
     if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', closeMobileMenu);
 
-    /* --- Flash Offers Countdown Timer --- */
-    const flashHoursEl = document.getElementById('flashHours');
-    const flashMinutesEl = document.getElementById('flashMinutes');
-    const flashSecondsEl = document.getElementById('flashSeconds');
+    /* --- Flash Offers Live Stock Counter --- */
+    const flashStockCountEl  = document.getElementById('flashStockCount');
+    const flashStockFillEl   = document.getElementById('flashStockFill');
+    const flashViewersTextEl = document.getElementById('flashViewersText');
 
-    if (flashHoursEl && flashMinutesEl && flashSecondsEl) {
-        const updateFlashCountdown = () => {
-            const now = new Date();
-            const endOfDay = new Date(now);
-            endOfDay.setHours(23, 59, 59, 999);
-            const diff = endOfDay - now;
-            const hours = Math.floor(diff / 3600000);
-            const minutes = Math.floor((diff % 3600000) / 60000);
-            const seconds = Math.floor((diff % 60000) / 1000);
-            flashHoursEl.textContent = String(hours).padStart(2, '0');
-            flashMinutesEl.textContent = String(minutes).padStart(2, '0');
-            flashSecondsEl.textContent = String(seconds).padStart(2, '0');
+    if (flashStockCountEl) {
+        const STOCK_MAX = 12;
+
+        // Seed from sessionStorage so count persists across small navigations in same tab
+        let stockCount = parseInt(sessionStorage.getItem('_flashStock') || '0', 10);
+        if (!stockCount || stockCount < 2 || stockCount > STOCK_MAX) {
+            stockCount = Math.floor(Math.random() * 6) + 5; // 5–10
+        }
+        let viewerCount = parseInt(sessionStorage.getItem('_flashViewers') || '0', 10);
+        if (!viewerCount || viewerCount < 8 || viewerCount > 24) {
+            viewerCount = Math.floor(Math.random() * 10) + 10; // 10–19
+        }
+
+        const updateStockFill = (count) => {
+            if (!flashStockFillEl) return;
+            flashStockFillEl.style.width = Math.round((count / STOCK_MAX) * 100) + '%';
         };
-        updateFlashCountdown();
-        setInterval(updateFlashCountdown, 1000);
+
+        const updateStockDisplay = (newCount, animate) => {
+            if (!animate) {
+                flashStockCountEl.textContent = newCount;
+                updateStockFill(newCount);
+                return;
+            }
+            flashStockCountEl.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+            flashStockCountEl.style.opacity = '0';
+            flashStockCountEl.style.transform = 'translateY(-6px)';
+            setTimeout(() => {
+                flashStockCountEl.textContent = newCount;
+                flashStockCountEl.style.opacity = '1';
+                flashStockCountEl.style.transform = 'translateY(0)';
+                updateStockFill(newCount);
+            }, 360);
+        };
+
+        const updateViewersDisplay = (newCount) => {
+            if (!flashViewersTextEl) return;
+            flashViewersTextEl.style.transition = 'opacity 0.4s ease';
+            flashViewersTextEl.style.opacity = '0';
+            setTimeout(() => {
+                const _isFr = localStorage.getItem('ipordise-language') === 'fr';
+                flashViewersTextEl.textContent = _isFr
+                    ? newCount + ' personnes consultent en ce moment'
+                    : newCount + ' people viewing right now';
+                flashViewersTextEl.style.opacity = '1';
+            }, 420);
+        };
+
+        // Initial render
+        updateStockDisplay(stockCount, false);
+        updateViewersDisplay(viewerCount);
+
+        // Slowly decrease stock — random interval between 18s and 45s
+        const scheduleStockDrop = () => {
+            const delay = (Math.random() * 27000) + 18000;
+            setTimeout(() => {
+                if (stockCount > 2) {
+                    stockCount = Math.max(2, stockCount - 1);
+                    sessionStorage.setItem('_flashStock', stockCount);
+                    updateStockDisplay(stockCount, true);
+                }
+                scheduleStockDrop();
+            }, delay);
+        };
+        scheduleStockDrop();
+
+        // Viewers fluctuate slightly every 12–22s
+        const scheduleViewerFluctuation = () => {
+            const delay = (Math.random() * 10000) + 12000;
+            setTimeout(() => {
+                const delta = Math.random() < 0.5 ? 1 : -1;
+                viewerCount = Math.min(28, Math.max(6, viewerCount + delta));
+                sessionStorage.setItem('_flashViewers', viewerCount);
+                updateViewersDisplay(viewerCount);
+                scheduleViewerFluctuation();
+            }, delay);
+        };
+        scheduleViewerFluctuation();
     }
+
+    /* --- Live Visitors Counter — smart time-based simulation --- */
+    (function lvcViewerPill() {
+        const numEl   = document.getElementById('flashViewersNum');
+        const labelEl = document.getElementById('flashViewersLabel');
+        const pillEl  = document.getElementById('flashStockBar');
+        if (!numEl) return;
+
+        /* ── Time-based traffic bands ────────────────────────────────────────
+         *  Returns [min, max] for the current hour of day.
+         * ─────────────────────────────────────────────────────────────────── */
+        const getTrafficBand = () => {
+            const h = new Date().getHours();
+            if (h >= 8  && h < 12) return [3,  12];   // morning
+            if (h >= 12 && h < 20) return [10, 28];   // afternoon
+            if (h >= 20 && h < 24) return [15, 35];   // evening peak
+            return [1, 6];                             // late night
+        };
+
+        /* ── Clamp a value within the current traffic band ─────────────────── */
+        const clampToBand = (val) => {
+            const [lo, hi] = getTrafficBand();
+            return Math.min(hi, Math.max(lo, val));
+        };
+
+        /* ── Seed initial count from sessionStorage or derive from time band ── */
+        const [bandLo, bandHi] = getTrafficBand();
+        let viewerCount = parseInt(sessionStorage.getItem('_flashViewers') || '0', 10);
+        if (!viewerCount || viewerCount < bandLo || viewerCount > bandHi) {
+            // Pick a random value inside the band, biased toward the lower third on first visit
+            viewerCount = Math.floor(Math.random() * (bandHi - bandLo + 1)) + bandLo;
+        }
+
+        /* ── Language helper ────────────────────────────────────────────────── */
+        const getLang = () => localStorage.getItem('ipordise-language') === 'fr';
+
+        const updateLabel = () => {
+            if (!labelEl) return;
+            labelEl.textContent = getLang()
+                ? ' personnes consultent en ce moment'
+                : ' people viewing right now';
+        };
+
+        numEl.textContent = viewerCount;
+        updateLabel();
+        window.addEventListener('ipordise:langchange', updateLabel);
+
+        /* ── Animate the number change (flip-out → update → flip-in) ───────── */
+        const animateCount = (newVal) => {
+            if (pillEl) {
+                pillEl.classList.remove('lvc-pulse');
+                void pillEl.offsetWidth;
+                pillEl.classList.add('lvc-pulse');
+                setTimeout(() => pillEl.classList.remove('lvc-pulse'), 500);
+            }
+            numEl.classList.remove('lvc-flip-in', 'lvc-flip-out');
+            void numEl.offsetWidth;
+            numEl.classList.add('lvc-flip-out');
+            setTimeout(() => {
+                numEl.textContent = newVal;
+                numEl.classList.remove('lvc-flip-out');
+                void numEl.offsetWidth;
+                numEl.classList.add('lvc-flip-in');
+                setTimeout(() => numEl.classList.remove('lvc-flip-in'), 420);
+            }, 200);
+        };
+
+        /* ── Scheduling logic ────────────────────────────────────────────────
+         *  - Base interval: 8–20 s
+         *  - 18% chance of a "frozen" tick (skip the update, just reschedule)
+         *  - Delta: mostly ±1, sometimes ±2, rarely ±3 — capped by traffic band
+         * ─────────────────────────────────────────────────────────────────── */
+        let consecutiveSameDir = 0; // prevent long monotonic runs
+
+        const scheduleNext = () => {
+            // Random delay: 8 000 – 20 000 ms
+            const delay = Math.floor(Math.random() * 12000) + 8000;
+
+            setTimeout(() => {
+                // 18% chance: freeze this tick (no visual change)
+                if (Math.random() < 0.18) {
+                    scheduleNext();
+                    return;
+                }
+
+                const [lo, hi] = getTrafficBand();
+
+                // Bias direction toward band center to avoid drifting to extremes
+                const mid        = (lo + hi) / 2;
+                const aboveMid   = viewerCount > mid;
+                let dirBias      = aboveMid ? -1 : 1;   // nudge toward center
+
+                // Randomly override bias 40% of the time for natural variance
+                if (Math.random() < 0.40) dirBias *= -1;
+
+                // Prevent more than 3 consecutive same-direction steps
+                if (Math.abs(consecutiveSameDir) >= 3) dirBias = -Math.sign(consecutiveSameDir);
+
+                // Delta size: 55% → ±1, 35% → ±2, 10% → ±3
+                const r = Math.random();
+                const magnitude = r < 0.55 ? 1 : r < 0.90 ? 2 : 3;
+                const delta = dirBias * magnitude;
+
+                const newCount = Math.min(hi, Math.max(lo, viewerCount + delta));
+
+                // Track direction streak
+                if (newCount > viewerCount)      consecutiveSameDir = Math.max(0, consecutiveSameDir) + 1;
+                else if (newCount < viewerCount) consecutiveSameDir = Math.min(0, consecutiveSameDir) - 1;
+                else                             consecutiveSameDir = 0;
+
+                if (newCount !== viewerCount) {
+                    viewerCount = newCount;
+                    try { sessionStorage.setItem('_flashViewers', viewerCount); } catch (_) {}
+                    animateCount(viewerCount);
+                }
+
+                scheduleNext();
+            }, delay);
+        };
+
+        scheduleNext();
+    })();
 
     /* --- Back to Top Button --- */
     const backToTopBtn = document.getElementById('backToTop');
