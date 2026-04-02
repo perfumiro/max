@@ -1,4 +1,4 @@
-﻿/* ═══════════════════════════════════════════
+﻿﻿/* ═══════════════════════════════════════════
    Scroll Progress Bar — class-based (JS: .scroll-progress)
    ═══════════════════════════════════════════ */
 .scroll-progress {
@@ -15172,6 +15172,16 @@ nav[aria-label="Breadcrumb"] ol {
     color: #e73c3c !important;
     transform: scale(1.08) !important;
     box-shadow: 0 8px 22px rgba(231,60,60,0.18) !important;
+}
+/* Active / saved state -- shown when this product is already in the user's favourites */
+.product-wishlist-btn.is-active,
+.product-wishlist-btn.is-active i {
+    color: #e73c3c !important;
+}
+.product-wishlist-btn.is-active {
+    border-color: #e73c3c !important;
+    background: #fff1f2 !important;
+    box-shadow: 0 4px 14px rgba(231,60,60,0.18) !important;
 }
 
 /* â”€â”€ Qty box â”€â”€ */

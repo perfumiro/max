@@ -6006,6 +6006,54 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // ── Favourite toast notification ──────────────────────────────────────────
+    // Shows a slim pill toast after adding / removing a favourite.
+    // Self-contained — no external dependencies.
+    const showFavouriteToast = (() => {
+        let _timer = null;
+        return (added, productName) => {
+            const existing = document.getElementById('ipordise-fav-toast');
+            if (existing) existing.remove();
+            clearTimeout(_timer);
+
+            const toast = document.createElement('div');
+            toast.id = 'ipordise-fav-toast';
+            const label = added
+                ? `<i class="fas fa-heart" style="color:#e73c3c"></i>&nbsp; <strong>${productName || 'Product'}</strong> added to wishlist`
+                : `<i class="far fa-heart" style="color:#e73c3c"></i>&nbsp; Removed from wishlist`;
+            toast.innerHTML = label;
+            Object.assign(toast.style, {
+                position:       'fixed',
+                bottom:         '1.5rem',
+                left:           '50%',
+                transform:      'translateX(-50%) translateY(5rem)',
+                background:     '#fff',
+                border:         '1px solid rgba(0,0,0,0.09)',
+                borderRadius:   '999px',
+                padding:        '0.6rem 1.35rem',
+                fontSize:       '0.8rem',
+                fontFamily:     'inherit',
+                color:          '#111827',
+                boxShadow:      '0 6px 28px rgba(15,23,42,0.15)',
+                zIndex:         '99999',
+                whiteSpace:     'nowrap',
+                opacity:        '0',
+                transition:     'transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.28s ease',
+                pointerEvents:  'none',
+            });
+            document.body.appendChild(toast);
+            requestAnimationFrame(() => {
+                toast.style.transform = 'translateX(-50%) translateY(0)';
+                toast.style.opacity   = '1';
+            });
+            _timer = setTimeout(() => {
+                toast.style.transform = 'translateX(-50%) translateY(5rem)';
+                toast.style.opacity   = '0';
+                setTimeout(() => toast.remove(), 350);
+            }, 2400);
+        };
+    })();
+
     const initWishlistButtons = () => {
         const headerWishlistButtons = document.querySelectorAll('.header-icon-btn[aria-label="Wishlist"]');
         const productFavoriteButtons = Array.from(document.querySelectorAll('button i.fa-heart, button i.far.fa-heart, button i.fas.fa-heart'))
@@ -6014,11 +6062,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const storageKey = 'ipordise-wishlist-items';
 
+        // Last-known cache key: updated on every ipordise:favs-changed so the next page
+        // load can show filled hearts instantly — even before Firebase resolves.
+        const cacheKey = 'ipordise-favs-cache';
+
         const readWishlist = () => {
             // Delegate to the centralized FavStore when it is available
             if (window.__ipordise_favs) return window.__ipordise_favs.getFavourites();
             try {
-                const raw = localStorage.getItem(storageKey);
+                // Prefer the guest localStorage key; fall back to the last-known cache
+                // (the cache is kept even for logged-in users so page loads feel instant).
+                const raw = localStorage.getItem(storageKey) || localStorage.getItem(cacheKey);
                 const parsed = raw ? JSON.parse(raw) : [];
                 return Array.isArray(parsed) ? parsed : [];
             } catch (error) {
@@ -6038,7 +6092,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const getFavoriteId = (data) => {
-            const seed = `${data.name || ''}-${data.brand || ''}-${data.price || ''}`
+            // Use the stable data-id attribute as the canonical key so a product
+            // saved from any surface (static card, flash carousel, product page)
+            // always stores and matches with the same identifier.
+            if (data.id) return String(data.id).trim();
+            const seed = `${data.name || ''}-${data.brand || ''}`
                 .toLowerCase()
                 .replace(/\s+/g, '-')
                 .replace(/[^a-z0-9-]/g, '');
@@ -6083,11 +6141,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const wishlist = readWishlist();
             const ids = new Set(wishlist.map((item) => item.id));
 
-            productFavoriteButtons.forEach((button) => {
+            // Live query — always reflects current DOM (safe after carousel refresh)
+            document.querySelectorAll('.product-favorite-btn').forEach((button) => {
                 const favoriteId = button.dataset.favoriteId;
                 const isActive = !!favoriteId && ids.has(favoriteId);
                 button.classList.toggle('is-active', isActive);
-                button.classList.toggle('product-favorite-btn', true);
 
                 const icon = button.querySelector('i');
                 if (!icon) return;
@@ -6098,7 +6156,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const setHeaderWishlistCount = () => {
             const count = readWishlist().length;
-            headerWishlistButtons.forEach((button) => {
+            // Live query — always reflects current DOM (safe after applyOfficialHeaderFooter)
+            document.querySelectorAll('.header-icon-btn[aria-label="Wishlist"]').forEach((button) => {
                 button.classList.toggle('is-active', count > 0);
                 let badge = button.querySelector('.header-wishlist-badge');
 
@@ -6226,14 +6285,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const favoriteId = getFavoriteId(data);
             button.dataset.favoriteId = favoriteId;
 
-            button.addEventListener('click', () => {
-                // Require login before saving a favourite
-                if (!window.__ipordise_user) {
-                    const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
-                    window.location.href = (inPages ? 'login.html' : 'pages/login.html') + '?tab=signup';
-                    return;
-                }
+            // Guard against double-binding when initWishlistButtons() is called a second time
+            // (e.g. after the flash carousel refreshes its cards at 290ms).
+            if (button.dataset.wishlistClickBound === 'true') return;
+            button.dataset.wishlistClickBound = 'true';
 
+            button.addEventListener('click', () => {
                 const favItem = {
                     id:    favoriteId,
                     name:  data.name,
@@ -6242,12 +6299,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     image: data.image,
                 };
 
+                // Determine if this item is currently in the wishlist (before toggle)
+                const wasActive = readWishlist().some((item) => item.id === favoriteId);
+
                 if (window.__ipordise_favs) {
-                    // Async path: store handles Firestore persistence.
-                    // The ipordise:favs-changed event will trigger all UI updates.
+                    // Optimistic immediate UI sync — update hearts right away
+                    const _currentList = window.__ipordise_favs.getFavourites();
+                    const _optimisticList = wasActive
+                        ? _currentList.filter((i) => i.id !== favoriteId)
+                        : [favItem, ..._currentList];
+                    const _optimisticIds = new Set(_optimisticList.map((i) => i.id));
+                    document.querySelectorAll('.product-favorite-btn').forEach((btn) => {
+                        const _fid = btn.dataset.favoriteId;
+                        if (!_fid) return;
+                        const _active = _optimisticIds.has(_fid);
+                        btn.classList.toggle('is-active', _active);
+                        const _ic = btn.querySelector('i');
+                        if (_ic) { _ic.classList.toggle('far', !_active); _ic.classList.toggle('fas', _active); }
+                    });
+                    // FavStore updates _favourites synchronously before awaiting _persist(),
+                    // so calling setHeaderWishlistCount() AFTER toggleFavourite picks up the new count.
                     window.__ipordise_favs.toggleFavourite(favItem);
+                    setHeaderWishlistCount();
                 } else {
-                    // Fallback: store not yet loaded — write directly to localStorage
+                    // Fallback: FavStore module not yet loaded — write directly to localStorage
                     const wishlist = readWishlist();
                     const exists   = wishlist.some((item) => item.id === favoriteId);
                     const nextWishlist = exists
@@ -6260,6 +6335,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (menu.classList.contains('is-open')) renderWishlistMenu(menu);
                     });
                 }
+
+                // Show a toast notification
+                showFavouriteToast(!wasActive, data.name);
             });
         });
 
@@ -6271,6 +6349,10 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             headerWishlistButtons.forEach((button) => {
+                // Guard against double-binding when initWishlistButtons is called twice
+                if (button.dataset.wishlistNavBound) return;
+                button.dataset.wishlistNavBound = 'true';
+
                 // FIX: Same pattern — ensure the wishlist button is in its own dedicated
                 // wrapper so .header-wishlist-wrap only covers the wishlist icon, not the
                 // entire icons row (which would conflict with .header-account-wrap).
@@ -6351,11 +6433,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // React to Firestore/auth-synced changes from the favourites store.
         // This fires after login (merge), after logout (clear), and after any toggle/remove.
-        document.addEventListener('ipordise:favs-changed', () => {
+        // Guard: only bind once per page load even if initWishlistButtons is called multiple times.
+        if (!window.__ipordise_favs_listener_set) {
+            window.__ipordise_favs_listener_set = true;
+        document.addEventListener('ipordise:favs-changed', (evt) => {
+            // Update the last-known cache so the next page load shows filled hearts instantly
+            const freshList = evt.detail?.favourites ||
+                (window.__ipordise_favs ? window.__ipordise_favs.getFavourites() : []);
+            try { localStorage.setItem(cacheKey, JSON.stringify(freshList)); } catch { /* ignore */ }
+
+            // Re-collect all heart buttons in case DOM changed since init
+            const allFavBtns = Array.from(document.querySelectorAll('.product-favorite-btn'));
+            const wishlistIds = new Set(freshList.map((i) => i.id));
+            allFavBtns.forEach((btn) => {
+                const fid = btn.dataset.favoriteId;
+                const active = !!fid && wishlistIds.has(fid);
+                btn.classList.toggle('is-active', active);
+                const icon = btn.querySelector('i');
+                if (icon) { icon.classList.toggle('far', !active); icon.classList.toggle('fas', active); }
+            });
             syncFavoriteButtonsUI();
             setHeaderWishlistCount();
             document.querySelectorAll('.wishlist-menu.is-open').forEach(renderWishlistMenu);
         });
+        } // end if (!window.__ipordise_favs_listener_set)
     };
 
     const initDiscoverFilters = () => {
@@ -7354,7 +7455,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .replace(new RegExp('^' + (product.brand || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*', 'i'), '')
                 .trim() || product.name;
 
-            const favId = `${product.id}-${(product.brand || '').toLowerCase().replace(/\s+/g, '-')}`;
+            const favId = product.id; // matches getFavoriteId which uses data.id
 
             const sizeBadgesHTML = sizeLabels.slice(0, 2)
                 .map((label, i) =>
