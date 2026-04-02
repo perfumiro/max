@@ -14,23 +14,24 @@
     </script>
     <title data-i18n-title="product.page_title">Buy Luxury Perfumes Online in Morocco | Authentic Fragrances — IPORDISE</title>
     <meta name="description" content="View perfume details, sizes and pricing at IPORDISE Morocco. 100% authentic luxury fragrances — niche, designer &amp; Arabian. Free delivery 35 MAD nationwide.">
-    <link rel="canonical" href="https://www.ipordise.com/product">
+    <link rel="canonical" href="https://www.ipordise.com/pages/product">
     <!-- Open Graph -->
     <meta property="og:title" content="Luxury Perfume Details — IPORDISE Morocco">
     <meta property="og:description" content="Authentic luxury fragrance — view sizes, accords and pricing. Free delivery 35 MAD across Morocco. 100% verified.">
     <meta property="og:type" content="product">
-    <meta property="og:url" content="https://www.ipordise.com/product">
-    <meta property="og:site_name" content="IPORDISE">
-    <meta property="og:image" content="https://raw.githubusercontent.com/perfumiro/max/main/assets/Herosectionphotos/FOR%20HIM.png">
+    <meta property="og:url" content="https://www.ipordise.com/pages/product">
+    <meta property="og:site_name" content="IPORDISE PARFUMS">
+    <meta property="og:image" content="https://www.ipordise.com/assets/Herosectionphotos/logo%20area.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="IPORDISE PARFUMS – Luxury Perfumes in Morocco">
     <meta property="og:locale" content="en_US">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@ipordise">
     <meta name="twitter:title" content="Luxury Perfume — IPORDISE Morocco">
     <meta name="twitter:description" content="Authentic niche, designer &amp; Arabian fragrance. Free delivery 35 MAD anywhere in Morocco.">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/perfumiro/max/main/assets/Herosectionphotos/FOR%20HIM.png">
+    <meta name="twitter:image" content="https://www.ipordise.com/assets/Herosectionphotos/logo%20area.png">
     <!-- Technical SEO -->
     <meta name="theme-color" content="#1a1a1a">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -47,6 +48,31 @@
     <script src="../script.js?v=20260329c"></script>
     <script src="../i18n.js?v=20260329c"></script>
     <link rel="stylesheet" href="../style.css?v=20260329c">
+    <!-- Dynamic canonical — updated per-product via URL params -->
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var id = params.get('id');
+        var name = params.get('name');
+        if (id || name) {
+          // Update canonical
+          var canonical = document.querySelector('link[rel="canonical"]');
+          if (canonical) canonical.href = window.location.origin + '/pages/product' + window.location.search;
+          // Update OG URL
+          var ogUrl = document.querySelector('meta[property="og:url"]');
+          if (ogUrl) ogUrl.setAttribute('content', window.location.origin + '/pages/product' + window.location.search);
+          // Update page title
+          if (name) {
+            var decoded = decodeURIComponent(name);
+            document.title = decoded + ' | Buy Online in Morocco \u2014 IPORDISE';
+            var ogTitle = document.querySelector('meta[property="og:title"]');
+            if (ogTitle) ogTitle.setAttribute('content', decoded + ' \u2014 IPORDISE Morocco');
+            var desc = document.querySelector('meta[name="description"]');
+            if (desc) desc.setAttribute('content', 'Buy ' + decoded + ' in Morocco at IPORDISE. 100% authentic. Free delivery 35 MAD nationwide.');
+          }
+        }
+      })();
+    </script>
     <!-- PWA -->
     <link rel="manifest" href="../manifest.json">
     <link rel="apple-touch-icon" sizes="192x192" href="../assets/logo-mark.svg">
@@ -207,7 +233,7 @@ s0.parentNode.insertBefore(s1,s0);
 
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="../index.html" aria-label="IPORDISE Home">
+                    <a href="/" aria-label="IPORDISE Home">
                         <img
                             src="../assets/logo-wordmark.svg"
                             alt="IPORDISE Luxury Perfumes"

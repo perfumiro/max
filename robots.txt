@@ -1,18 +1,25 @@
-# IPORDISE — robots.txt
+﻿# IPORDISE — robots.txt
 # https://www.ipordise.com
 
 User-agent: *
 Allow: /
 
-# Block checkout, cart, account, and thank-you pages from indexing
+# Block transactional & private pages from indexing
 Disallow: /pages/cart.html
+Disallow: /pages/cart
 Disallow: /pages/checkout.html
+Disallow: /pages/checkout
 Disallow: /pages/thank-you.html
+Disallow: /pages/thank-you
 Disallow: /pages/login.html
+Disallow: /pages/login
 
-# Block internal assets and scripts
+# Block internal development scripts
 Disallow: /download_assets.ps1
 Disallow: /download_assets2.ps1
+
+# Block service worker and manifest from indexing (not content pages)
+Disallow: /sw.js
 
 # Sitemap location
 Sitemap: https://www.ipordise.com/sitemap.xml
