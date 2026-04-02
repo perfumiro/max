@@ -722,6 +722,11 @@ s0.parentNode.insertBefore(s1,s0);
       $('switchToSignup')?.addEventListener('click', () => switchTab('signup'));
       $('switchToSignin')?.addEventListener('click', () => switchTab('signin'));
 
+      // Open signup tab if URL has ?tab=signup
+      if (new URLSearchParams(window.location.search).get('tab') === 'signup') {
+        switchTab('signup');
+      }
+
       // ── Password toggles ──────────────────────────────────────
       document.querySelectorAll('.auth-pw-toggle').forEach((btn) => {
         btn.addEventListener('click', () => {

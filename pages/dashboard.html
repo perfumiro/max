@@ -867,6 +867,79 @@
         }
 
         /* ═══════════════
+           WISHLIST GRID
+        ═══════════════ */
+        .dash-wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        .dash-wishlist-card {
+            background: var(--d-surface);
+            border-radius: var(--d-radius);
+            border: 1px solid var(--d-border);
+            box-shadow: var(--d-shadow-sm);
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s, transform 0.18s;
+        }
+        .dash-wishlist-card:hover {
+            box-shadow: var(--d-shadow-md);
+            transform: translateY(-3px);
+        }
+        .dash-wishlist-card img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            background: #f5f4f2;
+        }
+        .dash-wishlist-card-body { padding: 0.75rem; }
+        .dash-wishlist-card-name {
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--d-text);
+            line-height: 1.3;
+            margin-bottom: 0.2rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .dash-wishlist-card-price {
+            font-size: 0.7rem;
+            color: var(--d-red);
+            font-weight: 700;
+        }
+        .dash-wishlist-empty-msg {
+            background: var(--d-surface);
+            border-radius: var(--d-radius);
+            border: 1px solid var(--d-border);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: var(--d-shadow-sm);
+            grid-column: 1 / -1;
+        }
+        .dash-wishlist-empty-msg p { font-size: 0.82rem; color: var(--d-subtle); margin: 0; }
+        .dash-wishlist-empty-msg a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 1rem;
+            padding: 0.65rem 1.4rem;
+            background: var(--d-red);
+            color: #fff;
+            border-radius: 0.5rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.16s;
+        }
+        .dash-wishlist-empty-msg a:hover { background: #b52820; }
+
+        /* ═══════════════
            ANIMATIONS
         ═══════════════ */
         .dash-fadein { animation: dashFadeIn 0.5s cubic-bezier(0.16,1,0.3,1) both; }
@@ -1115,6 +1188,17 @@
                                 <a href="track-order.html" class="dash-stat-link">Track a parcel <i class="fas fa-arrow-right" style="font-size:0.65rem;"></i></a>
                             </div>
 
+                        </div>
+                    </section>
+
+                    <!-- ─── Section: My Favourites ─── -->
+                    <section id="section-wishlist">
+                        <div class="dash-section-header">
+                            <span class="dash-section-title">My Favourites</span>
+                            <a href="../discover.html" class="dash-section-action">Browse catalogue &rarr;</a>
+                        </div>
+                        <div id="dashWishlistGrid" class="dash-wishlist-grid">
+                            <!-- populated by JS after auth resolves -->
                         </div>
                     </section>
 
@@ -1395,14 +1479,54 @@
         if (profileHeadName) profileHeadName.textContent = name;
         if (verifiedEl && user.emailVerified) verifiedEl.style.display = 'inline-flex';
 
-        // Wishlist counts (hero + card)
+        // Wishlist counts (hero + card) + render wishlist items
         try {
-          const wl  = JSON.parse(localStorage.getItem('ipordise-wishlist') || '[]');
-          const cnt = Array.isArray(wl) ? wl.length : 0;
+          const WKEY = 'ipordise-wishlist-items';
+          const wl   = JSON.parse(localStorage.getItem(WKEY) || '[]');
+          const items = Array.isArray(wl) ? wl : [];
+          const cnt   = items.length;
+
           const heroWl = document.getElementById('dashWishlistCount');
           const cardWl = document.getElementById('dashWishlistCountCard');
           if (heroWl) heroWl.textContent = cnt;
           if (cardWl) cardWl.textContent = cnt;
+
+          // Render wishlist cards
+          const grid = document.getElementById('dashWishlistGrid');
+          if (grid) {
+            if (cnt === 0) {
+              grid.innerHTML = `
+                <div class="dash-wishlist-empty-msg">
+                  <p>You haven&rsquo;t saved any fragrances yet.</p>
+                  <a href="../discover.html?filter=all">
+                    <i class="fas fa-sparkles" style="font-size:0.7rem;"></i> Discover fragrances
+                  </a>
+                </div>
+              `;
+            } else {
+              // Fix image paths: items added from root have paths like "products/..."
+              // But dashboard is in /pages/ so we need "../products/..."
+              const fixImg = (src) => {
+                if (!src) return '';
+                if (src.startsWith('http') || src.startsWith('//') || src.startsWith('/') || src.startsWith('data:')) return src;
+                if (!src.startsWith('../')) return '../' + src;
+                return src;
+              };
+              grid.innerHTML = items.map((item) => {
+                const img = fixImg(item.image || '');
+                const price = (item.price || '').replace(/\s*·.*/,'').trim();
+                return `
+                  <a href="../discover.html" class="dash-wishlist-card" title="${item.name || ''}">
+                    ${img ? `<img src="${img}" alt="${item.name || ''}" loading="lazy">` : '<div style="aspect-ratio:1;background:#f5f4f2"></div>'}
+                    <div class="dash-wishlist-card-body">
+                      <div class="dash-wishlist-card-name">${item.name || 'Product'}</div>
+                      ${price ? `<div class="dash-wishlist-card-price">${price}</div>` : ''}
+                    </div>
+                  </a>
+                `;
+              }).join('');
+            }
+          }
         } catch { /* ignore */ }
 
         // Profile form

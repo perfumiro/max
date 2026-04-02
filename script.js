@@ -591,6 +591,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+
+        // Inject auth bridge module so the account menu reflects Firebase login state on all pages
+        if (!document.getElementById('ipordise-auth-bridge')) {
+            const bridgeScript = document.createElement('script');
+            bridgeScript.type  = 'module';
+            bridgeScript.id    = 'ipordise-auth-bridge';
+            bridgeScript.src   = `${rootPrefix}auth/account-header.js`;
+            document.head.appendChild(bridgeScript);
+        }
     };
 
     const normalizeLegacyFrenchContent = () => {
