@@ -3084,10 +3084,14 @@ s0.parentNode.insertBefore(s1,s0);
                 var panel = card.querySelector('#' + btn.dataset.target);
                 if (panel) panel.classList.add('is-active');
 
-                // Pause video when switching to map
-                if (btn.dataset.target === 'store-map') {
-                    var vid = card.querySelector('.store-video-el');
-                    if (vid) vid.pause();
+                // Autoplay video when switching to video tab, pause when switching to map
+                var vid = card.querySelector('.store-video-el');
+                if (vid) {
+                    if (btn.dataset.target === 'store-video') {
+                        vid.play();
+                    } else {
+                        vid.pause();
+                    }
                 }
             });
         });
