@@ -77,10 +77,6 @@ const buildLoggedOutHTML = () => {
             <i class="fas fa-bolt"></i>
             <span>Exclusive member offers await</span>
         </div>
-        <div class="account-menu-row">
-            <i class="fas fa-truck"></i>
-            <span>Free delivery from 500 DH</span>
-        </div>
     `;
 };
 
