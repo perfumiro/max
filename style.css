@@ -1,4 +1,4 @@
-/* ═══════════════════════════════════════════
+﻿/* ═══════════════════════════════════════════
    Scroll Progress Bar — class-based (JS: .scroll-progress)
    ═══════════════════════════════════════════ */
 .scroll-progress {
@@ -4861,6 +4861,41 @@ button.product-favorite-btn.is-active {
 /* Decante pills â€” subtle tint on non-active */
 .size-pill.is-decante:not(.is-active) {
     background: #fafbff;
+}
+
+/* Out-of-stock size pills */
+.size-pill.is-out-of-stock {
+    opacity: 0.65;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.size-pill.is-out-of-stock .spill-price {
+    color: #e73c3c;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.size-pill.is-out-of-stock::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 5px,
+        rgba(0,0,0,0.04) 5px,
+        rgba(0,0,0,0.04) 6px
+    );
+    pointer-events: none;
+    border-radius: inherit;
+}
+.size-pill.is-out-of-stock.is-active {
+    border-color: #e73c3c;
+    background: #fff5f5;
+}
+.size-pill.is-out-of-stock.is-active .spill-vol {
+    color: #e73c3c;
 }
 
 @media (max-width: 639px) {

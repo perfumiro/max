@@ -211,6 +211,8 @@ document.addEventListener('DOMContentLoaded', () => {
             wishlist_item_plural: 'items',
             product_fallback: 'Product',
             product_price_on_request: 'Price on Request',
+            product_out_of_stock: 'Out of Stock',
+            product_ask_whatsapp: 'Ask on WhatsApp',
             product_choose_size: 'Choose a size to see the price',
             product_choose_size_sticky: 'Choose size',
             product_add_to_cart: 'Add to Cart',
@@ -245,6 +247,8 @@ document.addEventListener('DOMContentLoaded', () => {
             wishlist_item_plural: 'articles',
             product_fallback: 'Produit',
             product_price_on_request: 'Prix sur demande',
+            product_out_of_stock: 'Rupture de stock',
+            product_ask_whatsapp: 'Demander sur WhatsApp',
             product_choose_size: 'Choisissez une taille pour voir le prix',
             product_choose_size_sticky: 'Choisir la taille',
             product_add_to_cart: 'Ajouter au panier',
@@ -5278,10 +5282,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const sizeSelector = document.getElementById('sizeSelector');
         if (sizeSelector && productSizePriceOptions.length) {
             const buildBtn = ({ sizeKey, label, priceText, isDecante, price }) => `
-                <button class="size-pill${isDecante ? ' is-decante' : ''}" type="button" data-size-key="${sizeKey}" data-label="${label}">
+                <button class="size-pill${isDecante ? ' is-decante' : ''}${price <= 0 ? ' is-out-of-stock' : ''}" type="button" data-size-key="${sizeKey}" data-label="${label}" ${price <= 0 ? 'data-no-price="true"' : ''}>
                     <span class="spill-indicator"></span>
                     <span class="spill-vol">${label}</span>
-                    <span class="spill-price">${price > 0 ? priceText : t('product_price_on_request')}</span>
+                    <span class="spill-price">${price > 0 ? priceText : t('product_out_of_stock')}</span>
                 </button>
             `;
 
@@ -5428,8 +5432,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const whatsappInquiryBtn = document.getElementById('whatsappInquiryBtn');
 
         const setAddButtonsEnabled = (enabled) => {
-            // For no-price products, never show the cart UI
-            if (!hasPrices) {
+            // Hide cart UI if whole product has no prices, or if selected size has no price
+            const selectedHasNoPrice = selectedSize && selectedSize.unitPrice <= 0;
+            if (!hasPrices || selectedHasNoPrice) {
                 [addToCartBtn, stickyAddToCartBtn].forEach((button) => {
                     if (!button) return;
                     button.classList.add('hidden');
@@ -5447,7 +5452,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     button.classList.remove('hidden');
                     button.disabled = false;
                     button.className = 'product-cart-btn';
-                    button.textContent = 'Add to Cart';
+                    button.textContent = t('product_add_to_cart');
                 }
             });
             if (qtyBoxContainer) {
@@ -5457,8 +5462,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const updateWhatsAppBtn = () => {
             if (!whatsappInquiryBtn) return;
-            if (!hasPrices && selectedSize) {
-                const msg = `Bonjour IPORDISE,\n\nJe suis intéressé(e) par le produit suivant et j'aimerais connaître le prix et la disponibilité :\n\n- Produit : ${productName}\n- Marque : ${resolvedBrand}\n- Taille : ${selectedSize.label}\n\nMerci !`;
+            const selectedHasNoPrice = selectedSize && selectedSize.unitPrice <= 0;
+            if (selectedHasNoPrice || (!hasPrices && selectedSize)) {
+                const msg = `Bonjour IPORDISE,\n\nJe suis intéressé(e) par le produit suivant :\n\n- Produit : ${productName}\n- Marque : ${resolvedBrand}\n- Taille : ${selectedSize.label}\n\nMerci !`;
                 whatsappInquiryBtn.href = `https://wa.me/212663750210?text=${encodeURIComponent(msg)}`;
                 whatsappInquiryBtn.classList.remove('hidden');
             } else {
@@ -5530,11 +5536,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         sizeOptions.forEach((option) => {
             option.button.addEventListener('click', () => {
+                // Out-of-stock pills are still selectable so WhatsApp inquiry works
                 sizeButtons.forEach((item) => item.classList.remove('is-active'));
                 option.button.classList.add('is-active');
                 selectedSize = option;
                 updateDisplayedPrice();
-                setAddButtonsEnabled(true);
+                // Only enable Add to Cart when the selected size has a price
+                setAddButtonsEnabled(option.unitPrice > 0);
                 updateWhatsAppBtn();
             });
         });
