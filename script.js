@@ -440,19 +440,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center justify-between h-20">
                         <div class="flex-shrink-0 flex items-center">
-                            <a href="${indexPath}" class="font-serif text-3xl font-bold tracking-widest text-white brand-logo-animated" aria-label="IPORDISE">
-                                <span class="sr-only">IPORDISE</span>
-                                <span class="brand-logo-word" aria-hidden="true">
-                                    <span class="brand-logo-letter">I</span>
-                                    <span class="brand-logo-letter">P</span>
-                                    <span class="brand-logo-letter">O</span>
-                                    <span class="brand-logo-letter">R</span>
-                                    <span class="brand-logo-letter">D</span>
-                                    <span class="brand-logo-letter">I</span>
-                                    <span class="brand-logo-letter">S</span>
-                                    <span class="brand-logo-letter">E</span>
-                                </span>
-                                <span class="brand-logo-dot" aria-hidden="true"></span>
+                            <a href="${indexPath}" aria-label="IPORDISE Home">
+                                <img src="${rootPrefix}assets/IPORDISE LOGO HEADER.png" alt="IPORDISE Luxury Perfumes" class="site-logo-img" fetchpriority="high" loading="eager" decoding="async">
                             </a>
                         </div>
 
@@ -7854,6 +7843,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const applyStaticDot = () => {
                 const { baseX, baseY } = computePositions();
                 dot.style.transform = `translate3d(${baseX}px, ${baseY}px, 0)`;
+                dot.style.opacity = '1';
             };
 
             const clearPendingLetterTimeouts = () => {
@@ -9136,6 +9126,23 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     applyOfficialHeaderFooter();
+
+    /* ── Header scroll-shrink: adds .is-scrolled when page is scrolled > 40px ── */
+    (() => {
+        const siteHeader = document.querySelector('header.bg-brand-dark');
+        if (!siteHeader) return;
+        const THRESHOLD = 40;
+        const onScroll = () => {
+            if (window.scrollY > THRESHOLD) {
+                siteHeader.classList.add('is-scrolled');
+            } else {
+                siteHeader.classList.remove('is-scrolled');
+            }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll(); // run once on load
+    })();
+
     initBrandLogoDotAnimation();
     normalizeLegacyFrenchContent();
     initLanguageSwitcher();
