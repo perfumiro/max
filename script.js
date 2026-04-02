@@ -5905,6 +5905,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 menu.classList.remove('is-open');
             });
             backdrop.classList.remove('is-visible');
+            // Release body scroll lock on mobile
+            if (isMobile()) document.body.style.overflow = '';
         };
 
         const buildAccountMenuHtml = (triggerHref) => `
@@ -5972,7 +5974,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (shouldOpen) {
                     setMobileTop(menu);
                     menu.classList.add('is-open');
-                    if (isMobile()) backdrop.classList.add('is-visible');
+                    if (isMobile()) {
+                        backdrop.classList.add('is-visible');
+                        // Prevent body from scrolling beneath the backdrop
+                        document.body.style.overflow = 'hidden';
+                    }
                 }
             });
 

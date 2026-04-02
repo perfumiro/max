@@ -21,7 +21,9 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
+  sendPasswordResetEmail,
   GoogleAuthProvider,
+  OAuthProvider,
   signInWithPopup,
 } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
 
@@ -112,6 +114,30 @@ export async function googleSignIn() {
   provider.setCustomParameters({ prompt: 'select_account' });
   const credential = await signInWithPopup(auth, provider);
   return credential.user;
+}
+
+// ── Apple OAuth — Sign in ────────────────────────────────────
+/**
+ * Opens an Apple sign-in popup.
+ * Requests email and name scopes.
+ * @returns {Promise<import('firebase/auth').User>}
+ */
+export async function appleSignIn() {
+  const provider = new OAuthProvider('apple.com');
+  provider.addScope('email');
+  provider.addScope('name');
+  const credential = await signInWithPopup(auth, provider);
+  return credential.user;
+}
+
+// ── Password reset ───────────────────────────────────────────
+/**
+ * Sends a Firebase password-reset email to the given address.
+ * @param {string} email
+ * @returns {Promise<void>}
+ */
+export async function resetPassword(email) {
+  await sendPasswordResetEmail(auth, email);
 }
 
 // ── Sign out ─────────────────────────────────────────────────

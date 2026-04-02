@@ -397,8 +397,207 @@ s0.parentNode.insertBefore(s1,s0);
             font-weight: 700;
             text-decoration: none;
             font-size: 0.82rem;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            font-family: inherit;
         }
         .auth-forgot:hover { text-decoration: underline; }
+        /* Reset-password modal */
+        .rp-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10,5,5,0.65);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .rp-overlay.open { display: flex; }
+        .rp-modal {
+            background: #fff;
+            border-radius: 1.75rem;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(231,60,60,0.08);
+            width: 100%;
+            max-width: 400px;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+            animation: rpIn 0.28s cubic-bezier(0.22,1,0.36,1) both;
+        }
+        @keyframes rpIn {
+            from { opacity: 0; transform: translateY(28px) scale(0.95); }
+            to   { opacity: 1; transform: none; }
+        }
+        .rp-modal-header {
+            background: linear-gradient(150deg, #1c0606 0%, #2e0c0c 45%, #200808 100%);
+            padding: 2.25rem 1.75rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .rp-modal-header::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(231,60,60,0.18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .rp-modal-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(231,60,60,0.5) 50%, transparent 100%);
+        }
+        .rp-close {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 50%;
+            width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; color: rgba(255,255,255,0.6);
+            cursor: pointer; line-height: 1;
+            transition: background 0.18s, color 0.18s, border-color 0.18s;
+            z-index: 1;
+        }
+        .rp-close:hover {
+            background: rgba(231,60,60,0.25);
+            border-color: rgba(231,60,60,0.4);
+            color: #fff;
+        }
+        .rp-icon {
+            width: 68px; height: 68px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(231,60,60,0.2) 0%, rgba(180,20,20,0.1) 100%);
+            border: 1.5px solid rgba(231,60,60,0.35);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.1rem;
+            font-size: 1.5rem; color: #e73c3c;
+            position: relative; z-index: 1;
+            box-shadow: 0 0 24px rgba(231,60,60,0.2);
+        }
+        .rp-title {
+            font-size: 1.25rem; font-weight: 800;
+            color: #fff; text-align: center;
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.015em;
+            position: relative; z-index: 1;
+        }
+        .rp-sub {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+            line-height: 1.6;
+            position: relative; z-index: 1;
+        }
+        .rp-modal-body {
+            padding: 1.75rem 1.75rem 2rem;
+            background: #fff;
+        }
+        .rp-input-label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        .rp-input-wrap {
+            position: relative;
+            margin-bottom: 1.1rem;
+        }
+        .rp-input-wrap i {
+            position: absolute;
+            left: 1rem; top: 50%;
+            transform: translateY(-50%);
+            color: #c0c0c0; font-size: 0.82rem;
+            pointer-events: none;
+        }
+        .rp-input {
+            width: 100%;
+            padding: 0.82rem 1rem 0.82rem 2.5rem;
+            border: 1.5px solid #ebebeb;
+            border-radius: 0.85rem;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+            box-sizing: border-box;
+            color: #1a1a1a;
+            background: #f8f8f8;
+        }
+        .rp-input:focus {
+            border-color: #e73c3c;
+            background: #fff;
+            box-shadow: 0 0 0 3.5px rgba(231,60,60,0.1);
+        }
+        .rp-input::placeholder { color: #c8c8c8; }
+        .rp-submit {
+            width: 100%;
+            padding: 0.88rem 1rem;
+            background: linear-gradient(135deg, #e73c3c 0%, #bf2424 100%);
+            color: #fff;
+            border: none;
+            border-radius: 0.85rem;
+            font-size: 0.93rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            font-family: inherit;
+            cursor: pointer;
+            transition: box-shadow 0.18s, transform 0.12s, opacity 0.15s;
+            display: flex; align-items: center; justify-content: center; gap: 0.55rem;
+            box-shadow: 0 4px 16px rgba(231,60,60,0.3);
+        }
+        .rp-submit:hover {
+            box-shadow: 0 6px 22px rgba(231,60,60,0.45);
+            transform: translateY(-1px);
+        }
+        .rp-submit:active { transform: scale(0.98); box-shadow: none; }
+        .rp-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        .rp-divider {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin: 1.25rem 0 0;
+        }
+        .rp-divider::before, .rp-divider::after {
+            content: ''; flex: 1; height: 1px; background: #f0f0f0;
+        }
+        .rp-divider-text {
+            font-size: 0.72rem; color: #ccc; font-weight: 600; white-space: nowrap;
+        }
+        .rp-msg {
+            font-size: 0.83rem;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            line-height: 1.5;
+            display: none;
+            font-family: inherit;
+        }
+        .rp-msg.success {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+            display: flex; align-items: center; gap: 0.55rem;
+            font-weight: 600;
+        }
+        .rp-msg.error {
+            background: linear-gradient(135deg, #fff5f5, #fef2f2);
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            display: flex; align-items: center; gap: 0.55rem;
+            font-weight: 600;
+        }
         /* Message */
         .auth-msg {
             font-size: 0.83rem;
@@ -470,6 +669,29 @@ s0.parentNode.insertBefore(s1,s0);
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         .auth-google-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        /* Apple */
+        .auth-apple-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #000;
+            border: 1.5px solid #000;
+            border-radius: 0.65rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+            margin-top: 0.65rem;
+        }
+        .auth-apple-btn:hover {
+            background: #1a1a1a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        }
+        .auth-apple-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         /* Footer text */
         .auth-switch-row {
             text-align: center;
@@ -538,7 +760,7 @@ s0.parentNode.insertBefore(s1,s0);
                         <label class="auth-remember">
                             <input type="checkbox" id="loginRememberMe"> <span data-i18n="login.remember_me">Stay signed in</span>
                         </label>
-                        <a href="support.html" class="auth-forgot" data-i18n="login.forgot_pw">Forgot password?</a>
+                        <button type="button" class="auth-forgot" id="forgotPwBtn" data-i18n="login.forgot_pw">Forgot password?</button>
                     </div>
 
                     <div id="loginFormMessage" class="auth-msg" role="alert" aria-live="polite"></div>
@@ -553,6 +775,11 @@ s0.parentNode.insertBefore(s1,s0);
                 <button type="button" class="auth-google-btn" id="googleSignInBtn" aria-label="Continue with Google">
                     <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908C16.658 14.121 17.64 11.813 17.64 9.2z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
                     <span data-i18n="login.google_btn">Continue with Google</span>
+                </button>
+
+                <button type="button" class="auth-apple-btn" id="appleSignInBtn" aria-label="Continue with Apple">
+                    <svg width="17" height="20" viewBox="0 0 17 20" aria-hidden="true" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M13.598 0c.064.862-.247 1.72-.792 2.368-.545.647-1.388 1.1-2.22 1.044-.082-.847.273-1.724.79-2.33C11.898.467 12.8.028 13.598 0zM16.5 13.726c-.37.868-.547 1.255-1.022 2.022-.663 1.068-1.598 2.4-2.758 2.41-.99.01-1.245-.636-2.588-.628-1.343.007-1.625.64-2.618.63-1.16-.012-2.044-1.218-2.708-2.286C3.01 13.778 2.75 10.887 3.75 9.09c.71-1.268 2.002-2.01 3.215-2.01 1.232 0 1.997.643 3.012.643.983 0 1.58-.645 2.996-.645 1.083 0 2.233.59 2.943 1.607-.004.003-1.628.952-1.61 2.84.02 2.224 1.958 2.96 2.194 3.2z"/></svg>
+                    <span data-i18n="login.apple_btn">Continue with Apple</span>
                 </button>
 
                 <div class="auth-switch-row">
@@ -626,6 +853,11 @@ s0.parentNode.insertBefore(s1,s0);
                     <span data-i18n="login.google_btn">Continue with Google</span>
                 </button>
 
+                <button type="button" class="auth-apple-btn" id="appleSignUpBtn" aria-label="Continue with Apple">
+                    <svg width="17" height="20" viewBox="0 0 17 20" aria-hidden="true" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M13.598 0c.064.862-.247 1.72-.792 2.368-.545.647-1.388 1.1-2.22 1.044-.082-.847.273-1.724.79-2.33C11.898.467 12.8.028 13.598 0zM16.5 13.726c-.37.868-.547 1.255-1.022 2.022-.663 1.068-1.598 2.4-2.758 2.41-.99.01-1.245-.636-2.588-.628-1.343.007-1.625.64-2.618.63-1.16-.012-2.044-1.218-2.708-2.286C3.01 13.778 2.75 10.887 3.75 9.09c.71-1.268 2.002-2.01 3.215-2.01 1.232 0 1.997.643 3.012.643.983 0 1.58-.645 2.996-.645 1.083 0 2.233.59 2.943 1.607-.004.003-1.628.952-1.61 2.84.02 2.224 1.958 2.96 2.194 3.2z"/></svg>
+                    <span data-i18n="login.apple_btn">Continue with Apple</span>
+                </button>
+
                 <div class="auth-switch-row">
                     <span data-i18n="login.have_account">Already have an account?</span> <button type="button" id="switchToSignin" data-i18n="login.existing_account_btn">Sign in</button>
                 </div>
@@ -638,6 +870,33 @@ s0.parentNode.insertBefore(s1,s0);
 
         </div>
     </main>
+
+    <!-- ── Reset Password Modal ─────────────────────────────────── -->
+    <div class="rp-overlay" id="rpOverlay" role="dialog" aria-modal="true" aria-labelledby="rpTitle">
+        <div class="rp-modal">
+            <div class="rp-modal-header">
+                <button class="rp-close" id="rpClose" aria-label="Close">&times;</button>
+                <div class="rp-icon"><i class="fas fa-unlock-alt"></i></div>
+                <div class="rp-title" id="rpTitle" data-i18n="login.rp_title">Reset your password</div>
+                <div class="rp-sub" data-i18n="login.rp_sub">Enter your email and we'll send you a reset link.</div>
+            </div>
+            <div class="rp-modal-body">
+                <label class="rp-input-label" for="rpEmailInput">Email address</label>
+                <div class="rp-input-wrap">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" class="rp-input" id="rpEmailInput" autocomplete="email"
+                           data-i18n-placeholder="login.rp_placeholder" placeholder="your@email.com">
+                </div>
+                <button class="rp-submit" id="rpSubmitBtn" data-i18n="login.rp_send">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Send reset link</span>
+                </button>
+                <div class="rp-divider"><span class="rp-divider-text"><i class="fas fa-shield-halved" style="margin-right:0.3rem;color:#e73c3c;"></i>Secure — powered by Firebase</span></div>
+                <div class="rp-msg" id="rpMsg" role="alert" aria-live="polite"></div>
+            </div>
+        </div>
+    </div>
+
     <footer class="bg-brand-dark text-white pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
@@ -689,7 +948,7 @@ s0.parentNode.insertBefore(s1,s0);
 
     <!-- ── Firebase Auth ──────────────────────────────────────── -->
     <script type="module">
-      import { signIn, signUp, googleSignIn, onAuthChange, getErrorMessage } from '../auth/auth.js';
+      import { signIn, signUp, googleSignIn, appleSignIn, resetPassword, onAuthChange, getErrorMessage } from '../auth/auth.js';
 
       // If already logged in → go straight to dashboard
       onAuthChange((user) => {
@@ -831,6 +1090,70 @@ s0.parentNode.insertBefore(s1,s0);
       };
       $('googleSignInBtn')?.addEventListener('click',  () => handleGoogle($('googleSignInBtn')));
       $('googleSignUpBtn')?.addEventListener('click',  () => handleGoogle($('googleSignUpBtn')));
+
+      // ── Apple Sign In ─────────────────────────────────────────
+      const handleApple = async (btn) => {
+        setLoading(btn, true);
+        try {
+          await appleSignIn();
+          window.location.replace('dashboard.html');
+        } catch (err) {
+          alert(getErrorMessage(err));
+          setLoading(btn, false);
+        }
+      };
+      $('appleSignInBtn')?.addEventListener('click',  () => handleApple($('appleSignInBtn')));
+      $('appleSignUpBtn')?.addEventListener('click',  () => handleApple($('appleSignUpBtn')));
+
+      // ── Forgot / Reset Password ───────────────────────────────
+      const rpOverlay  = $('rpOverlay');
+      const rpMsg      = $('rpMsg');
+      const rpEmailIn  = $('rpEmailInput');
+      const rpSubmit   = $('rpSubmitBtn');
+
+      const openReset = () => {
+        // Pre-fill with whatever is typed in login email
+        const loginEmail = $('loginEmailInput')?.value.trim();
+        if (loginEmail) rpEmailIn.value = loginEmail;
+        rpMsg.className = 'rp-msg';
+        rpMsg.textContent = '';
+        rpOverlay.classList.add('open');
+        setTimeout(() => rpEmailIn.focus(), 50);
+      };
+      const closeReset = () => rpOverlay.classList.remove('open');
+
+      $('forgotPwBtn')?.addEventListener('click', openReset);
+      $('rpClose')?.addEventListener('click', closeReset);
+      rpOverlay?.addEventListener('click', (e) => { if (e.target === rpOverlay) closeReset(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReset(); });
+
+      rpSubmit?.addEventListener('click', async () => {
+        const email = rpEmailIn?.value.trim();
+        const lang  = isFr() ? 'fr' : 'en';
+        if (!email) {
+          rpMsg.className = 'rp-msg error';
+          rpMsg.innerHTML = '<i class="fas fa-circle-exclamation"></i> ' + (lang === 'fr'
+            ? 'Veuillez entrer votre adresse email.'
+            : 'Please enter your email address.');
+          return;
+        }
+        rpSubmit.disabled = true;
+        rpMsg.className = 'rp-msg';
+        rpMsg.textContent = '';
+        try {
+          await resetPassword(email);
+          rpMsg.className = 'rp-msg success';
+          rpMsg.innerHTML = lang === 'fr'
+            ? '<i class="fas fa-circle-check"></i> Email envoy\u00e9\u00a0! V\u00e9rifiez votre bo\u00eete de r\u00e9ception.'
+            : '<i class="fas fa-circle-check"></i> Email sent! Check your inbox.';
+          rpSubmit.disabled = false;
+          setTimeout(closeReset, 3500);
+        } catch (err) {
+          rpMsg.className = 'rp-msg error';
+          rpMsg.innerHTML = '<i class="fas fa-circle-exclamation"></i> ' + getErrorMessage(err);
+          rpSubmit.disabled = false;
+        }
+      });
     </script>
 
     <!-- IPO Search Overlay -->
