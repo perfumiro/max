@@ -5481,6 +5481,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const isDecante = Boolean(selectedSize?.isDecante);
             const deliveryFee = isDecante ? '35 MAD' : '35 MAD (VAT included)';
 
+            // Toggle price card vs out-of-stock box depending on selected size
+            if (hasPrices) {
+                const showOutOfStock = selectedSize && !sizeHasPrice;
+                if (productPriceCard) productPriceCard.toggleAttribute('hidden', showOutOfStock);
+                if (productOndemandBox) productOndemandBox.toggleAttribute('hidden', !showOutOfStock);
+            }
+
             if (hasPrices) {
                 if (mainPriceEl) {
                     mainPriceEl.classList.toggle('text-gray-400', !sizeHasPrice);
@@ -5496,11 +5503,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             mainPriceEl.textContent = selectedPrice;
                         }
                     } else {
-                        mainPriceEl.textContent = t('product_price_on_request');
+                        mainPriceEl.textContent = t('product_out_of_stock');
                     }
                 }
                 if (stickyPriceEl) {
-                    stickyPriceEl.textContent = sizeHasPrice ? selectedPrice : (selectedSize ? t('product_price_on_request') : t('product_choose_size_sticky'));
+                    stickyPriceEl.textContent = sizeHasPrice ? selectedPrice : (selectedSize ? t('product_out_of_stock') : t('product_choose_size_sticky'));
                 }
                 if (deliveryInfoEl) {
                     deliveryInfoEl.textContent = `${t('product_delivery_in_stock')}: ${deliveryFee}`;
