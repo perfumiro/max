@@ -6015,6 +6015,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const storageKey = 'ipordise-wishlist-items';
 
         const readWishlist = () => {
+            // Delegate to the centralized FavStore when it is available
+            if (window.__ipordise_favs) return window.__ipordise_favs.getFavourites();
             try {
                 const raw = localStorage.getItem(storageKey);
                 const parsed = raw ? JSON.parse(raw) : [];
@@ -6025,6 +6027,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const writeWishlist = (items) => {
+            // Only used as a fallback when FavStore is not yet loaded
             localStorage.setItem(storageKey, JSON.stringify(items));
         };
 
@@ -6200,11 +6203,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     const itemId = itemEl?.dataset.id;
                     if (!itemId) return;
 
-                    const nextWishlist = readWishlist().filter((item) => item.id !== itemId);
-                    writeWishlist(nextWishlist);
-                    syncFavoriteButtonsUI();
-                    setHeaderWishlistCount();
-                    renderWishlistMenu(menuEl);
+                    if (window.__ipordise_favs) {
+                        // Store handles persistence; ipordise:favs-changed drives UI update
+                        window.__ipordise_favs.removeFavourite(itemId);
+                    } else {
+                        const nextWishlist = readWishlist().filter((item) => item.id !== itemId);
+                        writeWishlist(nextWishlist);
+                        syncFavoriteButtonsUI();
+                        setHeaderWishlistCount();
+                        renderWishlistMenu(menuEl);
+                    }
                 });
             });
         };
@@ -6226,28 +6234,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                const wishlist = readWishlist();
-                const exists = wishlist.some((item) => item.id === favoriteId);
+                const favItem = {
+                    id:    favoriteId,
+                    name:  data.name,
+                    brand: data.brand,
+                    price: data.price,
+                    image: data.image,
+                };
 
-                const nextWishlist = exists
-                    ? wishlist.filter((item) => item.id !== favoriteId)
-                    : [{
-                        id: favoriteId,
-                        name: data.name,
-                        brand: data.brand,
-                        price: data.price,
-                        image: data.image
-                    }, ...wishlist];
-
-                writeWishlist(nextWishlist);
-                syncFavoriteButtonsUI();
-                setHeaderWishlistCount();
-
-                document.querySelectorAll('.wishlist-menu').forEach((menu) => {
-                    if (menu.classList.contains('is-open')) {
-                        renderWishlistMenu(menu);
-                    }
-                });
+                if (window.__ipordise_favs) {
+                    // Async path: store handles Firestore persistence.
+                    // The ipordise:favs-changed event will trigger all UI updates.
+                    window.__ipordise_favs.toggleFavourite(favItem);
+                } else {
+                    // Fallback: store not yet loaded — write directly to localStorage
+                    const wishlist = readWishlist();
+                    const exists   = wishlist.some((item) => item.id === favoriteId);
+                    const nextWishlist = exists
+                        ? wishlist.filter((item) => item.id !== favoriteId)
+                        : [favItem, ...wishlist];
+                    writeWishlist(nextWishlist);
+                    syncFavoriteButtonsUI();
+                    setHeaderWishlistCount();
+                    document.querySelectorAll('.wishlist-menu').forEach((menu) => {
+                        if (menu.classList.contains('is-open')) renderWishlistMenu(menu);
+                    });
+                }
             });
         });
 
@@ -6336,6 +6348,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         syncFavoriteButtonsUI();
         setHeaderWishlistCount();
+
+        // React to Firestore/auth-synced changes from the favourites store.
+        // This fires after login (merge), after logout (clear), and after any toggle/remove.
+        document.addEventListener('ipordise:favs-changed', () => {
+            syncFavoriteButtonsUI();
+            setHeaderWishlistCount();
+            document.querySelectorAll('.wishlist-menu.is-open').forEach(renderWishlistMenu);
+        });
     };
 
     const initDiscoverFilters = () => {

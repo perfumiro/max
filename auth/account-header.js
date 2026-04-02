@@ -5,16 +5,12 @@
 // ================================================================
 
 import { onAuthChange, logOut } from './auth.js';
+import * as FavStore from './favourites.js';
 
-const WISHLIST_KEY = 'ipordise-wishlist-items';
+// Expose the centralized favourites store globally so non-module scripts (script.js) can use it.
+window.__ipordise_favs = FavStore;
 
-const getWishlistCount = () => {
-    try {
-        const raw    = localStorage.getItem(WISHLIST_KEY);
-        const parsed = raw ? JSON.parse(raw) : [];
-        return Array.isArray(parsed) ? parsed.length : 0;
-    } catch { return 0; }
-};
+const getWishlistCount = () => FavStore.getFavourites().length;
 
 // Determine root-relative path prefix based on current page location
 const getRootPrefix = () => {
@@ -109,8 +105,15 @@ const updateMenus = (user) => {
 };
 
 // ── Subscribe to Firebase auth state ─────────────────────────
+let _lastAuthUser = null;
 onAuthChange((user) => {
     // Expose globally so non-module scripts (script.js) can read auth state
     window.__ipordise_user = user;
+    _lastAuthUser = user;
     updateMenus(user);
+});
+
+// Re-render account menus whenever the favourites count changes (e.g. after Firestore sync)
+FavStore.subscribe(() => {
+    if (_lastAuthUser) updateMenus(_lastAuthUser);
 });
