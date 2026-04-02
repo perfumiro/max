@@ -561,7 +561,34 @@
             box-shadow: 0 0 0 3px rgba(217,52,43,0.25), 0 6px 20px rgba(217,52,43,0.35);
             position: relative;
             z-index: 1;
+            cursor: pointer;
+            overflow: hidden;
         }
+        .dash-profile-head-avatar img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .dash-avatar-upload-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.55);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.1rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+        .dash-profile-head-avatar:hover .dash-avatar-upload-overlay { opacity: 1; }
+        .dash-avatar-upload-overlay i { font-size: 0.85rem; color: #fff; }
+        .dash-avatar-upload-overlay span { font-size: 0.42rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.8); }
         .dash-profile-head-info { flex: 1; position: relative; z-index: 1; }
         .dash-profile-head-info h3 {
             font-size: 1.05rem;
@@ -580,12 +607,25 @@
             position: relative;
             z-index: 1;
             font-size: 0.65rem;
-            color: rgba(255,255,255,0.25);
+            color: rgba(255,255,255,0.45);
             display: flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.35rem;
             flex-shrink: 0;
+            cursor: pointer;
+            padding: 0.38rem 0.75rem;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 99px;
+            background: rgba(255,255,255,0.05);
+            transition: background 0.18s, color 0.18s, border-color 0.18s;
+            user-select: none;
         }
+        .dash-profile-head-edit-hint:hover {
+            background: rgba(217,52,43,0.18);
+            border-color: rgba(217,52,43,0.4);
+            color: #fff;
+        }
+        .dash-profile-head-edit-hint:hover i { color: var(--d-red); }
         .dash-profile-form {
             padding: 1.75rem 2rem 2rem;
             display: grid;
@@ -636,11 +676,28 @@
             box-shadow: 0 0 0 3px rgba(217,52,43,0.08);
         }
         .dash-field input:disabled {
-            background: #f5f4f2;
-            color: #bbb;
+            background: #f7f6f4;
+            color: #aaa;
             cursor: not-allowed;
-            border-color: #eeebe7;
+            border-color: #e8e5e1;
+            border-style: dashed;
             padding-left: 2.4rem;
+        }
+        .dash-field-locked-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #aaa;
+            background: #f0ede9;
+            border: 1px solid #e2ddd8;
+            border-radius: 99px;
+            padding: 0.18rem 0.55rem;
+            margin-left: 0.5rem;
+            vertical-align: middle;
         }
         .dash-profile-save-row {
             grid-column: 1 / -1;
@@ -1431,12 +1488,19 @@
                         </div>
                         <div class="dash-profile-wrap">
                             <div class="dash-profile-head">
-                                <div class="dash-profile-head-avatar" id="dashAvatarForm">?</div>
+                                <div class="dash-profile-head-avatar" id="dashAvatarForm" title="Click to upload photo">
+                                    <span id="dashAvatarInitial">?</span>
+                                    <div class="dash-avatar-upload-overlay">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Upload</span>
+                                    </div>
+                                    <input type="file" id="dashAvatarInput" accept="image/*" style="display:none;">
+                                </div>
                                 <div class="dash-profile-head-info">
                                     <h3 id="dashProfileHeadName">Your Account</h3>
                                     <p data-i18n="dashboard.profile_personal">Personal information &amp; preferences</p>
                                 </div>
-                                <div class="dash-profile-head-edit-hint">
+                                <div class="dash-profile-head-edit-hint" id="dashEditProfileBtn" role="button" tabindex="0">
                                     <i class="fas fa-pen-to-square"></i>
                                     <span data-i18n="dashboard.edit_profile">Edit profile</span>
                                 </div>
@@ -1451,11 +1515,11 @@
                                     </div>
                                 </div>
                                 <div class="dash-field">
-                                    <label for="dashProfileEmail" data-i18n="dashboard.email_address">Email Address</label>
+                                    <label for="dashProfileEmail" data-i18n="dashboard.email_address">Email Address <span class="dash-field-locked-badge"><i class="fas fa-lock" style="font-size:0.5rem;"></i> Locked</span></label>
                                     <div class="dash-field-inner">
                                         <i class="fas fa-envelope dash-field-icon"></i>
                                         <input type="email" id="dashProfileEmail" placeholder="Email" disabled autocomplete="email"
-                                               title="Email cannot be changed here.">
+                                               title="Email address cannot be changed.">
                                     </div>
                                 </div>
                                 <div class="dash-field">
@@ -1850,7 +1914,50 @@
         const initial = name.charAt(0).toUpperCase();
 
         if (avatar)          avatar.textContent          = initial;
-        if (avatarForm)      avatarForm.textContent      = initial;
+        // Profile pic from localStorage
+        const AVATAR_KEY = 'ipordise-avatar-' + user.uid;
+        const savedPic = localStorage.getItem(AVATAR_KEY);
+        const avatarInitial = document.getElementById('dashAvatarInitial');
+        if (savedPic && avatarForm) {
+          avatarInitial && (avatarInitial.style.display = 'none');
+          const existImg = avatarForm.querySelector('img');
+          if (!existImg) { const img = document.createElement('img'); img.src = savedPic; avatarForm.insertBefore(img, avatarForm.firstChild); }
+          else existImg.src = savedPic;
+        } else if (avatarInitial) {
+          avatarInitial.textContent = initial;
+        }
+        // Edit profile button → focus name field
+        const editProfileBtn = document.getElementById('dashEditProfileBtn');
+        if (editProfileBtn) {
+          const focusNameField = () => {
+            const nameInput = document.getElementById('dashProfileName');
+            if (!nameInput) return;
+            nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => nameInput.focus(), 350);
+          };
+          editProfileBtn.addEventListener('click', focusNameField);
+          editProfileBtn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); focusNameField(); } });
+        }
+        if (avatarForm && avatarInput) {
+          avatarForm.addEventListener('click', () => avatarInput.click());
+          avatarInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { showToast('Image too large (max 2 MB)'); return; }
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+              const dataUrl = ev.target.result;
+              localStorage.setItem(AVATAR_KEY, dataUrl);
+              avatarInitial && (avatarInitial.style.display = 'none');
+              let img = avatarForm.querySelector('img');
+              if (!img) { img = document.createElement('img'); avatarForm.insertBefore(img, avatarForm.firstChild); }
+              img.src = dataUrl;
+              if (avatar) { avatar.textContent = ''; avatar.style.backgroundImage = `url(${dataUrl})`; avatar.style.backgroundSize = 'cover'; }
+              showToast('Profile photo updated!');
+            };
+            reader.readAsDataURL(file);
+          });
+        }
         if (welcome)         welcome.textContent         = `Welcome back, ${name.split(' ')[0]}!`;
         if (emailEl)         emailEl.textContent         = user.email;
         if (profileHeadName) profileHeadName.textContent = name;
@@ -1977,7 +2084,8 @@
             await updateProfile(auth.currentUser, { displayName: newName });
             if (welcome)         welcome.textContent         = `Welcome back, ${newName.split(' ')[0]}!`;
             if (avatar)          avatar.textContent          = newName.charAt(0).toUpperCase();
-            if (avatarForm)      avatarForm.textContent      = newName.charAt(0).toUpperCase();
+            const _ai = document.getElementById('dashAvatarInitial');
+            if (_ai && !avatarForm?.querySelector('img')) _ai.textContent = newName.charAt(0).toUpperCase();
             if (profileHeadName) profileHeadName.textContent = newName;
           }
 
