@@ -113,4 +113,8 @@ const updateMenus = (user) => {
 };
 
 // ── Subscribe to Firebase auth state ─────────────────────────
-onAuthChange(updateMenus);
+onAuthChange((user) => {
+    // Expose globally so non-module scripts (script.js) can read auth state
+    window.__ipordise_user = user;
+    updateMenus(user);
+});

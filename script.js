@@ -6182,6 +6182,13 @@ document.addEventListener('DOMContentLoaded', () => {
             button.dataset.favoriteId = favoriteId;
 
             button.addEventListener('click', () => {
+                // Require login before saving a favourite
+                if (!window.__ipordise_user) {
+                    const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
+                    window.location.href = (inPages ? 'login.html' : 'pages/login.html') + '?tab=signup';
+                    return;
+                }
+
                 const wishlist = readWishlist();
                 const exists = wishlist.some((item) => item.id === favoriteId);
 
@@ -6251,11 +6258,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 button.addEventListener('click', (event) => {
                     event.preventDefault();
-                    const shouldOpen = !menu.classList.contains('is-open');
-                    closeWishlistMenus();
-                    if (shouldOpen) {
-                        renderWishlistMenu(menu);
-                        menu.classList.add('is-open');
+                    const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
+                    if (!window.__ipordise_user) {
+                        // Not logged in → send to login page
+                        window.location.href = inPages ? 'login.html' : 'pages/login.html';
+                    } else {
+                        // Logged in → send to My Favourites section in dashboard
+                        window.location.href = inPages
+                            ? 'dashboard.html#section-wishlist'
+                            : 'pages/dashboard.html#section-wishlist';
                     }
                 });
 

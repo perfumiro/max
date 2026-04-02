@@ -1468,6 +1468,15 @@
         if (guard) guard.style.display = 'none';
         if (page)  page.style.display  = 'block';
 
+        // Scroll to hash anchor if arriving from heart-icon link (e.g. #section-wishlist)
+        const hash = window.location.hash;
+        if (hash) {
+          setTimeout(() => {
+            const target = document.querySelector(hash);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 150);
+        }
+
         // Name & initial
         const name    = user.displayName || user.email.split('@')[0];
         const initial = name.charAt(0).toUpperCase();
@@ -1514,13 +1523,20 @@
               };
               grid.innerHTML = items.map((item) => {
                 const img = fixImg(item.image || '');
-                const price = (item.price || '').replace(/\s*·.*/,'').trim();
+                // Build direct product page URL from stored item data
+                const params = new URLSearchParams({
+                  id:    item.id    || '',
+                  name:  item.name  || '',
+                  brand: item.brand || '',
+                  price: item.price || '',
+                  image: item.image || '',
+                });
+                const productUrl = `../pages/product.html?${params.toString()}`;
                 return `
-                  <a href="../discover.html" class="dash-wishlist-card" title="${item.name || ''}">
+                  <a href="${productUrl}" class="dash-wishlist-card" title="${item.name || ''}">
                     ${img ? `<img src="${img}" alt="${item.name || ''}" loading="lazy">` : '<div style="aspect-ratio:1;background:#f5f4f2"></div>'}
                     <div class="dash-wishlist-card-body">
                       <div class="dash-wishlist-card-name">${item.name || 'Product'}</div>
-                      ${price ? `<div class="dash-wishlist-card-price">${price}</div>` : ''}
                     </div>
                   </a>
                 `;
@@ -1612,6 +1628,7 @@
           item.classList.add('active');
         });
       });
+
     </script>
 
 </body>
