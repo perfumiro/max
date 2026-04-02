@@ -3015,12 +3015,11 @@ button.product-favorite-btn.is-active {
         display: block;
         position: fixed;
         inset: 0;
-        background: rgba(8, 4, 4, 0.52);
-        z-index: 79;
+        background: rgba(6, 2, 2, 0.60);
+        z-index: 88;
         pointer-events: none;
         opacity: 0;
         transition: opacity 0.26s cubic-bezier(0.16, 1, 0.3, 1);
-        /* NO backdrop-filter — it bleeds blur to the popup and header on mobile */
     }
     .account-menu-backdrop.is-visible {
         opacity: 1;
@@ -3044,7 +3043,7 @@ button.product-favorite-btn.is-active {
             0 0 0 1px rgba(255, 255, 255, 0.7) inset;
         background: #ffffff;
         /* Own compositing layer ensures it paints ABOVE the backdrop cleanly */
-        z-index: 80;
+        z-index: 89;
         will-change: transform, opacity;
         transform: translateY(-12px) scale(0.97);
         transition: opacity 0.24s cubic-bezier(0.16,1,0.3,1),

@@ -5903,6 +5903,11 @@ document.addEventListener('DOMContentLoaded', () => {
             allMenus.forEach((menu) => {
                 if (menu === exceptMenu) return;
                 menu.classList.remove('is-open');
+                // Return the menu to its original wrap if it was teleported to body
+                const wrap = menu._acmWrap;
+                if (wrap && menu.parentElement === document.body) {
+                    wrap.appendChild(menu);
+                }
             });
             backdrop.classList.remove('is-visible');
             // Release body scroll lock on mobile
@@ -5923,10 +5928,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="account-menu-row">
                     <i class="fas fa-bolt"></i>
                     <span>${t('account_offer')}</span>
-                </div>
-                <div class="account-menu-row">
-                    <i class="fas fa-truck"></i>
-                    <span>${t('account_shipping')}</span>
                 </div>
             </div>
         `;
@@ -5961,6 +5962,7 @@ document.addEventListener('DOMContentLoaded', () => {
             menu.innerHTML = buildAccountMenuHtml(triggerHref);
 
             wrap.appendChild(menu);
+            menu._acmWrap = wrap; // remember original parent for teleport return
             allMenus.push(menu);
 
             onLanguageChange(() => {
@@ -5972,11 +5974,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const shouldOpen = !menu.classList.contains('is-open');
                 closeAllMenus();
                 if (shouldOpen) {
+                    if (isMobile()) {
+                        // Teleport OUT of header's stacking context (z-50) onto body
+                        // so the menu can paint above the backdrop cleanly
+                        document.body.appendChild(menu);
+                    }
                     setMobileTop(menu);
                     menu.classList.add('is-open');
                     if (isMobile()) {
                         backdrop.classList.add('is-visible');
-                        // Prevent body from scrolling beneath the backdrop
                         document.body.style.overflow = 'hidden';
                     }
                 }
