@@ -13464,35 +13464,32 @@ html {
     transform: translateX(5px) !important;
 }
 
-/* On-demand box â€” gold tone */
-/* â”€â”€ Price on Request box â€” premium red redesign â”€â”€ */
+/* ── Out of Stock box ── */
 .product-ondemand-box {
     display: flex !important;
     align-items: flex-start !important;
     gap: 1rem !important;
-    background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 60%, #fde8e8 100%) !important;
-    border: 1.5px solid rgba(231,60,60,0.22) !important;
+    background: linear-gradient(135deg, #fafafa 0%, #f4f4f5 60%, #ededef 100%) !important;
+    border: 1.5px solid rgba(113,113,122,0.25) !important;
     border-radius: 1.2rem !important;
     padding: 1.1rem 1.2rem !important;
     position: relative !important;
     overflow: hidden !important;
-    box-shadow: 0 4px 18px rgba(231,60,60,0.08), inset 0 1px 0 rgba(255,255,255,0.9) !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9) !important;
     transition: box-shadow 0.25s ease, border-color 0.25s ease !important;
 }
 .product-ondemand-box:hover {
-    border-color: rgba(231,60,60,0.42) !important;
-    box-shadow: 0 6px 26px rgba(231,60,60,0.14), inset 0 1px 0 rgba(255,255,255,0.95) !important;
+    border-color: rgba(113,113,122,0.4) !important;
+    box-shadow: 0 6px 26px rgba(0,0,0,0.09), inset 0 1px 0 rgba(255,255,255,0.95) !important;
 }
-/* Subtle red left-accent bar */
 .product-ondemand-box::before {
     content: "" !important;
     position: absolute !important;
     top: 0 !important; left: 0 !important;
     width: 4px !important; height: 100% !important;
-    background: linear-gradient(180deg, #e73c3c, #c0392b) !important;
+    background: linear-gradient(180deg, #71717a, #52525b) !important;
     border-radius: 1.2rem 0 0 1.2rem !important;
 }
-
 .product-ondemand-icon {
     flex-shrink: 0 !important;
     width: 2.8rem !important;
@@ -13502,27 +13499,24 @@ html {
     align-items: center !important;
     justify-content: center !important;
     font-size: 1.1rem !important;
-    background: linear-gradient(135deg, #e73c3c 0%, #c0392b 100%) !important;
+    background: linear-gradient(135deg, #71717a 0%, #52525b 100%) !important;
     color: #ffffff !important;
-    box-shadow: 0 4px 14px rgba(231,60,60,0.38), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+    box-shadow: 0 4px 14px rgba(82,82,91,0.35), inset 0 1px 0 rgba(255,255,255,0.2) !important;
 }
-
 .product-ondemand-title {
     font-size: 0.82rem !important;
     font-weight: 800 !important;
-    color: #be1e1e !important;
-    letter-spacing: 0.02em !important;
+    color: #3f3f46 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
     margin-bottom: 0.22rem !important;
 }
-
 .product-ondemand-sub {
     font-size: 0.73rem !important;
-    color: #7f1d1d !important;
+    color: #52525b !important;
     line-height: 1.6 !important;
-    opacity: 0.85 !important;
+    opacity: 0.9 !important;
 }
-
-/* Quick-fact pills (new element) */
 .product-quick-facts {
     display: flex;
     flex-wrap: wrap;
