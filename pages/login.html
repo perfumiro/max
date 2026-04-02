@@ -260,314 +260,377 @@ s0.parentNode.insertBefore(s1,s0);
         </nav>
     </header>
 
-    <main class="login-page-wrap py-10 sm:py-14 md:py-16 min-h-[78vh]">
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="login-hero-row">
-                <div>
-                    <p class="login-breadcrumbs text-sm mb-5 sm:mb-6">
-                        <a href="/" class="hover:text-white transition" data-i18n="common.home_breadcrumb">Home</a>
-                        <span class="mx-2 opacity-60">/</span>
-                        <span class="font-semibold" data-i18n="login.breadcrumb">Account Sign In</span>
-                    </p>
-                    <span class="login-hero-kicker" data-i18n="login.kicker">Private member access</span>
-                    <h1 class="login-hero-title" data-i18n="login.h1">Enter your private fragrance space.</h1>
-                    <p class="login-hero-text" data-i18n="login.text">Sign in to access saved selections, track deliveries, continue checkout faster, and keep your personal perfume archive in one elevated account experience.</p>
+    <style>
+        /* ── Simple Auth Card ─────────────────────────────────── */
+        .auth-page {
+            min-height: 80vh;
+            background: #f4f2ef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .auth-card {
+            background: #fff;
+            border-radius: 1.25rem;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.09);
+            width: 100%;
+            max-width: 440px;
+            padding: 2.5rem 2rem 2rem;
+        }
+        /* Tabs */
+        .auth-tabs {
+            display: flex;
+            background: #f4f2ef;
+            border-radius: 0.65rem;
+            padding: 4px;
+            margin-bottom: 1.75rem;
+            gap: 4px;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 0.6rem 0.75rem;
+            border: none;
+            background: transparent;
+            border-radius: 0.5rem;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #888;
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s;
+        }
+        .auth-tab.active {
+            background: #fff;
+            color: #1a1a1a;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+        /* Panels */
+        .auth-panel { display: none; }
+        .auth-panel.active { display: block; }
+        /* Heading */
+        .auth-heading {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin: 0 0 0.35rem;
+            letter-spacing: -0.02em;
+        }
+        .auth-subheading {
+            font-size: 0.84rem;
+            color: #999;
+            margin: 0 0 1.5rem;
+            line-height: 1.5;
+        }
+        /* Form fields */
+        .auth-field {
+            margin-bottom: 1rem;
+        }
+        .auth-field label {
+            display: block;
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #666;
+            margin-bottom: 0.4rem;
+        }
+        .auth-input-wrap {
+            position: relative;
+        }
+        .auth-input {
+            width: 100%;
+            padding: 0.75rem 0.9rem;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 0.6rem;
+            font-size: 0.92rem;
+            color: #1a1a1a;
+            background: #fafafa;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            box-sizing: border-box;
+        }
+        .auth-input:focus {
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 3px rgba(26,26,26,0.07);
+            background: #fff;
+        }
+        .auth-input.has-toggle { padding-right: 3rem; }
+        .auth-pw-toggle {
+            position: absolute;
+            right: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #bbb;
+            cursor: pointer;
+            padding: 0.2rem;
+            font-size: 0.9rem;
+            transition: color 0.15s;
+        }
+        .auth-pw-toggle:hover { color: #555; }
+        /* Name row */
+        .auth-name-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        @media (max-width: 360px) { .auth-name-row { grid-template-columns: 1fr; } }
+        /* Utility row */
+        .auth-util-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.82rem;
+        }
+        .auth-remember {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: #666;
+            cursor: pointer;
+        }
+        .auth-remember input { accent-color: #1a1a1a; }
+        .auth-forgot {
+            color: #e73c3c;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.82rem;
+        }
+        .auth-forgot:hover { text-decoration: underline; }
+        /* Message */
+        .auth-msg {
+            font-size: 0.83rem;
+            border-radius: 0.5rem;
+            padding: 0.65rem 0.9rem;
+            margin-bottom: 0.9rem;
+            line-height: 1.5;
+            display: none;
+        }
+        .auth-msg.error   { display: block; background: #fff0f0; color: #c0392b; border: 1px solid #fcc; }
+        .auth-msg.success { display: block; background: #f0fff4; color: #1a6c40; border: 1px solid #a8e6bf; }
+        /* Submit */
+        .auth-submit {
+            width: 100%;
+            padding: 0.85rem;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 0.65rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.18s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .auth-submit:hover { background: #333; }
+        .auth-submit:active { transform: scale(0.98); }
+        .auth-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+        /* Divider */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.4rem 0;
+            color: #ccc;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e8e8e8;
+        }
+        /* Google */
+        .auth-google-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #fff;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 0.65rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+        }
+        .auth-google-btn:hover {
+            background: #fafafa;
+            border-color: #ccc;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .auth-google-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        /* Footer text */
+        .auth-switch-row {
+            text-align: center;
+            margin-top: 1.25rem;
+            font-size: 0.84rem;
+            color: #999;
+        }
+        .auth-switch-row button {
+            background: none;
+            border: none;
+            color: #1a1a1a;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.84rem;
+            padding: 0;
+            text-decoration: underline;
+        }
+        .auth-switch-row button:hover { color: #e73c3c; }
+        /* Security */
+        .auth-secure {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            font-size: 0.73rem;
+            color: #bbb;
+            margin-top: 1.1rem;
+        }
+    </style>
 
-                    <div class="login-hero-metrics">
-                        <article class="login-hero-metric">
-                            <strong data-i18n="login.metric1_strong">1-click</strong>
-                            <span data-i18n="login.metric1_span">reorders for your signature picks</span>
-                        </article>
-                        <article class="login-hero-metric">
-                            <strong data-i18n="login.metric2_strong">Live</strong>
-                            <span data-i18n="login.metric2_span">tracking on every active order</span>
-                        </article>
-                        <article class="login-hero-metric">
-                            <strong data-i18n="login.metric3_strong">24/7</strong>
-                            <span data-i18n="login.metric3_span">access to your wishlist and profile</span>
-                        </article>
+    <main class="auth-page">
+        <div class="auth-card">
+
+            <!-- Tabs -->
+            <div class="auth-tabs" role="tablist">
+                <button class="auth-tab active" id="tabSignin" role="tab" aria-selected="true" aria-controls="panelSignin">Sign In</button>
+                <button class="auth-tab"        id="tabSignup" role="tab" aria-selected="false" aria-controls="panelSignup">Create Account</button>
+            </div>
+
+            <!-- ═══ SIGN IN PANEL ═══ -->
+            <div class="auth-panel active" id="panelSignin" role="tabpanel">
+                <h2 class="auth-heading">Welcome back</h2>
+                <p class="auth-subheading">Sign in to your IPORDISE account.</p>
+
+                <form id="loginForm" novalidate>
+                    <div class="auth-field">
+                        <label for="loginEmailInput">Email address</label>
+                        <input id="loginEmailInput" class="auth-input" type="email" name="email"
+                            placeholder="you@example.com" autocomplete="email" required>
                     </div>
-                </div>
 
-                <div class="login-hero-mini-card">
-                    <span data-i18n="login.concierge_title">Concierge access</span>
-                    <strong data-i18n="login.concierge_hours">Mon - Sat ? 09:00 - 20:00</strong>
-                    <p data-i18n="login.concierge_desc">Account support, order help, and fragrance guidance from our client care team.</p>
-                    <a href="contact.html" data-i18n="login.concierge_link">Talk to an advisor <i class="fas fa-arrow-right text-xs"></i></a>
+                    <div class="auth-field">
+                        <label for="loginPasswordInput">Password</label>
+                        <div class="auth-input-wrap">
+                            <input id="loginPasswordInput" class="auth-input has-toggle" type="password" name="password"
+                                placeholder="Your password" autocomplete="current-password" required>
+                            <button type="button" class="auth-pw-toggle" data-target="loginPasswordInput" aria-label="Show password">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="auth-util-row">
+                        <label class="auth-remember">
+                            <input type="checkbox" id="loginRememberMe"> Stay signed in
+                        </label>
+                        <a href="support.html" class="auth-forgot">Forgot password?</a>
+                    </div>
+
+                    <div id="loginFormMessage" class="auth-msg" role="alert" aria-live="polite"></div>
+
+                    <button type="submit" class="auth-submit" id="loginSubmitBtn">
+                        Sign in
+                    </button>
+                </form>
+
+                <div class="auth-divider">or</div>
+
+                <button type="button" class="auth-google-btn" id="googleSignInBtn" aria-label="Continue with Google">
+                    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908C16.658 14.121 17.64 11.813 17.64 9.2z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+                    Continue with Google
+                </button>
+
+                <div class="auth-switch-row">
+                    No account yet? <button type="button" id="switchToSignup">Create one now</button>
                 </div>
             </div>
 
-            <div class="login-shell">
-                <aside class="login-aside text-white">
-                    <div class="login-aside-inner">
-                        <span class="login-panel-kicker" data-i18n="login.aside_kicker">Member experience</span>
-                        <h2 class="login-panel-title" data-i18n="login.aside_h">Luxury access designed for returning clients.</h2>
-                        <p class="login-panel-text" data-i18n="login.aside_p">From wishlist curation to delivery follow-up, your IPORDISE account keeps every part of your perfume journey elegant, secure, and fast.</p>
+            <!-- ═══ SIGN UP PANEL ═══ -->
+            <div class="auth-panel" id="panelSignup" role="tabpanel">
+                <h2 class="auth-heading">Create your account</h2>
+                <p class="auth-subheading">Join IPORDISE — it only takes a minute.</p>
 
-                        <div class="login-showcase-card">
-                            <div class="login-showcase-head">
-                                <span data-i18n="login.card_title">Inside your account</span>
-                                <strong data-i18n="login.card_subtitle">Premium profile control</strong>
-                            </div>
-                            <div class="login-showcase-list">
-                                <div class="login-showcase-item">
-                                    <i class="fas fa-heart"></i>
-                                    <div>
-                                        <strong data-i18n="login.feat1_h">Saved favorites</strong>
-                                        <span data-i18n="login.feat1_p">Keep your best-loved bottles and decants ready to revisit.</span>
-                                    </div>
-                                </div>
-                                <div class="login-showcase-item">
-                                    <i class="fas fa-truck-fast"></i>
-                                    <div>
-                                        <strong data-i18n="login.feat2_h">Tracked delivery</strong>
-                                        <span data-i18n="login.feat2_p">Follow every shipment from confirmation to doorstep.</span>
-                                    </div>
-                                </div>
-                                <div class="login-showcase-item">
-                                    <i class="fas fa-bag-shopping"></i>
-                                    <div>
-                                        <strong data-i18n="login.feat3_h">Faster checkout</strong>
-                                        <span data-i18n="login.feat3_p">Return with your profile details and place orders in less time.</span>
-                                    </div>
-                                </div>
-                            </div>
+                <form id="signupForm" novalidate>
+                    <div class="auth-name-row auth-field">
+                        <div>
+                            <label for="signupFirstNameInput">First name</label>
+                            <input id="signupFirstNameInput" class="auth-input" type="text" name="firstName"
+                                placeholder="First name" autocomplete="given-name" required>
                         </div>
-
-                        <div class="login-stat-grid">
-                            <article class="login-stat-card">
-                                <strong data-i18n="login.stat1_h">Personal dashboard</strong>
-                                <span data-i18n="login.stat1_p">Review orders, favorites, and account details from one place.</span>
-                            </article>
-                            <article class="login-stat-card">
-                                <strong data-i18n="login.stat2_h">Protected access</strong>
-                                <span data-i18n="login.stat2_p">Secure sign in backed by encrypted session handling.</span>
-                            </article>
-                            <article class="login-stat-card">
-                                <strong data-i18n="login.stat3_h">Luxury follow-up</strong>
-                                <span data-i18n="login.stat3_p">Stay updated on deliveries, returns, and concierge support.</span>
-                            </article>
-                            <article class="login-stat-card">
-                                <strong data-i18n="login.stat4_h">Faster discovery</strong>
-                                <span data-i18n="login.stat4_p">Come back to collections you viewed and perfumes you loved.</span>
-                            </article>
-                        </div>
-
-                        <div class="login-benefits-cluster">
-                            <div class="login-benefit-item">
-                                <i class="fas fa-sparkles"></i>
-                                <span data-i18n="login.benefit1">Personalized fragrance recommendations for your profile</span>
-                            </div>
-                            <div class="login-benefit-item">
-                                <i class="fas fa-box-open"></i>
-                                <span data-i18n="login.benefit2">Fast order history and delivery follow-up</span>
-                            </div>
-                            <div class="login-benefit-item">
-                                <i class="fas fa-shield-heart"></i>
-                                <span data-i18n="login.benefit3">Secure account flow with trusted data protection</span>
-                            </div>
-                        </div>
-
-                        <div class="login-meta-card">
-                            <p class="text-xs uppercase tracking-[0.2em] font-bold text-[#f3dca5]" data-i18n="login.meta_title">Client support</p>
-                                <p class="text-sm text-white/78 mt-2" data-i18n="login.meta_p">Need help signing in or checking an order? Our advisors assist with account access, order follow-up, and product guidance.</p>
-                                <a href="contact.html" class="inline-flex items-center mt-4 text-sm font-semibold text-white hover:text-[#f3dca5] transition" data-i18n="login.meta_link">
-                                Contact customer care <i class="fas fa-arrow-right ml-2 text-xs"></i>
-                            </a>
+                        <div>
+                            <label for="signupLastNameInput">Last name</label>
+                            <input id="signupLastNameInput" class="auth-input" type="text" name="lastName"
+                                placeholder="Last name" autocomplete="family-name" required>
                         </div>
                     </div>
-                </aside>
 
-                <div class="login-form-panel">
-                    <div class="login-form-head">
-                        <div class="login-form-badge-row">
-                            <span class="login-form-kicker" data-i18n="login.form_kicker">Secure sign in</span>
-                            <span class="login-form-badge"><i class="fas fa-shield-check"></i> <span data-i18n="login.form_badge">Trusted account access</span></span>
+                    <div class="auth-field">
+                        <label for="signupEmailInput">Email address</label>
+                        <input id="signupEmailInput" class="auth-input" type="email" name="email"
+                            placeholder="you@example.com" autocomplete="email" required>
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="signupPasswordInput">Password</label>
+                        <div class="auth-input-wrap">
+                            <input id="signupPasswordInput" class="auth-input has-toggle" type="password" name="password"
+                                placeholder="Min. 6 characters" autocomplete="new-password" minlength="6" required>
+                            <button type="button" class="auth-pw-toggle" data-target="signupPasswordInput" aria-label="Show password">
+                                <i class="far fa-eye"></i>
+                            </button>
                         </div>
-                        <h2 class="login-form-title" data-i18n="login.form_title">Welcome back.</h2>
-                        <p class="login-form-subtitle" data-i18n="login.form_subtitle">Use your email and password to continue to your account, recover your favorites, and return to checkout with a smooth premium experience.</p>
                     </div>
 
-                    <div class="login-security-note">
-                        <i class="fas fa-lock"></i>
-                        <span data-i18n="login.security_note">Your session is protected with secure encryption.</span>
+                    <div class="auth-field">
+                        <label for="signupConfirmPasswordInput">Confirm password</label>
+                        <div class="auth-input-wrap">
+                            <input id="signupConfirmPasswordInput" class="auth-input has-toggle" type="password" name="confirmPassword"
+                                placeholder="Repeat password" autocomplete="new-password" minlength="6" required>
+                            <button type="button" class="auth-pw-toggle" data-target="signupConfirmPasswordInput" aria-label="Show password">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="login-form-feature-strip">
-                        <div class="login-form-feature"><i class="fas fa-heart-circle-check"></i><span data-i18n="login.feature_wishlist">Wishlist sync</span></div>
-                        <div class="login-form-feature"><i class="fas fa-location-dot"></i><span data-i18n="login.feature_delivery">Saved delivery details</span></div>
-                        <div class="login-form-feature"><i class="fas fa-receipt"></i><span data-i18n="login.feature_history">Order history</span></div>
-                    </div>
+                    <div id="signupFormMessage" class="auth-msg" role="alert" aria-live="polite"></div>
 
-                    <div class="login-auth-toggle" role="tablist" aria-label="Account access mode">
-                        <button type="button" class="login-auth-tab is-active" data-auth-mode="signin" aria-selected="true" data-i18n="login.tab_signin">Sign in</button>
-                        <button type="button" class="login-auth-tab" data-auth-mode="signup" aria-selected="false" data-i18n="login.tab_signup">Create account</button>
-                    </div>
+                    <button type="submit" class="auth-submit" id="signupSubmitBtn">
+                        Create account
+                    </button>
+                </form>
 
-                    <div class="login-auth-panels mt-7">
-                        <section class="login-auth-panel is-active" data-auth-panel="signin">
-                            <form id="loginForm" class="space-y-4" action="#" method="post">
-                                <label class="login-field">
-                                    <span data-i18n="login.email_label">Email address</span>
-                                    <div class="login-input-wrap">
-                                        <i class="far fa-envelope login-input-icon"></i>
-                                        <input id="loginEmailInput" class="login-input-control" type="email" name="email" placeholder="you@example.com" data-i18n-placeholder="login.email_ph" autocomplete="email" required>
-                                    </div>
-                                </label>
+                <div class="auth-divider">or</div>
 
-                                <label class="login-field">
-                                    <span data-i18n="login.password_label">Password</span>
-                                    <div class="login-input-wrap">
-                                        <i class="fas fa-lock login-input-icon"></i>
-                                        <input id="loginPasswordInput" class="login-input-control pr-14" type="password" name="password" placeholder="Enter your password" data-i18n-placeholder="login.password_ph" autocomplete="current-password" required>
-                                        <button type="button" class="login-password-toggle" data-password-toggle data-password-target="#loginPasswordInput" aria-label="Show password">
-                                            <i class="far fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </label>
+                <button type="button" class="auth-google-btn" id="googleSignUpBtn" aria-label="Continue with Google">
+                    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908C16.658 14.121 17.64 11.813 17.64 9.2z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+                    Continue with Google
+                </button>
 
-                                <div class="login-utility-row">
-                                    <label class="login-remember-option">
-                                        <input id="loginRememberMe" type="checkbox" class="rounded border-gray-300 text-brand-red focus:ring-brand-red">
-                                        <span data-i18n="login.remember_me">Stay signed in on this device</span>
-                                    </label>
-                                    <a href="support.html" class="login-forgot-link" data-i18n="login.forgot_pw">Forgot password?</a>
-                                </div>
-
-                                <label class="legal-consent-card legal-consent-card-login">
-                                    <span class="legal-consent-check">
-                                        <input id="loginLegalConsent" type="checkbox" class="legal-consent-input">
-                                        <span class="legal-consent-box" aria-hidden="true"></span>
-                                    </span>
-                                    <span class="legal-consent-copy">
-                                        <strong data-i18n="login.legal_accept">I accept the Privacy Policy and Terms & Conditions.</strong>
-                                        <span data-i18n="login.legal_signin_agree">By signing in, I agree to the processing of my account data according to IPORDISE policies.</span>
-                                        <span><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> and <a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a>.</span>
-                                    </span>
-                                </label>
-
-                                <p id="loginLegalConsentMessage" class="legal-consent-message hidden" data-i18n="login.legal_required_msg">Please accept the Privacy Policy and Terms & Conditions to continue.</p>
-                                <p id="loginFormMessage" class="login-form-message hidden" aria-live="polite"></p>
-
-                                <button id="loginSubmitBtn" type="submit" class="login-submit-btn opacity-50 cursor-not-allowed" disabled aria-disabled="true" data-i18n="login.submit_btn">Sign in securely</button>
-
-                                <button type="button" class="login-secondary-btn" data-auth-switch="signup" data-i18n="login.create_account_btn">Create a new account</button>
-                            </form>
-                        </section>
-
-                        <section class="login-auth-panel hidden" data-auth-panel="signup">
-                            <form id="signupForm" class="space-y-4" action="#" method="post">
-                                <div class="login-form-grid-2">
-                                    <label class="login-field">
-                                        <span data-i18n="login.signup_firstname_label">First name</span>
-                                        <div class="login-input-wrap">
-                                            <i class="far fa-user login-input-icon"></i>
-                                            <input id="signupFirstNameInput" class="login-input-control" type="text" name="firstName" placeholder="First name" data-i18n-placeholder="login.signup_firstname_ph" autocomplete="given-name" required>
-                                        </div>
-                                    </label>
-
-                                    <label class="login-field">
-                                        <span data-i18n="login.signup_lastname_label">Last name</span>
-                                        <div class="login-input-wrap">
-                                            <i class="far fa-user login-input-icon"></i>
-                                            <input id="signupLastNameInput" class="login-input-control" type="text" name="lastName" placeholder="Last name" data-i18n-placeholder="login.signup_lastname_ph" autocomplete="family-name" required>
-                                        </div>
-                                    </label>
-                                </div>
-
-                                <label class="login-field">
-                                    <span data-i18n="login.signup_email_label">Email address</span>
-                                    <div class="login-input-wrap">
-                                        <i class="far fa-envelope login-input-icon"></i>
-                                        <input id="signupEmailInput" class="login-input-control" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
-                                    </div>
-                                </label>
-
-                                <label class="login-field">
-                                    <span data-i18n="login.signup_create_pw_label">Create password</span>
-                                    <div class="login-input-wrap">
-                                        <i class="fas fa-lock login-input-icon"></i>
-                                        <input id="signupPasswordInput" class="login-input-control pr-14" type="password" name="password" placeholder="Minimum 6 characters" data-i18n-placeholder="login.signup_min_pw_ph" autocomplete="new-password" minlength="6" required>
-                                        <button type="button" class="login-password-toggle" data-password-toggle data-password-target="#signupPasswordInput" aria-label="Show password">
-                                            <i class="far fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </label>
-
-                                <label class="login-field">
-                                    <span data-i18n="login.signup_confirm_pw_label">Confirm password</span>
-                                    <div class="login-input-wrap">
-                                        <i class="fas fa-lock login-input-icon"></i>
-                                        <input id="signupConfirmPasswordInput" class="login-input-control pr-14" type="password" name="confirmPassword" placeholder="Repeat your password" data-i18n-placeholder="login.signup_repeat_pw_ph" autocomplete="new-password" minlength="6" required>
-                                        <button type="button" class="login-password-toggle" data-password-toggle data-password-target="#signupConfirmPasswordInput" aria-label="Show password">
-                                            <i class="far fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </label>
-
-                                <label class="legal-consent-card legal-consent-card-login">
-                                    <span class="legal-consent-check">
-                                        <input id="signupLegalConsent" type="checkbox" class="legal-consent-input">
-                                        <span class="legal-consent-box" aria-hidden="true"></span>
-                                    </span>
-                                    <span class="legal-consent-copy">
-                                        <strong data-i18n="login.legal_accept">I accept the Privacy Policy and Terms & Conditions.</strong>
-                                        <span data-i18n="login.legal_signup_agree">By creating an account, I agree to the processing of my account data according to IPORDISE policies.</span>
-                                        <span><a href="privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> and <a href="terms.html" data-i18n="footer.terms">Terms &amp; Conditions</a>.</span>
-                                    </span>
-                                </label>
-
-                                <p id="signupLegalConsentMessage" class="legal-consent-message hidden" data-i18n="login.legal_required_signup_msg">Please accept the Privacy Policy and Terms & Conditions to create your account.</p>
-                                <p id="signupFormMessage" class="login-form-message hidden" aria-live="polite"></p>
-
-                                <button id="signupSubmitBtn" type="submit" class="login-submit-btn opacity-50 cursor-not-allowed" disabled aria-disabled="true" data-i18n="login.signup_btn">Create account</button>
-
-                                <button type="button" class="login-secondary-btn" data-auth-switch="signin" data-i18n="login.existing_account_btn">I already have an account</button>
-                            </form>
-                        </section>
-                    </div>
-
-                    <div class="login-divider-row">
-                        <span class="h-px flex-1 bg-gray-200"></span>
-                        <span data-i18n="login.or_continue">Or continue with</span>
-                        <span class="h-px flex-1 bg-gray-200"></span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                        <button type="button" class="social-login-btn" aria-label="Continue with Google">
-                            <i class="fab fa-google text-red-500"></i>
-                            <span>Google</span>
-                        </button>
-                        <button type="button" class="social-login-btn" aria-label="Continue with Facebook">
-                            <i class="fab fa-facebook-f text-blue-600"></i>
-                            <span>Facebook</span>
-                        </button>
-                    </div>
-
-                    <div class="login-assistance-row">
-                        <article class="login-assistance-card">
-                            <span class="login-assistance-label" data-i18n="login.assist_new_label">New client</span>
-                            <strong data-i18n="login.assist_new_h">Create your account</strong>
-                            <p data-i18n="login.assist_new_p">Save favorites, speed up checkout, and keep your fragrance history organized.</p>
-                            <button type="button" class="login-inline-action" data-auth-switch="signup" data-i18n-html="login.assist_new_btn">Register now <i class="fas fa-arrow-right text-xs"></i></button>
-                        </article>
-                        <article class="login-assistance-card">
-                            <span class="login-assistance-label" data-i18n="login.assist_support_label">Need support?</span>
-                            <strong data-i18n="login.assist_support_h">Account assistance</strong>
-                            <p data-i18n="login.assist_support_p">Get help with sign in, password recovery, order access, and customer care.</p>
-                            <a href="support.html" data-i18n-html="login.assist_support_link">Visit support <i class="fas fa-arrow-right text-xs"></i></a>
-                        </article>
-                    </div>
-
-                    <div class="login-bottom-row">
-                        <p data-i18n="login.no_account">Don?t have an account yet?</p>
-                        <button type="button" class="login-inline-action" data-auth-switch="signup" data-i18n="login.create_now">Create one now</button>
-                    </div>
+                <div class="auth-switch-row">
+                    Already have an account? <button type="button" id="switchToSignin">Sign in</button>
                 </div>
             </div>
-        </section>
+
+            <div class="auth-secure">
+                <i class="fas fa-lock" style="font-size:0.65rem;"></i>
+                Protected by Firebase Authentication
+            </div>
+
+        </div>
     </main>
-
     <footer class="bg-brand-dark text-white pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
@@ -615,34 +678,125 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
     </footer>
 
-    <!-- Server Down Overlay (direct navigation to login.html) -->
-    <div id="loginServerDownOverlay" style="
-        position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;
-        display:flex;align-items:center;justify-content:center;
-        backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-    ">
-        <div style="
-            background:#1a1a1a;color:#fff;border-radius:1rem;
-            padding:2.5rem 2rem;max-width:420px;width:90%;text-align:center;
-            box-shadow:0 25px 60px rgba(0,0,0,0.5);
-            border:1px solid rgba(255,255,255,0.1);
-        ">
-            <div style="font-size:3rem;margin-bottom:1rem;">???</div>
-            <h2 style="font-size:1.4rem;font-weight:700;margin-bottom:0.75rem;letter-spacing:0.05em;">
-                Server Under Maintenance
-            </h2>
-            <p style="color:rgba(255,255,255,0.7);font-size:0.95rem;line-height:1.6;margin-bottom:1.75rem;">
-                Our login servers are currently down for maintenance.<br>
-                We apologize for the inconvenience and will be back shortly.
-            </p>
-            <a href="/" style="
-                display:inline-block;background:#e73c3c;color:#fff;
-                border-radius:999px;padding:0.65rem 2rem;
-                font-size:0.9rem;font-weight:700;letter-spacing:0.05em;
-                text-decoration:none;
-            ">Back to Home</a>
-        </div>
-    </div>
+    <!-- Server-down overlay removed — Firebase Authentication is now active -->
+
+    <!-- ── Firebase Auth ──────────────────────────────────────── -->
+    <script type="module">
+      import { signIn, signUp, googleSignIn, onAuthChange, getErrorMessage } from '../auth/auth.js';
+
+      // If already logged in → go straight to dashboard
+      onAuthChange((user) => {
+        if (user) window.location.replace('dashboard.html');
+      });
+
+      // ── Helpers ───────────────────────────────────────────────
+      const $ = (id) => document.getElementById(id);
+
+      const showMsg = (el, text, type) => {
+        if (!el) return;
+        el.textContent = text;
+        el.className = 'auth-msg' + (text ? ' ' + type : '');
+      };
+
+      const setLoading = (btn, on) => {
+        if (!btn) return;
+        btn.disabled = on;
+        if (on) { btn.dataset.orig = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Please wait…'; }
+        else    { btn.innerHTML = btn.dataset.orig || btn.innerHTML; }
+      };
+
+      // ── Tab switching ─────────────────────────────────────────
+      const tabs    = { signin: $('tabSignin'),  signup: $('tabSignup')  };
+      const panels  = { signin: $('panelSignin'), signup: $('panelSignup') };
+
+      const switchTab = (name) => {
+        Object.keys(tabs).forEach((k) => {
+          tabs[k].classList.toggle('active', k === name);
+          tabs[k].setAttribute('aria-selected', String(k === name));
+          panels[k].classList.toggle('active', k === name);
+        });
+      };
+
+      $('tabSignin')?.addEventListener('click', () => switchTab('signin'));
+      $('tabSignup')?.addEventListener('click', () => switchTab('signup'));
+      $('switchToSignup')?.addEventListener('click', () => switchTab('signup'));
+      $('switchToSignin')?.addEventListener('click', () => switchTab('signin'));
+
+      // ── Password toggles ──────────────────────────────────────
+      document.querySelectorAll('.auth-pw-toggle').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const input = document.getElementById(btn.dataset.target);
+          if (!input) return;
+          const show = input.type === 'password';
+          input.type = show ? 'text' : 'password';
+          const icon = btn.querySelector('i');
+          if (icon) { icon.className = show ? 'far fa-eye-slash' : 'far fa-eye'; }
+          btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        });
+      });
+
+      // ── Sign In ───────────────────────────────────────────────
+      $('loginForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const email    = $('loginEmailInput')?.value.trim() || '';
+        const password = $('loginPasswordInput')?.value     || '';
+        const msg      = $('loginFormMessage');
+        const btn      = $('loginSubmitBtn');
+        if (!email || !password) { showMsg(msg, 'Please enter your email and password.', 'error'); return; }
+        showMsg(msg, '', '');
+        setLoading(btn, true);
+        try {
+          const user = await signIn(email, password);
+          const name = (user.displayName || '').split(' ')[0] || 'back';
+          showMsg(msg, `Welcome ${name}! Redirecting…`, 'success');
+          setTimeout(() => window.location.replace('dashboard.html'), 1000);
+        } catch (err) {
+          showMsg(msg, getErrorMessage(err), 'error');
+          setLoading(btn, false);
+        }
+      }, true);
+
+      // ── Sign Up ───────────────────────────────────────────────
+      $('signupForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const firstName = $('signupFirstNameInput')?.value.trim()     || '';
+        const lastName  = $('signupLastNameInput')?.value.trim()       || '';
+        const email     = $('signupEmailInput')?.value.trim()          || '';
+        const password  = $('signupPasswordInput')?.value              || '';
+        const confirm   = $('signupConfirmPasswordInput')?.value       || '';
+        const msg       = $('signupFormMessage');
+        const btn       = $('signupSubmitBtn');
+        if (!firstName || !lastName || !email || !password) { showMsg(msg, 'Please fill in all fields.', 'error'); return; }
+        if (password.length < 6)   { showMsg(msg, 'Password must be at least 6 characters.', 'error'); return; }
+        if (password !== confirm)   { showMsg(msg, 'Passwords do not match.', 'error'); return; }
+        showMsg(msg, '', '');
+        setLoading(btn, true);
+        try {
+          await signUp(email, password, `${firstName} ${lastName}`);
+          showMsg(msg, `Welcome, ${firstName}! Account created. Redirecting…`, 'success');
+          setTimeout(() => window.location.replace('dashboard.html'), 1100);
+        } catch (err) {
+          showMsg(msg, getErrorMessage(err), 'error');
+          setLoading(btn, false);
+        }
+      }, true);
+
+      // ── Google Sign In ────────────────────────────────────────
+      const handleGoogle = async (btn) => {
+        setLoading(btn, true);
+        try {
+          await googleSignIn();
+          window.location.replace('dashboard.html');
+        } catch (err) {
+          alert(getErrorMessage(err));
+          setLoading(btn, false);
+        }
+      };
+      $('googleSignInBtn')?.addEventListener('click',  () => handleGoogle($('googleSignInBtn')));
+      $('googleSignUpBtn')?.addEventListener('click',  () => handleGoogle($('googleSignUpBtn')));
+    </script>
 
     <!-- IPO Search Overlay -->
     <div class="ipo-search-overlay" id="ipoSearchOverlay" role="dialog" aria-label="Search" aria-modal="true" aria-hidden="true">

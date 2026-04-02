@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-70NCC2RZM6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-70NCC2RZM6');
+    </script>
+    <title>Create Account | IPORDISE Morocco</title>
+    <meta name="description" content="Create your IPORDISE account to save favourites, track orders, and enjoy a personalised luxury fragrance experience in Morocco.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://www.ipordise.com/pages/register">
+    <meta name="theme-color" content="#1a1a1a">
+    <link rel="icon" type="image/png" href="../assets/logo.png">
+    <link rel="apple-touch-icon" href="../assets/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../script.js"></script>
+    <script src="../i18n.js"></script>
+    <link rel="stylesheet" href="../style.css">
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="IPORDISE">
+    <style>
+        /* ── Register page — scoped styles ──────────────────────── */
+        .reg-wrap {
+            min-height: 78vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            background: #f9f7f4;
+        }
+        .reg-card {
+            background: #fff;
+            border-radius: 1.25rem;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+            width: 100%;
+            max-width: 520px;
+            overflow: hidden;
+        }
+
+        /* Brand header stripe */
+        .reg-card-top {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 2rem 2.25rem 1.5rem;
+        }
+        .reg-card-top .reg-kicker {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #f3dca5;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .reg-card-top h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin: 0 0 0.4rem;
+        }
+        .reg-card-top p {
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.68);
+            line-height: 1.55;
+            margin: 0;
+        }
+
+        /* Form body */
+        .reg-card-body {
+            padding: 2rem 2.25rem 2.25rem;
+        }
+
+        .reg-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.875rem;
+        }
+        @media (max-width: 420px) {
+            .reg-grid-2 { grid-template-columns: 1fr; }
+        }
+
+        .reg-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+        .reg-field > span {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #555;
+        }
+        .reg-input-wrap {
+            position: relative;
+        }
+        .reg-input-icon {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+        .reg-input {
+            width: 100%;
+            padding: 0.7rem 0.9rem 0.7rem 2.4rem;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 0.6rem;
+            font-size: 0.92rem;
+            color: #1a1a1a;
+            background: #fafafa;
+            outline: none;
+            transition: border-color 0.18s, box-shadow 0.18s;
+            box-sizing: border-box;
+        }
+        .reg-input:focus {
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 3px rgba(26,26,26,0.07);
+            background: #fff;
+        }
+        .reg-input.pr-12 { padding-right: 3rem; }
+
+        /* Password toggle */
+        .reg-pw-toggle {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #aaa;
+            padding: 0.25rem;
+            font-size: 0.9rem;
+            line-height: 1;
+            transition: color 0.15s;
+        }
+        .reg-pw-toggle:hover { color: #555; }
+
+        /* Password strength bar */
+        .reg-pw-strength-wrap {
+            height: 4px;
+            background: #eee;
+            border-radius: 99px;
+            overflow: hidden;
+            margin-top: 0.35rem;
+        }
+        .reg-pw-strength-bar {
+            height: 100%;
+            border-radius: 99px;
+            transition: width 0.3s, background 0.3s;
+            width: 0%;
+        }
+        .reg-pw-hint {
+            font-size: 0.72rem;
+            color: #999;
+            margin-top: 0.25rem;
+        }
+
+        /* Divider */
+        .reg-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.4rem 0;
+            color: #bbb;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .reg-divider::before,
+        .reg-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        /* Google button */
+        .reg-google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 0.72rem 1.25rem;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 0.6rem;
+            background: #fff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
+        }
+        .reg-google-btn:hover {
+            background: #fafafa;
+            border-color: #ccc;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .reg-google-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Submit button */
+        .reg-submit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.85rem 1.5rem;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 0.6rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
+            margin-top: 1.1rem;
+        }
+        .reg-submit:hover {
+            background: #333;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+        }
+        .reg-submit:active { transform: scale(0.98); }
+        .reg-submit:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Message */
+        .reg-msg {
+            font-size: 0.84rem;
+            border-radius: 0.5rem;
+            padding: 0.65rem 0.9rem;
+            margin-top: 0.75rem;
+            display: none;
+            line-height: 1.5;
+        }
+        .reg-msg.is-error   { display: block; background: #fff0f0; color: #c0392b; border: 1px solid #fcc; }
+        .reg-msg.is-success { display: block; background: #f0fff4; color: #1e6c40; border: 1px solid #a8e6bf; }
+
+        /* Footer link row */
+        .reg-footer-link {
+            text-align: center;
+            margin-top: 1.25rem;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        .reg-footer-link a {
+            color: #1a1a1a;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        .reg-footer-link a:hover { color: #e73c3c; }
+
+        /* Security note */
+        .reg-security {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.76rem;
+            color: #aaa;
+            margin-top: 1.1rem;
+            justify-content: center;
+        }
+        .reg-security i { color: #1a1a1a; }
+    </style>
+</head>
+<body class="bg-white text-gray-800 font-sans antialiased">
+
+    <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide">
+        Complimentary gift wrapping &mdash; Code: <span class="top-announcement-code">PARFUM15</span> &mdash; <a href="#" class="top-announcement-link">SHOP NOW!</a>
+    </div>
+
+    <header class="bg-brand-dark text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Mobile Menu Toggle -->
+                <button id="mobileMenuToggle" class="md:hidden header-icon-btn hover:text-brand-red transition" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="/" aria-label="IPORDISE Home">
+                        <img
+                            src="../assets/logo-wordmark.svg"
+                            alt="IPORDISE Luxury Perfumes"
+                            class="site-logo-img"
+                            fetchpriority="high"
+                            loading="eager"
+                            decoding="async"
+                        >
+                    </a>
+                </div>
+
+                <!-- Desktop Search -->
+                <div class="flex-1 max-w-2xl mx-8 hidden md:block">
+                    <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
+                        <i class="fas fa-search ipo-search-trigger-icon"></i>
+                        <span class="ipo-search-trigger-text">Search perfumes, brands, notes...</span>
+                    </button>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-3 md:gap-6">
+                    <a href="../discover.html?filter=all" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">
+                        PROMOTIONS <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                    </a>
+                    <div class="flex items-center gap-2 md:gap-3 text-lg">
+                        <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
+                            <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                        </button>
+                        <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                        <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart" id="cartIconLink">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="header-cart-badge absolute hidden" id="cartBadge" aria-live="polite"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar -->
+        <div class="header-mobile-search md:hidden" aria-hidden="true" role="search">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="mobile-search-inner">
+                    <input type="text" class="mobile-search-input" placeholder="Search perfumes, brands, notes..." aria-label="Search" autocomplete="off">
+                    <button class="mobile-search-submit" aria-label="Submit search"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="perfume-nav hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <ul class="perfume-nav-list">
+                    <li><a href="../discover.html?filter=all" class="perfume-nav-link">ALL PERFUMES</a></li>
+                    <li><a href="../discover.html?filter=for-men" class="perfume-nav-link">MEN</a></li>
+                    <li><a href="../discover.html?filter=for-women" class="perfume-nav-link">WOMEN</a></li>
+                    <li><a href="../discover.html?filter=unisex" class="perfume-nav-link">UNISEX</a></li>
+                    <li><a href="../discover.html?filter=niche" class="perfume-nav-link">NICHE</a></li>
+                    <li><a href="../discover.html?filter=best-sellers" class="perfume-nav-link">BEST SELLERS</a></li>
+                    <li><a href="../discover.html?filter=new-in" class="perfume-nav-link">NEW IN</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════
+         Register page
+    ══════════════════════════════════════════════════════════ -->
+    <main class="reg-wrap">
+        <div class="reg-card">
+
+            <!-- Card header -->
+            <div class="reg-card-top">
+                <span class="reg-kicker">New member</span>
+                <h1>Create your account.</h1>
+                <p>Join thousands of fragrance lovers. Save favourites, track orders, and check out faster.</p>
+            </div>
+
+            <!-- Card body -->
+            <div class="reg-card-body">
+
+                <!-- Google Sign-in -->
+                <button type="button" class="reg-google-btn" id="regGoogleBtn" aria-label="Continue with Google">
+                    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+                        <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.616z"/>
+                        <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+                        <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+                        <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+
+                <div class="reg-divider">or register with email</div>
+
+                <!-- Register form -->
+                <form id="registerForm" novalidate>
+                    <div class="reg-grid-2" style="margin-bottom:0.875rem;">
+                        <label class="reg-field">
+                            <span>First name</span>
+                            <div class="reg-input-wrap">
+                                <i class="far fa-user reg-input-icon"></i>
+                                <input id="regFirstName" class="reg-input" type="text" name="firstName"
+                                    placeholder="First name" autocomplete="given-name" required>
+                            </div>
+                        </label>
+                        <label class="reg-field">
+                            <span>Last name</span>
+                            <div class="reg-input-wrap">
+                                <i class="far fa-user reg-input-icon"></i>
+                                <input id="regLastName" class="reg-input" type="text" name="lastName"
+                                    placeholder="Last name" autocomplete="family-name" required>
+                            </div>
+                        </label>
+                    </div>
+
+                    <label class="reg-field" style="margin-bottom:0.875rem;">
+                        <span>Email address</span>
+                        <div class="reg-input-wrap">
+                            <i class="far fa-envelope reg-input-icon"></i>
+                            <input id="regEmail" class="reg-input" type="email" name="email"
+                                placeholder="you@example.com" autocomplete="email" required>
+                        </div>
+                    </label>
+
+                    <label class="reg-field" style="margin-bottom:0.25rem;">
+                        <span>Password</span>
+                        <div class="reg-input-wrap">
+                            <i class="fas fa-lock reg-input-icon"></i>
+                            <input id="regPassword" class="reg-input pr-12" type="password" name="password"
+                                placeholder="Minimum 6 characters" autocomplete="new-password"
+                                minlength="6" required>
+                            <button type="button" class="reg-pw-toggle" id="regPwToggle1" aria-label="Show password">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
+                        <!-- Strength bar -->
+                        <div class="reg-pw-strength-wrap">
+                            <div class="reg-pw-strength-bar" id="regPwStrengthBar"></div>
+                        </div>
+                        <span class="reg-pw-hint" id="regPwHint">Use 8+ characters, numbers, and symbols for a stronger password.</span>
+                    </label>
+
+                    <label class="reg-field" style="margin-bottom:0.875rem;margin-top:0.875rem;">
+                        <span>Confirm password</span>
+                        <div class="reg-input-wrap">
+                            <i class="fas fa-lock reg-input-icon"></i>
+                            <input id="regConfirm" class="reg-input pr-12" type="password" name="confirm"
+                                placeholder="Repeat your password" autocomplete="new-password"
+                                minlength="6" required>
+                            <button type="button" class="reg-pw-toggle" id="regPwToggle2" aria-label="Show password">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
+                    </label>
+
+                    <!-- Legal consent -->
+                    <label style="display:flex;align-items:flex-start;gap:0.6rem;cursor:pointer;margin-top:0.5rem;">
+                        <input id="regConsent" type="checkbox" style="margin-top:3px;accent-color:#1a1a1a;width:15px;height:15px;flex-shrink:0;">
+                        <span style="font-size:0.78rem;color:#666;line-height:1.55;">
+                            I accept the
+                            <a href="privacy-policy.html" style="color:#1a1a1a;font-weight:700;text-decoration:none;" target="_blank">Privacy Policy</a>
+                            and
+                            <a href="terms.html" style="color:#1a1a1a;font-weight:700;text-decoration:none;" target="_blank">Terms &amp; Conditions</a>.
+                            By creating an account I agree to the processing of my data according to IPORDISE policies.
+                        </span>
+                    </label>
+
+                    <p id="regMessage" class="reg-msg" role="alert" aria-live="polite"></p>
+
+                    <button type="submit" class="reg-submit" id="regSubmitBtn">
+                        <i class="fas fa-user-plus"></i>
+                        Create account
+                    </button>
+                </form>
+
+                <div class="reg-footer-link">
+                    Already have an account? <a href="login.html">Sign in</a>
+                </div>
+
+                <div class="reg-security">
+                    <i class="fas fa-lock" style="font-size:0.7rem;"></i>
+                    Your account is protected with secure encryption.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="font-serif text-2xl font-bold mb-6">IPORDISE<span class="text-brand-red">.</span></h3>
+                    <p class="text-gray-400 text-sm mb-6">The ultimate destination for luxury perfumes, cosmetics, and beauty care online.</p>
+                    <div class="flex space-x-3">
+                        <a href="https://www.instagram.com/ipordise_parfums/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=61563285998567" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.tiktok.com/@ipordise_parfume" target="_blank" rel="noopener noreferrer" aria-label="TikTok" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red transition text-sm"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Customer Care</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="contact.html" class="hover:text-white transition">Contact Us</a></li>
+                        <li><a href="shipping.html" class="hover:text-white transition">Shipping &amp; Returns</a></li>
+                        <li><a href="track-order.html" class="hover:text-white transition">Track Order</a></li>
+                        <li><a href="faq.html" class="hover:text-white transition">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">About</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="our-story.html" class="hover:text-white transition">Our Story</a></li>
+                        <li><a href="store-locator.html" class="hover:text-white transition">Find a Store</a></li>
+                        <li><a href="terms.html" class="hover:text-white transition">Terms &amp; Conditions</a></li>
+                        <li><a href="privacy-policy.html" class="hover:text-white transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Subscribe for new arrivals and exclusive offers.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email address" class="bg-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-brand-red">
+                        <a href="newsletter.html" class="bg-brand-red px-4 py-2 rounded-r font-bold hover:bg-brand-redHover transition">OK</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2026 IPORDISE. All rights reserved.</p>
+                <p class="mt-1">Created by <a href="https://wa.me/212699289568" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Zakaria Zemzami</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- IPO Search Overlay -->
+    <div class="ipo-search-overlay" id="ipoSearchOverlay" role="dialog" aria-label="Search" aria-modal="true" aria-hidden="true">
+        <div class="ipo-search-overlay-backdrop" id="ipoSearchOverlayBackdrop"></div>
+        <div class="ipo-search-overlay-panel" id="ipoSearchOverlayPanel">
+            <div class="ipo-search-overlay-bar">
+                <div class="ipo-search-overlay-input-wrap">
+                    <i class="fas fa-search ipo-search-overlay-search-icon"></i>
+                    <input type="text" class="ipo-search-overlay-input" id="ipoSearchOverlayInput" placeholder="Search perfumes, brands, notes..." autocomplete="off" aria-label="Search">
+                    <button type="button" class="ipo-search-overlay-clear" id="ipoSearchOverlayClear" aria-label="Clear search"><i class="fas fa-times"></i></button>
+                </div>
+                <button type="button" class="ipo-search-overlay-close-btn" id="ipoSearchOverlayClose" aria-label="Close search"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="ipo-search-overlay-body" id="ipoSearchOverlayBody"></div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         Firebase Auth — Register page
+    ================================================================ -->
+    <script type="module">
+      import { signUp, googleSignIn, onAuthChange, getErrorMessage } from '../auth/auth.js';
+
+      // Redirect already-authenticated users
+      onAuthChange((user) => {
+        if (user) window.location.replace('dashboard.html');
+      });
+
+      // ── Helpers ──────────────────────────────────────────────
+      const $  = (id) => document.getElementById(id);
+      const el = {
+        form:       $('registerForm'),
+        firstName:  $('regFirstName'),
+        lastName:   $('regLastName'),
+        email:      $('regEmail'),
+        password:   $('regPassword'),
+        confirm:    $('regConfirm'),
+        consent:    $('regConsent'),
+        msg:        $('regMessage'),
+        submitBtn:  $('regSubmitBtn'),
+        googleBtn:  $('regGoogleBtn'),
+        pwBar:      $('regPwStrengthBar'),
+        pwHint:     $('regPwHint'),
+        toggle1:    $('regPwToggle1'),
+        toggle2:    $('regPwToggle2'),
+      };
+
+      const setMsg = (text, tone) => {
+        if (!el.msg) return;
+        el.msg.textContent = text || '';
+        el.msg.className   = 'reg-msg' + (text ? ' is-' + tone : '');
+      };
+
+      const setLoading = (btn, loading, origHTML) => {
+        if (!btn) return;
+        btn.disabled = loading;
+        if (loading) {
+          btn.dataset.orig = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:0.4rem;"></i>Please wait…';
+        } else {
+          btn.innerHTML = btn.dataset.orig || btn.innerHTML;
+        }
+      };
+
+      // ── Password strength indicator ───────────────────────────
+      el.password?.addEventListener('input', () => {
+        const pw = el.password.value;
+        let score = 0;
+        if (pw.length >= 6)  score++;
+        if (pw.length >= 10) score++;
+        if (/[A-Z]/.test(pw)) score++;
+        if (/[0-9]/.test(pw)) score++;
+        if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+        const widths = ['0%', '20%', '40%', '65%', '82%', '100%'];
+        const colors = ['', '#e73c3c', '#f39c12', '#f1c40f', '#27ae60', '#1a9c5a'];
+        const labels = ['', 'Very weak', 'Weak', 'Fair', 'Strong', 'Very strong'];
+
+        if (el.pwBar) {
+          el.pwBar.style.width      = widths[score];
+          el.pwBar.style.background = colors[score];
+        }
+        if (el.pwHint && pw.length > 0) {
+          el.pwHint.textContent = labels[score] || '';
+        } else if (el.pwHint) {
+          el.pwHint.textContent = 'Use 8+ characters, numbers, and symbols for a stronger password.';
+        }
+      });
+
+      // ── Password visibility toggles ───────────────────────────
+      const bindToggle = (btn, input) => {
+        btn?.addEventListener('click', () => {
+          const show = input.type === 'password';
+          input.type = show ? 'text' : 'password';
+          const icon = btn.querySelector('i');
+          icon?.classList.toggle('fa-eye',       !show);
+          icon?.classList.toggle('fa-eye-slash',  show);
+          btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        });
+      };
+      bindToggle(el.toggle1, el.password);
+      bindToggle(el.toggle2, el.confirm);
+
+      // ── Register form submit ───────────────────────────────────
+      el.form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        setMsg('', '');
+
+        const firstName = el.firstName.value.trim();
+        const lastName  = el.lastName.value.trim();
+        const email     = el.email.value.trim();
+        const password  = el.password.value;
+        const confirm   = el.confirm.value;
+
+        // Validation
+        if (!firstName || !lastName) {
+          setMsg('Please enter your first and last name.', 'error'); return;
+        }
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          setMsg('Please enter a valid email address.', 'error'); return;
+        }
+        if (password.length < 6) {
+          setMsg('Password must be at least 6 characters.', 'error'); return;
+        }
+        if (password !== confirm) {
+          setMsg('Passwords do not match. Please try again.', 'error'); return;
+        }
+        if (!el.consent?.checked) {
+          setMsg('Please accept the Privacy Policy and Terms & Conditions to continue.', 'error'); return;
+        }
+
+        setLoading(el.submitBtn, true);
+
+        try {
+          await signUp(email, password, `${firstName} ${lastName}`);
+          setMsg(`Welcome, ${firstName}! Your account has been created. Redirecting…`, 'success');
+          setTimeout(() => window.location.replace('dashboard.html'), 1300);
+        } catch (err) {
+          setMsg(getErrorMessage(err), 'error');
+          setLoading(el.submitBtn, false);
+        }
+      });
+
+      // ── Google Sign-in ─────────────────────────────────────────
+      el.googleBtn?.addEventListener('click', async () => {
+        setLoading(el.googleBtn, true);
+        try {
+          await googleSignIn();
+          window.location.replace('dashboard.html');
+        } catch (err) {
+          alert(getErrorMessage(err));
+          setLoading(el.googleBtn, false);
+        }
+      });
+    </script>
+
+</body>
+</html>

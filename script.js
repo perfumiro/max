@@ -3730,6 +3730,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Load both configs in parallel — sizes + prices
         const [pricesById] = await Promise.all([loadPricesJson(), loadSizesJson()]);
 
+        // Re-run new arrivals filtering now that we have real price data
+        limitNewArrivalsToLatest(pricesById);
+
         cards.forEach((card) => {
             const existingPriceEl = card.querySelector('.price');
             if (existingPriceEl) existingPriceEl.remove();
@@ -7461,14 +7464,23 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     void initFlashOffersRotation();
-    const limitNewArrivalsToLatest = () => {
+    const limitNewArrivalsToLatest = (pricesById = {}) => {
         const carousel = document.getElementById('newArrivalsCarousel');
         if (!carousel) return;
         const cards = Array.from(carousel.querySelectorAll('article'));
         if (!cards.length) return;
 
-        const indexMap = new Map(cards.map((card, index) => [card, index]));
-        const sorted = cards
+        // Only filter by price when real price data has been loaded (non-empty pricesById)
+        const hasPriceData = pricesById && typeof pricesById === 'object' && Object.keys(pricesById).length > 0;
+        const pricedCards = hasPriceData ? cards.filter((card) => {
+            const productId = card.dataset.id;
+            if (!productId) return true;
+            const options = getAvailableSizePriceOptions(productId, pricesById);
+            return options.some((entry) => entry.price > 0);
+        }) : cards;
+
+        const indexMap = new Map(pricedCards.map((card, index) => [card, index]));
+        const sorted = pricedCards
             .slice()
             .sort((a, b) => getCardAddedScore(b, indexMap.get(b)) - getCardAddedScore(a, indexMap.get(a)));
         const latest = sorted.slice(0, 8);
@@ -7599,6 +7611,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     populate2026Section();
+    // limitNewArrivalsToLatest is called after prices are loaded (see initCatalogPrices)
     limitNewArrivalsToLatest();
 
     /* Eagerly load all images inside the main product carousel so they are
@@ -9563,66 +9576,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.sect-reveal').forEach((el) => el.classList.add('is-visible'));
     }
 
-    /* --- Server Down Modal for Login --- */
-    const serverDownModal = document.createElement('div');
-    serverDownModal.id = 'serverDownModal';
-    serverDownModal.setAttribute('role', 'alertdialog');
-    serverDownModal.setAttribute('aria-modal', 'true');
-    serverDownModal.setAttribute('aria-labelledby', 'serverDownTitle');
-    serverDownModal.innerHTML = `
-        <div id="serverDownBackdrop" style="
-            position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9998;
-            display:flex;align-items:center;justify-content:center;
-            backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
-        ">
-            <div style="
-                background:#1a1a1a;color:#fff;border-radius:1rem;
-                padding:2.5rem 2rem;max-width:420px;width:90%;text-align:center;
-                box-shadow:0 25px 60px rgba(0,0,0,0.5);position:relative;z-index:9999;
-                border:1px solid rgba(255,255,255,0.1);
-            ">
-                <div style="font-size:3rem;margin-bottom:1rem;">🛠️</div>
-                <h2 id="serverDownTitle" style="font-size:1.4rem;font-weight:700;margin-bottom:0.75rem;letter-spacing:0.05em;">
-                    Server Under Maintenance
-                </h2>
-                <p style="color:rgba(255,255,255,0.7);font-size:0.95rem;line-height:1.6;margin-bottom:1.75rem;">
-                    Our login servers are currently down for maintenance.<br>
-                    We apologize for the inconvenience and will be back shortly.
-                </p>
-                <button id="serverDownClose" style="
-                    background:#e73c3c;color:#fff;border:none;border-radius:999px;
-                    padding:0.65rem 2rem;font-size:0.9rem;font-weight:700;
-                    cursor:pointer;letter-spacing:0.05em;transition:background 0.2s;
-                " onmouseover="this.style.background='#c0392b'" onmouseout="this.style.background='#e73c3c'">
-                    OK, Got It
-                </button>
-            </div>
-        </div>
-    `;
-    serverDownModal.style.display = 'none';
-    document.body.appendChild(serverDownModal);
-
-    const showServerDownModal = (e) => {
-        e.preventDefault();
-        serverDownModal.style.display = 'block';
-        document.getElementById('serverDownClose').focus();
-    };
-
-    const closeServerDownModal = () => {
-        serverDownModal.style.display = 'none';
-    };
-
-    document.getElementById('serverDownClose').addEventListener('click', closeServerDownModal);
-    document.getElementById('serverDownBackdrop').addEventListener('click', (e) => {
-        if (e.target === document.getElementById('serverDownBackdrop')) closeServerDownModal();
-    });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && serverDownModal.style.display !== 'none') closeServerDownModal();
-    });
-
-    document.querySelectorAll('a[href*="login.html"]').forEach((link) => {
-        link.addEventListener('click', showServerDownModal);
-    });
+    /* --- Server Down Modal removed — Firebase Authentication is live --- */
 
     /* ════════════════════════════════════════════════════════
        LUXURY UI MICRO-INTERACTIONS — v4
