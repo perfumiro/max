@@ -2756,6 +2756,7 @@ button.product-favorite-btn.is-active {
     text-align: center;
     line-height: 1;
     box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.9);
+    pointer-events: none; /* Prevent badge from stealing clicks on adjacent icons */
 }
 
 .header-account-wrap {
@@ -2765,7 +2766,9 @@ button.product-favorite-btn.is-active {
 .account-menu {
     position: absolute;
     top: calc(100% + 0.85rem);
-    right: -5.4rem;
+    /* FIX: was -5.4rem (relative to wide icons row). Now 0 = right-aligns dropdown
+       under the account icon's own dedicated wrapper. */
+    right: 0;
     width: min(92vw, 25.5rem);
     background: #ffffff;
     border-radius: 0.9rem;
@@ -2789,7 +2792,9 @@ button.product-favorite-btn.is-active {
     content: "";
     position: absolute;
     top: -8px;
-    right: 94px;
+    /* FIX: was 94px (calibrated for wide container). Now 10px = points at the icon
+       in its tight dedicated wrapper whose right edge aligns with the dropdown. */
+    right: 10px;
     width: 14px;
     height: 14px;
     background: #ffffff;
@@ -2883,19 +2888,19 @@ button.product-favorite-btn.is-active {
 
 @media (max-width: 768px) {
     .account-menu {
-        right: -4.7rem;
+        right: 0; /* was -4.7rem */
     }
 }
 
 @media (max-width: 640px) {
     .account-menu {
-        right: -4.9rem;
+        right: 0; /* was -4.9rem */
         top: calc(100% + 0.75rem);
         width: min(95vw, 23.5rem);
     }
 
     .account-menu::before {
-        right: 82px;
+        right: 10px; /* was 82px */
     }
 
     .account-menu-subtitle {

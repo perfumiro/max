@@ -475,7 +475,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
                                     <i class="fas fa-search"></i>
                                 </button>
-                                <a href="${pagePath('login')}" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                                <div style="position:relative;display:inline-flex;align-items:center;">
+                                    <a href="${pagePath('login')}" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
+                                </div>
+                                <div class="header-wishlist-wrap" style="position:relative;display:inline-flex;align-items:center;overflow:visible;">
                                 <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
                                 <a href="${pagePath('cart')}" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart">
                                     <i class="fas fa-shopping-bag"></i>
@@ -5896,8 +5899,24 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         accountTriggers.forEach((trigger) => {
-            const wrap = trigger.parentElement;
-            if (!wrap) return;
+            // FIX: Always ensure the trigger is inside its own dedicated wrapper.
+            // Using trigger.parentElement directly caused the ENTIRE icons row to become
+            // .header-account-wrap, placing the dropdown near the cart area and preventing
+            // close-on-cart-click from working.
+            const parentEl = trigger.parentElement;
+            if (!parentEl) return;
+
+            let wrap;
+            if (parentEl.classList.contains('header-account-wrap')) {
+                // Already in a dedicated wrapper (set in HTML or by a previous call)
+                wrap = parentEl;
+            } else {
+                // Create a tight 1:1 wrapper around the trigger only
+                wrap = document.createElement('div');
+                wrap.style.cssText = 'position:relative;display:inline-flex;align-items:center;';
+                parentEl.insertBefore(wrap, trigger);
+                wrap.appendChild(trigger);
+            }
 
             wrap.classList.add('header-account-wrap');
 
@@ -6187,8 +6206,22 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             headerWishlistButtons.forEach((button) => {
-                const wrap = button.parentElement;
-                if (!wrap) return;
+                // FIX: Same pattern — ensure the wishlist button is in its own dedicated
+                // wrapper so .header-wishlist-wrap only covers the wishlist icon, not the
+                // entire icons row (which would conflict with .header-account-wrap).
+                const parentEl = button.parentElement;
+                if (!parentEl) return;
+
+                let wrap;
+                if (parentEl.classList.contains('header-wishlist-wrap')) {
+                    // Already in a dedicated wrapper (e.g. set in HTML on index.html)
+                    wrap = parentEl;
+                } else {
+                    wrap = document.createElement('div');
+                    wrap.style.cssText = 'position:relative;display:inline-flex;align-items:center;overflow:visible;';
+                    parentEl.insertBefore(wrap, button);
+                    wrap.appendChild(button);
+                }
 
                 wrap.classList.add('header-wishlist-wrap');
 
