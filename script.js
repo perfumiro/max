@@ -5878,11 +5878,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const allMenus = [];
 
+        // ── Mobile backdrop (only rendered on ≤640px via CSS) ──
+        const backdrop = document.createElement('div');
+        backdrop.className = 'account-menu-backdrop';
+        document.body.appendChild(backdrop);
+
+        const isMobile = () => window.innerWidth <= 640;
+
+        // Set CSS custom property --acm-top from the real header bottom on mobile
+        const setMobileTop = (menu) => {
+            if (!isMobile()) return;
+            // Try common header selectors in priority order
+            const hdr =
+                document.querySelector('header') ||
+                document.querySelector('[class*="header"]') ||
+                document.querySelector('nav');
+            if (hdr) {
+                const bottom = hdr.getBoundingClientRect().bottom;
+                menu.style.setProperty('--acm-top', `${bottom + 6}px`);
+            }
+        };
+
         const closeAllMenus = (exceptMenu = null) => {
             allMenus.forEach((menu) => {
                 if (menu === exceptMenu) return;
                 menu.classList.remove('is-open');
             });
+            backdrop.classList.remove('is-visible');
         };
 
         const buildAccountMenuHtml = (triggerHref) => `
@@ -5947,13 +5969,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 event.preventDefault();
                 const shouldOpen = !menu.classList.contains('is-open');
                 closeAllMenus();
-                menu.classList.toggle('is-open', shouldOpen);
+                if (shouldOpen) {
+                    setMobileTop(menu);
+                    menu.classList.add('is-open');
+                    if (isMobile()) backdrop.classList.add('is-visible');
+                }
             });
 
             menu.addEventListener('click', (event) => {
                 event.stopPropagation();
             });
         });
+
+        // Close on backdrop tap
+        backdrop.addEventListener('click', () => closeAllMenus());
 
         document.addEventListener('click', (event) => {
             const isAccountArea = event.target.closest('.header-account-wrap');
@@ -5966,6 +5995,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (event.key === 'Escape') {
                 closeAllMenus();
             }
+        });
+
+        // Recalculate fixed top on resize (e.g. device rotation)
+        window.addEventListener('resize', () => {
+            allMenus.forEach((menu) => {
+                if (menu.classList.contains('is-open')) setMobileTop(menu);
+            });
         });
     };
 

@@ -27,28 +27,50 @@ import {
 
 // ── Human-readable error messages ────────────────────────────
 const FIREBASE_ERRORS = {
-  'auth/email-already-in-use':     'An account already exists with this email. Please sign in instead.',
-  'auth/invalid-email':            'The email address is not valid. Please check it and try again.',
-  'auth/user-not-found':           'No account found with that email. Please create an account first.',
-  'auth/wrong-password':           'Incorrect password. Please try again or reset your password.',
-  'auth/invalid-credential':       'Incorrect email or password. Please try again.',
-  'auth/weak-password':            'Password is too weak. Please use at least 6 characters.',
-  'auth/too-many-requests':        'Too many failed attempts. Please wait a moment, then try again.',
-  'auth/network-request-failed':   'Network error. Please check your connection and try again.',
-  'auth/popup-closed-by-user':     'Sign-in popup was closed before completing. Please try again.',
-  'auth/cancelled-popup-request':  'Only one sign-in popup can be open at a time.',
-  'auth/popup-blocked':            'Popup blocked by your browser. Please allow popups for this site.',
-  'auth/account-exists-with-different-credential':
-    'An account already exists with this email using a different sign-in method.',
+  en: {
+    'auth/email-already-in-use':     'An account already exists with this email. Please sign in instead.',
+    'auth/invalid-email':            'The email address is not valid. Please check it and try again.',
+    'auth/user-not-found':           'No account found with that email. Please create an account first.',
+    'auth/wrong-password':           'Incorrect password. Please try again or reset your password.',
+    'auth/invalid-credential':       'Incorrect email or password. Please try again.',
+    'auth/weak-password':            'Password is too weak. Please use at least 6 characters.',
+    'auth/too-many-requests':        'Too many failed attempts. Please wait a moment, then try again.',
+    'auth/network-request-failed':   'Network error. Please check your connection and try again.',
+    'auth/popup-closed-by-user':     'Sign-in popup was closed before completing. Please try again.',
+    'auth/cancelled-popup-request':  'Only one sign-in popup can be open at a time.',
+    'auth/popup-blocked':            'Popup blocked by your browser. Please allow popups for this site.',
+    'auth/account-exists-with-different-credential':
+      'An account already exists with this email using a different sign-in method.',
+  },
+  fr: {
+    'auth/email-already-in-use':     'Un compte existe d\u00e9j\u00e0 avec cet email. Veuillez vous connecter.',
+    'auth/invalid-email':            'L\u2019adresse email n\u2019est pas valide. Veuillez v\u00e9rifier et r\u00e9essayer.',
+    'auth/user-not-found':           'Aucun compte trouv\u00e9 avec cet email. Veuillez cr\u00e9er un compte.',
+    'auth/wrong-password':           'Mot de passe incorrect. R\u00e9essayez ou r\u00e9initialisez.',
+    'auth/invalid-credential':       'Email ou mot de passe incorrect. Veuillez r\u00e9essayer.',
+    'auth/weak-password':            'Mot de passe trop faible. Utilisez au moins 6 caract\u00e8res.',
+    'auth/too-many-requests':        'Trop de tentatives \u00e9chou\u00e9es. Patientez un instant et r\u00e9essayez.',
+    'auth/network-request-failed':   'Erreur r\u00e9seau. V\u00e9rifiez votre connexion et r\u00e9essayez.',
+    'auth/popup-closed-by-user':     'La fen\u00eatre de connexion a \u00e9t\u00e9 ferm\u00e9e avant la fin. R\u00e9essayez.',
+    'auth/cancelled-popup-request':  'Une seule fen\u00eatre de connexion peut \u00eatre ouverte \u00e0 la fois.',
+    'auth/popup-blocked':            'Fen\u00eatre popup bloqu\u00e9e. Autorisez les popups pour ce site.',
+    'auth/account-exists-with-different-credential':
+      'Un compte existant avec cet email utilise une autre m\u00e9thode de connexion.',
+  },
 };
 
 /**
  * Returns a user-friendly message for a Firebase auth error.
+ * Picks language from localStorage (defaults to 'fr' for Moroccan market).
  * @param {Error} error
  * @returns {string}
  */
-export const getErrorMessage = (error) =>
-  FIREBASE_ERRORS[error?.code] || error?.message || 'Something went wrong. Please try again.';
+export const getErrorMessage = (error) => {
+  const lang = (typeof localStorage !== 'undefined' && localStorage.getItem('ipordise-lang')) || 'fr';
+  const map = FIREBASE_ERRORS[lang] || FIREBASE_ERRORS.en;
+  const fallback = lang === 'fr' ? 'Quelque chose s\u2019est mal pass\u00e9. Veuillez r\u00e9essayer.' : 'Something went wrong. Please try again.';
+  return map[error?.code] || error?.message || fallback;
+};
 
 // ── Email / Password — Create account ────────────────────────
 /**

@@ -2993,30 +2993,150 @@ button.product-favorite-btn.is-active {
 }
 .acm-signout-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-@media (max-width: 768px) {
+/* ── Account menu backdrop (mobile only) ───────────────────── */
+.account-menu-backdrop {
+    display: none;
+}
+
+/* ── Mobile account popup — full redesign ≤640px ─────────────
+   Root cause fix: switch from position:absolute (anchored to
+   a small icon wrapper, overflows far left) to position:fixed
+   (viewport-anchored, perfectly centred, never off-screen).   */
+@media (max-width: 640px) {
+
+    /* Dimmed backdrop */
+    .account-menu-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 10, 18, 0);
+        z-index: 79;
+        pointer-events: none;
+        transition: background 0.25s ease;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+    }
+    .account-menu-backdrop.is-visible {
+        background: rgba(10, 10, 18, 0.48);
+        pointer-events: auto;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+    }
+
+    /* Panel — fixed, full-width with side gutters */
     .account-menu {
-        right: 0; /* was -4.7rem */
+        position: fixed;
+        /* JS sets --acm-top dynamically from header.getBoundingClientRect().bottom */
+        top: var(--acm-top, 108px);
+        left: 10px;
+        right: 10px;
+        width: auto;
+        max-width: calc(100vw - 20px);
+        border-radius: 1.15rem;
+        border: 1px solid rgba(229, 231, 235, 0.7);
+        box-shadow:
+            0 24px 64px rgba(10, 10, 18, 0.22),
+            0 8px 24px rgba(10, 10, 18, 0.12),
+            0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+        background: #ffffff;
+        /* Smooth slide-down entrance */
+        transform: translateY(-10px) scale(0.98);
+        transition: opacity 0.22s cubic-bezier(0.16,1,0.3,1),
+                    transform 0.22s cubic-bezier(0.16,1,0.3,1),
+                    visibility 0.22s ease;
+    }
+    .account-menu.is-open {
+        transform: translateY(0) scale(1);
+    }
+
+    /* Hide desktop caret arrow */
+    .account-menu::before {
+        display: none;
+    }
+
+    /* Inner padding — tighter on mobile */
+    .account-menu-inner {
+        padding: 1.15rem 1rem 0.95rem;
+    }
+
+    /* Brand header row */
+    .account-menu-head {
+        gap: 0.55rem;
+        margin-bottom: 0.55rem;
+        font-size: 0.83rem;
+        color: #6b7280;
+    }
+    .account-menu-head .fa-user {
+        font-size: 0.95rem;
+        color: #d9342b;
+    }
+    .account-menu-head strong { font-size: 0.93rem; }
+
+    /* Headline — reduced size, tighter line-height */
+    .account-menu-subtitle {
+        font-size: 0.97rem;
+        font-weight: 700;
+        line-height: 1.38;
+        margin: 0 0 0.9rem;
+        color: #111827;
+    }
+
+    /* CTA buttons — stacked full-width */
+    .account-menu-actions {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .account-menu-btn {
+        min-height: 2.9rem;
+        font-size: 0.93rem;
+        border-radius: 0.7rem;
+        letter-spacing: 0.02em;
+    }
+    .account-menu-btn-login  { background: #111827; }
+    .account-menu-btn-signup { background: #d9342b; }
+
+    /* Trust signal rows — compact */
+    .account-menu-row {
+        font-size: 0.8rem;
+        padding: 0.38rem 0;
+        gap: 0.6rem;
+        color: #6b7280;
+    }
+
+    /* Divider between rows */
+    .account-menu-row + .account-menu-row {
+        border-top: 1px solid #f3f4f6;
+    }
+
+    /* Logged-in state on mobile */
+    .acm-user-row {
+        padding-bottom: 0.65rem;
+        margin-bottom: 0.6rem;
+    }
+    .acm-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 0.98rem;
+    }
+    .acm-user-name { font-size: 0.88rem; }
+    .acm-user-email { font-size: 0.69rem; }
+    .acm-link {
+        padding: 0.48rem 0.55rem;
+        font-size: 0.85rem;
+    }
+    .acm-signout-btn {
+        margin-top: 0.1rem;
+        padding: 0.58rem;
+        font-size: 0.82rem;
     }
 }
 
-@media (max-width: 640px) {
+/* Tablet: keep absolute but ensure no overflow */
+@media (min-width: 641px) and (max-width: 768px) {
     .account-menu {
-        right: 0; /* was -4.9rem */
-        top: calc(100% + 0.75rem);
-        width: min(95vw, 23.5rem);
-    }
-
-    .account-menu::before {
-        right: 10px; /* was 82px */
-    }
-
-    .account-menu-subtitle {
-        font-size: 1.02rem;
-    }
-
-    .account-menu-btn {
-        font-size: 0.88rem;
-        min-height: 2.55rem;
+        right: 0;
+        width: min(88vw, 24rem);
     }
 }
 

@@ -505,27 +505,29 @@ s0.parentNode.insertBefore(s1,s0);
 
             <!-- Tabs -->
             <div class="auth-tabs" role="tablist">
-                <button class="auth-tab active" id="tabSignin" role="tab" aria-selected="true" aria-controls="panelSignin">Sign In</button>
-                <button class="auth-tab"        id="tabSignup" role="tab" aria-selected="false" aria-controls="panelSignup">Create Account</button>
+                <button class="auth-tab active" id="tabSignin" role="tab" aria-selected="true" aria-controls="panelSignin" data-i18n="login.tab_signin">Sign In</button>
+                <button class="auth-tab"        id="tabSignup" role="tab" aria-selected="false" aria-controls="panelSignup" data-i18n="login.tab_signup">Create Account</button>
             </div>
 
             <!-- ═══ SIGN IN PANEL ═══ -->
             <div class="auth-panel active" id="panelSignin" role="tabpanel">
-                <h2 class="auth-heading">Welcome back</h2>
-                <p class="auth-subheading">Sign in to your IPORDISE account.</p>
+                <h2 class="auth-heading" data-i18n="login.form_title">Welcome back</h2>
+                <p class="auth-subheading" data-i18n="login.form_subtitle">Sign in to your IPORDISE account.</p>
 
                 <form id="loginForm" novalidate>
                     <div class="auth-field">
-                        <label for="loginEmailInput">Email address</label>
+                        <label for="loginEmailInput" data-i18n="login.email_label">Email address</label>
                         <input id="loginEmailInput" class="auth-input" type="email" name="email"
-                            placeholder="you@example.com" autocomplete="email" required>
+                            placeholder="you@example.com" autocomplete="email" required
+                            data-i18n-placeholder="login.email_ph">
                     </div>
 
                     <div class="auth-field">
-                        <label for="loginPasswordInput">Password</label>
+                        <label for="loginPasswordInput" data-i18n="login.password_label">Password</label>
                         <div class="auth-input-wrap">
                             <input id="loginPasswordInput" class="auth-input has-toggle" type="password" name="password"
-                                placeholder="Your password" autocomplete="current-password" required>
+                                placeholder="Your password" autocomplete="current-password" required
+                                data-i18n-placeholder="login.password_ph">
                             <button type="button" class="auth-pw-toggle" data-target="loginPasswordInput" aria-label="Show password">
                                 <i class="far fa-eye"></i>
                             </button>
@@ -534,60 +536,64 @@ s0.parentNode.insertBefore(s1,s0);
 
                     <div class="auth-util-row">
                         <label class="auth-remember">
-                            <input type="checkbox" id="loginRememberMe"> Stay signed in
+                            <input type="checkbox" id="loginRememberMe"> <span data-i18n="login.remember_me">Stay signed in</span>
                         </label>
-                        <a href="support.html" class="auth-forgot">Forgot password?</a>
+                        <a href="support.html" class="auth-forgot" data-i18n="login.forgot_pw">Forgot password?</a>
                     </div>
 
                     <div id="loginFormMessage" class="auth-msg" role="alert" aria-live="polite"></div>
 
-                    <button type="submit" class="auth-submit" id="loginSubmitBtn">
+                    <button type="submit" class="auth-submit" id="loginSubmitBtn" data-i18n="login.submit_btn">
                         Sign in
                     </button>
                 </form>
 
-                <div class="auth-divider">or</div>
+                <div class="auth-divider" data-i18n="login.or">or</div>
 
                 <button type="button" class="auth-google-btn" id="googleSignInBtn" aria-label="Continue with Google">
                     <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908C16.658 14.121 17.64 11.813 17.64 9.2z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
-                    Continue with Google
+                    <span data-i18n="login.google_btn">Continue with Google</span>
                 </button>
 
                 <div class="auth-switch-row">
-                    No account yet? <button type="button" id="switchToSignup">Create one now</button>
+                    <span data-i18n="login.no_account">No account yet?</span> <button type="button" id="switchToSignup" data-i18n="login.create_one">Create one now</button>
                 </div>
             </div>
 
             <!-- ═══ SIGN UP PANEL ═══ -->
             <div class="auth-panel" id="panelSignup" role="tabpanel">
-                <h2 class="auth-heading">Create your account</h2>
-                <p class="auth-subheading">Join IPORDISE — it only takes a minute.</p>
+                <h2 class="auth-heading" data-i18n="login.signup_heading">Create your account</h2>
+                <p class="auth-subheading" data-i18n="login.signup_subheading">Join IPORDISE — it only takes a minute.</p>
 
                 <form id="signupForm" novalidate>
                     <div class="auth-name-row auth-field">
                         <div>
-                            <label for="signupFirstNameInput">First name</label>
+                            <label for="signupFirstNameInput" data-i18n="login.first_name">First name</label>
                             <input id="signupFirstNameInput" class="auth-input" type="text" name="firstName"
-                                placeholder="First name" autocomplete="given-name" required>
+                                placeholder="First name" autocomplete="given-name" required
+                                data-i18n-placeholder="login.first_name_ph">
                         </div>
                         <div>
-                            <label for="signupLastNameInput">Last name</label>
+                            <label for="signupLastNameInput" data-i18n="login.last_name">Last name</label>
                             <input id="signupLastNameInput" class="auth-input" type="text" name="lastName"
-                                placeholder="Last name" autocomplete="family-name" required>
+                                placeholder="Last name" autocomplete="family-name" required
+                                data-i18n-placeholder="login.last_name_ph">
                         </div>
                     </div>
 
                     <div class="auth-field">
-                        <label for="signupEmailInput">Email address</label>
+                        <label for="signupEmailInput" data-i18n="login.email_label">Email address</label>
                         <input id="signupEmailInput" class="auth-input" type="email" name="email"
-                            placeholder="you@example.com" autocomplete="email" required>
+                            placeholder="you@example.com" autocomplete="email" required
+                            data-i18n-placeholder="login.email_ph">
                     </div>
 
                     <div class="auth-field">
-                        <label for="signupPasswordInput">Password</label>
+                        <label for="signupPasswordInput" data-i18n="login.password_label">Password</label>
                         <div class="auth-input-wrap">
                             <input id="signupPasswordInput" class="auth-input has-toggle" type="password" name="password"
-                                placeholder="Min. 6 characters" autocomplete="new-password" minlength="6" required>
+                                placeholder="Min. 6 characters" autocomplete="new-password" minlength="6" required
+                                data-i18n-placeholder="login.password_min">
                             <button type="button" class="auth-pw-toggle" data-target="signupPasswordInput" aria-label="Show password">
                                 <i class="far fa-eye"></i>
                             </button>
@@ -595,10 +601,11 @@ s0.parentNode.insertBefore(s1,s0);
                     </div>
 
                     <div class="auth-field">
-                        <label for="signupConfirmPasswordInput">Confirm password</label>
+                        <label for="signupConfirmPasswordInput" data-i18n="login.confirm_password">Confirm password</label>
                         <div class="auth-input-wrap">
                             <input id="signupConfirmPasswordInput" class="auth-input has-toggle" type="password" name="confirmPassword"
-                                placeholder="Repeat password" autocomplete="new-password" minlength="6" required>
+                                placeholder="Repeat password" autocomplete="new-password" minlength="6" required
+                                data-i18n-placeholder="login.confirm_password_ph">
                             <button type="button" class="auth-pw-toggle" data-target="signupConfirmPasswordInput" aria-label="Show password">
                                 <i class="far fa-eye"></i>
                             </button>
@@ -607,26 +614,26 @@ s0.parentNode.insertBefore(s1,s0);
 
                     <div id="signupFormMessage" class="auth-msg" role="alert" aria-live="polite"></div>
 
-                    <button type="submit" class="auth-submit" id="signupSubmitBtn">
+                    <button type="submit" class="auth-submit" id="signupSubmitBtn" data-i18n="login.signup_btn">
                         Create account
                     </button>
                 </form>
 
-                <div class="auth-divider">or</div>
+                <div class="auth-divider" data-i18n="login.or">or</div>
 
                 <button type="button" class="auth-google-btn" id="googleSignUpBtn" aria-label="Continue with Google">
                     <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908C16.658 14.121 17.64 11.813 17.64 9.2z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
-                    Continue with Google
+                    <span data-i18n="login.google_btn">Continue with Google</span>
                 </button>
 
                 <div class="auth-switch-row">
-                    Already have an account? <button type="button" id="switchToSignin">Sign in</button>
+                    <span data-i18n="login.have_account">Already have an account?</span> <button type="button" id="switchToSignin" data-i18n="login.existing_account_btn">Sign in</button>
                 </div>
             </div>
 
             <div class="auth-secure">
                 <i class="fas fa-lock" style="font-size:0.65rem;"></i>
-                Protected by Firebase Authentication
+                <span data-i18n="login.secure_badge">Protected by Firebase Authentication</span>
             </div>
 
         </div>
@@ -691,6 +698,29 @@ s0.parentNode.insertBefore(s1,s0);
 
       // ── Helpers ───────────────────────────────────────────────
       const $ = (id) => document.getElementById(id);
+      const isFr = () => (localStorage.getItem('ipordise-lang') || 'fr') === 'fr';
+
+      const MSG = {
+        en: {
+          enter_creds:   'Please enter your email and password.',
+          fill_all:      'Please fill in all fields.',
+          pw_short:      'Password must be at least 6 characters.',
+          pw_mismatch:   'Passwords do not match.',
+          please_wait:   '<i class="fas fa-spinner fa-spin"></i> Please wait\u2026',
+          welcome_back:  (name) => `Welcome ${name}! Redirecting\u2026`,
+          welcome_new:   (name) => `Welcome, ${name}! Account created. Redirecting\u2026`,
+        },
+        fr: {
+          enter_creds:   'Veuillez saisir votre email et votre mot de passe.',
+          fill_all:      'Veuillez remplir tous les champs.',
+          pw_short:      'Le mot de passe doit comporter au moins 6 caract\u00e8res.',
+          pw_mismatch:   'Les mots de passe ne correspondent pas.',
+          please_wait:   '<i class="fas fa-spinner fa-spin"></i> Veuillez patienter\u2026',
+          welcome_back:  (name) => `Bienvenue ${name}\u00a0! Redirection\u2026`,
+          welcome_new:   (name) => `Bienvenue, ${name}\u00a0! Compte cr\u00e9\u00e9. Redirection\u2026`,
+        },
+      };
+      const m = () => MSG[isFr() ? 'fr' : 'en'];
 
       const showMsg = (el, text, type) => {
         if (!el) return;
@@ -701,7 +731,7 @@ s0.parentNode.insertBefore(s1,s0);
       const setLoading = (btn, on) => {
         if (!btn) return;
         btn.disabled = on;
-        if (on) { btn.dataset.orig = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Please wait…'; }
+        if (on) { btn.dataset.orig = btn.innerHTML; btn.innerHTML = m().please_wait; }
         else    { btn.innerHTML = btn.dataset.orig || btn.innerHTML; }
       };
 
@@ -748,13 +778,13 @@ s0.parentNode.insertBefore(s1,s0);
         const password = $('loginPasswordInput')?.value     || '';
         const msg      = $('loginFormMessage');
         const btn      = $('loginSubmitBtn');
-        if (!email || !password) { showMsg(msg, 'Please enter your email and password.', 'error'); return; }
+        if (!email || !password) { showMsg(msg, m().enter_creds, 'error'); return; }
         showMsg(msg, '', '');
         setLoading(btn, true);
         try {
           const user = await signIn(email, password);
           const name = (user.displayName || '').split(' ')[0] || 'back';
-          showMsg(msg, `Welcome ${name}! Redirecting…`, 'success');
+          showMsg(msg, m().welcome_back(name), 'success');
           setTimeout(() => window.location.replace('dashboard.html'), 1000);
         } catch (err) {
           showMsg(msg, getErrorMessage(err), 'error');
@@ -773,14 +803,14 @@ s0.parentNode.insertBefore(s1,s0);
         const confirm   = $('signupConfirmPasswordInput')?.value       || '';
         const msg       = $('signupFormMessage');
         const btn       = $('signupSubmitBtn');
-        if (!firstName || !lastName || !email || !password) { showMsg(msg, 'Please fill in all fields.', 'error'); return; }
-        if (password.length < 6)   { showMsg(msg, 'Password must be at least 6 characters.', 'error'); return; }
-        if (password !== confirm)   { showMsg(msg, 'Passwords do not match.', 'error'); return; }
+        if (!firstName || !lastName || !email || !password) { showMsg(msg, m().fill_all, 'error'); return; }
+        if (password.length < 6)   { showMsg(msg, m().pw_short, 'error'); return; }
+        if (password !== confirm)   { showMsg(msg, m().pw_mismatch, 'error'); return; }
         showMsg(msg, '', '');
         setLoading(btn, true);
         try {
           await signUp(email, password, `${firstName} ${lastName}`);
-          showMsg(msg, `Welcome, ${firstName}! Account created. Redirecting…`, 'success');
+          showMsg(msg, m().welcome_new(firstName), 'success');
           setTimeout(() => window.location.replace('dashboard.html'), 1100);
         } catch (err) {
           showMsg(msg, getErrorMessage(err), 'error');
