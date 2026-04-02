@@ -5806,6 +5806,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.innerHTML = `<i class="fas fa-bottle-droplet"></i> ${t('product_full_bottles')}`;
             });
 
+            // Out-of-stock pill labels
+            document.querySelectorAll('.size-pill.is-out-of-stock .spill-price').forEach((el) => {
+                el.textContent = t('product_out_of_stock');
+            });
+
             // Add to cart buttons
             [addToCartBtn, stickyAddToCartBtn].forEach((btn) => {
                 if (btn && !btn.classList.contains('hidden')) btn.textContent = t('product_add_to_cart');
