@@ -172,8 +172,40 @@
 
 <!-- ── Auth guard ────────────────────────────────────────────── -->
 <div id="authGuard">
-  <div style="font-size:2rem;color:#d1d5db"><i class="fas fa-chart-line"></i></div>
-  <p style="color:#6b7280;font-size:.88rem" id="authMsg">Verifying access…</p>
+  <!-- Checking state -->
+  <div id="authChecking" style="display:flex;flex-direction:column;align-items:center;gap:.75rem">
+    <div style="font-size:2rem;color:#d1d5db"><i class="fas fa-chart-line"></i></div>
+    <p style="color:#6b7280;font-size:.88rem">Verifying access…</p>
+  </div>
+
+  <!-- Inline login form (shown when not logged in) -->
+  <div id="adminLoginBox" style="display:none;width:100%;max-width:360px;padding:1rem">
+    <div style="text-align:center;margin-bottom:1.8rem">
+      <div style="display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;background:var(--dark);border-radius:50%;margin-bottom:.75rem">
+        <i class="fas fa-chart-line" style="color:#fff;font-size:1.2rem"></i>
+      </div>
+      <div style="font-weight:800;font-size:1.15rem;letter-spacing:.05em">IPORDISE</div>
+      <div style="font-size:.72rem;color:var(--sub);letter-spacing:.12em;text-transform:uppercase;margin-top:.2rem">Admin Analytics</div>
+    </div>
+    <div id="loginErr" style="display:none;background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c;font-size:.8rem;padding:.65rem .9rem;border-radius:.5rem;margin-bottom:1rem"></div>
+    <div style="margin-bottom:.85rem">
+      <input id="loginEmail" type="email" placeholder="Admin email" autocomplete="username"
+        style="width:100%;padding:.7rem 1rem;border:1px solid var(--border);border-radius:.5rem;font-size:.88rem;outline:none;font-family:inherit"
+        value="admin@ipordise.com">
+    </div>
+    <div style="margin-bottom:1.2rem;position:relative">
+      <input id="loginPass" type="password" placeholder="Password" autocomplete="current-password"
+        style="width:100%;padding:.7rem 1rem;border:1px solid var(--border);border-radius:.5rem;font-size:.88rem;outline:none;font-family:inherit;padding-right:2.5rem">
+      <button type="button" id="loginTogglePw"
+        style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9ca3af;padding:0">
+        <i class="fas fa-eye" id="loginEyeIcon"></i>
+      </button>
+    </div>
+    <button id="loginBtn" type="button"
+      style="width:100%;background:var(--dark);color:#fff;border:none;padding:.8rem 1rem;border-radius:.5rem;font-weight:700;font-size:.88rem;cursor:pointer;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;gap:.5rem">
+      <i class="fas fa-right-to-bracket"></i> Sign in to Dashboard
+    </button>
+  </div>
 </div>
 
 <!-- ── Dashboard (shown after auth) ─────────────────────────── -->
@@ -309,7 +341,6 @@ import {
 const LIVE_TTL  = 2 * 60 * 1000; // 2 minutes
 const $guard    = document.getElementById('authGuard');
 const $dash     = document.getElementById('dashboard');
-const $authMsg  = document.getElementById('authMsg');
 
 // ── Formatters ────────────────────────────────────────────────
 const fmtDur = s => { if(!s||s<0) return '—'; return s<60?`${s}s`:`${Math.floor(s/60)}m ${s%60}s`; };
@@ -596,11 +627,55 @@ const startLive = () => {
   },()=>{});
 };
 
+// ── Inline login form logic ──────────────────────────────────
+import { signInWithEmailAndPassword }
+  from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
+
+const $loginBox    = document.getElementById('adminLoginBox');
+const $loginChecking = document.getElementById('authChecking');
+const $loginErr    = document.getElementById('loginErr');
+const $loginBtn    = document.getElementById('loginBtn');
+const $loginEmail  = document.getElementById('loginEmail');
+const $loginPass   = document.getElementById('loginPass');
+
+document.getElementById('loginTogglePw')?.addEventListener('click', () => {
+  const hidden = $loginPass.type === 'password';
+  $loginPass.type = hidden ? 'text' : 'password';
+  document.getElementById('loginEyeIcon').className = hidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+});
+
+$loginBtn?.addEventListener('click', async () => {
+  const email = $loginEmail?.value.trim();
+  const pass  = $loginPass?.value;
+  if(!email || !pass) { $loginErr.textContent='Please enter email and password.'; $loginErr.style.display='block'; return; }
+  $loginBtn.disabled = true;
+  $loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in…';
+  $loginErr.style.display = 'none';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    // onAuthStateChanged will fire automatically and load the dashboard
+  } catch(err) {
+    const msg = err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password'
+      ? 'Incorrect email or password.'
+      : err.code === 'auth/user-not-found' ? 'No account found with this email.'
+      : err.code === 'auth/too-many-requests' ? 'Too many attempts. Please wait a moment.'
+      : 'Login failed. Please try again.';
+    $loginErr.textContent = msg;
+    $loginErr.style.display = 'block';
+    $loginBtn.disabled = false;
+    $loginBtn.innerHTML = '<i class="fas fa-right-to-bracket"></i> Sign in to Dashboard';
+  }
+});
+
+// Allow Enter key to submit
+$loginPass?.addEventListener('keydown', e => { if(e.key==='Enter') $loginBtn?.click(); });
+$loginEmail?.addEventListener('keydown', e => { if(e.key==='Enter') $loginPass?.focus(); });
+
 // ── Auth gate ─────────────────────────────────────────────────
 onAuthStateChanged(auth, async user => {
+  $loginChecking.style.display = 'none'; // hide spinner once Firebase responds
   if(!user){
-    $authMsg.textContent='Redirecting to login…';
-    setTimeout(()=>window.location.replace('pages/login.html'), 1000);
+    $loginBox.style.display = 'block';  // show inline login form
     return;
   }
   if(!ADMIN_EMAILS.includes(user.email)){
