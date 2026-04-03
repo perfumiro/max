@@ -1877,115 +1877,103 @@ s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
 
-    <!-- ── Star ratings injection ── -->
-    <script>
-    (function() {
-        function buildStars(rating) {
-            var html = '';
-            for (var i = 1; i <= 5; i++) {
-                if (rating >= i) {
-                    html += '<i class="fas fa-star"></i>';
-                } else if (rating >= i - 0.5) {
-                    html += '<i class="fas fa-star-half-stroke"></i>';
-                } else {
-                    html += '<i class="far fa-star"></i>';
-                }
-            }
-            return html;
+    <!-- ── Real Star ratings from Firestore ── -->
+    <script type="module">
+    import { db } from './auth/firebase.js';
+    import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
+
+    function buildStars(rating) {
+        var html = '';
+        for (var i = 1; i <= 5; i++) {
+            if (rating >= i)          html += '<i class="fas fa-star"></i>';
+            else if (rating >= i-0.5) html += '<i class="fas fa-star-half-stroke"></i>';
+            else                       html += '<i class="far fa-star"></i>';
         }
+        return html;
+    }
 
-        function injectRatings() {
-            var cards = document.querySelectorAll('#discover-collection [data-product-reviews]');
-            cards.forEach(function(card) {
-                /* skip if already injected */
-                if (card.querySelector('.ipo-card-rating')) return;
+    async function loadAndInject() {
+        // Fetch all reviews once
+        let snapshot;
+        try { snapshot = await getDocs(collection(db, 'reviews')); }
+        catch(e) { console.warn('Could not load reviews:', e); return; }
 
-                var count = parseInt(card.dataset.productReviews, 10) || 0;
-                if (count === 0) return;
+        // Group by productId → { sum, count }
+        const map = {};
+        snapshot.forEach(doc => {
+            const d = doc.data();
+            if (!d.productId || !d.rating) return;
+            if (!map[d.productId]) map[d.productId] = { sum: 0, count: 0 };
+            map[d.productId].sum   += d.rating;
+            map[d.productId].count += 1;
+        });
 
-                /* assign rating based on real-world fame of the perfume */
-                var id = card.dataset.id || '';
-                var famous49 = [
-                    'dior-sauvage-eau-de-parfum',
-                    'bleu-de-chanel-eau-de-parfum-spray',
-                    'versace-eros-eau-de-parfum',
-                    'rabanne-one-million-parfum',
-                    'jean-paul-gaultier-le-male-eau-de-toilette',
-                    'yves-saint-laurent-y-eau-de-parfum',
-                    'emporio-armani-stronger-with-you-intensely-edp',
-                    'jean-paul-gaultier-le-male-elixir-eau-de-parfum'
-                ];
-                var famous48 = [
-                    'versace-eros-flame-eau-de-parfum',
-                    'versace-dylan-blue-eau-de-toilette',
-                    'versace-eros-energy-eau-de-parfum',
-                    'dior-homme-intense-eau-de-parfum',
-                    'jean-paul-gaultier-le-male-le-parfum-eau-de-parfum',
-                    'jean-paul-gaultier-le-beau-eau-de-parfum',
-                    'yves-saint-laurent-myslf-eau-de-parfum',
-                    'rabanne-one-million-elixir-intense',
-                    'valentino-donna-born-in-roma-eau-de-parfum',
-                    'carolina-herrera-bad-boy-eau-de-toilette',
-                    'azzaro-the-most-wanted-parfum',
-                    'guerlain-l-homme-ideal-extreme',
-                    'gucci-guilty-absolu-de-parfum-pour-homme',
-                    'guerlain-l-homme-ideal-l-intense-eau-de-parfum',
-                    'hugo-boss-boss-bottled-elixir-intense',
-                    'boss-bottled-absolu-intense',
-                    'hugo-boss-the-scent-for-him-elixir',
-                    'armani-stronger-with-you-powerfully-eau-de-parfum',
-                    'armani-stronger-with-you-absolutely-perfume',
-                    'yves-saint-laurent-myslf-le-parfum',
-                    'azzaro-the-most-wanted-eau-de-parfum-intense',
-                    'azzaro-forever-wanted-elixir-eau-de-parfum',
-                    'valentino-born-in-roma-extradose-eau-de-toilette',
-                    'valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette',
-                    'valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette',
-                    'valentino-born-in-roma-uomo-intense-eau-de-parfum',
-                    'valentino-born-in-roma-donna-intense-eau-de-parfum',
-                    'valentino-uomo-born-in-roma-eau-de-toilette',
-                    'jean-paul-gaultier-scandal-elixir',
-                    'jean-paul-gaultier-scandal-intense-eau-de-parfum',
-                    'jean-paul-gaultier-le-male-in-blue-eau-de-parfum',
-                    'givenchy-gentleman-society-amber-eau-de-parfum',
-                    'givenchy-gentleman-society-nomade-eau-de-parfum',
-                    'givenchy-gentleman-society-extreme-eau-de-parfum',
-                    'gentleman-private-reserve-eau-de-parfum',
-                    'prada-luna-rossa-ocean-eau-de-parfum',
-                    'prada-luna-rossa-carbon-edt',
-                    'prada-luna-rossa-black-eau-de-parfum',
-                    'prada-l-homme-edt',
-                    'prada-luna-rossa-men-edt'
-                ];
-                var rating = famous49.indexOf(id) !== -1 ? 4.9
-                           : famous48.indexOf(id) !== -1 ? 4.8
-                           : 4.7;
-                var displayRating = rating.toFixed(1);
+        function injectCards() {
+            document.querySelectorAll('#discover-collection [data-id]').forEach(function(card) {
+                // Remove any previously injected row (e.g. after filter)
+                const old = card.querySelector('.ipo-card-rating');
+                if (old) old.remove();
 
-                var row = document.createElement('div');
+                const productId = card.dataset.id || '';
+                const data = map[productId];
+
+                // No real reviews → show nothing
+                if (!data || data.count === 0) return;
+
+                const avg = data.sum / data.count;
+                const row = document.createElement('div');
                 row.className = 'ipo-card-rating';
                 row.innerHTML =
-                    '<span class="ipo-card-rating__stars">' + buildStars(rating) + '</span>' +
-                    '<span class="ipo-card-rating__score">' + displayRating + '</span>' +
+                    '<span class="ipo-card-rating__stars">' + buildStars(avg) + '</span>' +
+                    '<span class="ipo-card-rating__score">' + avg.toFixed(1) + '</span>' +
                     '<span class="ipo-card-rating__dot" aria-hidden="true"></span>' +
-                    '<span class="ipo-card-rating__count">' + count + ' reviews</span>';
+                    '<span class="ipo-card-rating__count">' + data.count + (data.count === 1 ? ' review' : ' reviews') + '</span>';
 
-                /* insert after product title, before size badges */
-                var title = card.querySelector('.product-title');
+                const title = card.querySelector('.product-title');
                 if (title && title.parentNode) {
                     title.parentNode.insertBefore(row, title.nextSibling);
                 }
             });
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', injectRatings);
-        } else {
-            injectRatings();
+        injectCards();
+        document.addEventListener('discover:filtered', injectCards);
+        setTimeout(injectCards, 600);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadAndInject);
+    } else {
+        loadAndInject();
+    }
+    </script>
+
+    <!-- ── Abbreviate fragrance type labels in product titles ── -->
+    <script>
+    (function() {
+        var ABBR = [
+            [/\bEau de Parfum\b/gi,   'EDP'],
+            [/\bEau de Toilette\b/gi,  'EDT'],
+            [/\bEau de Cologne\b/gi,   'EDC'],
+        ];
+
+        function abbreviateTitles() {
+            document.querySelectorAll('#discover-collection .product-title').forEach(function(el) {
+                var t = el.textContent;
+                ABBR.forEach(function(pair) { t = t.replace(pair[0], pair[1]); });
+                if (t !== el.textContent) el.textContent = t;
+            });
         }
-        /* also run after filter changes inject new cards */
-        document.addEventListener('discover:filtered', injectRatings);
-        setTimeout(injectRatings, 600);
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', abbreviateTitles);
+        } else {
+            abbreviateTitles();
+        }
+        // Re-run after filters are applied
+        document.addEventListener('discover:filtered', abbreviateTitles);
+        // Safety net for late-rendering cards
+        setTimeout(abbreviateTitles, 700);
     })();
     </script>
 
