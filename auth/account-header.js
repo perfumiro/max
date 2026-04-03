@@ -29,9 +29,13 @@ const buildLoggedInHTML = (user) => {
     const initial = name.charAt(0).toUpperCase();
     const dash    = getDashPath();
     const wl      = getWishlistCount();
+    const savedPic = localStorage.getItem('ipordise-avatar-' + user.uid);
+    const avatarContent = savedPic
+        ? `<img src="${savedPic}" alt="${initial}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+        : initial;
     return `
         <div class="acm-user-row">
-            <div class="acm-avatar">${initial}</div>
+            <div class="acm-avatar" style="${savedPic ? 'background:none;box-shadow:none;overflow:hidden;' : ''}">${avatarContent}</div>
             <div class="acm-user-info">
                 <div class="acm-user-name">${name}</div>
                 <div class="acm-user-email">${user.email}</div>

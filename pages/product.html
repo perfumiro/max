@@ -442,11 +442,11 @@ s0.parentNode.insertBefore(s1,s0);
                         <h1 id="productName" class="text-3xl md:text-4xl font-bold text-brand-dark mt-2">Emporio Armani Stronger With You Intensely EDP</h1>
                         <p id="productSubtitle" class="text-sm mt-3 max-w-xl">Men&rsquo;s fragrance &middot; Oriental Fougère &middot; A bold, addictive signature with pink pepper, vanilla, and ambery woods.</p>
 
-                        <div class="flex items-center gap-3 mt-4 product-rating-row" id="productRatingRow" style="display:none">
+                        <a href="#reviews-section" onclick="event.preventDefault();document.getElementById('reviews-section')?.scrollIntoView({behavior:'smooth'});" class="flex items-center gap-3 mt-4 product-rating-row" id="productRatingRow" style="display:none;cursor:pointer;text-decoration:none;" title="See all reviews">
                             <div class="text-yellow-400 text-sm" id="productRatingStars" aria-label="Rating">
                             </div>
                             <span id="productReviewsCount" class="text-sm text-gray-500"></span>
-                        </div>
+                        </a>
                         <!-- Quick Fact Pills -->
                         <div class="product-quick-facts" id="productQuickFacts">
                             <span class="product-quick-fact" id="qfGender"><i class="fas fa-circle-dot"></i> <span id="qfGenderText">Men&rsquo;s</span></span>

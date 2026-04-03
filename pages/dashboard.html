@@ -1751,6 +1751,13 @@
     // Profile photo
     const AVATAR_KEY    = 'ipordise-avatar-' + user.uid;
     const savedPic      = localStorage.getItem(AVATAR_KEY);
+    // Apply to hero avatar circle too
+    if (savedPic && avatar) {
+      avatar.textContent = '';
+      avatar.style.backgroundImage = `url(${savedPic})`;
+      avatar.style.backgroundSize = 'cover';
+      avatar.style.backgroundPosition = 'center';
+    }
     const avatarInitial = document.getElementById('dashAvatarInitial');
     if (savedPic && avatarForm) {
       if (avatarInitial) avatarInitial.style.display = 'none';
