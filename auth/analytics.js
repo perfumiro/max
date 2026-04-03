@@ -129,15 +129,20 @@ const _initSession = async () => {
 };
 
 // ── Live-visitor heartbeat ────────────────────────────────────
-const _heartbeat = () => {
+const _heartbeat = async () => {
   if (!_ready) return;
-  _set(_lRef(), {
-    [`v.${_sid}`]: { t: Date.now(), page: _currentPage, device: _device(), uid: _uid },
-  }, { merge: true });
+  const val = { t: Date.now(), page: _currentPage, device: _device(), uid: _uid };
+  try {
+    // updateDoc interprets dotted keys as nested paths → writes into v map correctly
+    await updateDoc(_lRef(), { [`v.${_sid}`]: val });
+  } catch {
+    // Document doesn't exist yet — create it with the full structure
+    setDoc(_lRef(), { v: { [_sid]: val } }, { merge: true }).catch(() => {});
+  }
 };
 
 const _removeFromLive = () => {
-  _upd(_lRef(), { [`v.${_sid}`]: deleteField() });
+  updateDoc(_lRef(), { [`v.${_sid}`]: deleteField() }).catch(() => {});
 };
 
 // ── Periodic event-buffer flush ───────────────────────────────
