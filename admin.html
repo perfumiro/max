@@ -616,6 +616,7 @@
 // ================================================================
 const ADMIN_EMAILS = [
   'admin@ipordise.com',
+  'lecomaxstore@gmail.com',
 ];
 // ================================================================
 
@@ -1091,11 +1092,17 @@ onAuthStateChanged(auth, async user => {
           Open <code style="color:#f87171">admin.html</code> and add your email to<br>
           the <code style="color:#f87171">ADMIN_EMAILS</code> array.
         </div>
-        <button onclick="signOut(auth).catch(()=>{});window.location.replace('pages/login.html')"
+        <button id="adminSignOutBtn"
           style="width:100%;background:var(--red);color:#fff;border:none;padding:.75rem 1rem;border-radius:10px;font-weight:700;cursor:pointer;font-size:.85rem;font-family:inherit">
           <i class="fas fa-arrow-right-from-bracket"></i> Sign Out
         </button>
       </div>`;
+    // Wire up sign-out button (inline onclick can't reach module-scoped signOut)
+    document.getElementById('adminSignOutBtn')?.addEventListener('click', () => {
+      signOut(auth).catch(() => {}).finally(() => {
+        window.location.replace('pages/login.html');
+      });
+    });
     return;
   }
   $guard.style.display='none';
