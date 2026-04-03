@@ -18,7 +18,7 @@ import {
   doc, setDoc, updateDoc, increment, deleteField,
   serverTimestamp, writeBatch,
 } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
-import { onAuthStateChanged }
+import { onAuthStateChanged, signInAnonymously }
   from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
 
 // ── Config ────────────────────────────────────────────────────
@@ -324,13 +324,36 @@ const _detectPage = () => {
 
 // ── Bootstrap ─────────────────────────────────────────────────
 const _boot = async () => {
-  // Watch auth state; update session doc uid once resolved
-  onAuthStateChanged(auth, user => {
-    _uid = user?.uid || null;
-    if (_ready) _upd(_sRef(), { uid: _uid }).catch(() => {});
+  // Ensure every visitor has a Firebase auth token.
+  // Logged-in users keep their real account; anonymous visitors get
+  // a silent anonymous token so Firestore writes are authenticated.
+  await new Promise(resolve => {
+    const unsub = onAuthStateChanged(auth, async user => {
+      unsub();
+      if (user) {
+        _uid = user.uid;
+      } else {
+        try {
+          const cred = await signInAnonymously(auth);
+          _uid = cred.user.uid;
+        } catch {
+          _uid = null; // offline — writes will queue and retry
+        }
+      }
+      resolve();
+    });
   });
 
   await _initSession();
+
+  // If user signs in with real account later in the same session, link uid
+  onAuthStateChanged(auth, user => {
+    if (user && user.uid !== _uid) {
+      _uid = user.uid;
+      if (_ready) _upd(_sRef(), { uid: _uid }).catch(() => {});
+    }
+  });
+
   _detectPage();
   _initScroll();
   _initClicks();
