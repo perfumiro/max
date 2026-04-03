@@ -421,8 +421,7 @@
       <div class="login-field">
         <i class="fas fa-envelope login-field-icon"></i>
         <input id="loginEmail" type="email" class="login-input"
-          placeholder="admin@ipordise.com" autocomplete="username"
-          value="admin@ipordise.com">
+          placeholder="Enter your email" autocomplete="username">
       </div>
 
       <div class="login-field" style="margin-bottom:1.3rem">
@@ -469,6 +468,7 @@
     <button class="adm-tab" data-tab="products"><i class="fas fa-spray-can-sparkles"></i> Products</button>
     <button class="adm-tab" data-tab="sessions"><i class="fas fa-users"></i> Sessions</button>
     <button class="adm-tab" data-tab="live"><i class="fas fa-signal"></i> Live</button>
+    <button class="adm-tab" data-tab="users"><i class="fas fa-address-book"></i> Users</button>
   </nav>
 
   <main class="adm-main">
@@ -563,6 +563,47 @@
       </div>
     </div>
 
+    <!-- USERS -->
+    <div class="adm-panel" id="panel-users">
+      <div class="section-head">
+        <span class="section-title">Registered Users</span>
+        <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+          <input id="userSearch" type="search" placeholder="Search by name or email…"
+            style="font-size:.8rem;padding:.38rem .8rem;border:1px solid var(--border2);border-radius:8px;outline:none;font-family:inherit;width:220px">
+          <span id="userCount" class="badge badge-gray">—</span>
+        </div>
+      </div>
+      <div class="tbl-card">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>#</th><th>Name</th><th>Email</th><th>Provider</th>
+              <th>Joined</th><th>Orders</th><th>Cart Items</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="usersBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- User detail drawer -->
+      <div id="userDrawer" style="display:none;margin-top:1rem">
+        <div class="tbl-card">
+          <div class="tbl-head" style="justify-content:space-between">
+            <span class="tbl-title" id="drawerTitle">Order History</span>
+            <button onclick="document.getElementById('userDrawer').style.display='none'"
+              style="background:none;border:none;cursor:pointer;color:var(--sub);font-size:.8rem;font-family:inherit">
+              <i class="fas fa-xmark"></i> Close
+            </button>
+          </div>
+          <div class="tbl-wrap">
+            <table><thead><tr>
+              <th>Order ID</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th>
+            </tr></thead><tbody id="drawerBody"></tbody></table>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -583,7 +624,7 @@ import { signOut, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
 import {
   collection, doc, getDoc, getDocs,
-  query, orderBy, limit, onSnapshot,
+  query, orderBy, limit, onSnapshot, collectionGroup,
 } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
 
 const LIVE_TTL  = 2 * 60 * 1000; // 2 minutes
@@ -619,7 +660,8 @@ document.querySelectorAll('.adm-tab').forEach(tab => {
     tab.classList.add('active');
     _activeTab = tab.dataset.tab;
     document.getElementById(`panel-${_activeTab}`)?.classList.add('active');
-    if(_activeTab==='live') renderLive();
+    if(_activeTab==='live')  renderLive();
+    if(_activeTab==='users') loadUsers();
   });
 });
 
@@ -761,6 +803,114 @@ const renderSessionsTab = (filter='all') => {
       <td style="font-size:.72rem;color:var(--sub)">${ago(s.startTime)}</td>
     </tr>`).join('')
   : `<tr><td colspan="9"><div class="empty"><i class="fas fa-users"></i><p>No sessions match this filter.</p></div></td></tr>`;
+};
+
+// ── Users tab ─────────────────────────────────────────────────
+let _allUsers = [];
+
+const _fmtDate = ts => {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+};
+
+const loadUsers = async () => {
+  document.getElementById('usersBody').innerHTML =
+    `<tr><td colspan="8"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading users…</p></div></td></tr>`;
+  try {
+    const snap = await getDocs(collection(db, 'users'));
+    _allUsers = snap.docs.map(d => ({ _uid: d.id, ...d.data() }));
+  } catch {
+    document.getElementById('usersBody').innerHTML =
+      `<tr><td colspan="8"><div class="empty"><i class="fas fa-lock"></i><p>Could not load users. Check Firestore rules.</p></div></td></tr>`;
+    return;
+  }
+  renderUsers(_allUsers);
+};
+
+const renderUsers = (list) => {
+  document.getElementById('userCount').textContent = `${list.length} user${list.length !== 1 ? 's' : ''}`;
+  if (!list.length) {
+    document.getElementById('usersBody').innerHTML =
+      `<tr><td colspan="8"><div class="empty"><i class="fas fa-users"></i><p>No registered users yet.</p></div></td></tr>`;
+    return;
+  }
+  document.getElementById('usersBody').innerHTML = list.map((u, i) => {
+    const p = u.profile || {};
+    const cartLen = Array.isArray(u.cart) ? u.cart.length : 0;
+    const providerIcon = {
+      google: '<i class="fab fa-google" style="color:#4285f4"></i>',
+      apple:  '<i class="fab fa-apple" style="color:#555"></i>',
+      email:  '<i class="fas fa-envelope" style="color:var(--sub)"></i>',
+    }[p.provider || 'email'] || '<i class="fas fa-envelope" style="color:var(--sub)"></i>';
+    const orderCount = u._orderCount !== undefined ? u._orderCount : '—';
+    return `<tr>
+      <td style="color:var(--sub);font-weight:700">${i + 1}</td>
+      <td style="font-weight:600">${esc(p.displayName || '—')}</td>
+      <td style="font-size:.78rem">${esc(p.email || '—')}</td>
+      <td>${providerIcon} <span style="font-size:.72rem;color:var(--sub)">${esc(p.provider || 'email')}</span></td>
+      <td style="font-size:.75rem;color:var(--sub)">${_fmtDate(p.createdAt)}</td>
+      <td><span class="badge ${orderCount > 0 ? 'badge-green' : 'badge-gray'}">${orderCount}</span></td>
+      <td><span class="badge ${cartLen > 0 ? 'badge-blue' : 'badge-gray'}">${cartLen}</span></td>
+      <td>
+        <button onclick="showUserOrders('${esc(u._uid)}','${esc(p.displayName || p.email || u._uid)}')"
+          style="font-size:.72rem;padding:.28rem .65rem;border:1px solid var(--border2);border-radius:6px;background:#fff;cursor:pointer;font-family:inherit;color:var(--ink)">
+          <i class="fas fa-eye"></i> Orders
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+};
+
+// Search filter
+document.getElementById('userSearch')?.addEventListener('input', e => {
+  const q = e.target.value.toLowerCase().trim();
+  const filtered = q
+    ? _allUsers.filter(u => {
+        const p = u.profile || {};
+        return (p.email || '').toLowerCase().includes(q) ||
+               (p.displayName || '').toLowerCase().includes(q);
+      })
+    : _allUsers;
+  renderUsers(filtered);
+});
+
+// Show orders drawer for a specific user
+window.showUserOrders = async (uid, name) => {
+  const drawer = document.getElementById('userDrawer');
+  const body   = document.getElementById('drawerBody');
+  document.getElementById('drawerTitle').textContent = `Orders — ${name}`;
+  body.innerHTML = `<tr><td colspan="5"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading orders…</p></div></td></tr>`;
+  drawer.style.display = 'block';
+  drawer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  try {
+    const snap = await getDocs(
+      query(collection(db, 'users', uid, 'orders'), orderBy('createdAt', 'desc'))
+    );
+    if (!snap.docs.length) {
+      body.innerHTML = `<tr><td colspan="5"><div class="empty"><i class="fas fa-inbox"></i><p>No orders yet.</p></div></td></tr>`;
+      return;
+    }
+    // Also update order count in users list
+    const userIdx = _allUsers.findIndex(u => u._uid === uid);
+    if (userIdx >= 0) _allUsers[userIdx]._orderCount = snap.docs.length;
+
+    body.innerHTML = snap.docs.map(d => {
+      const o = d.data();
+      const items = Array.isArray(o.items) ? o.items : (o.summary?.items || []);
+      const total = o.summary?.total || o.total || 0;
+      return `<tr>
+        <td style="font-family:monospace;font-size:.7rem;color:var(--sub)">${esc(d.id.slice(0, 12))}…</td>
+        <td style="font-size:.75rem">${_fmtDate(o.createdAt)}</td>
+        <td>${fmtNum(items.length)} item${items.length !== 1 ? 's' : ''}</td>
+        <td style="font-weight:700">${fmtNum(total)} MAD</td>
+        <td><span class="badge ${o.status === 'pending' ? 'badge-amber' : o.status === 'delivered' ? 'badge-green' : 'badge-blue'}">${esc(o.status || 'pending')}</span></td>
+      </tr>`;
+    }).join('');
+  } catch {
+    body.innerHTML = `<tr><td colspan="5"><div class="empty"><i class="fas fa-triangle-exclamation"></i><p>Could not load orders.</p></div></td></tr>`;
+  }
 };
 
 // ── Live tab ──────────────────────────────────────────────────

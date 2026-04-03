@@ -14,7 +14,7 @@
 //
 // ================================================================
 
-import { auth } from './firebase.js';
+import { auth, db } from './firebase.js';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -26,6 +26,9 @@ import {
   OAuthProvider,
   signInWithPopup,
 } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
+import {
+  doc, setDoc, serverTimestamp,
+} from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
 
 // ── Human-readable error messages ────────────────────────────
 const FIREBASE_ERRORS = {
@@ -88,6 +91,18 @@ export async function signUp(email, password, displayName = '') {
   if (displayName.trim()) {
     await updateProfile(credential.user, { displayName: displayName.trim() });
   }
+  // Save user profile to Firestore so it appears in admin Users tab
+  try {
+    await setDoc(doc(db, 'users', credential.user.uid), {
+      profile: {
+        email:       email.toLowerCase().trim(),
+        displayName: displayName.trim() || '',
+        createdAt:   serverTimestamp(),
+        provider:    'email',
+      },
+      cart: [],
+    }, { merge: true });
+  } catch {}
   return credential.user;
 }
 
@@ -113,7 +128,13 @@ export async function googleSignIn() {
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
   const credential = await signInWithPopup(auth, provider);
-  return credential.user;
+  const u = credential.user;
+  try {
+    await setDoc(doc(db, 'users', u.uid), {
+      profile: { email: u.email||'', displayName: u.displayName||'', provider: 'google', lastLogin: serverTimestamp() },
+    }, { merge: true });
+  } catch {}
+  return u;
 }
 
 // ── Apple OAuth — Sign in ────────────────────────────────────
@@ -127,7 +148,13 @@ export async function appleSignIn() {
   provider.addScope('email');
   provider.addScope('name');
   const credential = await signInWithPopup(auth, provider);
-  return credential.user;
+  const u = credential.user;
+  try {
+    await setDoc(doc(db, 'users', u.uid), {
+      profile: { email: u.email||'', displayName: u.displayName||'', provider: 'apple', lastLogin: serverTimestamp() },
+    }, { merge: true });
+  } catch {}
+  return u;
 }
 
 // ── Password reset ───────────────────────────────────────────
