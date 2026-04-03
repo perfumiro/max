@@ -1408,17 +1408,24 @@ s0.parentNode.insertBefore(s1,s0);
           return;
         }
         listWrap.innerHTML = reviews.map(r => {
-          const initial = (r.displayName || '?').charAt(0).toUpperCase();
+          const initial   = (r.displayName || '?').charAt(0).toUpperCase();
+          const savedPic  = r.uid ? localStorage.getItem('ipordise-avatar-' + r.uid) : null;
           const date    = r.createdAt?.toDate
             ? r.createdAt.toDate().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })
             : '';
           const safeBody = (r.body || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          const avatarInner = savedPic
+            ? `<img src="${savedPic}" alt="${initial}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+            : initial;
+          const avatarBg = savedPic
+            ? 'background:none;'
+            : 'background:linear-gradient(145deg,#c8102e,#8c0b1e);font-size:1.15rem;font-weight:700;color:#fff;font-family:Georgia,serif;';
           return `<article class="rev-card" style="margin-bottom:1rem;">
             <div class="rev-card-header">
-              <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(145deg,#c8102e,#8c0b1e);
+              <div style="width:48px;height:48px;border-radius:50%;${avatarBg}
                 display:flex;align-items:center;justify-content:center;
-                font-size:1.15rem;font-weight:700;color:#fff;flex-shrink:0;font-family:Georgia,serif;">
-                ${initial}
+                flex-shrink:0;overflow:hidden;">
+                ${avatarInner}
               </div>
               <div class="rev-meta">
                 <div class="rev-meta-top">
