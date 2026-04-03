@@ -1,0 +1,1189 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (() => {
+            const hostname = window.location.hostname;
+            const protocol = window.location.protocol;
+            const isLocalPreview = protocol === 'file:'
+                || hostname === ''
+                || hostname === 'localhost'
+                || hostname === '127.0.0.1'
+                || hostname === '0.0.0.0';
+
+            if (!isLocalPreview || typeof window.fetch !== 'function') return;
+
+            const pageUrl = new URL(window.location.href);
+            pageUrl.hash = '';
+            pageUrl.searchParams.delete('previewRefreshTs');
+
+            let previousFingerprint = '';
+            let isReloading = false;
+
+            const getFingerprint = async () => {
+                const probeUrl = new URL(pageUrl.href);
+                probeUrl.searchParams.set('previewRefreshTs', String(Date.now()));
+
+                try {
+                    const headResponse = await window.fetch(probeUrl.href, {
+                        method: 'HEAD',
+                        cache: 'no-store'
+                    });
+
+                    if (headResponse.ok) {
+                        const etag = headResponse.headers.get('etag') || '';
+                        const lastModified = headResponse.headers.get('last-modified') || '';
+                        const contentLength = headResponse.headers.get('content-length') || '';
+                        const headerFingerprint = `${etag}|${lastModified}|${contentLength}`;
+
+                        if (headerFingerprint !== '||') return headerFingerprint;
+                    }
+                } catch {
+                    // Fall back to GET for servers that do not support HEAD.
+                }
+
+                try {
+                    const response = await window.fetch(probeUrl.href, { cache: 'no-store' });
+                    if (!response.ok) return null;
+
+                    const text = await response.text();
+                    return `${text.length}|${text.slice(0, 256)}|${text.slice(-256)}`;
+                } catch {
+                    return null;
+                }
+            };
+
+            const checkForChanges = async () => {
+                if (document.hidden || isReloading) return;
+
+                const fingerprint = await getFingerprint();
+                if (!fingerprint) return;
+
+                if (previousFingerprint && previousFingerprint !== fingerprint) {
+                    isReloading = true;
+                    window.location.reload();
+                    return;
+                }
+
+                previousFingerprint = fingerprint;
+            };
+
+            checkForChanges();
+            window.setInterval(checkForChanges, 2000);
+        })();
+    </script>
+    <title>IPORDISE Analytics Dashboard</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+      :root { --red:#c8102e; --dark:#0a0808; --ink:#1f2937; --sub:#6b7280; --border:#e5e7eb; --bg:#f9fafb; }
+      *{box-sizing:border-box}
+      body{font-family:Inter,sans-serif;background:var(--bg);color:var(--ink);margin:0}
+      /* ── Auth guard ─────────── */
+      #authGuard{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem}
+      /* ── Header ─────────────── */
+      .adm-header{background:var(--dark);color:#fff;padding:0 1.5rem;height:58px;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:50}
+      .adm-logo{font-weight:800;font-size:1rem;letter-spacing:.08em;color:#fff}
+      .adm-logo span{color:var(--red)}
+      .adm-spacer{flex:1}
+      .adm-badge{background:rgba(200,16,46,.2);color:#f87171;font-size:.68rem;font-weight:700;padding:.2rem .55rem;border-radius:99px;letter-spacing:.04em}
+      .adm-hbtn{background:transparent;color:#d1d5db;border:1px solid #374151;padding:.35rem .8rem;border-radius:.4rem;font-size:.78rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;transition:background .15s}
+      .adm-hbtn:hover{background:#1f2937;color:#fff}
+      /* ── Tabs ────────────────── */
+      .adm-tabs{background:#fff;border-bottom:1px solid var(--border);display:flex;gap:.25rem;padding:0 1.5rem}
+      .adm-tab{padding:.75rem 1.1rem;font-size:.83rem;font-weight:600;color:var(--sub);border:none;background:transparent;border-bottom:2.5px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:.45rem;transition:color .15s,border-color .15s}
+      .adm-tab:hover{color:var(--ink)}
+      .adm-tab.active{color:var(--red);border-bottom-color:var(--red)}
+      /* ── Layout ──────────────── */
+      .adm-main{padding:1.5rem;max-width:1400px;margin:0 auto}
+      .adm-panel{display:none}
+      .adm-panel.active{display:block}
+      /* ── Stat cards ──────────── */
+      .stat-grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));margin-bottom:1.5rem}
+      .stat-card{background:#fff;border:1px solid var(--border);border-radius:.85rem;padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.3rem}
+      .stat-icon{width:34px;height:34px;border-radius:.5rem;display:flex;align-items:center;justify-content:center;font-size:.9rem;margin-bottom:.3rem}
+      .stat-val{font-size:1.55rem;font-weight:800;line-height:1}
+      .stat-lbl{font-size:.7rem;color:var(--sub);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+      /* ── Live badge ──────────── */
+      .live-badge{display:inline-flex;align-items:center;gap:.4rem;background:#dcfce7;color:#15803d;font-size:.72rem;font-weight:700;padding:.2rem .65rem;border-radius:99px}
+      .live-dot{width:7px;height:7px;border-radius:50%;background:#16a34a;animation:pulse 1.4s infinite}
+      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+      /* ── Charts ──────────────── */
+      .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+      @media(max-width:860px){.chart-grid{grid-template-columns:1fr}}
+      .chart-card{background:#fff;border:1px solid var(--border);border-radius:.85rem;padding:1.2rem}
+      .chart-title{font-size:.8rem;font-weight:700;color:var(--ink);margin-bottom:.8rem;text-transform:uppercase;letter-spacing:.04em}
+      .chart-wrap{position:relative;height:200px}
+      /* ── Tables ──────────────── */
+      .tbl-card{background:#fff;border:1px solid var(--border);border-radius:.85rem;overflow:hidden;margin-bottom:1.5rem}
+      .tbl-head{padding:.9rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap}
+      .tbl-title{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+      .tbl-wrap{overflow-x:auto}
+      table{width:100%;border-collapse:collapse;font-size:.8rem}
+      th{background:#f9fafb;color:var(--sub);font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:.68rem;padding:.65rem 1rem;text-align:left;white-space:nowrap}
+      td{padding:.65rem 1rem;border-top:1px solid var(--border);vertical-align:middle}
+      tr:hover td{background:#fafafa}
+      /* ── Progress bars ────────── */
+      .pbar-wrap{display:flex;align-items:center;gap:.5rem}
+      .pbar{height:5px;background:#f3f4f6;border-radius:99px;flex:1;overflow:hidden;min-width:50px}
+      .pbar-fill{height:100%;border-radius:99px;background:var(--red);transition:width .4s}
+      .pbar-fill.green{background:#16a34a}
+      .pbar-fill.blue{background:#2563eb}
+      /* ── Funnel ───────────────── */
+      .funnel-grid{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+      .funnel-step{flex:1;min-width:120px;background:#fff;border:1px solid var(--border);border-radius:.85rem;padding:1.1rem;text-align:center;position:relative}
+      .funnel-step+.funnel-step::before{content:'\f054';font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;left:-1rem;top:50%;transform:translateY(-50%);color:var(--sub);font-size:.7rem}
+      .funnel-n{font-size:1.55rem;font-weight:800}
+      .funnel-l{font-size:.68rem;color:var(--sub);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:.2rem}
+      .funnel-pct{font-size:.74rem;color:#16a34a;font-weight:700;margin-top:.2rem}
+      /* ── Badges ───────────────── */
+      .badge{display:inline-block;padding:.18rem .55rem;border-radius:99px;font-size:.67rem;font-weight:700}
+      .badge-green{background:#dcfce7;color:#15803d}
+      .badge-red{background:#fee2e2;color:#b91c1c}
+      .badge-blue{background:#dbeafe;color:#1d4ed8}
+      .badge-gray{background:#f3f4f6;color:var(--sub)}
+      /* ── Live panel ───────────── */
+      .live-grid{display:grid;grid-template-columns:260px 1fr;gap:1rem}
+      @media(max-width:700px){.live-grid{grid-template-columns:1fr}}
+      .live-counter-card{background:var(--dark);color:#fff;border-radius:.85rem;padding:2rem;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.5rem}
+      .live-big-n{font-size:4rem;font-weight:900;line-height:1}
+      .live-sub{font-size:.78rem;color:#9ca3af}
+      .live-page-list{background:#fff;border:1px solid var(--border);border-radius:.85rem;overflow:hidden}
+      .live-page-item{padding:.7rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:.8rem;gap:.5rem}
+      .live-page-item:last-child{border-bottom:none}
+      /* ── Empty state ──────────── */
+      .empty{padding:3rem 1rem;text-align:center;color:var(--sub)}
+      .empty i{font-size:1.8rem;margin-bottom:.75rem;display:block;opacity:.3}
+      .empty p{font-size:.83rem}
+      /* ── Skeleton ─────────────── */
+      .skeleton{background:#f3f4f6;border-radius:.4rem;animation:shimmer 1.2s infinite}
+      @keyframes shimmer{0%,100%{opacity:1}50%{opacity:.45}}
+      ::-webkit-scrollbar{width:5px;height:5px}
+      ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:99px}
+    </style>
+</head>
+<body>
+
+<!-- ── Auth guard ────────────────────────────────────────────── -->
+<div id="authGuard">
+  <div style="font-size:2rem;color:#d1d5db"><i class="fas fa-chart-line"></i></div>
+  <p style="color:#6b7280;font-size:.88rem" id="authMsg">Verifying access…</p>
+</div>
+
+<!-- ── Dashboard (shown after auth) ─────────────────────────── -->
+<div id="dashboard" style="display:none">
+
+  <header class="adm-header">
+    <div class="adm-logo">IPO<span>R</span>DISE</div>
+    <span class="adm-badge">ANALYTICS</span>
+    <div class="adm-spacer"></div>
+    <span class="live-badge" id="liveHeaderBadge">
+      <span class="live-dot"></span>
+      <span id="liveHeaderCount">–</span>&nbsp;live
+    </span>
+    <button class="adm-hbtn" id="refreshBtn"><i class="fas fa-rotate-right"></i> Refresh</button>
+    <button class="adm-hbtn" id="logoutBtn"><i class="fas fa-arrow-right-from-bracket"></i> Logout</button>
+  </header>
+
+  <nav class="adm-tabs">
+    <button class="adm-tab active" data-tab="overview"><i class="fas fa-chart-pie"></i> Overview</button>
+    <button class="adm-tab" data-tab="products"><i class="fas fa-spray-can-sparkles"></i> Products</button>
+    <button class="adm-tab" data-tab="sessions"><i class="fas fa-users"></i> Sessions</button>
+    <button class="adm-tab" data-tab="live"><i class="fas fa-signal"></i> Live</button>
+  </nav>
+
+  <main class="adm-main">
+
+    <!-- OVERVIEW -->
+    <div class="adm-panel active" id="panel-overview">
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="funnel-grid" id="funnelGrid"></div>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-title"><i class="fas fa-chart-line" style="color:var(--red);margin-right:.4rem"></i>Sessions — last 7 days</div>
+          <div class="chart-wrap"><canvas id="sessionsChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title"><i class="fas fa-chart-bar" style="color:#2563eb;margin-right:.4rem"></i>Conversions — last 7 days</div>
+          <div class="chart-wrap"><canvas id="convChart"></canvas></div>
+        </div>
+      </div>
+      <div class="chart-grid">
+        <div class="tbl-card">
+          <div class="tbl-head"><span class="tbl-title"><i class="fas fa-trophy" style="color:#f59e0b;margin-right:.4rem"></i>Top Products — Cart Adds</span></div>
+          <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Product</th><th>Brand</th><th>Views</th><th>Cart Adds</th><th>Purchases</th><th>Conv%</th></tr></thead><tbody id="topProductsBody"></tbody></table></div>
+        </div>
+        <div class="tbl-card">
+          <div class="tbl-head"><span class="tbl-title"><i class="fas fa-clock-rotate-left" style="color:var(--sub);margin-right:.4rem"></i>Recent Sessions</span></div>
+          <div class="tbl-wrap"><table><thead><tr><th>Entry</th><th>Duration</th><th>Device</th><th>Type</th><th>Converted</th></tr></thead><tbody id="recentSessionsBody"></tbody></table></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="adm-panel" id="panel-products">
+      <div class="tbl-card">
+        <div class="tbl-head">
+          <span class="tbl-title"><i class="fas fa-spray-can-sparkles" style="color:var(--red);margin-right:.4rem"></i>All Products</span>
+          <select id="productSort" style="font-size:.78rem;padding:.3rem .6rem;border:1px solid var(--border);border-radius:.4rem;cursor:pointer">
+            <option value="cartAdds">Sort: Cart Adds</option>
+            <option value="views">Sort: Views</option>
+            <option value="purchases">Sort: Purchases</option>
+            <option value="favorites">Sort: Favorites</option>
+            <option value="abandoned">Sort: Abandoned (Cart-Purchase)</option>
+          </select>
+        </div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>#</th><th>Product</th><th>Brand</th><th>Views</th><th>Cart Adds</th><th>Purchases</th><th>Abandoned</th><th>Favorites</th><th>Conv%</th></tr></thead><tbody id="allProductsBody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SESSIONS -->
+    <div class="adm-panel" id="panel-sessions">
+      <div class="tbl-card">
+        <div class="tbl-head">
+          <span class="tbl-title"><i class="fas fa-users" style="color:#2563eb;margin-right:.4rem"></i>Recent Sessions</span>
+          <select id="sessionFilter" style="font-size:.78rem;padding:.3rem .6rem;border:1px solid var(--border);border-radius:.4rem;cursor:pointer">
+            <option value="all">All sessions</option>
+            <option value="converted">Converted only</option>
+            <option value="abandoned">Checkout abandoned</option>
+            <option value="new">New visitors</option>
+            <option value="mobile">Mobile only</option>
+          </select>
+        </div>
+        <div class="tbl-wrap">
+          <table><thead><tr><th>Session ID</th><th>Entry Page</th><th>Exit Page</th><th>Duration</th><th>Device</th><th>Type</th><th>Checkout</th><th>Converted</th><th>Date</th></tr></thead><tbody id="sessionsBody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE -->
+    <div class="adm-panel" id="panel-live">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <h2 style="font-size:.88rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Real-time Visitors</h2>
+        <span style="font-size:.72rem;color:var(--sub)" id="liveLastUpdate">Listening for updates…</span>
+      </div>
+      <div class="live-grid">
+        <div class="live-counter-card">
+          <div class="live-badge" style="margin-bottom:.5rem"><span class="live-dot"></span> LIVE NOW</div>
+          <div class="live-big-n" id="liveBigCount">–</div>
+          <div class="live-sub">active visitors</div>
+          <div style="margin-top:1.2rem;font-size:.74rem;color:#9ca3af" id="liveDeviceSplit"></div>
+        </div>
+        <div class="live-page-list" id="livePageList">
+          <div class="empty"><i class="fas fa-signal"></i><p>Waiting for live data…</p></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script type="module">
+// ================================================================
+// IPORDISE Analytics Dashboard — Admin Access Configuration
+//
+//  ⚙️  Add your email address below to grant access.
+//     Anyone NOT in this list will see an "Access Restricted" page.
+// ================================================================
+const ADMIN_EMAILS = [
+  'admin@ipordise.com',
+];
+// ================================================================
+
+import { auth, db } from './auth/firebase.js';
+import { signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
+import {
+  collection, doc, getDoc, getDocs,
+  query, orderBy, limit, onSnapshot,
+} from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
+
+const LIVE_TTL  = 2 * 60 * 1000; // 2 minutes
+const $guard    = document.getElementById('authGuard');
+const $dash     = document.getElementById('dashboard');
+const $authMsg  = document.getElementById('authMsg');
+
+// ── Formatters ────────────────────────────────────────────────
+const fmtDur = s => { if(!s||s<0) return '—'; return s<60?`${s}s`:`${Math.floor(s/60)}m ${s%60}s`; };
+const fmtNum = n => (n||0).toLocaleString('fr-FR');
+const fmtPct = (n,d) => !d ? '—' : Math.round((n/d)*100)+'%';
+const esc    = s => String(s||'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+const ago    = ts => {
+  if(!ts) return '—';
+  const d = ts.toDate?ts.toDate():new Date(ts);
+  const s = Math.round((Date.now()-d)/1000);
+  if(s<60) return `${s}s ago`;
+  if(s<3600) return `${Math.floor(s/60)}m ago`;
+  if(s<86400) return `${Math.floor(s/3600)}h ago`;
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+};
+const devIcon = d => ({
+  mobile:'<i class="fas fa-mobile-screen"></i>',
+  tablet:'<i class="fas fa-tablet"></i>',
+  desktop:'<i class="fas fa-desktop"></i>',
+}[d]||'<i class="fas fa-desktop"></i>');
+
+// ── Tab navigation ────────────────────────────────────────────
+let _activeTab = 'overview';
+document.querySelectorAll('.adm-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.adm-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    _activeTab = tab.dataset.tab;
+    document.getElementById(`panel-${_activeTab}`)?.classList.add('active');
+    if(_activeTab==='live') renderLive();
+  });
+});
+
+// ── Cached data ───────────────────────────────────────────────
+let _products = [], _sessions = [], _dailyDocs = {}, _liveData = {};
+let _sessChart = null, _convChart = null;
+
+// ── Stat cards ────────────────────────────────────────────────
+const renderStats = d => {
+  const {sessions=0,newSessions=0,pageViews=0,productViews=0,
+         cartAdds=0,conversions=0,cartAbandons=0,revenue=0} = d;
+  const abandRate = cartAdds ? Math.round(((cartAdds-conversions)/cartAdds)*100) : 0;
+  const cards = [
+    {icon:'fa-users',      col:'#dbeafe',ico:'#2563eb', v:fmtNum(sessions),       l:'Sessions Today'   },
+    {icon:'fa-eye',        col:'#e0e7ff',ico:'#4f46e5', v:fmtNum(pageViews),      l:'Page Views'       },
+    {icon:'fa-spray-can-sparkles',col:'#fef9c3',ico:'#ca8a04', v:fmtNum(productViews), l:'Product Views'},
+    {icon:'fa-cart-shopping',col:'#dcfce7',ico:'#16a34a',v:fmtNum(cartAdds),      l:'Cart Adds'        },
+    {icon:'fa-check-circle',col:'#dcfce7',ico:'#15803d',v:fmtNum(conversions),    l:'Conversions'      },
+    {icon:'fa-person-running',col:'#fee2e2',ico:'#b91c1c',v:abandRate+'%',        l:'Abandonment Rate' },
+    {icon:'fa-user-plus',  col:'#f3e8ff',ico:'#7c3aed', v:fmtNum(newSessions),    l:'New Visitors'     },
+    {icon:'fa-money-bill-wave',col:'#fef9c3',ico:'#d97706',v:fmtNum(revenue)+' MAD',l:'Revenue Today'  },
+  ];
+  document.getElementById('statGrid').innerHTML = cards.map(c=>`
+    <div class="stat-card">
+      <div class="stat-icon" style="background:${c.col};color:${c.ico}"><i class="fas ${c.icon}"></i></div>
+      <div class="stat-val">${esc(c.v)}</div>
+      <div class="stat-lbl">${esc(c.l)}</div>
+    </div>`).join('');
+};
+
+// ── Funnel ────────────────────────────────────────────────────
+const renderFunnel = d => {
+  const v=d.productViews||0, c=d.cartAdds||0, p=d.conversions||0;
+  document.getElementById('funnelGrid').innerHTML = [
+    {n:v, l:'Product Views', pct:null},
+    {n:c, l:'Cart Adds',     pct:v?fmtPct(c,v):null},
+    {n:p, l:'Purchases',     pct:c?fmtPct(p,c):null},
+  ].map(s=>`<div class="funnel-step">
+    <div class="funnel-n">${fmtNum(s.n)}</div>
+    <div class="funnel-l">${esc(s.l)}</div>
+    ${s.pct?`<div class="funnel-pct">↳ ${esc(s.pct)} conv</div>`:''}
+  </div>`).join('');
+};
+
+// ── 7-day charts ──────────────────────────────────────────────
+const renderCharts = () => {
+  const today = new Date();
+  const labels=[], sess=[], conv=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(today); d.setDate(d.getDate()-i);
+    const k=d.toISOString().slice(0,10);
+    labels.push(d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric'}));
+    const doc=_dailyDocs[k]||{};
+    sess.push(doc.sessions||0);
+    conv.push(doc.conversions||0);
+  }
+  const cfg = (label,data,color) => ({
+    type:'line', data:{labels,datasets:[{label,data,borderColor:color,
+      backgroundColor:color+'22',borderWidth:2.5,pointRadius:3,fill:true,tension:.38}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#9ca3af'}},
+              y:{grid:{color:'#f3f4f6'},ticks:{font:{size:10},color:'#9ca3af'},beginAtZero:true}}},
+  });
+  if(_sessChart) _sessChart.destroy();
+  if(_convChart) _convChart.destroy();
+  _sessChart = new Chart(document.getElementById('sessionsChart'), cfg('Sessions',sess,'#c8102e'));
+  _convChart = new Chart(document.getElementById('convChart'),    cfg('Conversions',conv,'#2563eb'));
+};
+
+// ── Overview: top products ─────────────────────────────────────
+const renderTopProducts = () => {
+  const top = [..._products].sort((a,b)=>(b.cartAdds||0)-(a.cartAdds||0)).slice(0,8);
+  const max = top[0]?.cartAdds||1;
+  document.getElementById('topProductsBody').innerHTML = top.length ? top.map((p,i)=>`
+    <tr>
+      <td style="color:var(--sub);font-weight:700">${i+1}</td>
+      <td style="font-weight:600;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.name||p.id)}</td>
+      <td><span class="badge badge-gray">${esc(p.brand||'—')}</span></td>
+      <td>${fmtNum(p.views)}</td>
+      <td><div class="pbar-wrap"><span style="min-width:26px">${fmtNum(p.cartAdds)}</span><div class="pbar"><div class="pbar-fill" style="width:${Math.round(((p.cartAdds||0)/max)*100)}%"></div></div></div></td>
+      <td>${fmtNum(p.purchases)}</td>
+      <td><span class="badge ${(p.cartAdds||0)>0?'badge-green':'badge-gray'}">${fmtPct(p.purchases||0,p.cartAdds||0)}</span></td>
+    </tr>`).join('')
+  : `<tr><td colspan="7"><div class="empty"><i class="fas fa-inbox"></i><p>No product data yet.</p></div></td></tr>`;
+};
+
+// ── Overview: recent sessions ─────────────────────────────────
+const renderRecentSessions = () => {
+  document.getElementById('recentSessionsBody').innerHTML = _sessions.slice(0,8).map(s=>`
+    <tr>
+      <td style="font-weight:600">${esc(s.entryPage||'—')}</td>
+      <td>${fmtDur(s.duration)}</td>
+      <td>${devIcon(s.device)}</td>
+      <td>${s.isNew?'<span class="badge badge-blue">New</span>':'<span class="badge badge-gray">Return</span>'}</td>
+      <td>${s.converted?'<span class="badge badge-green">✓ Yes</span>':'<span class="badge badge-gray">—</span>'}</td>
+    </tr>`).join('')
+  || `<tr><td colspan="5"><div class="empty"><i class="fas fa-users"></i><p>No session data yet.</p></div></td></tr>`;
+};
+
+// ── Products tab ──────────────────────────────────────────────
+const renderAllProducts = (sortKey='cartAdds') => {
+  let list = [..._products];
+  if(sortKey==='abandoned') list.sort((a,b)=>((b.cartAdds||0)-(b.purchases||0))-((a.cartAdds||0)-(a.purchases||0)));
+  else list.sort((a,b)=>(b[sortKey]||0)-(a[sortKey]||0));
+  document.getElementById('allProductsBody').innerHTML = list.length ? list.map((p,i)=>{
+    const aband = Math.max(0,(p.cartAdds||0)-(p.purchases||0));
+    return `<tr>
+      <td style="color:var(--sub);font-weight:700">${i+1}</td>
+      <td style="font-weight:600;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(p.name||p.id)}">${esc(p.name||p.id)}</td>
+      <td><span class="badge badge-gray">${esc(p.brand||'—')}</span></td>
+      <td>${fmtNum(p.views)}</td>
+      <td style="font-weight:700;color:${(p.cartAdds||0)>0?'#16a34a':'inherit'}">${fmtNum(p.cartAdds)}</td>
+      <td style="font-weight:700;color:${(p.purchases||0)>0?'#2563eb':'inherit'}">${fmtNum(p.purchases)}</td>
+      <td style="color:${aband>0?'#b91c1c':'var(--sub)'};font-weight:${aband>0?700:400}">${fmtNum(aband)}</td>
+      <td>${fmtNum(p.favorites)}</td>
+      <td><span class="badge ${(p.purchases||0)>0?'badge-green':'badge-gray'}">${fmtPct(p.purchases||0,p.cartAdds||0)}</span></td>
+    </tr>`;
+  }).join('')
+  : `<tr><td colspan="9"><div class="empty"><i class="fas fa-spray-can-sparkles"></i><p>No product data yet.</p></div></td></tr>`;
+};
+
+// ── Sessions tab ──────────────────────────────────────────────
+const renderSessionsTab = (filter='all') => {
+  let list = _sessions;
+  if(filter==='converted') list = list.filter(s=>s.converted);
+  if(filter==='abandoned') list = list.filter(s=>s.checkoutStarted&&!s.converted);
+  if(filter==='new')       list = list.filter(s=>s.isNew);
+  if(filter==='mobile')    list = list.filter(s=>s.device==='mobile');
+  document.getElementById('sessionsBody').innerHTML = list.length ? list.map(s=>`
+    <tr>
+      <td style="font-family:monospace;font-size:.7rem;color:var(--sub)">${esc((s._id||'').slice(0,14))}…</td>
+      <td style="font-weight:600">${esc(s.entryPage||'—')}</td>
+      <td>${esc(s.exitPage||'—')}</td>
+      <td>${fmtDur(s.duration)}</td>
+      <td>${devIcon(s.device)}&nbsp;<span style="font-size:.7rem;color:var(--sub)">${esc(s.screen||'')}</span></td>
+      <td>${s.isNew?'<span class="badge badge-blue">New</span>':'<span class="badge badge-gray">Return</span>'}</td>
+      <td>${s.checkoutStarted?'<span class="badge badge-blue">Yes</span>':'<span class="badge badge-gray">No</span>'}</td>
+      <td>${s.converted?'<span class="badge badge-green">✓ Converted</span>':'<span class="badge badge-gray">—</span>'}</td>
+      <td style="font-size:.72rem;color:var(--sub)">${ago(s.startTime)}</td>
+    </tr>`).join('')
+  : `<tr><td colspan="9"><div class="empty"><i class="fas fa-users"></i><p>No sessions match this filter.</p></div></td></tr>`;
+};
+
+// ── Live tab ──────────────────────────────────────────────────
+const renderLive = () => {
+  const now    = Date.now();
+  const active = Object.entries(_liveData)
+    .filter(([,v])=>v&&typeof v.t==='number'&&(now-v.t)<LIVE_TTL)
+    .sort((a,b)=>b[1].t-a[1].t);
+  const count = active.length;
+  document.getElementById('liveBigCount').textContent    = count;
+  document.getElementById('liveHeaderCount').textContent = count;
+  document.getElementById('liveLastUpdate').textContent  =
+    'Updated: '+new Date().toLocaleTimeString('en-GB');
+  const mob=active.filter(([,v])=>v.device==='mobile').length;
+  const tab=active.filter(([,v])=>v.device==='tablet').length;
+  document.getElementById('liveDeviceSplit').innerHTML = count
+    ? `<i class="fas fa-mobile-screen"></i> ${mob} &nbsp;<i class="fas fa-tablet"></i> ${tab} &nbsp;<i class="fas fa-desktop"></i> ${count-mob-tab}`
+    : '';
+  if(!active.length){
+    document.getElementById('livePageList').innerHTML=
+      '<div class="empty"><i class="fas fa-signal"></i><p>No active visitors right now.</p></div>';
+    return;
+  }
+  const pages={};
+  active.forEach(([,v])=>{
+    const pg=v.page||'home';
+    if(!pages[pg]){pages[pg]={count:0,devices:[]};}
+    pages[pg].count++; pages[pg].devices.push(v.device);
+  });
+  document.getElementById('livePageList').innerHTML =
+    Object.entries(pages).sort((a,b)=>b[1].count-a[1].count).map(([pg,info])=>`
+      <div class="live-page-item">
+        <div>
+          <div style="font-weight:600">${esc(pg)}</div>
+          <div style="font-size:.7rem;color:var(--sub)">${info.devices.map(devIcon).join(' ')}</div>
+        </div>
+        <span class="badge badge-blue">${info.count} visitor${info.count>1?'s':''}</span>
+      </div>`).join('');
+};
+
+// ── Load all Firestore data ────────────────────────────────────
+const loadData = async () => {
+  document.getElementById('statGrid').innerHTML =
+    Array(8).fill(0).map(()=>`<div class="stat-card">
+      <div class="skeleton" style="width:34px;height:34px;border-radius:.5rem;margin-bottom:.6rem"></div>
+      <div class="skeleton" style="height:24px;width:65%;border-radius:.3rem;margin-bottom:.3rem"></div>
+      <div class="skeleton" style="height:11px;width:45%;border-radius:.3rem"></div>
+    </div>`).join('');
+
+  const todayKey  = new Date().toISOString().slice(0,10);
+  const todaySnap = await getDoc(doc(db,'analytics_daily',todayKey));
+  const todayData = todaySnap.exists() ? todaySnap.data() : {};
+
+  // 7-day daily docs
+  _dailyDocs = {};
+  await Promise.all(Array.from({length:7},(_,i)=>{
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const k=d.toISOString().slice(0,10);
+    return getDoc(doc(db,'analytics_daily',k)).then(s=>{ if(s.exists()) _dailyDocs[k]=s.data(); });
+  }));
+
+  // Products
+  const pSnap = await getDocs(
+    query(collection(db,'analytics_products'),orderBy('cartAdds','desc'),limit(50))
+  ).catch(()=>({docs:[]}));
+  _products = pSnap.docs.map(d=>({_id:d.id,...d.data()}));
+
+  // Sessions
+  const sSnap = await getDocs(
+    query(collection(db,'analytics_sessions'),orderBy('startTime','desc'),limit(30))
+  ).catch(()=>({docs:[]}));
+  _sessions = sSnap.docs.map(d=>({_id:d.id,...d.data()}));
+
+  renderStats(todayData);
+  renderFunnel(todayData);
+  renderCharts();
+  renderTopProducts();
+  renderRecentSessions();
+  renderAllProducts(document.getElementById('productSort')?.value||'cartAdds');
+  renderSessionsTab(document.getElementById('sessionFilter')?.value||'all');
+};
+
+// ── Sort / filter controls ─────────────────────────────────────
+document.getElementById('productSort')?.addEventListener('change', e => renderAllProducts(e.target.value));
+document.getElementById('sessionFilter')?.addEventListener('change', e => renderSessionsTab(e.target.value));
+
+// ── Refresh button ────────────────────────────────────────────
+document.getElementById('refreshBtn')?.addEventListener('click', async () => {
+  const btn = document.getElementById('refreshBtn');
+  btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Loading…';
+  await loadData();
+  if(_activeTab==='live') renderLive();
+  btn.disabled=false; btn.innerHTML='<i class="fas fa-rotate-right"></i> Refresh';
+});
+
+// ── Logout ────────────────────────────────────────────────────
+document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+  await signOut(auth).catch(()=>{});
+  window.location.replace('pages/login.html');
+});
+
+// ── Live Firestore listener ───────────────────────────────────
+let _unsub=null;
+const startLive = () => {
+  if(_unsub) _unsub();
+  _unsub = onSnapshot(doc(db,'analytics_live','state'), snap => {
+    _liveData = snap.exists() ? (snap.data().v||{}) : {};
+    const now=Date.now();
+    const n=Object.values(_liveData).filter(v=>v&&typeof v.t==='number'&&(now-v.t)<LIVE_TTL).length;
+    document.getElementById('liveHeaderCount').textContent=n;
+    if(_activeTab==='live') renderLive();
+  },()=>{});
+};
+
+// ── Auth gate ─────────────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  if(!user){
+    $authMsg.textContent='Redirecting to login…';
+    setTimeout(()=>window.location.replace('pages/login.html'), 1000);
+    return;
+  }
+  if(!ADMIN_EMAILS.includes(user.email)){
+    $guard.innerHTML=`
+      <div style="text-align:center;max-width:360px;padding:2rem">
+        <div style="font-size:2.2rem;color:#d1d5db;margin-bottom:1rem"><i class="fas fa-lock"></i></div>
+        <h2 style="font-weight:800;font-size:1.05rem;margin-bottom:.5rem">Access Restricted</h2>
+        <p style="color:#6b7280;font-size:.85rem;margin-bottom:1.2rem">
+          Admin access only.<br>Signed in as <strong>${esc(user.email)}</strong>
+        </p>
+        <p style="font-size:.75rem;background:#f3f4f6;padding:.75rem 1rem;border-radius:.5rem;color:#374151;margin-bottom:1rem;text-align:left">
+          To grant access, open <code>admin.html</code> and add your email to the<br>
+          <code style="color:var(--red)">ADMIN_EMAILS</code> array at the top of the script.
+        </p>
+        <button onclick="import('./auth/firebase.js').then(m=>m.auth).then(a=>a.signOut?a.signOut():null).catch(()=null);window.location.replace('pages/login.html')"
+          style="background:#c8102e;color:#fff;border:none;padding:.55rem 1.3rem;border-radius:.5rem;font-weight:700;cursor:pointer;font-size:.82rem">
+          <i class="fas fa-arrow-right-from-bracket"></i> Sign Out
+        </button>
+      </div>`;
+    return;
+  }
+  $guard.style.display='none';
+  $dash.style.display='block';
+  await loadData();
+  startLive();
+  setInterval(loadData, 60_000);
+  setInterval(()=>{ if(_activeTab==='live') renderLive(); }, 30_000);
+});
+</script>
+</body>
+</html>
+            overflow: hidden;
+        }
+
+        /* Animated dark background */
+        .bg-layer {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 30%, rgba(201,168,76,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 70%, rgba(201,168,76,0.05) 0%, transparent 55%),
+                #0a080c;
+            z-index: 0;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            background: rgba(201, 168, 76, 0.18);
+            animation: float linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%   { transform: translateY(110vh) scale(0);   opacity: 0; }
+            10%  { opacity: 1; }
+            90%  { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1.4); opacity: 0; }
+        }
+
+        /* Card */
+        .card {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 420px;
+            margin: 24px;
+            background: rgba(18, 13, 8, 0.85);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 6px;
+            padding: 48px 44px 40px;
+            box-shadow:
+                0 0 0 1px rgba(201,168,76,0.08) inset,
+                0 40px 80px rgba(0,0,0,0.75),
+                0 0 60px rgba(201,168,76,0.06);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        /* Top gold rule */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #C9A84C, transparent);
+        }
+
+        /* Logo */
+        .logo-wrap {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #C9A84C 0%, #f5e090 50%, #a07010 100%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #1a0e00;
+            margin-bottom: 14px;
+            box-shadow: 0 0 28px rgba(201,168,76,0.45);
+        }
+
+        .logo-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.55rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            color: rgba(201,168,76,0.80);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(201,168,76,0.20);
+        }
+        .divider span {
+            font-size: 0.6rem;
+            letter-spacing: 0.30em;
+            color: rgba(201,168,76,0.55);
+            text-transform: uppercase;
+        }
+
+        /* Form fields */
+        .field {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(201,168,76,0.55);
+            font-size: 0.78rem;
+            pointer-events: none;
+            transition: color 0.25s;
+        }
+
+        .field input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(201,168,76,0.28);
+            border-radius: 3px;
+            padding: 13px 14px 13px 38px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+        }
+
+        .field input::placeholder { color: rgba(255,255,255,0.28); }
+
+        .field input:focus {
+            border-color: rgba(201,168,76,0.70);
+            background: rgba(255,255,255,0.07);
+            box-shadow: 0 0 0 3px rgba(201,168,76,0.10);
+        }
+
+        .field input:focus + .field-icon,
+        .field:focus-within .field-icon {
+            color: #C9A84C;
+        }
+
+        /* Toggle password */
+        .toggle-pw {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.30);
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+        .toggle-pw:hover { color: rgba(201,168,76,0.80); }
+
+        /* Error message */
+        .error-msg {
+            display: none;
+            background: rgba(220,38,38,0.12);
+            border: 1px solid rgba(220,38,38,0.35);
+            border-radius: 3px;
+            padding: 10px 14px;
+            font-size: 0.78rem;
+            color: #fca5a5;
+            margin-bottom: 18px;
+            letter-spacing: 0.03em;
+        }
+
+        .error-msg i { margin-right: 6px; }
+
+        /* Submit button */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(180deg, #f5e090 0%, #d4a82a 45%, #a07010 100%);
+            color: #1a0e00;
+            border: none;
+            border-top:    2px solid #faeaaa;
+            border-left:   2px solid #e8cc60;
+            border-right:  2px solid #7a5208;
+            border-bottom: 4px solid #4a3005;
+            border-radius: 4px;
+            padding: 14px 20px 17px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 6px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.14s ease, box-shadow 0.20s ease;
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,220,0.55),
+                inset 0 -2px 0 rgba(0,0,0,0.25),
+                0 5px 0 #2a1800,
+                0 8px 22px rgba(0,0,0,0.55),
+                0 0 20px rgba(210,165,40,0.30);
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 48%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.30) 0%, transparent 100%);
+            border-radius: 3px 3px 0 0;
+            pointer-events: none;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,220,0.55),
+                inset 0 -2px 0 rgba(0,0,0,0.25),
+                0 7px 0 #2a1800,
+                0 12px 28px rgba(0,0,0,0.55),
+                0 0 28px rgba(210,165,40,0.45);
+        }
+
+        .btn-submit:active {
+            transform: translateY(4px);
+            border-bottom-width: 1px;
+            box-shadow:
+                inset 0 3px 8px rgba(0,0,0,0.35),
+                0 1px 0 #2a1800;
+        }
+
+        .btn-submit .spinner {
+            display: none;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(26,14,0,0.35);
+            border-top-color: #1a0e00;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Footer note */
+        .card-footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.65rem;
+            letter-spacing: 0.10em;
+            color: rgba(255,255,255,0.20);
+        }
+
+        .card-footer a {
+            color: rgba(201,168,76,0.45);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .card-footer a:hover { color: rgba(201,168,76,0.85); }
+    </style>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{};
+var Tawk_LoadStart=new Date();
+Tawk_API.onLoad=function(){
+  Tawk_API.hideWidget();
+  /* ── Custom floating chat button with IPORDISE logo ── */
+  var style=document.createElement('style');
+  style.textContent='\
+    #ipo-tawk-wrap{\
+      position:fixed;\
+      bottom:calc(72px + 0.75rem + env(safe-area-inset-bottom,0px));\
+      right:1.25rem;\
+      z-index:99999;\
+      display:flex;\
+      align-items:center;\
+      justify-content:center;\
+      animation:ipo-pop-in .4s cubic-bezier(.34,1.56,.64,1) both;\
+    }\
+    @keyframes ipo-pop-in{\
+      from{opacity:0;transform:scale(.6);}\
+      to{opacity:1;transform:scale(1);}\
+    }\
+    #ipo-tawk-btn{\
+      position:relative;\
+      width:60px;height:60px;\
+      border-radius:50%;\
+      background:#25D366;\
+      box-shadow:0 8px 30px rgba(0,0,0,.28);\
+      cursor:pointer;\
+      border:none;\
+      padding:0;\
+      overflow:visible;\
+      -webkit-tap-highlight-color:transparent;\
+      display:flex;\
+      align-items:center;\
+      justify-content:center;\
+      transition:transform .18s ease,box-shadow .18s ease;\
+    }\
+    #ipo-tawk-btn:hover{\
+      transform:scale(1.1);\
+      box-shadow:0 12px 38px rgba(0,0,0,.32);\
+    }\
+    #ipo-tawk-btn:active{transform:scale(.92);}\
+    #ipo-tawk-img{\
+      color:#fff;\
+      font-size:34px;\
+      line-height:1;\
+      pointer-events:none;\
+      display:block;\
+    }\
+    #ipo-tawk-dot{\
+      position:absolute;\
+      top:-11px;right:-11px;\
+      width:26px;height:26px;\
+      background:linear-gradient(135deg,#ff2525 0%,#c40000 100%);\
+      color:#fff;\
+      font-size:13px;\
+      font-weight:900;\
+      font-family:Inter,system-ui,sans-serif;\
+      border-radius:50%;\
+      display:flex;\
+      align-items:center;\
+      justify-content:center;\
+      border:3px solid #fff;\
+      z-index:5;\
+      box-shadow:0 0 0 0 rgba(239,68,68,.75),0 4px 18px rgba(196,0,0,.60);\
+      animation:ipo-bdg-pop .6s cubic-bezier(.34,1.56,.64,1) 1.5s both,ipo-bdg-pulse 2.2s ease-out 2.5s infinite,ipo-bdg-shake 5s ease-in-out 6s infinite;\
+      pointer-events:none;\
+      line-height:1;\
+      letter-spacing:-.5px;\
+    }\
+    @keyframes ipo-bdg-pop{\
+      0%{transform:scale(0) rotate(-30deg);opacity:0;filter:blur(4px);}\
+      40%{transform:scale(1.6) rotate(12deg);opacity:1;filter:blur(0);}\
+      60%{transform:scale(.82) rotate(-6deg);}\
+      80%{transform:scale(1.15) rotate(3deg);}\
+      100%{transform:scale(1) rotate(0deg);opacity:1;}\
+    }\
+    @keyframes ipo-bdg-pulse{\
+      0%{box-shadow:0 0 0 0 rgba(239,68,68,.9),0 0 0 0 rgba(239,68,68,.45),0 4px 18px rgba(196,0,0,.60);}\
+      50%{box-shadow:0 0 0 14px rgba(239,68,68,0),0 0 0 7px rgba(239,68,68,.22),0 4px 18px rgba(196,0,0,.60);}\
+      100%{box-shadow:0 0 0 0 rgba(239,68,68,0),0 0 0 0 rgba(239,68,68,0),0 4px 18px rgba(196,0,0,.60);}\
+    }\
+    @keyframes ipo-bdg-shake{\
+      0%,85%,100%{transform:scale(1) rotate(0deg);}\
+      88%{transform:scale(1.2) rotate(-12deg);}\
+      91%{transform:scale(1.2) rotate(12deg);}\
+      94%{transform:scale(1.1) rotate(-7deg);}\
+      97%{transform:scale(1.1) rotate(7deg);}\
+    }\
+    @media(prefers-reduced-motion:reduce){\
+      #ipo-tawk-wrap{animation:none;}\
+    }\
+    @media(min-width:640px){\
+      #ipo-tawk-wrap{bottom:2rem;right:2rem;}\
+      #ipo-tawk-btn{width:64px;height:64px;}\
+    }\
+  ';
+  document.head.appendChild(style);
+  var wrap=document.createElement('div');
+  wrap.id='ipo-tawk-wrap';
+  wrap.innerHTML='\
+    <button id="ipo-tawk-btn" aria-label="Chat with us">\
+      <i id="ipo-tawk-img" class="fab fa-whatsapp"></i>\
+      <div id="ipo-tawk-dot">1</div>\
+    </button>';
+  document.body.appendChild(wrap);
+  document.getElementById('ipo-tawk-btn').addEventListener('click',function(){
+    var b=document.getElementById('ipo-tawk-dot');
+    if(b){b.style.transition='transform .2s,opacity .2s';b.style.transform='scale(0)';b.style.opacity='0';setTimeout(function(){b.style.display='none';},220);}
+    Tawk_API.maximize();
+  });
+
+};
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/69c93f783157ae1c386572f6/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+</head>
+<body>
+
+<div class="bg-layer"></div>
+
+<!-- Floating particles -->
+<script>
+(function(){
+    var sizes  = [3,4,5,6,3,4,5,3,4,6];
+    var delays = [0,2,4,6,8,10,12,14,16,18];
+    var speeds = [12,16,20,14,18,22,10,15,19,13];
+    for (var i = 0; i < 10; i++) {
+        var p = document.createElement('div');
+        p.className = 'particle';
+        var s = sizes[i];
+        p.style.cssText = [
+            'width:' + s + 'px',
+            'height:' + s + 'px',
+            'left:' + (Math.random() * 100) + '%',
+            'animation-delay:' + delays[i] + 's',
+            'animation-duration:' + speeds[i] + 's'
+        ].join(';');
+        document.body.appendChild(p);
+    }
+})();
+</script>
+
+<div class="card">
+
+    <div class="logo-wrap">
+        <div class="logo-icon"><i class="fas fa-crown"></i></div>
+        <div class="logo-name">IPORDISE</div>
+        <div class="logo-sub">Admin Portal</div>
+    </div>
+
+    <div class="divider"><span>Secure Access</span></div>
+
+    <form id="adminForm" autocomplete="off" novalidate>
+
+        <div class="error-msg" id="errorMsg">
+            <i class="fas fa-circle-exclamation"></i>
+            <span id="errorText">Invalid credentials. Please try again.</span>
+        </div>
+
+        <div class="field">
+            <input
+                type="text"
+                id="adminUser"
+                placeholder="Username"
+                autocomplete="off"
+                spellcheck="false"
+                required
+            >
+            <i class="fas fa-user field-icon"></i>
+        </div>
+
+        <div class="field">
+            <input
+                type="password"
+                id="adminPass"
+                placeholder="Password"
+                autocomplete="off"
+                required
+            >
+            <i class="fas fa-lock field-icon"></i>
+            <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">
+                <i class="fas fa-eye" id="pwEyeIcon"></i>
+            </button>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+            <span id="btnLabel">ENTER DASHBOARD</span>
+            <div class="spinner" id="btnSpinner"></div>
+        </button>
+
+    </form>
+
+    <div class="card-footer">
+        &copy; 2026 IPORDISE &nbsp;·&nbsp; <a href="/">Return to Store</a>
+    </div>
+
+</div>
+
+<script>
+(function () {
+    /* ── Credentials ── */
+    var ADMIN_USER = 'ipordise';
+    var ADMIN_PASS = 'ipordise2026';
+    /* ── GitHub repo URL – change to your exact repo ── */
+    var GITHUB_URL = 'https://github.com/perfumiro/max';
+
+    var form      = document.getElementById('adminForm');
+    var errorBox  = document.getElementById('errorMsg');
+    var errorText = document.getElementById('errorText');
+    var submitBtn = document.getElementById('submitBtn');
+    var btnLabel  = document.getElementById('btnLabel');
+    var spinner   = document.getElementById('btnSpinner');
+    var togglePw  = document.getElementById('togglePw');
+    var passField = document.getElementById('adminPass');
+    var eyeIcon   = document.getElementById('pwEyeIcon');
+
+    /* Toggle password visibility */
+    togglePw.addEventListener('click', function () {
+        var isHidden = passField.type === 'password';
+        passField.type = isHidden ? 'text' : 'password';
+        eyeIcon.className = isHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+    });
+
+    /* Login */
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        errorBox.style.display = 'none';
+
+        var user = document.getElementById('adminUser').value.trim();
+        var pass = passField.value;
+
+        if (!user || !pass) {
+            errorText.textContent = 'Please fill in all fields.';
+            errorBox.style.display = 'block';
+            return;
+        }
+
+        /* Loading state */
+        btnLabel.style.display = 'none';
+        spinner.style.display  = 'block';
+        submitBtn.disabled     = true;
+
+        /* Simulate brief auth delay */
+        setTimeout(function () {
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                window.location.href = GITHUB_URL;
+            } else {
+                btnLabel.style.display = 'inline';
+                spinner.style.display  = 'none';
+                submitBtn.disabled     = false;
+                errorText.textContent  = 'Invalid credentials. Please try again.';
+                errorBox.style.display = 'block';
+                passField.value = '';
+                passField.focus();
+            }
+        }, 900);
+    });
+
+    /* Clear error on input */
+    ['adminUser', 'adminPass'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', function () {
+            errorBox.style.display = 'none';
+        });
+    });
+})();
+</script>
+
+</body>
+</html>
