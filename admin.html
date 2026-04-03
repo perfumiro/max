@@ -1010,7 +1010,7 @@ document.getElementById('refreshBtn')?.addEventListener('click', async () => {
 // ── Logout ────────────────────────────────────────────────────
 document.getElementById('logoutBtn')?.addEventListener('click', async () => {
   await signOut(auth).catch(()=>{});
-  window.location.replace('pages/login.html');
+  window.location.replace('admin.html');
 });
 
 // ── Live Firestore listener ───────────────────────────────────
@@ -1100,7 +1100,7 @@ onAuthStateChanged(auth, async user => {
     // Wire up sign-out button (inline onclick can't reach module-scoped signOut)
     document.getElementById('adminSignOutBtn')?.addEventListener('click', () => {
       signOut(auth).catch(() => {}).finally(() => {
-        window.location.replace('pages/login.html');
+        window.location.replace('admin.html');
       });
     });
     return;
