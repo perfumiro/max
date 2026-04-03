@@ -6330,6 +6330,13 @@ document.addEventListener('DOMContentLoaded', () => {
             button.dataset.wishlistClickBound = 'true';
 
             button.addEventListener('click', () => {
+                // If not signed in → redirect to login instead of saving to localStorage
+                if (!window.__ipordise_user) {
+                    const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
+                    window.location.href = inPages ? 'login.html' : 'pages/login.html';
+                    return;
+                }
+
                 const favItem = {
                     id:    favoriteId,
                     name:  data.name,
