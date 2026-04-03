@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Reviews ─────────────────────────────────────────────────────────
+    // Anyone can read reviews.
+    // A signed-in user can create or update their own review only.
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.uid == request.resource.data.uid;
+    }
+
+    // ── User profiles ────────────────────────────────────────────────────
+    match /users/{userId} {
+      allow read:  if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // ── Orders ───────────────────────────────────────────────────────────
+    match /orders/{orderId} {
+      allow read:  if request.auth != null && request.auth.uid == resource.data.uid;
+      allow create: if request.auth != null;
+    }
+
+  }
+}

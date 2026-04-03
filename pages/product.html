@@ -442,11 +442,10 @@ s0.parentNode.insertBefore(s1,s0);
                         <h1 id="productName" class="text-3xl md:text-4xl font-bold text-brand-dark mt-2">Emporio Armani Stronger With You Intensely EDP</h1>
                         <p id="productSubtitle" class="text-sm mt-3 max-w-xl">Men&rsquo;s fragrance &middot; Oriental Fougère &middot; A bold, addictive signature with pink pepper, vanilla, and ambery woods.</p>
 
-                        <div class="flex items-center gap-3 mt-4 product-rating-row">
-                            <div class="text-yellow-400 text-sm" aria-label="Rating">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        <div class="flex items-center gap-3 mt-4 product-rating-row" id="productRatingRow" style="display:none">
+                            <div class="text-yellow-400 text-sm" id="productRatingStars" aria-label="Rating">
                             </div>
-                            <span id="productReviewsCount" class="text-sm text-gray-500">(0 reviews)</span>
+                            <span id="productReviewsCount" class="text-sm text-gray-500"></span>
                         </div>
                         <!-- Quick Fact Pills -->
                         <div class="product-quick-facts" id="productQuickFacts">
@@ -647,33 +646,14 @@ s0.parentNode.insertBefore(s1,s0);
                 </div>
 
                 <div class="tab-panel" id="tab-reviews" role="tabpanel" hidden>
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                        <div class="lg:col-span-4 review-summary" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;padding:1.8rem;">
-                            <p class="text-5xl font-bold text-brand-dark" style="background:linear-gradient(135deg,#c9a227,#e8c84a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">4.8</p>
-                            <div class="text-yellow-400 mt-1 text-base">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-1 text-center" data-i18n="product.reviews_count">Based on 69 verified reviews</p>
-                            <span style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.65rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#78350f;background:linear-gradient(135deg,#fefdf4,#fdf7dc);border:1px solid rgba(201,162,39,0.35);border-radius:999px;padding:0.3rem 0.8rem;margin-top:0.5rem;"><i class="fas fa-shield-check" style="color:#c9a227;"></i> Verified Buyers</span>
-                        </div>
-                        <div class="lg:col-span-8 space-y-4">
-                            <article class="review-card">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex items-center gap-2"><img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Yassine A" style="width:2rem;height:2rem;border-radius:50%;object-fit:cover;" loading="lazy"><h4 class="font-bold text-gray-900">Yassine A</h4></div>
-                                    <span class="text-xs text-gray-400" style="background:#f8fafc;border:1px solid rgba(226,232,240,0.9);border-radius:999px;padding:0.2rem 0.55rem;">2026-01-29</span>
-                                </div>
-                                <div class="text-yellow-400 text-xs mt-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                                <p class="text-sm text-gray-700 mt-2">Elegant scent and very good longevity. Packaging also feels luxury.</p>
-                            </article>
-                            <article class="review-card">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex items-center gap-2"><img src="https://randomuser.me/api/portraits/women/18.jpg" alt="Salma B" style="width:2rem;height:2rem;border-radius:50%;object-fit:cover;" loading="lazy"><h4 class="font-bold text-gray-900">Salma B</h4></div>
-                                    <span class="text-xs text-gray-400" style="background:#f8fafc;border:1px solid rgba(226,232,240,0.9);border-radius:999px;padding:0.2rem 0.55rem;">2026-01-27</span>
-                                </div>
-                                <div class="text-yellow-400 text-xs mt-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                                <p class="text-sm text-gray-700 mt-2">Beautiful coffret and quick delivery. I will order again.</p>
-                            </article>
-                        </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;padding:2rem 1rem;text-align:center;">
+                        <div id="tabRevRating" style="font-size:3.5rem;font-weight:800;background:linear-gradient(135deg,#c9a227,#e8c84a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;">—</div>
+                        <div id="tabRevStars" class="text-yellow-400 text-base" style="display:flex;gap:2px;justify-content:center;"></div>
+                        <p id="tabRevCount" class="text-sm text-gray-500">No reviews yet</p>
+                        <a href="#reviews-section" onclick="event.preventDefault();document.getElementById('reviews-section')?.scrollIntoView({behavior:'smooth'});"
+                           style="margin-top:0.5rem;display:inline-flex;align-items:center;gap:0.4rem;font-size:0.78rem;font-weight:700;color:#c8102e;text-decoration:none;">
+                            <i class="fas fa-arrow-down" style="font-size:0.65rem;"></i> See all reviews
+                        </a>
                     </div>
                 </div>
             </div>
@@ -745,149 +725,92 @@ s0.parentNode.insertBefore(s1,s0);
             </div>
         </section>
 
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+        <section id="reviews-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 ipo-reveal">
             <div class="flex items-center gap-4 mb-8">
                 <div>
-                    <p class="product-section-kicker">Verified Buyers</p>
-                    <h2 class="text-2xl md:text-3xl font-bold text-brand-dark" data-i18n="product.more_reviews">Customer Reviews</h2>
+                    <p class="product-section-kicker">Community</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-brand-dark">Customer Reviews</h2>
                 </div>
                 <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(201,162,39,0.35),transparent);margin-left:0.25rem;"></span>
-                <a href="#" class="hidden sm:inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-700 px-4 py-2.5 rounded-full transition" style="white-space:nowrap;flex-shrink:0;"><i class="fas fa-pen text-[10px]"></i> Write a Review</a>
+                <button type="button" id="writeReviewTopBtn" class="hidden sm:inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-700 px-4 py-2.5 rounded-full transition" style="white-space:nowrap;flex-shrink:0;">
+                    <i class="fas fa-pen text-[10px]"></i> Write a Review
+                </button>
             </div>
 
             <div class="customer-reviews-grid">
-                <aside class="customer-rating-panel" style="text-align:center;">
-                    <p class="customer-rating-value">4.88</p>
-                    <div class="text-yellow-400 mt-2 text-sm" style="justify-content:center;display:flex;gap:2px;">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                <!-- ── Left: live aggregate stats ───────────────────── -->
+                <aside class="customer-rating-panel" style="text-align:center;padding:0;overflow:hidden;">
+                    <!-- Header band -->
+                    <div style="background:linear-gradient(135deg,#1a0505 0%,#2d0a0a 60%,#1a0505 100%);padding:1.6rem 1.25rem 1.4rem;position:relative;overflow:hidden;">
+                        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 90% at 110% 50%,rgba(200,16,46,0.22) 0%,transparent 60%);pointer-events:none;"></div>
+                        <p style="font-size:0.55rem;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin:0 0 0.6rem;position:relative;">Overall Rating</p>
+                        <p class="customer-rating-value" id="liveRatingVal" style="color:#fff;margin:0 0 0.5rem;line-height:1;position:relative;">—</p>
+                        <div id="liveRatingStars" style="justify-content:center;display:flex;gap:3px;color:#f59e0b;font-size:1rem;min-height:1.2rem;position:relative;"></div>
+                        <p id="liveReviewCount" style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin:0.55rem 0 0;position:relative;">Be the first to review</p>
                     </div>
 
-                    <div class="rating-breakdown-list" aria-label="Rating distribution" style="margin-top:1.2rem;text-align:left;">
-                        <div class="rating-row">
-                            <span class="rating-label">5 <i class="fas fa-star text-yellow-400"></i></span>
-                            <div class="rating-bar-track"><span class="rating-bar-fill" style="width: 89.9%;"></span></div>
-                            <span class="rating-percent">89.9%</span>
-                        </div>
-                        <div class="rating-row">
-                            <span class="rating-label">4 <i class="fas fa-star text-yellow-400"></i></span>
-                            <div class="rating-bar-track"><span class="rating-bar-fill" style="width: 8.7%;"></span></div>
-                            <span class="rating-percent">8.7%</span>
-                        </div>
-                        <div class="rating-row">
-                            <span class="rating-label">3 <i class="fas fa-star text-yellow-400"></i></span>
-                            <div class="rating-bar-track"><span class="rating-bar-fill" style="width: 1.4%;"></span></div>
-                            <span class="rating-percent">1.4%</span>
-                        </div>
-                        <div class="rating-row">
-                            <span class="rating-label">2 <i class="fas fa-star text-yellow-400"></i></span>
-                            <div class="rating-bar-track"><span class="rating-bar-fill" style="width: 0%;"></span></div>
-                            <span class="rating-percent">0.0%</span>
-                        </div>
-                        <div class="rating-row">
-                            <span class="rating-label">1 <i class="fas fa-star text-yellow-400"></i></span>
-                            <div class="rating-bar-track"><span class="rating-bar-fill" style="width: 0%;"></span></div>
-                            <span class="rating-percent">0.0%</span>
+                    <!-- Breakdown bars -->
+                    <div style="padding:1.25rem 1.25rem 0.5rem;">
+                        <div class="rating-breakdown-list" id="liveBreakdown" aria-label="Rating distribution" style="text-align:left;">
+                            <!-- empty-state placeholder bars -->
+                            <div id="liveBreakdownEmpty">
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">5 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">—</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">4 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">—</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">3 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">—</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">2 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">—</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">1 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">—</span></div>
+                            </div>
                         </div>
                     </div>
 
-                    <p class="customer-rating-footnote" data-i18n="product.rating_footnote">Calculated from verified customer ratings.</p>
+                    <!-- Footer -->
+                    <div style="padding:0.85rem 1.25rem 1.25rem;border-top:1px solid rgba(0,0,0,0.06);margin-top:0.35rem;">
+                        <p class="customer-rating-footnote" style="margin:0 0 0.9rem;">Verified customer ratings</p>
+                        <button type="button" id="writeReviewPanelBtn"
+                            style="width:100%;padding:0.65rem 1rem;background:#c8102e;color:#fff;border:none;
+                                border-radius:99px;font-size:0.78rem;font-weight:700;cursor:pointer;
+                                display:flex;align-items:center;justify-content:center;gap:0.45rem;
+                                transition:background 0.15s,transform 0.12s;letter-spacing:0.03em;"
+                            onmouseover="this.style.background='#a80e28';this.style.transform='translateY(-1px)'"
+                            onmouseout="this.style.background='#c8102e';this.style.transform='none'">
+                            <i class="fas fa-star" style="font-size:0.7rem;"></i> Write a Review
+                        </button>
+                    </div>
                 </aside>
 
+                <!-- ── Right: write form + real reviews ─────────────── -->
                 <div class="customer-reviews-panel">
-                    <div class="customer-reviews-toolbar">
-                        <p class="text-sm font-semibold text-gray-800">5 star &mdash; 69 reviews</p>
-                        <button class="text-sm text-gray-600 hover:text-gray-900" type="button">Sort by: Most relevant <i class="fas fa-chevron-down text-xs ml-1"></i></button>
+                    <div id="reviewFormContainer" style="margin-bottom:1.25rem;">
+                        <!-- Default: shown immediately before Firebase auth resolves -->
+                        <div style="background:#fff;border:1.5px solid #e5e7eb;border-radius:1rem;
+                                padding:1.75rem 1.5rem;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                            <div style="width:56px;height:56px;border-radius:50%;background:#fef0f2;display:flex;align-items:center;
+                                    justify-content:center;font-size:1.4rem;color:#c8102e;margin:0 auto 1rem;">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p style="font-weight:800;color:#1f2937;margin:0 0 0.35rem;font-size:1rem;">Leave a Review</p>
+                            <p style="font-size:0.82rem;color:#6b7280;margin:0 0 1.25rem;">You need an account to share your experience with this fragrance.</p>
+                            <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+                                <a href="login.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.65rem 1.6rem;
+                                        background:#c8102e;color:#fff;border-radius:99px;font-size:0.82rem;font-weight:700;
+                                        text-decoration:none;white-space:nowrap;"
+                                   onmouseover="this.style.background='#a80e28'" onmouseout="this.style.background='#c8102e'">
+                                    <i class="fas fa-sign-in-alt"></i> Sign In
+                                </a>
+                                <a href="register.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.65rem 1.6rem;
+                                        background:#fff;color:#c8102e;border:1.5px solid #c8102e;border-radius:99px;
+                                        font-size:0.82rem;font-weight:700;text-decoration:none;white-space:nowrap;"
+                                   onmouseover="this.style.background='#fef0f2'" onmouseout="this.style.background='#fff'">
+                                    <i class="fas fa-user-plus"></i> Create Account
+                                </a>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="customer-review-list">
-
-                        <!-- Review 1 -->
-                        <article class="customer-review-item rev-card">
-                            <div class="rev-card-header">
-                                <div class="rev-avatar-wrap">
-                                    <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Yassine A" class="rev-avatar" style="object-fit:cover;border-radius:50%;width:48px;height:48px;" loading="lazy">
-                                </div>
-                                <div class="rev-meta">
-                                    <div class="rev-meta-top">
-                                        <h3 class="rev-name">Yassine A</h3>
-                                        <span class="rev-verified"><i class="fas fa-circle-check"></i> Verified</span>
-                                    </div>
-                                    <div class="rev-meta-bottom">
-                                        <span class="rev-stars">
-                                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                            <span class="rev-score">5.0</span>
-                                        </span>
-                                        <span class="rev-date">Jan 29, 2026 &middot; Morocco</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <blockquote class="rev-body">
-                                &ldquo;The vanilla dry-down is what stood out first and it feels very polished on skin. Longevity has been very solid for me and the scent stays elegant throughout the wear.&rdquo;
-                            </blockquote>
-                            <div class="rev-footer">
-                                <span class="rev-tag"><i class="fas fa-fire-flame-curved"></i> Longevity</span>
-                                <span class="rev-tag"><i class="fas fa-star"></i> Elegance</span>
-                            </div>
-                        </article>
-
-                        <!-- Review 2 -->
-                        <article class="customer-review-item rev-card">
-                            <div class="rev-card-header">
-                                <div class="rev-avatar-wrap">
-                                    <img src="https://randomuser.me/api/portraits/women/18.jpg" alt="Salma B" class="rev-avatar" style="object-fit:cover;border-radius:50%;width:48px;height:48px;" loading="lazy">
-                                </div>
-                                <div class="rev-meta">
-                                    <div class="rev-meta-top">
-                                        <h3 class="rev-name">Salma B</h3>
-                                        <span class="rev-verified"><i class="fas fa-circle-check"></i> Verified</span>
-                                    </div>
-                                    <div class="rev-meta-bottom">
-                                        <span class="rev-stars">
-                                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                            <span class="rev-score">5.0</span>
-                                        </span>
-                                        <span class="rev-date">Jan 27, 2026 &middot; Morocco</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <blockquote class="rev-body">
-                                &ldquo;Beautiful presentation and exactly what I expected. The coffret arrived quickly and the fragrance is absolutely stunning — a perfect gift.&rdquo;
-                            </blockquote>
-                            <div class="rev-footer">
-                                <span class="rev-tag"><i class="fas fa-box-open"></i> Packaging</span>
-                                <span class="rev-tag"><i class="fas fa-truck-fast"></i> Fast delivery</span>
-                            </div>
-                        </article>
-
-                        <!-- Review 3 -->
-                        <article class="customer-review-item rev-card">
-                            <div class="rev-card-header">
-                                <div class="rev-avatar-wrap">
-                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Imane E" class="rev-avatar" style="object-fit:cover;border-radius:50%;width:48px;height:48px;" loading="lazy">
-                                </div>
-                                <div class="rev-meta">
-                                    <div class="rev-meta-top">
-                                        <h3 class="rev-name">Imane E</h3>
-                                        <span class="rev-verified"><i class="fas fa-circle-check"></i> Verified</span>
-                                    </div>
-                                    <div class="rev-meta-bottom">
-                                        <span class="rev-stars">
-                                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                            <span class="rev-score">5.0</span>
-                                        </span>
-                                        <span class="rev-date">Jan 24, 2026 &middot; Morocco</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <blockquote class="rev-body">
-                                &ldquo;Luxury presentation all around — the bottle looks incredible on the shelf. The scent lasts the entire day with a beautiful projection.&rdquo;
-                            </blockquote>
-                            <div class="rev-footer">
-                                <span class="rev-tag"><i class="fas fa-gem"></i> Luxury feel</span>
-                                <span class="rev-tag"><i class="fas fa-wind"></i> Projection</span>
-                            </div>
-                        </article>
-
+                    <div id="realReviewList">
+                        <div style="padding:3rem 1rem;text-align:center;color:#9ca3af;font-size:0.85rem;">
+                            <i class="fas fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:0.75rem;display:block;"></i>
+                            Loading reviews…
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1366,6 +1289,350 @@ s0.parentNode.insertBefore(s1,s0);
             img.style.transformOrigin = 'center center';
         });
     })();
+    </script>
+
+    <!-- ── Real Customer Reviews — Firebase ───────────────────────────── -->
+    <script type="module">
+      import { auth, db } from '../auth/firebase.js';
+      import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
+      import {
+        collection, doc, setDoc, getDocs, getDoc,
+        query, where, orderBy, serverTimestamp
+      } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
+
+      // ── Derive a stable product ID from the URL ────────────────────────
+      const params      = new URLSearchParams(window.location.search);
+      const rawId       = params.get('id') || params.get('name') || '';
+      const productId   = rawId.toLowerCase()
+                            .replace(/[^a-z0-9-]/g, '-')
+                            .replace(/-+/g, '-')
+                            .replace(/^-|-$/g, '') || 'unknown';
+      const productName = decodeURIComponent(params.get('name') || params.get('id') || '');
+
+      // ── DOM refs ───────────────────────────────────────────────────────
+      const formWrap      = document.getElementById('reviewFormContainer');
+      const listWrap      = document.getElementById('realReviewList');
+      const liveVal       = document.getElementById('liveRatingVal');
+      const liveStars     = document.getElementById('liveRatingStars');
+      const liveCount     = document.getElementById('liveReviewCount');
+      const liveBreakdown = document.getElementById('liveBreakdown');
+      const writeTopBtn   = document.getElementById('writeReviewTopBtn');
+      const writePanelBtn = document.getElementById('writeReviewPanelBtn');
+
+      const scrollToForm = () => {
+        formWrap?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => document.getElementById('reviewBodyInput')?.focus(), 400);
+      };
+      writePanelBtn?.addEventListener('click', scrollToForm);
+
+      // ── Stars HTML helper ──────────────────────────────────────────────
+      const starsHtml = (n) => {
+        let h = '';
+        for (let i = 1; i <= 5; i++) {
+          if (n >= i)         h += '<i class="fas fa-star"></i>';
+          else if (n >= i-.5) h += '<i class="fas fa-star-half-alt"></i>';
+          else                h += '<i class="far fa-star" style="color:#d1d5db;"></i>';
+        }
+        return h;
+      };
+
+      // ── Render aggregate stats ─────────────────────────────────────────
+      const renderStats = (reviews) => {
+        const n = reviews.length;
+        // Tab panel refs
+        const tabVal   = document.getElementById('tabRevRating');
+        const tabStars = document.getElementById('tabRevStars');
+        const tabCount = document.getElementById('tabRevCount');
+
+        const emptyPlaceholder = document.getElementById('liveBreakdownEmpty');
+        const ratingRow = document.getElementById('productRatingRow');
+        if (!n) {
+          if (ratingRow) ratingRow.style.display = 'none';
+          if (liveVal)   liveVal.textContent   = '—';
+          if (liveStars) liveStars.innerHTML   = '<i class="far fa-star" style="color:rgba(255,255,255,0.2);"></i>'.repeat(5);
+          if (liveCount) liveCount.textContent = 'Be the first to review';
+          if (emptyPlaceholder) emptyPlaceholder.style.display = 'block';
+          if (tabVal)   tabVal.textContent   = '—';
+          if (tabStars) tabStars.innerHTML   = '';
+          if (tabCount) tabCount.textContent = 'No reviews yet';
+          return;
+        }
+        if (ratingRow) ratingRow.style.display = '';
+        const ratingRowStars = document.getElementById('productRatingStars');
+        const ratingRowCount = document.getElementById('productReviewsCount');
+        if (ratingRowStars) ratingRowStars.innerHTML = starsHtml(reviews.reduce((s,r)=>s+r.rating,0)/reviews.length);
+        if (ratingRowCount) ratingRowCount.textContent = '(' + reviews.length + (reviews.length === 1 ? ' review)' : ' reviews)');
+        if (emptyPlaceholder) emptyPlaceholder.style.display = 'none';
+        const avg    = reviews.reduce((s, r) => s + r.rating, 0) / n;
+        const avgStr = avg.toFixed(1);
+        if (liveVal)   liveVal.textContent = avgStr;
+        if (liveStars) liveStars.innerHTML = starsHtml(avg);
+        if (liveCount) liveCount.textContent = n + (n === 1 ? ' verified review' : ' verified reviews');
+        if (liveBreakdown) {
+          const emptyEl = document.getElementById('liveBreakdownEmpty');
+          if (emptyEl) emptyEl.style.display = 'none';
+          let realBarsEl = document.getElementById('liveBreakdownReal');
+          if (!realBarsEl) {
+            realBarsEl = document.createElement('div');
+            realBarsEl.id = 'liveBreakdownReal';
+            liveBreakdown.appendChild(realBarsEl);
+          }
+          let html = '';
+          for (let s = 5; s >= 1; s--) {
+            const cnt = reviews.filter(r => r.rating === s).length;
+            const pct = Math.round((cnt / n) * 100);
+            html += `<div class="rating-row">
+              <span class="rating-label">${s} <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span>
+              <div class="rating-bar-track"><span class="rating-bar-fill" style="width:${pct}%"></span></div>
+              <span class="rating-percent">${pct}%</span>
+            </div>`;
+          }
+          realBarsEl.innerHTML = html;
+        }
+        if (tabVal)   tabVal.textContent = avgStr;
+        if (tabStars) tabStars.innerHTML = starsHtml(avg);
+        if (tabCount) tabCount.textContent = 'Based on ' + n + ' verified review' + (n === 1 ? '' : 's');
+      };
+
+      // ── Render reviews list ────────────────────────────────────────────
+      const renderList = (reviews) => {
+        if (!listWrap) return;
+        if (!reviews.length) {
+          listWrap.innerHTML = `<div style="padding:3rem 1.5rem;text-align:center;border:1.5px dashed #e5e7eb;border-radius:1rem;">
+            <div style="width:64px;height:64px;border-radius:50%;background:#fef0f2;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fca5b0;margin:0 auto 1rem;">
+              <i class="far fa-comment-dots"></i>
+            </div>
+            <p style="font-weight:700;color:#1f2937;margin:0 0 0.4rem;font-size:0.95rem;">No reviews yet</p>
+            <p style="font-size:0.82rem;color:#6b7280;margin:0;">Be the first to share your experience with this fragrance.</p>
+          </div>`;
+          return;
+        }
+        listWrap.innerHTML = reviews.map(r => {
+          const initial = (r.displayName || '?').charAt(0).toUpperCase();
+          const date    = r.createdAt?.toDate
+            ? r.createdAt.toDate().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })
+            : '';
+          const safeBody = (r.body || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          return `<article class="rev-card" style="margin-bottom:1rem;">
+            <div class="rev-card-header">
+              <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(145deg,#c8102e,#8c0b1e);
+                display:flex;align-items:center;justify-content:center;
+                font-size:1.15rem;font-weight:700;color:#fff;flex-shrink:0;font-family:Georgia,serif;">
+                ${initial}
+              </div>
+              <div class="rev-meta">
+                <div class="rev-meta-top">
+                  <h3 class="rev-name">${(r.displayName || 'Customer').replace(/</g,'&lt;')}</h3>
+                  <span class="rev-verified"><i class="fas fa-circle-check"></i> Verified</span>
+                </div>
+                <div class="rev-meta-bottom">
+                  <span class="rev-stars" style="color:#f59e0b;">${starsHtml(r.rating)}
+                    <span class="rev-score">${Number(r.rating).toFixed(1)}</span>
+                  </span>
+                  ${date ? `<span class="rev-date">${date}</span>` : ''}
+                </div>
+              </div>
+            </div>
+            <blockquote class="rev-body">&#8220;${safeBody}&#8221;</blockquote>
+          </article>`;
+        }).join('');
+      };
+
+      // ── Load reviews from Firestore ────────────────────────────────────
+      const loadReviews = async () => {
+        try {
+          const q    = query(
+            collection(db, 'reviews'),
+            where('productId', '==', productId),
+            orderBy('createdAt', 'desc')
+          );
+          const snap = await getDocs(q);
+          const revs = [];
+          snap.forEach(d => revs.push({ id: d.id, ...d.data() }));
+          renderStats(revs);
+          renderList(revs);
+        } catch (e) {
+          // Composite index may not exist yet — try without orderBy
+          try {
+            const q2   = query(collection(db, 'reviews'), where('productId', '==', productId));
+            const snap = await getDocs(q2);
+            const revs = [];
+            snap.forEach(d => revs.push({ id: d.id, ...d.data() }));
+            revs.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+            renderStats(revs);
+            renderList(revs);
+          } catch (e2) {
+            console.error('reviews load error:', e2);
+            if (listWrap) listWrap.innerHTML = '<p style="color:#dc2626;padding:1rem;font-size:0.82rem;">Could not load reviews.</p>';
+          }
+        }
+      };
+
+      // ── Render write-review form ───────────────────────────────────────
+      const renderForm = (user, existing) => {
+        if (!formWrap) return;
+
+        // Not signed in
+        if (!user) {
+          formWrap.innerHTML = `<div style="background:#fff;border:1.5px solid #e5e7eb;border-radius:1rem;
+              padding:1.75rem 1.5rem;text-align:center;margin-bottom:0.25rem;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+            <div style="width:56px;height:56px;border-radius:50%;background:#fef0f2;display:flex;align-items:center;
+                justify-content:center;font-size:1.4rem;color:#c8102e;margin:0 auto 1rem;">
+              <i class="fas fa-star"></i>
+            </div>
+            <p style="font-weight:800;color:#1f2937;margin:0 0 0.35rem;font-size:1rem;">Leave a Review</p>
+            <p style="font-size:0.82rem;color:#6b7280;margin:0 0 1.25rem;">You need an account to share your experience with this fragrance.</p>
+            <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+              <a href="login.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.65rem 1.6rem;
+                  background:#c8102e;color:#fff;border-radius:99px;font-size:0.82rem;font-weight:700;
+                  text-decoration:none;white-space:nowrap;transition:background 0.15s;"
+                 onmouseover="this.style.background='#a80e28'" onmouseout="this.style.background='#c8102e'">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+              </a>
+              <a href="register.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.65rem 1.6rem;
+                  background:#fff;color:#c8102e;border:1.5px solid #c8102e;border-radius:99px;
+                  font-size:0.82rem;font-weight:700;text-decoration:none;white-space:nowrap;transition:all 0.15s;"
+                 onmouseover="this.style.background='#fef0f2'" onmouseout="this.style.background='#fff'">
+                <i class="fas fa-user-plus"></i> Create Account
+              </a>
+            </div>
+          </div>`;
+          return;
+        }
+
+        const isEdit    = !!existing;
+        const initRating = existing?.rating || 0;
+        const initBody   = existing?.body   || '';
+
+        formWrap.innerHTML = `<div style="background:#fff;border:1.5px solid #e5e7eb;border-radius:1rem;
+            padding:1.5rem 1.75rem;margin-bottom:0.25rem;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+          <p style="font-size:0.6rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;
+              color:#9ca3af;margin:0 0 0.9rem;">${isEdit ? 'Edit Your Review' : 'Write a Review'}</p>
+
+          <!-- Star picker -->
+          <div id="starPicker" style="display:flex;gap:0.5rem;font-size:1.8rem;cursor:pointer;margin-bottom:0.5rem;" data-val="${initRating}">
+            ${[1,2,3,4,5].map(i =>
+              `<i class="${i <= initRating ? 'fas' : 'far'} fa-star" data-star="${i}"
+                  style="color:#f59e0b;transition:transform 0.1s;"></i>`
+            ).join('')}
+          </div>
+          <p id="starError" style="display:none;font-size:0.75rem;color:#dc2626;margin:0 0 0.7rem;">
+            Please select a star rating.
+          </p>
+
+          <!-- Text area -->
+          <textarea id="reviewBodyInput" maxlength="600"
+            placeholder="Share your thoughts on the scent, longevity, packaging…"
+            style="width:100%;min-height:100px;border:1.5px solid #e5e7eb;border-radius:0.65rem;
+                padding:0.75rem 1rem;font-size:0.88rem;font-family:inherit;resize:vertical;
+                outline:none;box-sizing:border-box;transition:border-color 0.15s;"
+            onfocus="this.style.borderColor='#c8102e'" onblur="this.style.borderColor='#e5e7eb'"
+          >${initBody}</textarea>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.9rem;flex-wrap:wrap;gap:0.5rem;">
+            <span id="revSubmitMsg" style="font-size:0.78rem;font-weight:600;display:none;"></span>
+            <button type="button" id="submitRevBtn"
+                style="margin-left:auto;display:inline-flex;align-items:center;gap:0.45rem;
+                    padding:0.65rem 1.75rem;background:#c8102e;color:#fff;border:none;
+                    border-radius:99px;font-size:0.82rem;font-weight:700;cursor:pointer;transition:background 0.15s;"
+                onmouseover="this.style.background='#a80e28'" onmouseout="this.style.background='#c8102e'">
+              ${isEdit ? 'Update Review' : 'Submit Review'} <i class="fas fa-arrow-right" style="font-size:0.65rem;"></i>
+            </button>
+          </div>
+        </div>`;
+
+        // Star picker interaction
+        const picker = document.getElementById('starPicker');
+        let chosen = initRating;
+        picker.querySelectorAll('i').forEach(icon => {
+          icon.addEventListener('mouseover', () => {
+            const v = +icon.dataset.star;
+            picker.querySelectorAll('i').forEach((ic, idx) => {
+              ic.className = (idx < v ? 'fas' : 'far') + ' fa-star';
+            });
+          });
+          icon.addEventListener('mouseout', () => {
+            picker.querySelectorAll('i').forEach((ic, idx) => {
+              ic.className = (idx < chosen ? 'fas' : 'far') + ' fa-star';
+            });
+          });
+          icon.addEventListener('click', () => {
+            chosen = +icon.dataset.star;
+            picker.dataset.val = chosen;
+            const err = document.getElementById('starError');
+            if (err) err.style.display = 'none';
+          });
+        });
+
+        // Submit handler
+        document.getElementById('submitRevBtn')?.addEventListener('click', async () => {
+          const body  = document.getElementById('reviewBodyInput')?.value.trim() || '';
+          const errEl = document.getElementById('starError');
+          const msgEl = document.getElementById('revSubmitMsg');
+          const btn   = document.getElementById('submitRevBtn');
+
+          if (!chosen) { if (errEl) errEl.style.display = 'block'; return; }
+          if (!body) {
+            if (msgEl) { msgEl.style.display='inline'; msgEl.style.color='#dc2626'; msgEl.textContent='Please write something before submitting.'; }
+            return;
+          }
+
+          btn.disabled = true;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+          try {
+            await setDoc(doc(db, 'reviews', productId + '_' + user.uid), {
+              productId,
+              productName,
+              uid:         user.uid,
+              displayName: user.displayName || user.email.split('@')[0],
+              rating:      chosen,
+              body,
+              createdAt:   serverTimestamp()
+            });
+            if (msgEl) { msgEl.style.display='inline'; msgEl.style.color='#16a34a'; msgEl.textContent='✓ Review saved!'; }
+            btn.innerHTML = (isEdit ? 'Update Review' : 'Submit Review') + ' <i class="fas fa-arrow-right" style="font-size:0.65rem;"></i>';
+            btn.disabled = false;
+            await loadReviews();
+          } catch (e) {
+            console.error('Review save error:', e);
+            let errMsg = 'Failed to save. Please try again.';
+            if (e.code === 'permission-denied') {
+              errMsg = 'Permission denied. Firestore rules may need to be updated.';
+            } else if (e.code === 'unavailable' || e.code === 'network-request-failed') {
+              errMsg = 'Network error. Check your connection and try again.';
+            } else if (e.code === 'unauthenticated') {
+              errMsg = 'Session expired. Please sign in again.';
+            } else if (e.message) {
+              errMsg = e.message.length > 80 ? e.message.slice(0, 80) + '…' : e.message;
+            }
+            if (msgEl) { msgEl.style.display='inline'; msgEl.style.color='#dc2626'; msgEl.textContent=errMsg; }
+            btn.innerHTML = (isEdit ? 'Update Review' : 'Submit Review') + ' <i class="fas fa-arrow-right" style="font-size:0.65rem;"></i>';
+            btn.disabled = false;
+          }
+        });
+      };
+
+      // ── "Write a Review" top button scrolls to form ────────────────────
+      writeTopBtn?.addEventListener('click', scrollToForm);
+
+      // ── Auth observer — init everything ───────────────────────────────
+      onAuthStateChanged(auth, async (user) => {
+        let existing = null;
+        if (user) {
+          try {
+            const snap = await getDoc(doc(db, 'reviews', productId + '_' + user.uid));
+            if (snap.exists()) existing = snap.data();
+          } catch {}
+        }
+        // Update panel button label
+        if (writePanelBtn) {
+          writePanelBtn.innerHTML = existing
+            ? '<i class="fas fa-pen" style="font-size:0.7rem;"></i> Edit Your Review'
+            : '<i class="fas fa-star" style="font-size:0.7rem;"></i> Write a Review';
+        }
+        renderForm(user, existing);
+        await loadReviews();
+      });
     </script>
 
 </body>

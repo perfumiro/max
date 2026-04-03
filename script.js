@@ -4812,13 +4812,9 @@ document.addEventListener('DOMContentLoaded', () => {
                              'Karim D',   'Bilal H', 'Tarik N', 'Zakaria L', 'Soufiane R', 'Adil C'];
         const femaleNames = ['Salma B', 'Imane E', 'Nadia H', 'Sara A', 'Khadija R', 'Aya M',
                              'Fatima Z', 'Hind K',  'Meryem O', 'Amina S',  'Loubna T',   'Zineb F'];
-        // randomuser.me portrait IDs selected for MENA/Moroccan appearance
-        const maleAvatarImgs   = ['men/7',  'men/10', 'men/22', 'men/27', 'men/33',
-                                   'men/40', 'men/52', 'men/55', 'men/66', 'men/70',
-                                   'men/75', 'men/80'];
-        const femaleAvatarImgs = ['women/5',  'women/9',  'women/11', 'women/18',
-                                   'women/21', 'women/25', 'women/44', 'women/55',
-                                   'women/60', 'women/65', 'women/70', 'women/75'];
+        // pravatar.cc img IDs — curated for MENA/Moroccan appearance
+        const maleAvatarImgs   = [11, 12, 14, 20, 33, 51, 53, 57, 60, 65, 68, 70];
+        const femaleAvatarImgs = [5,   9, 16, 23, 25, 29, 36, 38, 44, 47, 56, 64];
         const audience = inferFragranceAudience(productName, productOverride);
 
         let pool = maleNames;
@@ -4862,7 +4858,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isFemale = femaleNames.includes(nameEl.textContent.trim());
                 const imgPool  = isFemale ? femaleAvatarImgs : maleAvatarImgs;
                 const imgId    = imgPool[(baseHash + index * 4) % imgPool.length];
-                avatarEl.src = 'https://randomuser.me/api/portraits/' + imgId + '.jpg';
+                avatarEl.src = 'https://i.pravatar.cc/96?img=' + imgId;
                 avatarEl.alt = nameEl.textContent;
             }
         });
@@ -4888,7 +4884,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const imgId    = imgPool[(baseHash + index * 4) % imgPool.length];
                 const avatarWrap = avatarEl.closest('.rev-avatar-wrap') || avatarEl.parentElement;
                 if (avatarWrap) {
-                    avatarWrap.innerHTML = '<img src="https://randomuser.me/api/portraits/' + imgId + '.jpg" alt="' + (nameEl.textContent || '') + '" class="rev-avatar" style="object-fit:cover;border-radius:50%;width:48px;height:48px;" loading="lazy">';
+                    avatarWrap.innerHTML = '<img src="https://i.pravatar.cc/96?img=' + imgId + '" alt="' + (nameEl.textContent || '') + '" class="rev-avatar" style="object-fit:cover;border-radius:50%;width:48px;height:48px;" loading="lazy">';
                 }
             }
             if (footerEl) {

@@ -927,11 +927,11 @@ s0.parentNode.insertBefore(s1,s0);
 
     <!-- ── Firebase Auth ──────────────────────────────────────── -->
     <script type="module">
-      import { signIn, signUp, googleSignIn, resetPassword, onAuthChange, getErrorMessage } from '../auth/auth.js';
+      import { signIn, signUp, googleSignIn, logOut, resetPassword, onAuthChange, getErrorMessage } from '../auth/auth.js';
 
-      // If already logged in → go straight to dashboard
+      // If already logged in AND email verified → go straight to dashboard
       onAuthChange((user) => {
-        if (user) window.location.replace('dashboard.html');
+        if (user && user.emailVerified) window.location.replace('dashboard.html');
       });
 
       // ── Helpers ───────────────────────────────────────────────
@@ -946,7 +946,8 @@ s0.parentNode.insertBefore(s1,s0);
           pw_mismatch:   'Passwords do not match.',
           please_wait:   '<i class="fas fa-spinner fa-spin"></i> Please wait\u2026',
           welcome_back:  (name) => `Welcome ${name}! Redirecting\u2026`,
-          welcome_new:   (name) => `Welcome, ${name}! Account created. Redirecting\u2026`,
+          welcome_new:   (name) => `Welcome, ${name}! A verification email has been sent. Please check your inbox to activate your account.`,
+          email_not_verified: 'Please verify your email before signing in. Check your inbox for the verification link.',
         },
         fr: {
           enter_creds:   'Veuillez saisir votre email et votre mot de passe.',
@@ -955,7 +956,8 @@ s0.parentNode.insertBefore(s1,s0);
           pw_mismatch:   'Les mots de passe ne correspondent pas.',
           please_wait:   '<i class="fas fa-spinner fa-spin"></i> Veuillez patienter\u2026',
           welcome_back:  (name) => `Bienvenue ${name}\u00a0! Redirection\u2026`,
-          welcome_new:   (name) => `Bienvenue, ${name}\u00a0! Compte cr\u00e9\u00e9. Redirection\u2026`,
+          welcome_new:   (name) => `Bienvenue, ${name}\u00a0! Un email de v\u00e9rification a \u00e9t\u00e9 envoy\u00e9. Veuillez consulter votre bo\u00eete de r\u00e9ception pour activer votre compte.`,
+          email_not_verified: 'Veuillez v\u00e9rifier votre email avant de vous connecter. Consultez votre bo\u00eete de r\u00e9ception.',
         },
       };
       const m = () => MSG[isFr() ? 'fr' : 'en'];
@@ -995,6 +997,12 @@ s0.parentNode.insertBefore(s1,s0);
         switchTab('signup');
       }
 
+      // Show verification warning if redirected back from dashboard
+      if (new URLSearchParams(window.location.search).get('reason') === 'unverified') {
+        const msg = $('loginFormMessage');
+        if (msg) showMsg(msg, m().email_not_verified, 'error');
+      }
+
       // ── Password toggles ──────────────────────────────────────
       document.querySelectorAll('.auth-pw-toggle').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -1021,6 +1029,13 @@ s0.parentNode.insertBefore(s1,s0);
         setLoading(btn, true);
         try {
           const user = await signIn(email, password);
+          if (!user.emailVerified) {
+            // Block unverified users — sign them out and show a clear message
+            await logOut();
+            showMsg(msg, m().email_not_verified, 'error');
+            setLoading(btn, false);
+            return;
+          }
           const name = (user.displayName || '').split(' ')[0] || 'back';
           showMsg(msg, m().welcome_back(name), 'success');
           setTimeout(() => window.location.replace('dashboard.html'), 1000);
@@ -1049,7 +1064,8 @@ s0.parentNode.insertBefore(s1,s0);
         try {
           await signUp(email, password, `${firstName} ${lastName}`);
           showMsg(msg, m().welcome_new(firstName), 'success');
-          setTimeout(() => window.location.replace('dashboard.html'), 1100);
+          setLoading(btn, false);
+          // Do NOT redirect — user must verify email first
         } catch (err) {
           showMsg(msg, getErrorMessage(err), 'error');
           setLoading(btn, false);

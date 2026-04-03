@@ -22,6 +22,7 @@ import {
   onAuthStateChanged,
   updateProfile,
   sendPasswordResetEmail,
+  sendEmailVerification,
   GoogleAuthProvider,
   OAuthProvider,
   signInWithPopup,
@@ -91,6 +92,8 @@ export async function signUp(email, password, displayName = '') {
   if (displayName.trim()) {
     await updateProfile(credential.user, { displayName: displayName.trim() });
   }
+  // Send email verification — user must confirm before they can log in
+  await sendEmailVerification(credential.user);
   // Save user profile to Firestore so it appears in admin Users tab
   try {
     await setDoc(doc(db, 'users', credential.user.uid), {
@@ -103,6 +106,8 @@ export async function signUp(email, password, displayName = '') {
       cart: [],
     }, { merge: true });
   } catch {}
+  // Sign them out immediately — they must verify email before accessing the dashboard
+  await signOut(auth);
   return credential.user;
 }
 
