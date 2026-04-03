@@ -734,15 +734,15 @@ const renderCharts = () => {
 
 // ── Overview: top products ─────────────────────────────────────
 const renderTopProducts = () => {
-  const top = [..._products].sort((a,b)=>(b.cartAdds||0)-(a.cartAdds||0)).slice(0,8);
-  const max = top[0]?.cartAdds||1;
+  const top = [..._products].sort((a,b)=>(b.views||0)-(a.views||0)).slice(0,8);
+  const max = top[0]?.views||1;
   document.getElementById('topProductsBody').innerHTML = top.length ? top.map((p,i)=>`
     <tr>
       <td style="color:var(--sub);font-weight:700">${i+1}</td>
       <td style="font-weight:600;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.name||p.id)}</td>
       <td><span class="badge badge-gray">${esc(p.brand||'—')}</span></td>
-      <td>${fmtNum(p.views)}</td>
-      <td><div class="pbar-wrap"><span style="min-width:26px">${fmtNum(p.cartAdds)}</span><div class="pbar"><div class="pbar-fill" style="width:${Math.round(((p.cartAdds||0)/max)*100)}%"></div></div></div></td>
+      <td><div class="pbar-wrap"><span style="min-width:26px">${fmtNum(p.views)}</span><div class="pbar"><div class="pbar-fill" style="width:${Math.round(((p.views||0)/max)*100)}%"></div></div></div></td>
+      <td>${fmtNum(p.cartAdds)}</td>
       <td>${fmtNum(p.purchases)}</td>
       <td><span class="badge ${(p.cartAdds||0)>0?'badge-green':'badge-gray'}">${fmtPct(p.purchases||0,p.cartAdds||0)}</span></td>
     </tr>`).join('')
@@ -975,7 +975,7 @@ const loadData = async () => {
 
   // Products
   const pSnap = await getDocs(
-    query(collection(db,'analytics_products'),orderBy('cartAdds','desc'),limit(50))
+    collection(db,'analytics_products')
   ).catch(()=>({docs:[]}));
   _products = pSnap.docs.map(d=>({_id:d.id,...d.data()}));
 
