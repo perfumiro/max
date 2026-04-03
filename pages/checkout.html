@@ -562,5 +562,48 @@ s0.parentNode.insertBefore(s1,s0);
             <div class="ipo-search-overlay-body" id="ipoSearchOverlayBody"></div>
         </div>
     </div>
+
+    <!-- ── Cloud sync: auto-fill form + save order to Firestore for logged-in users ── -->
+    <script type="module">
+    import { auth } from '../auth/firebase.js';
+    import {
+        onAuthStateChanged,
+    } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
+    import { loadUserProfile, saveUserProfile } from '../auth/user-data.js';
+
+    const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val && !el.value) el.value = val;
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) return;
+        try {
+            const profile = await loadUserProfile(user.uid);
+            // Auto-fill billing form fields from saved profile (only if empty)
+            setVal('billingFirstName', profile.firstName);
+            setVal('billingLastName',  profile.lastName);
+            setVal('billingPhone',     profile.phone);
+            setVal('billingAddress',   profile.address);
+            setVal('billingCity',      profile.city);
+            setVal('billingEmail',     user.email);
+            // Trigger validation re-run so the Place Order button updates
+            document.getElementById('billingPhone')?.dispatchEvent(new Event('input'));
+        } catch(e) {}
+
+        // When the form is submitted (Place Order button), also save billing details back
+        document.getElementById('checkoutBillingForm')?.addEventListener('submit', async () => {
+            try {
+                await saveUserProfile(user.uid, {
+                    firstName: (document.getElementById('billingFirstName')?.value || '').trim(),
+                    lastName:  (document.getElementById('billingLastName')?.value  || '').trim(),
+                    phone:     (document.getElementById('billingPhone')?.value     || '').trim(),
+                    address:   (document.getElementById('billingAddress')?.value   || '').trim(),
+                    city:      (document.getElementById('billingCity')?.value      || '').trim(),
+                });
+            } catch(e) {}
+        }, { once: true });
+    });
+    </script>
 </body>
 </html>

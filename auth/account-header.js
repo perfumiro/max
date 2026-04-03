@@ -6,6 +6,8 @@
 
 import { onAuthChange, logOut } from './auth.js';
 import * as FavStore from './favourites.js';
+import './user-data.js';   // Activates cart sync + profile/order cloud storage
+import './analytics.js';   // Activates behavior tracking on every page
 
 // Expose the centralized favourites store globally so non-module scripts (script.js) can use it.
 window.__ipordise_favs = FavStore;

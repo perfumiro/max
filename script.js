@@ -3733,6 +3733,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Re-run new arrivals filtering now that we have real price data
         limitNewArrivalsToLatest(pricesById);
+        // After price-based re-sort the same DOM nodes are re-appended (data-favorite-id
+        // and wishlistClickBound are preserved), but any card that was re-ordered or
+        // revealed needs its heart button checked.  bindProductLinks injects missing
+        // buttons; __ipordise_sync_fav_ui re-fills the correct ones from the cache/FavStore.
+        bindProductLinks();
+        window.__ipordise_sync_fav_ui?.();
 
         cards.forEach((card) => {
             const existingPriceEl = card.querySelector('.price');
@@ -4124,6 +4130,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!card.hasAttribute('tabindex')) {
                 card.setAttribute('tabindex', '0');
+            }
+
+            // Inject a heart/favourite button on cards that don't have one yet
+            // (e.g. New Arrivals cards that lack a product-favorite-btn in the HTML).
+            // Skip if any heart icon already exists inside a button (covers discover.html
+            // cards which have heart icons but without the product-favorite-btn class).
+            if (!card.querySelector('button i.fa-heart, button i.far.fa-heart, button i.fas.fa-heart, .product-favorite-btn')) {
+                card.classList.add('relative');
+                const heartBtn = document.createElement('button');
+                heartBtn.type = 'button';
+                heartBtn.className = 'product-favorite-btn absolute top-3 right-3';
+                heartBtn.setAttribute('aria-label', 'Add to wishlist');
+                heartBtn.innerHTML = '<i class="far fa-heart"></i>';
+                // Insert as first child so it renders on top of the card image area
+                card.insertBefore(heartBtn, card.firstChild);
             }
 
             const navigateToProduct = () => {
@@ -6066,18 +6087,40 @@ document.addEventListener('DOMContentLoaded', () => {
         // load can show filled hearts instantly — even before Firebase resolves.
         const cacheKey = 'ipordise-favs-cache';
 
+        // Private key name must stay in sync with AUTH_CACHE_KEY in auth/favourites.js
+        const authCacheKey = 'ipordise-favs-auth-cache';
+
         const readWishlist = () => {
-            // Delegate to the centralized FavStore when it is available
-            if (window.__ipordise_favs) return window.__ipordise_favs.getFavourites();
+            // 1. Only trust FavStore when Firebase auth has fully resolved and _favourites
+            //    is populated. Before that, _ready === false and getFavourites() returns []
+            //    which would wipe all hearts. Fall through to localStorage instead so
+            //    the cached data from the previous page persists immediately on refresh.
+            if (window.__ipordise_favs?.isReady()) return window.__ipordise_favs.getFavourites();
+
+            // FavStore not yet resolved (module still loading / Firebase still connecting).
+            // Walk the cache hierarchy: guest key (for logged-out) → auth cache (for
+            // logged-in users who toggled before FavStore loaded) → display cache (stale).
             try {
-                // Prefer the guest localStorage key; fall back to the last-known cache
-                // (the cache is kept even for logged-in users so page loads feel instant).
-                const raw = localStorage.getItem(storageKey) || localStorage.getItem(cacheKey);
+                const guestRaw = localStorage.getItem(storageKey);
+                if (guestRaw) {
+                    const g = JSON.parse(guestRaw);
+                    if (Array.isArray(g) && g.length) return g;
+                }
+            } catch { /* ignore */ }
+
+            try {
+                const authRaw = localStorage.getItem(authCacheKey);
+                if (authRaw) {
+                    const a = JSON.parse(authRaw);
+                    if (Array.isArray(a) && a.length) return a;
+                }
+            } catch { /* ignore */ }
+
+            try {
+                const raw = localStorage.getItem(cacheKey);
                 const parsed = raw ? JSON.parse(raw) : [];
                 return Array.isArray(parsed) ? parsed : [];
-            } catch (error) {
-                return [];
-            }
+            } catch { return []; }
         };
 
         const writeWishlist = (items) => {
@@ -6302,9 +6345,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Determine if this item is currently in the wishlist (before toggle)
                 const wasActive = readWishlist().some((item) => item.id === favoriteId);
 
-                if (window.__ipordise_favs) {
-                    // Optimistic immediate UI sync — update hearts right away
-                    const _currentList = window.__ipordise_favs.getFavourites();
+                // Only use FavStore when it has fully resolved (isReady). If the module is
+                // loaded but Firebase hasn't resolved yet (_ready=false, _favourites=[]),
+                // getFavourites() returns [] which would corrupt the optimistic UI and let
+                // toggleFavourite() overwrite Firestore data with a single-item list.
+                if (window.__ipordise_favs?.isReady()) {
+                    // Optimistic immediate UI sync — derive the expected next state from
+                    // readWishlist() which already handles the isReady() fallback chain.
+                    const _currentList = readWishlist();
                     const _optimisticList = wasActive
                         ? _currentList.filter((i) => i.id !== favoriteId)
                         : [favItem, ..._currentList];
@@ -6430,6 +6478,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
         syncFavoriteButtonsUI();
         setHeaderWishlistCount();
+
+        // Expose a global re-sync helper so external async callers (initCatalogPrices,
+        // pageshow bfcache restore, etc.) can trigger a full-heart-state refresh without
+        // needing access to this closure's inner functions.
+        // Only set once — the closures are equivalent across subsequent initWishlistButtons calls.
+        if (!window.__ipordise_sync_fav_ui) {
+            window.__ipordise_sync_fav_ui = () => {
+                syncFavoriteButtonsUI();
+                setHeaderWishlistCount();
+            };
+        }
+
+        // If FavStore already resolved before initWishlistButtons ran (e.g. fast returning
+        // visitor whose module cached) force an immediate re-sync using authoritative data.
+        if (window.__ipordise_favs?.isReady()) {
+            const readyList = window.__ipordise_favs.getFavourites();
+            try { localStorage.setItem(cacheKey, JSON.stringify(readyList)); } catch { /* ignore */ }
+            const readyIds = new Set(readyList.map((i) => i.id));
+            document.querySelectorAll('.product-favorite-btn').forEach((btn) => {
+                const fid = btn.dataset.favoriteId;
+                const active = !!fid && readyIds.has(fid);
+                btn.classList.toggle('is-active', active);
+                const icon = btn.querySelector('i');
+                if (icon) { icon.classList.toggle('far', !active); icon.classList.toggle('fas', active); }
+            });
+            setHeaderWishlistCount();
+        }
 
         // React to Firestore/auth-synced changes from the favourites store.
         // This fires after login (merge), after logout (clear), and after any toggle/remove.
@@ -7759,7 +7834,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const priceHTML = p.price
                 ? `<p class="card-2026-price"><i class="fas fa-tag card-2026-price-icon"></i>${p.price}</p>`
                 : '';
-            const favoriteId = `${p.id}-${p.brand.toLowerCase().replace(/\s+/g, '-')}-`;
+            const favoriteId = p.id;
             return `<article class="card-2026 js-product-link cursor-pointer card-2026-init"
                     data-product-name="${p.name}"
                     data-product-brand="${p.brand}"
@@ -7859,7 +7934,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // restores a page from the back/forward cache, so we must reset here too.
     window.addEventListener('pageshow', (e) => {
         if (e.persisted) {
-            requestAnimationFrame(() => requestAnimationFrame(resetCarouselPositions));
+            requestAnimationFrame(() => {
+                requestAnimationFrame(resetCarouselPositions);
+                // bfcache page restore: DOM is frozen/unfrozen but DOMContentLoaded does
+                // NOT re-fire.  Re-sync favorite hearts so returning visitors always see
+                // the correct filled/empty state without needing to reload or interact.
+                window.__ipordise_sync_fav_ui?.();
+                // If FavStore is live, dispatch a favs-changed to let the full pipeline run
+                if (window.__ipordise_favs?.isReady()) {
+                    document.dispatchEvent(new CustomEvent('ipordise:favs-changed', {
+                        detail: { favourites: window.__ipordise_favs.getFavourites() }
+                    }));
+                }
+            });
         }
     });
 

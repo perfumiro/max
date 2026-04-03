@@ -17716,6 +17716,34 @@ select {
    Shared layout, header, hero, and product-card fixes
    ============================================================= */
 
+/* ── New-Arrivals dynamically-injected heart button ── */
+#newArrivalsCarousel > article > button.product-favorite-btn {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    width: 2rem;
+    height: 2rem;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(226,232,240,0.9);
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(15,23,42,0.10);
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.2s, background 0.2s, transform 0.18s, box-shadow 0.2s;
+    color: #94a3b8;
+}
+#newArrivalsCarousel > article > button.product-favorite-btn:hover,
+#newArrivalsCarousel > article > button.product-favorite-btn.is-active {
+    color: #e73c3c;
+    background: #fff1f2;
+    border-color: rgba(231,60,60,0.26);
+    transform: scale(1.06);
+    box-shadow: 0 6px 18px rgba(231,60,60,0.16);
+}
+
 :root {
     --site-shell-max: 1440px;
     --site-gutter: clamp(1rem, 2vw, 1.75rem);

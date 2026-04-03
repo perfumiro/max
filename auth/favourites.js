@@ -53,8 +53,10 @@ import {
 } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
 
 // ── Constants ────────────────────────────────────────────────
-const GUEST_KEY       = 'ipordise-wishlist-items';
-const FIRESTORE_FIELD = 'favourites';
+const GUEST_KEY         = 'ipordise-wishlist-items';
+const AUTH_CACHE_KEY    = 'ipordise-favs-auth-cache';  // safety net: survives page navigation
+const DISPLAY_CACHE_KEY = 'ipordise-favs-cache';       // fast-read display cache for heart icons / count badge
+const FIRESTORE_FIELD   = 'favourites';
 
 // ── In-memory state ──────────────────────────────────────────
 let _favourites  = [];       // current active list
@@ -189,15 +191,52 @@ export const clearFavourites = async () => {
   _notify();
 };
 
+// ── Local-cache helpers ────────────────────────────────────────────────
+// Writes BOTH the safety-net cache AND the display cache synchronously so that:
+//  a) A fast page navigation never loses an item (auth cache is merged on next load).
+//  b) The count badge and heart icon state are always instantly correct on new pages
+//     even before Firebase resolves (display cache is the fastest fallback).
+
+const _writeCaches = (items) => {
+  try { localStorage.setItem(AUTH_CACHE_KEY,    JSON.stringify(items)); } catch {}
+  try { localStorage.setItem(DISPLAY_CACHE_KEY, JSON.stringify(items)); } catch {}
+};
+
+// Keep old name as alias so nothing else breaks
+const _writeAuthCache = _writeCaches;
+
+const _readAuthCache = () => {
+  try {
+    const raw    = localStorage.getItem(AUTH_CACHE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch { return []; }
+};
+
+const _clearCaches = () => {
+  try { localStorage.removeItem(AUTH_CACHE_KEY);    } catch {}
+  try { localStorage.removeItem(DISPLAY_CACHE_KEY); } catch {}
+};
+
+// Keep old name as alias
+const _clearAuthCache = _clearCaches;
+
 // ── Internal persistence helper ──────────────────────────────
 
 const _persist = async () => {
   const user = auth.currentUser;
   if (user) {
+    // 1. Write BOTH caches synchronously (instant, no network).
+    //    → AUTH_CACHE_KEY   : merged back on the next page if Firestore write was still in-flight.
+    //    → DISPLAY_CACHE_KEY: read by readWishlist() fallback before FavStore resolves on each new page.
+    _writeCaches(_favourites);
+    // 2. Persist to Firestore (async).
     await saveUserFavourites(user.uid, _favourites);
-    clearGuestFavourites(); // guest list not needed once authenticated
+    // 3. Clear guest items — they are folded into the merged list now.
+    clearGuestFavourites();
   } else {
     saveGuestFavourites(_favourites);
+    _clearCaches(); // prevent stale data leaking to another session/user
   }
 };
 
@@ -205,17 +244,24 @@ const _persist = async () => {
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // Logged in: fetch Firestore + local guest items then merge
-    const [guestFavs, userFavs] = await Promise.all([
-      Promise.resolve(loadGuestFavourites()),
-      loadUserFavourites(user.uid),
-    ]);
-    _favourites = mergeFavourites(guestFavs, userFavs);
-    // Persist merged result and clear guest storage
+    // Logged in: fetch all local sources + Firestore then merge.
+    // The auth-cache captures any items toggled on a previous page BEFORE
+    // the Firestore write could complete (e.g. user navigated instantly).
+    const guestFavs  = loadGuestFavourites();
+    const cachedFavs = _readAuthCache();
+    const userFavs   = await loadUserFavourites(user.uid);
+
+    // Merge order: Firestore (trusted) wins order, local cache fills gaps.
+    const allLocal   = mergeFavourites(guestFavs, cachedFavs);
+    _favourites      = mergeFavourites(allLocal, userFavs);
+
+    // Persist the fully-merged list and update both caches so every layer is in sync.
     await saveUserFavourites(user.uid, _favourites);
     clearGuestFavourites();
+    _writeCaches(_favourites); // both AUTH_CACHE_KEY + DISPLAY_CACHE_KEY
   } else {
-    // Logged out: discard authenticated state, restore guest items only
+    // Logged out: scrub both caches so the next user session starts clean.
+    _clearCaches();
     _favourites = loadGuestFavourites();
   }
   _ready = true;

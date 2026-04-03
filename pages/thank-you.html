@@ -389,6 +389,43 @@ s0.parentNode.insertBefore(s1,s0);
         try { localStorage.removeItem('ipordise-cart-items'); } catch(e) {}
     </script>
 
+    <!-- ── Cloud sync: save confirmed order to Firestore + clear cloud cart ── -->
+    <script type="module">
+    import { auth } from '../auth/firebase.js';
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
+    import { saveUserOrder, saveUserProfile } from '../auth/user-data.js';
+    import { db } from '../auth/firebase.js';
+    import { doc, setDoc } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
+
+    const PENDING_ORDER_KEY = 'ipordise-pending-order';
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) return;
+        // Clear cloud cart (order is complete)
+        try { await setDoc(doc(db, 'users', user.uid), { cart: [] }, { merge: true }); } catch(e) {}
+        // Save pending order if one exists from checkout
+        try {
+            const raw = sessionStorage.getItem(PENDING_ORDER_KEY);
+            if (!raw) return;
+            const orderData = JSON.parse(raw);
+            sessionStorage.removeItem(PENDING_ORDER_KEY);
+            if (orderData && typeof orderData === 'object') {
+                await saveUserOrder(user.uid, orderData);
+                // Also save billing info back to profile for future auto-fill
+                if (orderData.customer) {
+                    await saveUserProfile(user.uid, {
+                        firstName: orderData.customer.firstName || '',
+                        lastName:  orderData.customer.lastName  || '',
+                        phone:     orderData.customer.phone     || '',
+                        address:   orderData.customer.address   || '',
+                        city:      orderData.customer.city      || '',
+                    });
+                }
+            }
+        } catch(e) {}
+    });
+    </script>
+
     <!-- IPO Search Overlay -->
     <div class="ipo-search-overlay" id="ipoSearchOverlay" role="dialog" aria-label="Search" aria-modal="true" aria-hidden="true">
         <div class="ipo-search-overlay-backdrop" id="ipoSearchOverlayBackdrop"></div>

@@ -228,6 +228,32 @@
             return bodyText;
         };
 
+        // Build a structured order object for Firestore storage
+        const buildStructuredOrder = (channel) => {
+            const items = readCheckoutCart();
+            const summary = summarize(items);
+            const firstName = (document.getElementById('billingFirstName')?.value || '').trim();
+            const lastName  = (document.getElementById('billingLastName')?.value  || '').trim();
+            const address   = (document.getElementById('billingAddress')?.value   || '').trim();
+            const city      = (document.getElementById('billingCity')?.value      || '').trim();
+            const phone     = (document.getElementById('billingPhone')?.value     || '').trim();
+            const email     = (document.getElementById('billingEmail')?.value     || '').trim();
+            const notes     = (document.getElementById('orderNotes')?.value       || '').trim();
+            return {
+                channel,
+                items:    items.map((i) => ({ id: i.id, name: i.name, size: i.size || '', qty: i.qty, price: i.price, pricePending: i.pricePending })),
+                customer: { firstName, lastName, address, city, phone, email, notes },
+                summary:  { subtotal: summary.subtotal, shipping: summary.shipping, total: summary.total, hasPendingPricing: summary.hasPendingPricing },
+            };
+        };
+
+        // Store pending order in sessionStorage so thank-you.html can save it to Firestore
+        const storePendingOrder = (channel) => {
+            try {
+                sessionStorage.setItem('ipordise-pending-order', JSON.stringify(buildStructuredOrder(channel)));
+            } catch(e) {}
+        };
+
         const updateConfirmationLinks = () => {
             const messageBody = buildConfirmationPayload();
             const encodedBody = encodeURIComponent(messageBody);
@@ -384,6 +410,7 @@
             placeOrderBtn.disabled = true;
             placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-sm"></i> Envoi en cours...';
 
+            storePendingOrder('email');
             sendOrderEmail().then(() => {
                 markConfirmationPending('email');
                 sessionStorage.removeItem('ipordise_cart');
@@ -393,6 +420,7 @@
 
         confirmWhatsApp.addEventListener('click', () => {
             updateConfirmationLinks();
+            storePendingOrder('whatsapp');
             markConfirmationPending('whatsapp');
         });
 

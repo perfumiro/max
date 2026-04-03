@@ -686,6 +686,49 @@
     }
     .d-cta:hover { background: var(--red); transform: translateY(-1px); }
 
+    /* ── ORDER CARDS ──────────────────────────────── */
+    #dashOrdersList { display: flex; flex-direction: column; gap: 1rem; }
+    .d-order-card {
+      background: var(--surface);
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      box-shadow: var(--sh-xs);
+      overflow: hidden;
+      transition: box-shadow 0.22s, transform 0.18s;
+    }
+    .d-order-card:hover { box-shadow: var(--sh-md); transform: translateY(-2px); }
+    .d-order-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; gap: 0.5rem;
+    }
+    .d-order-meta { display: flex; flex-direction: column; gap: 0.15rem; }
+    .d-order-id { font-size: 0.8rem; font-weight: 700; color: var(--ink); font-family: var(--sans); }
+    .d-order-date { font-size: 0.68rem; color: var(--subtle); }
+    .d-order-badge {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.28rem 0.75rem;
+      border-radius: 99px;
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .d-order-badge--pending   { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+    .d-order-badge--confirmed { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+    .d-order-badge--shipped   { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .d-order-badge--delivered { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+    .d-order-items { padding: 0.9rem 1.25rem; display: flex; flex-direction: column; gap: 0.45rem; }
+    .d-order-item  { font-size: 0.76rem; color: var(--ink-soft); line-height: 1.4; }
+    .d-order-item span.d-order-item-name { font-weight: 600; color: var(--ink); }
+    .d-order-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.7rem 1.25rem;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      font-size: 0.74rem; flex-wrap: wrap; gap: 0.4rem;
+    }
+    .d-order-total { font-weight: 700; color: var(--ink); }
+    .d-order-channel { color: var(--subtle); display: flex; align-items: center; gap: 0.3rem; }
+
     /* ── QUICK ACTIONS ────────────────────────────── */
     .d-qa-grid {
       display: grid;
@@ -1163,7 +1206,10 @@
                     <span class="d-sec-title" data-i18n="dashboard.recent_orders">Recent Orders</span>
                     <a href="track-order.html" class="d-sec-action" data-i18n="dashboard.track_order_link">Track order →</a>
                 </div>
-                <div class="d-orders-empty">
+                <!-- Dynamic order list (populated by module script) -->
+                <div id="dashOrdersList"></div>
+                <!-- Empty state shown until orders load -->
+                <div class="d-orders-empty" id="dashOrdersEmpty" style="display:none">
                     <div class="d-orders-ico"><i class="fas fa-bag-shopping"></i></div>
                     <h3 data-i18n="dashboard.no_orders">No orders yet</h3>
                     <p data-i18n-html="dashboard.no_orders_desc">You haven&rsquo;t placed any orders yet.<br>Start exploring our curated fragrance collection.</p>
@@ -1454,6 +1500,7 @@
   import { updateProfile }
     from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
   import { auth } from '../auth/firebase.js';
+  import { loadUserOrders, loadUserProfile, saveUserProfile } from '../auth/user-data.js';
 
   // ── DOM refs ─────────────────────────────────────────────
   const guard           = document.getElementById('dashAuthGuard');
@@ -1484,10 +1531,10 @@
     toastTimer = setTimeout(() => toast.classList.remove('is-visible'), duration);
   };
 
-  // ── Profile extras (localStorage) ───────────────────────
-  const PROFILE_KEY = 'ipordise-profile-extras';
-  const readExtras  = () => { try { return JSON.parse(localStorage.getItem(PROFILE_KEY) || '{}'); } catch { return {}; } };
-  const saveExtras  = (data) => { try { localStorage.setItem(PROFILE_KEY, JSON.stringify(data)); } catch {} };
+  // ── Profile extras (Firestore-backed, localStorage fallback) ────
+  const PROFILE_KEY  = 'ipordise-profile-extras';
+  const readExtras   = () => { try { return JSON.parse(localStorage.getItem(PROFILE_KEY) || '{}'); } catch { return {}; } };
+  const writeExtras  = (data) => { try { localStorage.setItem(PROFILE_KEY, JSON.stringify(data)); } catch {} };
 
   // ── Guard fallback ───────────────────────────────────────
   const guardTimeout = setTimeout(() => window.location.replace('login.html'), 6000);
@@ -1502,6 +1549,24 @@
     const cardWl = document.getElementById('dashWishlistCountCard');
     if (heroWl) heroWl.textContent = cnt;
     if (cardWl) cardWl.textContent = cnt;
+
+    // Always keep the header badge in sync with the count we're actually rendering.
+    // This is the authoritative update — no reliance on async event ordering.
+    document.querySelectorAll('.header-icon-btn[aria-label="Wishlist"]').forEach((btn) => {
+      btn.classList.toggle('is-active', cnt > 0);
+      let badge = btn.querySelector('.header-wishlist-badge');
+      if (cnt > 0) {
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'header-wishlist-badge absolute -top-1.5 -right-2';
+          btn.classList.add('relative');
+          btn.appendChild(badge);
+        }
+        badge.textContent = String(Math.min(cnt, 99));
+      } else if (badge) {
+        badge.remove();
+      }
+    });
 
     const grid = document.getElementById('dashWishlistGrid');
     if (!grid) return;
@@ -1573,13 +1638,93 @@
     };
   };
 
-  // Reactive: re-render whenever FavStore syncs
+  // ── Orders render ────────────────────────────────────────────
+  const formatDate = (d) => {
+    if (!d) return '—';
+    const dt = d instanceof Date ? d : new Date(d);
+    if (isNaN(dt)) return '—';
+    return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  };
+
+  const formatMAD = (v) => {
+    const n = Number(v);
+    return `${isNaN(n) ? 0 : n.toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} MAD`;
+  };
+
+  const statusBadge = (s) => {
+    const map = {
+      pending:   ['pending',   'Pending'],
+      confirmed: ['confirmed', 'Confirmed'],
+      shipped:   ['shipped',   'Shipped'],
+      delivered: ['delivered', 'Delivered'],
+    };
+    const [cls, label] = map[s] || ['pending', 'Pending'];
+    return `<span class="d-order-badge d-order-badge--${cls}"><i class="fas fa-circle" style="font-size:.45rem"></i>${label}</span>`;
+  };
+
+  const renderOrders = (orders) => {
+    const list  = document.getElementById('dashOrdersList');
+    const empty = document.getElementById('dashOrdersEmpty');
+    const heroCount = document.getElementById('dashOrderCount');
+    const cardCount = document.getElementById('dashOrderCountCard');
+    if (!list) return;
+
+    if (heroCount) heroCount.textContent = orders.length;
+    if (cardCount) cardCount.textContent = orders.length;
+
+    if (!orders.length) {
+      list.innerHTML = '';
+      if (empty) empty.style.display = '';
+      return;
+    }
+    if (empty) empty.style.display = 'none';
+
+    list.innerHTML = orders.map((order) => {
+      const shortId = order.id ? '#' + order.id.slice(-6).toUpperCase() : '#—';
+      const date    = formatDate(order.createdAt);
+      const items   = Array.isArray(order.items) ? order.items : [];
+      const s       = order.summary || {};
+      const totalTxt = s.hasPendingPricing ? 'Pending confirmation' : formatMAD(s.total);
+      const ch = order.channel === 'whatsapp'
+        ? '<i class="fab fa-whatsapp"></i> WhatsApp'
+        : '<i class="fas fa-envelope"></i> Email';
+
+      const itemLines = items.slice(0, 3).map((it) =>
+        `<div class="d-order-item">
+          <span class="d-order-item-name">${it.name || 'Product'}</span>
+          ${it.size ? ` · ${it.size}` : ''} · ×${it.qty || 1}
+          ${it.pricePending ? ' · <em style="color:var(--muted)">Pending</em>' : ` · ${formatMAD(it.price * it.qty)}`}
+        </div>`
+      ).join('');
+      const moreCount = items.length > 3 ? `<div class="d-order-item" style="color:var(--subtle)">+ ${items.length - 3} more item${items.length - 3 !== 1 ? 's' : ''}…</div>` : '';
+
+      return `
+        <div class="d-order-card">
+          <div class="d-order-head">
+            <div class="d-order-meta">
+              <div class="d-order-id">${shortId}</div>
+              <div class="d-order-date">${date}</div>
+            </div>
+            ${statusBadge(order.status)}
+          </div>
+          <div class="d-order-items">${itemLines}${moreCount}</div>
+          <div class="d-order-foot">
+            <span class="d-order-total">${totalTxt}</span>
+            <span class="d-order-channel">${ch}</span>
+          </div>
+        </div>`;
+    }).join('');
+  };
+
+  // Reactive: re-render whenever FavStore syncs.
+  // No auth.currentUser guard — the event only fires after FavStore resolves
+  // (which requires auth), and renderDashWishlist is safe to call at any time.
   document.addEventListener('ipordise:favs-changed', (e) => {
-    if (auth.currentUser) renderDashWishlist(e.detail.favourites);
+    renderDashWishlist(e.detail?.favourites || []);
   });
 
   // ── Auth observer ────────────────────────────────────────
-  onAuthChange((user) => {
+  onAuthChange(async (user) => {
     clearTimeout(guardTimeout);
 
     if (!user) { window.location.replace('login.html'); return; }
@@ -1652,11 +1797,17 @@
     if (verifiedEl && user.emailVerified) verifiedEl.style.display = 'inline-flex';
 
     // Wishlist initial load
+    // Walk the same cache hierarchy as readWishlist() in script.js:
+    // FavStore (authoritative) → auth cache (last toggled state) → display cache → empty
     try {
-      const WKEY = 'ipordise-wishlist-items';
       const initItems = window.__ipordise_favs?.isReady()
         ? window.__ipordise_favs.getFavourites()
-        : (() => { try { const wl = JSON.parse(localStorage.getItem(WKEY) || '[]'); return Array.isArray(wl) ? wl : []; } catch { return []; } })();
+        : (() => {
+            try { const c = JSON.parse(localStorage.getItem('ipordise-favs-auth-cache') || '[]');    if (Array.isArray(c) && c.length) return c; } catch {}
+            try { const c = JSON.parse(localStorage.getItem('ipordise-favs-cache')       || '[]');    if (Array.isArray(c) && c.length) return c; } catch {}
+            try { const c = JSON.parse(localStorage.getItem('ipordise-wishlist-items')   || '[]');    if (Array.isArray(c))             return c; } catch {}
+            return [];
+          })();
       renderDashWishlist(initItems);
     } catch {}
 
@@ -1673,11 +1824,26 @@
       settingVerifyEl.style.color = user.emailVerified ? '#15803d' : '#dc2626';
     }
 
-    const extras  = readExtras();
-    const phoneEl = document.getElementById('dashProfilePhone');
-    const cityEl  = document.getElementById('dashProfileCity');
-    if (phoneEl) phoneEl.value = extras.phone || '';
-    if (cityEl)  cityEl.value  = extras.city  || '';
+    // Load profile: Firestore first, then localStorage fallback for phone/city
+    const cloudProfile = await loadUserProfile(user.uid).catch(() => ({}));
+    const localExtras  = readExtras();
+    const phoneVal  = cloudProfile.phone   || localExtras.phone || '';
+    const cityVal   = cloudProfile.city    || localExtras.city  || '';
+    const addrVal   = cloudProfile.address || '';
+    const fnVal     = cloudProfile.firstName || '';
+    const lnVal     = cloudProfile.lastName  || '';
+    const phoneEl   = document.getElementById('dashProfilePhone');
+    const cityEl    = document.getElementById('dashProfileCity');
+    if (phoneEl) phoneEl.value = phoneVal;
+    if (cityEl)  cityEl.value  = cityVal;
+    // If we have cloud data, also update localStorage for offline fallback
+    if (cloudProfile.phone || cloudProfile.city) writeExtras({ phone: phoneVal, city: cityVal });
+
+    // Load orders from Firestore
+    try {
+      const orders = await loadUserOrders(user.uid);
+      renderOrders(orders);
+    } catch { renderOrders([]); }
   });
 
   // ── Profile save ─────────────────────────────────────────
@@ -1696,10 +1862,19 @@
         if (_ai && !avatarForm?.querySelector('img')) _ai.textContent = newName.charAt(0).toUpperCase();
         if (profileHeadName) profileHeadName.textContent = newName;
       }
-      saveExtras({
-        phone: document.getElementById('dashProfilePhone')?.value.trim() || '',
-        city:  document.getElementById('dashProfileCity')?.value.trim()  || '',
-      });
+      const phone = document.getElementById('dashProfilePhone')?.value.trim() || '';
+      const city  = document.getElementById('dashProfileCity')?.value.trim()  || '';
+      // Save to localStorage (offline fallback)
+      writeExtras({ phone, city });
+      // Save to Firestore (cross-device sync)
+      if (auth.currentUser) {
+        await saveUserProfile(auth.currentUser.uid, {
+          firstName: newName.split(' ')[0] || '',
+          lastName:  newName.split(' ').slice(1).join(' ') || '',
+          phone,
+          city,
+        });
+      }
       showToast('✓ Profile saved successfully.');
       if (profileMsg) { profileMsg.style.display = 'inline-flex'; setTimeout(() => { profileMsg.style.display = 'none'; }, 3000); }
     } catch (err) {
