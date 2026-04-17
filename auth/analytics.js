@@ -74,16 +74,32 @@ const _fetchGeo = async () => {
   try {
     const cached = sessionStorage.getItem(GEO_KEY);
     if (cached) { _geo = JSON.parse(cached); return; }
-    const r = await fetch('https://ipapi.co/json/', { cache: 'force-cache' });
-    if (!r.ok) return;
-    const d = await r.json();
-    _geo = {
-      ip:      d.ip      || '',
-      country: d.country_name || d.country || '',
-      city:    d.city    || '',
-      region:  d.region  || '',
-    };
-    sessionStorage.setItem(GEO_KEY, JSON.stringify(_geo));
+
+    // Try ipwho.is first (free, HTTPS, no daily cap)
+    let d = null;
+    try {
+      const r1 = await fetch('https://ipwho.is/', { cache: 'no-store' });
+      if (r1.ok) {
+        const j = await r1.json();
+        if (j.success && j.ip) d = { ip: j.ip, country: j.country || '', city: j.city || '', region: j.region || '' };
+      }
+    } catch {}
+
+    // Fallback: ipapi.co
+    if (!d) {
+      try {
+        const r2 = await fetch('https://ipapi.co/json/', { cache: 'no-store' });
+        if (r2.ok) {
+          const j = await r2.json();
+          if (j.ip) d = { ip: j.ip, country: j.country_name || j.country || '', city: j.city || '', region: j.region || '' };
+        }
+      } catch {}
+    }
+
+    if (d) {
+      _geo = d;
+      sessionStorage.setItem(GEO_KEY, JSON.stringify(_geo));
+    }
   } catch { /* geo is optional — never block tracking */ }
 };
 
