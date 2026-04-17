@@ -67,6 +67,26 @@ const _ensureAuth = () => new Promise(resolve => {
   });
 });
 
+// ── Geo: fetch IP + country + city once per session ───────────
+let _geo = null;
+const GEO_KEY = 'ipo-geo';
+const _fetchGeo = async () => {
+  try {
+    const cached = sessionStorage.getItem(GEO_KEY);
+    if (cached) { _geo = JSON.parse(cached); return; }
+    const r = await fetch('https://ipapi.co/json/', { cache: 'force-cache' });
+    if (!r.ok) return;
+    const d = await r.json();
+    _geo = {
+      ip:      d.ip      || '',
+      country: d.country_name || d.country || '',
+      city:    d.city    || '',
+      region:  d.region  || '',
+    };
+    sessionStorage.setItem(GEO_KEY, JSON.stringify(_geo));
+  } catch { /* geo is optional — never block tracking */ }
+};
+
 // ── Step 2: Write session init ────────────────────────────────
 const _initSession = async () => {
   if (_sessInit) return;
@@ -78,6 +98,10 @@ const _initSession = async () => {
     referrer: document.referrer ? (() => { try { return new URL(document.referrer).hostname; } catch { return 'direct'; } })() : 'direct',
     entryPage: _currentPage, currentPage: _currentPage,
     isNew, converted: false, checkoutStarted: false, duration: 0,
+    ip:      _geo?.ip      || '',
+    country: _geo?.country || '',
+    city:    _geo?.city    || '',
+    region:  _geo?.region  || '',
   });
   _w(_dRef(), {
     date: _today(), sessions: increment(1), newSessions: increment(isNew ? 1 : 0),
@@ -198,7 +222,7 @@ const _watchRealAuth = () => {
 // BOOT
 // ================================================================
 const _boot = async () => {
-  await _ensureAuth();
+  await Promise.all([_ensureAuth(), _fetchGeo()]);
   _initSession();  // fire-and-forget — don't await
   _detectPage();
   _initClicks();

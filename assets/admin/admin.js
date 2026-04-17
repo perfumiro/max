@@ -162,7 +162,7 @@ const renderLatestVisitors = (rows) => {
   const mobile = qs('#latestVisitorsMobile');
   if (!tbody) return;
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px">No visitor data yet.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px">No visitor data yet.</td></tr>';
     if (mobile) mobile.innerHTML = '';
     return;
   }
@@ -171,6 +171,8 @@ const renderLatestVisitors = (rows) => {
     <td class="td-mono td-short">${esc(r.id?.slice(0, 10) || '-')}</td>
     <td class="td-page">${esc(r.entryPage || '/')}</td>
     <td>${deviceIcon(r.device)} <span class="td-muted" style="font-size:11px">${esc(r.device || '-')}</span></td>
+    <td class="td-mono td-muted" style="font-size:11px">${esc(r.ip || '-')}</td>
+    <td class="td-muted" style="font-size:11px">${r.city ? esc(r.city) + (r.country ? ', ' + esc(r.country) : '') : (r.country ? esc(r.country) : '-')}</td>
     <td class="td-muted">${esc(r.referrer || 'direct')}</td>
     <td class="td-muted">${r.duration ? r.duration + 's' : '-'}</td>
     <td><span class="badge ${r.isNew === false ? 'badge-gold' : 'badge-green'}">${r.isNew === false ? 'Returning' : 'New'}</span></td>
@@ -179,6 +181,8 @@ const renderLatestVisitors = (rows) => {
     <div class="mobile-card-row"><span class="mobile-card-key">Time</span><span class="mobile-card-val">${relTime(r.startTime)}</span></div>
     <div class="mobile-card-row"><span class="mobile-card-key">Page</span><span class="mobile-card-val">${esc(r.entryPage || '/')}</span></div>
     <div class="mobile-card-row"><span class="mobile-card-key">Device</span><span class="mobile-card-val">${deviceIcon(r.device)} ${esc(r.device || '-')}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">IP</span><span class="mobile-card-val td-mono" style="font-size:11px">${esc(r.ip || '-')}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Location</span><span class="mobile-card-val">${r.city ? esc(r.city) + (r.country ? ', ' + esc(r.country) : '') : (r.country ? esc(r.country) : '-')}</span></div>
     <div class="mobile-card-row"><span class="mobile-card-key">Referrer</span><span class="mobile-card-val">${esc(r.referrer || 'direct')}</span></div>
     <div class="mobile-card-row"><span class="mobile-card-key">Type</span><span class="mobile-card-val"><span class="badge ${r.isNew === false ? 'badge-gold' : 'badge-green'}">${r.isNew === false ? 'Returning' : 'New'}</span></span></div>
   </div>`).join('');
@@ -189,7 +193,7 @@ const renderVisitorsTable = (rows) => {
   const tbody  = qs('#visitorsBody');
   const mobile = qs('#visitorsMobile');
   if (!rows.length) {
-    if (tbody)  tbody.innerHTML  = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px">No records found.</td></tr>';
+    if (tbody)  tbody.innerHTML  = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px">No records found.</td></tr>';
     if (mobile) mobile.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px">No records found.</div>';
     return;
   }
@@ -198,6 +202,8 @@ const renderVisitorsTable = (rows) => {
     <td class="td-mono td-short">${esc(r.id?.slice(0, 10) || '-')}</td>
     <td class="td-page" title="${esc(r.entryPage)}">${esc(r.entryPage || '/')}</td>
     <td>${deviceIcon(r.device)} <span class="td-muted" style="font-size:11px">${esc(r.device || '-')}</span></td>
+    <td class="td-mono td-muted" style="font-size:11px">${esc(r.ip || '-')}</td>
+    <td class="td-muted" style="font-size:11px">${r.city ? esc(r.city) + (r.country ? ', ' + esc(r.country) : '') : (r.country ? esc(r.country) : '-')}</td>
     <td class="td-muted">${esc(r.referrer || 'direct')}</td>
     <td class="td-muted">${r.duration ? r.duration + 's' : '-'}</td>
     <td><span class="badge ${r.isNew === false ? 'badge-gold' : 'badge-green'}">${r.isNew === false ? 'Returning' : 'New'}</span></td>
@@ -207,6 +213,9 @@ const renderVisitorsTable = (rows) => {
     <div class="mobile-card-row"><span class="mobile-card-key">Session</span><span class="mobile-card-val td-mono">${esc(r.id?.slice(0, 10) || '-')}</span></div>
     <div class="mobile-card-row"><span class="mobile-card-key">Page</span><span class="mobile-card-val">${esc(r.entryPage || '/')}</span></div>
     <div class="mobile-card-row"><span class="mobile-card-key">Device</span><span class="mobile-card-val">${deviceIcon(r.device)} ${esc(r.device || '-')}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">IP</span><span class="mobile-card-val td-mono" style="font-size:11px">${esc(r.ip || '-')}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Location</span><span class="mobile-card-val">${r.city ? esc(r.city) + (r.country ? ', ' + esc(r.country) : '') : (r.country ? esc(r.country) : '-')}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Referrer</span><span class="mobile-card-val">${esc(r.referrer || 'direct')}</span></div>
     <div class="mobile-card-row"><span class="mobile-card-key">Type</span><span class="mobile-card-val"><span class="badge ${r.isNew === false ? 'badge-gold' : 'badge-green'}">${r.isNew === false ? 'Returning' : 'New'}</span></span></div>
   </div>`).join('');
 };
@@ -369,6 +378,7 @@ const getLatestVisitors = async () => {
 const aggregateSessions = async (days) => {
   const since = new Date(Date.now() - days * 86_400_000);
   const pageMap = new Map(), deviceMap = new Map(), referrerMap = new Map();
+  const countryMap = new Map(), cityMap = new Map();
   try {
     const snap = await getDocs(
       query(collection(db, 'analytics_sessions'),
@@ -384,11 +394,19 @@ const aggregateSessions = async (days) => {
       pageMap.set(pg,  (pageMap.get(pg)   || 0) + 1);
       deviceMap.set(dev, (deviceMap.get(dev) || 0) + 1);
       referrerMap.set(ref, (referrerMap.get(ref) || 0) + 1);
+      if (r.country) countryMap.set(r.country, (countryMap.get(r.country) || 0) + 1);
+      if (r.city)    cityMap.set(r.city,    (cityMap.get(r.city)    || 0) + 1);
     });
   } catch {}
   const sorted = (map, n = 10) =>
     Array.from(map.entries()).sort((a, b) => b[1] - a[1]).slice(0, n).map(([name, value]) => ({ name, value }));
-  return { topPages: sorted(pageMap, 12), deviceBreakdown: sorted(deviceMap, 5), topReferrers: sorted(referrerMap, 8) };
+  return {
+    topPages:        sorted(pageMap, 12),
+    deviceBreakdown: sorted(deviceMap, 5),
+    topReferrers:    sorted(referrerMap, 8),
+    topCountries:    sorted(countryMap, 10),
+    topCities:       sorted(cityMap, 10),
+  };
 };
 
 // ─── DATA LOADERS ─────────────────────────────────────────────────────────────
@@ -403,7 +421,7 @@ const loadOverview = async () => {
   renderLatestVisitors(latestVisitors);
   renderCharts(visitsByDay, agg.deviceBreakdown);
   renderRankList('#topPagesList',         agg.topPages);
-  renderRankList('#topCountriesList',     agg.deviceBreakdown);
+  renderRankList('#topCountriesList',     agg.topCountries.length ? agg.topCountries : [{ name: 'No geo data yet', value: 0 }]);
   renderRankList('#browserBreakdownList', agg.topReferrers);
   const el = qs('#lastUpdated');
   if (el) el.textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -442,9 +460,9 @@ const loadAnalyticsView = async () => {
     aggregateSessions(state.analyticsRange),
   ]);
   renderAnalyticsChart(visitsByDay);
-  renderRankList('#analyticsCountriesList', agg.deviceBreakdown);
-  renderRankList('#analyticsCitiesList',    agg.topReferrers);
-  renderRankList('#analyticsDevicesList',   agg.topPages);
+  renderRankList('#analyticsCountriesList', agg.topCountries.length ? agg.topCountries : [{ name: 'No geo data yet', value: 0 }]);
+  renderRankList('#analyticsCitiesList',    agg.topCities.length    ? agg.topCities    : [{ name: 'No city data yet', value: 0 }]);
+  renderRankList('#analyticsDevicesList',   agg.deviceBreakdown);
 };
 
 const loadActivity = async () => {
