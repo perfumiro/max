@@ -421,7 +421,7 @@ const loadOverview = async () => {
   renderLatestVisitors(latestVisitors);
   renderCharts(visitsByDay, agg.deviceBreakdown);
   renderRankList('#topPagesList',         agg.topPages);
-  renderRankList('#topCountriesList',     agg.topCountries.length ? agg.topCountries : [{ name: 'No geo data yet', value: 0 }]);
+  renderRankList('#topCountriesList',     agg.topCountries.length ? agg.topCountries : [{ name: '🌍 Collecting — visit site to generate data', value: 0 }]);
   renderRankList('#browserBreakdownList', agg.topReferrers);
   const el = qs('#lastUpdated');
   if (el) el.textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -460,8 +460,8 @@ const loadAnalyticsView = async () => {
     aggregateSessions(state.analyticsRange),
   ]);
   renderAnalyticsChart(visitsByDay);
-  renderRankList('#analyticsCountriesList', agg.topCountries.length ? agg.topCountries : [{ name: 'No geo data yet', value: 0 }]);
-  renderRankList('#analyticsCitiesList',    agg.topCities.length    ? agg.topCities    : [{ name: 'No city data yet', value: 0 }]);
+  renderRankList('#analyticsCountriesList', agg.topCountries.length ? agg.topCountries : [{ name: '🌍 Collecting — visit site to generate data', value: 0 }]);
+  renderRankList('#analyticsCitiesList',    agg.topCities.length    ? agg.topCities    : [{ name: '🏙️ Collecting — visit site to generate data', value: 0 }]);
   renderRankList('#analyticsDevicesList',   agg.deviceBreakdown);
 };
 
