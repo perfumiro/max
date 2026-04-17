@@ -1,101 +1,67 @@
-﻿'use strict';
+﻿// ─── IPORDISE Admin — Firebase Analytics Dashboard ────────────────────────────
+// Auth: Firebase Email/Password   Data: Firestore   No server required.
 
-// ─── UTILITY ─────────────────────────────────────────────────────────────────
-const normalizeApiBase = (v) => {
-  const raw = String(v || '').trim();
-  if (!raw) return 'http://localhost:5050';
-  try { return new URL(raw).origin; } catch { return 'http://localhost:5050'; }
+import { initializeApp }
+  from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
+import {
+  getFirestore, collection, doc,
+  getDoc, getDocs, setDoc,
+  query, orderBy, limit, where,
+} from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
+
+// ─── FIREBASE ─────────────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey:            'AIzaSyAt-fnGB3Y69qEmg4pjOWneKrutbnQLMM4',
+  authDomain:        'ipordise-aef54.firebaseapp.com',
+  projectId:         'ipordise-aef54',
+  storageBucket:     'ipordise-aef54.firebasestorage.app',
+  messagingSenderId: '870679323928',
+  appId:             '1:870679323928:web:d3f03a8dddff119951ea6d',
 };
-const qs  = (sel) => document.querySelector(sel);
-const qsa = (sel) => Array.from(document.querySelectorAll(sel));
-const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmtNum      = (n) => Number(n || 0).toLocaleString('en-US');
-const fmtDate     = (ts) => { if (!ts) return '-'; const d = new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); };
-const fmtDateTime = (ts) => { if (!ts) return '-'; const d = new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); };
+const fbApp = initializeApp(firebaseConfig);
+const auth  = getAuth(fbApp);
+const db    = getFirestore(fbApp);
+
+// Change this to match the admin account email in your Firebase Auth console
+const ADMIN_EMAIL = 'admin@ipordise.com';
+
+// ─── UTILITIES ────────────────────────────────────────────────────────────────
+const qs  = (sel, ctx = document) => ctx.querySelector(sel);
+const qsa = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+const esc = (s) => { const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; };
+const fmtNum = (n) => Number(n).toLocaleString();
+const fmtDate = (str) => new Date(str).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+const toDate  = (ts) => ts?.toDate ? ts.toDate() : (ts ? new Date(ts) : new Date(0));
+const fmtDateTime = (ts) => toDate(ts).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 const relTime = (ts) => {
-  if (!ts) return '-';
-  const s = Math.floor((Date.now() - new Date(ts)) / 1000);
-  if (s < 60) return s + 's ago';
-  const m = Math.floor(s/60); if (m < 60) return m + 'm ago';
-  const h = Math.floor(m/60); if (h < 24) return h + 'h ago';
-  return Math.floor(h/24) + 'd ago';
+  const diff = Math.max(0, Date.now() - toDate(ts).getTime());
+  if (diff < 60_000)     return 'just now';
+  if (diff < 3_600_000)  return `${Math.round(diff / 60_000)}m ago`;
+  if (diff < 86_400_000) return `${Math.round(diff / 3_600_000)}h ago`;
+  return `${Math.round(diff / 86_400_000)}d ago`;
 };
-const flag = (country) => {
-  if (!country || country.length !== 2) return '';
-  try { return String.fromCodePoint(...[...country.toUpperCase()].map(c => 0x1F1E0 + c.charCodeAt(0) - 65)) + ' '; } catch { return ''; }
-};
-const deviceIcon = (t) => {
-  const v = (t||'').toLowerCase();
-  if (v==='mobile') return '<i class="fas fa-mobile-screen" title="Mobile"></i>';
-  if (v==='tablet') return '<i class="fas fa-tablet-screen-button" title="Tablet"></i>';
-  return '<i class="fas fa-desktop" title="Desktop"></i>';
-};
-const browserIcon = (n) => {
-  const v = (n||'').toLowerCase();
-  if (v.includes('chrome'))  return '<i class="fab fa-chrome"></i> ';
-  if (v.includes('firefox')) return '<i class="fab fa-firefox-browser"></i> ';
-  if (v.includes('safari'))  return '<i class="fab fa-safari"></i> ';
-  if (v.includes('edge'))    return '<i class="fab fa-edge"></i> ';
-  if (v.includes('opera'))   return '<i class="fab fa-opera"></i> ';
-  return '<i class="fas fa-globe"></i> ';
-};
+const deviceIcon = (t) => ({ mobile: '<i class="fas fa-mobile-screen"></i>', tablet: '<i class="fas fa-tablet-screen-button"></i>', desktop: '<i class="fas fa-desktop"></i>' }[t] || '<i class="fas fa-desktop"></i>');
+const today = () => new Date().toISOString().slice(0, 10);
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
-const storedBase  = localStorage.getItem('ipordise-admin-api-base');
-const defaultBase = window.location.protocol === 'file:' ? 'http://localhost:5050' : window.location.origin;
+// ─── STATE ────────────────────────────────────────────────────────────────────
 const state = {
-  apiBase:       normalizeApiBase(storedBase || defaultBase),
-  currentView:   'overview',
-  trafficRange:  30,
-  analyticsRange:30,
-  filters:       { startDate:'', endDate:'', country:'', city:'', pageUrl:'', search:'' },
-  pagination:    { page:1, pageSize:20, total:0, totalPages:1 },
-  charts:        { visitsOverTime:null, deviceBreakdown:null, analyticsDaily:null },
-  pollers:       []
+  currentView:    'overview',
+  trafficRange:   30,
+  analyticsRange: 30,
+  filters: { device: '', search: '', page: '' },
+  pagination: { page: 1, pageSize: 20, total: 0, totalPages: 1 },
+  charts:  { visitsOverTime: null, deviceBreakdown: null, analyticsDaily: null },
+  pollers: [],
 };
-
-// ─── API ─────────────────────────────────────────────────────────────────────
-const candidateBases = () => {
-  const s = new Set([normalizeApiBase(state.apiBase)]);
-  if (window.location.protocol !== 'file:') {
-    s.add(normalizeApiBase(window.location.origin));
-    s.add(normalizeApiBase(window.location.protocol+'//'+window.location.hostname+':5050'));
-  }
-  s.add('http://127.0.0.1:5050'); s.add('http://localhost:5050');
-  return [...s];
-};
-const resolveUrl = (path, base) => /^https?:\/\//i.test(path) ? path : base + path;
-const fetchJson = async (url, opts = {}) => {
-  let lastErr;
-  for (const base of candidateBases()) {
-    try {
-      const res = await fetch(resolveUrl(url, base), {
-        credentials: 'include',
-        headers: { 'Content-Type':'application/json', ...(opts.headers||{}) },
-        ...opts
-      });
-      if (!res.ok) {
-        const b = await res.json().catch(() => ({}));
-        if (res.status === 404) { lastErr = new Error('Endpoint not found'); continue; }
-        throw new Error(b.error || 'Request failed ('+res.status+')');
-      }
-      state.apiBase = base;
-      localStorage.setItem('ipordise-admin-api-base', base);
-      return res.json();
-    } catch (e) { lastErr = e; }
-  }
-  throw new Error(lastErr?.message || 'Cannot connect to analytics API. Start backend on http://localhost:5050.');
-};
-const openDownload = (path) => window.open(resolveUrl(path, state.apiBase), '_blank', 'noopener');
 
 // ─── TOAST ────────────────────────────────────────────────────────────────────
-const toast = (message, type = 'info', duration = 3500) => {
+const toast = (msg, type = 'info', duration = 3500) => {
   const el = document.createElement('div');
-  el.className = 'toast toast-' + type;
-  const icons = { success:'fa-circle-check', error:'fa-circle-exclamation', info:'fa-circle-info' };
-  el.innerHTML = '<i class="fas '+(icons[type]||icons.info)+' toast-icon"></i><span>'+esc(message)+'</span>';
-  const c = qs('#toastContainer');
-  if (c) c.appendChild(el);
+  el.className = `toast toast-${type}`;
+  el.textContent = msg;
+  qs('#toastContainer').appendChild(el);
   setTimeout(() => {
     el.style.animation = 'toastOut .2s ease forwards';
     el.addEventListener('animationend', () => el.remove());
@@ -111,7 +77,7 @@ const setTheme = (theme) => {
 };
 const initTheme = () => {
   const s = localStorage.getItem('ipordise-admin-theme');
-  setTheme(s==='dark'||s==='light' ? s : (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'));
+  setTheme(s === 'dark' || s === 'light' ? s : (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'));
 };
 
 // ─── SIDEBAR + VIEW NAV ───────────────────────────────────────────────────────
@@ -120,11 +86,11 @@ const closeMobileSidebar = () => { qs('#sidebar')?.classList.remove('open'); qs(
 const switchView = (name) => {
   state.currentView = name;
   qsa('.view').forEach(el => el.classList.remove('active'));
-  qs('#view-'+name)?.classList.add('active');
+  qs('#view-' + name)?.classList.add('active');
   qsa('.sidebar-item[data-view]').forEach(it => it.classList.toggle('active', it.dataset.view === name));
-  if (name === 'visitors') loadVisitors().catch(e => toast(e.message,'error'));
-  if (name === 'analytics') loadAnalyticsView().catch(e => toast(e.message,'error'));
-  if (name === 'activity') loadActivity().catch(e => toast(e.message,'error'));
+  if (name === 'visitors')  loadVisitors().catch(e => toast(e.message, 'error'));
+  if (name === 'analytics') loadAnalyticsView().catch(e => toast(e.message, 'error'));
+  if (name === 'activity')  loadActivity().catch(e => toast(e.message, 'error'));
   if (window.innerWidth < 768) closeMobileSidebar();
 };
 const initSidebar = () => {
@@ -144,13 +110,13 @@ const showDashboard = () => { qs('#authScreen').classList.add('hidden'); qs('#da
 // ─── ANIMATED COUNTER ─────────────────────────────────────────────────────────
 const animateCount = (el, target, dur = 700) => {
   if (!el) return;
-  const start = parseInt(el.textContent.replace(/,/g,''), 10) || 0;
-  const diff = target - start;
+  const start = parseInt(el.textContent.replace(/,/g, ''), 10) || 0;
+  const diff  = target - start;
   if (!diff) { el.textContent = fmtNum(target); return; }
   const t0 = performance.now();
   const step = (now) => {
-    const p = Math.min((now-t0)/dur, 1);
-    el.textContent = fmtNum(Math.round(start + diff * (1 - Math.pow(1-p, 3))));
+    const p = Math.min((now - t0) / dur, 1);
+    el.textContent = fmtNum(Math.round(start + diff * (1 - Math.pow(1 - p, 3))));
     if (p < 1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
@@ -158,19 +124,19 @@ const animateCount = (el, target, dur = 700) => {
 
 // ─── STATS GRID ───────────────────────────────────────────────────────────────
 const setLoadingSkeleton = () => {
-  qs('#statsGrid').innerHTML = Array.from({length:5}, () =>
+  qs('#statsGrid').innerHTML = Array.from({ length: 5 }, () =>
     '<div class="stat-card"><div class="skeleton" style="height:80px;border-radius:var(--radius-md)"></div></div>'
   ).join('');
 };
 const STAT_DEFS = [
-  { key:'totalVisits',       label:'Total Visits',    icon:'fas fa-chart-bar',    accent:'var(--gold)' },
-  { key:'todayVisits',       label:"Today's Visits",  icon:'fas fa-calendar-day', accent:'var(--sky)' },
-  { key:'uniqueVisitors',    label:'Unique Visitors', icon:'fas fa-users',        accent:'var(--emerald)' },
-  { key:'returningVisitors', label:'Returning',       icon:'fas fa-rotate-right', accent:'var(--amber)' },
-  { key:'onlineNow',         label:'Online Now',      icon:'fas fa-wifi',         accent:'var(--rose)' },
+  { key: 'totalVisits',       label: 'Total Page Views', icon: 'fas fa-chart-bar',    accent: 'var(--gold)' },
+  { key: 'todayVisits',       label: "Today's Views",    icon: 'fas fa-calendar-day', accent: 'var(--sky)' },
+  { key: 'uniqueVisitors',    label: 'Total Sessions',   icon: 'fas fa-users',        accent: 'var(--emerald)' },
+  { key: 'returningVisitors', label: 'Returning',        icon: 'fas fa-rotate-right', accent: 'var(--amber)' },
+  { key: 'onlineNow',         label: 'Online Now',       icon: 'fas fa-wifi',         accent: 'var(--rose)' },
 ];
 const updateStats = (stats) => {
-  const grid = qs('#statsGrid');
+  const grid    = qs('#statsGrid');
   const isFirst = !grid.querySelector('[data-stat]');
   if (isFirst) {
     grid.innerHTML = STAT_DEFS.map(d => `
@@ -181,7 +147,7 @@ const updateStats = (stats) => {
       </div>`).join('');
   } else {
     STAT_DEFS.forEach(d => {
-      const el = grid.querySelector('[data-stat="'+d.key+'"]');
+      const el = grid.querySelector('[data-stat="' + d.key + '"]');
       if (el) animateCount(el, Number(stats[d.key] || 0));
     });
   }
@@ -192,81 +158,75 @@ const updateStats = (stats) => {
 
 // ─── LATEST VISITORS ─────────────────────────────────────────────────────────
 const renderLatestVisitors = (rows) => {
-  const tbody = qs('#latestVisitorsBody');
+  const tbody  = qs('#latestVisitorsBody');
   const mobile = qs('#latestVisitorsMobile');
   if (!tbody) return;
   if (!rows.length) {
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px">No visitor data yet.</td></tr>';
-    if (mobile) mobile.innerHTML = ''; return;
+    if (mobile) mobile.innerHTML = '';
+    return;
   }
   tbody.innerHTML = rows.map(r => `<tr>
-    <td class="td-mono td-muted">${relTime(r.timestamp)}</td>
-    <td class="td-mono td-short">${esc(r.visitor_id)}</td>
-    <td class="td-mono">${esc(r.ip_masked)}</td>
-    <td>${flag(r.country)}${esc(r.city||r.country||'-')}</td>
-    <td class="td-page" title="${esc(r.page_url)}">${esc(r.page_url)}</td>
-    <td>${deviceIcon(r.device_type)}</td>
-    <td><span class="badge ${r.is_returning?'badge-gold':'badge-green'}">${r.is_returning?'Returning':'New'}</span></td>
+    <td class="td-mono td-muted">${relTime(r.startTime)}</td>
+    <td class="td-mono td-short">${esc(r.id?.slice(0, 10) || '-')}</td>
+    <td class="td-page">${esc(r.entryPage || '/')}</td>
+    <td>${deviceIcon(r.device)} <span class="td-muted" style="font-size:11px">${esc(r.device || '-')}</span></td>
+    <td class="td-muted">${esc(r.referrer || 'direct')}</td>
+    <td class="td-muted">${r.duration ? r.duration + 's' : '-'}</td>
+    <td><span class="badge ${r.isNew === false ? 'badge-gold' : 'badge-green'}">${r.isNew === false ? 'Returning' : 'New'}</span></td>
   </tr>`).join('');
   if (mobile) mobile.innerHTML = rows.map(r => `<div class="mobile-card">
-    <div class="mobile-card-row"><span class="mobile-card-key">Time</span><span class="mobile-card-val">${relTime(r.timestamp)}</span></div>
-    <div class="mobile-card-row"><span class="mobile-card-key">IP</span><span class="mobile-card-val td-mono">${esc(r.ip_masked)}</span></div>
-    <div class="mobile-card-row"><span class="mobile-card-key">Location</span><span class="mobile-card-val">${flag(r.country)}${esc(r.city||r.country||'-')}</span></div>
-    <div class="mobile-card-row"><span class="mobile-card-key">Page</span><span class="mobile-card-val">${esc(r.page_url)}</span></div>
-    <div class="mobile-card-row"><span class="mobile-card-key">Type</span><span class="mobile-card-val"><span class="badge ${r.is_returning?'badge-gold':'badge-green'}">${r.is_returning?'Returning':'New'}</span></span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Time</span><span class="mobile-card-val">${relTime(r.startTime)}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Page</span><span class="mobile-card-val">${esc(r.entryPage || '/')}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Device</span><span class="mobile-card-val">${deviceIcon(r.device)} ${esc(r.device || '-')}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Referrer</span><span class="mobile-card-val">${esc(r.referrer || 'direct')}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Type</span><span class="mobile-card-val"><span class="badge ${r.isNew === false ? 'badge-gold' : 'badge-green'}">${r.isNew === false ? 'Returning' : 'New'}</span></span></div>
   </div>`).join('');
 };
 
 // ─── VISITORS TABLE ───────────────────────────────────────────────────────────
 const renderVisitorsTable = (rows) => {
-  const tbody = qs('#visitorsBody');
+  const tbody  = qs('#visitorsBody');
   const mobile = qs('#visitorsMobile');
   if (!rows.length) {
-    if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px">No records for selected filters.</td></tr>';
+    if (tbody)  tbody.innerHTML  = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px">No records found.</td></tr>';
     if (mobile) mobile.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px">No records found.</div>';
     return;
   }
   if (tbody) tbody.innerHTML = rows.map(r => `<tr>
-    <td class="td-mono td-muted">${fmtDateTime(r.timestamp)}</td>
-    <td class="td-mono td-short">${esc(r.visitor_id)}</td>
-    <td class="td-mono">${esc(r.ip_masked)}</td>
-    <td>${flag(r.country)}${esc(r.city?r.city+', '+r.country:r.country||'-')}</td>
-    <td class="td-page" title="${esc(r.page_url)}">${esc(r.page_url)}</td>
-    <td>${deviceIcon(r.device_type)} <span class="td-muted" style="font-size:11px">${esc(r.device_type||'-')}</span></td>
-    <td>${browserIcon(r.browser)}${esc(r.browser||'-')}</td>
-    <td class="td-muted td-short">${r.referrer?esc(r.referrer):'<span class="badge badge-muted">direct</span>'}</td>
-    <td><span class="badge ${r.is_returning?'badge-gold':'badge-green'}">${r.is_returning?'Returning':'New'}</span></td>
+    <td class="td-mono td-muted">${fmtDateTime(r.startTime)}</td>
+    <td class="td-mono td-short">${esc(r.id?.slice(0, 10) || '-')}</td>
+    <td class="td-page" title="${esc(r.entryPage)}">${esc(r.entryPage || '/')}</td>
+    <td>${deviceIcon(r.device)} <span class="td-muted" style="font-size:11px">${esc(r.device || '-')}</span></td>
+    <td class="td-muted">${esc(r.referrer || 'direct')}</td>
+    <td class="td-muted">${r.duration ? r.duration + 's' : '-'}</td>
+    <td><span class="badge ${r.isNew === false ? 'badge-gold' : 'badge-green'}">${r.isNew === false ? 'Returning' : 'New'}</span></td>
   </tr>`).join('');
   if (mobile) mobile.innerHTML = rows.map(r => `<div class="mobile-card">
-    <div class="mobile-card-row"><span class="mobile-card-key">Time</span><span class="mobile-card-val">${fmtDateTime(r.timestamp)}</span></div>
-    <div class="mobile-card-row"><span class="mobile-card-key">IP</span><span class="mobile-card-val td-mono">${esc(r.ip_masked)}</span></div>
-    <div class="mobile-card-row"><span class="mobile-card-key">Location</span><span class="mobile-card-val">${flag(r.country)}${esc(r.city?r.city+', '+r.country:r.country||'-')}</span></div>
-    <div class="mobile-card-row"><span class="mobile-card-key">Page</span><span class="mobile-card-val">${esc(r.page_url)}</span></div>
-    <div class="mobile-card-row"><span class="mobile-card-key">Browser</span><span class="mobile-card-val">${browserIcon(r.browser)}${esc(r.browser||'-')}</span></div>
-    <div class="mobile-card-row"><span class="mobile-card-key">Type</span><span class="mobile-card-val"><span class="badge ${r.is_returning?'badge-gold':'badge-green'}">${r.is_returning?'Returning':'New'}</span></span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Time</span><span class="mobile-card-val">${fmtDateTime(r.startTime)}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Session</span><span class="mobile-card-val td-mono">${esc(r.id?.slice(0, 10) || '-')}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Page</span><span class="mobile-card-val">${esc(r.entryPage || '/')}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Device</span><span class="mobile-card-val">${deviceIcon(r.device)} ${esc(r.device || '-')}</span></div>
+    <div class="mobile-card-row"><span class="mobile-card-key">Type</span><span class="mobile-card-val"><span class="badge ${r.isNew === false ? 'badge-gold' : 'badge-green'}">${r.isNew === false ? 'Returning' : 'New'}</span></span></div>
   </div>`).join('');
 };
 
 // ─── PAGINATION ───────────────────────────────────────────────────────────────
-const renderPagination = (pagination) => {
-  state.pagination = pagination;
+const renderPagination = () => {
+  const { page, totalPages, total } = state.pagination;
   const info = qs('#paginationInfo');
-  if (info) info.textContent = 'Page '+pagination.page+' of '+pagination.totalPages+' - '+fmtNum(pagination.total)+' records';
+  if (info) info.textContent = `Page ${page} of ${totalPages} — ${fmtNum(total)} records`;
   const lbl = qs('#visitorCountLabel');
-  if (lbl) lbl.textContent = fmtNum(pagination.total) + ' records';
+  if (lbl) lbl.textContent = `${fmtNum(total)} records`;
   const controls = qs('#paginationControls');
   if (!controls) return;
-  const { page, totalPages } = pagination;
-  const pages = [];
-  if (page > 1) pages.push({ label:'Prev', n:page-1 });
-  const s = Math.max(1, page-2), e = Math.min(totalPages, page+2);
-  for (let i=s; i<=e; i++) pages.push({ label:String(i), n:i, active:i===page });
-  if (page < totalPages) pages.push({ label:'Next', n:page+1 });
-  controls.innerHTML = pages.map(p => '<button class="page-btn'+(p.active?' active':'')+'" data-page="'+p.n+'">'+p.label+'</button>').join('');
-  controls.querySelectorAll('.page-btn').forEach(btn => btn.addEventListener('click', () => {
-    state.pagination.page = parseInt(btn.dataset.page, 10);
-    loadVisitors().catch(e => toast(e.message,'error'));
-  }));
+  controls.innerHTML = `
+    <button class="page-btn" id="pagePrev" ${page <= 1 ? 'disabled' : ''}>Prev</button>
+    <button class="page-btn active">${page} / ${totalPages}</button>
+    <button class="page-btn" id="pageNext" ${page >= totalPages ? 'disabled' : ''}>Next</button>
+  `;
+  qs('#pagePrev')?.addEventListener('click', () => { if (state.pagination.page > 1) { state.pagination.page--; loadVisitors().catch(e => toast(e.message, 'error')); } });
+  qs('#pageNext')?.addEventListener('click', () => { if (state.pagination.page < state.pagination.totalPages) { state.pagination.page++; loadVisitors().catch(e => toast(e.message, 'error')); } });
 };
 
 // ─── RANK LIST ────────────────────────────────────────────────────────────────
@@ -275,25 +235,25 @@ const renderRankList = (selector, rows) => {
   if (!el) return;
   if (!rows.length) { el.innerHTML = '<div class="rank-item"><span class="rank-label td-muted">No data yet</span></div>'; return; }
   const max = rows[0]?.value || 1;
-  el.innerHTML = rows.map((r,i) => `<div class="rank-item">
-    <span class="rank-num">${i+1}</span>
-    <span class="rank-label">${flag(r.name)}${esc(r.name)}</span>
-    <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:${Math.round(r.value/max*100)}%"></div></div>
+  el.innerHTML = rows.map((r, i) => `<div class="rank-item">
+    <span class="rank-num">${i + 1}</span>
+    <span class="rank-label">${esc(r.name)}</span>
+    <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:${Math.round(r.value / max * 100)}%"></div></div>
     <span class="rank-count">${fmtNum(r.value)}</span>
   </div>`).join('');
 };
 
 // ─── ACTIVITY FEED ────────────────────────────────────────────────────────────
 const actCls = (page) => {
-  const p = (page||'').toLowerCase();
-  if (p.includes('product')||p.includes('perfume')) return 'activity-icon-product';
-  if (p.includes('cart')||p.includes('checkout'))   return 'activity-icon-cart';
+  const p = (page || '').toLowerCase();
+  if (p.includes('product') || p.includes('perfume')) return 'activity-icon-product';
+  if (p.includes('cart')    || p.includes('checkout')) return 'activity-icon-cart';
   return 'activity-icon-page';
 };
 const actFa = (page) => {
-  const p = (page||'').toLowerCase();
-  if (p.includes('product')||p.includes('perfume')) return 'fa-bottle-droplet';
-  if (p.includes('cart')||p.includes('checkout'))   return 'fa-cart-shopping';
+  const p = (page || '').toLowerCase();
+  if (p.includes('product') || p.includes('perfume')) return 'fa-bottle-droplet';
+  if (p.includes('cart')    || p.includes('checkout')) return 'fa-cart-shopping';
   return 'fa-eye';
 };
 const renderActivity = (rows) => {
@@ -301,240 +261,403 @@ const renderActivity = (rows) => {
   if (!feed) return;
   if (!rows.length) { feed.innerHTML = '<div style="color:var(--muted);text-align:center;padding:24px">No activity yet.</div>'; return; }
   feed.innerHTML = rows.map(r => `<div class="activity-item">
-    <div class="activity-icon ${actCls(r.page_url)}"><i class="fas ${actFa(r.page_url)}"></i></div>
+    <div class="activity-icon ${actCls(r.currentPage || r.entryPage)}"><i class="fas ${actFa(r.currentPage || r.entryPage)}"></i></div>
     <div class="activity-body">
-      <div class="activity-page" title="${esc(r.page_url)}">${esc(r.page_url||'/')}</div>
+      <div class="activity-page">${esc(r.currentPage || r.entryPage || '/')}</div>
       <div class="activity-meta">
-        <span>${flag(r.country)}${esc(r.city?r.city+', '+r.country:r.country||'Unknown')}</span>
-        <span class="activity-meta-sep">·</span><span class="td-mono">${esc(r.ip_masked)}</span>
-        <span class="activity-meta-sep">·</span><span>${deviceIcon(r.device_type)}</span>
-        <span class="activity-meta-sep">·</span><span>${esc(r.event_type||'pageview')}</span>
+        <span>${deviceIcon(r.device)}</span>
+        <span class="activity-meta-sep">·</span><span>${esc(r.referrer || 'direct')}</span>
+        ${r.converted ? '<span class="activity-meta-sep">·</span><span class="badge badge-green">converted</span>' : ''}
+        ${r.checkoutStarted ? '<span class="activity-meta-sep">·</span><span class="badge badge-gold">checkout</span>' : ''}
       </div>
     </div>
-    <div class="activity-time">${relTime(r.timestamp)}</div>
+    <div class="activity-time">${relTime(r.lastSeen)}</div>
   </div>`).join('');
 };
 
 // ─── CHARTS ───────────────────────────────────────────────────────────────────
-const chartCfg = () => document.body.getAttribute('data-theme')==='dark'
-  ? { gold:'#c8a96a', goldFill:'rgba(200,169,106,.12)', sky:'#38bdf8', emerald:'#22c55e', rose:'#f43f5e', amber:'#f59e0b', grid:'rgba(255,255,255,.06)', ticks:'rgba(255,255,255,.35)', tooltip:'#1c1c2a' }
-  : { gold:'#b8922a', goldFill:'rgba(184,146,42,.1)',   sky:'#0369a1', emerald:'#16a34a', rose:'#dc2626', amber:'#d97706', grid:'rgba(0,0,0,.06)', ticks:'rgba(0,0,0,.4)', tooltip:'#ffffff' };
+const chartCfg = () => document.body.getAttribute('data-theme') === 'dark'
+  ? { gold: '#c8a96a', goldFill: 'rgba(200,169,106,.12)', sky: '#38bdf8', emerald: '#22c55e', rose: '#f43f5e', amber: '#f59e0b', grid: 'rgba(255,255,255,.06)', ticks: 'rgba(255,255,255,.35)', tooltip: '#1c1c2a' }
+  : { gold: '#b8922a', goldFill: 'rgba(184,146,42,.1)',   sky: '#0369a1', emerald: '#16a34a', rose: '#dc2626', amber: '#d97706', grid: 'rgba(0,0,0,.06)', ticks: 'rgba(0,0,0,.4)', tooltip: '#ffffff' };
 
 const upsertChart = (key, canvas, config) => {
   if (!canvas || typeof window.Chart !== 'function') return;
-  if (state.charts[key]) { state.charts[key].destroy(); state.charts[key]=null; }
+  if (state.charts[key]) { try { state.charts[key].destroy(); } catch {} state.charts[key] = null; }
   state.charts[key] = new window.Chart(canvas, config);
 };
 
-const renderCharts = (analytics) => {
+const renderCharts = (visitsByDay, deviceBreakdown) => {
   const cc = chartCfg();
-  const tooltipBase = { backgroundColor:cc.tooltip, titleColor:cc.gold, bodyColor: document.body.getAttribute('data-theme')==='dark'?'#f0f0f8':'#111128', borderColor:'rgba(200,169,106,.3)', borderWidth:1, padding:10 };
-  const labels = analytics.visitsByDay.map(d => fmtDate(d.day));
-  const data   = analytics.visitsByDay.map(d => d.visits);
+  const tooltipBase = { backgroundColor: cc.tooltip, titleColor: cc.gold, bodyColor: document.body.getAttribute('data-theme') === 'dark' ? '#f0f0f8' : '#111128', borderColor: 'rgba(200,169,106,.3)', borderWidth: 1, padding: 10 };
+  const labels = visitsByDay.map(d => fmtDate(d.day));
+  const data   = visitsByDay.map(d => d.visits);
   upsertChart('visitsOverTime', qs('#visitsOverTimeChart'), {
-    type:'line',
-    data:{ labels, datasets:[{ label:'Visits', data, borderColor:cc.gold, backgroundColor:cc.goldFill, fill:true, borderWidth:2.5, tension:.4, pointRadius:data.length>30?0:3, pointHoverRadius:5, pointBackgroundColor:cc.gold }] },
-    options:{ responsive:true, maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
-      plugins:{ legend:{display:false}, tooltip:tooltipBase },
-      scales:{ x:{grid:{color:cc.grid},ticks:{color:cc.ticks,font:{size:11},maxTicksLimit:8}}, y:{beginAtZero:true,grid:{color:cc.grid},ticks:{color:cc.ticks,font:{size:11},precision:0}} } }
+    type: 'line',
+    data: { labels, datasets: [{ label: 'Page Views', data, borderColor: cc.gold, backgroundColor: cc.goldFill, fill: true, borderWidth: 2.5, tension: .4, pointRadius: data.length > 30 ? 0 : 3, pointHoverRadius: 5, pointBackgroundColor: cc.gold }] },
+    options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { display: false }, tooltip: tooltipBase }, scales: { x: { grid: { color: cc.grid }, ticks: { color: cc.ticks, font: { size: 11 }, maxTicksLimit: 8 } }, y: { beginAtZero: true, grid: { color: cc.grid }, ticks: { color: cc.ticks, font: { size: 11 }, precision: 0 } } } },
   });
   const devColors = [cc.gold, cc.sky, cc.emerald, cc.rose, cc.amber];
-  const devData = analytics.deviceBreakdown || [];
   upsertChart('deviceBreakdown', qs('#deviceBreakdownChart'), {
-    type:'doughnut',
-    data:{ labels:devData.map(d=>d.name), datasets:[{ data:devData.map(d=>d.value), backgroundColor:devColors, borderWidth:0, hoverOffset:6 }] },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'72%', plugins:{ legend:{display:false}, tooltip:tooltipBase } }
+    type: 'doughnut',
+    data: { labels: deviceBreakdown.map(d => d.name), datasets: [{ data: deviceBreakdown.map(d => d.value), backgroundColor: devColors, borderWidth: 0, hoverOffset: 6 }] },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '72%', plugins: { legend: { display: false }, tooltip: tooltipBase } },
   });
-  const total = devData.reduce((s,d) => s+d.value, 0);
+  const total = deviceBreakdown.reduce((s, d) => s + d.value, 0);
   animateCount(qs('#donutTotalVal'), total);
   const legend = qs('#deviceLegend');
-  if (legend) legend.innerHTML = devData.map((d,i) => `<li><span class="donut-legend-dot" style="background:${devColors[i]}"></span><span>${esc(d.name)}</span><span class="donut-legend-val">${fmtNum(d.value)}</span></li>`).join('');
+  if (legend) legend.innerHTML = deviceBreakdown.map((d, i) => `<li><span class="donut-legend-dot" style="background:${devColors[i]}"></span><span>${esc(d.name)}</span><span class="donut-legend-val">${fmtNum(d.value)}</span></li>`).join('');
 };
 
-const renderAnalyticsChart = (analytics) => {
+const renderAnalyticsChart = (visitsByDay) => {
   const cc = chartCfg();
-  const tooltipBase = { backgroundColor:cc.tooltip, titleColor:cc.gold, bodyColor: document.body.getAttribute('data-theme')==='dark'?'#f0f0f8':'#111128', borderColor:'rgba(200,169,106,.3)', borderWidth:1 };
+  const tooltipBase = { backgroundColor: cc.tooltip, titleColor: cc.gold, bodyColor: document.body.getAttribute('data-theme') === 'dark' ? '#f0f0f8' : '#111128', borderColor: 'rgba(200,169,106,.3)', borderWidth: 1 };
   upsertChart('analyticsDaily', qs('#analyticsDailyChart'), {
-    type:'bar',
-    data:{ labels:analytics.visitsByDay.map(d=>fmtDate(d.day)), datasets:[{ label:'Visits', data:analytics.visitsByDay.map(d=>d.visits), backgroundColor:cc.goldFill, borderColor:cc.gold, borderWidth:1, borderRadius:4, borderSkipped:false }] },
-    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipBase },
-      scales:{ x:{grid:{color:cc.grid},ticks:{color:cc.ticks,font:{size:11},maxTicksLimit:12}}, y:{beginAtZero:true,grid:{color:cc.grid},ticks:{color:cc.ticks,font:{size:11},precision:0}} } }
+    type: 'bar',
+    data: { labels: visitsByDay.map(d => fmtDate(d.day)), datasets: [{ label: 'Page Views', data: visitsByDay.map(d => d.visits), backgroundColor: cc.goldFill, borderColor: cc.gold, borderWidth: 1, borderRadius: 4, borderSkipped: false }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: tooltipBase }, scales: { x: { grid: { color: cc.grid }, ticks: { color: cc.ticks, font: { size: 11 }, maxTicksLimit: 12 } }, y: { beginAtZero: true, grid: { color: cc.grid }, ticks: { color: cc.ticks, font: { size: 11 }, precision: 0 } } } },
   });
+};
+
+// ─── FIRESTORE DATA ───────────────────────────────────────────────────────────
+const getVisitsByDay = async (days) => {
+  const sinceKey = new Date(Date.now() - days * 86_400_000).toISOString().slice(0, 10);
+  try {
+    const snap = await getDocs(
+      query(collection(db, 'analytics_daily'), where('date', '>=', sinceKey), orderBy('date', 'asc'))
+    );
+    return snap.docs.map(d => ({ day: d.id, visits: d.data().pageViews || 0 }));
+  } catch { return []; }
+};
+
+const getOverviewStats = async () => {
+  const todaySnap  = await getDoc(doc(db, 'analytics_daily', today())).catch(() => null);
+  const todayData  = todaySnap?.exists() ? todaySnap.data() : {};
+  const todayVisits = todayData.pageViews || 0;
+
+  let totalVisits = 0, totalSessions = 0, totalNew = 0;
+  try {
+    const allSnap = await getDocs(collection(db, 'analytics_daily'));
+    allSnap.forEach(d => {
+      const x = d.data();
+      totalVisits   += x.pageViews   || 0;
+      totalSessions += x.sessions    || 0;
+      totalNew      += x.newSessions || 0;
+    });
+  } catch {}
+
+  let onlineNow = 0;
+  try {
+    const liveSnap = await getDoc(doc(db, 'analytics_live', 'state'));
+    if (liveSnap.exists()) {
+      const v = liveSnap.data()?.v || {};
+      onlineNow = Object.values(v).filter(s => (Date.now() - (s.t || 0)) < 5 * 60_000).length;
+    }
+  } catch {}
+
+  return { totalVisits, todayVisits, uniqueVisitors: totalSessions, returningVisitors: Math.max(0, totalSessions - totalNew), onlineNow };
+};
+
+const getLatestVisitors = async () => {
+  try {
+    const snap = await getDocs(
+      query(collection(db, 'analytics_sessions'), orderBy('startTime', 'desc'), limit(12))
+    );
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch { return []; }
+};
+
+const aggregateSessions = async (days) => {
+  const since = new Date(Date.now() - days * 86_400_000);
+  const pageMap = new Map(), deviceMap = new Map(), referrerMap = new Map();
+  try {
+    const snap = await getDocs(
+      query(collection(db, 'analytics_sessions'),
+        where('startTime', '>=', since),
+        orderBy('startTime', 'desc'),
+        limit(1000))
+    );
+    snap.forEach(d => {
+      const r = d.data();
+      const pg  = r.entryPage || '/';
+      const dev = r.device    || 'desktop';
+      const ref = r.referrer  || 'direct';
+      pageMap.set(pg,  (pageMap.get(pg)   || 0) + 1);
+      deviceMap.set(dev, (deviceMap.get(dev) || 0) + 1);
+      referrerMap.set(ref, (referrerMap.get(ref) || 0) + 1);
+    });
+  } catch {}
+  const sorted = (map, n = 10) =>
+    Array.from(map.entries()).sort((a, b) => b[1] - a[1]).slice(0, n).map(([name, value]) => ({ name, value }));
+  return { topPages: sorted(pageMap, 12), deviceBreakdown: sorted(deviceMap, 5), topReferrers: sorted(referrerMap, 8) };
 };
 
 // ─── DATA LOADERS ─────────────────────────────────────────────────────────────
 const loadOverview = async () => {
-  const data = await fetchJson('/api/admin/overview');
-  updateStats(data.stats);
-  renderLatestVisitors(data.latestVisitors || []);
+  const [stats, latestVisitors, visitsByDay, agg] = await Promise.all([
+    getOverviewStats(),
+    getLatestVisitors(),
+    getVisitsByDay(state.trafficRange),
+    aggregateSessions(state.trafficRange),
+  ]);
+  updateStats(stats);
+  renderLatestVisitors(latestVisitors);
+  renderCharts(visitsByDay, agg.deviceBreakdown);
+  renderRankList('#topPagesList',         agg.topPages);
+  renderRankList('#topCountriesList',     agg.deviceBreakdown);
+  renderRankList('#browserBreakdownList', agg.topReferrers);
   const el = qs('#lastUpdated');
-  if (el) el.textContent = 'Updated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-};
-const collectFilters = () => {
-  state.filters.startDate = qs('#filterStartDate')?.value||'';
-  state.filters.endDate   = qs('#filterEndDate')?.value||'';
-  state.filters.country   = (qs('#filterCountry')?.value||'').trim();
-  state.filters.city      = (qs('#filterCity')?.value||'').trim();
-  state.filters.pageUrl   = (qs('#filterPage')?.value||'').trim();
-  state.filters.search    = (qs('#filterSearch')?.value||'').trim();
-};
-const loadVisitors = async () => {
-  const p = new URLSearchParams({ page:state.pagination.page, pageSize:state.pagination.pageSize });
-  Object.entries(state.filters).forEach(([k,v]) => { if (v) p.set(k,v); });
-  const data = await fetchJson('/api/admin/visitors?'+p);
-  renderVisitorsTable(data.rows||[]);
-  renderPagination(data.pagination);
-};
-const loadAnalytics = async () => {
-  const data = await fetchJson('/api/admin/analytics?days='+state.trafficRange);
-  renderCharts(data);
-  renderRankList('#topCountriesList',    data.topCountries    ||[]);
-  renderRankList('#topPagesList',        data.topPages        ||[]);
-  renderRankList('#browserBreakdownList',data.browserBreakdown||[]);
-};
-const loadAnalyticsView = async () => {
-  const data = await fetchJson('/api/admin/analytics?days='+state.analyticsRange);
-  renderAnalyticsChart(data);
-  renderRankList('#analyticsCountriesList', data.topCountries   ||[]);
-  renderRankList('#analyticsCitiesList',    data.topCities      ||[]);
-  renderRankList('#analyticsDevicesList',   data.deviceBreakdown||[]);
-};
-const loadActivity = async () => {
-  const data = await fetchJson('/api/admin/activity');
-  renderActivity(data.rows||[]);
-};
-const refreshAll = async () => {
-  try { await Promise.all([loadOverview(), loadAnalytics()]); }
-  catch (e) { toast(e.message,'error'); throw e; }
+  if (el) el.textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
-// ─── FILTERS UI ───────────────────────────────────────────────────────────────
+const loadVisitors = async () => {
+  const { page, pageSize } = state.pagination;
+  let allRows = [];
+  try {
+    const snap = await getDocs(
+      query(collection(db, 'analytics_sessions'), orderBy('startTime', 'desc'), limit(2000))
+    );
+    allRows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (e) { toast('Could not load visitors: ' + e.message, 'error'); return; }
+
+  const search = state.filters.search.toLowerCase();
+  const device = state.filters.device;
+  const pageF  = state.filters.page.toLowerCase();
+  const filtered = allRows.filter(r => {
+    if (search && !r.id.toLowerCase().includes(search) && !(r.entryPage || '').toLowerCase().includes(search)) return false;
+    if (device && r.device !== device) return false;
+    if (pageF  && !(r.entryPage || '').toLowerCase().includes(pageF))  return false;
+    return true;
+  });
+
+  state.pagination.total      = filtered.length;
+  state.pagination.totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const offset = (page - 1) * pageSize;
+  renderVisitorsTable(filtered.slice(offset, offset + pageSize));
+  renderPagination();
+};
+
+const loadAnalyticsView = async () => {
+  const [visitsByDay, agg] = await Promise.all([
+    getVisitsByDay(state.analyticsRange),
+    aggregateSessions(state.analyticsRange),
+  ]);
+  renderAnalyticsChart(visitsByDay);
+  renderRankList('#analyticsCountriesList', agg.deviceBreakdown);
+  renderRankList('#analyticsCitiesList',    agg.topReferrers);
+  renderRankList('#analyticsDevicesList',   agg.topPages);
+};
+
+const loadActivity = async () => {
+  try {
+    const snap = await getDocs(
+      query(collection(db, 'analytics_sessions'), orderBy('lastSeen', 'desc'), limit(25))
+    );
+    renderActivity(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+  } catch (e) { toast('Could not load activity: ' + e.message, 'error'); }
+};
+
+const refreshAll = async () => {
+  setLoadingSkeleton();
+  await loadOverview();
+};
+
+// ─── FILTERS ─────────────────────────────────────────────────────────────────
 const initFilters = () => {
-  qs('#applyFiltersBtn')?.addEventListener('click', () => {
-    state.pagination.page = 1; collectFilters();
-    loadVisitors().catch(e => toast(e.message,'error'));
-  });
+  const applyFilters = () => {
+    state.filters.search = qs('#filterSearch')?.value?.trim()  || '';
+    state.filters.device = qs('#filterCountry')?.value?.trim() || '';
+    state.filters.page   = qs('#filterPage')?.value?.trim()    || '';
+    state.pagination.page = 1;
+    loadVisitors().catch(e => toast(e.message, 'error'));
+  };
+  qs('#applyFiltersBtn')?.addEventListener('click', applyFilters);
   qs('#clearFiltersBtn')?.addEventListener('click', () => {
-    ['filterStartDate','filterEndDate','filterCountry','filterCity','filterPage','filterSearch'].forEach(id => { const el = qs('#'+id); if(el) el.value=''; });
-    state.pagination.page = 1; collectFilters();
-    loadVisitors().catch(e => toast(e.message,'error'));
+    ['filterSearch', 'filterCountry', 'filterCity', 'filterPage', 'filterStartDate', 'filterEndDate']
+      .forEach(id => { const el = qs('#' + id); if (el) el.value = ''; });
+    state.filters = { device: '', search: '', page: '' };
+    state.pagination.page = 1;
+    loadVisitors().catch(e => toast(e.message, 'error'));
   });
-  qsa('#filterSearch,#filterCountry,#filterCity,#filterPage').forEach(inp => inp.addEventListener('keydown', e => {
-    if (e.key==='Enter') { state.pagination.page=1; collectFilters(); loadVisitors().catch(er=>toast(er.message,'error')); }
-  }));
+  qsa('#filterSearch,#filterCountry,#filterPage').forEach(inp =>
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') applyFilters(); })
+  );
 };
 
 // ─── TOOLBAR ─────────────────────────────────────────────────────────────────
 const initToolbar = () => {
-  qs('#refreshBtn')?.addEventListener('click', () => refreshAll().then(()=>toast('Dashboard refreshed','success')).catch(()=>{}));
+  qs('#refreshBtn')?.addEventListener('click', () =>
+    refreshAll().then(() => toast('Dashboard refreshed', 'success')).catch(() => {})
+  );
   qs('#themeToggle')?.addEventListener('click', () => {
     const cur = document.body.getAttribute('data-theme');
-    setTheme(cur==='dark'?'light':'dark');
-    if (state.currentView==='overview')   loadAnalytics().catch(()=>{});
-    if (state.currentView==='analytics')  loadAnalyticsView().catch(()=>{});
+    setTheme(cur === 'dark' ? 'light' : 'dark');
+    if (state.currentView === 'overview')  loadOverview().catch(() => {});
+    if (state.currentView === 'analytics') loadAnalyticsView().catch(() => {});
   });
-  qs('#refreshActivityBtn')?.addEventListener('click', () => loadActivity().then(()=>toast('Feed refreshed','success')).catch(e=>toast(e.message,'error')));
-  qs('#trafficRange')?.addEventListener('change', e => { state.trafficRange=parseInt(e.target.value,10); loadAnalytics().catch(e2=>toast(e2.message,'error')); });
-  qs('#analyticsRange')?.addEventListener('change', e => { state.analyticsRange=parseInt(e.target.value,10); loadAnalyticsView().catch(e2=>toast(e2.message,'error')); });
+  qs('#refreshActivityBtn')?.addEventListener('click', () =>
+    loadActivity().then(() => toast('Feed refreshed', 'success')).catch(e => toast(e.message, 'error'))
+  );
+  qs('#trafficRange')?.addEventListener('change', e => {
+    state.trafficRange = parseInt(e.target.value, 10);
+    loadOverview().catch(e2 => toast(e2.message, 'error'));
+  });
+  qs('#analyticsRange')?.addEventListener('change', e => {
+    state.analyticsRange = parseInt(e.target.value, 10);
+    loadAnalyticsView().catch(e2 => toast(e2.message, 'error'));
+  });
   const dateEl = qs('#todayDateLabel');
-  if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 };
 
 // ─── EXPORTS ─────────────────────────────────────────────────────────────────
 const initExports = () => {
-  const doExp = (fmt) => { openDownload('/api/admin/export?format='+fmt); toast('Downloading '+fmt.toUpperCase()+'...','info'); };
-  qs('#exportCsvBtn')?.addEventListener('click',  () => doExp('csv'));
-  qs('#exportJsonBtn')?.addEventListener('click', () => doExp('json'));
-  qs('#exportCsvBtn2')?.addEventListener('click', () => doExp('csv'));
-  qs('#exportJsonBtn2')?.addEventListener('click',() => doExp('json'));
+  const doExport = async (fmt) => {
+    toast('Preparing export…', 'info');
+    try {
+      const snap = await getDocs(
+        query(collection(db, 'analytics_sessions'), orderBy('startTime', 'desc'), limit(5000))
+      );
+      const rows = snap.docs.map(d => {
+        const x = d.data();
+        return { id: d.id, startTime: toDate(x.startTime).toISOString(), lastSeen: toDate(x.lastSeen).toISOString(), device: x.device, screen: x.screen, entryPage: x.entryPage, exitPage: x.exitPage, referrer: x.referrer, duration: x.duration, isNew: x.isNew, converted: x.converted };
+      });
+      let content, mimeType, ext;
+      if (fmt === 'csv') {
+        const cols = ['id', 'startTime', 'lastSeen', 'device', 'screen', 'entryPage', 'exitPage', 'referrer', 'duration', 'isNew', 'converted'];
+        const e2 = v => { const s = String(v ?? ''); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+        content = [cols.join(','), ...rows.map(r => cols.map(c => e2(r[c])).join(','))].join('\n');
+        mimeType = 'text/csv'; ext = 'csv';
+      } else {
+        content = JSON.stringify(rows, null, 2);
+        mimeType = 'application/json'; ext = 'json';
+      }
+      const blob = new Blob([content], { type: mimeType });
+      const url  = URL.createObjectURL(blob);
+      Object.assign(document.createElement('a'), { href: url, download: `ipordise-visitors-${Date.now()}.${ext}` }).click();
+      URL.revokeObjectURL(url);
+      toast('Downloaded!', 'success');
+    } catch (e) { toast('Export failed: ' + e.message, 'error'); }
+  };
+  qs('#exportCsvBtn')?.addEventListener('click',  () => doExport('csv'));
+  qs('#exportJsonBtn')?.addEventListener('click', () => doExport('json'));
+  qs('#exportCsvBtn2')?.addEventListener('click', () => doExport('csv'));
+  qs('#exportJsonBtn2')?.addEventListener('click',() => doExport('json'));
 };
 
 // ─── AUTH ─────────────────────────────────────────────────────────────────────
 const REMEMBER_KEY = 'ipordise-admin-remember-email';
+
+const doLogout = async () => {
+  state.pollers.forEach(clearInterval); state.pollers = [];
+  Object.values(state.charts).forEach(c => { if (c) { try { c.destroy(); } catch {} } });
+  state.charts.visitsOverTime = null; state.charts.deviceBreakdown = null; state.charts.analyticsDaily = null;
+  await signOut(auth).catch(() => {});
+  showAuth();
+};
+
+const FIREBASE_ERR = {
+  'auth/invalid-credential':     'Incorrect email or password.',
+  'auth/wrong-password':         'Incorrect password.',
+  'auth/user-not-found':         'No account found with that email.',
+  'auth/too-many-requests':      'Too many attempts. Please wait a moment.',
+  'auth/network-request-failed': 'Network error. Check your connection.',
+  'auth/invalid-email':          'Invalid email address.',
+};
+
 const initAuth = () => {
-  const pwdInput  = qs('#loginPassword');
-  const pwdIcon   = qs('#togglePasswordIcon');
-  const remember  = qs('#rememberLogin');
-  const emailInput= qs('#loginUsername');
+  const pwdInput   = qs('#loginPassword');
+  const pwdIcon    = qs('#togglePasswordIcon');
+  const remember   = qs('#rememberLogin');
+  const emailInput = qs('#loginUsername');
   const saved = localStorage.getItem(REMEMBER_KEY);
-  if (saved && emailInput && remember) { emailInput.value=saved; remember.checked=true; }
+  if (saved && emailInput && remember) { emailInput.value = saved; remember.checked = true; }
 
   qs('#togglePasswordBtn')?.addEventListener('click', () => {
-    const shown = pwdInput.type==='text';
-    pwdInput.type = shown?'password':'text';
-    if (pwdIcon) pwdIcon.className = shown?'fas fa-eye':'fas fa-eye-slash';
+    const shown = pwdInput.type === 'text';
+    pwdInput.type = shown ? 'password' : 'text';
+    if (pwdIcon) pwdIcon.className = shown ? 'fas fa-eye' : 'fas fa-eye-slash';
   });
 
   qs('#loginForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const lbl=qs('#loginBtnLabel'), spn=qs('#loginBtnSpinner');
+    const lbl = qs('#loginBtnLabel'), spn = qs('#loginBtnSpinner');
     lbl?.classList.add('hidden'); spn?.classList.remove('hidden');
     qs('#authError')?.classList.add('hidden');
     try {
-      await fetchJson('/api/admin/login',{ method:'POST', body:JSON.stringify({ username:emailInput.value.trim(), password:pwdInput.value }) });
-      if (remember?.checked) localStorage.setItem(REMEMBER_KEY, emailInput.value.trim());
+      const email = emailInput.value.trim();
+      const cred  = await signInWithEmailAndPassword(auth, email, pwdInput.value);
+      if (cred.user.email?.toLowerCase() !== ADMIN_EMAIL) {
+        await signOut(auth);
+        throw new Error('Access denied — this account is not authorised as admin.');
+      }
+      if (remember?.checked) localStorage.setItem(REMEMBER_KEY, email);
       else localStorage.removeItem(REMEMBER_KEY);
-      await bootstrapDashboard();
+      await bootstrapDashboard(cred.user);
     } catch (err) {
-      const msg = /Cannot connect|endpoint not found|Failed to fetch/i.test(err.message) ? err.message+' - Make sure backend is running.' : err.message;
       const authErr = qs('#authError');
-      if (authErr) { authErr.textContent=msg; authErr.classList.remove('hidden'); }
+      if (authErr) { authErr.textContent = FIREBASE_ERR[err.code] || err.message; authErr.classList.remove('hidden'); }
     } finally { lbl?.classList.remove('hidden'); spn?.classList.add('hidden'); }
   });
 
-  const doLogout = () => {
-    state.pollers.forEach(clearInterval); state.pollers=[];
-    Object.values(state.charts).forEach(c => { if(c){ try{c.destroy();}catch{} }});
-    state.charts.visitsOverTime=null; state.charts.deviceBreakdown=null; state.charts.analyticsDaily=null;
-    showAuth();
-  };
-
-  qs('#logoutBtn')?.addEventListener('click', async () => {
-    try { await fetchJson('/api/admin/logout',{method:'POST'}); } catch {}
-    doLogout(); toast('Signed out','info');
-  });
+  qs('#logoutBtn')?.addEventListener('click', () => doLogout().then(() => toast('Signed out', 'info')));
 
   qs('#forceLogoutAllBtn')?.addEventListener('click', async () => {
-    if (!confirm('This will immediately sign out ALL admin sessions on every device. Continue?')) return;
+    if (!confirm('This will revoke ALL admin sessions on every device. Continue?')) return;
     try {
-      await fetchJson('/api/admin/force-logout-all',{method:'POST'});
-      toast('All sessions revoked — everyone must sign in again','success');
-    } catch(err) {
-      toast('Error: '+err.message,'error');
-    }
-    doLogout();
+      await setDoc(doc(db, 'admin_config', 'security'), { revokedBefore: Date.now() }, { merge: true });
+      toast('All sessions revoked — everyone must sign in again.', 'success');
+    } catch (err) { toast('Error: ' + err.message, 'error'); }
+    await doLogout();
   });
 
   const apiHint = qs('#apiHint');
-  if (apiHint) apiHint.textContent = 'API: '+state.apiBase;
+  if (apiHint) apiHint.textContent = 'Firebase · ' + firebaseConfig.projectId;
 };
 
 // ─── BOOTSTRAP ───────────────────────────────────────────────────────────────
-const bootstrapDashboard = async () => {
-  const session = await fetchJson('/api/admin/session');
+const bootstrapDashboard = async (user) => {
+  try {
+    const tokenResult   = await user.getIdTokenResult(true);
+    const iat           = new Date(tokenResult.issuedAtTime).getTime();
+    const configSnap    = await getDoc(doc(db, 'admin_config', 'security'));
+    const revokedBefore = configSnap.exists() ? (configSnap.data()?.revokedBefore || 0) : 0;
+    if (iat < revokedBefore) {
+      await signOut(auth);
+      showAuth();
+      toast('Your session was revoked. Please sign in again.', 'error');
+      return;
+    }
+  } catch {}
+
   const userEl = qs('#sidebarUserEmail');
-  if (userEl && session?.user) userEl.textContent = session.user;
+  if (userEl) userEl.textContent = user.email || ADMIN_EMAIL;
   showDashboard();
   switchView('overview');
   setLoadingSkeleton();
-  collectFilters();
-  await refreshAll();
-  state.pollers.forEach(clearInterval); state.pollers=[];
+  await refreshAll().catch(e => toast(e.message, 'error'));
+  state.pollers.forEach(clearInterval); state.pollers = [];
   state.pollers = [
-    setInterval(() => loadOverview().catch(()=>{}), 10000),
-    setInterval(() => loadActivity().catch(()=>{}), 12000),
+    setInterval(() => loadOverview().catch(() => {}),  30_000),
+    setInterval(() => { if (state.currentView === 'activity') loadActivity().catch(() => {}); }, 15_000),
   ];
 };
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-const init = async () => {
+const init = () => {
   initTheme();
   initAuth();
   initSidebar();
   initFilters();
   initExports();
   initToolbar();
-  try { await bootstrapDashboard(); } catch { showAuth(); }
+  onAuthStateChanged(auth, async (user) => {
+    if (user && !user.isAnonymous && user.email?.toLowerCase() === ADMIN_EMAIL) {
+      try { await bootstrapDashboard(user); }
+      catch { showAuth(); }
+    } else {
+      showAuth();
+    }
+  });
 };
 
-init().catch(() => showAuth());
+init();

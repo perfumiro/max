@@ -10,8 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="assets/admin/admin.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
-  <script src="assets/admin/admin.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script type="module" src="assets/admin/admin.js"></script>
 </head>
 <body data-theme="dark">
   <div id="toastContainer" aria-live="polite"></div>
@@ -142,7 +142,7 @@
             </div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th>Time</th><th>Visitor</th><th>IP</th><th>Location</th><th>Page</th><th>Device</th><th>Status</th></tr></thead>
+                <thead><tr><th>Time</th><th>Session</th><th>Entry Page</th><th>Device</th><th>Referrer</th><th>Duration</th><th>Status</th></tr></thead>
                 <tbody id="latestVisitorsBody"></tbody>
               </table>
             </div>
@@ -158,7 +158,7 @@
               <button class="btn btn-xs btn-danger" id="clearFiltersBtn">Clear All</button>
             </div>
             <div class="card-body filters-grid">
-              <input id="filterSearch"    class="filter-input" type="search" placeholder="Search IP or Visitor ID...">
+              <input id="filterSearch"    class="filter-input" type="search" placeholder="Search session ID or page...">
               <input id="filterCountry"   class="filter-input" type="search" placeholder="Country">
               <input id="filterCity"      class="filter-input" type="search" placeholder="City">
               <input id="filterPage"      class="filter-input" type="search" placeholder="Page URL">
@@ -177,7 +177,7 @@
             </div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th>Timestamp</th><th>Visitor ID</th><th>IP</th><th>Location</th><th>Page</th><th>Device</th><th>Browser / OS</th><th>Referrer</th><th>Type</th></tr></thead>
+                <thead><tr><th>Timestamp</th><th>Session ID</th><th>Entry Page</th><th>Device</th><th>Referrer</th><th>Duration</th><th>Type</th></tr></thead>
                 <tbody id="visitorsBody"></tbody>
               </table>
             </div>

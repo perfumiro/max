@@ -2,9 +2,13 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // ── Admin helper ─────────────────────────────────────────────────────
+    function isAdmin() {
+      return request.auth != null
+          && request.auth.token.email == 'admin@ipordise.com';
+    }
+
     // ── Reviews ─────────────────────────────────────────────────────────
-    // Anyone can read reviews.
-    // A signed-in user can create or update their own review only.
     match /reviews/{reviewId} {
       allow read: if true;
       allow write: if request.auth != null
@@ -21,6 +25,33 @@ service cloud.firestore {
     match /orders/{orderId} {
       allow read:  if request.auth != null && request.auth.uid == resource.data.uid;
       allow create: if request.auth != null;
+    }
+
+    // ── Analytics: any authenticated user (incl. anonymous) can write ────
+    //               only admin can read
+    match /analytics_sessions/{sid} {
+      allow read:  if isAdmin();
+      allow write: if request.auth != null;
+    }
+
+    match /analytics_daily/{day} {
+      allow read:  if isAdmin();
+      allow write: if request.auth != null;
+    }
+
+    match /analytics_products/{productId} {
+      allow read:  if isAdmin();
+      allow write: if request.auth != null;
+    }
+
+    match /analytics_live/{docId} {
+      allow read:  if isAdmin();
+      allow write: if request.auth != null;
+    }
+
+    // ── Admin config (force-logout timestamp) ────────────────────────────
+    match /admin_config/{docId} {
+      allow read, write: if isAdmin();
     }
 
   }
