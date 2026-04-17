@@ -1,1117 +1,234 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        (() => {
-            const hostname = window.location.hostname;
-            const protocol = window.location.protocol;
-            const isLocalPreview = protocol === 'file:'
-                || hostname === ''
-                || hostname === 'localhost'
-                || hostname === '127.0.0.1'
-                || hostname === '0.0.0.0';
-
-            if (!isLocalPreview || typeof window.fetch !== 'function') return;
-
-            const pageUrl = new URL(window.location.href);
-            pageUrl.hash = '';
-            pageUrl.searchParams.delete('previewRefreshTs');
-
-            let previousFingerprint = '';
-            let isReloading = false;
-
-            const getFingerprint = async () => {
-                const probeUrl = new URL(pageUrl.href);
-                probeUrl.searchParams.set('previewRefreshTs', String(Date.now()));
-
-                try {
-                    const headResponse = await window.fetch(probeUrl.href, {
-                        method: 'HEAD',
-                        cache: 'no-store'
-                    });
-
-                    if (headResponse.ok) {
-                        const etag = headResponse.headers.get('etag') || '';
-                        const lastModified = headResponse.headers.get('last-modified') || '';
-                        const contentLength = headResponse.headers.get('content-length') || '';
-                        const headerFingerprint = `${etag}|${lastModified}|${contentLength}`;
-
-                        if (headerFingerprint !== '||') return headerFingerprint;
-                    }
-                } catch {
-                    // Fall back to GET for servers that do not support HEAD.
-                }
-
-                try {
-                    const response = await window.fetch(probeUrl.href, { cache: 'no-store' });
-                    if (!response.ok) return null;
-
-                    const text = await response.text();
-                    return `${text.length}|${text.slice(0, 256)}|${text.slice(-256)}`;
-                } catch {
-                    return null;
-                }
-            };
-
-            const checkForChanges = async () => {
-                if (document.hidden || isReloading) return;
-
-                const fingerprint = await getFingerprint();
-                if (!fingerprint) return;
-
-                if (previousFingerprint && previousFingerprint !== fingerprint) {
-                    isReloading = true;
-                    window.location.reload();
-                    return;
-                }
-
-                previousFingerprint = fingerprint;
-            };
-
-            checkForChanges();
-            window.setInterval(checkForChanges, 2000);
-        })();
-    </script>
-    <title>IPORDISE Analytics Dashboard</title>
-    <meta name="robots" content="noindex, nofollow">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <style>
-      /* ══════════════════════════════════════════════
-         IPORDISE Analytics — Premium Dashboard CSS
-      ══════════════════════════════════════════════ */
-      :root{
-        --red:#c8102e; --red-dim:#fef2f2;
-        --dark:#0d0d0d; --dark2:#161616;
-        --ink:#111827; --sub:#6b7280;
-        --border:#f0f0f0; --border2:#e5e7eb;
-        --bg:#f5f5f7; --card:#ffffff;
-        --green:#16a34a; --green-bg:#f0fdf4;
-        --blue:#2563eb; --blue-bg:#eff6ff;
-        --amber:#d97706; --amber-bg:#fffbeb;
-        --purple:#7c3aed; --purple-bg:#f5f3ff;
-        --radius:14px; --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.05);
-        --shadow-lg:0 8px 32px rgba(0,0,0,.10);
-      }
-      *{box-sizing:border-box;margin:0;padding:0}
-      body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
-
-      /* ── Auth screen ─────────────────────────────────── */
-      #authGuard{
-        min-height:100vh;display:flex;align-items:center;justify-content:center;
-        background:var(--dark);
-        background-image:radial-gradient(ellipse 80% 60% at 15% 25%,rgba(200,16,46,.08) 0%,transparent 60%),
-          radial-gradient(ellipse 60% 50% at 85% 75%,rgba(200,16,46,.05) 0%,transparent 55%);
-      }
-      .login-card{
-        width:100%;max-width:400px;margin:1.5rem;
-        background:rgba(255,255,255,.04);
-        border:1px solid rgba(255,255,255,.1);
-        border-radius:20px;
-        padding:2.5rem 2.25rem;
-        backdrop-filter:blur(20px);
-        box-shadow:0 32px 80px rgba(0,0,0,.5);
-      }
-      .login-logo-ring{
-        width:60px;height:60px;border-radius:50%;
-        background:linear-gradient(135deg,var(--red) 0%,#ff6b6b 100%);
-        display:flex;align-items:center;justify-content:center;
-        margin:0 auto 1.2rem;
-        box-shadow:0 8px 24px rgba(200,16,46,.4);
-      }
-      .login-logo-ring i{color:#fff;font-size:1.3rem}
-      .login-title{color:#fff;font-size:1.25rem;font-weight:800;letter-spacing:.04em;text-align:center}
-      .login-sub{color:rgba(255,255,255,.4);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;text-align:center;margin-top:.3rem;margin-bottom:2rem}
-      .login-err{
-        display:none;background:rgba(200,16,46,.15);border:1px solid rgba(200,16,46,.3);
-        color:#fca5a5;font-size:.8rem;padding:.65rem .9rem;border-radius:10px;margin-bottom:1.1rem;
-      }
-      .login-field{position:relative;margin-bottom:.85rem}
-      .login-field-icon{
-        position:absolute;left:1rem;top:50%;transform:translateY(-50%);
-        color:rgba(255,255,255,.3);font-size:.8rem;pointer-events:none;
-      }
-      .login-input{
-        width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
-        border-radius:10px;padding:.8rem 1rem .8rem 2.6rem;
-        color:#fff;font-family:inherit;font-size:.88rem;outline:none;
-        transition:border-color .2s,background .2s;
-      }
-      .login-input::placeholder{color:rgba(255,255,255,.28)}
-      .login-input:focus{border-color:rgba(200,16,46,.6);background:rgba(255,255,255,.1)}
-      .login-eye{
-        position:absolute;right:.9rem;top:50%;transform:translateY(-50%);
-        background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;padding:2px;
-        transition:color .2s;
-      }
-      .login-eye:hover{color:rgba(255,255,255,.7)}
-      .login-btn{
-        width:100%;background:var(--red);color:#fff;border:none;
-        border-radius:10px;padding:.85rem 1rem;font-weight:700;font-size:.9rem;
-        cursor:pointer;letter-spacing:.03em;
-        display:flex;align-items:center;justify-content:center;gap:.55rem;
-        transition:background .2s,transform .1s,box-shadow .2s;
-        box-shadow:0 4px 16px rgba(200,16,46,.35);margin-top:.3rem;
-      }
-      .login-btn:hover{background:#a50d26;box-shadow:0 6px 20px rgba(200,16,46,.45)}
-      .login-btn:active{transform:scale(.98)}
-      .login-btn:disabled{opacity:.65;cursor:not-allowed;transform:none}
-      .login-divider{height:1px;background:rgba(255,255,255,.08);margin:1.5rem 0}
-      .login-footer{text-align:center;color:rgba(255,255,255,.25);font-size:.72rem}
-
-      /* ── Header ──────────────────────────────────────── */
-      .adm-header{
-        background:var(--dark);color:#fff;
-        padding:0 1.75rem;height:60px;
-        display:flex;align-items:center;gap:.85rem;
-        position:sticky;top:0;z-index:100;
-        border-bottom:1px solid rgba(255,255,255,.06);
-      }
-      .adm-logo{font-weight:800;font-size:.95rem;letter-spacing:.1em;color:#fff;display:flex;align-items:center;gap:.5rem}
-      .adm-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--red)}
-      .adm-spacer{flex:1}
-      .adm-badge{
-        background:rgba(200,16,46,.18);color:#f87171;
-        font-size:.65rem;font-weight:700;padding:.22rem .6rem;
-        border-radius:99px;letter-spacing:.06em;text-transform:uppercase;
-      }
-      .adm-hbtn{
-        background:rgba(255,255,255,.06);color:#9ca3af;
-        border:1px solid rgba(255,255,255,.1);
-        padding:.38rem .85rem;border-radius:8px;font-size:.78rem;
-        cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;
-        transition:all .15s;font-family:inherit;
-      }
-      .adm-hbtn:hover{background:rgba(255,255,255,.12);color:#fff}
-
-      /* ── Tab bar ─────────────────────────────────────── */
-      .adm-tabs{
-        background:#fff;border-bottom:1px solid var(--border2);
-        display:flex;gap:0;padding:0 1.75rem;
-        box-shadow:0 1px 0 var(--border);
-      }
-      .adm-tab{
-        padding:.8rem 1.15rem;font-size:.82rem;font-weight:600;
-        color:var(--sub);border:none;background:transparent;
-        border-bottom:2px solid transparent;cursor:pointer;
-        display:inline-flex;align-items:center;gap:.45rem;
-        transition:color .15s,border-color .15s;white-space:nowrap;
-        font-family:inherit;
-      }
-      .adm-tab:hover{color:var(--ink)}
-      .adm-tab.active{color:var(--ink);border-bottom-color:var(--red)}
-
-      /* ── Page frame ──────────────────────────────────── */
-      .adm-main{padding:1.75rem;max-width:1440px;margin:0 auto}
-      .adm-panel{display:none}
-      .adm-panel.active{display:block;animation:fadeIn .22s ease}
-      @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-
-      /* ── Section heading ─────────────────────────────── */
-      .section-head{
-        display:flex;align-items:center;justify-content:space-between;
-        margin-bottom:1.25rem;flex-wrap:wrap;gap:.5rem;
-      }
-      .section-title{font-size:.78rem;font-weight:700;text-transform:uppercase;
-        letter-spacing:.08em;color:var(--sub)}
-
-      /* ── Stat cards ──────────────────────────────────── */
-      .stat-grid{
-        display:grid;gap:1rem;
-        grid-template-columns:repeat(auto-fill,minmax(168px,1fr));
-        margin-bottom:1.5rem;
-      }
-      .stat-card{
-        background:var(--card);border:1px solid var(--border);
-        border-radius:var(--radius);padding:1.2rem 1.3rem;
-        box-shadow:var(--shadow);display:flex;flex-direction:column;gap:.2rem;
-        transition:box-shadow .2s;
-      }
-      .stat-card:hover{box-shadow:var(--shadow-lg)}
-      .stat-icon{
-        width:36px;height:36px;border-radius:10px;
-        display:flex;align-items:center;justify-content:center;
-        font-size:.88rem;margin-bottom:.55rem;
-      }
-      .stat-val{font-size:1.6rem;font-weight:800;line-height:1.1;letter-spacing:-.02em}
-      .stat-lbl{
-        font-size:.68rem;color:var(--sub);font-weight:600;
-        text-transform:uppercase;letter-spacing:.05em;margin-top:.1rem;
-      }
-
-      /* ── Live badge ──────────────────────────────────── */
-      .live-badge{
-        display:inline-flex;align-items:center;gap:.4rem;
-        background:var(--green-bg);color:var(--green);
-        font-size:.72rem;font-weight:700;padding:.25rem .7rem;border-radius:99px;
-        border:1px solid rgba(22,163,74,.15);
-      }
-      .live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.6s infinite}
-      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-      @keyframes spin{to{transform:rotate(360deg)}}
-
-      /* ── Funnel ──────────────────────────────────────── */
-      .funnel-grid{
-        display:flex;gap:.85rem;margin-bottom:1.5rem;flex-wrap:wrap;
-      }
-      .funnel-step{
-        flex:1;min-width:130px;
-        background:var(--card);border:1px solid var(--border);
-        border-radius:var(--radius);padding:1.25rem 1rem;
-        text-align:center;position:relative;box-shadow:var(--shadow);
-      }
-      .funnel-step+.funnel-step::before{
-        content:'\f054';font-family:"Font Awesome 6 Free";font-weight:900;
-        position:absolute;left:calc(-0.85rem - 6px);top:50%;
-        transform:translateY(-50%);color:#d1d5db;font-size:.6rem;
-      }
-      .funnel-n{font-size:1.65rem;font-weight:800;letter-spacing:-.02em}
-      .funnel-l{
-        font-size:.67rem;color:var(--sub);font-weight:600;
-        text-transform:uppercase;letter-spacing:.05em;margin-top:.25rem;
-      }
-      .funnel-pct{
-        display:inline-flex;align-items:center;gap:.25rem;
-        font-size:.72rem;font-weight:700;color:var(--green);
-        background:var(--green-bg);padding:.15rem .5rem;
-        border-radius:99px;margin-top:.5rem;
-      }
-
-      /* ── Chart cards ─────────────────────────────────── */
-      .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
-      @media(max-width:860px){.chart-grid{grid-template-columns:1fr}}
-      .chart-card{
-        background:var(--card);border:1px solid var(--border);
-        border-radius:var(--radius);padding:1.3rem 1.4rem;
-        box-shadow:var(--shadow);
-      }
-      .chart-title{
-        font-size:.75rem;font-weight:700;color:var(--ink);
-        margin-bottom:1rem;text-transform:uppercase;letter-spacing:.06em;
-        display:flex;align-items:center;gap:.45rem;
-      }
-      .chart-title-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-      .chart-wrap{position:relative;height:210px}
-
-      /* ── Table cards ─────────────────────────────────── */
-      .tbl-card{
-        background:var(--card);border:1px solid var(--border);
-        border-radius:var(--radius);overflow:hidden;
-        margin-bottom:1.5rem;box-shadow:var(--shadow);
-      }
-      .tbl-head{
-        padding:1rem 1.4rem;border-bottom:1px solid var(--border);
-        display:flex;align-items:center;justify-content:space-between;
-        gap:.75rem;flex-wrap:wrap;
-      }
-      .tbl-title{
-        font-size:.75rem;font-weight:700;
-        text-transform:uppercase;letter-spacing:.07em;
-        display:flex;align-items:center;gap:.45rem;
-      }
-      .tbl-wrap{overflow-x:auto}
-      table{width:100%;border-collapse:collapse;font-size:.8rem}
-      th{
-        background:#fafafa;color:var(--sub);font-weight:700;
-        text-transform:uppercase;letter-spacing:.05em;font-size:.67rem;
-        padding:.7rem 1.2rem;text-align:left;white-space:nowrap;
-        border-bottom:1px solid var(--border2);
-      }
-      td{padding:.7rem 1.2rem;border-top:1px solid var(--border);vertical-align:middle}
-      tr:hover td{background:#fafafa}
-      .adm-select{
-        font-size:.78rem;padding:.35rem .7rem;
-        border:1px solid var(--border2);border-radius:8px;
-        cursor:pointer;color:var(--ink);background:#fff;
-        font-family:inherit;outline:none;
-      }
-      .adm-select:focus{border-color:#aaa}
-
-      /* ── Progress bars ───────────────────────────────── */
-      .pbar-wrap{display:flex;align-items:center;gap:.6rem}
-      .pbar{height:4px;background:#f3f4f6;border-radius:99px;flex:1;overflow:hidden;min-width:44px}
-      .pbar-fill{height:100%;border-radius:99px;background:var(--red);transition:width .5s}
-      .pbar-fill.green{background:var(--green)}
-      .pbar-fill.blue{background:var(--blue)}
-
-      /* ── Badges ──────────────────────────────────────── */
-      .badge{
-        display:inline-flex;align-items:center;gap:.25rem;
-        padding:.2rem .6rem;border-radius:99px;font-size:.66rem;font-weight:700;
-      }
-      .badge-green{background:var(--green-bg);color:var(--green)}
-      .badge-red{background:var(--red-dim);color:var(--red)}
-      .badge-blue{background:var(--blue-bg);color:var(--blue)}
-      .badge-gray{background:#f3f4f6;color:var(--sub)}
-      .badge-amber{background:var(--amber-bg);color:var(--amber)}
-
-      /* ── Live panel ──────────────────────────────────── */
-      .live-grid{display:grid;grid-template-columns:280px 1fr;gap:1rem}
-      @media(max-width:720px){.live-grid{grid-template-columns:1fr}}
-      .live-counter-card{
-        background:var(--dark);border-radius:var(--radius);
-        padding:2.2rem 1.5rem;text-align:center;
-        display:flex;flex-direction:column;align-items:center;gap:.5rem;
-        box-shadow:var(--shadow-lg);
-      }
-      .live-big-n{font-size:4.5rem;font-weight:900;line-height:1;color:#fff;letter-spacing:-.03em}
-      .live-sub{font-size:.78rem;color:#6b7280}
-      .live-page-list{
-        background:var(--card);border:1px solid var(--border);
-        border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
-      }
-      .live-page-item{
-        padding:.8rem 1.2rem;border-bottom:1px solid var(--border);
-        display:flex;align-items:center;justify-content:space-between;
-        font-size:.8rem;gap:.5rem;transition:background .15s;
-      }
-      .live-page-item:hover{background:#fafafa}
-      .live-page-item:last-child{border-bottom:none}
-
-      /* ── Empty state ─────────────────────────────────── */
-      .empty{padding:3.5rem 1rem;text-align:center;color:var(--sub)}
-      .empty i{font-size:2rem;margin-bottom:.9rem;display:block;opacity:.2}
-      .empty p{font-size:.82rem;line-height:1.6}
-
-      /* ── Skeleton loading ────────────────────────────── */
-      .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200%;border-radius:6px;animation:shimmer 1.4s infinite}
-      @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-      /* ── Access denied box ───────────────────────────── */
-      .denied-card{
-        width:100%;max-width:380px;margin:1.5rem;
-        background:rgba(255,255,255,.05);
-        border:1px solid rgba(255,255,255,.1);
-        border-radius:20px;padding:2.5rem;
-        backdrop-filter:blur(20px);
-        text-align:center;
-      }
-
-      /* ── Scrollbar ───────────────────────────────────── */
-      ::-webkit-scrollbar{width:5px;height:5px}
-      ::-webkit-scrollbar-track{background:transparent}
-      ::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:99px}
-      ::-webkit-scrollbar-thumb:hover{background:#9ca3af}
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>IPORDISE Admin - Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/admin/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+  <script src="assets/admin/admin.js" defer></script>
 </head>
-<body>
-
-<!-- ── Auth guard (login + checking screens) ────────────────── -->
-<div id="authGuard">
-
-  <!-- Checking / spinner -->
-  <div id="authChecking" style="display:flex;flex-direction:column;align-items:center;gap:.9rem">
-    <div style="width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,.1);border-top-color:var(--red);animation:spin .7s linear infinite"></div>
-    <p style="color:rgba(255,255,255,.4);font-size:.82rem;letter-spacing:.04em">Verifying access…</p>
-  </div>
-
-  <!-- Login card -->
-  <div id="adminLoginBox" style="display:none">
-    <div class="login-card">
-      <div class="login-logo-ring"><i class="fas fa-chart-line"></i></div>
-      <div class="login-title">IPORDISE</div>
-      <div class="login-sub">Admin Analytics Portal</div>
-
-      <div id="loginErr" class="login-err"></div>
-
-      <div class="login-field">
-        <i class="fas fa-envelope login-field-icon"></i>
-        <input id="loginEmail" type="email" class="login-input"
-          placeholder="Enter your email" autocomplete="username">
+<body data-theme="dark">
+  <div id="toastContainer" aria-live="polite"></div>
+  <section id="authScreen" class="auth-shell">
+    <form id="loginForm" class="auth-card" autocomplete="on">
+      <div class="auth-logo-wrap">
+        <div class="auth-logo-icon"><i class="fas fa-gem"></i></div>
+        <div><div class="auth-logo-name">IPORDISE</div><div class="auth-logo-sub">Admin Analytics</div></div>
       </div>
-
-      <div class="login-field" style="margin-bottom:1.3rem">
-        <i class="fas fa-lock login-field-icon"></i>
-        <input id="loginPass" type="password" class="login-input"
-          placeholder="Password" autocomplete="current-password"
-          style="padding-right:2.8rem">
-        <button type="button" id="loginTogglePw" class="login-eye">
-          <i class="fas fa-eye" id="loginEyeIcon"></i>
-        </button>
+      <h1 class="auth-title">Secure analytics access</h1>
+      <p class="auth-sub">Sign in to view visitor tracking, live activity and performance data.</p>
+      <label class="auth-row" for="loginUsername">
+        <span class="auth-label">Admin email</span>
+        <input id="loginUsername" class="auth-input" type="email" name="username" placeholder="admin@ipordise.com" required>
+      </label>
+      <label class="auth-row" for="loginPassword">
+        <span class="auth-label">Password</span>
+        <span class="auth-password-wrap">
+          <input id="loginPassword" class="auth-input auth-input-password" type="password" name="password" placeholder="Enter password" required>
+          <button id="togglePasswordBtn" class="auth-password-toggle" type="button" aria-label="Show password">
+            <i class="fas fa-eye" id="togglePasswordIcon"></i>
+          </button>
+        </span>
+      </label>
+      <div class="auth-options-row">
+        <label class="auth-toggle" for="rememberLogin">
+          <input id="rememberLogin" type="checkbox">
+          <span>Remember email</span>
+        </label>
       </div>
-
-      <button id="loginBtn" type="button" class="login-btn">
-        <i class="fas fa-right-to-bracket"></i> Sign in to Dashboard
+      <button class="btn btn-primary" type="submit" id="loginSubmitBtn">
+        <span id="loginBtnLabel">Sign In</span>
+        <span id="loginBtnSpinner" class="hidden"><i class="fas fa-circle-notch fa-spin"></i> Signing in...</span>
       </button>
+      <div id="authError" class="auth-error hidden" role="alert"></div>
+      <p id="apiHint" class="auth-hint"></p>
+    </form>
+  </section>
 
-      <div class="login-divider"></div>
-      <div class="login-footer">ipordise.com &nbsp;·&nbsp; Restricted access</div>
-    </div>
+  <div id="dashboardScreen" class="dashboard-shell hidden">
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon"><i class="fas fa-gem"></i></div>
+        <div><div class="sidebar-logo-name">IPORDISE</div><div class="sidebar-logo-sub">Command Center</div></div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Dashboard</div>
+        <a class="sidebar-item active" data-view="overview"><i class="fas fa-chart-pie sidebar-item-icon"></i><span>Overview</span></a>
+        <a class="sidebar-item" data-view="visitors"><i class="fas fa-users sidebar-item-icon"></i><span>Visitors</span><span class="sidebar-badge" id="navTodayBadge">0</span></a>
+        <a class="sidebar-item" data-view="analytics"><i class="fas fa-chart-line sidebar-item-icon"></i><span>Analytics</span></a>
+        <a class="sidebar-item" data-view="activity"><i class="fas fa-satellite-dish sidebar-item-icon"></i><span>Live Feed</span><span class="sidebar-badge live-badge-nav" id="navLiveBadge">live</span></a>
+        <div class="sidebar-section-label" style="margin-top:14px;">Export</div>
+        <a class="sidebar-item" id="exportCsvBtn"><i class="fas fa-file-csv sidebar-item-icon"></i><span>Export CSV</span></a>
+        <a class="sidebar-item" id="exportJsonBtn"><i class="fas fa-file-code sidebar-item-icon"></i><span>Export JSON</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">AD</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="sidebarUserEmail">admin</div>
+            <div class="sidebar-user-role">Super Admin</div>
+          </div>
+        </div>
+        <button id="logoutBtn" class="sidebar-item sidebar-item-danger"><i class="fas fa-right-from-bracket sidebar-item-icon"></i><span>Sign Out</span></button>
+      </div>
+    </aside>
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <main class="main-wrap">
+      <header class="topbar">
+        <button class="topbar-menu-btn" id="menuBtn" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button>
+        <div class="topbar-live"><span class="live-dot"></span><span id="onlineCount">0</span> online now</div>
+        <div class="topbar-right">
+          <span class="topbar-updated" id="lastUpdated">Loading...</span>
+          <button class="topbar-icon-btn" id="refreshBtn" title="Refresh"><i class="fas fa-rotate-right"></i></button>
+          <button class="topbar-icon-btn" id="themeToggle" title="Toggle theme"><i class="fas fa-moon" id="themeIcon"></i></button>
+        </div>
+      </header>
+
+      <div class="scroll-area" id="scrollArea">
+
+        <section id="view-overview" class="view active">
+          <div class="view-title">Overview <span class="view-title-sub" id="todayDateLabel"></span></div>
+          <div id="statsGrid" class="stats-grid"></div>
+          <div class="charts-row">
+            <div class="card chart-card-main">
+              <div class="card-head">
+                <span class="card-title"><i class="fas fa-chart-area card-title-icon"></i> Traffic Overview</span>
+                <select class="select-sm" id="trafficRange">
+                  <option value="7">Last 7 days</option>
+                  <option value="14">Last 14 days</option>
+                  <option value="30" selected>Last 30 days</option>
+                  <option value="90">Last 90 days</option>
+                </select>
+              </div>
+              <div class="card-body"><div class="chart-box"><canvas id="visitsOverTimeChart"></canvas></div></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><span class="card-title"><i class="fas fa-mobile-screen card-title-icon"></i> Devices</span></div>
+              <div class="card-body card-body-center">
+                <div class="donut-wrap">
+                  <div class="chart-box-donut"><canvas id="deviceBreakdownChart"></canvas></div>
+                  <div class="donut-center-label"><span id="donutTotalVal">-</span><span>visits</span></div>
+                </div>
+                <ul class="donut-legend" id="deviceLegend"></ul>
+              </div>
+            </div>
+          </div>
+          <div class="details-grid">
+            <div class="card">
+              <div class="card-head"><span class="card-title"><i class="fas fa-globe card-title-icon"></i> Top Countries</span></div>
+              <div class="card-body card-body-list" id="topCountriesList"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><span class="card-title"><i class="fas fa-file-lines card-title-icon"></i> Top Pages</span></div>
+              <div class="card-body card-body-list" id="topPagesList"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><span class="card-title"><i class="fas fa-window-maximize card-title-icon"></i> Browsers</span></div>
+              <div class="card-body card-body-list" id="browserBreakdownList"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <span class="card-title"><i class="fas fa-satellite-dish card-title-icon"></i> Latest Visitors</span>
+              <button class="btn btn-xs" data-view="visitors">View All</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Time</th><th>Visitor</th><th>IP</th><th>Location</th><th>Page</th><th>Device</th><th>Status</th></tr></thead>
+                <tbody id="latestVisitorsBody"></tbody>
+              </table>
+            </div>
+            <div id="latestVisitorsMobile" class="mobile-cards card-body"></div>
+          </div>
+        </section>
+
+        <section id="view-visitors" class="view">
+          <div class="view-title">Visitors <span class="view-title-sub" id="visitorCountLabel">-</span></div>
+          <div class="card filters-card">
+            <div class="card-head">
+              <span class="card-title"><i class="fas fa-filter card-title-icon"></i> Smart Filters</span>
+              <button class="btn btn-xs btn-danger" id="clearFiltersBtn">Clear All</button>
+            </div>
+            <div class="card-body filters-grid">
+              <input id="filterSearch"    class="filter-input" type="search" placeholder="Search IP or Visitor ID...">
+              <input id="filterCountry"   class="filter-input" type="search" placeholder="Country">
+              <input id="filterCity"      class="filter-input" type="search" placeholder="City">
+              <input id="filterPage"      class="filter-input" type="search" placeholder="Page URL">
+              <input id="filterStartDate" class="filter-input" type="date">
+              <input id="filterEndDate"   class="filter-input" type="date">
+              <button class="btn btn-gold filters-search-btn" id="applyFiltersBtn"><i class="fas fa-magnifying-glass"></i> Search</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <span class="card-title"><i class="fas fa-table-list card-title-icon"></i> Visitor Log</span>
+              <div class="card-head-actions">
+                <button class="btn btn-xs" id="exportCsvBtn2"><i class="fas fa-download"></i> CSV</button>
+                <button class="btn btn-xs" id="exportJsonBtn2"><i class="fas fa-download"></i> JSON</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Timestamp</th><th>Visitor ID</th><th>IP</th><th>Location</th><th>Page</th><th>Device</th><th>Browser / OS</th><th>Referrer</th><th>Type</th></tr></thead>
+                <tbody id="visitorsBody"></tbody>
+              </table>
+            </div>
+            <div id="visitorsMobile" class="mobile-cards card-body"></div>
+            <div class="pagination">
+              <span class="pagination-info" id="paginationInfo">-</span>
+              <div class="pagination-controls" id="paginationControls"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-analytics" class="view">
+          <div class="view-title">Analytics <span class="view-title-sub">deep dive</span></div>
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-head">
+              <span class="card-title"><i class="fas fa-chart-column card-title-icon"></i> Daily Traffic</span>
+              <select class="select-sm" id="analyticsRange">
+                <option value="7">7 days</option><option value="14">14 days</option>
+                <option value="30" selected>30 days</option><option value="90">90 days</option>
+              </select>
+            </div>
+            <div class="card-body"><div class="chart-box" style="height:280px;"><canvas id="analyticsDailyChart"></canvas></div></div>
+          </div>
+          <div class="details-grid">
+            <div class="card">
+              <div class="card-head"><span class="card-title"><i class="fas fa-map-location-dot card-title-icon"></i> Countries</span></div>
+              <div class="card-body card-body-list" id="analyticsCountriesList"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><span class="card-title"><i class="fas fa-city card-title-icon"></i> Cities</span></div>
+              <div class="card-body card-body-list" id="analyticsCitiesList"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><span class="card-title"><i class="fas fa-desktop card-title-icon"></i> Device Split</span></div>
+              <div class="card-body card-body-list" id="analyticsDevicesList"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-activity" class="view">
+          <div class="view-title">Live Feed <span class="view-title-sub">auto-refresh every 12s</span></div>
+          <div class="card">
+            <div class="card-head">
+              <span class="card-title"><i class="fas fa-rss card-title-icon"></i> Recent Activity</span>
+              <button class="btn btn-xs btn-gold" id="refreshActivityBtn"><i class="fas fa-rotate-right"></i> Refresh</button>
+            </div>
+            <div class="card-body"><div id="activityFeed" class="activity-feed"></div></div>
+          </div>
+        </section>
+
+      </div>
+    </main>
   </div>
-
-</div>
-
-<!-- ── Dashboard (shown after auth) ─────────────────────────── -->
-<div id="dashboard" style="display:none">
-
-  <header class="adm-header">
-    <div class="adm-logo">
-      <div class="adm-logo-dot"></div>
-      IPORDISE
-    </div>
-    <span class="adm-badge">Analytics</span>
-    <div class="adm-spacer"></div>
-    <span class="live-badge" id="liveHeaderBadge">
-      <span class="live-dot"></span>
-      <span id="liveHeaderCount">–</span>&nbsp;live
-    </span>
-    <button class="adm-hbtn" id="refreshBtn"><i class="fas fa-rotate-right"></i> Refresh</button>
-    <button class="adm-hbtn" id="logoutBtn"><i class="fas fa-arrow-right-from-bracket"></i> Logout</button>
-  </header>
-
-  <nav class="adm-tabs">
-    <button class="adm-tab active" data-tab="overview"><i class="fas fa-chart-pie"></i> Overview</button>
-    <button class="adm-tab" data-tab="products"><i class="fas fa-spray-can-sparkles"></i> Products</button>
-    <button class="adm-tab" data-tab="sessions"><i class="fas fa-users"></i> Sessions</button>
-    <button class="adm-tab" data-tab="live"><i class="fas fa-signal"></i> Live</button>
-    <button class="adm-tab" data-tab="users"><i class="fas fa-address-book"></i> Users</button>
-  </nav>
-
-  <main class="adm-main">
-
-    <!-- OVERVIEW -->
-    <div class="adm-panel active" id="panel-overview">
-      <div class="section-head"><span class="section-title">Today's Overview</span></div>
-      <div class="stat-grid" id="statGrid"></div>
-
-      <div class="section-head"><span class="section-title">Conversion Funnel</span></div>
-      <div class="funnel-grid" id="funnelGrid"></div>
-
-      <div class="section-head"><span class="section-title">7-Day Trends</span></div>
-      <div class="chart-grid">
-        <div class="chart-card">
-          <div class="chart-title"><span class="chart-title-dot" style="background:var(--red)"></span>Sessions</div>
-          <div class="chart-wrap"><canvas id="sessionsChart"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title"><span class="chart-title-dot" style="background:var(--blue)"></span>Conversions</div>
-          <div class="chart-wrap"><canvas id="convChart"></canvas></div>
-        </div>
-      </div>
-
-      <div class="section-head"><span class="section-title">Performance</span></div>
-      <div class="chart-grid">
-        <div class="tbl-card">
-          <div class="tbl-head"><span class="tbl-title"><span class="chart-title-dot" style="background:#f59e0b;margin-right:.1rem"></span>Top Products — Cart Adds</span></div>
-          <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Product</th><th>Brand</th><th>Views</th><th>Cart Adds</th><th>Purchases</th><th>Conv%</th></tr></thead><tbody id="topProductsBody"></tbody></table></div>
-        </div>
-        <div class="tbl-card">
-          <div class="tbl-head"><span class="tbl-title"><span class="chart-title-dot" style="background:var(--sub);margin-right:.1rem"></span>Recent Sessions</span></div>
-          <div class="tbl-wrap"><table><thead><tr><th>Entry</th><th>Duration</th><th>Device</th><th>Type</th><th>Converted</th></tr></thead><tbody id="recentSessionsBody"></tbody></table></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PRODUCTS -->
-    <div class="adm-panel" id="panel-products">
-      <div class="tbl-card">
-        <div class="tbl-head">
-          <span class="tbl-title"><span class="chart-title-dot" style="background:var(--red)"></span>All Products</span>
-          <select id="productSort" class="adm-select">
-            <option value="cartAdds">Sort: Cart Adds</option>
-            <option value="views">Sort: Views</option>
-            <option value="purchases">Sort: Purchases</option>
-            <option value="favorites">Sort: Favorites</option>
-            <option value="abandoned">Sort: Abandoned (Cart-Purchase)</option>
-          </select>
-        </div>
-        <div class="tbl-wrap">
-          <table><thead><tr><th>#</th><th>Product</th><th>Brand</th><th>Views</th><th>Cart Adds</th><th>Purchases</th><th>Abandoned</th><th>Favorites</th><th>Conv%</th></tr></thead><tbody id="allProductsBody"></tbody></table>
-        </div>
-      </div>
-    </div>
-
-    <!-- SESSIONS -->
-    <div class="adm-panel" id="panel-sessions">
-      <div class="tbl-card">
-        <div class="tbl-head">
-          <span class="tbl-title"><span class="chart-title-dot" style="background:var(--blue)"></span>Recent Sessions</span>
-          <select id="sessionFilter" class="adm-select">
-            <option value="all">All sessions</option>
-            <option value="converted">Converted only</option>
-            <option value="abandoned">Checkout abandoned</option>
-            <option value="new">New visitors</option>
-            <option value="mobile">Mobile only</option>
-          </select>
-        </div>
-        <div class="tbl-wrap">
-          <table><thead><tr><th>Session ID</th><th>Entry Page</th><th>Exit Page</th><th>Duration</th><th>Device</th><th>Type</th><th>Checkout</th><th>Converted</th><th>Date</th></tr></thead><tbody id="sessionsBody"></tbody></table>
-        </div>
-      </div>
-    </div>
-
-    <!-- LIVE -->
-    <div class="adm-panel" id="panel-live">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-        <h2 style="font-size:.88rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Real-time Visitors</h2>
-        <span style="font-size:.72rem;color:var(--sub)" id="liveLastUpdate">Listening for updates…</span>
-      </div>
-      <div class="live-grid">
-        <div class="live-counter-card">
-          <div class="live-badge" style="margin-bottom:.5rem"><span class="live-dot"></span> LIVE NOW</div>
-          <div class="live-big-n" id="liveBigCount">–</div>
-          <div class="live-sub">active visitors</div>
-          <div style="margin-top:1.2rem;font-size:.74rem;color:#9ca3af" id="liveDeviceSplit"></div>
-        </div>
-        <div class="live-page-list" id="livePageList">
-          <div class="empty"><i class="fas fa-signal"></i><p>Waiting for live data…</p></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- USERS -->
-    <div class="adm-panel" id="panel-users">
-      <div class="section-head">
-        <span class="section-title">Registered Users</span>
-        <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
-          <input id="userSearch" type="search" placeholder="Search by name or email…"
-            style="font-size:.8rem;padding:.38rem .8rem;border:1px solid var(--border2);border-radius:8px;outline:none;font-family:inherit;width:220px">
-          <span id="userCount" class="badge badge-gray">—</span>
-        </div>
-      </div>
-      <div class="tbl-card">
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr>
-              <th>#</th><th>Name</th><th>Email</th><th>Provider</th>
-              <th>Joined</th><th>Orders</th><th>Cart Items</th><th>Actions</th>
-            </tr></thead>
-            <tbody id="usersBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- User detail drawer -->
-      <div id="userDrawer" style="display:none;margin-top:1rem">
-        <div class="tbl-card">
-          <div class="tbl-head" style="justify-content:space-between">
-            <span class="tbl-title" id="drawerTitle">Order History</span>
-            <button onclick="document.getElementById('userDrawer').style.display='none'"
-              style="background:none;border:none;cursor:pointer;color:var(--sub);font-size:.8rem;font-family:inherit">
-              <i class="fas fa-xmark"></i> Close
-            </button>
-          </div>
-          <div class="tbl-wrap">
-            <table><thead><tr>
-              <th>Order ID</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th>
-            </tr></thead><tbody id="drawerBody"></tbody></table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<script type="module">
-// ================================================================
-// IPORDISE Analytics Dashboard — Admin Access Configuration
-//
-//  ⚙️  Add your email address below to grant access.
-//     Anyone NOT in this list will see an "Access Restricted" page.
-// ================================================================
-const ADMIN_EMAILS = [
-  'admin@ipordise.com',
-  'lecomaxstore@gmail.com',
-];
-// ================================================================
-
-import { auth, db } from './auth/firebase.js';
-import { signOut, onAuthStateChanged }
-  from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
-import {
-  collection, doc, getDoc, getDocs,
-  query, orderBy, limit, onSnapshot, collectionGroup,
-} from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
-
-const LIVE_TTL  = 2 * 60 * 1000; // 2 minutes
-const $guard    = document.getElementById('authGuard');
-const $dash     = document.getElementById('dashboard');
-
-// ── Formatters ────────────────────────────────────────────────
-const fmtDur = s => { if(!s||s<0) return '—'; return s<60?`${s}s`:`${Math.floor(s/60)}m ${s%60}s`; };
-const fmtNum = n => (n||0).toLocaleString('fr-FR');
-const fmtPct = (n,d) => !d ? '—' : Math.round((n/d)*100)+'%';
-const esc    = s => String(s||'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
-const ago    = ts => {
-  if(!ts) return '—';
-  const d = ts.toDate?ts.toDate():new Date(ts);
-  const s = Math.round((Date.now()-d)/1000);
-  if(s<60) return `${s}s ago`;
-  if(s<3600) return `${Math.floor(s/60)}m ago`;
-  if(s<86400) return `${Math.floor(s/3600)}h ago`;
-  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
-};
-const devIcon = d => ({
-  mobile:'<i class="fas fa-mobile-screen"></i>',
-  tablet:'<i class="fas fa-tablet"></i>',
-  desktop:'<i class="fas fa-desktop"></i>',
-}[d]||'<i class="fas fa-desktop"></i>');
-
-// ── Tab navigation ────────────────────────────────────────────
-let _activeTab = 'overview';
-document.querySelectorAll('.adm-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.adm-panel').forEach(p=>p.classList.remove('active'));
-    tab.classList.add('active');
-    _activeTab = tab.dataset.tab;
-    document.getElementById(`panel-${_activeTab}`)?.classList.add('active');
-    if(_activeTab==='live')  renderLive();
-    if(_activeTab==='users') loadUsers();
-  });
-});
-
-// ── Cached data ───────────────────────────────────────────────
-let _products = [], _sessions = [], _dailyDocs = {}, _liveData = {};
-let _sessChart = null, _convChart = null;
-
-// ── Stat cards ────────────────────────────────────────────────
-const renderStats = d => {
-  const {sessions=0,newSessions=0,pageViews=0,productViews=0,
-         cartAdds=0,conversions=0,cartAbandons=0,revenue=0} = d;
-  const abandRate = cartAdds ? Math.round(((cartAdds-conversions)/cartAdds)*100) : 0;
-  const cards = [
-    {icon:'fa-users',      col:'#dbeafe',ico:'#2563eb', v:fmtNum(sessions),       l:'Sessions Today'   },
-    {icon:'fa-eye',        col:'#e0e7ff',ico:'#4f46e5', v:fmtNum(pageViews),      l:'Page Views'       },
-    {icon:'fa-spray-can-sparkles',col:'#fef9c3',ico:'#ca8a04', v:fmtNum(productViews), l:'Product Views'},
-    {icon:'fa-cart-shopping',col:'#dcfce7',ico:'#16a34a',v:fmtNum(cartAdds),      l:'Cart Adds'        },
-    {icon:'fa-check-circle',col:'#dcfce7',ico:'#15803d',v:fmtNum(conversions),    l:'Conversions'      },
-    {icon:'fa-person-running',col:'#fee2e2',ico:'#b91c1c',v:abandRate+'%',        l:'Abandonment Rate' },
-    {icon:'fa-user-plus',  col:'#f3e8ff',ico:'#7c3aed', v:fmtNum(newSessions),    l:'New Visitors'     },
-    {icon:'fa-money-bill-wave',col:'#fef9c3',ico:'#d97706',v:fmtNum(revenue)+' MAD',l:'Revenue Today'  },
-  ];
-  document.getElementById('statGrid').innerHTML = cards.map(c=>`
-    <div class="stat-card">
-      <div class="stat-icon" style="background:${c.col};color:${c.ico}"><i class="fas ${c.icon}"></i></div>
-      <div class="stat-val">${esc(c.v)}</div>
-      <div class="stat-lbl">${esc(c.l)}</div>
-    </div>`).join('');
-};
-
-// ── Funnel ────────────────────────────────────────────────────
-const renderFunnel = d => {
-  const v=d.productViews||0, c=d.cartAdds||0, p=d.conversions||0;
-  document.getElementById('funnelGrid').innerHTML = [
-    {n:v, l:'Product Views', pct:null},
-    {n:c, l:'Cart Adds',     pct:v?fmtPct(c,v):null},
-    {n:p, l:'Purchases',     pct:c?fmtPct(p,c):null},
-  ].map(s=>`<div class="funnel-step">
-    <div class="funnel-n">${fmtNum(s.n)}</div>
-    <div class="funnel-l">${esc(s.l)}</div>
-    ${s.pct?`<div class="funnel-pct">↳ ${esc(s.pct)} conv</div>`:''}
-  </div>`).join('');
-};
-
-// ── 7-day charts ──────────────────────────────────────────────
-const renderCharts = () => {
-  const today = new Date();
-  const labels=[], sess=[], conv=[];
-  for(let i=6;i>=0;i--){
-    const d=new Date(today); d.setDate(d.getDate()-i);
-    const k=d.toISOString().slice(0,10);
-    labels.push(d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric'}));
-    const doc=_dailyDocs[k]||{};
-    sess.push(doc.sessions||0);
-    conv.push(doc.conversions||0);
-  }
-  const cfg = (label,data,color) => ({
-    type:'line', data:{labels,datasets:[{label,data,borderColor:color,
-      backgroundColor:color+'22',borderWidth:2.5,pointRadius:3,fill:true,tension:.38}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#9ca3af'}},
-              y:{grid:{color:'#f3f4f6'},ticks:{font:{size:10},color:'#9ca3af'},beginAtZero:true}}},
-  });
-  if(_sessChart) _sessChart.destroy();
-  if(_convChart) _convChart.destroy();
-  _sessChart = new Chart(document.getElementById('sessionsChart'), cfg('Sessions',sess,'#c8102e'));
-  _convChart = new Chart(document.getElementById('convChart'),    cfg('Conversions',conv,'#2563eb'));
-};
-
-// ── Overview: top products ─────────────────────────────────────
-const renderTopProducts = () => {
-  const top = [..._products].sort((a,b)=>(b.views||0)-(a.views||0)).slice(0,8);
-  const max = top[0]?.views||1;
-  document.getElementById('topProductsBody').innerHTML = top.length ? top.map((p,i)=>`
-    <tr>
-      <td style="color:var(--sub);font-weight:700">${i+1}</td>
-      <td style="font-weight:600">${esc(p.name||p.id)}</td>
-      <td><span class="badge badge-gray">${esc(p.brand||'—')}</span></td>
-      <td><div class="pbar-wrap"><span style="min-width:26px">${fmtNum(p.views)}</span><div class="pbar"><div class="pbar-fill" style="width:${Math.round(((p.views||0)/max)*100)}%"></div></div></div></td>
-      <td>${fmtNum(p.cartAdds)}</td>
-      <td>${fmtNum(p.purchases)}</td>
-      <td><span class="badge ${(p.cartAdds||0)>0?'badge-green':'badge-gray'}">${fmtPct(p.purchases||0,p.cartAdds||0)}</span></td>
-    </tr>`).join('')
-  : `<tr><td colspan="7"><div class="empty"><i class="fas fa-inbox"></i><p>No product data yet.</p></div></td></tr>`;
-};
-
-// ── Overview: recent sessions ─────────────────────────────────
-const renderRecentSessions = () => {
-  document.getElementById('recentSessionsBody').innerHTML = _sessions.slice(0,8).map(s=>`
-    <tr>
-      <td style="font-weight:600">${esc(s.entryPage||'—')}</td>
-      <td>${fmtDur(s.duration)}</td>
-      <td>${devIcon(s.device)}</td>
-      <td>${s.isNew?'<span class="badge badge-blue">New</span>':'<span class="badge badge-gray">Return</span>'}</td>
-      <td>${s.converted?'<span class="badge badge-green">✓ Yes</span>':'<span class="badge badge-gray">—</span>'}</td>
-    </tr>`).join('')
-  || `<tr><td colspan="5"><div class="empty"><i class="fas fa-users"></i><p>No session data yet.</p></div></td></tr>`;
-};
-
-// ── Products tab ──────────────────────────────────────────────
-const renderAllProducts = (sortKey='cartAdds') => {
-  let list = [..._products];
-  if(sortKey==='abandoned') list.sort((a,b)=>((b.cartAdds||0)-(b.purchases||0))-((a.cartAdds||0)-(a.purchases||0)));
-  else list.sort((a,b)=>(b[sortKey]||0)-(a[sortKey]||0));
-  document.getElementById('allProductsBody').innerHTML = list.length ? list.map((p,i)=>{
-    const aband = Math.max(0,(p.cartAdds||0)-(p.purchases||0));
-    return `<tr>
-      <td style="color:var(--sub);font-weight:700">${i+1}</td>
-      <td style="font-weight:600" title="${esc(p.name||p.id)}">${esc(p.name||p.id)}</td>
-      <td><span class="badge badge-gray">${esc(p.brand||'—')}</span></td>
-      <td>${fmtNum(p.views)}</td>
-      <td style="font-weight:700;color:${(p.cartAdds||0)>0?'#16a34a':'inherit'}">${fmtNum(p.cartAdds)}</td>
-      <td style="font-weight:700;color:${(p.purchases||0)>0?'#2563eb':'inherit'}">${fmtNum(p.purchases)}</td>
-      <td style="color:${aband>0?'#b91c1c':'var(--sub)'};font-weight:${aband>0?700:400}">${fmtNum(aband)}</td>
-      <td>${fmtNum(p.favorites)}</td>
-      <td><span class="badge ${(p.purchases||0)>0?'badge-green':'badge-gray'}">${fmtPct(p.purchases||0,p.cartAdds||0)}</span></td>
-    </tr>`;
-  }).join('')
-  : `<tr><td colspan="9"><div class="empty"><i class="fas fa-spray-can-sparkles"></i><p>No product data yet.</p></div></td></tr>`;
-};
-
-// ── Sessions tab ──────────────────────────────────────────────
-const renderSessionsTab = (filter='all') => {
-  let list = _sessions;
-  if(filter==='converted') list = list.filter(s=>s.converted);
-  if(filter==='abandoned') list = list.filter(s=>s.checkoutStarted&&!s.converted);
-  if(filter==='new')       list = list.filter(s=>s.isNew);
-  if(filter==='mobile')    list = list.filter(s=>s.device==='mobile');
-  document.getElementById('sessionsBody').innerHTML = list.length ? list.map(s=>`
-    <tr>
-      <td style="font-family:monospace;font-size:.7rem;color:var(--sub)">${esc((s._id||'').slice(0,14))}…</td>
-      <td style="font-weight:600">${esc(s.entryPage||'—')}</td>
-      <td>${esc(s.exitPage||'—')}</td>
-      <td>${fmtDur(s.duration)}</td>
-      <td>${devIcon(s.device)}&nbsp;<span style="font-size:.7rem;color:var(--sub)">${esc(s.screen||'')}</span></td>
-      <td>${s.isNew?'<span class="badge badge-blue">New</span>':'<span class="badge badge-gray">Return</span>'}</td>
-      <td>${s.checkoutStarted?'<span class="badge badge-blue">Yes</span>':'<span class="badge badge-gray">No</span>'}</td>
-      <td>${s.converted?'<span class="badge badge-green">✓ Converted</span>':'<span class="badge badge-gray">—</span>'}</td>
-      <td style="font-size:.72rem;color:var(--sub)">${ago(s.startTime)}</td>
-    </tr>`).join('')
-  : `<tr><td colspan="9"><div class="empty"><i class="fas fa-users"></i><p>No sessions match this filter.</p></div></td></tr>`;
-};
-
-// ── Users tab ─────────────────────────────────────────────────
-let _allUsers = [];
-
-const _fmtDate = ts => {
-  if (!ts) return '—';
-  const d = ts.toDate ? ts.toDate() : new Date(ts);
-  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-};
-
-const loadUsers = async () => {
-  document.getElementById('usersBody').innerHTML =
-    `<tr><td colspan="8"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading users…</p></div></td></tr>`;
-  try {
-    const snap = await getDocs(collection(db, 'users'));
-    _allUsers = snap.docs.map(d => ({ _uid: d.id, ...d.data() }));
-  } catch {
-    document.getElementById('usersBody').innerHTML =
-      `<tr><td colspan="8"><div class="empty"><i class="fas fa-lock"></i><p>Could not load users. Check Firestore rules.</p></div></td></tr>`;
-    return;
-  }
-  renderUsers(_allUsers);
-};
-
-const renderUsers = (list) => {
-  document.getElementById('userCount').textContent = `${list.length} user${list.length !== 1 ? 's' : ''}`;
-  if (!list.length) {
-    document.getElementById('usersBody').innerHTML =
-      `<tr><td colspan="8"><div class="empty"><i class="fas fa-users"></i><p>No registered users yet.</p></div></td></tr>`;
-    return;
-  }
-  document.getElementById('usersBody').innerHTML = list.map((u, i) => {
-    const p = u.profile || {};
-    const cartLen = Array.isArray(u.cart) ? u.cart.length : 0;
-    const providerIcon = {
-      google: '<i class="fab fa-google" style="color:#4285f4"></i>',
-      apple:  '<i class="fab fa-apple" style="color:#555"></i>',
-      email:  '<i class="fas fa-envelope" style="color:var(--sub)"></i>',
-    }[p.provider || 'email'] || '<i class="fas fa-envelope" style="color:var(--sub)"></i>';
-    const orderCount = u._orderCount !== undefined ? u._orderCount : '—';
-    return `<tr>
-      <td style="color:var(--sub);font-weight:700">${i + 1}</td>
-      <td style="font-weight:600">${esc(p.displayName || '—')}</td>
-      <td style="font-size:.78rem">${esc(p.email || '—')}</td>
-      <td>${providerIcon} <span style="font-size:.72rem;color:var(--sub)">${esc(p.provider || 'email')}</span></td>
-      <td style="font-size:.75rem;color:var(--sub)">${_fmtDate(p.createdAt)}</td>
-      <td><span class="badge ${orderCount > 0 ? 'badge-green' : 'badge-gray'}">${orderCount}</span></td>
-      <td><span class="badge ${cartLen > 0 ? 'badge-blue' : 'badge-gray'}">${cartLen}</span></td>
-      <td>
-        <button onclick="showUserOrders('${esc(u._uid)}','${esc(p.displayName || p.email || u._uid)}')"
-          style="font-size:.72rem;padding:.28rem .65rem;border:1px solid var(--border2);border-radius:6px;background:#fff;cursor:pointer;font-family:inherit;color:var(--ink)">
-          <i class="fas fa-eye"></i> Orders
-        </button>
-      </td>
-    </tr>`;
-  }).join('');
-};
-
-// Search filter
-document.getElementById('userSearch')?.addEventListener('input', e => {
-  const q = e.target.value.toLowerCase().trim();
-  const filtered = q
-    ? _allUsers.filter(u => {
-        const p = u.profile || {};
-        return (p.email || '').toLowerCase().includes(q) ||
-               (p.displayName || '').toLowerCase().includes(q);
-      })
-    : _allUsers;
-  renderUsers(filtered);
-});
-
-// Show orders drawer for a specific user
-window.showUserOrders = async (uid, name) => {
-  const drawer = document.getElementById('userDrawer');
-  const body   = document.getElementById('drawerBody');
-  document.getElementById('drawerTitle').textContent = `Orders — ${name}`;
-  body.innerHTML = `<tr><td colspan="5"><div class="empty"><i class="fas fa-spinner fa-spin"></i><p>Loading orders…</p></div></td></tr>`;
-  drawer.style.display = 'block';
-  drawer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  try {
-    const snap = await getDocs(
-      query(collection(db, 'users', uid, 'orders'), orderBy('createdAt', 'desc'))
-    );
-    if (!snap.docs.length) {
-      body.innerHTML = `<tr><td colspan="5"><div class="empty"><i class="fas fa-inbox"></i><p>No orders yet.</p></div></td></tr>`;
-      return;
-    }
-    // Also update order count in users list
-    const userIdx = _allUsers.findIndex(u => u._uid === uid);
-    if (userIdx >= 0) _allUsers[userIdx]._orderCount = snap.docs.length;
-
-    body.innerHTML = snap.docs.map(d => {
-      const o = d.data();
-      const items = Array.isArray(o.items) ? o.items : (o.summary?.items || []);
-      const total = o.summary?.total || o.total || 0;
-      return `<tr>
-        <td style="font-family:monospace;font-size:.7rem;color:var(--sub)">${esc(d.id.slice(0, 12))}…</td>
-        <td style="font-size:.75rem">${_fmtDate(o.createdAt)}</td>
-        <td>${fmtNum(items.length)} item${items.length !== 1 ? 's' : ''}</td>
-        <td style="font-weight:700">${fmtNum(total)} MAD</td>
-        <td><span class="badge ${o.status === 'pending' ? 'badge-amber' : o.status === 'delivered' ? 'badge-green' : 'badge-blue'}">${esc(o.status || 'pending')}</span></td>
-      </tr>`;
-    }).join('');
-  } catch {
-    body.innerHTML = `<tr><td colspan="5"><div class="empty"><i class="fas fa-triangle-exclamation"></i><p>Could not load orders.</p></div></td></tr>`;
-  }
-};
-
-// ── Live tab ──────────────────────────────────────────────────
-const renderLive = () => {
-  const now    = Date.now();
-  const active = Object.entries(_liveData)
-    .filter(([,v])=>v&&typeof v.t==='number'&&(now-v.t)<LIVE_TTL)
-    .sort((a,b)=>b[1].t-a[1].t);
-  const count = active.length;
-  document.getElementById('liveBigCount').textContent    = count;
-  document.getElementById('liveHeaderCount').textContent = count;
-  document.getElementById('liveLastUpdate').textContent  =
-    'Updated: '+new Date().toLocaleTimeString('en-GB');
-  const mob=active.filter(([,v])=>v.device==='mobile').length;
-  const tab=active.filter(([,v])=>v.device==='tablet').length;
-  document.getElementById('liveDeviceSplit').innerHTML = count
-    ? `<i class="fas fa-mobile-screen"></i> ${mob} &nbsp;<i class="fas fa-tablet"></i> ${tab} &nbsp;<i class="fas fa-desktop"></i> ${count-mob-tab}`
-    : '';
-  if(!active.length){
-    document.getElementById('livePageList').innerHTML=
-      '<div class="empty"><i class="fas fa-signal"></i><p>No active visitors right now.</p></div>';
-    return;
-  }
-  const pages={};
-  active.forEach(([,v])=>{
-    const pg=v.page||'home';
-    if(!pages[pg]){pages[pg]={count:0,devices:[]};}
-    pages[pg].count++; pages[pg].devices.push(v.device);
-  });
-  document.getElementById('livePageList').innerHTML =
-    Object.entries(pages).sort((a,b)=>b[1].count-a[1].count).map(([pg,info])=>`
-      <div class="live-page-item">
-        <div>
-          <div style="font-weight:600">${esc(pg)}</div>
-          <div style="font-size:.7rem;color:var(--sub)">${info.devices.map(devIcon).join(' ')}</div>
-        </div>
-        <span class="badge badge-blue">${info.count} visitor${info.count>1?'s':''}</span>
-      </div>`).join('');
-};
-
-// ── Load all Firestore data ────────────────────────────────────
-const loadData = async () => {
-  document.getElementById('statGrid').innerHTML =
-    Array(8).fill(0).map(()=>`<div class="stat-card">
-      <div class="skeleton" style="width:34px;height:34px;border-radius:.5rem;margin-bottom:.6rem"></div>
-      <div class="skeleton" style="height:24px;width:65%;border-radius:.3rem;margin-bottom:.3rem"></div>
-      <div class="skeleton" style="height:11px;width:45%;border-radius:.3rem"></div>
-    </div>`).join('');
-
-  const todayKey  = new Date().toISOString().slice(0,10);
-  const todaySnap = await getDoc(doc(db,'analytics_daily',todayKey));
-  const todayData = todaySnap.exists() ? todaySnap.data() : {};
-
-  // 7-day daily docs
-  _dailyDocs = {};
-  await Promise.all(Array.from({length:7},(_,i)=>{
-    const d=new Date(); d.setDate(d.getDate()-i);
-    const k=d.toISOString().slice(0,10);
-    return getDoc(doc(db,'analytics_daily',k)).then(s=>{ if(s.exists()) _dailyDocs[k]=s.data(); });
-  }));
-
-  // Products
-  const pSnap = await getDocs(
-    collection(db,'analytics_products')
-  ).catch(()=>({docs:[]}));
-  _products = pSnap.docs.map(d=>({_id:d.id,...d.data()}));
-
-  // Sessions
-  const sSnap = await getDocs(
-    query(collection(db,'analytics_sessions'),orderBy('startTime','desc'),limit(30))
-  ).catch(()=>({docs:[]}));
-  _sessions = sSnap.docs.map(d=>({_id:d.id,...d.data()}));
-
-  renderStats(todayData);
-  renderFunnel(todayData);
-  renderCharts();
-  renderTopProducts();
-  renderRecentSessions();
-  renderAllProducts(document.getElementById('productSort')?.value||'cartAdds');
-  renderSessionsTab(document.getElementById('sessionFilter')?.value||'all');
-};
-
-// ── Sort / filter controls ─────────────────────────────────────
-document.getElementById('productSort')?.addEventListener('change', e => renderAllProducts(e.target.value));
-document.getElementById('sessionFilter')?.addEventListener('change', e => renderSessionsTab(e.target.value));
-
-// ── Refresh button ────────────────────────────────────────────
-document.getElementById('refreshBtn')?.addEventListener('click', async () => {
-  const btn = document.getElementById('refreshBtn');
-  btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Loading…';
-  await loadData();
-  if(_activeTab==='live') renderLive();
-  btn.disabled=false; btn.innerHTML='<i class="fas fa-rotate-right"></i> Refresh';
-});
-
-// ── Logout ────────────────────────────────────────────────────
-document.getElementById('logoutBtn')?.addEventListener('click', async () => {
-  await signOut(auth).catch(()=>{});
-  window.location.replace('admin.html');
-});
-
-// ── Live Firestore listener ───────────────────────────────────
-let _unsub=null;
-const startLive = () => {
-  if(_unsub) _unsub();
-  _unsub = onSnapshot(doc(db,'analytics_live','state'), snap => {
-    _liveData = snap.exists() ? (snap.data().v||{}) : {};
-    const now=Date.now();
-    const n=Object.values(_liveData).filter(v=>v&&typeof v.t==='number'&&(now-v.t)<LIVE_TTL).length;
-    document.getElementById('liveHeaderCount').textContent=n;
-    if(_activeTab==='live') renderLive();
-  },()=>{});
-};
-
-// ── Inline login form logic ──────────────────────────────────
-import { signInWithEmailAndPassword }
-  from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
-
-const $loginBox    = document.getElementById('adminLoginBox');
-const $loginChecking = document.getElementById('authChecking');
-const $loginErr    = document.getElementById('loginErr');
-const $loginBtn    = document.getElementById('loginBtn');
-const $loginEmail  = document.getElementById('loginEmail');
-const $loginPass   = document.getElementById('loginPass');
-
-document.getElementById('loginTogglePw')?.addEventListener('click', () => {
-  const hidden = $loginPass.type === 'password';
-  $loginPass.type = hidden ? 'text' : 'password';
-  document.getElementById('loginEyeIcon').className = hidden ? 'fas fa-eye-slash' : 'fas fa-eye';
-});
-
-$loginBtn?.addEventListener('click', async () => {
-  const email = $loginEmail?.value.trim();
-  const pass  = $loginPass?.value;
-  if(!email || !pass) { $loginErr.textContent='Please enter email and password.'; $loginErr.style.display='block'; return; }
-  $loginBtn.disabled = true;
-  $loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in…';
-  $loginErr.style.display = 'none';
-  try {
-    await signInWithEmailAndPassword(auth, email, pass);
-    // onAuthStateChanged will fire automatically and load the dashboard
-  } catch(err) {
-    const msg = err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password'
-      ? 'Incorrect email or password.'
-      : err.code === 'auth/user-not-found' ? 'No account found with this email.'
-      : err.code === 'auth/too-many-requests' ? 'Too many attempts. Please wait a moment.'
-      : 'Login failed. Please try again.';
-    $loginErr.textContent = msg;
-    $loginErr.style.display = 'block';
-    $loginBtn.disabled = false;
-    $loginBtn.innerHTML = '<i class="fas fa-right-to-bracket"></i> Sign in to Dashboard';
-  }
-});
-
-// Allow Enter key to submit
-$loginPass?.addEventListener('keydown', e => { if(e.key==='Enter') $loginBtn?.click(); });
-$loginEmail?.addEventListener('keydown', e => { if(e.key==='Enter') $loginPass?.focus(); });
-
-// ── Auth gate ─────────────────────────────────────────────────
-onAuthStateChanged(auth, async user => {
-  $loginChecking.style.display = 'none'; // hide spinner once Firebase responds
-  if(!user){
-    $loginBox.style.display = 'block';  // show inline login form
-    return;
-  }
-  if(!ADMIN_EMAILS.includes(user.email)){
-    $guard.innerHTML=`
-      <div class="denied-card">
-        <div style="width:56px;height:56px;border-radius:50%;background:rgba(200,16,46,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem">
-          <i class="fas fa-lock" style="color:var(--red);font-size:1.3rem"></i>
-        </div>
-        <div style="color:#fff;font-weight:800;font-size:1.05rem;margin-bottom:.5rem">Access Restricted</div>
-        <p style="color:rgba(255,255,255,.4);font-size:.82rem;margin-bottom:1.3rem;line-height:1.6">
-          This dashboard is for admins only.<br>
-          Signed in as <span style="color:rgba(255,255,255,.7)">${esc(user.email)}</span>
-        </p>
-        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:.85rem 1rem;font-size:.75rem;color:rgba(255,255,255,.4);text-align:left;margin-bottom:1.3rem;line-height:1.7">
-          Open <code style="color:#f87171">admin.html</code> and add your email to<br>
-          the <code style="color:#f87171">ADMIN_EMAILS</code> array.
-        </div>
-        <button id="adminSignOutBtn"
-          style="width:100%;background:var(--red);color:#fff;border:none;padding:.75rem 1rem;border-radius:10px;font-weight:700;cursor:pointer;font-size:.85rem;font-family:inherit">
-          <i class="fas fa-arrow-right-from-bracket"></i> Sign Out
-        </button>
-      </div>`;
-    // Wire up sign-out button (inline onclick can't reach module-scoped signOut)
-    document.getElementById('adminSignOutBtn')?.addEventListener('click', () => {
-      signOut(auth).catch(() => {}).finally(() => {
-        window.location.replace('admin.html');
-      });
-    });
-    return;
-  }
-  $guard.style.display='none';
-  $dash.style.display='block';
-  await loadData();
-  startLive();
-  setInterval(loadData, 60_000);
-  setInterval(()=>{ if(_activeTab==='live') renderLive(); }, 30_000);
-});
-</script>
 </body>
 </html>

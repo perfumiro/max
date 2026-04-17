@@ -538,12 +538,33 @@ s0.parentNode.insertBefore(s1,s0);
                                     </div>
                                 </div>
                                 <button id="addToCartBtn" class="hidden" type="button"><i class="fas fa-bag-shopping"></i> Add to Cart</button>
-                                <a id="whatsappInquiryBtn" class="hidden product-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i> <span data-i18n="product.ask_whatsapp">Ask on WhatsApp</span></a>
                                 <button class="product-wishlist-btn" type="button" aria-label="Add to wishlist">
                                     <i class="far fa-heart"></i>
                                 </button>
                             </div>
                             <p class="product-cta-hint hidden" id="productCtaHint"><i class="fas fa-hand-point-up text-brand-red"></i> Select a size above to add to cart</p>
+                        </div>
+
+                        <!-- Full-width WhatsApp CTA — shown for out-of-stock / no-price items -->
+                        <div id="productWhatsappBlock" class="mt-4 hidden">
+                            <a id="productWhatsappBlockBtn" class="product-whatsapp-fullbtn" href="#" target="_blank" rel="noopener noreferrer" aria-label="Ask about this product on WhatsApp">
+                                <!-- Pulsing live dot -->
+                                <span class="product-wa-live" aria-hidden="true"></span>
+                                <!-- WhatsApp icon bubble -->
+                                <span class="product-wa-icon-bubble">
+                                    <i class="fab fa-whatsapp"></i>
+                                </span>
+                                <!-- Text body -->
+                                <span class="product-wa-body">
+                                    <span class="product-wa-title" data-i18n="product.ask_whatsapp">Ask on WhatsApp</span>
+                                    <span class="product-wa-sub" data-i18n="product.ask_whatsapp_sub">Get price &amp; availability — we reply in minutes</span>
+                                </span>
+                                <!-- Right side: fast reply badge + arrow -->
+                                <span class="product-wa-right">
+                                    <span class="product-wa-badge" data-i18n="product.ask_whatsapp_badge">Fast reply</span>
+                                    <i class="fas fa-arrow-right product-wa-arrow"></i>
+                                </span>
+                            </a>
                         </div>
 
                         <!-- Fragrance Profile -->
@@ -649,7 +670,7 @@ s0.parentNode.insertBefore(s1,s0);
                     <div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;padding:2rem 1rem;text-align:center;">
                         <div id="tabRevRating" style="font-size:3.5rem;font-weight:800;background:linear-gradient(135deg,#c9a227,#e8c84a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;">—</div>
                         <div id="tabRevStars" class="text-yellow-400 text-base" style="display:flex;gap:2px;justify-content:center;"></div>
-                        <p id="tabRevCount" class="text-sm text-gray-500">No reviews yet</p>
+                        <p id="tabRevCount" class="text-sm text-gray-500" data-i18n="product.reviews_no_reviews">No reviews yet</p>
                         <a href="#reviews-section" onclick="event.preventDefault();document.getElementById('reviews-section')?.scrollIntoView({behavior:'smooth'});"
                            style="margin-top:0.5rem;display:inline-flex;align-items:center;gap:0.4rem;font-size:0.78rem;font-weight:700;color:#c8102e;text-decoration:none;">
                             <i class="fas fa-arrow-down" style="font-size:0.65rem;"></i> See all reviews
@@ -728,11 +749,11 @@ s0.parentNode.insertBefore(s1,s0);
         <section id="reviews-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 ipo-reveal">
             <div class="flex items-center gap-4 mb-8">
                 <div>
-                    <p class="product-section-kicker">Community</p>
-                    <h2 class="text-2xl md:text-3xl font-bold text-brand-dark">Customer Reviews</h2>
+                    <p class="product-section-kicker" data-i18n="product.reviews_kicker">Community</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-brand-dark" data-i18n="product.reviews_title">Customer Reviews</h2>
                 </div>
                 <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(201,162,39,0.35),transparent);margin-left:0.25rem;"></span>
-                <button type="button" id="writeReviewTopBtn" class="hidden sm:inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-700 px-4 py-2.5 rounded-full transition" style="white-space:nowrap;flex-shrink:0;">
+                <button type="button" id="writeReviewTopBtn" class="hidden sm:inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-700 px-4 py-2.5 rounded-full transition" style="white-space:nowrap;flex-shrink:0;" data-i18n-html="product.reviews_write_btn">
                     <i class="fas fa-pen text-[10px]"></i> Write a Review
                 </button>
             </div>
@@ -743,10 +764,10 @@ s0.parentNode.insertBefore(s1,s0);
                     <!-- Header band -->
                     <div style="background:linear-gradient(135deg,#1a0505 0%,#2d0a0a 60%,#1a0505 100%);padding:1.6rem 1.25rem 1.4rem;position:relative;overflow:hidden;">
                         <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 90% at 110% 50%,rgba(200,16,46,0.22) 0%,transparent 60%);pointer-events:none;"></div>
-                        <p style="font-size:0.55rem;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin:0 0 0.6rem;position:relative;">Overall Rating</p>
+                        <p style="font-size:0.55rem;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin:0 0 0.6rem;position:relative;" data-i18n="product.reviews_overall">Overall Rating</p>
                         <p class="customer-rating-value" id="liveRatingVal" style="color:#fff;margin:0 0 0.5rem;line-height:1;position:relative;">—</p>
                         <div id="liveRatingStars" style="justify-content:center;display:flex;gap:3px;color:#f59e0b;font-size:1rem;min-height:1.2rem;position:relative;"></div>
-                        <p id="liveReviewCount" style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin:0.55rem 0 0;position:relative;">Be the first to review</p>
+                        <p id="liveReviewCount" style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin:0.55rem 0 0;position:relative;" data-i18n="product.reviews_be_first">Be the first to review</p>
                     </div>
 
                     <!-- Breakdown bars -->
@@ -765,14 +786,14 @@ s0.parentNode.insertBefore(s1,s0);
 
                     <!-- Footer -->
                     <div style="padding:0.85rem 1.25rem 1.25rem;border-top:1px solid rgba(0,0,0,0.06);margin-top:0.35rem;">
-                        <p class="customer-rating-footnote" style="margin:0 0 0.9rem;">Verified customer ratings</p>
+                        <p class="customer-rating-footnote" style="margin:0 0 0.9rem;" data-i18n="product.reviews_verified">Verified customer ratings</p>
                         <button type="button" id="writeReviewPanelBtn"
                             style="width:100%;padding:0.65rem 1rem;background:#c8102e;color:#fff;border:none;
                                 border-radius:99px;font-size:0.78rem;font-weight:700;cursor:pointer;
                                 display:flex;align-items:center;justify-content:center;gap:0.45rem;
                                 transition:background 0.15s,transform 0.12s;letter-spacing:0.03em;"
                             onmouseover="this.style.background='#a80e28';this.style.transform='translateY(-1px)'"
-                            onmouseout="this.style.background='#c8102e';this.style.transform='none'">
+                            onmouseout="this.style.background='#c8102e';this.style.transform='none'" data-i18n-html="product.reviews_write_btn_2">
                             <i class="fas fa-star" style="font-size:0.7rem;"></i> Write a Review
                         </button>
                     </div>
@@ -788,20 +809,20 @@ s0.parentNode.insertBefore(s1,s0);
                                     justify-content:center;font-size:1.4rem;color:#c8102e;margin:0 auto 1rem;">
                                 <i class="fas fa-star"></i>
                             </div>
-                            <p style="font-weight:800;color:#1f2937;margin:0 0 0.35rem;font-size:1rem;">Leave a Review</p>
-                            <p style="font-size:0.82rem;color:#6b7280;margin:0 0 1.25rem;">You need an account to share your experience with this fragrance.</p>
+                            <p data-i18n="product.reviews_leave_title" style="font-weight:800;color:#1f2937;margin:0 0 0.35rem;font-size:1rem;">Leave a Review</p>
+                            <p data-i18n="product.reviews_need_account" style="font-size:0.82rem;color:#6b7280;margin:0 0 1.25rem;">You need an account to share your experience with this fragrance.</p>
                             <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
                                 <a href="login.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.65rem 1.6rem;
                                         background:#c8102e;color:#fff;border-radius:99px;font-size:0.82rem;font-weight:700;
                                         text-decoration:none;white-space:nowrap;"
                                    onmouseover="this.style.background='#a80e28'" onmouseout="this.style.background='#c8102e'">
-                                    <i class="fas fa-sign-in-alt"></i> Sign In
+                                    <i class="fas fa-sign-in-alt"></i> <span data-i18n="product.reviews_sign_in">Sign In</span>
                                 </a>
                                 <a href="register.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.65rem 1.6rem;
                                         background:#fff;color:#c8102e;border:1.5px solid #c8102e;border-radius:99px;
                                         font-size:0.82rem;font-weight:700;text-decoration:none;white-space:nowrap;"
                                    onmouseover="this.style.background='#fef0f2'" onmouseout="this.style.background='#fff'">
-                                    <i class="fas fa-user-plus"></i> Create Account
+                                    <i class="fas fa-user-plus"></i> <span data-i18n="product.reviews_create_account">Create Account</span>
                                 </a>
                             </div>
                         </div>
@@ -1402,9 +1423,10 @@ s0.parentNode.insertBefore(s1,s0);
             <div style="width:64px;height:64px;border-radius:50%;background:#fef0f2;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fca5b0;margin:0 auto 1rem;">
               <i class="far fa-comment-dots"></i>
             </div>
-            <p style="font-weight:700;color:#1f2937;margin:0 0 0.4rem;font-size:0.95rem;">No reviews yet</p>
-            <p style="font-size:0.82rem;color:#6b7280;margin:0;">Be the first to share your experience with this fragrance.</p>
+            <p data-i18n="product.reviews_no_reviews" style="font-weight:700;color:#1f2937;margin:0 0 0.4rem;font-size:0.95rem;">No reviews yet</p>
+            <p data-i18n="product.reviews_no_reviews_sub" style="font-size:0.82rem;color:#6b7280;margin:0;">Be the first to share your experience with this fragrance.</p>
           </div>`;
+          if (window.ipw && window.ipw.translatePage) window.ipw.translatePage();
           return;
         }
         listWrap.innerHTML = reviews.map(r => {
@@ -1487,23 +1509,24 @@ s0.parentNode.insertBefore(s1,s0);
                 justify-content:center;font-size:1.4rem;color:#c8102e;margin:0 auto 1rem;">
               <i class="fas fa-star"></i>
             </div>
-            <p style="font-weight:800;color:#1f2937;margin:0 0 0.35rem;font-size:1rem;">Leave a Review</p>
-            <p style="font-size:0.82rem;color:#6b7280;margin:0 0 1.25rem;">You need an account to share your experience with this fragrance.</p>
+            <p data-i18n="product.reviews_leave_title" style="font-weight:800;color:#1f2937;margin:0 0 0.35rem;font-size:1rem;">Leave a Review</p>
+            <p data-i18n="product.reviews_need_account" style="font-size:0.82rem;color:#6b7280;margin:0 0 1.25rem;">You need an account to share your experience with this fragrance.</p>
             <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
               <a href="login.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.65rem 1.6rem;
                   background:#c8102e;color:#fff;border-radius:99px;font-size:0.82rem;font-weight:700;
                   text-decoration:none;white-space:nowrap;transition:background 0.15s;"
                  onmouseover="this.style.background='#a80e28'" onmouseout="this.style.background='#c8102e'">
-                <i class="fas fa-sign-in-alt"></i> Sign In
+                <i class="fas fa-sign-in-alt"></i> <span data-i18n="product.reviews_sign_in">Sign In</span>
               </a>
               <a href="register.html" style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.65rem 1.6rem;
                   background:#fff;color:#c8102e;border:1.5px solid #c8102e;border-radius:99px;
                   font-size:0.82rem;font-weight:700;text-decoration:none;white-space:nowrap;transition:all 0.15s;"
                  onmouseover="this.style.background='#fef0f2'" onmouseout="this.style.background='#fff'">
-                <i class="fas fa-user-plus"></i> Create Account
+                <i class="fas fa-user-plus"></i> <span data-i18n="product.reviews_create_account">Create Account</span>
               </a>
             </div>
           </div>`;
+          if (window.ipw && window.ipw.translatePage) window.ipw.translatePage();
           return;
         }
 
@@ -1513,7 +1536,7 @@ s0.parentNode.insertBefore(s1,s0);
 
         formWrap.innerHTML = `<div style="background:#fff;border:1.5px solid #e5e7eb;border-radius:1rem;
             padding:1.5rem 1.75rem;margin-bottom:0.25rem;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-          <p style="font-size:0.6rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;
+          <p data-i18n="product.reviews_write_title" style="font-size:0.6rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;
               color:#9ca3af;margin:0 0 0.9rem;">${isEdit ? 'Edit Your Review' : 'Write a Review'}</p>
 
           <!-- Star picker -->
@@ -1523,12 +1546,13 @@ s0.parentNode.insertBefore(s1,s0);
                   style="color:#f59e0b;transition:transform 0.1s;"></i>`
             ).join('')}
           </div>
-          <p id="starError" style="display:none;font-size:0.75rem;color:#dc2626;margin:0 0 0.7rem;">
+          <p id="starError" data-i18n="product.reviews_star_error" style="display:none;font-size:0.75rem;color:#dc2626;margin:0 0 0.7rem;">
             Please select a star rating.
           </p>
 
           <!-- Text area -->
           <textarea id="reviewBodyInput" maxlength="600"
+            data-i18n-placeholder="product.reviews_placeholder"
             placeholder="Share your thoughts on the scent, longevity, packaging…"
             style="width:100%;min-height:100px;border:1.5px solid #e5e7eb;border-radius:0.65rem;
                 padding:0.75rem 1rem;font-size:0.88rem;font-family:inherit;resize:vertical;
@@ -1539,6 +1563,7 @@ s0.parentNode.insertBefore(s1,s0);
           <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.9rem;flex-wrap:wrap;gap:0.5rem;">
             <span id="revSubmitMsg" style="font-size:0.78rem;font-weight:600;display:none;"></span>
             <button type="button" id="submitRevBtn"
+                data-i18n-html="product.reviews_submit"
                 style="margin-left:auto;display:inline-flex;align-items:center;gap:0.45rem;
                     padding:0.65rem 1.75rem;background:#c8102e;color:#fff;border:none;
                     border-radius:99px;font-size:0.82rem;font-weight:700;cursor:pointer;transition:background 0.15s;"
@@ -1547,6 +1572,8 @@ s0.parentNode.insertBefore(s1,s0);
             </button>
           </div>
         </div>`;
+
+        if (window.ipw && window.ipw.translatePage) window.ipw.translatePage();
 
         // Star picker interaction
         const picker = document.getElementById('starPicker');

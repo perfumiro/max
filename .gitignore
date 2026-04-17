@@ -11,6 +11,10 @@ download_assets2.ps1
 
 # Build tools
 tailwindcss.exe
+node_modules/
+backend/node_modules/
+backend/data/
+backend/.env
 
 # VS Code extensions
 *.vsix
