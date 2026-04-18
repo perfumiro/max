@@ -4664,28 +4664,39 @@ button.product-favorite-btn.is-active {
 }
 
 .product-price-card {
-    background: linear-gradient(135deg, #ffffff 0%, #fef2f2 55%, #fff5f5 100%);
-    border-radius: 1rem;
-    padding: 1.1rem 1.15rem 1.1rem 1.3rem;
-    border: 1px solid rgba(220, 38, 38, 0.15);
-    border-left: 3.5px solid #dc2626;
+    background: linear-gradient(150deg, #fff 0%, #fdf3f3 45%, #fff8f6 100%);
+    border-radius: 1.15rem;
+    padding: 1.25rem 1.35rem 1.2rem 1.35rem;
+    border: 1px solid rgba(220, 38, 38, 0.12);
     position: relative;
     overflow: hidden;
     isolation: isolate;
     transform: translateZ(0);
-    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+    transition: box-shadow 0.35s ease, transform 0.3s ease;
     animation: priceCardFadeIn 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-    box-shadow: 0 2px 16px rgba(220, 38, 38, 0.07), 0 1px 4px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 4px 24px rgba(220, 38, 38, 0.09), 0 1px 4px rgba(15, 23, 42, 0.04);
+}
+/* Gradient top accent line */
+.product-price-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #dc2626 0%, #f87171 50%, #dc2626 100%);
+    border-radius: 1.15rem 1.15rem 0 0;
+    z-index: 2;
+    animation: none !important;
 }
 
-.product-price-card::before {
+/* Shimmer overlay — inside the card, not the top line */
+.product-price-card .price-shimmer {
     content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: linear-gradient(112deg, transparent 16%, rgba(255, 255, 255, 0.65) 40%, transparent 62%);
+    background: linear-gradient(112deg, transparent 16%, rgba(255,255,255,0.7) 40%, transparent 62%);
     transform: translateX(-118%);
-    animation: priceCardSweep 4.8s ease-in-out infinite;
+    animation: priceCardSweep 5s ease-in-out infinite;
     pointer-events: none;
     z-index: 0;
 }
@@ -4693,13 +4704,13 @@ button.product-favorite-btn.is-active {
 .product-price-card::after {
     content: "";
     position: absolute;
-    width: 14rem;
-    height: 14rem;
-    right: -6.5rem;
-    bottom: -7rem;
+    width: 16rem;
+    height: 16rem;
+    right: -7rem;
+    bottom: -8rem;
     border-radius: 50%;
-    background: radial-gradient(circle at center, rgba(239, 68, 68, 0.18), transparent 70%);
-    animation: priceCardAura 3.6s ease-in-out infinite;
+    background: radial-gradient(circle at center, rgba(239, 68, 68, 0.13), transparent 68%);
+    animation: priceCardAura 4s ease-in-out infinite;
     pointer-events: none;
     z-index: 0;
 }
@@ -4711,9 +4722,8 @@ button.product-favorite-btn.is-active {
 
 .product-price-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(220, 38, 38, 0.3);
-    border-left-color: #b91c1c;
-    box-shadow: 0 8px 28px rgba(185, 28, 28, 0.13), 0 2px 6px rgba(15, 23, 42, 0.05);
+    border-color: rgba(220, 38, 38, 0.22);
+    box-shadow: 0 10px 36px rgba(185, 28, 28, 0.14), 0 2px 8px rgba(15, 23, 42, 0.05);
 }
 
 #productPrice {
@@ -4733,26 +4743,39 @@ button.product-favorite-btn.is-active {
 }
 
 .price-card-label {
-    font-size: 0.58rem;
+    font-size: 0.56rem;
     font-weight: 800;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.26em;
     text-transform: uppercase;
     color: #dc2626;
-    opacity: 0.7;
+    opacity: 0.75;
     line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.price-card-label::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #dc2626;
+    opacity: 0.7;
 }
 
 .price-discount-badge {
     display: inline-flex;
     align-items: center;
+    gap: 0.2rem;
     font-size: 0.68rem;
     font-weight: 800;
-    color: #b91c1c;
-    background: rgba(220, 38, 38, 0.08);
-    border: 1px solid rgba(220, 38, 38, 0.2);
+    color: #fff;
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
     border-radius: 999px;
-    padding: 0.13rem 0.55rem;
-    letter-spacing: 0.03em;
+    padding: 0.18rem 0.6rem;
+    letter-spacing: 0.04em;
+    box-shadow: 0 2px 8px rgba(185, 28, 28, 0.35);
     transition: opacity 0.28s ease, transform 0.28s ease;
 }
 
@@ -4764,10 +4787,11 @@ button.product-favorite-btn.is-active {
 }
 
 .price-old-value {
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 500;
-    color: #9ca3af;
+    color: #b0b8c9;
     text-decoration: line-through;
+    text-decoration-color: rgba(176, 184, 201, 0.7);
     transition: opacity 0.28s ease, transform 0.28s ease;
 }
 
@@ -4873,6 +4897,7 @@ button.product-favorite-btn.is-active {
     .product-price-card,
     .product-price-card::before,
     .product-price-card::after,
+    .product-price-card .price-shimmer,
     .product-price-card.is-price-animating #productPrice,
     .product-price-card.has-meta #productDiscount {
         animation: none !important;
@@ -4888,15 +4913,15 @@ button.product-favorite-btn.is-active {
 #productDeliveryInfo {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    margin-top: 0.55rem;
-    font-size: 0.715rem;
+    gap: 0.4rem;
+    margin-top: 0.7rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    color: #16a34a;
-    background: rgba(22, 163, 74, 0.07);
-    border: 1px solid rgba(22, 163, 74, 0.18);
+    color: #15803d;
+    background: linear-gradient(90deg, rgba(22,163,74,0.09) 0%, rgba(22,163,74,0.04) 100%);
+    border: 1px solid rgba(22, 163, 74, 0.2);
     border-radius: 999px;
-    padding: 0.2rem 0.65rem 0.2rem 0.45rem;
+    padding: 0.22rem 0.75rem 0.22rem 0.5rem;
     letter-spacing: 0.01em;
     line-height: 1.4;
 }
@@ -4905,7 +4930,7 @@ button.product-favorite-btn.is-active {
     content: '\f0d1';
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     color: #16a34a;
     flex-shrink: 0;
 }
@@ -26803,5 +26828,281 @@ body.ipo-is-transitioning * {
     }
     .ipordise-nl-row {
         grid-template-columns: 1fr !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRODUCT PAGE — ACCORDS + PYRAMID PREMIUM UPGRADE  (April 2026)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Accords Card shell ── */
+.product-main-accords-card {
+    background: #ffffff !important;
+    border: 1px solid rgba(220, 228, 240, 0.9) !important;
+    border-radius: 1.3rem !important;
+    padding: 1.5rem 1.6rem 1.65rem !important;
+    box-shadow:
+        0 4px 18px rgba(15, 23, 42, 0.06),
+        0 1px 4px  rgba(15, 23, 42, 0.03) !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+/* Red top accent line */
+.product-main-accords-card::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important; left: 0 !important; right: 0 !important;
+    height: 3px !important;
+    background: linear-gradient(90deg, #d42c2c, #e74444, #d42c2c) !important;
+    border-radius: 1.3rem 1.3rem 0 0 !important;
+}
+
+.product-main-accords-kicker {
+    font-size: 0.58rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.26em !important;
+    color: #d42c2c !important;
+    text-transform: uppercase !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    margin-bottom: 0.3rem !important;
+}
+
+.product-main-accords-kicker::before {
+    content: "\2726" !important;
+    font-size: 0.52rem !important;
+    opacity: 0.7 !important;
+}
+
+.product-main-accords-title {
+    font-size: 1.25rem !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    letter-spacing: -0.025em !important;
+    margin: 0 0 1.15rem !important;
+    line-height: 1.1 !important;
+}
+
+.product-main-accords-head {
+    margin-bottom: 0 !important;
+}
+
+/* ── Accord track: full-width rail (shows relative strength visually) ── */
+.product-main-accords-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+}
+
+.product-accord-row {
+    position: relative !important;
+    width: 100% !important;
+    background: rgba(226, 232, 240, 0.35) !important;
+    border-radius: 999px !important;
+    overflow: hidden !important;
+    transition: transform 0.22s ease !important;
+}
+
+.product-accord-row:hover {
+    transform: scaleY(1.04) !important;
+}
+
+/* ── Accord pill: fills only to its strength width ── */
+.product-accord-pill {
+    display: flex !important;
+    align-items: center !important;
+    width: var(--accord-width, 100%) !important;
+    min-height: 3.1rem !important;
+    padding: 0 1.3rem !important;
+    border-radius: 999px !important;
+    background: var(--accord-bg) !important;
+    color: var(--accord-fg) !important;
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: capitalize !important;
+    position: relative !important;
+    overflow: hidden !important;
+    justify-content: flex-start !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3) !important;
+    transition: filter 0.2s ease !important;
+}
+
+/* Gloss highlight stripe inside each bar */
+.product-accord-pill::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important; left: 0 !important; right: 0 !important;
+    height: 45% !important;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 100%) !important;
+    pointer-events: none !important;
+    border-radius: 999px 999px 0 0 !important;
+}
+
+.product-accord-row:hover .product-accord-pill {
+    filter: brightness(1.05) !important;
+}
+
+/* ── Fragrance Pyramid container ── */
+.fragrance-pyramid {
+    border-radius: 1.45rem !important;
+    overflow: hidden !important;
+    box-shadow:
+        0 10px 36px rgba(15, 23, 42, 0.1),
+        0 2px 8px  rgba(15, 23, 42, 0.05) !important;
+    border: 1px solid rgba(210, 220, 235, 0.75) !important;
+}
+
+/* Separator between levels */
+.pyramid-level + .pyramid-level {
+    border-top: 1px solid rgba(255, 255, 255, 0.65) !important;
+}
+
+/* ── Pyramid levels: richer gradients + colored left accent ── */
+.pyramid-level {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 1.25rem !important;
+    padding: 1.55rem 1.65rem !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    position: relative !important;
+    transition: filter 0.22s ease !important;
+}
+
+.pyramid-level:hover { filter: brightness(0.965) !important; }
+
+.pyramid-top {
+    background: linear-gradient(135deg, #eef4ff 0%, #dbeafe 100%) !important;
+    border-left: 4px solid #3b82f6 !important;
+}
+
+.pyramid-heart {
+    background: linear-gradient(135deg, #fdf0f7 0%, #fce7f3 100%) !important;
+    border-left: 4px solid #ec4899 !important;
+}
+
+.pyramid-base {
+    background: linear-gradient(135deg, #fffaf0 0%, #fef3c7 100%) !important;
+    border-left: 4px solid #f59e0b !important;
+}
+
+/* ── Icons: larger, vibrant, rounded-square ── */
+.pyramid-icon {
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+    border-radius: 1.05rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.25rem !important;
+    flex-shrink: 0 !important;
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease !important;
+}
+
+.pyramid-level:hover .pyramid-icon {
+    transform: scale(1.1) rotate(-5deg) !important;
+}
+
+.pyramid-top   .pyramid-icon {
+    background: linear-gradient(135deg, #60a5fa, #2563eb) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 22px rgba(59, 130, 246, 0.38) !important;
+}
+
+.pyramid-heart .pyramid-icon {
+    background: linear-gradient(135deg, #f472b6, #db2777) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 22px rgba(236, 72, 153, 0.38) !important;
+}
+
+.pyramid-base  .pyramid-icon {
+    background: linear-gradient(135deg, #fbbf24, #d97706) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 22px rgba(245, 158, 11, 0.38) !important;
+}
+
+/* ── Note-type label above h3 (CSS-generated) ── */
+.pyramid-top    .pyramid-content::before { content: "Top Notes" !important; color: #2563eb !important; }
+.pyramid-heart  .pyramid-content::before { content: "Heart Notes" !important; color: #be185d !important; }
+.pyramid-base   .pyramid-content::before { content: "Base Notes" !important; color: #b45309 !important; }
+
+.pyramid-top   .pyramid-content::before,
+.pyramid-heart .pyramid-content::before,
+.pyramid-base  .pyramid-content::before {
+    display: block !important;
+    font-size: 0.58rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 0.3rem !important;
+    opacity: 0.75 !important;
+}
+
+/* ── h3 note name ── */
+.pyramid-content h3 {
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.05em !important;
+    color: #0f172a !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.45rem !important;
+}
+
+/* ── Description ── */
+.pyramid-content p {
+    font-size: 0.8rem !important;
+    color: #64748b !important;
+    line-height: 1.58 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* ── Duration badge ── */
+.pyramid-duration {
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 0.6rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: #64748b !important;
+    margin-top: 0 !important;
+    padding: 0.28rem 0.72rem !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.75) !important;
+    border: 1px solid rgba(218, 226, 238, 0.85) !important;
+    backdrop-filter: blur(4px) !important;
+}
+
+/* ── Mobile adjustments ── */
+@media (max-width: 767px) {
+    .pyramid-level {
+        padding: 1.3rem 1.2rem !important;
+        gap: 1rem !important;
+    }
+
+    .pyramid-icon {
+        width: 2.9rem !important;
+        height: 2.9rem !important;
+        font-size: 1.05rem !important;
+        border-radius: 0.8rem !important;
+    }
+
+    .pyramid-content h3 {
+        font-size: 0.9rem !important;
+    }
+
+    .product-accord-pill {
+        min-height: 2.75rem !important;
+        font-size: 0.8rem !important;
+        padding: 0 1.05rem !important;
+    }
+
+    .product-main-accords-title {
+        font-size: 1.1rem !important;
     }
 }
