@@ -72,7 +72,7 @@ const FIREBASE_ERRORS = {
  * @returns {string}
  */
 export const getErrorMessage = (error) => {
-  const lang = (typeof localStorage !== 'undefined' && localStorage.getItem('ipordise-lang')) || 'fr';
+  const lang = (typeof localStorage !== 'undefined' && (localStorage.getItem('ipordise-language') || localStorage.getItem('ipordise-lang'))) || 'fr';
   const map = FIREBASE_ERRORS[lang] || FIREBASE_ERRORS.en;
   const fallback = lang === 'fr' ? 'Quelque chose s\u2019est mal pass\u00e9. Veuillez r\u00e9essayer.' : 'Something went wrong. Please try again.';
   return map[error?.code] || error?.message || fallback;

@@ -307,34 +307,34 @@ s0.parentNode.insertBefore(s1,s0);
             from { opacity: 0; transform: translateY(24px) scale(0.97); }
             to   { opacity: 1; transform: none; }
         }
-        /* Red gradient accent line at top */
-        .auth-card::before {
-            content: '';
-            display: block;
-            height: 3px;
-            background: linear-gradient(90deg, #dc2626 0%, #f87171 50%, #dc2626 100%);
-        }
         .auth-card-inner {
             padding: 2.25rem 2rem 2rem;
         }
-        /* Brand mark */
+        /* Brand mark header */
         .auth-brand-mark {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f111a 0%, #1a1d2e 60%, #111320 100%);
+            padding: 1.6rem 2rem 1.4rem;
+            position: relative;
+            overflow: hidden;
         }
-        .auth-brand-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #dc2626, #f87171);
+        .auth-brand-mark::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 60% 50%, rgba(220,38,38,0.18) 0%, transparent 65%);
+            pointer-events: none;
         }
-        .auth-brand-name {
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: #9ca3af;
+        .auth-brand-logo {
+            height: 52px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 2px 12px rgba(220,38,38,0.25));
         }
         /* Tabs */
         .auth-tabs {
@@ -784,13 +784,11 @@ s0.parentNode.insertBefore(s1,s0);
 
     <main class="auth-page">
         <div class="auth-card">
-          <div class="auth-card-inner">
-
-            <!-- Brand mark -->
+            <!-- Brand mark header -->
             <div class="auth-brand-mark">
-                <span class="auth-brand-dot"></span>
-                <span class="auth-brand-name">IPORDISE</span>
+                <img src="../assets/IPORDISE LOGO HEADER.png" alt="IPORDISE" class="auth-brand-logo">
             </div>
+          <div class="auth-card-inner">
 
             <!-- Tabs -->
             <div class="auth-tabs" role="tablist">
@@ -1010,7 +1008,7 @@ s0.parentNode.insertBefore(s1,s0);
 
       // ── Helpers ───────────────────────────────────────────────
       const $ = (id) => document.getElementById(id);
-      const isFr = () => (localStorage.getItem('ipordise-lang') || 'fr') === 'fr';
+      const isFr = () => (localStorage.getItem('ipordise-lang') || 'en') === 'fr';
 
       const MSG = {
         en: {

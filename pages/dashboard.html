@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31,7 +31,7 @@
 
     <style>
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       IPORDISE â€” Dashboard  "Prestige Edition"
+       IPORDISE — Dashboard  "Prestige Edition"
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     :root {
       --ink:       #0d0b0b;
@@ -344,19 +344,23 @@
     .d-sec-hdr {
       display: flex; align-items: center;
       justify-content: space-between;
-      margin-bottom: 1.1rem;
+      margin-bottom: 1.35rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 1.5px solid var(--border);
     }
     .d-sec-title {
-      font-size: 0.56rem; font-weight: 800;
-      letter-spacing: 0.26em; text-transform: uppercase;
-      color: #c4bcb6;
+      font-family: var(--serif);
+      font-size: 1.45rem; font-weight: 700;
+      letter-spacing: 0.01em;
+      color: var(--ink);
     }
     .d-sec-action {
+      display: inline-flex; align-items: center; gap: 0.3rem;
       font-size: 0.74rem; font-weight: 700;
       color: var(--red); text-decoration: none;
-      transition: opacity 0.15s;
+      transition: opacity 0.15s, transform 0.15s;
     }
-    .d-sec-action:hover { opacity: 0.72; }
+    .d-sec-action:hover { opacity: 0.8; transform: translateX(2px); }
 
     /* â”€â”€ STAT CARDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .d-stats-row {
@@ -381,9 +385,9 @@
       height: 3px; border-radius: 0;
     }
     .d-stat-ico {
-      width: 44px; height: 44px; border-radius: 12px;
+      width: 52px; height: 52px; border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; flex-shrink: 0;
+      font-size: 1.1rem; flex-shrink: 0;
     }
     .d-stat-val {
       font-family: var(--serif);
@@ -465,6 +469,19 @@
     .d-profile-ava:hover .d-ava-overlay { opacity: 1; }
     .d-ava-overlay i { font-size: 0.9rem; color: #fff; }
     .d-ava-overlay span { font-size: 0.42rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.8); }
+        .d-profile-ava-col {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.5rem; flex-shrink: 0; position: relative; z-index: 1;
+    }
+    .d-ava-remove-btn {
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 99px; padding: 0.22rem 0.65rem; cursor: pointer;
+      transition: all 0.18s; display: flex; align-items: center; gap: 0.3rem;
+      white-space: nowrap; line-height: 1.6;
+    }
+    .d-ava-remove-btn:hover { background: rgba(200,16,46,0.18); border-color: rgba(200,16,46,0.4); color: #ff8080; }
     .d-profile-hdr-info { flex: 1; position: relative; z-index: 1; min-width: 0; }
     .d-profile-hdr-info h3 { font-size: 1.05rem; font-weight: 700; color: #fff; margin: 0 0 0.22rem; }
     .d-profile-hdr-info p  { font-size: 0.72rem; color: rgba(255,255,255,0.36); margin: 0; }
@@ -807,7 +824,7 @@
       transition: transform 0.22s;
       box-shadow: 0 1px 3px rgba(0,0,0,0.18);
     }
-    .d-toggle input:checked + .d-toggle-sl { background: var(--ink); }
+    .d-toggle input:checked + .d-toggle-sl { background: var(--red); }
     .d-toggle input:checked + .d-toggle-sl::before { transform: translateX(17px); }
     /* Danger zone */
     .d-danger {
@@ -869,13 +886,179 @@
 
     /* Bottom nav label in the existing style.css-driven bottom bar */
     body.ipd-dash { padding-bottom: 0 !important; }
+    /* ═══════════════════════════════════════════════
+       DASHBOARD ENHANCEMENTS
+    ═══════════════════════════════════════════════ */
+
+    html { scroll-behavior: smooth; }
+
+    /* ── Sidebar user mini-profile ── */
+    .d-sidenav-user {
+      display: flex; align-items: center; gap: 0.9rem;
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(135deg, #0d0b0b 0%, #1c0a0f 100%);
+    }
+    .d-snu-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(145deg, var(--red), #8c0b1e);
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 700;
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 2px rgba(200,16,46,0.35), 0 4px 12px rgba(200,16,46,0.25);
+      overflow: hidden; background-size: cover; background-position: center;
+    }
+    .d-snu-info { flex: 1; min-width: 0; }
+    .d-snu-name {
+      font-size: 0.84rem; font-weight: 700;
+      color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 0.15rem;
+    }
+    .d-snu-badge {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-size: 0.57rem; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #d4a017;
+    }
+
+    /* ── Welcome banner ── */
+    .d-welcome-banner {
+      background: linear-gradient(135deg, #0d0b0b 0%, #1c0a0f 50%, #0d0b0b 100%);
+      border-radius: var(--r-lg);
+      border: 1px solid rgba(200,16,46,0.18);
+      box-shadow: var(--sh-md), inset 0 1px 0 rgba(255,255,255,0.04);
+      padding: 2.25rem 2.25rem 2rem;
+      position: relative; overflow: hidden;
+      margin-bottom: 0.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .d-welcome-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 55% 100% at 100% 50%, rgba(200,16,46,0.2) 0%, transparent 55%),
+        radial-gradient(ellipse 25% 55% at 5% 100%, rgba(176,125,16,0.09) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .d-wb-left { position: relative; z-index: 1; }
+    .d-wb-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      font-size: 0.6rem; font-weight: 800;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 0.8rem;
+    }
+    .d-wb-title {
+      font-family: var(--serif);
+      font-size: 2rem; font-weight: 700;
+      color: #fff; line-height: 1.1; margin: 0 0 0.65rem;
+      letter-spacing: 0.01em;
+    }
+    .d-wb-sub {
+      font-size: 0.81rem; color: rgba(255,255,255,0.42);
+      line-height: 1.65; margin: 0 0 1.5rem; max-width: 380px;
+    }
+    .d-wb-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .d-wb-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.72rem 1.5rem;
+      background: var(--red); color: #fff;
+      border-radius: var(--r-sm); border: none;
+      font-size: 0.78rem; font-weight: 700;
+      text-decoration: none; transition: all 0.18s;
+      box-shadow: 0 4px 16px var(--red-glow);
+    }
+    .d-wb-btn:hover { background: #a80e28; transform: translateY(-1px); box-shadow: 0 6px 24px var(--red-glow); }
+    .d-wb-secondary {
+      font-size: 0.76rem; font-weight: 600;
+      color: rgba(255,255,255,0.38); text-decoration: none;
+      transition: color 0.15s; border-bottom: 1px solid rgba(255,255,255,0.12);
+      padding-bottom: 1px;
+    }
+    .d-wb-secondary:hover { color: rgba(255,255,255,0.75); }
+    .d-wb-deco {
+      position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+      width: 220px; height: 220px; opacity: 0.07; pointer-events: none;
+    }
+    .d-wb-deco svg { width: 100%; height: 100%; }
+    @media (max-width: 640px) {
+      .d-wb-deco { display: none; }
+      .d-welcome-banner { padding: 1.6rem 1.35rem; }
+      .d-wb-title { font-size: 1.55rem; }
+    }
+
+    /* ── Stat card improvements ── */
+    .d-stat {
+      padding: 1.65rem 1.5rem 1.4rem;
+    }
+    .d-stat-bar { height: 4px; }
+    .ds-orders .d-stat-ico { background: linear-gradient(145deg, #f0eeec, #e8e4e0); color: #4a4a4a; }
+    .ds-fav    .d-stat-ico { background: linear-gradient(145deg, #fef2f4, #fee5ea); color: var(--red); }
+    .ds-vip    .d-stat-ico { background: linear-gradient(145deg, #fffbeb, #fef3c7); color: var(--gold); }
+    .ds-ship   .d-stat-ico { background: linear-gradient(145deg, #f0fdf6, #dcfce7); color: var(--green); }
+
+    /* ── Profile header ── */
+    .d-profile-hdr {
+      background: linear-gradient(135deg, #0d0b0b 0%, #1c0a10 55%, #110808 100%) !important;
+    }
+
+    /* ── Hero red line separator ── */
+    .d-hero::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, rgba(200,16,46,0.5) 30%, rgba(200,16,46,0.5) 70%, transparent 100%);
+    }
+
+    /* ── Better mobile tab active state ── */
+    .d-mobile-tabs {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.85rem;
+    }
+    .d-mobile-tab.active {
+      background: var(--ink); color: #fff;
+      border-color: transparent;
+    }
+    .d-mobile-tab i { font-size: 0.78rem; }
+
+    /* ── Order card head subtle bg ── */
+    .d-order-head { background: #fafaf9; }
+    .d-order-card { border-radius: var(--r-lg); }
+
+    /* ── Settings card hover ── */
+    .d-s-card { transition: box-shadow 0.2s, transform 0.18s, border-color 0.18s; }
+    .d-s-card:hover { border-color: var(--border-md); }
+
+    /* ── Improved toast ── */
+    #dashToast {
+      background: #1a1917;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--r-sm);
+      padding: 0.88rem 1.6rem;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.36), 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* ── Quick action card arrow on hover ── */
+    .d-qa-card { transition: box-shadow 0.2s, transform 0.18s, border-color 0.2s, background 0.18s; }
+    .d-qa-card:hover { background: #fdfdfc; border-color: rgba(200,16,46,0.12); }
+
+    /* ── Sidebar link font size ── */
+    .d-snav-link { font-size: 0.84rem; }
+
+    /* ── Stat name ── */
+    .d-stat-name { font-size: 0.74rem; letter-spacing: 0.04em; }
+    .d-stat-desc { font-size: 0.73rem; }
+
+    /* ── Section gap ── */
+    .d-main { gap: 2.5rem; }
+
     </style>
 </head>
 
 <body class="text-gray-800 antialiased ipd-dash">
 
 <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     AUTH GUARD  â€” elegant loading screen
+     AUTH GUARD  — elegant loading screen
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div id="dashAuthGuard" role="status" aria-label="Loading your account">
     <div class="guard-wordmark">IPORDISE<em>.</em></div>
@@ -883,7 +1066,7 @@
 </div>
 
 <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     PAGE â€” hidden until auth confirmed
+     PAGE — hidden until auth confirmed
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <div class="dash-protected d-fadein" id="dashPage">
 
@@ -907,7 +1090,7 @@
                 <div class="flex-1 max-w-2xl mx-8 hidden md:block">
                     <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
                         <i class="fas fa-search ipo-search-trigger-icon"></i>
-                        <span class="ipo-search-trigger-text">Search perfumes, brands, notesâ€¦</span>
+                        <span class="ipo-search-trigger-text">Search perfumes, brands, notes…</span>
                     </button>
                 </div>
                 <div class="flex items-center gap-3 md:gap-6">
@@ -931,7 +1114,7 @@
         <div class="header-mobile-search md:hidden" aria-hidden="true" role="search">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="mobile-search-inner">
-                    <input type="text" class="mobile-search-input" placeholder="Search perfumes, brands, notesâ€¦" aria-label="Search" autocomplete="off">
+                    <input type="text" class="mobile-search-input" placeholder="Search perfumes, brands, notes…" aria-label="Search" autocomplete="off">
                     <button class="mobile-search-submit" aria-label="Submit search"><i class="fas fa-search"></i></button>
                 </div>
             </div>
@@ -1018,13 +1201,21 @@
     </div>
 
     <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-         LAYOUT â€” Sidebar + Main
+         LAYOUT — Sidebar + Main
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div style="background:var(--bg)">
       <div class="d-layout">
 
         <!-- â”€â”€ Sidebar â”€â”€ -->
         <aside class="d-sidenav" aria-label="Dashboard navigation">
+            <!-- User mini-profile -->
+            <div class="d-sidenav-user">
+                <div class="d-snu-avatar" id="dashSideAvatar">?</div>
+                <div class="d-snu-info">
+                    <div class="d-snu-name" id="dashSideName">My Account</div>
+                    <div class="d-snu-badge"><i class="fas fa-crown" style="font-size:.56rem"></i>&amp;nbsp;VIP Member</div>
+                </div>
+            </div>
             <div class="d-sidenav-hdr" data-i18n="dashboard.navigation">Navigation</div>
             <a href="#section-overview" class="d-snav-link active">
                 <span class="d-snav-icon"><i class="fas fa-grid-2"></i></span>
@@ -1074,7 +1265,28 @@
         <main class="d-main">
 
             <!-- â”€â”€â”€ Section: Overview â”€â”€â”€ -->
-            <section id="section-overview" class="d-fadein">
+            
+            <!-- ── Welcome Banner ── -->
+            <div class="d-welcome-banner d-fadein">
+                <div class="d-wb-left">
+                    <div class="d-wb-eyebrow"><i class="fas fa-sparkles"></i>&nbsp;VIP Early Access</div>
+                    <h2 class="d-wb-title">New Arrivals Are Live</h2>
+                    <p class="d-wb-sub">Shop the latest fragrances before they sell out — your exclusive VIP access is active now.</p>
+                    <div class="d-wb-actions">
+                        <a href="../discover.html?filter=new-in" class="d-wb-btn">Shop New In &nbsp;<i class="fas fa-arrow-right" style="font-size:.72rem"></i></a>
+                        <a href="../discover.html?filter=best-sellers" class="d-wb-secondary">Best Sellers</a>
+                    </div>
+                </div>
+                <div class="d-wb-deco">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="white" stroke-width="1"/>
+                        <circle cx="100" cy="100" r="60" fill="none" stroke="white" stroke-width="0.7"/>
+                        <circle cx="100" cy="100" r="40" fill="none" stroke="white" stroke-width="0.5"/>
+                        <circle cx="100" cy="100" r="22" fill="none" stroke="white" stroke-width="0.4"/>
+                    </svg>
+                </div>
+            </div>
+<section id="section-overview" class="d-fadein">
                 <div class="d-sec-hdr">
                     <span class="d-sec-title" data-i18n="dashboard.account_overview">Account Overview</span>
                     <a href="../discover.html?filter=all" class="d-sec-action" data-i18n="dashboard.browse_collection">Browse collection â†’</a>
@@ -1126,7 +1338,7 @@
                     <span class="d-sec-title" data-i18n="dashboard.my_favourites">My Favourites</span>
                     <a href="../discover.html" class="d-sec-action" data-i18n="dashboard.browse_catalogue">Browse catalogue &rarr;</a>
                 </div>
-                <!-- Wishlist rendered by JS â€” uses .d-fav-card classes -->
+                <!-- Wishlist rendered by JS — uses .d-fav-card classes -->
                 <div id="dashWishlistGrid" class="d-fav-grid"></div>
             </section>
 
@@ -1137,13 +1349,18 @@
                 </div>
                 <div class="d-profile-card">
                     <div class="d-profile-hdr">
-                        <div class="d-profile-ava" id="dashAvatarForm" title="Click to upload photo">
+                        <div class="d-profile-ava-col">
+                        <div class="d-profile-ava" id="dashAvatarForm" title="Click to change photo">
                             <span id="dashAvatarInitial">?</span>
                             <div class="d-ava-overlay">
                                 <i class="fas fa-camera"></i>
-                                <span>Upload</span>
+                                <span id="dashAvaOverlayLabel">Upload</span>
                             </div>
                             <input type="file" id="dashAvatarInput" accept="image/*" style="display:none">
+                        </div>
+                        <button type="button" id="dashRemovePhoto" class="d-ava-remove-btn" style="display:none">
+                            <i class="fas fa-xmark"></i> Remove photo
+                        </button>
                         </div>
                         <div class="d-profile-hdr-info">
                             <h3 id="dashProfileHeadName">Your Account</h3>
@@ -1185,7 +1402,7 @@
                             <label for="dashProfileCity" data-i18n="dashboard.city">City</label>
                             <div class="d-field-wrap">
                                 <i class="fas fa-location-dot d-field-ico"></i>
-                                <input type="text" id="dashProfileCity" placeholder="Casablanca, Rabat, Tangierâ€¦" autocomplete="address-level2"
+                                <input type="text" id="dashProfileCity" placeholder="Casablanca, Rabat, Tangier…" autocomplete="address-level2"
                                        data-i18n-placeholder="dashboard.city_ph">
                             </div>
                         </div>
@@ -1263,11 +1480,11 @@
                         </div>
                         <div class="d-s-row">
                             <span class="d-s-lbl">Account email</span>
-                            <span class="d-s-val" id="settingEmailDisplay" style="font-size:.7rem;color:var(--subtle)">â€”</span>
+                            <span class="d-s-val" id="settingEmailDisplay" style="font-size:.7rem;color:var(--subtle)">—</span>
                         </div>
                         <div class="d-s-row">
                             <span class="d-s-lbl">Email verified</span>
-                            <span class="d-s-val" id="settingEmailVerified">â€”</span>
+                            <span class="d-s-val" id="settingEmailVerified">—</span>
                         </div>
                         <div class="d-s-row">
                             <span class="d-s-lbl">Analytics cookies</span>
@@ -1291,16 +1508,16 @@
                             <span class="d-s-lbl">Language</span>
                             <select id="settingLangSelect" style="border:none;background:none;font-size:.78rem;font-weight:600;color:var(--ink);cursor:pointer;font-family:var(--sans);outline:none;">
                                 <option value="en">English</option>
-                                <option value="fr">FranÃ§ais</option>
+                                <option value="fr">Français</option>
                             </select>
                         </div>
                         <div class="d-s-row">
                             <span class="d-s-lbl">Currency</span>
-                            <span class="d-s-val">MAD â€” Moroccan Dirham</span>
+                            <span class="d-s-val">MAD — Moroccan Dirham</span>
                         </div>
                         <div class="d-s-row">
                             <span class="d-s-lbl">Region</span>
-                            <span class="d-s-val">Morocco ðŸ‡²ðŸ‡¦</span>
+                            <span class="d-s-val">Morocco 🇲🇦</span>
                         </div>
                     </div>
 
@@ -1478,7 +1695,7 @@
             <div class="ipo-search-overlay-bar">
                 <div class="ipo-search-overlay-input-wrap">
                     <i class="fas fa-search ipo-search-overlay-search-icon"></i>
-                    <input type="text" class="ipo-search-overlay-input" id="ipoSearchOverlayInput" placeholder="Search perfumes, brands, notesâ€¦" autocomplete="off" aria-label="Search">
+                    <input type="text" class="ipo-search-overlay-input" id="ipoSearchOverlayInput" placeholder="Search perfumes, brands, notes…" autocomplete="off" aria-label="Search">
                     <button type="button" class="ipo-search-overlay-clear" id="ipoSearchOverlayClear" aria-label="Clear search"><i class="fas fa-times"></i></button>
                 </div>
                 <button type="button" class="ipo-search-overlay-close-btn" id="ipoSearchOverlayClose" aria-label="Close search"><i class="fas fa-times"></i></button>
@@ -1508,6 +1725,8 @@
   const avatar          = document.getElementById('dashAvatar');
   const avatarForm      = document.getElementById('dashAvatarForm');
   const avatarInput     = document.getElementById('dashAvatarInput');
+  const removePhotoBtn  = document.getElementById('dashRemovePhoto');
+  const avaOverlayLabel = document.getElementById('dashAvaOverlayLabel');
   const welcome         = document.getElementById('dashWelcome');
   const emailEl         = document.getElementById('dashEmail');
   const verifiedEl      = document.getElementById('dashVerified');
@@ -1551,7 +1770,7 @@
     if (cardWl) cardWl.textContent = cnt;
 
     // Always keep the header badge in sync with the count we're actually rendering.
-    // This is the authoritative update â€” no reliance on async event ordering.
+    // This is the authoritative update — no reliance on async event ordering.
     document.querySelectorAll('.header-icon-btn[aria-label="Wishlist"]').forEach((btn) => {
       btn.classList.toggle('is-active', cnt > 0);
       let badge = btn.querySelector('.header-wishlist-badge');
@@ -1640,9 +1859,9 @@
 
   // â”€â”€ Orders render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const formatDate = (d) => {
-    if (!d) return 'â€”';
+    if (!d) return '—';
     const dt = d instanceof Date ? d : new Date(d);
-    if (isNaN(dt)) return 'â€”';
+    if (isNaN(dt)) return '—';
     return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   };
 
@@ -1680,7 +1899,7 @@
     if (empty) empty.style.display = 'none';
 
     list.innerHTML = orders.map((order) => {
-      const shortId = order.id ? '#' + order.id.slice(-6).toUpperCase() : '#â€”';
+      const shortId = order.id ? '#' + order.id.slice(-6).toUpperCase() : '#—';
       const date    = formatDate(order.createdAt);
       const items   = Array.isArray(order.items) ? order.items : [];
       const s       = order.summary || {};
@@ -1692,11 +1911,11 @@
       const itemLines = items.slice(0, 3).map((it) =>
         `<div class="d-order-item">
           <span class="d-order-item-name">${it.name || 'Product'}</span>
-          ${it.size ? ` Â· ${it.size}` : ''} Â· Ã—${it.qty || 1}
+          ${it.size ? ` Â· ${it.size}` : ''} Â· ×${it.qty || 1}
           ${it.pricePending ? ' Â· <em style="color:var(--muted)">Pending</em>' : ` Â· ${formatMAD(it.price * it.qty)}`}
         </div>`
       ).join('');
-      const moreCount = items.length > 3 ? `<div class="d-order-item" style="color:var(--subtle)">+ ${items.length - 3} more item${items.length - 3 !== 1 ? 's' : ''}â€¦</div>` : '';
+      const moreCount = items.length > 3 ? `<div class="d-order-item" style="color:var(--subtle)">+ ${items.length - 3} more item${items.length - 3 !== 1 ? 's' : ''}…</div>` : '';
 
       return `
         <div class="d-order-card">
@@ -1717,7 +1936,7 @@
   };
 
   // Reactive: re-render whenever FavStore syncs.
-  // No auth.currentUser guard â€” the event only fires after FavStore resolves
+  // No auth.currentUser guard — the event only fires after FavStore resolves
   // (which requires auth), and renderDashWishlist is safe to call at any time.
   document.addEventListener('ipordise:favs-changed', (e) => {
     renderDashWishlist(e.detail?.favourites || []);
@@ -1749,7 +1968,8 @@
     if (avatar) avatar.textContent = initial;
 
     // Profile photo
-    const AVATAR_KEY    = 'ipordise-avatar-' + user.uid;
+    const AVATAR_KEY       = 'ipordise-avatar-' + user.uid;
+    const AVATAR_THUMB_KEY = 'ipordise-avatar-thumb-' + user.uid;
     const savedPic      = localStorage.getItem(AVATAR_KEY);
     // Apply to hero avatar circle too
     if (savedPic && avatar) {
@@ -1759,14 +1979,30 @@
       avatar.style.backgroundPosition = 'center';
     }
     const avatarInitial = document.getElementById('dashAvatarInitial');
-    if (savedPic && avatarForm) {
-      if (avatarInitial) avatarInitial.style.display = 'none';
-      const existImg = avatarForm.querySelector('img');
-      if (!existImg) { const img = document.createElement('img'); img.src = savedPic; avatarForm.insertBefore(img, avatarForm.firstChild); }
-      else existImg.src = savedPic;
-    } else if (avatarInitial) {
-      avatarInitial.textContent = initial;
-    }
+    // -- Avatar photo state helper --
+    const setAvatarPhotoState = (dataUrl) => {
+      if (dataUrl) {
+        if (avatarInitial) avatarInitial.style.display = 'none';
+        let img = avatarForm ? avatarForm.querySelector('img') : null;
+        if (!img && avatarForm) { img = document.createElement('img'); avatarForm.insertBefore(img, avatarForm.firstChild); }
+        if (img) img.src = dataUrl;
+        if (avatar) { avatar.textContent = ''; avatar.style.backgroundImage = 'url(' + dataUrl + ')'; avatar.style.backgroundSize = 'cover'; avatar.style.backgroundPosition = 'center'; }
+        if (removePhotoBtn) removePhotoBtn.style.display = 'flex';
+        if (avaOverlayLabel) avaOverlayLabel.textContent = 'Change';
+        const sideAvEl = document.getElementById('dashSideAvatar');
+        if (sideAvEl) { sideAvEl.style.backgroundImage = 'url(' + dataUrl + ')'; sideAvEl.style.backgroundSize = 'cover'; sideAvEl.style.backgroundPosition = 'center'; sideAvEl.textContent = ''; }
+      } else {
+        const img = avatarForm ? avatarForm.querySelector('img') : null;
+        if (img) img.remove();
+        if (avatarInitial) { avatarInitial.style.display = ''; avatarInitial.textContent = initial; }
+        if (avatar) { avatar.style.backgroundImage = ''; avatar.style.backgroundSize = ''; avatar.textContent = initial; }
+        if (removePhotoBtn) removePhotoBtn.style.display = 'none';
+        if (avaOverlayLabel) avaOverlayLabel.textContent = 'Upload';
+        const sideAvEl = document.getElementById('dashSideAvatar');
+        if (sideAvEl) { sideAvEl.style.backgroundImage = ''; sideAvEl.style.backgroundSize = ''; sideAvEl.textContent = initial; }
+      }
+    };
+        setAvatarPhotoState(savedPic || null);
 
     // Edit profile â†’ focus name
     const editBtn = document.getElementById('dashEditProfileBtn');
@@ -1792,14 +2028,39 @@
         reader.onload = (ev) => {
           const dataUrl = ev.target.result;
           localStorage.setItem(AVATAR_KEY, dataUrl);
-          if (avatarInitial) avatarInitial.style.display = 'none';
-          let img = avatarForm.querySelector('img');
-          if (!img) { img = document.createElement('img'); avatarForm.insertBefore(img, avatarForm.firstChild); }
+          // Create compressed 80×80 thumbnail for Firestore / review display
+          const img = new Image();
+          img.onload = () => {
+            const SIZE = 80;
+            const canvas = document.createElement('canvas');
+            canvas.width = SIZE; canvas.height = SIZE;
+            const ctx = canvas.getContext('2d');
+            const side = Math.min(img.width, img.height);
+            const ox = (img.width  - side) / 2;
+            const oy = (img.height - side) / 2;
+            ctx.drawImage(img, ox, oy, side, side, 0, 0, SIZE, SIZE);
+            const thumb = canvas.toDataURL('image/jpeg', 0.7);
+            localStorage.setItem(AVATAR_THUMB_KEY, thumb);
+            if (auth.currentUser) saveUserProfile(auth.currentUser.uid, { photoURL: thumb });
+          };
           img.src = dataUrl;
-          if (avatar) { avatar.textContent = ''; avatar.style.backgroundImage = `url(${dataUrl})`; avatar.style.backgroundSize = 'cover'; }
+          setAvatarPhotoState(dataUrl);
           showToast('Profile photo updated!');
         };
         reader.readAsDataURL(file);
+      });
+    }
+
+    // Remove photo
+    if (removePhotoBtn) {
+      removePhotoBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        localStorage.removeItem(AVATAR_KEY);
+        localStorage.removeItem(AVATAR_THUMB_KEY);
+        avatarInput.value = '';
+        setAvatarPhotoState(null);
+        if (auth.currentUser) saveUserProfile(auth.currentUser.uid, { photoURL: null });
+        showToast('Profile photo removed.');
       });
     }
 
@@ -1865,7 +2126,7 @@
     if (!saveBtn) return;
     const newName = profileName?.value.trim() || '';
     saveBtn.disabled = true;
-    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Savingâ€¦';
+    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
     try {
       if (auth.currentUser && newName && newName !== auth.currentUser.displayName) {
         await updateProfile(auth.currentUser, { displayName: newName });
@@ -1905,7 +2166,13 @@
     const orig = btn.innerHTML;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     try {
+      const uid = auth.currentUser?.uid;
       await logOut();
+      // Clear logged-in user data so next visitor starts fresh
+      localStorage.removeItem('cart');
+      localStorage.removeItem('ipordise-cart-items');
+      localStorage.removeItem('ipordise-profile-extras');
+      if (uid) localStorage.removeItem('ipordise-avatar-' + uid);
       window.location.replace('login.html');
     } catch (err) {
       showToast(getErrorMessage(err));
@@ -1919,11 +2186,13 @@
   // â”€â”€ Language select â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const langSelect = document.getElementById('settingLangSelect');
   if (langSelect) {
-    langSelect.value = localStorage.getItem('ipordise-lang') || 'fr';
+    langSelect.value = localStorage.getItem('ipordise-language') || localStorage.getItem('ipordise-lang') || 'en';
     langSelect.addEventListener('change', () => {
-      localStorage.setItem('ipordise-lang', langSelect.value);
-      showToast('Language updated â€” reloadingâ€¦');
-      setTimeout(() => window.location.reload(), 800);
+      const lang = langSelect.value;
+      localStorage.setItem('ipordise-language', lang);
+      localStorage.setItem('ipordise-lang', lang);
+      window.dispatchEvent(new CustomEvent('ipordise:langchange', { detail: { lang } }));
+      showToast(lang === 'fr' ? 'Langue mise à jour !' : 'Language updated!');
     });
   }
 

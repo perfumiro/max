@@ -1439,7 +1439,7 @@ s0.parentNode.insertBefore(s1,s0);
         }
         listWrap.innerHTML = reviews.map(r => {
           const initial   = (r.displayName || '?').charAt(0).toUpperCase();
-          const savedPic  = r.uid ? localStorage.getItem('ipordise-avatar-' + r.uid) : null;
+          const savedPic  = r.photoURL || (r.uid ? localStorage.getItem('ipordise-avatar-' + r.uid) : null);
           const date    = r.createdAt?.toDate
             ? r.createdAt.toDate().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })
             : '';
@@ -1627,6 +1627,7 @@ s0.parentNode.insertBefore(s1,s0);
               productName,
               uid:         user.uid,
               displayName: user.displayName || user.email.split('@')[0],
+              photoURL:    localStorage.getItem('ipordise-avatar-thumb-' + user.uid) || user.photoURL || null,
               rating:      chosen,
               body,
               createdAt:   serverTimestamp()
