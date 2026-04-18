@@ -1963,7 +1963,7 @@
     if (hash) setTimeout(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
 
     // Name & initial
-    const name    = user.displayName || user.email.split('@')[0];
+    const name    = user.displayName || (user.email ? user.email.split('@')[0] : 'Client');
     const initial = name.charAt(0).toUpperCase();
     if (avatar) avatar.textContent = initial;
 

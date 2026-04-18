@@ -1348,9 +1348,27 @@ s0.parentNode.insertBefore(s1,s0);
       const writeTopBtn   = document.getElementById('writeReviewTopBtn');
       const writePanelBtn = document.getElementById('writeReviewPanelBtn');
 
+      let currentUser = null; // tracked by onAuthStateChanged below
+
       const scrollToForm = () => {
         formWrap?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(() => document.getElementById('reviewBodyInput')?.focus(), 400);
+        if (!currentUser) {
+          // Guest: show toast and pulse the sign-in panel
+          if (window.showToast) {
+            window.showToast('Please sign in to write a review — it only takes a second!');
+          }
+          setTimeout(() => {
+            const panel = formWrap?.querySelector('div');
+            if (panel) {
+              panel.style.transition = 'box-shadow 0.18s, outline 0.18s';
+              panel.style.outline = '2px solid #c8102e';
+              panel.style.boxShadow = '0 0 0 4px rgba(200,16,46,0.15)';
+              setTimeout(() => { panel.style.outline = ''; panel.style.boxShadow = ''; }, 1600);
+            }
+          }, 350);
+        } else {
+          setTimeout(() => document.getElementById('reviewBodyInput')?.focus(), 400);
+        }
       };
       writePanelBtn?.addEventListener('click', scrollToForm);
 
@@ -1626,7 +1644,7 @@ s0.parentNode.insertBefore(s1,s0);
               productId,
               productName,
               uid:         user.uid,
-              displayName: user.displayName || user.email.split('@')[0],
+              displayName: user.displayName || (user.email ? user.email.split('@')[0] : 'Client'),
               photoURL:    localStorage.getItem('ipordise-avatar-thumb-' + user.uid) || user.photoURL || null,
               rating:      chosen,
               body,
