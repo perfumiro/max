@@ -25502,27 +25502,63 @@ button.product-favorite-btn:not(.is-active) i.fa-heart {
     display: flex;
     flex-direction: column;
     gap: 0;
+    background: linear-gradient(160deg, #fff 0%, #fdfbf7 100%);
+    border: 1px solid rgba(201, 162, 39, 0.15);
+    border-radius: 1.1rem;
+    padding: 1.6rem 1.75rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decorative top-left quote mark */
+.prod-desc-wrap::before {
+    content: '\201C';
+    position: absolute;
+    top: -0.5rem;
+    left: 1rem;
+    font-size: 6rem;
+    line-height: 1;
+    color: rgba(201, 162, 39, 0.12);
+    font-family: Georgia, serif;
+    pointer-events: none;
+    user-select: none;
+}
+/* Subtle bottom-right glow */
+.prod-desc-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: -3rem;
+    right: -3rem;
+    width: 12rem;
+    height: 12rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,162,39,0.08) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 /* Pull-quote: first sentence — larger, accent left bar */
 .prod-desc-lead {
-    font-size: 1.05rem !important;
-    font-weight: 500 !important;
-    line-height: 1.65 !important;
-    color: #1a1a2e !important;
-    padding-left: 1.1rem !important;
-    border-left: 3px solid #c9a227 !important;
+    font-size: 1.08rem !important;
+    font-weight: 600 !important;
+    line-height: 1.7 !important;
+    color: #111827 !important;
+    padding: 0 0 1rem !important;
+    border-bottom: 1px solid rgba(201, 162, 39, 0.2) !important;
     margin: 0 0 1.1rem !important;
-    letter-spacing: -0.005em !important;
+    letter-spacing: -0.01em !important;
+    position: relative;
+    z-index: 1;
 }
 
 /* Body copy: comfortable reading */
 .prod-desc-body {
-    font-size: 0.875rem !important;
-    line-height: 1.8 !important;
-    color: #4b5563 !important;
-    margin: 0 0 1.25rem !important;
+    font-size: 0.9rem !important;
+    line-height: 1.85 !important;
+    color: #374151 !important;
+    margin: 0 !important;
     font-weight: 400 !important;
+    position: relative;
+    z-index: 1;
 }
 
 /* Bottle / section card */
@@ -25562,12 +25598,14 @@ button.product-favorite-btn:not(.is-active) i.fa-heart {
 }
 
 @media (max-width: 767px) {
+    .prod-desc-wrap {
+        padding: 1.15rem 1.1rem 1.1rem !important;
+    }
     .prod-desc-lead {
-        font-size: 0.92rem !important;
-        padding-left: 0.85rem !important;
+        font-size: 0.95rem !important;
     }
     .prod-desc-body {
-        font-size: 0.825rem !important;
+        font-size: 0.845rem !important;
     }
 }
 
