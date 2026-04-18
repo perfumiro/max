@@ -1,5 +1,9 @@
 ﻿﻿/* ═══════════════════════════════════════════
-   Scroll Progress Bar — class-based (JS: .scroll-progress)
+   Scroll Progress Bar — premium luxury (IPORDISE)
+   • Fades in on first scroll, hidden at very top
+   • Deep crimson → rose → champagne-gold gradient
+   • Glow intensifies past 50% scroll depth
+   • Respects prefers-reduced-motion
    ═══════════════════════════════════════════ */
 .scroll-progress {
     --scroll-progress-scale: 0;
@@ -7,11 +11,20 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 3px;
+    height: 3px;                     /* minimal, clean */
     z-index: 99999;
     pointer-events: none;
     overflow: hidden;
     contain: strict;
+
+    /* Fade-in: invisible at page top, appears on first scroll */
+    opacity: 0;
+    transition: opacity 0.45s ease;
+}
+
+/* Becomes visible once user scrolls even slightly */
+.scroll-progress.is-visible {
+    opacity: 1;
 }
 
 .scroll-progress__bar {
@@ -20,20 +33,52 @@
     width: 100%;
     transform-origin: left center;
     transform: scaleX(var(--scroll-progress-scale, 0));
-    background: linear-gradient(90deg, #a01e1e 0%, #d42c2c 45%, #ff5252 100%);
+
+    /* Luxury gradient: deep crimson → rose → champagne gold */
+    background: linear-gradient(
+        90deg,
+        #7b0d1e  0%,
+        #c0182e  25%,
+        #e05070  55%,
+        #d4975a  80%,
+        #f0c274 100%
+    );
+
+    /* Subtle ambient glow (base state) */
     box-shadow:
-        0 0 10px rgba(212, 44, 44, 0.65),
-        0 0 3px  rgba(255, 82,  82, 0.45);
+        0 0 8px  rgba(192, 24,  46, 0.55),
+        0 0 2px  rgba(224, 80, 112, 0.35);
+
     will-change: transform;
 }
 
+/* Active scrolling: sharper, brighter glow */
 .scroll-progress.is-scrolling .scroll-progress__bar {
     box-shadow:
-        0 0 16px rgba(212, 44, 44, 0.85),
-        0 0 6px  rgba(255, 82,  82, 0.60);
+        0 0 14px rgba(192, 24,  46, 0.75),
+        0 0 5px  rgba(224, 80, 112, 0.55);
+}
+
+/* Past 50% scroll depth: intensified glow + gold halo */
+.scroll-progress.is-halfway .scroll-progress__bar {
+    box-shadow:
+        0 0 18px rgba(192, 24,  46, 0.80),
+        0 0 8px  rgba(224, 80, 112, 0.60),
+        0 0 3px  rgba(212, 151, 90, 0.45);
+}
+
+/* Both conditions: maximum luxury glow */
+.scroll-progress.is-scrolling.is-halfway .scroll-progress__bar {
+    box-shadow:
+        0 0 22px rgba(192, 24,  46, 0.90),
+        0 0 10px rgba(224, 80, 112, 0.70),
+        0 0 4px  rgba(212, 151, 90, 0.50);
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .scroll-progress {
+        transition: none;
+    }
     .scroll-progress__bar {
         transition: none;
     }

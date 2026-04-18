@@ -1879,7 +1879,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 82, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Spicy Woody · A powerful signature with cardamom, caramel, and amber woods.",
-            longDescription: 'Azzaro The Most Wanted Eau de Parfum Intense delivers a bold, addictive trail built around warm spices and deep woods. The opening is energetic and bright, the heart is rich and confident, and the dry-down is smooth and long-lasting for evening wear.',
+            longDescription: 'Azzaro The Most Wanted Eau de Parfum Intense is an irresistibly bold fragrance that pushes the boundaries of seduction. The composition opens with a fiery burst of cardamom and toffee apple, instantly commanding attention with its sweet-spicy magnetism. At the heart, an addictive caramel accord intertwines with rich amber, creating a warm and enveloping aura that feels both luxurious and provocative. The base reveals deep woody notes of vetiver and cedarwood, grounded by creamy vanilla and tonka bean for a smooth, skin-hugging finish that lingers for hours. Housed in a bold black-and-gold bottle, this intense interpretation is designed for the man who leaves a lasting impression wherever he goes.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -1903,7 +1903,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme · Épicé Boisé · Une signature puissante avec cardamome, caramel et bois ambrés.",
-                longDescription: "Azzaro The Most Wanted Eau de Parfum Intense délivre un sillage audacieux et addictif construit autour d'épices chaudes et de bois profonds. L'ouverture est énergétique et lumineuse, le cœur est riche et confié, et le séchage est lisse et durable pour une tenue soirée.",
+                longDescription: "Azzaro The Most Wanted Eau de Parfum Intense est un parfum irrésistiblement audacieux qui repousse les limites de la séduction. La composition s'ouvre sur un éclat ardent de cardamome et de pomme caramélisée, captant immédiatement l'attention par son magnétisme sucré-épicé. Au cœur, un accord de caramel addictif s'entrelace avec un ambre riche, créant une aura chaleureuse et enveloppante à la fois luxueuse et provocante. Le fond révèle des notes boisées profondes de vétiver et de cèdre, ancrées par de la vanille crémeuse et de la fève tonka pour une finition lisse et durable.",
                 notes: [
                     { title: 'CARDAMOME', text: 'Une ouverture chaude et épicée qui se sent vibrante et confiante.' },
                     { title: 'ACCORD CARAMEL', text: 'Un cœur doux et addictif qui ajoute de la profondeur et de la richesse.' },
@@ -1921,7 +1921,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gender: 'men',
             fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 80, sillageLabel: 'Strong', season: 50, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Amber Gourmand · A rich, smooth elixir with warm woods and vanilla.",
-            longDescription: 'Azzaro Forever Wanted Elixir is a deep, luxurious scent designed for night. It opens with a refined freshness, settles into rich amber warmth, and finishes with a smooth vanilla trail that stays on skin for hours.',
+            longDescription: 'Azzaro Forever Wanted Elixir Eau de Parfum is a dark and opulent elixir crafted for the man who commands the night. The fragrance opens with an intoxicating blend of ginger and lavender, setting the stage with spicy aromatic energy. At its heart, a rich fusion of Tonka bean and praline creates an irresistible gourmand warmth, complemented by the smoky allure of incense. The base is a masterclass in seduction, where dark woods, amber resin, and a velvety vanilla accord merge into a deeply sensual and long-lasting trail. This is a fragrance for unforgettable evenings, encased in a sleek bottle that reflects its magnetic, sophisticated character.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -1945,7 +1945,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme · Ambré Gourmand · Un élixir riche et lisse avec des bois chauds et de la vanille.",
-                longDescription: "Azzaro Forever Wanted Elixir est un parfum profond et luxueux conçu pour la nuit. Il s'ouvre sur une fraîcheur affinée, se pose sur une chaleur ambrée riche, et se termine par un sillage doux de vanille qui reste sur la peau pendant des heures.",
+                longDescription: "Azzaro Forever Wanted Elixir Eau de Parfum est un élixir sombre et opulent conçu pour l'homme qui domine la nuit. Le parfum s'ouvre sur un mélange enivrant de gingembre et de lavande, créant une énergie aromatique épicée. Au cœur, une fusion riche de fève tonka et de praliné crée une chaleur gourmande irrésistible, rehaussée par l'allure fumée de l'encens. Le fond est un chef-d'œuvre de séduction, où bois sombres, résine d'ambre et un accord vanillé velouté fusionnent en un sillage profond et durable.",
                 notes: [
                     { title: 'OUVERTURE FRAÎCHE', text: 'Un début lumineux qui se feel propre et invitant.' },
                     { title: 'CŒUR AMBRÉ', text: 'Un noyau chaud et résineux qui ajoute de la richesse.' },
@@ -1963,7 +1963,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gender: 'women',
             fragranceProfile: { longevity: 78, longevityLabel: '7-9h', sillage: 72, sillageLabel: 'Moderate', season: 75, seasonLabel: 'All Year' },
             subtitle: "Women's fragrance · Floral Woody · A luminous blend of jasmine, blackcurrant, and warm woods.",
-            longDescription: 'Valentino Donna Born in Roma is a modern floral with a bright, elegant opening and a smooth, woody base. It feels refined yet bold, perfect for day-to-night wear.',
+            longDescription: 'Valentino Donna Born in Roma Eau de Parfum is a contemporary floral masterpiece inspired by the spirit of Roman couture. The fragrance opens with a burst of juicy blackcurrant buds and pink peppercorn, creating an immediate sense of vibrant femininity. At its heart, a lavish bouquet of jasmine grandiflorum blossoms alongside a velvety Bulgarian rose accord, evoking the elegance of an Italian garden at dusk. The base unfolds with creamy Bourbon vanilla, cashmeran, and warm guaiac wood, wrapping the skin in a sensual and sophisticated trail. Housed in the iconic Valentino Rockstud bottle, this fragrance celebrates the bold, modern woman who embraces her individuality with grace and confidence.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -1987,7 +1987,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum femme · Floral Boisé · Un mélange lumineux de jasmin, cassis et bois chauds.",
-                longDescription: "Valentino Donna Born in Roma est un floral moderne avec une ouverture lumineuse et élégante et un fond boisé lisse. Il se felt raffiné mais audacieux, parfait du jour au soir.",
+                longDescription: "Valentino Donna Born in Roma Eau de Parfum est un chef-d'œuvre floral contemporain inspiré par l'esprit de la couture romaine. Le parfum s'ouvre sur un éclat de bourgeons de cassis juteux et de poivre rose, créant une féminité vibrante. Au cœur, un bouquet somptueux de jasmin grandiflorum s'épanouit aux côtés d'un accord de rose bulgare velouté, évoquant l'élégance d'un jardin italien au crépuscule. Le fond se déploie avec de la vanille Bourbon crémeuse, du cashmeran et du bois de gaïac chaud, enveloppant la peau d'un sillage sensuel et sophistiqué.",
                 notes: [
                     { title: 'CASSIS', text: 'Une ouverture juteuse et vibrante avec une touche moderne.' },
                     { title: 'JASMIN', text: 'Un cœur floral riche qui se felt élégant et rayonnant.' },
@@ -2005,7 +2005,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gender: 'men',
             fragranceProfile: { longevity: 65, longevityLabel: '5-7h', sillage: 60, sillageLabel: 'Moderate', season: 90, seasonLabel: 'Spring/Summer' },
             subtitle: "Men's fragrance · Fruity Woody · A fresh and vibrant blend with apple, sage, and tobacco.",
-            longDescription: 'Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette is a bright, modern scent that balances juicy fruit with aromatic woods. It feels fresh, energetic, and easy to wear.',
+            longDescription: 'Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette is a sun-drenched, spirited fragrance that captures the vibrant energy of a Mediterranean summer. The composition opens with a crisp burst of red apple and zesty bergamot, instantly lifting the mood with fresh, fruity brightness. At the heart, aromatic clary sage and warm ginger flower create an intriguing contrast between herbal coolness and spicy warmth. The fragrance settles into a refined base of smooth Virginia tobacco, sandalwood, and a hint of vanilla, providing a comfortable yet distinctive trail. Presented in the iconic Rockstud bottle with a coral accent, this scent is made for the modern man who lives life with color and confidence.',
             sizes: [
                 { label: 'Decante 10ML', priceText: '110 DH' },
                 { label: 'Decante 20ML', priceText: '220 DH' },
@@ -2029,7 +2029,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme · Fruité Boisé · Un mélange frais et vibrant avec pomme, sauge et tabac.",
-                longDescription: "Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette est un parfum lumineux et moderne qui équilibre fruits juteux et bois aromatiques. Il se felt frais, énergétique et facile à porter.",
+                longDescription: "Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette est un parfum ensoleillé et spiriteux qui capture l'énergie vibrante d'un été méditerranéen. La composition s'ouvre sur un éclat croquant de pomme rouge et de bergamote pétillante. Au cœur, la sauge sclarée aromatique et la fleur de gingembre chaude créent un contraste intrigant entre fraîcheur herbale et chaleur épicée. Le fond s'installe sur du tabac Virginia lisse, du bois de santal et une touche de vanille pour un sillage confortable et distinctif.",
                 notes: [
                     { title: 'POMME ROUGE', text: 'Une ouverture croquante et juteusse qui se felt vibrante et fraîche.' },
                     { title: 'SAUGE', text: 'Un cœur aromatique qui ajoute une texture propre et herbace.' },
@@ -2047,7 +2047,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gender: 'men',
             fragranceProfile: { longevity: 70, longevityLabel: '6-8h', sillage: 68, sillageLabel: 'Moderate', season: 80, seasonLabel: 'Spring/Summer' },
             subtitle: "Men's fragrance · Woody Aromatic · A bold, modern scent with fresh spice and woods.",
-            longDescription: 'Valentino Born in Roma Extradose Eau de Toilette is a clean and confident signature with a fresh opening, aromatic heart, and a smooth woody base for everyday wear.',
+            longDescription: 'Valentino Born in Roma Extradose Eau de Toilette is a vibrant and energizing interpretation of the Born in Roma line, crafted for the bold, modern man. The fragrance opens with an invigorating burst of mandarin and green apple, delivering fresh, sparkling energy from the first spray. At its heart, an aromatic blend of lavender and juniper berry creates a crisp, herbal sophistication that feels both clean and magnetic. The base brings together creamy cashmeran, warm amber, and a subtle smoky accord that gives the scent lasting depth and an addictive, skin-close trail. This extra dose of intensity makes it the perfect signature for the man who brings energy and confidence to every moment.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2071,7 +2071,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme · Boisé Aromatique · Un parfum moderne et audacieux avec épice fraîche et bois.",
-                longDescription: "Valentino Born in Roma Extradose Eau de Toilette est une signature propre et confiante avec une ouverture fraîche, un cœur aromatique et un fond boisé lisse pour une tenue quotidienne.",
+                longDescription: "Valentino Born in Roma Extradose Eau de Toilette est une interprétation vibrante et énergisante de la ligne Born in Roma. Le parfum s'ouvre sur un éclat revigorant de mandarine et de pomme verte, délivrant une énergie fraîche et pétillante. Au cœur, un mélange aromatique de lavande et de baie de genévrier crée une sophistication herbale à la fois propre et magnétique. Le fond rassemble du cashmeran crémeux, de l'ambre chaud et un subtil accord fumé pour une profondeur durable et un sillage addictif proche de la peau.",
                 notes: [
                     { title: 'ÉPICE FRAÎCHE', text: 'Une ouverture vivante avec une touche propre et moderne.' },
                     { title: 'CŒUR AROMATIQUE', text: 'Un noyau aromatique raffiné qui se felt crisp et masculin.' },
@@ -2130,7 +2130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gender: 'men',
             fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 70, sillageLabel: 'Moderate', season: 65, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Iris Woody · A refined, elegant scent with iris, amber, and cedar.",
-            longDescription: 'Dior Homme Intense is a smooth, elegant fragrance built around soft iris and warm amber woods. It feels refined and confident, perfect for evening wear and cooler seasons.',
+            longDescription: 'Dior Homme Intense Eau de Parfum is a masterfully refined fragrance that elevates the art of masculine elegance. The composition opens with a delicate interplay of lavender and pear blossom, offering a fresh yet sophisticated first impression. At its heart lies the noble iris absolute, the most precious ingredient in perfumery, which unfolds with a rich, powdery softness that feels both luxurious and intimate. The depth of Haitian vetiver and Virginia cedar in the base adds a warm, woody masculinity, while a sensual veil of amber and musk creates an enveloping trail of quiet confidence. Designed by François Demachy, this is a fragrance for the man who appreciates understated luxury and refined sensuality.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2154,7 +2154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme · Iris Boisé · Un parfum raffiné et élégant avec iris, ambre et cèdre.",
-                longDescription: "Dior Homme Intense est un parfum lisse et élégant construit autour d'un iris doux et de bois ambrés chauds. Il se felt raffiné et confiant, parfait pour la soirée et les saisons plus fraîches.",
+                longDescription: "Dior Homme Intense Eau de Parfum est un parfum magistralement raffiné qui élève l'art de l'élégance masculine. La composition s'ouvre sur un jeu délicat de lavande et de fleur de poirier, offrant une première impression fraîche et sophistiquée. En son cœur se trouve l'absolu d'iris noble, l'ingrédient le plus précieux de la parfumerie, qui se déploie avec une douceur poudrée riche et intime. La profondeur du vétiver haïtien et du cèdre de Virginie en fond ajoute une masculinité boisée chaleureuse, tandis qu'un voile sensuel d'ambre et de musc crée un sillage enveloppant de confiance discrète.",
                 notes: [
                     { title: 'IRIS', text: 'Une signature douce et poudrée qui se felt luxueuse.' },
                     { title: 'AMBRE', text: 'Un noyau chaud qui ajoute profondeur et richesse.' },
@@ -2172,7 +2172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 78, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
             subtitle: "Men's fragrance · Amber Woody · A deep, intense blend with vanilla and smoky woods.",
-            longDescription: 'Valentino Born in Roma Uomo Intense Eau de Parfum offers a rich, warm signature with smooth vanilla and dark woods. It is bold yet elegant, ideal for evening wear.',
+            longDescription: 'Valentino Born in Roma Uomo Intense Eau de Parfum is a deeper, more seductive evolution of the original, designed for the man who lives with passion and intensity. The fragrance opens with a luminous burst of green mandarin and saffron, creating an immediately captivating and warm impression. At its heart, the richness of Virginia tobacco leaf intertwines with aromatic lavender, building a complex and masculine core that feels both refined and powerful. The base is a sumptuous blend of Bourbon vanilla, dark vetiver, and benzoin resin, creating an addictive, long-lasting trail that wraps the skin in warmth and sensuality. Housed in the signature Rockstud bottle with a deep, dark finish, this fragrance embodies the ultimate expression of Italian confidence.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2196,7 +2196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme · Ambré Boisé · Un mélange profond et intense avec vanille et bois fumés.",
-                longDescription: "Valentino Born in Roma Uomo Intense Eau de Parfum offre une signature riche et chaude avec une vanille lisse et des bois sombres. Il est audacieux mais élégant, idéal pour la soirée.",
+                longDescription: "Valentino Born in Roma Uomo Intense Eau de Parfum est une évolution plus profonde et séduisante de l'original, conçue pour l'homme qui vit avec passion et intensité. Le parfum s'ouvre sur un éclat lumineux de mandarine verte et de safran. Au cœur, la richesse de la feuille de tabac Virginia s'entrelace avec de la lavande aromatique, construisant un noyau complexe et masculin. Le fond est un mélange somptueux de vanille Bourbon, de vétiver sombre et de résine de benjoin, créant un sillage addictif et durable qui enveloppe la peau de chaleur et de sensualité.",
                 notes: [
                     { title: 'VANILLE', text: 'Une ouverture riche qui se felt lisse et addictive.' },
                     { title: 'LAVANDE', text: 'Un cœur aromatique raffiné pour l’équilibre.' },
@@ -2214,7 +2214,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gender: 'women',
             fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 75, sillageLabel: 'Strong', season: 70, seasonLabel: 'All Year' },
             subtitle: "Women's fragrance · Amber Floral · A sensual blend of jasmine and vanilla with warm woods.",
-            longDescription: 'Valentino Born in Roma Donna Intense is a richer, deeper take on the original with luminous florals and a warm vanilla base. It is elegant, confident, and long-lasting.',
+            longDescription: 'Valentino Born in Roma Donna Intense Eau de Parfum is a captivating intensification of the original, crafted for the woman who radiates confidence and sensuality. The fragrance opens with a luminous blend of yellow tangerine and pink peppercorn, creating a sparkling yet mysterious first impression. At its heart, a sumptuous bouquet of jasmine sambac and Turkish rose absolute reveals layers of opulent femininity, enriched by a heady tuberose accord. The base is a masterful composition of dark vanilla, Benzoin Siam resin, and warm guaiac wood, creating a rich, enveloping trail that stays close to the skin for hours. This deeper interpretation of the Born in Roma line celebrates the woman who embraces her power with elegance and allure.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2238,7 +2238,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum femme · Floral Ambré · Un mélange sensuel de jasmin et vanille avec des bois chauds.",
-                longDescription: "Valentino Born in Roma Donna Intense est une version plus riche et plus profonde de l'original avec des floraux lumineux et un fond vanillé chaud. Il est élégant, confiant et durable.",
+                longDescription: "Valentino Born in Roma Donna Intense Eau de Parfum est une intensification captivante de l'original, créée pour la femme qui rayonne de confiance et de sensualité. Le parfum s'ouvre sur un mélange lumineux de mandarine jaune et de poivre rose, créant une première impression pétillante et mystérieuse. Au cœur, un bouquet somptueux de jasmin sambac et d'absolu de rose turque révèle des couches de féminité opulente, enrichies par un accord de tubéreuse enivrant. Le fond est une composition magistrale de vanille sombre, de résine de benjoin du Siam et de bois de gaïac chaud, créant un sillage riche et enveloppant.",
                 notes: [
                     { title: 'JASMIN', text: 'Un cœur floral rayonnant avec une élégance raffinée.' },
                     { title: 'VANILLE', text: 'Une signature chaude et lisse qui se felt sensuelle.' },
@@ -2256,7 +2256,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gender: 'men',
             fragranceProfile: { longevity: 72, longevityLabel: '6-8h', sillage: 65, sillageLabel: 'Moderate', season: 75, seasonLabel: 'Spring/Summer' },
             subtitle: "Men's fragrance · Woody Aromatic · A clean and vibrant blend of citrus, sage, and woods.",
-            longDescription: 'Valentino Uomo Born in Roma Eau de Toilette is a fresh and modern signature with crisp citrus, aromatic herbs, and a smooth woody base. Ideal for everyday wear.',
+            longDescription: 'Valentino Uomo Born in Roma Eau de Toilette is a vibrant and contemporary masculine fragrance that captures the spirit of modern Rome. The composition opens with a bright cascade of ginger and bergamot, delivering an energizing freshness that awakens the senses. At its heart, clary sage and mineral accord bring a refined aromatic complexity that feels both clean and characterful. The base reveals a smooth foundation of Virginia cedar, vetiver, and a warm skin musk accord, creating a comfortable yet distinctive trail that lasts through the day. Presented in the iconic Valentino Rockstud bottle, this versatile scent is the perfect daily companion for the man who blends tradition with effortless modern style.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2280,7 +2280,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme · Boisé Aromatique · Un mélange propre et vibrant de citrus, sauge et bois.",
-                longDescription: "Valentino Uomo Born in Roma Eau de Toilette est une signature fraîche et moderne avec des agrumes croquants, des herbes aromatiques et un fond boisé lisse. Idéal pour l'usage quotidien.",
+                longDescription: "Valentino Uomo Born in Roma Eau de Toilette est un parfum masculin vibrant et contemporain qui capture l'esprit de la Rome moderne. La composition s'ouvre sur une cascade lumineuse de gingembre et de bergamote, délivrant une fraîcheur énergisante. Au cœur, la sauge sclarée et un accord minéral apportent une complexité aromatique raffinée, à la fois propre et caractérielle. Le fond révèle une base lisse de cèdre de Virginie, de vétiver et d'un accord musqué chaud, créant un sillage confortable et distinctif qui dure toute la journée.",
                 notes: [
                     { title: 'AGRUMES', text: 'Une ouverture lumineuse qui se felt fraîche et moderne.' },
                     { title: 'SAUGE', text: 'Un cœur aromatique qui ajoute une texture propre.' },
@@ -2924,7 +2924,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gender: 'unisex',
             fragranceProfile: { longevity: 94, longevityLabel: '12h+', sillage: 88, sillageLabel: 'Powerful', season: 48, seasonLabel: 'Fall/Winter' },
             subtitle: 'Unisex fragrance · Oriental Gourmand · An iconic bestseller blending tonka bean, rose, bergamot, oud, and leather.',
-            longDescription: 'An iconic bestseller, Arabians Tonka charms with its refined gourmand notes: smooth tonka bean, captivating rose, and the radiance of bergamot unite with oud and leather. Powerful, sweet, unforgettable.',
+            longDescription: 'Montale Arabians Tonka is an iconic bestseller that has earned its cult status in the niche fragrance world. This opulent Oriental Gourmand opens with the radiant glow of Italian bergamot and a hint of saffron, casting a luminous warmth from the very first spray. At its heart, a captivating Damascena rose intertwines with velvety smooth tonka bean, creating a rich, intoxicating sweetness that feels both refined and deeply addictive. The base is a tour de force of Arabian oud, supple leather, and amber resin, grounding the composition with a dark, mysterious depth that projects powerfully and lasts well over 12 hours on skin. This is a fragrance for those who appreciate uncompromising quality and a trail that commands attention in any room.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2948,7 +2948,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum unisexe · Gourmand Oriental · Un bestseller iconique alliant fève tonka, rose, bergamote, oud et cuir.",
-                longDescription: "Un bestseller iconique, Arabians Tonka charme avec ses raffinées notes gourmandes : la douce fève tonka, la rose captivante et le rayonnement de la bergamote s'unissent à l'oud et au cuir. Puissant, doux, inoubliable.",
+                longDescription: "Montale Arabians Tonka est un bestseller iconique qui a gagné son statut culte dans le monde de la parfumerie niche. Cet opulent Gourmand Oriental s'ouvre sur l'éclat rayonnant de la bergamote italienne et une touche de safran, diffusant une chaleur lumineuse dès la première vaporisation. Au cœur, une captivante rose de Damas s'entrelace avec la douce fève tonka veloutée, créant une richesse sucrée à la fois raffinée et profondément addictive. Le fond est un tour de force d'oud arabe, de cuir souple et de résine d'ambre, ancrant la composition dans une profondeur sombre et mystérieuse qui projette puissamment et dure bien plus de 12 heures sur la peau.",
                 notes: [
                     { title: 'BERGAMOTE & TONKA', text: 'La bergamote rayonnante et la douce fève tonka ouvrent le parfum avec douceur et légèreté raffinée.' },
                     { title: 'ROSE CAPTIVANTE', text: 'La rose ajoute une richesse florale raffinée qui adoucit la puissance de la composition.' },
@@ -10454,6 +10454,20 @@ document.addEventListener('DOMContentLoaded', function () {
     function setProgress(progress) {
         var safeProgress = Math.min(Math.max(progress, 0), 1);
         progressRoot.style.setProperty('--scroll-progress-scale', safeProgress.toFixed(4));
+
+        /* Fade-in: hide bar at very top (< 0.5%), reveal on first scroll */
+        if (safeProgress > 0.005) {
+            progressRoot.classList.add('is-visible');
+        } else {
+            progressRoot.classList.remove('is-visible');
+        }
+
+        /* Enhanced glow + gold halo once scrolled past 50% of page */
+        if (safeProgress > 0.5) {
+            progressRoot.classList.add('is-halfway');
+        } else {
+            progressRoot.classList.remove('is-halfway');
+        }
     }
 
     function renderProgress() {
