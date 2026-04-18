@@ -26538,3 +26538,270 @@ body.ipo-is-transitioning * {
     }
 }
 
+
+
+/* ══════════════════════════════════════════════
+   NEWSLETTER SECTION — REDESIGNED v2
+   ══════════════════════════════════════════════ */
+
+/* Shell */
+.ipordise-newsletter-shell {
+    background: linear-gradient(135deg, #0c1320 0%, #111827 60%, #0d1627 100%) !important;
+    border: 1px solid rgba(255,255,255,0.07) !important;
+    border-radius: 1.5rem !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    position: relative !important;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.28) !important;
+}
+.ipordise-newsletter-shell::before {
+    content: "";
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 340px; height: 340px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(231,60,60,0.12) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+}
+.ipordise-newsletter-shell::after {
+    content: "";
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.07) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Two-column inner layout */
+.ipordise-nl-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    z-index: 1;
+}
+
+/* Left: copy */
+.ipordise-nl-copy {
+    padding: 3.2rem 2.5rem 3.2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.07);
+}
+.ipordise-nl-eyebrow {
+    font-size: 0.62rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.26em !important;
+    text-transform: uppercase !important;
+    color: #e73c3c !important;
+    margin-bottom: 1rem !important;
+    display: block !important;
+}
+.ipordise-nl-heading {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-size: clamp(1.8rem, 3vw, 2.6rem) !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    color: #ffffff !important;
+    margin-bottom: 1rem !important;
+}
+.ipordise-nl-desc {
+    font-size: 0.88rem !important;
+    color: rgba(203,213,225,0.65) !important;
+    line-height: 1.65 !important;
+    margin-bottom: 1.8rem !important;
+    max-width: 300px !important;
+}
+.ipordise-nl-trust {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.7rem !important;
+}
+.ipordise-nl-trust li {
+    font-size: 0.8rem !important;
+    color: rgba(203,213,225,0.55) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.6rem !important;
+}
+.ipordise-nl-trust li i {
+    color: #e73c3c !important;
+    font-size: 0.75rem !important;
+    flex-shrink: 0 !important;
+}
+
+/* Right: form */
+.ipordise-nl-form-wrap {
+    padding: 3.2rem 3rem 3.2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.ipordise-nl-form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.1rem !important;
+}
+
+/* 2-column row (name + email) */
+.ipordise-nl-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.9rem !important;
+}
+
+/* Label */
+.ipordise-nl-label {
+    display: block !important;
+    font-size: 0.68rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.08em !important;
+    color: rgba(203,213,225,0.6) !important;
+    text-transform: uppercase !important;
+    margin-bottom: 0.45rem !important;
+}
+.ipordise-nl-label span {
+    color: #e73c3c !important;
+}
+
+/* Input / select */
+.ipordise-nl-input {
+    display: block !important;
+    width: 100% !important;
+    padding: 0.78rem 1rem !important;
+    border-radius: 0.6rem !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    background: rgba(255,255,255,0.06) !important;
+    color: #f8fafc !important;
+    font-size: 0.875rem !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+    box-sizing: border-box !important;
+}
+.ipordise-nl-input::placeholder {
+    color: rgba(255,255,255,0.25) !important;
+}
+.ipordise-nl-input:focus {
+    outline: none !important;
+    border-color: rgba(231,60,60,0.55) !important;
+    background: rgba(255,255,255,0.09) !important;
+    box-shadow: 0 0 0 3px rgba(231,60,60,0.1) !important;
+}
+.ipordise-nl-input option {
+    background: #1f2937 !important;
+    color: #f8fafc !important;
+}
+
+/* Select wrapper */
+.ipordise-nl-select-wrap {
+    position: relative !important;
+}
+.ipordise-nl-chevron {
+    position: absolute !important;
+    right: 1rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    pointer-events: none !important;
+    color: rgba(255,255,255,0.35) !important;
+    font-size: 0.65rem !important;
+}
+
+/* Privacy row */
+.ipordise-nl-privacy {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 0.6rem !important;
+    color: rgba(203,213,225,0.5) !important;
+    font-size: 0.78rem !important;
+    line-height: 1.5 !important;
+    justify-content: flex-start !important;
+}
+.ipordise-nl-check {
+    width: 1rem !important;
+    height: 1rem !important;
+    margin-top: 2px !important;
+    flex-shrink: 0 !important;
+    accent-color: #e73c3c !important;
+    cursor: pointer !important;
+}
+.ipordise-nl-privacy a,
+.ipordise-privacy-link {
+    color: #93c5fd !important;
+    text-decoration: underline !important;
+}
+.ipordise-nl-privacy a:hover,
+.ipordise-privacy-link:hover {
+    color: #60a5fa !important;
+}
+
+/* Submit button */
+.ipordise-nl-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.6rem !important;
+    width: 100% !important;
+    padding: 0.9rem 1.5rem !important;
+    border-radius: 0.65rem !important;
+    background: linear-gradient(135deg, #e73c3c 0%, #c0392b 100%) !important;
+    color: #ffffff !important;
+    font-size: 0.75rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase !important;
+    border: none !important;
+    cursor: pointer !important;
+    box-shadow: 0 10px 28px rgba(231,60,60,0.28) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease !important;
+    margin-top: 0.3rem !important;
+}
+.ipordise-nl-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 18px 40px rgba(231,60,60,0.42) !important;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+}
+.ipordise-nl-btn i {
+    font-size: 0.7rem !important;
+    transition: transform 0.2s ease !important;
+}
+.ipordise-nl-btn:hover i {
+    transform: translateX(3px) !important;
+}
+
+/* Required note */
+.ipordise-nl-req {
+    color: rgba(203,213,225,0.3) !important;
+    text-align: center !important;
+    font-size: 0.65rem !important;
+    margin-top: 0.25rem !important;
+}
+
+/* Mobile: stack to single column */
+@media (max-width: 767px) {
+    .ipordise-nl-inner {
+        grid-template-columns: 1fr !important;
+    }
+    .ipordise-nl-copy {
+        padding: 2.2rem 1.8rem 1.5rem !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+    }
+    .ipordise-nl-heading {
+        font-size: 1.7rem !important;
+    }
+    .ipordise-nl-desc {
+        max-width: 100% !important;
+        margin-bottom: 1.2rem !important;
+    }
+    .ipordise-nl-form-wrap {
+        padding: 1.8rem 1.8rem 2.2rem !important;
+    }
+    .ipordise-nl-row {
+        grid-template-columns: 1fr !important;
+    }
+}

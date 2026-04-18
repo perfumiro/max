@@ -7895,6 +7895,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const pricedCards = hasPriceData ? cards.filter((card) => {
             const productId = card.dataset.id;
             if (!productId) return true;
+            // Keep cards that already have price text set via data-product-price attribute
+            if (card.dataset.productPrice && card.dataset.productPrice.trim()) return true;
             const options = getAvailableSizePriceOptions(productId, pricesById);
             return options.some((entry) => entry.price > 0);
         }) : cards;
@@ -7903,7 +7905,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sorted = pricedCards
             .slice()
             .sort((a, b) => getCardAddedScore(b, indexMap.get(b)) - getCardAddedScore(a, indexMap.get(a)));
-        const latest = sorted.slice(0, 8);
+        const latest = sorted.slice(0, 12);
 
         carousel.innerHTML = '';
         latest.forEach((card) => {
@@ -8046,6 +8048,70 @@ document.addEventListener('DOMContentLoaded', () => {
     initCarousel('brandCarousel');
     initCarousel('newArrivalsCarousel');
     enableCarouselAutoplay('brandCarousel', 180, 2400);
+
+    // ── New Arrivals mobile card fix ─────────────────────────────────────
+    // CSS cannot reliably override Tailwind's inline-generated bg-[#111827]
+    // and pt-12 classes.  Inline styles set here always win.
+    const fixNewArrivalCards = () => {
+        if (window.innerWidth >= 768) return;
+        document.querySelectorAll('#newArrivalsCarousel > article').forEach((card) => {
+            // Image wrapper — kill pt-12 (48px) and force pure white
+            const imgWrap = card.querySelector(':scope > div:first-child');
+            if (imgWrap) {
+                imgWrap.style.setProperty('background-color', '#ffffff', 'important');
+                imgWrap.style.setProperty('background', '#ffffff', 'important');
+                imgWrap.style.setProperty('padding-top', '6px', 'important');
+                imgWrap.style.setProperty('padding-bottom', '6px', 'important');
+                imgWrap.style.setProperty('padding-left', '4px', 'important');
+                imgWrap.style.setProperty('padding-right', '4px', 'important');
+                imgWrap.style.setProperty('min-height', '240px', 'important');
+                imgWrap.style.setProperty('height', '240px', 'important');
+                imgWrap.style.setProperty('overflow', 'visible', 'important');
+            }
+            // Badge bar div — make fully transparent, shrink to chip
+            const badgeBar = card.querySelector(':scope > div:first-child > div:not(.product-favorite-btn):not(button)');
+            if (badgeBar) {
+                badgeBar.style.setProperty('background', 'transparent', 'important');
+                badgeBar.style.setProperty('background-color', 'transparent', 'important');
+                badgeBar.style.setProperty('height', 'auto', 'important');
+                badgeBar.style.setProperty('width', 'auto', 'important');
+                badgeBar.style.setProperty('top', '8px', 'important');
+                badgeBar.style.setProperty('left', '8px', 'important');
+                badgeBar.style.setProperty('right', 'auto', 'important');
+                badgeBar.style.setProperty('bottom', 'auto', 'important');
+                badgeBar.style.setProperty('padding', '0', 'important');
+                badgeBar.style.setProperty('z-index', '20', 'important');
+                // Style the "NEW" span inside as a pill chip
+                const span = badgeBar.querySelector('span');
+                if (span) {
+                    span.style.setProperty('background', '#111', 'important');
+                    span.style.setProperty('background-color', '#111', 'important');
+                    span.style.setProperty('color', '#fff', 'important');
+                    span.style.setProperty('font-size', '7px', 'important');
+                    span.style.setProperty('font-weight', '800', 'important');
+                    span.style.setProperty('letter-spacing', '0.2em', 'important');
+                    span.style.setProperty('padding', '3px 7px', 'important');
+                    span.style.setProperty('border-radius', '999px', 'important');
+                    span.style.setProperty('line-height', '1.5', 'important');
+                    span.style.setProperty('display', 'inline-block', 'important');
+                }
+            }
+            // Product image — fill the white area fully
+            const img = card.querySelector('img');
+            if (img) {
+                img.style.setProperty('height', '225px', 'important');
+                img.style.setProperty('max-height', '225px', 'important');
+                img.style.setProperty('width', '100%', 'important');
+                img.style.setProperty('max-width', '100%', 'important');
+                img.style.setProperty('object-fit', 'contain', 'important');
+                img.style.setProperty('filter', 'drop-shadow(0 10px 14px rgba(0,0,0,0.12))', 'important');
+                img.style.setProperty('position', 'relative', 'important');
+                img.style.setProperty('z-index', '1', 'important');
+            }
+        });
+    };
+    requestAnimationFrame(fixNewArrivalCards);
+    window.addEventListener('resize', fixNewArrivalCards);
     bindSectionCarouselNav('flashOffersSection', 'productCarousel');
     bindSectionCarouselNav('newArrivalsSection', 'newArrivalsCarousel');
     bindSectionCarouselNav('class2026Section', 'carousel2026');
