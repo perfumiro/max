@@ -399,23 +399,25 @@ s0.parentNode.insertBefore(s1,s0);
         }
         .auth-input {
             width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1.5px solid #e5e7eb;
+            padding: 0.85rem 1rem;
+            border: 2px solid #d1d5db;
             border-radius: 0.7rem;
-            font-size: 0.92rem;
-            color: #111827;
-            background: #f9fafb;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #0f172a;
+            background: #ffffff;
             outline: none;
             transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
             box-sizing: border-box;
             font-family: inherit;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06) inset;
         }
         .auth-input:focus {
             border-color: #dc2626;
-            box-shadow: 0 0 0 3.5px rgba(220,38,38,0.1);
+            box-shadow: 0 0 0 4px rgba(220,38,38,0.12);
             background: #fff;
         }
-        .auth-input::placeholder { color: #d1d5db; }
+        .auth-input::placeholder { color: #9ca3af; font-weight: 400; }
         .auth-input.has-toggle { padding-right: 3rem; }
         .auth-pw-toggle {
             position: absolute;
@@ -467,199 +469,266 @@ s0.parentNode.insertBefore(s1,s0);
             transition: color 0.15s;
         }
         .auth-forgot:hover { color: #b91c1c; text-decoration: underline; }
-        /* Reset-password modal */
+        /* ═══════════════════════════════════════════════
+           Reset-password modal — IPORDISE luxury rebuild
+           ═══════════════════════════════════════════════ */
+
+        /* ── Backdrop ── */
         .rp-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(10,5,5,0.65);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+            background: radial-gradient(ellipse at 50% 40%, rgba(60,5,5,0.70) 0%, rgba(4,2,2,0.82) 100%);
+            backdrop-filter: blur(10px) saturate(1.4);
+            -webkit-backdrop-filter: blur(10px) saturate(1.4);
             z-index: 9999;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
+            padding: 1.25rem;
+            opacity: 0;
+            transition: opacity 0.30s ease;
         }
-        .rp-overlay.open { display: flex; }
+        .rp-overlay.open {
+            display: flex;
+            animation: rpBackdropIn 0.30s ease forwards;
+        }
+        @keyframes rpBackdropIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* ── Modal shell ── */
         .rp-modal {
-            background: #fff;
-            border-radius: 1.75rem;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(231,60,60,0.08);
             width: 100%;
-            max-width: 400px;
-            padding: 0;
-            position: relative;
+            max-width: 390px;
+            border-radius: 1.5rem;
             overflow: hidden;
+            position: relative;
             font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
-            animation: rpIn 0.28s cubic-bezier(0.22,1,0.36,1) both;
+            animation: rpModalIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+            /* Layered shadow for depth */
+            box-shadow:
+                0 2px 0 rgba(200, 169, 106, 0.18) inset,   /* gold top highlight */
+                0 40px 90px rgba(0, 0, 0, 0.55),
+                0 12px 28px rgba(0, 0, 0, 0.30),
+                0 0 0 1px rgba(200, 169, 106, 0.12);        /* gold border ring */
         }
-        @keyframes rpIn {
-            from { opacity: 0; transform: translateY(28px) scale(0.95); }
-            to   { opacity: 1; transform: none; }
+        @keyframes rpModalIn {
+            from { opacity: 0; transform: translateY(32px) scale(0.94); }
+            to   { opacity: 1; transform: translateY(0)    scale(1); }
         }
+
+        /* ── Header panel ── */
         .rp-modal-header {
-            background: linear-gradient(150deg, #1c0606 0%, #2e0c0c 45%, #200808 100%);
-            padding: 2.25rem 1.75rem 2rem;
+            background:
+                radial-gradient(ellipse at 70% 0%, rgba(192,24,46,0.22) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 100%, rgba(100,10,10,0.35) 0%, transparent 55%),
+                linear-gradient(160deg, #150606 0%, #260a0a 50%, #1a0707 100%);
+            padding: 2.2rem 1.75rem 1.9rem;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
-        .rp-modal-header::before {
-            content: '';
-            position: absolute;
-            top: -60px; right: -60px;
-            width: 180px; height: 180px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(231,60,60,0.18) 0%, transparent 70%);
-            pointer-events: none;
-        }
+
+        /* Gold shimmer line at bottom of header */
         .rp-modal-header::after {
             content: '';
             position: absolute;
             bottom: 0; left: 0; right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(231,60,60,0.5) 50%, transparent 100%);
+            background: linear-gradient(
+                90deg,
+                transparent   0%,
+                rgba(200,169,106,0.50) 35%,
+                rgba(240,194,116,0.75) 50%,
+                rgba(200,169,106,0.50) 65%,
+                transparent  100%
+            );
         }
+
+        /* Decorative orb — top right */
+        .rp-modal-header::before {
+            content: '';
+            position: absolute;
+            top: -50px; right: -50px;
+            width: 170px; height: 170px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(192,24,46,0.16) 0%, transparent 68%);
+            pointer-events: none;
+        }
+
+        /* ── Close button ── */
         .rp-close {
             position: absolute;
-            top: 1rem; right: 1rem;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
+            top: 0.95rem; right: 0.95rem;
+            width: 30px; height: 30px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(200,169,106,0.18);
             border-radius: 50%;
-            width: 32px; height: 32px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; color: rgba(255,255,255,0.6);
+            font-size: 1rem; color: rgba(255,255,255,0.45);
             cursor: pointer; line-height: 1;
-            transition: background 0.18s, color 0.18s, border-color 0.18s;
-            z-index: 1;
+            transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+            z-index: 2;
         }
         .rp-close:hover {
-            background: rgba(231,60,60,0.25);
-            border-color: rgba(231,60,60,0.4);
+            background: rgba(192,24,46,0.30);
+            border-color: rgba(192,24,46,0.50);
             color: #fff;
+            transform: rotate(90deg);
         }
+
+        /* ── Icon circle ── */
         .rp-icon {
-            width: 68px; height: 68px;
+            width: 64px; height: 64px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(231,60,60,0.2) 0%, rgba(180,20,20,0.1) 100%);
-            border: 1.5px solid rgba(231,60,60,0.35);
+            background: linear-gradient(135deg, rgba(192,24,46,0.18) 0%, rgba(90,8,8,0.12) 100%);
+            border: 1.5px solid rgba(200,169,106,0.30);
             display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 1.1rem;
-            font-size: 1.5rem; color: #e73c3c;
+            margin: 0 auto 1rem;
+            font-size: 1.35rem;
+            color: #e07070;
             position: relative; z-index: 1;
-            box-shadow: 0 0 24px rgba(231,60,60,0.2);
+            box-shadow:
+                0 0 28px rgba(192,24,46,0.22),
+                0 0 0 6px rgba(192,24,46,0.06);
         }
+
+        /* ── Title & subtitle ── */
         .rp-title {
-            font-size: 1.25rem; font-weight: 800;
-            color: #fff; text-align: center;
-            margin-bottom: 0.4rem;
-            letter-spacing: -0.015em;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f5ede0;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.35rem;
             position: relative; z-index: 1;
         }
         .rp-sub {
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.5);
-            text-align: center;
-            line-height: 1.6;
+            font-size: 0.78rem;
+            color: rgba(220,195,165,0.55);
+            line-height: 1.65;
             position: relative; z-index: 1;
         }
+
+        /* ── Body panel ── */
         .rp-modal-body {
-            padding: 1.75rem 1.75rem 2rem;
-            background: #fff;
+            padding: 1.6rem 1.65rem 1.9rem;
+            background: #faf7f4;
         }
+
+        /* ── Label ── */
         .rp-input-label {
             display: block;
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 0.4rem;
-            letter-spacing: 0.02em;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #8a7060;
+            letter-spacing: 0.07em;
             text-transform: uppercase;
+            margin-bottom: 0.4rem;
         }
+
+        /* ── Input wrapper ── */
         .rp-input-wrap {
             position: relative;
-            margin-bottom: 1.1rem;
+            margin-bottom: 1.05rem;
         }
         .rp-input-wrap i {
             position: absolute;
-            left: 1rem; top: 50%;
+            left: 0.95rem; top: 50%;
             transform: translateY(-50%);
-            color: #c0c0c0; font-size: 0.82rem;
+            color: #c4a98a;
+            font-size: 0.8rem;
             pointer-events: none;
+            transition: color 0.18s;
         }
+        .rp-input-wrap:focus-within i { color: #c0182e; }
+
+        /* ── Input field ── */
         .rp-input {
             width: 100%;
-            padding: 0.82rem 1rem 0.82rem 2.5rem;
-            border: 1.5px solid #ebebeb;
-            border-radius: 0.85rem;
-            font-size: 0.9rem;
+            padding: 0.80rem 1rem 0.80rem 2.45rem;
+            border: 1.5px solid #e8e0d6;
+            border-radius: 0.8rem;
+            font-size: 0.88rem;
             font-family: inherit;
+            color: #1e1210;
+            background: #fff;
             outline: none;
-            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
             box-sizing: border-box;
-            color: #1a1a1a;
-            background: #f8f8f8;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04) inset;
         }
         .rp-input:focus {
-            border-color: #e73c3c;
-            background: #fff;
-            box-shadow: 0 0 0 3.5px rgba(231,60,60,0.1);
+            border-color: #c0182e;
+            background: #fffcfc;
+            box-shadow:
+                0 0 0 3px rgba(192,24,46,0.10),
+                0 1px 3px rgba(0,0,0,0.04) inset;
         }
-        .rp-input::placeholder { color: #c8c8c8; }
+        .rp-input::placeholder { color: #c8b8aa; }
+
+        /* ── Submit button ── */
         .rp-submit {
             width: 100%;
-            padding: 0.88rem 1rem;
-            background: linear-gradient(135deg, #e73c3c 0%, #bf2424 100%);
+            padding: 0.85rem 1rem;
+            background: linear-gradient(135deg, #c0182e 0%, #8a0d1e 55%, #7b0d1e 100%);
             color: #fff;
             border: none;
-            border-radius: 0.85rem;
-            font-size: 0.93rem;
+            border-radius: 0.8rem;
+            font-size: 0.88rem;
             font-weight: 700;
-            letter-spacing: 0.01em;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
             font-family: inherit;
             cursor: pointer;
-            transition: box-shadow 0.18s, transform 0.12s, opacity 0.15s;
-            display: flex; align-items: center; justify-content: center; gap: 0.55rem;
-            box-shadow: 0 4px 16px rgba(231,60,60,0.3);
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            transition: box-shadow 0.2s, transform 0.15s, opacity 0.18s;
+            box-shadow:
+                0 4px 18px rgba(192,24,46,0.38),
+                0 1px 0 rgba(255,255,255,0.10) inset;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Shimmer sweep on hover */
+        .rp-submit::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+            transition: left 0.45s ease;
         }
         .rp-submit:hover {
-            box-shadow: 0 6px 22px rgba(231,60,60,0.45);
+            box-shadow: 0 7px 26px rgba(192,24,46,0.50), 0 1px 0 rgba(255,255,255,0.10) inset;
             transform: translateY(-1px);
         }
+        .rp-submit:hover::after { left: 140%; }
         .rp-submit:active { transform: scale(0.98); box-shadow: none; }
-        .rp-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-        .rp-divider {
-            display: flex; align-items: center; gap: 0.75rem;
-            margin: 1.25rem 0 0;
-        }
-        .rp-divider::before, .rp-divider::after {
-            content: ''; flex: 1; height: 1px; background: #f0f0f0;
-        }
-        .rp-divider-text {
-            font-size: 0.72rem; color: #ccc; font-weight: 600; white-space: nowrap;
-        }
+        .rp-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* ── Feedback message ── */
         .rp-msg {
-            font-size: 0.83rem;
-            border-radius: 0.75rem;
-            padding: 0.75rem 1rem;
+            font-size: 0.82rem;
+            border-radius: 0.7rem;
+            padding: 0.72rem 0.9rem;
             margin-top: 1rem;
-            line-height: 1.5;
+            line-height: 1.55;
             display: none;
             font-family: inherit;
+            font-weight: 600;
+            align-items: center; gap: 0.5rem;
         }
         .rp-msg.success {
+            display: flex;
             background: linear-gradient(135deg, #f0fdf4, #dcfce7);
             color: #15803d;
             border: 1px solid #bbf7d0;
-            display: flex; align-items: center; gap: 0.55rem;
-            font-weight: 600;
         }
         .rp-msg.error {
+            display: flex;
             background: linear-gradient(135deg, #fff5f5, #fef2f2);
             color: #b91c1c;
             border: 1px solid #fecaca;
-            display: flex; align-items: center; gap: 0.55rem;
-            font-weight: 600;
         }
         /* Message */
         .auth-msg {
@@ -942,7 +1011,7 @@ s0.parentNode.insertBefore(s1,s0);
                     <i class="fas fa-paper-plane"></i>
                     <span>Send reset link</span>
                 </button>
-                <div class="rp-divider"><span class="rp-divider-text"><i class="fas fa-shield-halved" style="margin-right:0.3rem;color:#e73c3c;"></i>Secure — powered by Firebase</span></div>
+
                 <div class="rp-msg" id="rpMsg" role="alert" aria-live="polite"></div>
             </div>
         </div>

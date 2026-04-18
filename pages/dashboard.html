@@ -1963,7 +1963,7 @@
     if (hash) setTimeout(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
 
     // Name & initial
-    const name    = user.displayName || (user.email ? user.email.split('@')[0] : 'Client');
+    const name    = user.displayName || user.email.split('@')[0];
     const initial = name.charAt(0).toUpperCase();
     if (avatar) avatar.textContent = initial;
 
@@ -2094,7 +2094,7 @@
     const settingVerifyEl = document.getElementById('settingEmailVerified');
     if (settingEmailEl)  settingEmailEl.textContent  = user.email;
     if (settingVerifyEl) {
-      settingVerifyEl.textContent = user.emailVerified ? 'âœ“ Verified' : 'âœ— Not verified';
+      settingVerifyEl.textContent = user.emailVerified ? '✓ Verified' : '✗ Not verified';
       settingVerifyEl.style.color = user.emailVerified ? '#15803d' : '#dc2626';
     }
 
@@ -2149,7 +2149,7 @@
           city,
         });
       }
-      showToast('âœ“ Profile saved successfully.');
+      showToast('✓ Profile saved successfully.');
       if (profileMsg) { profileMsg.style.display = 'inline-flex'; setTimeout(() => { profileMsg.style.display = 'none'; }, 3000); }
     } catch (err) {
       showToast('Could not save: ' + getErrorMessage(err));
