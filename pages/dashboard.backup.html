@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31,9 +31,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
 
     <style>
-        /* ═══════════════════════════════════════════════════════
-           IPORDISE DASHBOARD — Premium Style v3
-        ═══════════════════════════════════════════════════════ */
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+           IPORDISE DASHBOARD â€” Premium Style v3
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
         :root {
             --d-bg:        #f5f3f0;
@@ -55,7 +55,7 @@
             --d-font-head: 'Playfair Display', Georgia, serif;
         }
 
-        /* ── Base ── */
+        /* â”€â”€ Base â”€â”€ */
         body.dash-body {
             background: var(--d-bg);
             font-family: var(--d-font-body);
@@ -63,7 +63,7 @@
         }
         .dash-protected { display: none; }
 
-        /* ── Auth Guard ── */
+        /* â”€â”€ Auth Guard â”€â”€ */
         #dashAuthGuard {
             position: fixed;
             inset: 0;
@@ -106,9 +106,9 @@
         @keyframes guardFadeIn { to { opacity: 1; } }
         @keyframes dashSpin { to { transform: rotate(360deg); } }
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            HERO BANNER
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-hero {
             position: relative;
             overflow: hidden;
@@ -298,9 +298,9 @@
             color: #f0c040;
         }
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            LAYOUT
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-bg-wrap { background: var(--d-bg); }
         .dash-layout {
             max-width: 1280px;
@@ -316,9 +316,9 @@
             .dash-sidenav { display: none; }
         }
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            SIDEBAR
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-sidenav {
             background: var(--d-surface);
             border-radius: var(--d-radius);
@@ -392,9 +392,9 @@
         .dash-sidenav-item.danger .snav-icon { background: #fde8e7; color: var(--d-red); }
         .dash-sidenav-item.danger:hover { background: var(--d-red-light); }
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            MAIN CONTENT
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-main { display: flex; flex-direction: column; gap: 1.75rem; min-width: 0; }
 
         /* Section header */
@@ -420,9 +420,9 @@
         }
         .dash-section-action:hover { opacity: 0.7; }
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            STAT CARDS
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
@@ -509,9 +509,9 @@
 
 
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            PROFILE
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-profile-wrap {
             background: var(--d-surface);
             border-radius: var(--d-radius);
@@ -744,9 +744,9 @@
         .dash-save-btn:active { transform: translateY(0); }
         .dash-save-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            ORDERS EMPTY
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-orders-empty {
             background: var(--d-surface);
             border-radius: var(--d-radius);
@@ -796,9 +796,9 @@
         }
         .dash-cta-btn:hover { background: var(--d-red); transform: translateY(-1px); }
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            QUICK ACTIONS
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-actions-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
@@ -860,9 +860,9 @@
             transform: translateX(2px);
         }
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            TOAST
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         #dashToast {
             position: fixed;
             bottom: 2rem;
@@ -883,9 +883,9 @@
         }
         #dashToast.is-visible { transform: translateX(-50%) translateY(0); }
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            MOBILE TABS
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-mobile-tabs {
             display: none;
             overflow-x: auto;
@@ -921,9 +921,9 @@
 
 
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            SETTINGS
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-settings-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1022,9 +1022,9 @@
         }
         .dash-danger-btn:hover { background: var(--d-red); color: #fff; border-color: var(--d-red); }
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            WISHLIST GRID
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-wishlist-grid {
             display: flex;
             flex-direction: column;
@@ -1049,7 +1049,7 @@
             transform: translateY(-2px);
             border-color: rgba(0,0,0,0.1);
         }
-        /* image wrapper — fixed square on the left */
+        /* image wrapper â€” fixed square on the left */
         .dash-wishlist-img-wrap {
             position: relative;
             overflow: hidden;
@@ -1141,9 +1141,9 @@
         }
         .dash-wishlist-empty-msg a:hover { background: #b52820; }
 
-        /* ═══════════════
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
            ANIMATIONS
-        ═══════════════ */
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         .dash-fadein { animation: dashFadeIn 0.5s cubic-bezier(0.16,1,0.3,1) both; }
         @keyframes dashFadeIn {
             from { opacity:0; transform: translateY(16px); }
@@ -1158,7 +1158,7 @@
             .dash-layout { padding: 1.25rem 1rem 4rem; }
         }
 
-        /* ── Stat card: VIP tier badge ── */
+        /* â”€â”€ Stat card: VIP tier badge â”€â”€ */
         .stat-status .dash-stat-val {
             font-size: 0.9rem;
             display: inline-flex;
@@ -1173,7 +1173,7 @@
             font-family: var(--d-font-body);
             font-weight: 800;
         }
-        /* ── Stat card: Live delivery dot ── */
+        /* â”€â”€ Stat card: Live delivery dot â”€â”€ */
         .stat-delivery .dash-stat-val {
             font-size: 0.88rem;
             display: inline-flex;
@@ -1196,7 +1196,7 @@
             70%  { box-shadow: 0 0 0 8px rgba(22,163,74,0);    }
             100% { box-shadow: 0 0 0 0   rgba(22,163,74,0);    }
         }
-        /* ── Wishlist card improvements ── */
+        /* â”€â”€ Wishlist card improvements â”€â”€ */
         .dash-wishlist-remove-btn {
             position: absolute;
             top: 0.4rem;
@@ -1230,9 +1230,9 @@
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased dash-body">
 
-    <!-- ═══════════════════════════════════════════════════════
-         AUTH GUARD — premium loading screen
-    ═══════════════════════════════════════════════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         AUTH GUARD â€” premium loading screen
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div id="dashAuthGuard" role="status" aria-label="Loading your account">
         <div class="guard-logo">IPORDISE<span>.</span></div>
         <div class="guard-dots">
@@ -1240,9 +1240,9 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         PAGE CONTENT — hidden until auth confirmed
-    ═══════════════════════════════════════════════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         PAGE CONTENT â€” hidden until auth confirmed
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="dash-protected dash-fadein" id="dashPage">
 
         <!-- Announcement bar -->
@@ -1250,7 +1250,7 @@
             Complimentary gift wrapping &mdash; Code: <span class="top-announcement-code">PARFUM15</span> &mdash; <a href="../discover.html?filter=all" class="top-announcement-link">SHOP NOW!</a>
         </div>
 
-        <!-- ── Header ── -->
+        <!-- â”€â”€ Header â”€â”€ -->
         <header class="bg-brand-dark text-white sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-20">
@@ -1311,9 +1311,9 @@
             </nav>
         </header>
 
-        <!-- ═══════════════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              HERO BANNER
-        ═══════════════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <section class="dash-hero">
             <!-- Top row: avatar + name + actions -->
             <div class="dash-hero-inner">
@@ -1359,9 +1359,9 @@
             </div>
         </section>
 
-        <!-- ═══════════════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              MOBILE NAV TABS
-        ═══════════════════════════════════════════════════ -->
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <div class="dash-bg-wrap">
             <div class="dash-mobile-tabs">
                 <a href="#section-overview"  class="dash-mobile-tab active"><i class="fas fa-grid-2"></i> <span data-i18n="dashboard.nav_overview">Overview</span></a>
@@ -1374,13 +1374,13 @@
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════════
-             MAIN LAYOUT — SIDEBAR + CONTENT
-        ═══════════════════════════════════════════════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             MAIN LAYOUT â€” SIDEBAR + CONTENT
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <div class="dash-bg-wrap">
             <div class="dash-layout">
 
-                <!-- ── Sidebar ── -->
+                <!-- â”€â”€ Sidebar â”€â”€ -->
                 <aside class="dash-sidenav" aria-label="Dashboard navigation">
                     <div class="dash-sidenav-header" data-i18n="dashboard.navigation">Navigation</div>
                     <a href="#section-overview" class="dash-sidenav-item active">
@@ -1427,14 +1427,14 @@
                     </button>
                 </aside>
 
-                <!-- ── Main content ── -->
+                <!-- â”€â”€ Main content â”€â”€ -->
                 <main class="dash-main">
 
-                    <!-- ─── Section: Overview ─── -->
+                    <!-- â”€â”€â”€ Section: Overview â”€â”€â”€ -->
                     <section id="section-overview">
                         <div class="dash-section-header">
                             <span class="dash-section-title" data-i18n="dashboard.account_overview">Account Overview</span>
-                            <a href="../discover.html?filter=all" class="dash-section-action" data-i18n="dashboard.browse_collection">Browse collection →</a>
+                            <a href="../discover.html?filter=all" class="dash-section-action" data-i18n="dashboard.browse_collection">Browse collection â†’</a>
                         </div>
                         <div class="dash-stats-grid">
 
@@ -1473,7 +1473,7 @@
                         </div>
                     </section>
 
-                    <!-- ─── Section: My Favourites ─── -->
+                    <!-- â”€â”€â”€ Section: My Favourites â”€â”€â”€ -->
                     <section id="section-wishlist">
                         <div class="dash-section-header">
                             <span class="dash-section-title" data-i18n="dashboard.my_favourites">My Favourites</span>
@@ -1484,7 +1484,7 @@
                         </div>
                     </section>
 
-                    <!-- ─── Section: My Profile ─── -->
+                    <!-- â”€â”€â”€ Section: My Profile â”€â”€â”€ -->
                     <section id="section-profile">
                         <div class="dash-section-header">
                             <span class="dash-section-title" data-i18n="dashboard.nav_my_profile">My Profile</span>
@@ -1536,7 +1536,7 @@
                                     <label for="dashProfileCity" data-i18n="dashboard.city">City</label>
                                     <div class="dash-field-inner">
                                         <i class="fas fa-location-dot dash-field-icon"></i>
-                                        <input type="text" id="dashProfileCity" placeholder="Casablanca, Rabat, Tangier…" autocomplete="address-level2"
+                                        <input type="text" id="dashProfileCity" placeholder="Casablanca, Rabat, Tangierâ€¦" autocomplete="address-level2"
                                                data-i18n-placeholder="dashboard.city_ph">
                                     </div>
                                 </div>
@@ -1550,11 +1550,11 @@
                         </div>
                     </section>
 
-                    <!-- ─── Section: Recent Orders ─── -->
+                    <!-- â”€â”€â”€ Section: Recent Orders â”€â”€â”€ -->
                     <section id="section-orders">
                         <div class="dash-section-header">
                             <span class="dash-section-title" data-i18n="dashboard.recent_orders">Recent Orders</span>
-                            <a href="track-order.html" class="dash-section-action" data-i18n="dashboard.track_order_link">Track order →</a>
+                            <a href="track-order.html" class="dash-section-action" data-i18n="dashboard.track_order_link">Track order â†’</a>
                         </div>
                         <div class="dash-orders-empty">
                             <div class="dash-orders-empty-icon"><i class="fas fa-bag-shopping"></i></div>
@@ -1567,7 +1567,7 @@
                         </div>
                     </section>
 
-                    <!-- ─── Section: Settings ─── -->
+                    <!-- â”€â”€â”€ Section: Settings â”€â”€â”€ -->
                     <section id="section-settings">
                         <div class="dash-section-header">
                             <span class="dash-section-title" data-i18n="dashboard.nav_settings">Settings</span>
@@ -1610,11 +1610,11 @@
                                 </div>
                                 <div class="dash-settings-row">
                                     <span class="dash-settings-row-label">Account email</span>
-                                    <span class="dash-settings-row-val" id="settingEmailDisplay" style="font-size:0.7rem;color:var(--d-subtle);">—</span>
+                                    <span class="dash-settings-row-val" id="settingEmailDisplay" style="font-size:0.7rem;color:var(--d-subtle);">â€”</span>
                                 </div>
                                 <div class="dash-settings-row">
                                     <span class="dash-settings-row-label">Email verified</span>
-                                    <span class="dash-settings-row-val" id="settingEmailVerified">—</span>
+                                    <span class="dash-settings-row-val" id="settingEmailVerified">â€”</span>
                                 </div>
                                 <div class="dash-settings-row">
                                     <span class="dash-settings-row-label">Analytics cookies</span>
@@ -1638,16 +1638,16 @@
                                     <span class="dash-settings-row-label">Language</span>
                                     <select id="settingLangSelect" style="border:none;background:none;font-size:0.78rem;font-weight:600;color:var(--d-text);cursor:pointer;font-family:var(--d-font-body);outline:none;">
                                         <option value="en">English</option>
-                                        <option value="fr">Français</option>
+                                        <option value="fr">FranÃ§ais</option>
                                     </select>
                                 </div>
                                 <div class="dash-settings-row">
                                     <span class="dash-settings-row-label">Currency</span>
-                                    <span class="dash-settings-row-val">MAD — Moroccan Dirham</span>
+                                    <span class="dash-settings-row-val">MAD â€” Moroccan Dirham</span>
                                 </div>
                                 <div class="dash-settings-row">
                                     <span class="dash-settings-row-label">Region</span>
-                                    <span class="dash-settings-row-val">Morocco 🇲🇦</span>
+                                    <span class="dash-settings-row-val">Morocco ðŸ‡²ðŸ‡¦</span>
                                 </div>
                             </div>
 
@@ -1688,7 +1688,7 @@
                             </div>
                         </div>
 
-                        <!-- ─── Quick Actions ─── -->
+                        <!-- â”€â”€â”€ Quick Actions â”€â”€â”€ -->
                         <div id="section-actions" style="margin-top:1.75rem;">
                             <div class="dash-section-header">
                                 <span class="dash-section-title" data-i18n="dashboard.quick_actions">Quick Actions</span>
@@ -1777,7 +1777,7 @@
             </div><!-- /.dash-layout -->
         </div>
 
-        <!-- ── Footer ── -->
+        <!-- â”€â”€ Footer â”€â”€ -->
         <footer class="bg-brand-dark text-white pt-16 pb-8">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
@@ -1840,7 +1840,7 @@
     <div id="dashToast" role="status" aria-live="polite"></div>
 
     <!-- ================================================================
-         IPORDISE Firebase Auth — Dashboard (protected page)
+         IPORDISE Firebase Auth â€” Dashboard (protected page)
     ================================================================ -->
     <script type="module">
       import { logOut, onAuthChange, getErrorMessage } from '../auth/auth.js';
@@ -1848,7 +1848,7 @@
         from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
       import { auth } from '../auth/firebase.js';
 
-      // ── DOM refs ─────────────────────────────────────────────
+      // â”€â”€ DOM refs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       const guard           = document.getElementById('dashAuthGuard');
       const page            = document.getElementById('dashPage');
       const avatar          = document.getElementById('dashAvatar');
@@ -1866,7 +1866,7 @@
       const saveBtn         = document.getElementById('dashProfileSaveBtn');
       const toast           = document.getElementById('dashToast');
 
-      // ── Toast helper ─────────────────────────────────────────
+      // â”€â”€ Toast helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       let toastTimer;
       const showToast = (msg, duration = 2800) => {
         if (!toast) return;
@@ -1876,7 +1876,7 @@
         toastTimer = setTimeout(() => toast.classList.remove('is-visible'), duration);
       };
 
-      // ── Cached profile extras (localStorage) ──────────────────
+      // â”€â”€ Cached profile extras (localStorage) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       const PROFILE_KEY = 'ipordise-profile-extras';
       const readExtras  = () => {
         try { return JSON.parse(localStorage.getItem(PROFILE_KEY) || '{}'); } catch { return {}; }
@@ -1885,12 +1885,12 @@
         try { localStorage.setItem(PROFILE_KEY, JSON.stringify(data)); } catch {}
       };
 
-      // ── Guard fallback: redirect to login after 6 s ───────────
+      // â”€â”€ Guard fallback: redirect to login after 6 s â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       const guardTimeout = setTimeout(() => {
         window.location.replace('login.html');
       }, 6000);
 
-      // ── Wishlist render (called on page load AND on every favs change) ─
+      // â”€â”€ Wishlist render (called on page load AND on every favs change) â”€
       const renderDashWishlist = (items) => {
         const safeItems = Array.isArray(items) ? items : [];
         const cnt = safeItems.length;
@@ -1978,7 +1978,7 @@
         if (auth.currentUser) renderDashWishlist(e.detail.favourites);
       });
 
-      // ── Auth state observer ───────────────────────────────────
+      // â”€â”€ Auth state observer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       onAuthChange((user) => {
         clearTimeout(guardTimeout);
 
@@ -2017,7 +2017,7 @@
         } else if (avatarInitial) {
           avatarInitial.textContent = initial;
         }
-        // Edit profile button → focus name field
+        // Edit profile button â†’ focus name field
         const editProfileBtn = document.getElementById('dashEditProfileBtn');
         if (editProfileBtn) {
           const focusNameField = () => {
@@ -2073,7 +2073,7 @@
         const settingVerifyEl = document.getElementById('settingEmailVerified');
         if (settingEmailEl) settingEmailEl.textContent = user.email;
         if (settingVerifyEl) {
-          settingVerifyEl.textContent = user.emailVerified ? '✓ Verified' : '✗ Not verified';
+          settingVerifyEl.textContent = user.emailVerified ? 'âœ“ Verified' : 'âœ— Not verified';
           settingVerifyEl.style.color = user.emailVerified ? '#16a34a' : '#d9342b';
         }
 
@@ -2084,14 +2084,14 @@
         if (cityEl)  cityEl.value  = extras.city  || '';
       });
 
-      // ── Profile save ──────────────────────────────────────────
+      // â”€â”€ Profile save â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       profileForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!saveBtn) return;
 
         const newName = profileName?.value.trim() || '';
         saveBtn.disabled = true;
-        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Savingâ€¦';
 
         try {
           if (auth.currentUser && newName && newName !== auth.currentUser.displayName) {
@@ -2110,7 +2110,7 @@
             city:  cityEl?.value.trim()  || '',
           });
 
-          showToast('✓ Profile saved successfully.');
+          showToast('âœ“ Profile saved successfully.');
           if (profileMsg) {
             profileMsg.style.display = 'inline-flex';
             setTimeout(() => { profileMsg.style.display = 'none'; }, 3000);
@@ -2123,7 +2123,7 @@
         }
       });
 
-      // ── Logout ────────────────────────────────────────────────
+      // â”€â”€ Logout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       const handleLogout = async (btn) => {
         if (!btn) return;
         btn.disabled = true;
@@ -2142,19 +2142,19 @@
       logoutBtn?.addEventListener('click',  () => handleLogout(logoutBtn));
       logoutBtn2?.addEventListener('click', () => handleLogout(logoutBtn2));
 
-      // ── Settings: language select ─────────────────────────────
+      // â”€â”€ Settings: language select â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       const langSelect = document.getElementById('settingLangSelect');
       if (langSelect) {
         const currentLang = localStorage.getItem('ipordise-lang') || 'fr';
         langSelect.value = currentLang;
         langSelect.addEventListener('change', () => {
           localStorage.setItem('ipordise-lang', langSelect.value);
-          showToast('Language updated — reloading…');
+          showToast('Language updated â€” reloadingâ€¦');
           setTimeout(() => window.location.reload(), 800);
         });
       }
 
-      // ── Settings: clear wishlist ─────────────────────────────
+      // â”€â”€ Settings: clear wishlist â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       document.getElementById('settingClearWishlist')?.addEventListener('click', async () => {
         if (!confirm('Remove all items from your wishlist?')) return;
         if (window.__ipordise_favs?.clearFavourites) {
@@ -2168,12 +2168,12 @@
         }
       });
 
-      // ── Settings: sign out ────────────────────────────────────
+      // â”€â”€ Settings: sign out â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       document.getElementById('settingSignOutAll')?.addEventListener('click', () => {
         handleLogout(document.getElementById('settingSignOutAll'));
       });
 
-      // ── Mobile tab active state ───────────────────────────────
+      // â”€â”€ Mobile tab active state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       document.querySelectorAll('.dash-mobile-tab').forEach(tab => {
         tab.addEventListener('click', () => {
           document.querySelectorAll('.dash-mobile-tab').forEach(t => t.classList.remove('active'));
@@ -2181,7 +2181,7 @@
         });
       });
 
-      // ── Sidebar active state ──────────────────────────────────
+      // â”€â”€ Sidebar active state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       document.querySelectorAll('.dash-sidenav-item[href]').forEach(item => {
         item.addEventListener('click', () => {
           document.querySelectorAll('.dash-sidenav-item').forEach(i => i.classList.remove('active'));

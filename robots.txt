@@ -1,8 +1,12 @@
 ﻿# IPORDISE — robots.txt
-# https://www.ipordise.com
+# https://ipordise.com
 
 User-agent: *
 Allow: /
+
+# Block /index.html — canonical is https://ipordise.com/ (apex, no www)
+# Google must only index the trailing-slash URL, not /index.html
+Disallow: /index.html
 
 # Block transactional & private pages from indexing
 Disallow: /pages/cart.html
@@ -22,7 +26,7 @@ Disallow: /download_assets2.ps1
 Disallow: /sw.js
 
 # Sitemap location
-Sitemap: https://www.ipordise.com/sitemap.xml
+Sitemap: https://ipordise.com/sitemap.xml
 
 # Crawl delay (courtesy for bots other than Googlebot)
 Crawl-delay: 1

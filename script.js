@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const applyStaticLanguage = () => {
         document.documentElement.lang = currentLanguage;
-        const newArrivalsHref = window.location.pathname.includes('/pages/') ? '../index.html#newArrivalsCarousel' : '#newArrivalsCarousel';
+        const newArrivalsHref = window.location.pathname.includes('/pages/') ? '../#newArrivalsCarousel' : '#newArrivalsCarousel';
         const discoverPath = window.location.pathname.includes('/pages/') ? '../discover.html' : 'discover.html';
 
         document.querySelectorAll('.header-lang-btn > span:first-child').forEach((label) => {
@@ -531,7 +531,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const inPagesFolder = path.includes('/pages/');
         const rootPrefix = inPagesFolder ? '../' : '';
 
-        const indexPath = `${rootPrefix}index.html`;
+        const indexPath = inPagesFolder ? '../' : '/';
         const discoverPath = `${rootPrefix}discover.html`;
         const pagePath = (pageName) => (inPagesFolder ? `${pageName}.html` : `pages/${pageName}.html`);
 
@@ -9116,7 +9116,7 @@ document.addEventListener('DOMContentLoaded', () => {
             writeCurrentAccount(account, loginRememberMe?.checked);
             setFormMessage(loginMessage, `Welcome back, ${account.firstName}. Redirecting to the homepage...`, 'success');
             window.setTimeout(() => {
-                navigateWithTransition('../index.html');
+                navigateWithTransition('../');
             }, 1200);
         });
 
@@ -9170,12 +9170,11 @@ document.addEventListener('DOMContentLoaded', () => {
             writeCurrentAccount(account, true);
             setFormMessage(signupMessage, `Your account has been created, ${firstName}. Redirecting to the homepage...`, 'success');
             window.setTimeout(() => {
-                navigateWithTransition('../index.html');
+                navigateWithTransition('../');
             }, 1200);
         });
 
         loginConsentCheckbox.addEventListener('change', syncLoginState);
-        signupConsentCheckbox.addEventListener('change', syncSignupState);
         signupPasswordInput.addEventListener('input', syncSignupState);
         signupConfirmPasswordInput.addEventListener('input', syncSignupState);
 
