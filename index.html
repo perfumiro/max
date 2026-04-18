@@ -1096,22 +1096,33 @@ s0.parentNode.insertBefore(s1,s0);
         <div class="ipo-loader-line"></div>
     </div>
     <script>
-        // Remove preloader smoothly once the page is fully loaded
-        window.addEventListener('load', function() {
-            const preloader = document.getElementById('ipo-preloader');
-            if (preloader) {
-                preloader.classList.add('ipo-loaded');
-                setTimeout(() => { preloader.remove(); }, 600); // Fully remove from DOM after fade out
+        // Show preloader only on first visit — skip it when navigating within the site
+        (function () {
+            var preloader = document.getElementById('ipo-preloader');
+            if (!preloader) return;
+
+            if (sessionStorage.getItem('ipo-visited')) {
+                // Already inside the site — remove instantly, no flash
+                preloader.remove();
+                return;
             }
-        });
-        // Fallback fail-safe in case window load stalls
-        setTimeout(function() {
-            const preloader = document.getElementById('ipo-preloader');
-            if (preloader && !preloader.classList.contains('ipo-loaded')) {
+
+            // First visit — mark session and play the preloader
+            sessionStorage.setItem('ipo-visited', '1');
+
+            window.addEventListener('load', function () {
                 preloader.classList.add('ipo-loaded');
-                setTimeout(() => { preloader.remove(); }, 600);
-            }
-        }, 5000);
+                setTimeout(function () { preloader.remove(); }, 600);
+            });
+
+            // Fail-safe: remove after 5 s even if load never fires
+            setTimeout(function () {
+                if (preloader && !preloader.classList.contains('ipo-loaded')) {
+                    preloader.classList.add('ipo-loaded');
+                    setTimeout(function () { preloader.remove(); }, 600);
+                }
+            }, 5000);
+        }());
     </script>
 
     <!-- Top Announcement Banner -->
