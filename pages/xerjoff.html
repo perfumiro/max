@@ -1187,7 +1187,7 @@ s0.parentNode.insertBefore(s1,s0);
             var priceText = priceEl && priceEl.dataset.price;
             if (!sizeLabel) {
                 var lang = localStorage.getItem('ipordise-language') || 'en';
-                alert(lang === 'fr' ? 'Veuillez sÃ©lectionner une taille.' : 'Please select a size first.');
+                alert(lang === 'fr' ? 'Veuillez sélectionner une taille.' : 'Please select a size first.');
                 return;
             }
             var qty = parseInt(document.getElementById(prefix + '-qty').textContent) || 1;
@@ -1243,7 +1243,7 @@ s0.parentNode.insertBefore(s1,s0);
             // Show confirmation on the button — no redirect
             var btn = document.querySelector('#product-' + prefix + ' .xerjoff-cart-btn');
             var lang = localStorage.getItem('ipordise-language') || 'en';
-            btn.textContent = lang === 'fr' ? '? AjoutÃ© au panier' : '? Added to Cart';
+            btn.textContent = lang === 'fr' ? '? Ajouté au panier' : '? Added to Cart';
             btn.style.background = '#16a34a';
             btn.disabled = true;
             setTimeout(function() {
