@@ -782,11 +782,11 @@ s0.parentNode.insertBefore(s1,s0);
                         <div class="rating-breakdown-list" id="liveBreakdown" aria-label="Rating distribution" style="text-align:left;">
                             <!-- empty-state placeholder bars -->
                             <div id="liveBreakdownEmpty">
-                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">5 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">â€”</span></div>
-                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">4 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">â€”</span></div>
-                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">3 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">â€”</span></div>
-                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">2 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">â€”</span></div>
-                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">1 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">â€”</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">5 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">&mdash;</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">4 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">&mdash;</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">3 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">&mdash;</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">2 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">&mdash;</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">1 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">&mdash;</span></div>
                             </div>
                         </div>
                     </div>
@@ -1376,7 +1376,7 @@ s0.parentNode.insertBefore(s1,s0);
         const ratingRow = document.getElementById('productRatingRow');
         if (!n) {
           if (ratingRow) ratingRow.style.display = 'none';
-          if (liveVal)   liveVal.textContent   = 'â€”';
+          if (liveVal)   liveVal.textContent = '\u2014';
           if (liveStars) liveStars.innerHTML   = '<i class="far fa-star" style="color:rgba(255,255,255,0.2);"></i>'.repeat(5);
           if (liveCount) liveCount.textContent = 'Be the first to review';
           if (emptyPlaceholder) emptyPlaceholder.style.display = 'block';
@@ -1412,7 +1412,7 @@ s0.parentNode.insertBefore(s1,s0);
             html += `<div class="rating-row">
               <span class="rating-label">${s} <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span>
               <div class="rating-bar-track"><span class="rating-bar-fill" style="width:${pct}%"></span></div>
-              <span class="rating-percent">${pct}%</span>
+              <span class="rating-percent">&mdash;</span>
             </div>`;
           }
           realBarsEl.innerHTML = html;
