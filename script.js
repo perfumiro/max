@@ -5178,56 +5178,85 @@ document.addEventListener('DOMContentLoaded', () => {
         { label: 'coffee', weight: 11, color: '#6e4c39', textColor: '#ffffff', terms: ['coffee'] },
         { label: 'salty', weight: 11, color: '#8fb8cc', textColor: '#173040', terms: ['salty', 'marine', 'sea salt'] },
         { label: 'herbal', weight: 10, color: '#c8d5cb', textColor: '#33423a', terms: ['herbal', 'clary sage', 'sage', 'green'] },
-        { label: 'musky', weight: 10, color: '#d9d5d0', textColor: '#49433f', terms: ['musk', 'musky'] }
+        { label: 'musky', weight: 10, color: '#d9d5d0', textColor: '#49433f', terms: ['musk', 'musky'] },
+        { label: 'resinous', weight: 11, color: '#b59374', textColor: '#ffffff', terms: ['resinous', 'resin', 'myrrh', 'frankincense', 'benzoin', 'cistus', 'labdanum'] },
+        { label: 'oriental', weight: 12, color: '#c9813a', textColor: '#ffffff', terms: ['oriental', 'balsamic', 'balsam', 'oud'] },
+        { label: 'almond', weight: 11, color: '#d4a5a5', textColor: '#4a2020', terms: ['almond', 'marzipan', 'heliotrope'] },
+        { label: 'marine', weight: 11, color: '#5b9fc2', textColor: '#ffffff', terms: ['marine', 'aquatic', 'sea', 'ocean', 'watery', 'salt'] }
     ];
     const accordWidths = ['100%', '93%', '85%', '72%', '69%', '62%', '58%', '54%'];
     const mainAccordCatalog = {
+        // Chanel
         'bleu de chanel eau de parfum spray': ['citrus', 'woody', 'aromatic', 'amber', 'fresh spicy'],
+        // Hugo Boss
         'hugo boss the scent for him elixir': ['warm spicy', 'aromatic', 'woody', 'amber', 'leather'],
         'boss bottled absolu intense': ['leather', 'woody', 'warm spicy', 'resinous', 'amber'],
         'hugo boss boss bottled elixir intense': ['woody', 'amber', 'warm spicy', 'earthy', 'resinous'],
+        // Guerlain
         'guerlain l homme id al l intense eau de parfum': ['warm spicy', 'woody', 'amber', 'oriental', 'leather'],
         'guerlain l homme ideal l intense eau de parfum': ['warm spicy', 'woody', 'amber', 'oriental', 'leather'],
         'guerlain l homme id al extr me': ['almond', 'warm spicy', 'woody', 'tobacco', 'leather'],
         'guerlain l homme ideal extreme': ['almond', 'warm spicy', 'woody', 'tobacco', 'leather'],
+        // Versace
         'versace eros eau de parfum': ['fresh', 'vanilla', 'aromatic', 'woody', 'amber'],
         'versace eros flame eau de parfum': ['citrus', 'warm spicy', 'woody', 'vanilla', 'aromatic'],
         'versace eros energy eau de parfum': ['citrus', 'fresh', 'aromatic', 'musky', 'woody'],
         'versace dylan blue eau de toilette': ['citrus', 'fresh spicy', 'musky', 'woody', 'aromatic'],
+        // Rabanne
         'rabanne one million parfum': ['salty', 'white floral', 'amber', 'leather', 'warm spicy'],
         'rabanne one million elixir intense': ['vanilla', 'sweet', 'fruity', 'warm spicy', 'amber'],
+        // Givenchy
         'givenchy gentleman society amber eau de parfum': ['amber', 'tobacco', 'woody', 'warm spicy', 'leather'],
         'givenchy gentleman society nomade eau de parfum': ['woody', 'aromatic', 'floral', 'earthy', 'vanilla'],
         'givenchy gentleman society extreme eau de parfum': ['aromatic', 'coffee', 'woody', 'warm spicy', 'vanilla'],
         'gentleman private reserve eau de parfum': ['powdery', 'boozy', 'woody', 'amber', 'sweet'],
+        // Jean Paul Gaultier Scandal
         'jean paul gaultier scandal elixir': ['fruity', 'sweet', 'warm spicy', 'woody', 'amber'],
         'jean paul gaultier scandal intense eau de parfum': ['leather', 'woody', 'amber', 'aromatic', 'warm spicy'],
+        // Azzaro
         'azzaro the most wanted parfum': ['vanilla', 'amber', 'warm spicy', 'woody', 'sweet'],
         'azzaro the most wanted eau de parfum intense': ['sweet', 'warm spicy', 'amber', 'woody', 'vanilla'],
         'azzaro forever wanted elixir eau de parfum': ['amber', 'sweet', 'vanilla', 'woody', 'warm spicy'],
+        // Valentino
         'valentino donna born in roma eau de parfum': ['fruity', 'white floral', 'vanilla', 'woody', 'sweet'],
         'valentino uomo born in roma coral fantasy eau de toilette': ['fruity', 'aromatic', 'tobacco', 'woody', 'fresh spicy'],
         'valentino born in roma extradose eau de toilette': ['woody', 'aromatic', 'fresh spicy', 'citrus', 'amber'],
-        'dior sauvage eau de parfum': ['fresh spicy', 'amber', 'vanilla', 'woody', 'citrus'],
-        'dior homme intense eau de parfum': ['powdery', 'woody', 'amber', 'musky', 'floral'],
         'valentino born in roma uomo intense eau de parfum': ['vanilla', 'amber', 'woody', 'aromatic', 'smoky'],
         'valentino born in roma donna intense eau de parfum': ['vanilla', 'amber', 'white floral', 'woody', 'sweet'],
         'valentino uomo born in roma eau de toilette': ['citrus', 'aromatic', 'woody', 'fresh spicy', 'fresh'],
+        'valentino uomo born in roma purple melancholia eau de toilette': ['fresh spicy', 'citrus', 'aromatic', 'woody', 'musky'],
+        // Dior
+        'dior sauvage eau de parfum': ['fresh spicy', 'amber', 'vanilla', 'woody', 'citrus'],
+        'dior homme intense eau de parfum': ['powdery', 'woody', 'amber', 'musky', 'floral'],
+        // Armani
         'emporio armani stronger with you intensely edp': ['vanilla', 'sweet', 'amber', 'warm spicy', 'woody'],
         'armani stronger with you powerfully eau de parfum': ['fruity', 'aromatic', 'smoky', 'vanilla', 'amber'],
         'armani stronger with you absolutely perfume': ['boozy', 'vanilla', 'amber', 'sweet', 'woody'],
+        // YSL
         'yves saint laurent y eau de parfum': ['aromatic', 'fresh spicy', 'woody', 'citrus', 'smoky'],
         'yves saint laurent myslf eau de parfum': ['citrus', 'white floral', 'woody', 'fresh', 'amber'],
         'yves saint laurent myslf le parfum': ['warm spicy', 'white floral', 'vanilla', 'woody', 'amber'],
+        // Jean Paul Gaultier Le Male
         'jean paul gaultier le male elixir eau de parfum': ['vanilla', 'aromatic', 'sweet', 'amber', 'fresh spicy'],
-        'jean paul gaultier le male in blue eau de parfum': ['aromatic', 'fresh spicy', 'amber', 'marine', 'lavender'],
-        'jean paul gaultier le male eau de toilette': ['aromatic', 'fresh spicy', 'vanilla', 'warm spicy', 'woody'],
+        'jean paul gaultier le male in blue eau de parfum': ['marine', 'aromatic', 'fresh spicy', 'amber', 'lavender'],
+        'jean paul gaultier le male eau de toilette': ['aromatic', 'vanilla', 'lavender', 'warm spicy', 'fresh spicy'],
         'jean paul gaultier le male le parfum eau de parfum': ['warm spicy', 'vanilla', 'woody', 'amber', 'aromatic'],
         'jean paul gaultier le beau eau de parfum': ['fruity', 'sweet', 'vanilla', 'woody', 'amber'],
+        // Carolina Herrera
         'carolina herrera bad boy eau de toilette': ['warm spicy', 'citrus', 'woody', 'aromatic', 'sweet'],
+        // Gucci
         'gucci guilty absolu de parfum pour homme': ['boozy', 'woody', 'amber', 'warm spicy', 'white floral'],
         'gucci guilty elixir pour homme': ['amber', 'powdery', 'woody', 'smoky', 'warm spicy'],
-        'montale arabians tonka': ['sweet', 'amber', 'leather', 'woody', 'floral']
+        // Montale
+        'montale arabians tonka': ['sweet', 'amber', 'leather', 'woody', 'floral'],
+        // Prada Luna Rossa
+        'prada luna rossa ocean eau de parfum': ['marine', 'fresh spicy', 'woody', 'aromatic', 'amber'],
+        'prada luna rossa carbon edt': ['marine', 'aromatic', 'woody', 'fresh spicy', 'musky'],
+        'prada luna rossa black eau de parfum': ['aromatic', 'woody', 'amber', 'warm spicy', 'musky'],
+        'prada luna rossa men edt': ['lavender', 'aromatic', 'marine', 'musky', 'fresh spicy'],
+        // Prada
+        'prada l homme edt': ['powdery', 'floral', 'woody', 'aromatic', 'fresh spicy'],
+        'prada paradigme eau de parfum': ['woody', 'aromatic', 'amber', 'smoky', 'fresh spicy'],
     };
     const accordLookup = accordDefinitions.reduce((lookup, accord) => {
         lookup[accord.label] = accord;
