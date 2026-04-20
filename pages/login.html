@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -38,7 +38,7 @@ var Tawk_API=Tawk_API||{};
 var Tawk_LoadStart=new Date();
 Tawk_API.onLoad=function(){
   Tawk_API.hideWidget();
-  /* ── Custom floating chat button with IPORDISE logo ── */
+  /* -- Custom floating chat button with IPORDISE logo -- */
   var style=document.createElement('style');
   style.textContent='\
     #ipo-tawk-wrap{\
@@ -186,7 +186,7 @@ s0.parentNode.insertBefore(s1,s0);
                     </a>
                 </div>
 
-                <!-- Search trigger — opens full overlay on click -->
+                <!-- Search trigger � opens full overlay on click -->
                 <div class="flex-1 max-w-2xl mx-8 hidden md:block">
                     <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
                         <i class="fas fa-search ipo-search-trigger-icon"></i>
@@ -261,7 +261,7 @@ s0.parentNode.insertBefore(s1,s0);
     </header>
 
     <style>
-        /* ── Premium Auth Card ─────────────────────────────────── */
+        /* -- Premium Auth Card ----------------------------------- */
         .auth-page {
             min-height: 80vh;
             background: linear-gradient(145deg, #f7f4f0 0%, #ede9e3 50%, #f5f2ee 100%);
@@ -469,11 +469,11 @@ s0.parentNode.insertBefore(s1,s0);
             transition: color 0.15s;
         }
         .auth-forgot:hover { color: #b91c1c; text-decoration: underline; }
-        /* ═══════════════════════════════════════════════
-           Reset-password modal — IPORDISE luxury rebuild
-           ═══════════════════════════════════════════════ */
+        /* -----------------------------------------------
+           Reset-password modal � IPORDISE luxury rebuild
+           ----------------------------------------------- */
 
-        /* ── Backdrop ── */
+        /* -- Backdrop -- */
         .rp-overlay {
             display: none;
             position: fixed;
@@ -497,7 +497,7 @@ s0.parentNode.insertBefore(s1,s0);
             to   { opacity: 1; }
         }
 
-        /* ── Modal shell ── */
+        /* -- Modal shell -- */
         .rp-modal {
             width: 100%;
             max-width: 390px;
@@ -518,7 +518,7 @@ s0.parentNode.insertBefore(s1,s0);
             to   { opacity: 1; transform: translateY(0)    scale(1); }
         }
 
-        /* ── Header panel ── */
+        /* -- Header panel -- */
         .rp-modal-header {
             background:
                 radial-gradient(ellipse at 70% 0%, rgba(192,24,46,0.22) 0%, transparent 60%),
@@ -546,7 +546,7 @@ s0.parentNode.insertBefore(s1,s0);
             );
         }
 
-        /* Decorative orb — top right */
+        /* Decorative orb � top right */
         .rp-modal-header::before {
             content: '';
             position: absolute;
@@ -557,7 +557,7 @@ s0.parentNode.insertBefore(s1,s0);
             pointer-events: none;
         }
 
-        /* ── Close button ── */
+        /* -- Close button -- */
         .rp-close {
             position: absolute;
             top: 0.95rem; right: 0.95rem;
@@ -578,7 +578,7 @@ s0.parentNode.insertBefore(s1,s0);
             transform: rotate(90deg);
         }
 
-        /* ── Icon circle ── */
+        /* -- Icon circle -- */
         .rp-icon {
             width: 64px; height: 64px;
             border-radius: 50%;
@@ -594,7 +594,7 @@ s0.parentNode.insertBefore(s1,s0);
                 0 0 0 6px rgba(192,24,46,0.06);
         }
 
-        /* ── Title & subtitle ── */
+        /* -- Title & subtitle -- */
         .rp-title {
             font-size: 1.2rem;
             font-weight: 700;
@@ -610,13 +610,13 @@ s0.parentNode.insertBefore(s1,s0);
             position: relative; z-index: 1;
         }
 
-        /* ── Body panel ── */
+        /* -- Body panel -- */
         .rp-modal-body {
             padding: 1.6rem 1.65rem 1.9rem;
             background: #faf7f4;
         }
 
-        /* ── Label ── */
+        /* -- Label -- */
         .rp-input-label {
             display: block;
             font-size: 0.72rem;
@@ -627,7 +627,7 @@ s0.parentNode.insertBefore(s1,s0);
             margin-bottom: 0.4rem;
         }
 
-        /* ── Input wrapper ── */
+        /* -- Input wrapper -- */
         .rp-input-wrap {
             position: relative;
             margin-bottom: 1.05rem;
@@ -643,7 +643,7 @@ s0.parentNode.insertBefore(s1,s0);
         }
         .rp-input-wrap:focus-within i { color: #c0182e; }
 
-        /* ── Input field ── */
+        /* -- Input field -- */
         .rp-input {
             width: 100%;
             padding: 0.80rem 1rem 0.80rem 2.45rem;
@@ -667,7 +667,7 @@ s0.parentNode.insertBefore(s1,s0);
         }
         .rp-input::placeholder { color: #c8b8aa; }
 
-        /* ── Submit button ── */
+        /* -- Submit button -- */
         .rp-submit {
             width: 100%;
             padding: 0.85rem 1rem;
@@ -706,7 +706,7 @@ s0.parentNode.insertBefore(s1,s0);
         .rp-submit:active { transform: scale(0.98); box-shadow: none; }
         .rp-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* ── Feedback message ── */
+        /* -- Feedback message -- */
         .rp-msg {
             font-size: 0.82rem;
             border-radius: 0.7rem;
@@ -865,7 +865,7 @@ s0.parentNode.insertBefore(s1,s0);
                 <button class="auth-tab"        id="tabSignup" role="tab" aria-selected="false" aria-controls="panelSignup" data-i18n="login.tab_signup">Create Account</button>
             </div>
 
-            <!-- ═══ SIGN IN PANEL ═══ -->
+            <!-- --- SIGN IN PANEL --- -->
             <div class="auth-panel active" id="panelSignin" role="tabpanel">
                 <h2 class="auth-heading" data-i18n="login.form_title">Welcome back</h2>
                 <p class="auth-subheading" data-i18n="login.form_subtitle">Sign in to your IPORDISE account.</p>
@@ -916,10 +916,10 @@ s0.parentNode.insertBefore(s1,s0);
                 </div>
             </div>
 
-            <!-- ═══ SIGN UP PANEL ═══ -->
+            <!-- --- SIGN UP PANEL --- -->
             <div class="auth-panel" id="panelSignup" role="tabpanel">
                 <h2 class="auth-heading" data-i18n="login.signup_heading">Create your account</h2>
-                <p class="auth-subheading" data-i18n="login.signup_subheading">Join IPORDISE — it only takes a minute.</p>
+                <p class="auth-subheading" data-i18n="login.signup_subheading">Join IPORDISE � it only takes a minute.</p>
 
                 <form id="signupForm" novalidate>
                     <div class="auth-name-row auth-field">
@@ -991,7 +991,7 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
     </main>
 
-    <!-- ── Reset Password Modal ─────────────────────────────────── -->
+    <!-- -- Reset Password Modal ----------------------------------- -->
     <div class="rp-overlay" id="rpOverlay" role="dialog" aria-modal="true" aria-labelledby="rpTitle">
         <div class="rp-modal">
             <div class="rp-modal-header">
@@ -1064,18 +1064,18 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
     </footer>
 
-    <!-- Server-down overlay removed — Firebase Authentication is now active -->
+    <!-- Server-down overlay removed � Firebase Authentication is now active -->
 
-    <!-- ── Firebase Auth ──────────────────────────────────────── -->
+    <!-- -- Firebase Auth ---------------------------------------- -->
     <script type="module">
       import { signIn, signUp, googleSignIn, logOut, resetPassword, onAuthChange, getErrorMessage } from '../auth/auth.js';
 
-      // If already logged in AND email verified → go straight to dashboard
+      // If already logged in AND email verified ? go straight to dashboard
       onAuthChange((user) => {
         if (user && user.emailVerified) window.location.replace('dashboard.html');
       });
 
-      // ── Helpers ───────────────────────────────────────────────
+      // -- Helpers -----------------------------------------------
       const $ = (id) => document.getElementById(id);
       const isFr = () => (localStorage.getItem('ipordise-lang') || 'en') === 'fr';
 
@@ -1116,7 +1116,7 @@ s0.parentNode.insertBefore(s1,s0);
         else    { btn.innerHTML = btn.dataset.orig || btn.innerHTML; }
       };
 
-      // ── Tab switching ─────────────────────────────────────────
+      // -- Tab switching -----------------------------------------
       const tabs    = { signin: $('tabSignin'),  signup: $('tabSignup')  };
       const panels  = { signin: $('panelSignin'), signup: $('panelSignup') };
 
@@ -1144,7 +1144,7 @@ s0.parentNode.insertBefore(s1,s0);
         if (msg) showMsg(msg, m().email_not_verified, 'error');
       }
 
-      // ── Password toggles ──────────────────────────────────────
+      // -- Password toggles --------------------------------------
       document.querySelectorAll('.auth-pw-toggle').forEach((btn) => {
         btn.addEventListener('click', () => {
           const input = document.getElementById(btn.dataset.target);
@@ -1157,7 +1157,7 @@ s0.parentNode.insertBefore(s1,s0);
         });
       });
 
-      // ── Sign In ───────────────────────────────────────────────
+      // -- Sign In -----------------------------------------------
       $('loginForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -1171,7 +1171,7 @@ s0.parentNode.insertBefore(s1,s0);
         try {
           const user = await signIn(email, password);
           if (!user.emailVerified) {
-            // Block unverified users — sign them out and show a clear message
+            // Block unverified users � sign them out and show a clear message
             await logOut();
             showMsg(msg, m().email_not_verified, 'error');
             setLoading(btn, false);
@@ -1186,7 +1186,7 @@ s0.parentNode.insertBefore(s1,s0);
         }
       }, true);
 
-      // ── Sign Up ───────────────────────────────────────────────
+      // -- Sign Up -----------------------------------------------
       $('signupForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -1206,14 +1206,14 @@ s0.parentNode.insertBefore(s1,s0);
           await signUp(email, password, `${firstName} ${lastName}`);
           showMsg(msg, m().welcome_new(firstName), 'success');
           setLoading(btn, false);
-          // Do NOT redirect — user must verify email first
+          // Do NOT redirect � user must verify email first
         } catch (err) {
           showMsg(msg, getErrorMessage(err), 'error');
           setLoading(btn, false);
         }
       }, true);
 
-      // ── Google Sign In ────────────────────────────────────────
+      // -- Google Sign In ----------------------------------------
       const handleGoogle = async (btn) => {
         setLoading(btn, true);
         try {
@@ -1227,7 +1227,7 @@ s0.parentNode.insertBefore(s1,s0);
       $('googleSignInBtn')?.addEventListener('click',  () => handleGoogle($('googleSignInBtn')));
       $('googleSignUpBtn')?.addEventListener('click',  () => handleGoogle($('googleSignUpBtn')));
 
-      // ── Forgot / Reset Password ───────────────────────────────
+      // -- Forgot / Reset Password -------------------------------
       const rpOverlay  = $('rpOverlay');
       const rpMsg      = $('rpMsg');
       const rpEmailIn  = $('rpEmailInput');
@@ -1308,5 +1308,6 @@ s0.parentNode.insertBefore(s1,s0);
             <div class="ipo-search-overlay-body" id="ipoSearchOverlayBody"></div>
         </div>
     </div>
+    <script src="/assets/scroll-progress.js" defer></script>
 </body>
 </html>
