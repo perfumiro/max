@@ -27552,105 +27552,147 @@ body.ipo-is-transitioning * {
 }
 
 /* ================================================================
-   INGREDIENTS TAB — INCI PILL DISPLAY (April 2026)
+   INGREDIENTS TAB — INCI PILL DISPLAY  ·  redesigned (April 2026)
    ================================================================ */
 
 .inci-wrap {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.1rem;
+    background: linear-gradient(145deg, #fafbfd 0%, #f3f6fa 100%);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 1.1rem;
+    padding: 1.3rem 1.45rem;
+    box-shadow: 0 2px 14px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
 .inci-header {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
     flex-wrap: wrap;
 }
 
 .inci-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 0.65rem;
+    gap: 0.45rem;
+    font-size: 0.61rem;
     font-weight: 800;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.17em;
     text-transform: uppercase;
-    color: #0f172a;
-    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-    border: 1px solid rgba(148, 163, 184, 0.45);
+    color: #f1f5f9;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 999px;
-    padding: 0.3rem 0.75rem;
+    padding: 0.36rem 0.9rem;
+    box-shadow: 0 2px 7px rgba(15, 23, 42, 0.22);
 }
 
 .inci-badge i {
-    color: #64748b;
-    font-size: 0.6rem;
+    color: #c8a96a;
+    font-size: 0.61rem;
 }
 
-.inci-note {
+.inci-allergen-count {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    font-size: 0.65rem;
+    font-size: 0.61rem;
+    font-weight: 700;
+    color: #92400e;
+    background: #fef3c7;
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    letter-spacing: 0.03em;
+}
+
+.inci-allergen-count i {
+    font-size: 0.55rem;
+    color: #d97706;
+}
+
+.inci-total-count {
+    font-size: 0.61rem;
     font-weight: 600;
     color: #94a3b8;
     letter-spacing: 0.04em;
 }
 
-.inci-allergen-dot {
-    font-size: 0.45rem !important;
-    color: #dc2626 !important;
-}
-
 .inci-pills {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem;
+    gap: 0.38rem;
 }
 
 .inci-pill {
     display: inline-flex;
     align-items: center;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 500;
-    color: #374151;
-    background: #f8fafc;
-    border: 1px solid rgba(203, 213, 225, 0.8);
-    border-radius: 999px;
-    padding: 0.3rem 0.75rem;
+    color: #334155;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(203, 213, 225, 0.65);
+    border-radius: 0.5rem;
+    padding: 0.27rem 0.65rem;
     line-height: 1.3;
-    transition: background 0.15s ease, border-color 0.15s ease;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
     cursor: default;
 }
 
 .inci-pill:hover {
-    background: #f1f5f9;
-    border-color: rgba(148, 163, 184, 0.7);
+    background: #ffffff;
+    border-color: rgba(148, 163, 184, 0.8);
+    transform: translateY(-1px);
 }
 
 .inci-pill.inci-allergen {
-    color: #991b1b;
-    background: #fef2f2;
-    border-color: rgba(252, 165, 165, 0.7);
+    color: #92400e;
+    background: rgba(254, 243, 199, 0.9);
+    border-color: rgba(251, 191, 36, 0.5);
     font-weight: 600;
 }
 
+.inci-pill.inci-allergen::before {
+    content: '⚠';
+    font-size: 0.52rem;
+    margin-right: 0.28rem;
+    opacity: 0.65;
+}
+
 .inci-pill.inci-allergen:hover {
-    background: #fee2e2;
-    border-color: rgba(248, 113, 113, 0.85);
+    background: #fef3c7;
+    border-color: rgba(217, 119, 6, 0.65);
+    transform: translateY(-1px);
+}
+
+.inci-divider {
+    height: 1px;
+    border: none;
+    background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.2) 30%, rgba(148, 163, 184, 0.2) 70%, transparent);
+    margin: 0;
 }
 
 .inci-legal {
-    font-size: 0.63rem;
+    font-size: 0.6rem;
     color: #94a3b8;
-    line-height: 1.5;
+    line-height: 1.6;
     margin: 0;
-    padding-top: 0.25rem;
-    border-top: 1px solid #f1f5f9;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+}
+
+.inci-legal::before {
+    content: '§';
+    font-size: 0.68rem;
+    color: #cbd5e1;
+    flex-shrink: 0;
 }
 
 @media (max-width: 767px) {
-    .inci-pill { font-size: 0.68rem; padding: 0.25rem 0.6rem; }
-    .inci-header { gap: 0.5rem; }
+    .inci-wrap { padding: 1rem; gap: 0.85rem; border-radius: 0.85rem; }
+    .inci-pill { font-size: 0.64rem; padding: 0.24rem 0.55rem; border-radius: 0.45rem; }
+    .inci-header { gap: 0.45rem; }
 }

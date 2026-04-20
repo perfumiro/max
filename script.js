@@ -5562,18 +5562,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const inciRaw = PRODUCT_INCI[inciKey] || productOverride?.ingredients || null;
             if (inciRaw) {
                 const terms = inciRaw.replace(/\.\s*$/, '').split(/,\s*/);
-                const pills = terms.map((term, i) => {
+                let allergenCount = 0;
+                const pills = terms.map((term) => {
                     const isAllergen = /linalool|limonene|citronellol|geraniol|citral|coumarin|eugenol|farnesol|benzyl|alpha-isomethyl|amyl cinnamal|isoeugenol|cinnamyl|hydroxy/i.test(term);
+                    if (isAllergen) allergenCount++;
                     return `<span class="inci-pill${isAllergen ? ' inci-allergen' : ''}" title="${isAllergen ? 'EU-listed fragrance allergen' : ''}">${term.trim()}</span>`;
                 }).join('');
                 ingredientsPanel.innerHTML = `
                     <div class="inci-wrap">
                         <div class="inci-header">
                             <span class="inci-badge"><i class="fas fa-flask"></i> INCI Declaration</span>
-                            <span class="inci-note"><i class="fas fa-circle inci-allergen-dot"></i> highlighted = EU-listed allergen</span>
+                            ${allergenCount > 0 ? `<span class="inci-allergen-count"><i class="fas fa-triangle-exclamation"></i> ${allergenCount} EU allergen${allergenCount > 1 ? 's' : ''} detected</span>` : ''}
+                            <span class="inci-total-count">${terms.length} ingredients</span>
                         </div>
                         <div class="inci-pills">${pills}</div>
-                        <p class="inci-legal">Ingredients listed in descending order of concentration per EU Cosmetics Regulation 1223/2009.</p>
+                        <hr class="inci-divider">
+                        <p class="inci-legal">Ingredients listed in descending order of concentration per EU Cosmetics Regulation 1223/2009. Allergens highlighted per EU 2023/1545.</p>
                     </div>`;
             }
         }
