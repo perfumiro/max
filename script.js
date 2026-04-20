@@ -10808,6 +10808,121 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }());
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   IPORDISE — PWA Install Banner
+   Shows a luxury branded "Add to home screen" banner 3 s after the first visit.
+   Dismissed state is stored in localStorage so it never shows again after dismiss.
+   "Install" button triggers the browser's native beforeinstallprompt.
+   "Download our App" footer button also triggers the same prompt (if available)
+   or explains iOS steps via a tooltip.
+───────────────────────────────────────────────────────────────────────────── */
+(function () {
+    const DISMISS_KEY   = 'ipo-pwa-banner-dismissed';
+    const INSTALLED_KEY = 'ipo-pwa-installed';
+    let deferredPrompt  = null;
+    let banner          = null;
+
+    // Already installed — skip everything
+    if (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone === true ||
+        localStorage.getItem(INSTALLED_KEY) === '1'
+    ) return;
+
+    // Already dismissed — skip everything
+    if (localStorage.getItem(DISMISS_KEY) === '1') return;
+
+    // Capture the install prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // Show banner after 3 s delay on first visit
+        setTimeout(showBanner, 3000);
+    });
+
+    // Mark installed if user accepts from OS prompt or adds to home screen
+    window.addEventListener('appinstalled', () => {
+        localStorage.setItem(INSTALLED_KEY, '1');
+        hideBanner();
+    });
+
+    function buildBanner() {
+        const el = document.createElement('div');
+        el.id        = 'ipo-install-banner';
+        el.className = 'ipo-install-banner';
+        el.setAttribute('role', 'dialog');
+        el.setAttribute('aria-label', 'Install IPORDISE app');
+        el.innerHTML = `
+            <div class="ipo-install-banner-inner">
+                <img src="/assets/logo.png" alt="IPORDISE" class="ipo-install-banner-logo">
+                <div class="ipo-install-banner-text">
+                    <strong>Add IPORDISE to your home screen</strong>
+                    <span>Faster checkout &amp; exclusive member deals</span>
+                </div>
+                <button class="ipo-install-banner-btn" id="ipo-install-accept">Install</button>
+                <button class="ipo-install-banner-close" id="ipo-install-dismiss" aria-label="Dismiss">&#x2715;</button>
+            </div>
+        `;
+        document.body.appendChild(el);
+
+        el.querySelector('#ipo-install-accept').addEventListener('click', triggerInstall);
+        el.querySelector('#ipo-install-dismiss').addEventListener('click', dismiss);
+        return el;
+    }
+
+    function showBanner() {
+        if (!deferredPrompt) return;
+        if (!banner) banner = buildBanner();
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => banner.classList.add('is-visible'));
+        });
+    }
+
+    function hideBanner() {
+        if (!banner) return;
+        banner.classList.remove('is-visible');
+    }
+
+    function dismiss() {
+        localStorage.setItem(DISMISS_KEY, '1');
+        hideBanner();
+    }
+
+    async function triggerInstall() {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        if (outcome === 'accepted') {
+            localStorage.setItem(INSTALLED_KEY, '1');
+        }
+        hideBanner();
+    }
+
+    // Expose so the footer "Download App" button can trigger the same prompt
+    window.__ipordiseInstallApp = function () {
+        if (deferredPrompt) {
+            triggerInstall();
+        } else if (
+            /iphone|ipad|ipod/i.test(navigator.userAgent) &&
+            !window.navigator.standalone
+        ) {
+            // iOS — show a tooltip since iOS doesn't support beforeinstallprompt
+            const ios = document.getElementById('ipo-ios-install-tip');
+            if (ios) {
+                ios.classList.toggle('is-visible');
+            }
+        } else {
+            // Already installed or browser doesn't support PWA install
+            const msg = document.getElementById('ipo-already-installed-msg');
+            if (msg) {
+                msg.classList.add('is-visible');
+                setTimeout(() => msg.classList.remove('is-visible'), 3000);
+            }
+        }
+    };
+}());
+
 /* ── Service Worker registration with auto-update ── */
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
