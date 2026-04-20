@@ -27313,3 +27313,138 @@ body.ipo-is-transitioning * {
         letter-spacing: 0 !important;
     }
 }
+
+/* ================================================================
+   PRICE CARD — ✦ MAGIC ANIMATION ✦
+   Cycling glow · gold-red shimmer sweep · border color flow
+   ================================================================ */
+
+/* ── Ambient glow: neutral → gold → red → neutral ── */
+@keyframes priceMagicPulse {
+    0%, 100% {
+        box-shadow:
+            0 4px 22px rgba(15,23,42,0.08),
+            0 1px 3px rgba(15,23,42,0.04);
+    }
+    38% {
+        box-shadow:
+            0 8px 40px rgba(201,162,39,0.32),
+            0 2px 14px rgba(201,162,39,0.18),
+            0 0 0 1.5px rgba(201,162,39,0.22);
+    }
+    70% {
+        box-shadow:
+            0 8px 40px rgba(231,60,60,0.26),
+            0 2px 14px rgba(231,60,60,0.12),
+            0 0 0 1.5px rgba(231,60,60,0.18);
+    }
+}
+
+/* ── Left border color cycle: dark → gold → red → dark ── */
+@keyframes priceAccentCycle {
+    0%, 100% { border-left-color: #111827; }
+    30%      { border-left-color: #c9a227; }
+    60%      { border-left-color: #e73c3c; }
+}
+
+/* ── Top accent line: gold → white → red sweep ── */
+@keyframes priceTopSweep {
+    0%      { background-position: -240% 0; opacity: 0; }
+    6%      { opacity: 1; }
+    55%     { opacity: 1; }
+    100%    { background-position: 240% 0; opacity: 0; }
+}
+
+/* ── Price number: gold shimmer pass ── */
+@keyframes priceGoldShimmer {
+    0%   { background-position: -280% center; }
+    100% { background-position: 280% center; }
+}
+
+/* ── Floating sparkle ── */
+@keyframes priceSparkRise {
+    0%   { transform: translateY(0) scale(1);      opacity: 0.9; }
+    100% { transform: translateY(-22px) scale(0.1); opacity: 0;   }
+}
+
+/* ── Apply combined animation to is-priced card ── */
+#productPriceCard.is-priced {
+    animation:
+        priceCardFadeIn 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+        priceMagicPulse  5.5s ease-in-out 1.2s infinite,
+        priceAccentCycle 5.5s ease-in-out 1.2s infinite !important;
+}
+
+/* ── Animated top accent line (gold shimmer sweep) ── */
+#productPriceCard.is-priced::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 3px !important;
+    border-radius: 1rem 1rem 0 0 !important;
+    background: linear-gradient(
+        90deg,
+        transparent  0%,
+        #c9a227     18%,
+        #fff8e1     38%,
+        #ffffff     50%,
+        #fce4ec     62%,
+        #e73c3c     82%,
+        transparent 100%
+    ) !important;
+    background-size: 300% 100% !important;
+    animation: priceTopSweep 5.5s cubic-bezier(0.4, 0, 0.6, 1) 0.8s infinite !important;
+    z-index: 3 !important;
+    pointer-events: none !important;
+    display: block !important;
+}
+
+/* ── Gold sparkle dot — rises and fades ── */
+#productPriceCard.is-priced::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 18px !important;
+    right: 22px !important;
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle, #f0d878 0%, #c9a227 100%) !important;
+    box-shadow: 0 0 7px rgba(201,162,39,0.65) !important;
+    animation: priceSparkRise 3.2s ease-in-out 2.2s infinite !important;
+    pointer-events: none !important;
+    z-index: 3 !important;
+    display: block !important;
+}
+
+/* ── Price number: gold shimmer sweep (only when not mid-reveal) ── */
+#productPriceCard.is-priced:not(.is-price-animating) #productPrice {
+    background: linear-gradient(
+        100deg,
+        #111827 12%,
+        #111827 30%,
+        rgba(201,162,39,0.55)  44%,
+        rgba(255,248,210,0.92) 50%,
+        rgba(201,162,39,0.55)  56%,
+        #111827 70%,
+        #111827 88%
+    ) !important;
+    background-size: 260% auto !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    animation: priceGoldShimmer 5s linear 1s infinite !important;
+}
+
+/* ── Respect reduced-motion ── */
+@media (prefers-reduced-motion: reduce) {
+    #productPriceCard.is-priced,
+    #productPriceCard.is-priced::before,
+    #productPriceCard.is-priced::after { animation: none !important; }
+    #productPriceCard.is-priced:not(.is-price-animating) #productPrice {
+        animation: none !important;
+        -webkit-text-fill-color: #111827 !important;
+        background: none !important;
+    }
+}
