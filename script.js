@@ -5652,6 +5652,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const firstThumbBtn = document.querySelector('#productThumbs .product-thumb-btn');
             if (firstThumb) firstThumb.src = defaultImage;
             if (firstThumbBtn) firstThumbBtn.dataset.image = defaultImage;
+
+            // ── Update OG / Twitter meta tags with the resolved product image ──
+            // Helps JS-executing crawlers (LinkedIn, Discord, Slack, Telegram) show
+            // the actual product photo instead of the site logo.
+            try {
+                const absDefaultImage = defaultImage.startsWith('http')
+                    ? defaultImage
+                    : window.location.origin + '/' + defaultImage.replace(/^(\.\.\/)+/, '').replace(/^\//, '');
+                const metaOgImg = document.querySelector('meta[property="og:image"]');
+                if (metaOgImg) metaOgImg.setAttribute('content', absDefaultImage);
+                const metaTwImg = document.querySelector('meta[name="twitter:image"]');
+                if (metaTwImg) metaTwImg.setAttribute('content', absDefaultImage);
+                const metaOgImgAlt = document.querySelector('meta[property="og:image:alt"]');
+                if (metaOgImgAlt) metaOgImgAlt.setAttribute('content', productName + ' \u2014 IPORDISE');
+            } catch (_e) { /* non-critical */ }
         }
 
         const applyThumbFallbacks = () => {

@@ -53,7 +53,8 @@
       (function () {
         var params = new URLSearchParams(window.location.search);
         var id = params.get('id');
-        var name = params.get('name');
+        var name   = params.get('name');
+        var imgRaw = params.get('image');
         if (id || name) {
           // Update canonical
           var canonical = document.querySelector('link[rel="canonical"]');
@@ -61,14 +62,36 @@
           // Update OG URL
           var ogUrl = document.querySelector('meta[property="og:url"]');
           if (ogUrl) ogUrl.setAttribute('content', window.location.origin + '/pages/product' + window.location.search);
-          // Update page title
+          // Update page title + description
           if (name) {
             var decoded = decodeURIComponent(name);
             document.title = decoded + ' | Buy Online in Morocco \u2014 IPORDISE';
             var ogTitle = document.querySelector('meta[property="og:title"]');
             if (ogTitle) ogTitle.setAttribute('content', decoded + ' \u2014 IPORDISE Morocco');
+            var twTitle = document.querySelector('meta[name="twitter:title"]');
+            if (twTitle) twTitle.setAttribute('content', decoded + ' \u2014 IPORDISE Morocco');
             var desc = document.querySelector('meta[name="description"]');
             if (desc) desc.setAttribute('content', 'Buy ' + decoded + ' in Morocco at IPORDISE. 100% authentic. Free delivery 35 MAD nationwide.');
+            var ogDesc = document.querySelector('meta[property="og:description"]');
+            if (ogDesc) ogDesc.setAttribute('content', 'Buy ' + decoded + ' in Morocco at IPORDISE. 100% authentic luxury fragrance. Free delivery 35 MAD nationwide.');
+            var twDesc = document.querySelector('meta[name="twitter:description"]');
+            if (twDesc) twDesc.setAttribute('content', 'Buy ' + decoded + ' in Morocco at IPORDISE. 100% authentic. Free delivery 35 MAD nationwide.');
+          }
+          // Update og:image / twitter:image from the ?image= URL param.
+          // Converts relative paths (assets/... or ../assets/...) to absolute URLs
+          // so crawlers that execute JS (LinkedIn, Discord, Slack, Telegram) get
+          // the actual product image instead of the site logo.
+          if (imgRaw) {
+            var imgDecoded = decodeURIComponent(imgRaw);
+            // Strip leading ../ so we always root from the site origin
+            imgDecoded = imgDecoded.replace(/^(\.\.\/)+/, '');
+            var absImg = window.location.origin + '/' + imgDecoded;
+            var ogImg  = document.querySelector('meta[property="og:image"]');
+            if (ogImg)  ogImg.setAttribute('content', absImg);
+            var ogImgAlt = document.querySelector('meta[property="og:image:alt"]');
+            if (ogImgAlt && name) ogImgAlt.setAttribute('content', decodeURIComponent(name) + ' \u2014 IPORDISE');
+            var twImg  = document.querySelector('meta[name="twitter:image"]');
+            if (twImg)  twImg.setAttribute('content', absImg);
           }
         }
       })();
