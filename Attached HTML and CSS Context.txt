@@ -1,0 +1,948 @@
+Attached HTML and CSS Context
+
+<div class="flex items-center justify-between h-20">
+                        <div class="flex-shrink-0 flex items-center">
+                            <a href="index.html" aria-label="IPORDISE Home">
+                                <img src="assets/logo-wordmark.svg" alt="IPORDISE Luxury Perfumes" class="site-logo-img" fetchpriority="high" loading="eager" decoding="async">
+                            </a>
+                        </div>
+
+                        <div class="flex-1 max-w-2xl mx-8 hidden md:block">
+                            <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
+                                <i class="fas fa-search ipo-search-trigger-icon"></i>
+                                <span class="ipo-search-trigger-text">Search perfumes, brands, notes...</span>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-3 md:gap-6">
+                            <a href="#newArrivalsCarousel" class="hidden lg:inline-flex bg-brand-red hover:bg-brand-redHover text-white px-4 py-2 rounded-full text-sm font-bold transition duration-200">NEW COLLECTION <i class="fas fa-chevron-right ml-2 text-xs"></i></a>
+
+                            <div class="flex items-center gap-2 md:gap-3 text-lg header-lang-wrap">
+                                <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold" data-lang-bound="true">
+                                    <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                                </button>
+                                <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <div style="position:relative;display:inline-flex;align-items:center;">
+                                    <div class="header-account-wrap" style="position: relative; display: inline-flex; align-items: center;"><a href="pages/login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a><div class="account-menu" role="dialog" aria-label="Account menu">
+            <div class="account-menu-inner">
+        <div class="account-menu-head">
+            <i class="far fa-user"></i>
+            <span>Welcome to <strong>IPORDISE</strong></span>
+        </div>
+        <p class="account-menu-subtitle">Sign in to track orders, save favourites &amp; more.</p>
+        <div class="account-menu-actions">
+            <a href="pages/login.html" class="account-menu-btn account-menu-btn-login">Sign in</a>
+            <a href="pages/login.html?tab=signup" class="account-menu-btn account-menu-btn-signup">Register</a>
+        </div>
+        <div class="account-menu-row">
+            <i class="fas fa-bolt"></i>
+            <span>Exclusive member offers await</span>
+        </div>
+    </div>
+        </div></div>
+                                </div>
+                                <div class="header-wishlist-wrap" style="position:relative;display:inline-flex;align-items:center;overflow:visible;">
+                                <a href="#" class="header-icon-btn hover:text-brand-red transition is-active relative" aria-label="Wishlist"><i class="far fa-heart"></i><span class="header-wishlist-badge absolute -top-1.5 -right-2">3</span></a>
+                                <a href="pages/cart.html" class="header-icon-btn hover:text-brand-red transition relative is-active" aria-label="Cart">
+                                    <i class="fas fa-shopping-bag"></i>
+                                <span class="header-wishlist-badge header-cart-badge absolute -top-1.5 -right-2">1</span></a>
+                            <div class="wishlist-menu">
+                    <div class="wishlist-menu-inner">
+                        <div class="wishlist-menu-head">
+                            <span class="wishlist-menu-title">YOUR FAVORITES</span>
+                            <span class="wishlist-menu-count">0 items</span>
+                        </div>
+                        <div class="wishlist-list"></div>
+                    </div>
+                </div><div class="wishlist-menu">
+                    <div class="wishlist-menu-inner">
+                        <div class="wishlist-menu-head">
+                            <span class="wishlist-menu-title">YOUR FAVORITES</span>
+                            <span class="wishlist-menu-count">0 items</span>
+                        </div>
+                        <div class="wishlist-list"></div>
+                    </div>
+                </div></div>
+                        <div class="header-lang-menu">
+                <button type="button" class="header-lang-option is-active" data-lang="en">English (EN)</button>
+                <button type="button" class="header-lang-option" data-lang="fr">Français (FR)</button>
+            </div></div>
+                    </div>
+                </div>
+
+
+/* Matched Rule from user-agent */
+div {
+  display: block;
+}
+
+/* Matched Rule from user-agent */
+address, blockquote, center, div, figure, figcaption, footer, form, header, hr, legend, listing, main, p, plaintext, pre, summary, xmp, article, aside, h1, h2, h3, h4, h5, h6, hgroup, nav, section, search, table, caption, colgroup, col, thead, tbody, tfoot, tr, td, th, dir, dd, dl, dt, menu, ol, ul, li, bdi, output, [dir="ltr" i], [dir="rtl" i], [dir="auto" i] {
+  unicode-bidi: isolate;
+}
+
+/* Matched Rule from regular */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Matched Rule from regular */
+*, ::before, ::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+}
+
+/* Matched Rule from regular */
+*, ::after, ::before {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+  box-sizing: border-box;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: rgb(229, 231, 235);
+  border-right-color: rgb(229, 231, 235);
+  border-bottom-color: rgb(229, 231, 235);
+  border-left-color: rgb(229, 231, 235);
+}
+
+/* Matched Rule from regular */
+.flex {
+  display: flex;
+  display: flex;
+}
+
+/* Matched Rule from regular */
+.h-20 {
+  height: 5rem;
+  height: 5rem;
+}
+
+/* Matched Rule from regular */
+.items-center {
+  align-items: center;
+  align-items: center;
+}
+
+/* Matched Rule from regular */
+.justify-between {
+  justify-content: space-between;
+  justify-content: space-between;
+}
+
+/* Matched Rule from regular */
+header .h-20 {
+  height: 4rem !important;
+  height: 4rem !important;
+}
+
+/* Matched Rule from regular */
+header.bg-brand-dark .h-20 {
+  min-height: 5rem;
+  height: auto;
+  gap: 1rem;
+  min-height: 5rem;
+  height: auto;
+  row-gap: 1rem;
+  column-gap: 1rem;
+}
+
+/* Matched Rule from regular */
+header.bg-brand-dark .h-20 {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 4.35rem;
+  display: grid;
+  grid-template-columns: auto minmax(0px, 1fr) auto;
+  align-items: center;
+  row-gap: 0.65rem;
+  column-gap: 0.65rem;
+  min-height: 4.35rem;
+}
+
+/* Matched Rule from regular */
+header.bg-brand-dark .h-20 {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  position: static !important;
+  height: auto !important;
+  min-height: clamp(3.6rem, 9vw, 5rem) !important;
+  width: 100% !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  position: static !important;
+  height: auto !important;
+  min-height: clamp(3.6rem, 9vw, 5rem) !important;
+  width: 100% !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  box-sizing: border-box !important;
+}
+
+/* Matched Rule from regular */
+header.bg-brand-dark .h-20 {
+  min-height: 3.75rem !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  gap: 0 !important;
+  min-height: 3.75rem !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  row-gap: 0px !important;
+  column-gap: 0px !important;
+}
+
+/* Inherited from ancestor level 1 (user-agent) */
+div {
+  display: block;
+}
+
+/* Inherited from ancestor level 1 (user-agent) */
+address, blockquote, center, div, figure, figcaption, footer, form, header, hr, legend, listing, main, p, plaintext, pre, summary, xmp, article, aside, h1, h2, h3, h4, h5, h6, hgroup, nav, section, search, table, caption, colgroup, col, thead, tbody, tfoot, tr, td, th, dir, dd, dl, dt, menu, ol, ul, li, bdi, output, [dir="ltr" i], [dir="rtl" i], [dir="auto" i] {
+  unicode-bidi: isolate;
+}
+
+/* Inherited from ancestor level 1 (regular) */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Inherited from ancestor level 1 (regular) */
+*, ::before, ::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+}
+
+/* Inherited from ancestor level 1 (regular) */
+*, ::after, ::before {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+  box-sizing: border-box;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: rgb(229, 231, 235);
+  border-right-color: rgb(229, 231, 235);
+  border-bottom-color: rgb(229, 231, 235);
+  border-left-color: rgb(229, 231, 235);
+}
+
+/* Inherited from ancestor level 1 (regular) */
+.max-w-7xl, .max-w-6xl, .max-w-5xl {
+  width: 100%;
+  box-sizing: border-box;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Inherited from ancestor level 1 (regular) */
+.max-w-7xl, .max-w-6xl, .max-w-5xl {
+  width: min(100%, var(--site-shell-max));
+  width: min(100%, var(--site-shell-max));
+}
+
+/* Inherited from ancestor level 1 (regular) */
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Inherited from ancestor level 1 (regular) */
+.max-w-7xl {
+  max-width: 80rem;
+  max-width: 80rem;
+}
+
+/* Inherited from ancestor level 1 (regular) */
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Inherited from ancestor level 1 (regular) */
+header.bg-brand-dark > .max-w-7xl, .perfume-nav > .max-w-7xl, .trust-bar > .max-w-7xl {
+  width: min(100%, var(--site-shell-max));
+  padding-left: var(--site-gutter) !important;
+  padding-right: var(--site-gutter) !important;
+  width: min(100%, var(--site-shell-max));
+  padding-left: var(--site-gutter) !important;
+  padding-right: var(--site-gutter) !important;
+}
+
+/* Inherited from ancestor level 1 (regular) */
+header.bg-brand-dark > .max-w-7xl {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+
+/* Inherited from ancestor level 1 (regular) */
+header.bg-brand-dark > .max-w-7xl {
+  overflow: visible !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+}
+
+/* Inherited from ancestor level 1 (regular) */
+header.bg-brand-dark > .max-w-7xl {
+  padding-left: 1rem !important;
+  padding-right: 0.75rem !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  overflow: visible !important;
+  padding-left: 1rem !important;
+  padding-right: 0.75rem !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+}
+
+/* Inherited from ancestor level 2 (user-agent) */
+article, aside, footer, header, hgroup, main, nav, search, section {
+  display: block;
+}
+
+/* Inherited from ancestor level 2 (user-agent) */
+address, blockquote, center, div, figure, figcaption, footer, form, header, hr, legend, listing, main, p, plaintext, pre, summary, xmp, article, aside, h1, h2, h3, h4, h5, h6, hgroup, nav, section, search, table, caption, colgroup, col, thead, tbody, tfoot, tr, td, th, dir, dd, dl, dt, menu, ol, ul, li, bdi, output, [dir="ltr" i], [dir="rtl" i], [dir="auto" i] {
+  unicode-bidi: isolate;
+}
+
+/* Inherited from ancestor level 2 (regular) */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Inherited from ancestor level 2 (regular) */
+*, ::before, ::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+}
+
+/* Inherited from ancestor level 2 (regular) */
+*, ::after, ::before {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+  box-sizing: border-box;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: rgb(229, 231, 235);
+  border-right-color: rgb(229, 231, 235);
+  border-bottom-color: rgb(229, 231, 235);
+  border-left-color: rgb(229, 231, 235);
+}
+
+/* Inherited from ancestor level 2 (regular) */
+header, .top-announcement {
+  padding-left: max(env(safe-area-inset-left, 0px), 0px);
+  padding-right: max(env(safe-area-inset-right, 0px), 0px);
+  padding-left: max(env(safe-area-inset-left, 0px), 0px);
+  padding-right: max(env(safe-area-inset-right, 0px), 0px);
+}
+
+/* Inherited from ancestor level 2 (regular) */
+body > header, body > main, body > footer, body > section, body > div {
+  max-width: 100%;
+  max-width: 100%;
+}
+
+/* Inherited from ancestor level 2 (regular) */
+.sticky {
+  position: sticky;
+  position: sticky;
+}
+
+/* Inherited from ancestor level 2 (regular) */
+.top-0 {
+  top: 0px;
+  top: 0px;
+}
+
+/* Inherited from ancestor level 2 (regular) */
+.z-50 {
+  z-index: 50;
+  z-index: 50;
+}
+
+/* Inherited from ancestor level 2 (regular) */
+.bg-brand-dark {
+  --tw-bg-opacity: 1;
+  background-color: rgb(26 26 26 / var(--tw-bg-opacity, 1));
+  --tw-bg-opacity: 1;
+  background-color: rgb(26 26 26 / var(--tw-bg-opacity, 1));
+}
+
+/* Inherited from ancestor level 2 (regular) */
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+
+/* Inherited from ancestor level 2 (regular) */
+header.bg-brand-dark, header[class*="bg-brand-dark"] {
+  background: #0a0a0a !important;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(255, 255, 255, 0.04);
+  background-image: initial !important;
+  background-position-x: initial !important;
+  background-position-y: initial !important;
+  background-size: initial !important;
+  background-repeat: initial !important;
+  background-attachment: initial !important;
+  background-origin: initial !important;
+  background-clip: initial !important;
+  background-color: rgb(10, 10, 10) !important;
+}
+
+/* Inherited from ancestor level 2 (regular) */
+header.bg-brand-dark {
+  width: 100%;
+  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.16);
+  width: 100%;
+  box-shadow: rgba(2, 6, 23, 0.16) 0px 12px 30px;
+}
+
+/* Inherited from ancestor level 2 (regular) */
+header.bg-brand-dark {
+  animation: ipHeaderDrop 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  animation-fill-mode: both;
+  animation-play-state: running;
+  animation-name: ipHeaderDrop;
+  animation-timeline: auto;
+  animation-range-start: normal;
+  animation-range-end: normal;
+}
+
+/* Inherited from ancestor level 3 (user-agent) */
+body {
+  display: block;
+  margin-top: 8px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  margin-left: 8px;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+*, ::before, ::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+*, ::after, ::before {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+  box-sizing: border-box;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: rgb(229, 231, 235);
+  border-right-color: rgb(229, 231, 235);
+  border-bottom-color: rgb(229, 231, 235);
+  border-left-color: rgb(229, 231, 235);
+}
+
+/* Inherited from ancestor level 3 (regular) */
+body {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  background: #ffffff;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  background-image: initial;
+  background-position-x: initial;
+  background-position-y: initial;
+  background-size: initial;
+  background-repeat: initial;
+  background-attachment: initial;
+  background-origin: initial;
+  background-clip: initial;
+  background-color: rgb(255, 255, 255);
+}
+
+/* Inherited from ancestor level 3 (regular) */
+body {
+  color: #1f2937;
+  line-height: 1.5;
+  color: rgb(31, 41, 55);
+  line-height: 1.5;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+body {
+  margin: 0;
+  line-height: inherit;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  line-height: inherit;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+}
+
+/* Inherited from ancestor level 3 (regular) */
+.font-sans {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+.text-gray-800 {
+  --tw-text-opacity: 1;
+  color: rgb(31 41 55 / var(--tw-text-opacity, 1));
+  --tw-text-opacity: 1;
+  color: rgb(31 41 55 / var(--tw-text-opacity, 1));
+}
+
+/* Inherited from ancestor level 3 (regular) */
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Inherited from ancestor level 3 (regular) */
+body:has(.ipo-bnav) {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Inherited from ancestor level 3 (regular) */
+body.ip-loaded {
+  animation: ipBodyIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-duration: 0.65s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  animation-fill-mode: both;
+  animation-play-state: running;
+  animation-name: ipBodyIn;
+  animation-timeline: auto;
+  animation-range-start: normal;
+  animation-range-end: normal;
+}
+
+/* Inherited from ancestor level 4 (user-agent) */
+html {
+  display: block;
+}
+
+/* Inherited from ancestor level 4 (user-agent) */
+:root {
+  view-transition-name: root;
+}
+
+/* Inherited from ancestor level 4 (regular) */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Inherited from ancestor level 4 (regular) */
+*, ::before, ::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+}
+
+/* Inherited from ancestor level 4 (regular) */
+*, ::after, ::before {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+  box-sizing: border-box;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: rgb(229, 231, 235);
+  border-right-color: rgb(229, 231, 235);
+  border-bottom-color: rgb(229, 231, 235);
+  border-left-color: rgb(229, 231, 235);
+}
+
+/* Inherited from ancestor level 4 (regular) */
+html {
+  overflow-x: hidden;
+  overflow-x: hidden;
+}
+
+/* Inherited from ancestor level 4 (regular) */
+html {
+  text-rendering: optimizeSpeed;
+  text-rendering: optimizespeed;
+}
+
+/* Inherited from ancestor level 4 (regular) */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+/* Inherited from ancestor level 4 (regular) */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  background: #ffffff;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  background-image: initial;
+  background-position-x: initial;
+  background-position-y: initial;
+  background-size: initial;
+  background-repeat: initial;
+  background-attachment: initial;
+  background-origin: initial;
+  background-clip: initial;
+  background-color: rgb(255, 255, 255);
+}
+
+/* Inherited from ancestor level 4 (regular) */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+/* Inherited from ancestor level 4 (regular) */
+:host, html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.5;
+  text-size-adjust: 100%;
+  tab-size: 4;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Inherited from ancestor level 4 (regular) */
+:host, :root {
+  --fa-style-family-brands: "Font Awesome 6 Brands";
+  --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
+  --fa-style-family-brands: "Font Awesome 6 Brands";
+  --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
+}
+
+/* Inherited from ancestor level 4 (regular) */
+:host, :root {
+  --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Free";
+  --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Free";
+}
+
+/* Inherited from ancestor level 4 (regular) */
+:host, :root {
+  --fa-style-family-classic: "Font Awesome 6 Free";
+  --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Free";
+  --fa-style-family-classic: "Font Awesome 6 Free";
+  --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Free";
+}
+
+/* Inherited from ancestor level 4 (regular) */
+:root {
+  --site-shell-max: 1440px;
+  --site-gutter: clamp(1rem, 2vw, 1.75rem);
+  --section-space: clamp(2.75rem, 6vw, 5rem);
+  --card-radius: 1.1rem;
+  --card-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+  --card-shadow-hover: 0 22px 44px rgba(15, 23, 42, 0.12);
+  --site-shell-max: 1440px;
+  --site-gutter: clamp(1rem, 2vw, 1.75rem);
+  --section-space: clamp(2.75rem, 6vw, 5rem);
+  --card-radius: 1.1rem;
+  --card-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+  --card-shadow-hover: 0 22px 44px rgba(15, 23, 42, 0.12);
+}

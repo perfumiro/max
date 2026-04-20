@@ -27,3 +27,11 @@ SEO-STRATEGY.md
 # OS files
 .DS_Store
 Thumbs.db
+
+# Source product image folders (images migrated to assets/images/products/)
+/products/
+/uniqueeluxury products/
+/Xerjoff Products/
+
+# Ensure migrated assets ARE tracked
+!assets/images/
