@@ -27448,3 +27448,105 @@ body.ipo-is-transitioning * {
         background: none !important;
     }
 }
+
+/* ================================================================
+   NOTES PYRAMID — LUXURY FLOATING CARD UPGRADE (April 2026)
+   ================================================================ */
+
+/* Separate cards: gap + full individual border-radius */
+.fragrance-pyramid {
+    gap: 0.85rem !important;
+}
+
+.pyramid-level {
+    border-radius: 1.3rem !important;
+    border-bottom: none !important;
+    transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.26s ease !important;
+}
+
+.pyramid-level:first-child,
+.pyramid-level:last-child {
+    border-radius: 1.3rem !important;
+    border-top: none !important;
+}
+
+.pyramid-level:not(:last-child) {
+    border-bottom: none !important;
+}
+
+/* Color-matched card shadows (per layer) */
+.pyramid-top {
+    box-shadow: 0 6px 28px rgba(59, 130, 246, 0.14),
+                0 1px 4px rgba(15, 23, 42, 0.04) !important;
+}
+.pyramid-heart {
+    box-shadow: 0 6px 28px rgba(236, 72, 153, 0.14),
+                0 1px 4px rgba(15, 23, 42, 0.04) !important;
+}
+.pyramid-base {
+    box-shadow: 0 6px 28px rgba(245, 158, 11, 0.14),
+                0 1px 4px rgba(15, 23, 42, 0.04) !important;
+}
+
+/* Hover: lift + deepen colored shadow (replace brightness filter) */
+.pyramid-level:hover {
+    filter: none !important;
+    transform: translateY(-3px) !important;
+}
+.pyramid-top:hover {
+    box-shadow: 0 16px 44px rgba(59, 130, 246, 0.22),
+                0 2px 8px rgba(15, 23, 42, 0.05) !important;
+}
+.pyramid-heart:hover {
+    box-shadow: 0 16px 44px rgba(236, 72, 153, 0.22),
+                0 2px 8px rgba(15, 23, 42, 0.05) !important;
+}
+.pyramid-base:hover {
+    box-shadow: 0 16px 44px rgba(245, 158, 11, 0.22),
+                0 2px 8px rgba(15, 23, 42, 0.05) !important;
+}
+
+/* Duration badges — color-matched to each layer */
+.pyramid-top   .pyramid-duration {
+    background: rgba(219, 234, 254, 0.9) !important;
+    color: #1d4ed8 !important;
+    border-color: rgba(147, 197, 253, 0.75) !important;
+}
+.pyramid-heart .pyramid-duration {
+    background: rgba(252, 231, 243, 0.9) !important;
+    color: #be185d !important;
+    border-color: rgba(249, 168, 212, 0.75) !important;
+}
+.pyramid-base  .pyramid-duration {
+    background: rgba(254, 243, 199, 0.9) !important;
+    color: #92400e !important;
+    border-color: rgba(253, 211, 77, 0.75) !important;
+}
+
+/* Kicker labels — full opacity, slightly larger */
+.pyramid-top    .pyramid-content::before,
+.pyramid-heart  .pyramid-content::before,
+.pyramid-base   .pyramid-content::before {
+    opacity: 1 !important;
+    font-size: 0.62rem !important;
+    letter-spacing: 0.2em !important;
+}
+
+/* Timeline connecting line — spans gap between floating cards */
+.fragrance-pyramid::before {
+    top: 2.5rem !important;
+    bottom: 2.5rem !important;
+    left: calc(1.4rem + 1.75rem) !important;
+    width: 2px !important;
+    opacity: 0.3 !important;
+    z-index: 0 !important;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .fragrance-pyramid { gap: 0.65rem !important; }
+    .pyramid-level { border-radius: 1.1rem !important; }
+    .pyramid-level:first-child,
+    .pyramid-level:last-child { border-radius: 1.1rem !important; }
+}
