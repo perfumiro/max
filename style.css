@@ -27550,3 +27550,107 @@ body.ipo-is-transitioning * {
     .pyramid-level:first-child,
     .pyramid-level:last-child { border-radius: 1.1rem !important; }
 }
+
+/* ================================================================
+   INGREDIENTS TAB — INCI PILL DISPLAY (April 2026)
+   ================================================================ */
+
+.inci-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.inci-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.inci-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #0f172a;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    border: 1px solid rgba(148, 163, 184, 0.45);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+}
+
+.inci-badge i {
+    color: #64748b;
+    font-size: 0.6rem;
+}
+
+.inci-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 0.04em;
+}
+
+.inci-allergen-dot {
+    font-size: 0.45rem !important;
+    color: #dc2626 !important;
+}
+
+.inci-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.inci-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #374151;
+    background: #f8fafc;
+    border: 1px solid rgba(203, 213, 225, 0.8);
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    line-height: 1.3;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    cursor: default;
+}
+
+.inci-pill:hover {
+    background: #f1f5f9;
+    border-color: rgba(148, 163, 184, 0.7);
+}
+
+.inci-pill.inci-allergen {
+    color: #991b1b;
+    background: #fef2f2;
+    border-color: rgba(252, 165, 165, 0.7);
+    font-weight: 600;
+}
+
+.inci-pill.inci-allergen:hover {
+    background: #fee2e2;
+    border-color: rgba(248, 113, 113, 0.85);
+}
+
+.inci-legal {
+    font-size: 0.63rem;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin: 0;
+    padding-top: 0.25rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+@media (max-width: 767px) {
+    .inci-pill { font-size: 0.68rem; padding: 0.25rem 0.6rem; }
+    .inci-header { gap: 0.5rem; }
+}

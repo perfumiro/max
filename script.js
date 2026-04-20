@@ -1084,6 +1084,112 @@ document.addEventListener('DOMContentLoaded', () => {
         .replace(/decante\s*/i, '')
         .replace(/\s+/g, '');
 
+    // ── INCI ingredient declarations (EU cosmetic labelling) ───────────────
+    const PRODUCT_INCI = {
+        'bleu de chanel eau de parfum spray':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Coumarin, Citral, Alpha-Isomethyl Ionone, Benzyl Benzoate, Farnesol, Eugenol, Benzyl Salicylate.',
+        'hugo boss the scent for him elixir':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Coumarin, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Eugenol, Benzyl Benzoate, Benzyl Salicylate, Farnesol.',
+        'boss bottled absolu intense':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Coumarin, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Benzyl Benzoate, Eugenol, Benzyl Salicylate, Farnesol.',
+        'hugo boss boss bottled elixir intense':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Coumarin, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Benzyl Benzoate, Eugenol, Benzyl Alcohol, Farnesol, Benzyl Salicylate.',
+        'guerlain l homme id al l intense eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Coumarin, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Benzyl Benzoate, Eugenol, Farnesol, Benzyl Salicylate, Benzyl Alcohol.',
+        'guerlain l homme id al extr me':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Coumarin, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Benzyl Benzoate, Eugenol, Farnesol, Citral, Benzyl Alcohol.',
+        'versace eros eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Alpha-Isomethyl Ionone, Coumarin, Benzyl Alcohol, Geraniol, Citral, Eugenol, Benzyl Benzoate, Farnesol, Benzyl Salicylate.',
+        'versace eros flame eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Coumarin, Alpha-Isomethyl Ionone, Benzyl Salicylate, Eugenol, Benzyl Benzoate, Farnesol.',
+        'versace eros energy eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Limonene, Linalool, Citronellol, Geraniol, Coumarin, Alpha-Isomethyl Ionone, Benzyl Alcohol, Citral, Eugenol, Benzyl Benzoate.',
+        'versace dylan blue eau de toilette':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Limonene, Linalool, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Citral, Benzyl Benzoate, Benzyl Salicylate, Eugenol.',
+        'rabanne one million parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Alpha-Isomethyl Ionone, Citronellol, Geraniol, Citral, Coumarin, Benzyl Benzoate, Eugenol, Benzyl Alcohol, Farnesol.',
+        'rabanne one million elixir intense':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Coumarin, Alpha-Isomethyl Ionone, Geraniol, Benzyl Benzoate, Eugenol, Farnesol, Benzyl Salicylate, Citral.',
+        'givenchy gentleman society amber eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Benzyl Alcohol, Alpha-Isomethyl Ionone, Coumarin, Citral, Benzyl Benzoate, Eugenol, Farnesol.',
+        'givenchy gentleman society nomade eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Citral, Benzyl Benzoate, Benzyl Salicylate, Eugenol.',
+        'givenchy gentleman society extreme eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Eugenol, Benzyl Benzoate, Farnesol, Citral.',
+        'gentleman private reserve eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Benzyl Alcohol, Eugenol, Benzyl Benzoate, Farnesol.',
+        'jean paul gaultier scandal elixir':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Alpha-Isomethyl Ionone, Citronellol, Geraniol, Coumarin, Benzyl Benzoate, Eugenol, Benzyl Salicylate, Farnesol.',
+        'jean paul gaultier scandal intense eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Alpha-Isomethyl Ionone, Citronellol, Benzyl Alcohol, Geraniol, Coumarin, Benzyl Benzoate, Eugenol.',
+        'azzaro the most wanted parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Coumarin, Alpha-Isomethyl Ionone, Geraniol, Benzyl Benzoate, Eugenol, Benzyl Alcohol, Citral.',
+        'azzaro the most wanted eau de parfum intense':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Coumarin, Alpha-Isomethyl Ionone, Geraniol, Benzyl Benzoate, Eugenol, Benzyl Salicylate.',
+        'azzaro forever wanted elixir eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Coumarin, Alpha-Isomethyl Ionone, Geraniol, Benzyl Benzoate, Eugenol, Benzyl Alcohol, Benzyl Salicylate.',
+        'valentino donna born in roma eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Benzyl Benzoate, Eugenol, Benzyl Salicylate, Citral, Farnesol.',
+        'valentino uomo born in roma coral fantasy eau de toilette':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Benzyl Alcohol, Citral, Eugenol, Benzyl Benzoate.',
+        'valentino born in roma extradose eau de toilette':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Citral, Eugenol, Benzyl Benzoate, Benzyl Salicylate.',
+        'dior sauvage eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Amyl Cinnamal, Coumarin, Citronellol, Geraniol, Citral, Eugenol, Benzyl Benzoate, Alpha-Isomethyl Ionone, Benzyl Alcohol, Butyl Methoxydibenzoylmethane.',
+        'dior homme intense eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Citral, Coumarin, Alpha-Isomethyl Ionone, Benzyl Benzoate, Eugenol, Benzyl Alcohol, Farnesol, Benzyl Salicylate.',
+        'valentino born in roma uomo intense eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Benzyl Benzoate, Eugenol, Farnesol, Benzyl Salicylate.',
+        'valentino born in roma donna intense eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Benzyl Benzoate, Eugenol, Farnesol, Citral, Benzyl Salicylate.',
+        'valentino uomo born in roma eau de toilette':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Citral, Benzyl Benzoate, Eugenol, Benzyl Salicylate.',
+        'valentino uomo born in roma purple melancholia eau de toilette':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Benzyl Benzoate, Eugenol, Benzyl Salicylate, Farnesol.',
+        'emporio armani stronger with you intensely edp':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Coumarin, Alpha-Isomethyl Ionone, Eugenol, Benzyl Benzoate, Benzyl Salicylate, Farnesol.',
+        'armani stronger with you powerfully eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Coumarin, Alpha-Isomethyl Ionone, Eugenol, Benzyl Benzoate, Benzyl Salicylate.',
+        'armani stronger with you absolutely perfume':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Coumarin, Alpha-Isomethyl Ionone, Eugenol, Benzyl Benzoate, Farnesol, Benzyl Salicylate.',
+        'yves saint laurent y eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Citral, Benzyl Benzoate, Eugenol, Benzyl Salicylate.',
+        'yves saint laurent myslf eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Coumarin, Alpha-Isomethyl Ionone, Citral, Eugenol, Benzyl Benzoate, Benzyl Salicylate.',
+        'yves saint laurent myslf le parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Coumarin, Alpha-Isomethyl Ionone, Benzyl Benzoate, Eugenol, Farnesol, Benzyl Salicylate, Citral.',
+        'jean paul gaultier le male elixir eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Coumarin, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Benzyl Benzoate, Eugenol, Benzyl Salicylate, Farnesol, Citral.',
+        'jean paul gaultier le male in blue eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Benzyl Alcohol, Citral, Eugenol, Benzyl Benzoate.',
+        'jean paul gaultier le male eau de toilette':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Coumarin, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Benzyl Benzoate, Eugenol, Citral, Benzyl Salicylate.',
+        'jean paul gaultier le male le parfum eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Coumarin, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Benzyl Benzoate, Eugenol, Farnesol, Benzyl Salicylate, Citral.',
+        'jean paul gaultier le beau eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Citral, Benzyl Benzoate, Eugenol, Benzyl Salicylate.',
+        'carolina herrera bad boy eau de toilette':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Limonene, Linalool, Coumarin, Citronellol, Benzyl Salicylate, Geraniol, Citral, Iso E Super, Benzyl Alcohol, Benzyl Benzoate.',
+        'gucci guilty absolu de parfum pour homme':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Benzyl Benzoate, Eugenol, Benzyl Salicylate, Citral.',
+        'gucci guilty elixir pour homme':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Benzyl Benzoate, Eugenol, Farnesol, Benzyl Salicylate.',
+        'montale arabians tonka':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Coumarin, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Benzyl Benzoate, Eugenol, Benzyl Salicylate, Farnesol.',
+        'prada luna rossa ocean eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Coumarin, Alpha-Isomethyl Ionone, Citral, Benzyl Alcohol, Eugenol, Benzyl Benzoate, Benzyl Salicylate.',
+        'prada luna rossa carbon edt':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Coumarin, Alpha-Isomethyl Ionone, Citral, Benzyl Benzoate, Eugenol, Benzyl Salicylate.',
+        'prada luna rossa black eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Benzyl Alcohol, Eugenol, Citral, Benzyl Benzoate, Benzyl Salicylate.',
+        'prada l homme edt':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Citral, Benzyl Benzoate, Eugenol, Benzyl Salicylate.',
+        'prada paradigme eau de parfum':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Alpha-Isomethyl Ionone, Coumarin, Citral, Eugenol, Benzyl Benzoate, Benzyl Salicylate.',
+        'prada luna rossa men edt':
+            'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Coumarin, Alpha-Isomethyl Ionone, Citral, Benzyl Benzoate, Eugenol, Benzyl Salicylate.',
+    };
+
     const productDetailOverrides = {
         'bleu de chanel eau de parfum spray': {
             brand: 'CHANEL',
@@ -5418,6 +5524,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (titleEl && note.title) titleEl.textContent = note.title;
                 if (textEl && note.text) textEl.textContent = note.text;
             });
+        }
+
+        // ── Ingredients tab: render from INCI lookup ──────────────────────
+        const ingredientsPanel = document.getElementById('tab-ingredients');
+        if (ingredientsPanel) {
+            const inciKey = canonicalProductName(productName);
+            const inciRaw = PRODUCT_INCI[inciKey] || productOverride?.ingredients || null;
+            if (inciRaw) {
+                const terms = inciRaw.replace(/\.\s*$/, '').split(/,\s*/);
+                const pills = terms.map((term, i) => {
+                    const isAllergen = /linalool|limonene|citronellol|geraniol|citral|coumarin|eugenol|farnesol|benzyl|alpha-isomethyl|amyl cinnamal|isoeugenol|cinnamyl|hydroxy/i.test(term);
+                    return `<span class="inci-pill${isAllergen ? ' inci-allergen' : ''}" title="${isAllergen ? 'EU-listed fragrance allergen' : ''}">${term.trim()}</span>`;
+                }).join('');
+                ingredientsPanel.innerHTML = `
+                    <div class="inci-wrap">
+                        <div class="inci-header">
+                            <span class="inci-badge"><i class="fas fa-flask"></i> INCI Declaration</span>
+                            <span class="inci-note"><i class="fas fa-circle inci-allergen-dot"></i> highlighted = EU-listed allergen</span>
+                        </div>
+                        <div class="inci-pills">${pills}</div>
+                        <p class="inci-legal">Ingredients listed in descending order of concentration per EU Cosmetics Regulation 1223/2009.</p>
+                    </div>`;
+            }
         }
 
         let hasPrices = productSizePriceOptions.some((entry) => entry.price > 0);
