@@ -10873,6 +10873,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function showBanner() {
         if (!deferredPrompt) return;
         if (!banner) banner = buildBanner();
+        // Mark as seen immediately on first show — return visits will never see it again.
+        // The footer "Download our App" button still works for returning users.
+        localStorage.setItem(DISMISS_KEY, '1');
         requestAnimationFrame(() => {
             requestAnimationFrame(() => banner.classList.add('is-visible'));
         });
