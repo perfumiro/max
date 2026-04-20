@@ -2838,10 +2838,14 @@ button.product-favorite-btn.is-active {
 @media (min-width: 641px) {
     body > .account-menu {
         position: fixed;
-        top: var(--acm-top, 80px);
+        top: var(--acm-top, 72px);
         right: var(--acm-right, 10px);
         left: auto;
         width: min(92vw, 25.5rem);
+    }
+    /* Caret arrow tracks the account icon on desktop */
+    body > .account-menu::before {
+        right: var(--acm-caret-right, 10px);
     }
 }
 
@@ -3086,8 +3090,8 @@ button.product-favorite-btn.is-active {
     /* Panel — fixed, full-width with side gutters */
     .account-menu {
         position: fixed;
-        /* JS sets --acm-top dynamically from header.getBoundingClientRect().bottom */
-        top: var(--acm-top, 108px);
+        /* JS sets --acm-top from trigger.getBoundingClientRect().bottom + 10px */
+        top: var(--acm-top, 72px);
         left: 10px;
         right: 10px;
         width: auto;

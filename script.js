@@ -6211,25 +6211,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const isMobile = () => window.innerWidth <= 640;
 
-        // Set CSS custom properties --acm-top and (desktop) --acm-right
-        // Works on ALL screen sizes — always teleport to body to escape the header's
-        // will-change / backdrop-filter stacking context which would otherwise trap
-        // the dropdown's z-index and let perfume-nav paint on top of it.
+        // Position the menu directly below the trigger button.
+        // Uses the trigger's own bounding rect so the popup is always 10px
+        // below the icon, regardless of how tall the header/nav bar is.
         const positionMenu = (menu, triggerEl) => {
-            const hdr =
-                document.querySelector('header') ||
-                document.querySelector('[class*="header"]') ||
-                document.querySelector('nav');
-            if (hdr) {
-                const bottom = hdr.getBoundingClientRect().bottom;
-                menu.style.setProperty('--acm-top', `${bottom + 6}px`);
-            }
-            // Desktop: align the menu's right edge with the trigger's right edge
-            if (!isMobile() && triggerEl) {
-                const tRect = triggerEl.getBoundingClientRect();
-                const right = window.innerWidth - tRect.right;
-                menu.style.setProperty('--acm-right', `${Math.max(8, right)}px`);
-            }
+            if (!triggerEl) return;
+            const tRect = triggerEl.getBoundingClientRect();
+            // Top: 10px gap below the icon's bottom edge
+            menu.style.setProperty('--acm-top', `${tRect.bottom + 10}px`);
+            // Right: align the menu's right edge with the trigger's right edge,
+            // clamped so it never clips off-screen on the left.
+            const menuWidth = Math.min(window.innerWidth * 0.92, 408); // 25.5rem ≈ 408px
+            const desiredRight = window.innerWidth - tRect.right;
+            const clampedRight = Math.max(8, Math.min(desiredRight, window.innerWidth - menuWidth - 8));
+            menu.style.setProperty('--acm-right', `${clampedRight}px`);
+            // Store trigger center-x so the CSS caret arrow points at the icon
+            const triggerCenterX = tRect.left + tRect.width / 2;
+            const menuRight = clampedRight;
+            const caretOffset = window.innerWidth - menuRight - menuWidth - (window.innerWidth - triggerCenterX - menuRight);
+            // Simpler: distance from menu's right edge to trigger center
+            const distFromRight = (window.innerWidth - triggerCenterX) - clampedRight;
+            menu.style.setProperty('--acm-caret-right', `${Math.max(8, Math.min(distFromRight - 7, menuWidth - 24))}px`);
         };
 
         const closeAllMenus = (exceptMenu = null) => {
@@ -6340,6 +6342,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeAllMenus();
             }
         });
+
+        // Close immediately on any scroll — the popup stays open on mouse-wheel
+        // only when the user is scrolling inside the menu itself.
+        const onScroll = () => closeAllMenus();
+        window.addEventListener('scroll', onScroll, { passive: true });
 
         // Recalculate position on resize (e.g. device rotation)
         window.addEventListener('resize', () => {
