@@ -27189,3 +27189,127 @@ body.ipo-is-transitioning * {
         font-size: 1.1rem !important;
     }
 }
+
+/* ================================================================
+   PRODUCT INFO CARD — PREMIUM VISUAL IMPROVEMENTS
+   ================================================================ */
+
+/* ── Quick fact pills: gold icon, warmer background ── */
+.product-quick-fact {
+    background: linear-gradient(135deg, #fefcf3 0%, #f8fafc 100%) !important;
+    border: 1px solid rgba(201,162,39,0.22) !important;
+    transition: all 0.18s ease !important;
+}
+.product-quick-fact i {
+    color: #c9a227 !important;
+    font-size: 0.6rem !important;
+}
+.product-quick-fact:hover {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef9ef 100%) !important;
+    border-color: rgba(201,162,39,0.4) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(201,162,39,0.12) !important;
+}
+
+/* ── Share buttons: branded hover colors ── */
+.product-share-btn[aria-label*="Facebook"]:hover {
+    color: #1877f2 !important;
+    border-color: rgba(24,119,242,0.45) !important;
+    background: rgba(24,119,242,0.06) !important;
+}
+.product-share-btn[aria-label*="Instagram"]:hover {
+    color: #e1306c !important;
+    border-color: rgba(225,48,108,0.45) !important;
+    background: rgba(225,48,108,0.06) !important;
+}
+.product-share-btn[aria-label*="WhatsApp"]:hover {
+    color: #25d366 !important;
+    border-color: rgba(37,211,102,0.45) !important;
+    background: rgba(37,211,102,0.06) !important;
+}
+
+/* ── Price card: differentiate placeholder vs real price ── */
+.product-price-card:not(.is-priced) #productPrice {
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    color: #9ca3af !important;
+    font-style: italic !important;
+    letter-spacing: 0 !important;
+    text-shadow: none !important;
+}
+
+@media (max-width: 1023px) {
+    /* ── Info card: slightly deeper shadow for depth ── */
+    .product-info-card {
+        box-shadow: 0 4px 22px rgba(15,23,42,0.10), 0 1px 4px rgba(15,23,42,0.04) !important;
+    }
+
+    /* ── Size pills: bigger, more premium ── */
+    .size-pill {
+        min-width: 5rem !important;
+        padding: 0.6rem 0.75rem 0.65rem !important;
+        border-radius: 0.7rem !important;
+    }
+    .spill-vol {
+        font-size: 0.78rem !important;
+        font-weight: 800 !important;
+    }
+    .spill-price {
+        font-size: 0.72rem !important;
+        font-weight: 800 !important;
+    }
+    .size-group {
+        border-radius: 0.9rem !important;
+        padding: 0.85rem 0.9rem !important;
+        box-shadow: 0 1px 6px rgba(15,23,42,0.04) !important;
+    }
+
+    /* ── Fix DNA value column clipping ("Moderate-Strong" cut off) ── */
+    .product-dna-row {
+        grid-template-columns: 5rem 1fr 5.5rem !important;
+    }
+    .product-dna-value {
+        font-size: 0.58rem !important;
+        min-width: auto !important;
+        padding: 0.2rem 0.45rem !important;
+    }
+
+    /* ── CTA hint: pill badge style ── */
+    .product-cta-hint {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.35rem !important;
+        background: #f8fafc !important;
+        border: 1px solid #e9ecf0 !important;
+        border-radius: 999px !important;
+        padding: 0.4rem 0.9rem !important;
+        font-size: 0.7rem !important;
+        font-weight: 600 !important;
+        color: #374151 !important;
+        width: fit-content !important;
+    }
+
+    /* ── Wishlist button: clear border ── */
+    .product-wishlist-btn,
+    .product-favorite-btn {
+        border: 1.5px solid #e2e8f0 !important;
+        background: #ffffff !important;
+        color: #9ca3af !important;
+    }
+    .product-wishlist-btn:hover,
+    .product-favorite-btn:hover {
+        border-color: #fca5a5 !important;
+        color: #e73c3c !important;
+        background: #fff5f5 !important;
+    }
+
+    /* ── Price placeholder before size selection ── */
+    .product-price-card:not(.is-priced) #productPrice {
+        font-size: 0.95rem !important;
+        font-weight: 500 !important;
+        color: #9ca3af !important;
+        font-style: italic !important;
+        letter-spacing: 0 !important;
+    }
+}
