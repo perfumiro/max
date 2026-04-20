@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const productNameEl = document.getElementById('productName');
     const languageStorageKey = 'ipordise-language';
     const supportedLanguages = ['en', 'fr'];
-    const logoAreaImageUrl = 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/assets/Herosectionphotos/logo%20area.png';
+    const logoAreaImageUrl = 'assets/Herosectionphotos/logo area.png';
 
     const navigateWithTransition = (target) => {
         if (!target) return;
@@ -1123,9 +1123,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/4.jpg'
+                'assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/2.jpg',
+                'assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/3.jpg',
+                'assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/4.jpg'
             ]
         },
         'hugo boss the scent for him elixir': {
@@ -1165,10 +1165,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/2.png',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/3.png',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/4.png',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/5.png'
+                'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/2.png',
+                'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/3.png',
+                'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/4.png',
+                'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/5.png'
             ]
         },
         'boss bottled absolu intense': {
@@ -1208,11 +1208,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/2.jpeg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/3.jpeg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/4.jpeg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/5.jpeg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/6.jpeg'
+                'assets/images/products/hugo-boss/boss-bottled-absolu-intense/2.jpeg',
+                'assets/images/products/hugo-boss/boss-bottled-absolu-intense/3.jpeg',
+                'assets/images/products/hugo-boss/boss-bottled-absolu-intense/4.jpeg',
+                'assets/images/products/hugo-boss/boss-bottled-absolu-intense/5.jpeg',
+                'assets/images/products/hugo-boss/boss-bottled-absolu-intense/6.jpeg'
             ]
         },
         'hugo boss boss bottled elixir intense': {
@@ -1252,11 +1252,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/2.jpeg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/4.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/5.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/6.jpg'
+                'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/2.jpeg',
+                'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/3.jpg',
+                'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/4.jpg',
+                'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/5.jpg',
+                'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/6.jpg'
             ]
         },
         'guerlain l homme id al l intense eau de parfum': {
@@ -1296,7 +1296,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'Homme%20Id%C3%A9al%20L'Intense%20Eau%20de%20Parfum/2.jpg"
+                "assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/2.jpg"
             ]
         },
         'guerlain l homme id al extr me': {
@@ -1336,7 +1336,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'homme%20Id%C3%A9al%20Extr%C3%AAme/2.jpg"
+                "assets/images/products/guerlain/lhomme-ideal-extreme/2.jpg"
             ]
         },
         'versace eros eau de parfum': {
@@ -1376,7 +1376,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Eau%20de%20Parfum/2.jpg'
+                'assets/images/products/versace/versace-eros-eau-de-parfum/2.jpg'
             ]
         },
         'versace eros flame eau de parfum': {
@@ -1416,7 +1416,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Flame%20Eau%20de%20Parfum/2.jpg'
+                'assets/images/products/versace/versace-eros-flame-eau-de-parfum/2.jpg'
             ]
         },
         'versace eros energy eau de parfum': {
@@ -1456,8 +1456,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Energy%20Eau%20de%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Energy%20Eau%20de%20Parfum/3.jpg'
+                'assets/images/products/versace/versace-eros-energy-eau-de-parfum/2.jpg',
+                'assets/images/products/versace/versace-eros-energy-eau-de-parfum/3.jpg'
             ]
         },
         'versace dylan blue eau de toilette': {
@@ -1497,7 +1497,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Dylan%20Blue%20%20Eau%20de%20Toilette/2.jpg'
+                'assets/images/products/versace/versace-dylan-blue-eau-de-toilette/2.jpg'
             ]
         },
         'rabanne one million parfum': {
@@ -1537,9 +1537,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Parfum/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Parfum/4.jpg'
+                'assets/images/products/rabanne/rabanne-one-million-parfum/2.jpg',
+                'assets/images/products/rabanne/rabanne-one-million-parfum/3.jpg',
+                'assets/images/products/rabanne/rabanne-one-million-parfum/4.jpg'
             ]
         },
         'rabanne one million elixir intense': {
@@ -1579,10 +1579,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/4.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/5.jpg'
+                'assets/images/products/rabanne/rabanne-one-million-elixir-intense/2.webp',
+                'assets/images/products/rabanne/rabanne-one-million-elixir-intense/3.jpg',
+                'assets/images/products/rabanne/rabanne-one-million-elixir-intense/4.jpg',
+                'assets/images/products/rabanne/rabanne-one-million-elixir-intense/5.jpg'
             ]
         },
         'givenchy gentleman society amber eau de parfum': {
@@ -1622,10 +1622,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/4.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/5.jpg'
+                'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/2.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/3.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/4.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/5.jpg'
             ]
         },
         'givenchy gentleman society nomade eau de parfum': {
@@ -1665,10 +1665,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/4.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/5.jpg'
+                'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/2.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/3.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/4.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/5.jpg'
             ]
         },
         'givenchy gentleman society extreme eau de parfum': {
@@ -1708,10 +1708,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/4.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/5.jpg'
+                'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/2.webp',
+                'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/3.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/4.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/5.jpg'
             ]
         },
         'gentleman private reserve eau de parfum': {
@@ -1751,10 +1751,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/4.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/5.jpg'
+                'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/2.webp',
+                'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/3.jpg',
+                'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/4.jpg',
+                'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/5.jpg'
             ]
         },
         'jean paul gaultier scandal elixir': {
@@ -1794,10 +1794,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/4.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/5.jpg'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/2.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/3.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/4.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/5.jpg'
             ]
         },
         'jean paul gaultier scandal intense eau de parfum': {
@@ -1825,11 +1825,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Intense%20Eau%20de%20Parfum/1.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Intense%20Eau%20de%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Intense%20Eau%20de%20Parfum/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Intense%20Eau%20de%20Parfum/4.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Intense%20Eau%20de%20Parfum/5.jpg'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/2.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/3.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/4.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/5.jpg'
             ]
         },
         'azzaro the most wanted parfum': {
@@ -1869,9 +1869,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/4.webp'
+                'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/2.webp',
+                'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/3.webp',
+                'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/4.webp'
             ]
         },
         'azzaro the most wanted eau de parfum intense': {
@@ -1911,9 +1911,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/4.webp'
+                'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/2.webp',
+                'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/3.webp',
+                'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/4.webp'
             ]
         },
         'azzaro forever wanted elixir eau de parfum': {
@@ -1953,9 +1953,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/4.jpg'
+                'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/2.jpg',
+                'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/3.jpg',
+                'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/4.jpg'
             ]
         },
         'valentino donna born in roma eau de parfum': {
@@ -1995,9 +1995,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/4.webp'
+                'assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/2.webp',
+                'assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/3.webp',
+                'assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/4.webp'
             ]
         },
         'valentino uomo born in roma coral fantasy eau de toilette': {
@@ -2037,9 +2037,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/4.webp'
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/2.webp',
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/3.webp',
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/4.webp'
             ]
         },
         'valentino born in roma extradose eau de toilette': {
@@ -2079,9 +2079,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/4.jpg'
+                'assets/images/products/valentino/valentino-born-in-rome-extradose/2.jpg',
+                'assets/images/products/valentino/valentino-born-in-rome-extradose/3.jpg',
+                'assets/images/products/valentino/valentino-born-in-rome-extradose/4.jpg'
             ]
         },
         'dior sauvage eau de parfum': {
@@ -2121,8 +2121,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Dior%20SAUVAGE%20Eau%20de%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Dior%20SAUVAGE%20Eau%20de%20Parfum/3.webp'
+                'assets/images/products/dior/dior-sauvage-eau-de-parfum/2.jpg',
+                'assets/images/products/dior/dior-sauvage-eau-de-parfum/3.webp'
             ]
         },
         'dior homme intense eau de parfum': {
@@ -2162,9 +2162,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/3.avif',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/4.avif'
+                'assets/images/products/dior/dior-homme-intense-eau-de-parfum/2.webp',
+                'assets/images/products/dior/dior-homme-intense-eau-de-parfum/3.avif',
+                'assets/images/products/dior/dior-homme-intense-eau-de-parfum/4.avif'
             ]
         },
         'valentino born in roma uomo intense eau de parfum': {
@@ -2204,9 +2204,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/4.webp'
+                'assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/2.webp',
+                'assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/3.webp',
+                'assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/4.webp'
             ]
         },
         'valentino born in roma donna intense eau de parfum': {
@@ -2246,9 +2246,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/4.webp'
+                'assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/2.webp',
+                'assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/3.webp',
+                'assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/4.webp'
             ]
         },
         'valentino uomo born in roma eau de toilette': {
@@ -2288,9 +2288,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/4.jpg'
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/2.jpg',
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/3.jpg',
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/4.jpg'
             ]
         },
         'valentino uomo born in roma purple melancholia eau de toilette': {
@@ -2330,8 +2330,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Purple%20Melancholia%20Eau%20de%20Toilette/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Purple%20Melancholia%20Eau%20de%20Toilette/3.jpg'
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/2.jpg',
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/3.jpg'
             ]
         },
         'emporio armani stronger with you intensely edp': {
@@ -2370,11 +2370,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/1.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/4.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/5.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/6.webp'
+                'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp',
+                'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/3.webp',
+                'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/4.webp',
+                'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/5.webp',
+                'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/6.webp'
             ]
         },
         'armani stronger with you powerfully eau de parfum': {
@@ -2413,10 +2413,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/4.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/5.webp'
+                'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/2.webp',
+                'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/3.webp',
+                'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/4.webp',
+                'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/5.webp'
             ]
         },
         'armani stronger with you absolutely perfume': {
@@ -2455,11 +2455,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/4.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/5.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/6.webp'
+                'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/2.webp',
+                'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/3.webp',
+                'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/4.webp',
+                'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/5.webp',
+                'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/6.webp'
             ]
         },
         'yves saint laurent y eau de parfum': {
@@ -2498,9 +2498,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Y%20Eau%20de%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Y%20Eau%20de%20Parfum/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Y%20Eau%20de%20Parfum/4.webp'
+                'assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/2.webp',
+                'assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/3.webp',
+                'assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/4.webp'
             ]
         },
         'yves saint laurent myslf eau de parfum': {
@@ -2539,10 +2539,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Myslf%20Eau%20de%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Myslf%20Eau%20de%20Parfum/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Myslf%20Eau%20de%20Parfum/4.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Myslf%20Eau%20de%20Parfum/5.webp'
+                'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/2.webp',
+                'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/3.webp',
+                'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/4.webp',
+                'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/5.webp'
             ]
         },
         'yves saint laurent myslf le parfum': {
@@ -2581,9 +2581,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/4.jpg'
+                'assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/2.webp',
+                'assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/3.webp',
+                'assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/4.jpg'
             ]
         },
         'jean paul gaultier le male elixir eau de parfum': {
@@ -2622,9 +2622,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/4.webp'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/2.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/3.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/4.webp'
             ]
         },
         'jean paul gaultier le male in blue eau de parfum': {
@@ -2663,8 +2663,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20In%20Blue%20Eau%20de%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20In%20Blue%20Eau%20de%20Parfum/3.jpg'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/2.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/3.jpg'
             ]
         },
         'jean paul gaultier le male eau de toilette': {
@@ -2703,9 +2703,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Le%20Male%20Eau%20de%20Toilette/2.png',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Le%20Male%20Eau%20de%20Toilette/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Le%20Male%20Eau%20de%20Toilette/4.jpg'
+                'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/2.png',
+                'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/3.jpg',
+                'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/4.jpg'
             ]
         },
         'jean paul gaultier le male le parfum eau de parfum': {
@@ -2744,11 +2744,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/1.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/4.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/5.webp'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/2.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/3.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/4.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/5.webp'
             ]
         },
         'jean paul gaultier le beau eau de parfum': {
@@ -2787,10 +2787,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/4.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/5.jpg'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/2.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/3.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/4.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/5.jpg'
             ]
         },
         'carolina herrera bad boy eau de toilette': {
@@ -2830,10 +2830,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/4.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/5.jpg'
+                'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/2.jpg',
+                'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/3.jpg',
+                'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/4.jpg',
+                'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/5.jpg'
             ]
         },
         'gucci guilty absolu de parfum pour homme': {
@@ -2873,8 +2873,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Absolu%20de%20Parfum%20Pour%20Homme/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Absolu%20de%20Parfum%20Pour%20Homme/3.jpg'
+                'assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/2.webp',
+                'assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/3.jpg'
             ]
         },
         'gucci guilty elixir pour homme': {
@@ -2914,9 +2914,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Elixir%20Pour%20Homme/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Elixir%20Pour%20Homme/3.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Elixir%20Pour%20Homme/4.webp'
+                'assets/images/products/gucci/gucci-guilty-elixir-pour-homme/2.webp',
+                'assets/images/products/gucci/gucci-guilty-elixir-pour-homme/3.webp',
+                'assets/images/products/gucci/gucci-guilty-elixir-pour-homme/4.webp'
             ]
         },
         'montale arabians tonka': {
@@ -2956,8 +2956,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Montale%20Arabians%20Tonka/2.webp',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Montale%20Arabians%20Tonka/3.webp'
+                'assets/images/products/montale/montale-arabians-tonka/2.webp',
+                'assets/images/products/montale/montale-arabians-tonka/3.webp'
             ]
         },
         'prada luna rossa ocean eau de parfum': {
@@ -2998,9 +2998,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Ocean%20Eau%20de%20Parfum/1.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Ocean%20Eau%20de%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Ocean%20Eau%20de%20Parfum/3.jpg'
+                'assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg',
+                'assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/2.jpg',
+                'assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/3.jpg'
             ]
         },
         'prada luna rossa carbon edt': {
@@ -3041,11 +3041,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Carbon%20EDT/1.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Carbon%20EDT/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Carbon%20EDT/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Carbon%20EDT/4.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Carbon%20EDT/5.jpg'
+                'assets/images/products/prada/prada-luna-rossa-carbon-edt/1.jpg',
+                'assets/images/products/prada/prada-luna-rossa-carbon-edt/2.jpg',
+                'assets/images/products/prada/prada-luna-rossa-carbon-edt/3.jpg',
+                'assets/images/products/prada/prada-luna-rossa-carbon-edt/4.jpg',
+                'assets/images/products/prada/prada-luna-rossa-carbon-edt/5.jpg'
             ]
         },
         'prada luna rossa black eau de parfum': {
@@ -3086,10 +3086,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Black%20Eau%20de%20Parfum/1.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Black%20Eau%20de%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Black%20Eau%20de%20Parfum/3.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Black%20Eau%20de%20Parfum/4.jpg'
+                'assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg',
+                'assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/2.jpg',
+                'assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/3.jpg',
+                'assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/4.jpg'
             ]
         },
         'prada l homme edt': {
@@ -3130,9 +3130,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20L'Homme%20EDT/1.jpg",
-                "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20L'Homme%20EDT/2.jpg",
-                "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20L'Homme%20EDT/3.jpg"
+                "assets/images/products/prada/prada-lhomme-edt/1.jpg",
+                "assets/images/products/prada/prada-lhomme-edt/2.jpg",
+                "assets/images/products/prada/prada-lhomme-edt/3.jpg"
             ]
         },
         'prada paradigme eau de parfum': {
@@ -3173,9 +3173,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Paradigme%20Eau%20de%20Parfum/1.png',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Paradigme%20Eau%20de%20Parfum/2.jpg',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Paradigme%20Eau%20de%20Parfum/3.jpg'
+                'assets/images/products/prada/prada-paradigme-eau-de-parfum/1.png',
+                'assets/images/products/prada/prada-paradigme-eau-de-parfum/2.jpg',
+                'assets/images/products/prada/prada-paradigme-eau-de-parfum/3.jpg'
             ]
         },
         'prada luna rossa men edt': {
@@ -3216,8 +3216,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             },
             images: [
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Men%20EDT/1.jfif',
-                'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Prada%20Luna%20Rossa%20Men%20EDT/2.webp'
+                'assets/images/products/prada/prada-luna-rossa-men-edt/1.jfif',
+                'assets/images/products/prada/prada-luna-rossa-men-edt/2.webp'
             ]
         }
     };
@@ -4324,238 +4324,238 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'RABANNE',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Parfum/1.jpg'
+            image: 'assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg'
         },
         {
             name: 'Rabanne One Million Elixir Intense',
             brand: 'RABANNE',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Rabanne%20One%20Million%20Elixir%20Intense/1.webp'
+            image: 'assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp'
         },
         {
             name: 'Givenchy Gentleman Society Amber Eau de Parfum',
             brand: 'GIVENCHY',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/1.jpg'
+            image: 'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg'
         },
         {
             name: 'Givenchy Gentleman Society Nomade Eau de Parfum',
             brand: 'GIVENCHY',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Nomade%20Eau%20de%20Parfum/1.webp'
+            image: 'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/1.webp'
         },
         {
             name: 'Givenchy Gentleman Society Extreme Eau de Parfum',
             brand: 'GIVENCHY',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Extreme%20Eau%20de%20Parfum/1.webp'
+            image: 'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp'
         },
         {
             name: 'Gentleman Private Reserve Eau de Parfum',
             brand: 'GIVENCHY',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/1.png'
+            image: 'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png'
         },
         {
             name: 'Jean Paul Gaultier Scandal Elixir',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Elixir/1.jpg'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg'
         },
         {
             name: 'Jean Paul Gaultier Scandal Intense Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Scandal%20Intense%20Eau%20de%20Parfum/1.jpg'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg'
         },
         {
             name: 'Emporio Armani Stronger With You Intensely EDP',
             brand: 'GIORGIO ARMANI',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/2.webp'
+            image: 'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/2.webp'
         },
         {
             name: 'Armani Stronger With You Powerfully Eau de Parfum',
             brand: 'GIORGIO ARMANI',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp'
+            image: 'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp'
         },
         {
             name: 'Armani Stronger With You Absolutely Perfume',
             brand: 'GIORGIO ARMANI',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/first.webp'
+            image: 'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp'
         },
         {
             name: 'Yves Saint Laurent Y Eau de Parfum',
             brand: 'YVES SAINT LAURENT',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Y%20Eau%20de%20Parfum/1.webp'
+            image: 'assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp'
         },
         {
             name: 'Yves Saint Laurent Myslf Eau de Parfum',
             brand: 'YVES SAINT LAURENT',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20Myslf%20Eau%20de%20Parfum/1.jpg'
+            image: 'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/1.jpg'
         },
         {
             name: 'Yves Saint Laurent MYSLF Le Parfum',
             brand: 'YVES SAINT LAURENT',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Yves%20Saint%20Laurent%20MYSLF%20Le%20Parfum/1.webp'
+            image: 'assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/1.webp'
         },
         {
             name: 'Jean Paul Gaultier Le male Elixir Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Elixir/1.webp'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp'
         },
         {
             name: 'Jean Paul Gaultier Le Male In Blue Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20In%20Blue%20Eau%20de%20Parfum/1.jpg'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg'
         },
         {
             name: 'Jean Paul Gaultier Le Male Eau de Toilette',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Le%20Male%20Eau%20de%20Toilette/1.png'
+            image: 'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png'
         },
         {
             name: 'Jean Paul Gaultier Le male Le parfum Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20Le%20Parfum%20Eau%20de%20Parfum/2.webp'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/2.webp'
         },
         {
             name: 'Jean Paul Gaultier Le Beau Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Beau%20Eau%20de%20Parfum/1.webp'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp'
         },
         {
             name: 'Azzaro The Most Wanted Eau de Parfum Intense',
             brand: 'AZZARO',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/1.webp'
+            image: 'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp'
         },
         {
             name: 'Azzaro Forever Wanted Elixir Eau de Parfum',
             brand: 'AZZARO',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg'
+            image: 'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg'
         },
         {
             name: 'Azzaro The Most Wanted Parfum',
             brand: 'AZZARO',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/1.webp'
+            image: 'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp'
         },
         {
             name: 'Valentino Donna Born in Roma Eau de Parfum',
             brand: 'VALENTINO',
             price: '',
             gender: 'women',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Donna%20Born%20in%20Roma%20Eau%20de%20Parfum/1.webp'
+            image: 'assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/1.webp'
         },
         {
             name: 'Valentino Uomo Born In Roma Coral Fantasy Eau de Toilette',
             brand: 'VALENTINO',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Coral%20Fantasy%20Eau%20de%20Toilette/1.webp'
+            image: 'assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/1.webp'
         },
         {
             name: 'Valentino Born in Roma Extradose Eau de Toilette',
             brand: 'VALENTINO',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/1.jpg'
+            image: 'assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg'
         },
         {
             name: 'Dior Homme Intense Eau de Parfum',
             brand: 'DIOR',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/1.jpg'
+            image: 'assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg'
         },
         {
             name: 'Valentino Born In Roma Uomo Intense Eau de Parfum',
             brand: 'VALENTINO',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Uomo%20Intense%20Eau%20de%20Parfum/1.webp'
+            image: 'assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp'
         },
         {
             name: 'Valentino Born In Roma Donna Intense Eau de Parfum',
             brand: 'VALENTINO',
             price: '',
             gender: 'women',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20In%20Roma%20Donna%20Intense%20Eau%20de%20Parfum/1.webp'
+            image: 'assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp'
         },
         {
             name: 'Valentino Uomo Born in Roma Eau de Toilette',
             brand: 'VALENTINO',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20in%20Roma%20Eau%20de%20Toilette/1.jpg'
+            image: 'assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/1.jpg'
         },
         {
             name: 'Valentino Uomo Born In Roma Purple Melancholia Eau de Toilette',
             brand: 'VALENTINO',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Uomo%20Born%20In%20Roma%20Purple%20Melancholia%20Eau%20de%20Toilette/1.jpg'
+            image: 'assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/1.jpg'
         },
         {
             name: 'Carolina Herrera Bad Boy Eau de Toilette',
             brand: 'CAROLINA HERRERA',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/1.jpg'
+            image: 'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg'
         },
         {
             name: 'Gucci Guilty Absolu de Parfum Pour Homme',
             brand: 'GUCCI',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Absolu%20de%20Parfum%20Pour%20Homme/1.webp'
+            image: 'assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp'
         },
         {
             name: 'Gucci Guilty Elixir Pour Homme',
             brand: 'GUCCI',
             price: '',
             gender: 'men',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Elixir%20Pour%20Homme/1.webp'
+            image: 'assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp'
         },
         {
             name: 'Montale Arabians Tonka',
             brand: 'MONTALE',
             price: '',
             gender: 'unisex',
-            image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Montale%20Arabians%20Tonka/1.webp'
+            image: 'assets/images/products/montale/montale-arabians-tonka/1.webp'
         }
     ];
 
@@ -7496,83 +7496,83 @@ document.addEventListener('DOMContentLoaded', () => {
         const FLASH_POOL = [
             { id: 'armani-stronger-with-you-absolutely-perfume',
               name: 'Armani Stronger With You Absolutely Perfume', brand: 'GIORGIO ARMANI',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Absolutely%20Perfume/first.webp',
+              image: 'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp',
               badge: 'NEW', badgeRotate: 'NEW|BEST OFFER|TOP TREND', reviews: 5 },
             { id: 'armani-stronger-with-you-powerfully-eau-de-parfum',
               name: 'Armani Stronger With You Powerfully Eau de Parfum', brand: 'GIORGIO ARMANI',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp',
+              image: 'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
               badge: 'HOT PICK', badgeRotate: 'NEW|HOT PICK|BEST SELLER', reviews: 6 },
             { id: 'azzaro-forever-wanted-elixir-eau-de-parfum',
               name: 'Azzaro Forever Wanted Elixir Eau de Parfum', brand: 'AZZARO',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg',
+              image: 'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|ELIXIR|LIMITED', reviews: 9 },
             { id: 'azzaro-the-most-wanted-eau-de-parfum-intense',
               name: 'Azzaro The Most Wanted Eau de Parfum Intense', brand: 'AZZARO',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Eau%20de%20Parfum%20Intense/1.webp',
+              image: 'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp',
               badge: 'NEW', badgeRotate: 'NEW|INTENSE|MUST HAVE', reviews: 11 },
             { id: 'azzaro-the-most-wanted-parfum',
               name: 'Azzaro The Most Wanted Parfum', brand: 'AZZARO',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20The%20Most%20Wanted%20Parfum/1.webp',
+              image: 'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp',
               badge: 'NEW', badgeRotate: 'NEW|TOP PICK|LUXURY', reviews: 7 },
             { id: 'bleu-de-chanel-eau-de-parfum-spray',
               name: 'BLEU DE CHANEL Eau de Parfum spray', brand: 'CHANEL',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/BLEU%20DE%20CHANEL%20Eau%20de%20Parfum%20spray/1.jpg',
+              image: 'assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg',
               badge: 'ICONIC', badgeRotate: 'ICONIC|BEST SELLER|CLASSIC', reviews: 24 },
             { id: 'boss-bottled-absolu-intense',
               name: 'Boss Bottled Absolu Intense', brand: 'HUGO BOSS',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Boss%20Bottled%20Absolu%20Intense/1.jpeg',
+              image: 'assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg',
               badge: 'NEW', badgeRotate: 'NEW|INTENSE|JUST LANDED', reviews: 11 },
             { id: 'carolina-herrera-bad-boy-eau-de-toilette',
               name: 'Carolina Herrera Bad Boy Eau de Toilette', brand: 'CAROLINA HERRERA',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Carolina%20Herrera%20Bad%20Boy%20Eau%20de%20Toilette/1.jpg',
+              image: 'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|BAD BOY|BOLD', reviews: 14 },
             { id: 'gucci-guilty-absolu-de-parfum-pour-homme',
               name: 'Gucci Guilty Absolu de Parfum Pour Homme', brand: 'GUCCI',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gucci%20Guilty%20Absolu%20de%20Parfum%20Pour%20Homme/1.webp',
+              image: 'assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp',
               badge: 'LUXURY', badgeRotate: 'LUXURY|GUILTY|TOP PICK', reviews: 8 },
             { id: 'hugo-boss-boss-bottled-elixir-intense',
               name: 'Hugo Boss Boss Bottled Elixir Intense', brand: 'HUGO BOSS',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20Boss%20Bottled%20Elixir%20Intense/1.jpeg',
+              image: 'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg',
               badge: 'NEW', badgeRotate: 'NEW|ELIXIR|JUST LANDED', reviews: 9 },
             { id: 'dior-homme-intense-eau-de-parfum',
               name: 'DIOR HOMME INTENSE Eau de Parfum', brand: 'DIOR',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/DIOR%20HOMME%20INTENSE%20Eau%20de%20Parfum/1.jpg',
+              image: 'assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg',
               badge: 'INTENSE', badgeRotate: 'INTENSE|DIOR|ICONIC', reviews: 16 },
             { id: 'dior-sauvage-eau-de-parfum',
               name: 'DIOR SAUVAGE Eau de Parfum', brand: 'DIOR',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Dior%20SAUVAGE%20Eau%20de%20Parfum/1.jpg',
+              image: 'assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|SAUVAGE|BEST SELLER', reviews: 28 },
             { id: 'emporio-armani-stronger-with-you-intensely-edp',
               name: 'Emporio Armani Stronger With You Intensely EDP', brand: 'GIORGIO ARMANI',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/main/products/Emporio%20Armani%20Stronger%20With%20You%20Intensely/2.webp',
+              image: 'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/2.webp',
               badge: 'BEST OFFER', badgeRotate: 'NEW|BEST SELLER|BEST OFFER', reviews: 13 },
             { id: 'gentleman-private-reserve-eau-de-parfum',
               name: 'Gentleman Private Reserve Eau de Parfum', brand: 'GIVENCHY',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Gentleman%20Private%20Reserve%20Eau%20de%20Parfum/1.png',
+              image: 'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png',
               badge: 'RARE', badgeRotate: 'RARE|LUXURY|LIMITED', reviews: 7 },
             { id: 'guerlain-l-homme-ideal-l-intense-eau-de-parfum',
               name: "Guerlain L'Homme Id\u00e9al L'Intense Eau de Parfum", brand: 'GUERLAIN',
-              image: "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'Homme%20Id%C3%A9al%20L'Intense%20Eau%20de%20Parfum/1.webp",
+              image: "assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp",
               badge: 'NEW', badgeRotate: 'NEW|INTENSE|LUXURY', reviews: 13 },
             { id: 'guerlain-l-homme-ideal-extreme',
               name: "GUERLAIN L'homme Id\u00e9al Extr\u00eame", brand: 'GUERLAIN',
-              image: "https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/L'homme%20Id%C3%A9al%20Extr%C3%AAme/1.jpg",
+              image: "assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg",
               badge: 'NEW', badgeRotate: 'NEW|EXTREME|LUXURY', reviews: 14 },
             { id: 'hugo-boss-the-scent-for-him-elixir',
               name: 'Hugo Boss The Scent For Him Elixir', brand: 'HUGO BOSS',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Hugo%20Boss%20The%20Scent%20For%20Him%20Elixir/1.png',
+              image: 'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png',
               badge: 'NEW', badgeRotate: 'NEW|HOT PICK|JUST LANDED', reviews: 8 },
             { id: 'givenchy-gentleman-society-amber-eau-de-parfum',
               name: 'Givenchy Gentleman Society Amber Eau de Parfum', brand: 'GIVENCHY',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Givenchy%20Gentleman%20Society%20Amber%20Eau%20de%20Parfum/1.jpg',
+              image: 'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|AMBER|LUXURY', reviews: 10 },
             { id: 'versace-dylan-blue-eau-de-toilette',
               name: 'Versace Dylan Blue Eau de Toilette', brand: 'VERSACE',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Dylan%20Blue%20%20Eau%20de%20Toilette/1.jpg',
+              image: 'assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|BLUE|MEDITERRANEAN', reviews: 18 },
             { id: 'versace-eros-flame-eau-de-parfum',
               name: 'Versace Eros Flame Eau de Parfum', brand: 'VERSACE',
-              image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Versace%20Eros%20Flame%20Eau%20de%20Parfum/1.jpg',
+              image: 'assets/images/products/versace/versace-eros-flame-eau-de-parfum/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|FLAME|SEDUCTIVE', reviews: 16 },
         ];
 
@@ -7924,7 +7924,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'Jean Paul Gaultier Le Male In Blue Eau de Parfum',
                 brand: 'JEAN PAUL GAULTIER',
                 id: 'jean-paul-gaultier-le-male-in-blue-eau-de-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Jean%20Paul%20Gaultier%20Le%20Male%20In%20Blue%20Eau%20de%20Parfum/1.jpg',
+                image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg',
                 price: '',
                 sizes: ['75ML', '125ML'],
                 added: '2026-01-15'
@@ -7933,7 +7933,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'Valentino Born in Roma Extradose Eau de Toilette',
                 brand: 'VALENTINO',
                 id: 'valentino-born-in-roma-extradose-eau-de-toilette',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Valentino%20Born%20in%20Rome%20Extradose/1.jpg',
+                image: 'assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg',
                 price: '',
                 sizes: ['50ML', '100ML'],
                 added: '2026-01-01'
@@ -7942,7 +7942,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'Armani Stronger With You Powerfully Eau de Parfum',
                 brand: 'GIORGIO ARMANI',
                 id: 'armani-stronger-with-you-powerfully-eau-de-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Armani%20Stronger%20With%20You%20Powerfully%20Eau%20de%20Parfum/1.webp',
+                image: 'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
                 price: '',
                 sizes: ['50ML', '100ML'],
                 added: '2026-01-10'
@@ -7951,7 +7951,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'Azzaro Forever Wanted Elixir Eau de Parfum',
                 brand: 'AZZARO',
                 id: 'azzaro-forever-wanted-elixir-eau-de-parfum',
-                image: 'https://raw.githubusercontent.com/perfumiro/max/refs/heads/main/products/Azzaro%20Forever%20Wanted%20Elixir%20Eau%20de%20Parfum/1.jpg',
+                image: 'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
                 price: '',
                 sizes: ['50ML', '100ML'],
                 added: '2026-02-01'
