@@ -27665,6 +27665,117 @@ body.ipo-is-transitioning * {
 }
 
 /* ================================================================
+   REVIEWS TAB — EMPTY STATE  (April 2026)
+   ================================================================ */
+
+.tab-rev-empty-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+    background: linear-gradient(160deg, #fffdf7 0%, #faf9ff 100%);
+    border: 1px solid rgba(201, 162, 39, 0.15);
+    border-radius: 1.25rem;
+    box-shadow: 0 2px 16px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+.tab-rev-empty-icon {
+    width: 3.8rem;
+    height: 3.8rem;
+    border-radius: 1.1rem;
+    background: linear-gradient(135deg, #c9a227, #e8c84a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(201, 162, 39, 0.35);
+    margin-bottom: 0.4rem;
+    animation: tab-rev-star-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes tab-rev-star-pulse {
+    0%, 100% { box-shadow: 0 8px 24px rgba(201, 162, 39, 0.35); transform: scale(1); }
+    50%       { box-shadow: 0 12px 32px rgba(201, 162, 39, 0.55); transform: scale(1.05); }
+}
+
+.tab-rev-empty-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tab-rev-empty-score {
+    font-size: 2.6rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, #c9a227, #e8c84a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tab-rev-empty-stars {
+    display: flex;
+    gap: 2px;
+    color: #e2c050;
+}
+
+.tab-rev-empty-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.tab-rev-empty-sub {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.5;
+    max-width: 22rem;
+}
+
+.tab-rev-empty-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    padding: 0.55rem 1.35rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #ffffff;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: none;
+    border-radius: 999px;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.22);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.tab-rev-empty-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.32);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.tab-rev-empty-cta i {
+    font-size: 0.7rem;
+    color: #c8a96a;
+}
+
+@media (max-width: 767px) {
+    .tab-rev-empty-wrap { padding: 2rem 1rem 1.75rem; border-radius: 1rem; }
+    .tab-rev-empty-icon { width: 3.2rem; height: 3.2rem; font-size: 1.2rem; }
+    .tab-rev-empty-score { font-size: 2.2rem; }
+}
+
+/* ================================================================
    INGREDIENTS TAB — INCI PILL DISPLAY  ·  redesigned (April 2026)
    ================================================================ */
 
