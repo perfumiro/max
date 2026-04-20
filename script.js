@@ -5795,6 +5795,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 btn.classList.add('is-active');
                 btn.setAttribute('aria-selected', 'true');
+
+                // Hide mobile accords panel when switching away from Details tab
+                const mobileAccords = document.getElementById('productMainAccordsPanelMobile');
+                if (mobileAccords) {
+                    if (tabId === 'details') {
+                        mobileAccords.hidden = false;
+                        mobileAccords.style.display = '';
+                    } else {
+                        mobileAccords.hidden = true;
+                        mobileAccords.style.display = 'none';
+                    }
+                }
             });
         });
 
