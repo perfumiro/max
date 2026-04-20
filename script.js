@@ -6196,10 +6196,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const isMobile = () => window.innerWidth <= 640;
 
-        // Set CSS custom property --acm-top from the real header bottom on mobile
-        const setMobileTop = (menu) => {
-            if (!isMobile()) return;
-            // Try common header selectors in priority order
+        // Set CSS custom properties --acm-top and (desktop) --acm-right
+        // Works on ALL screen sizes — always teleport to body to escape the header's
+        // will-change / backdrop-filter stacking context which would otherwise trap
+        // the dropdown's z-index and let perfume-nav paint on top of it.
+        const positionMenu = (menu, triggerEl) => {
             const hdr =
                 document.querySelector('header') ||
                 document.querySelector('[class*="header"]') ||
@@ -6207,6 +6208,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (hdr) {
                 const bottom = hdr.getBoundingClientRect().bottom;
                 menu.style.setProperty('--acm-top', `${bottom + 6}px`);
+            }
+            // Desktop: align the menu's right edge with the trigger's right edge
+            if (!isMobile() && triggerEl) {
+                const tRect = triggerEl.getBoundingClientRect();
+                const right = window.innerWidth - tRect.right;
+                menu.style.setProperty('--acm-right', `${Math.max(8, right)}px`);
             }
         };
 
@@ -6273,7 +6280,8 @@ document.addEventListener('DOMContentLoaded', () => {
             menu.innerHTML = buildAccountMenuHtml(triggerHref);
 
             wrap.appendChild(menu);
-            menu._acmWrap = wrap; // remember original parent for teleport return
+            menu._acmWrap = wrap;    // remember original parent for teleport return
+            menu._trigger  = trigger; // needed for resize re-positioning
             allMenus.push(menu);
 
             onLanguageChange(() => {
@@ -6285,12 +6293,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const shouldOpen = !menu.classList.contains('is-open');
                 closeAllMenus();
                 if (shouldOpen) {
-                    if (isMobile()) {
-                        // Teleport OUT of header's stacking context (z-50) onto body
-                        // so the menu can paint above the backdrop cleanly
-                        document.body.appendChild(menu);
-                    }
-                    setMobileTop(menu);
+                    // Always teleport to body so the menu escapes the header's stacking
+                    // context (will-change / backdrop-filter on ancestors trap z-index)
+                    document.body.appendChild(menu);
+                    positionMenu(menu, trigger);
                     menu.classList.add('is-open');
                     if (isMobile()) {
                         backdrop.classList.add('is-visible');
@@ -6320,10 +6326,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Recalculate fixed top on resize (e.g. device rotation)
+        // Recalculate position on resize (e.g. device rotation)
         window.addEventListener('resize', () => {
             allMenus.forEach((menu) => {
-                if (menu.classList.contains('is-open')) setMobileTop(menu);
+                if (menu.classList.contains('is-open')) positionMenu(menu, menu._trigger);
             });
         });
     };

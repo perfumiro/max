@@ -2833,6 +2833,18 @@ button.product-favorite-btn.is-active {
     transform: translateY(0);
 }
 
+/* Desktop: menu teleported to <body> — use fixed positioning so it escapes
+   the header's stacking context (will-change / backdrop-filter on ancestors) */
+@media (min-width: 641px) {
+    body > .account-menu {
+        position: fixed;
+        top: var(--acm-top, 80px);
+        right: var(--acm-right, 10px);
+        left: auto;
+        width: min(92vw, 25.5rem);
+    }
+}
+
 .account-menu::before {
     content: "";
     position: absolute;
