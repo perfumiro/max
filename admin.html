@@ -19,10 +19,14 @@
     <form id="loginForm" class="auth-card" autocomplete="on">
       <div class="auth-logo-wrap">
         <div class="auth-logo-icon"><i class="fas fa-gem"></i></div>
-        <div><div class="auth-logo-name">IPORDISE</div><div class="auth-logo-sub">Admin Analytics</div></div>
+        <div>
+          <div class="auth-logo-name">IPORDISE</div>
+          <div class="auth-logo-sub">Command Center</div>
+        </div>
       </div>
-      <h1 class="auth-title">Secure analytics access</h1>
-      <p class="auth-sub">Sign in to view visitor tracking, live activity and performance data.</p>
+      <div class="auth-divider"></div>
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-sub">Sign in to manage orders, customers, analytics and live store activity.</p>
       <label class="auth-row" for="loginUsername">
         <span class="auth-label">Admin email</span>
         <input id="loginUsername" class="auth-input" type="email" name="username" placeholder="admin@ipordise.com" required>
@@ -47,6 +51,11 @@
         <span id="loginBtnSpinner" class="hidden"><i class="fas fa-circle-notch fa-spin"></i> Signing in...</span>
       </button>
       <div id="authError" class="auth-error hidden" role="alert"></div>
+      <div class="auth-trust">
+        <span class="auth-trust-item"><i class="fas fa-lock" style="color:var(--gold)"></i> SSL Secured</span>
+        <span class="auth-trust-item"><i class="fas fa-shield-halved" style="color:var(--gold)"></i> Admin only</span>
+        <span class="auth-trust-item"><i class="fas fa-fire" style="color:var(--gold)"></i> Firebase Auth</span>
+      </div>
       <p id="apiHint" class="auth-hint"></p>
     </form>
   </section>
@@ -55,7 +64,10 @@
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-logo">
         <div class="sidebar-logo-icon"><i class="fas fa-gem"></i></div>
-        <div><div class="sidebar-logo-name">IPORDISE</div><div class="sidebar-logo-sub">Command Center</div></div>
+        <div class="sidebar-logo-texts">
+          <div class="sidebar-logo-name">IPORDISE</div>
+          <div class="sidebar-logo-sub">Command Center</div>
+        </div>
       </div>
       <nav class="sidebar-nav">
         <div class="sidebar-section-label">Dashboard</div>
