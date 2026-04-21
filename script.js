@@ -334,6 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
             product_ask_whatsapp_sub: 'Get price \u0026 availability \u2014 we reply in minutes',
             product_ask_whatsapp_badge: 'Fast reply',
             product_choose_size: 'Choose a size to see the price',
+            product_choose_size_cta: 'Choose a size',
             product_choose_size_sticky: 'Choose size',
             product_add_to_cart: 'Add to Cart',
             product_added: '\u2713 Added!',
@@ -372,6 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
             product_ask_whatsapp_sub: 'Prix et disponibilit\u00e9 \u2014 r\u00e9ponse en quelques minutes',
             product_ask_whatsapp_badge: 'R\u00e9ponse rapide',
             product_choose_size: 'Choisissez une taille pour voir le prix',
+            product_choose_size_cta: 'Choisir une taille',
             product_choose_size_sticky: 'Choisir la taille',
             product_add_to_cart: 'Ajouter au panier',
             product_added: '\u2713 Ajout\u00e9\u00a0!',
@@ -4893,8 +4895,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return fixedReviewCounts[canonicalName];
         }
 
-        const countPool = [3, 4, 5, 7];
-        return countPool[Math.floor(Math.random() * countPool.length)];
+        const countPool = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 25, 27];
+        const hash = getStableHashNumber(canonicalName);
+        return countPool[hash % countPool.length];
     };
 
     const getHonestRatingValue = (productName) => {
@@ -5764,17 +5767,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (qtyBoxContainer) qtyBoxContainer.classList.add('hidden');
                 return;
             }
+            // Product has prices — always show the Add to Cart button
             [addToCartBtn, stickyAddToCartBtn].forEach((button) => {
                 if (!button) return;
-                if (!enabled) {
-                    button.classList.add('hidden');
-                    button.disabled = true;
-                } else {
-                    button.classList.remove('hidden');
-                    button.disabled = false;
-                    button.className = 'product-cart-btn';
-                    button.textContent = t('product_add_to_cart');
-                }
+                button.classList.remove('hidden');
+                button.disabled = false;
+                button.className = 'product-cart-btn';
+                button.innerHTML = `<i class="fas fa-bag-shopping"></i> ${t('product_add_to_cart')}`;
             });
             if (qtyBoxContainer) {
                 qtyBoxContainer.classList.toggle('hidden', !enabled);
@@ -5803,12 +5802,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const deliveryChipEl = document.getElementById('productDeliveryChip');
         const deliveryInfoEl = document.getElementById('productDeliveryInfo');
+        const priceSelectedSizeEl = document.getElementById('priceSelectedSize');
 
         const updateDisplayedPrice = () => {
             const selectedPrice = selectedSize?.priceText || '';
             const sizeHasPrice = selectedSize && selectedSize.unitPrice > 0;
             const isDecante = Boolean(selectedSize?.isDecante);
             const deliveryFee = isDecante ? '35 MAD' : '35 MAD (VAT included)';
+
+            // Update the selected-size top-right label inside the price card
+            if (priceSelectedSizeEl) {
+                priceSelectedSizeEl.textContent = selectedSize ? `≈ ${selectedSize.label}` : '';
+            }
 
             // Toggle price card vs out-of-stock box depending on selected size
             if (hasPrices) {
@@ -5822,7 +5827,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     mainPriceEl.classList.toggle('text-gray-400', !sizeHasPrice);
                     mainPriceEl.classList.toggle('text-gray-900', !!sizeHasPrice);
                     if (!selectedSize) {
-                        mainPriceEl.textContent = t('product_choose_size');
+                        mainPriceEl.textContent = '—';
                     } else if (sizeHasPrice) {
                         // Split "270 DH" → number + styled unit span
                         const priceMatch = selectedPrice.match(/^(.+?)\s*(DH)$/);
@@ -5901,7 +5906,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const handleAddToCart = () => {
-            if (!selectedSize) return;
+            if (!selectedSize) {
+                // Shake the size selector and show a notice
+                const sizeEl = document.getElementById('sizeSelector');
+                if (sizeEl) {
+                    sizeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    sizeEl.style.animation = 'ipp-shake 0.45s ease';
+                    setTimeout(() => { sizeEl.style.animation = ''; }, 500);
+                }
+                // Flash the price card border red briefly
+                const priceCardEl = document.getElementById('productPriceCard');
+                if (priceCardEl) {
+                    priceCardEl.style.transition = 'box-shadow 0.2s, border-color 0.2s';
+                    priceCardEl.style.borderColor = '#e73c3c';
+                    priceCardEl.style.boxShadow = '0 0 0 3px rgba(231,60,60,0.18)';
+                    setTimeout(() => {
+                        priceCardEl.style.borderColor = '';
+                        priceCardEl.style.boxShadow = '';
+                    }, 1200);
+                }
+                // Show toast
+                const toastEl = document.createElement('div');
+                toastEl.textContent = t('product_choose_size_cta') || 'Please choose a size first';
+                toastEl.style.cssText = 'position:fixed;bottom:calc(80px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%) translateY(20px);background:#111827;color:#fff;font-size:0.78rem;font-weight:700;padding:10px 20px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,0.22);z-index:99999;opacity:0;transition:opacity 0.25s,transform 0.25s;white-space:nowrap;pointer-events:none;';
+                document.body.appendChild(toastEl);
+                requestAnimationFrame(() => {
+                    toastEl.style.opacity = '1';
+                    toastEl.style.transform = 'translateX(-50%) translateY(0)';
+                });
+                setTimeout(() => {
+                    toastEl.style.opacity = '0';
+                    toastEl.style.transform = 'translateX(-50%) translateY(10px)';
+                    setTimeout(() => toastEl.remove(), 300);
+                }, 2000);
+                return;
+            }
             const qty = qtyValue ? Number(qtyValue.textContent) || 1 : 1;
             const nextItems = readCart();
             const existingIndex = nextItems.findIndex(
@@ -10968,3 +11007,383 @@ if ('serviceWorker' in navigator) {
         });
     });
 }
+
+/* =============================================================================
+   IPORDISE — Recently Viewed Products
+   Saves product data when a user views a product card/page.
+   Renders a horizontal strip on the homepage (and any page with #recentlyViewedSection).
+   Max 8 products. Stored in localStorage under 'ipo_recently_viewed'.
+   ============================================================================= */
+(function () {
+    'use strict';
+    const RV_KEY = 'ipo_recently_viewed';
+    const RV_MAX = 8;
+
+    const getRV = () => {
+        try { return JSON.parse(localStorage.getItem(RV_KEY) || '[]'); }
+        catch (_) { return []; }
+    };
+
+    const saveRV = (list) => {
+        try { localStorage.setItem(RV_KEY, JSON.stringify(list)); } catch (_) { /* quota */ }
+    };
+
+    window.ipoTrackRecentlyViewed = (product) => {
+        if (!product || !product.name) return;
+        const list = getRV().filter((p) => p.id !== product.id);
+        list.unshift({
+            id: product.id || product.name,
+            name: product.name,
+            brand: product.brand || 'IPORDISE',
+            image: product.image || '',
+            url: product.url || ''
+        });
+        saveRV(list.slice(0, RV_MAX));
+        renderRecentlyViewedSection();
+    };
+
+    const buildCardHTML = (p) => {
+        const esc = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+        return `<div class="rv-card" role="button" tabindex="0" onclick="location.href='${esc(p.url)}'" onkeydown="if(event.key==='Enter')location.href='${esc(p.url)}'">
+            <div class="rv-card-img"><img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none'"></div>
+            <div class="rv-card-body">
+                <p class="rv-card-brand">${esc(p.brand)}</p>
+                <p class="rv-card-name">${esc(p.name)}</p>
+            </div>
+        </div>`;
+    };
+
+    const renderRecentlyViewedSection = () => {
+        const section = document.getElementById('recentlyViewedSection');
+        const carousel = document.getElementById('recentlyViewedCarousel');
+        if (!section || !carousel) return;
+        const list = getRV();
+        if (!list.length) { section.style.display = 'none'; return; }
+        section.style.display = '';
+        carousel.innerHTML = list.map(buildCardHTML).join('');
+    };
+
+    // Clear button
+    document.addEventListener('click', (e) => {
+        if (e.target && e.target.id === 'clearRecentlyViewed') {
+            saveRV([]);
+            renderRecentlyViewedSection();
+        }
+    });
+
+    // Hook into product card clicks — intercept before navigation
+    document.addEventListener('click', (e) => {
+        const card = e.target.closest('.js-product-link[data-product-name]');
+        if (!card) return;
+        const name = card.dataset.productName;
+        const id = card.dataset.id || name;
+        const brand = card.dataset.productBrand;
+        const image = card.dataset.productImage;
+        if (!name) return;
+        // Build the product page URL (mirrors navigateToProductPage logic)
+        const path = window.location.pathname.replace(/\\/g, '/');
+        const base = path.includes('/pages/') ? '' : 'pages/';
+        const params = new URLSearchParams({ id, name, brand: brand || '', image: image || '' });
+        const url = `${base}product.html?${params.toString()}`;
+        window.ipoTrackRecentlyViewed({ id, name, brand, image, url });
+    }, true); // capture so it runs before navigation
+
+    // Also hook into the product detail page itself
+    document.addEventListener('DOMContentLoaded', () => {
+        const productNameEl = document.getElementById('productName');
+        const mainImageEl = document.getElementById('productMainImage');
+        if (!productNameEl) {
+            renderRecentlyViewedSection();
+            return;
+        }
+        // We're on the product page — save after a short delay so data is populated
+        setTimeout(() => {
+            const params = new URLSearchParams(window.location.search);
+            const name = productNameEl.textContent.trim() || params.get('name') || '';
+            const id = params.get('id') || name;
+            const brand = document.getElementById('productBrand')?.textContent.trim() || params.get('brand') || 'IPORDISE';
+            const image = mainImageEl?.src || params.get('image') || '';
+            const urlParams = new URLSearchParams({ id, name, brand, image });
+            const url = `product.html?${urlParams.toString()}`;
+            if (name) window.ipoTrackRecentlyViewed({ id, name, brand, image, url });
+        }, 800);
+    });
+}());
+
+/* =============================================================================
+   IPORDISE — WhatsApp Abandoned Cart Nudge
+   Shows a WhatsApp nudge 20 minutes after items are added to cart,
+   if the user hasn't visited the checkout page.
+   Dismissed permanently for that cart session when closed.
+   ============================================================================= */
+(function () {
+    'use strict';
+    const NUDGE_DELAY_MS = 20 * 60 * 1000; // 20 minutes
+    const NUDGE_KEY = 'ipo_cart_nudge_dismissed';
+    const WHATSAPP_NUMBER = '212600000000'; // ← update with real number
+    let nudgeTimer = null;
+
+    const getCartItems = () => {
+        try { return JSON.parse(localStorage.getItem('cart') || '[]'); } catch (_) { return []; }
+    };
+
+    const buildWhatsAppMsg = () => {
+        const items = getCartItems();
+        if (!items.length) return '';
+        const lines = items.slice(0, 3).map((item) => {
+            const name = item.name || item.productName || 'Product';
+            const size = item.size || item.selectedSize || '';
+            const qty = item.qty || item.quantity || 1;
+            return `• ${name}${size ? ` (${size})` : ''} x${qty}`;
+        });
+        const more = items.length > 3 ? `\n• +${items.length - 3} more item(s)` : '';
+        return encodeURIComponent(`Hi IPORDISE! I'd like to complete my order:\n${lines.join('\n')}${more}\n\nCan you help me finalize it?`);
+    };
+
+    const showNudge = () => {
+        const items = getCartItems();
+        if (!items.length) return;
+        const nudge = document.getElementById('ipoCartNudge');
+        const btn = document.getElementById('ipoCartNudgeBtn');
+        if (!nudge || !btn) return;
+        const dismissed = (() => { try { return localStorage.getItem(NUDGE_KEY) === '1'; } catch(_){ return false; } })();
+        if (dismissed) return;
+        const msg = buildWhatsAppMsg();
+        if (msg) btn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+        nudge.style.display = '';
+        // Track that we showed it for this session
+        try { sessionStorage.setItem('ipo_nudge_shown', '1'); } catch(_){}
+    };
+
+    const scheduleNudge = () => {
+        clearTimeout(nudgeTimer);
+        const items = getCartItems();
+        if (!items.length) return;
+        const alreadyShown = (() => { try { return sessionStorage.getItem('ipo_nudge_shown') === '1'; } catch(_){ return false; } })();
+        if (alreadyShown) return;
+        nudgeTimer = setTimeout(showNudge, NUDGE_DELAY_MS);
+    };
+
+    // Close button
+    document.addEventListener('click', (e) => {
+        if (e.target && (e.target.id === 'ipoCartNudgeClose' || e.target.closest('#ipoCartNudgeClose'))) {
+            const nudge = document.getElementById('ipoCartNudge');
+            if (nudge) nudge.style.display = 'none';
+            try { localStorage.setItem(NUDGE_KEY, '1'); } catch(_){}
+        }
+    });
+
+    // Hide nudge when user clicks the WhatsApp button (they're converting)
+    document.addEventListener('click', (e) => {
+        if (e.target && (e.target.id === 'ipoCartNudgeBtn' || e.target.closest('#ipoCartNudgeBtn'))) {
+            const nudge = document.getElementById('ipoCartNudge');
+            if (nudge) nudge.style.display = 'none';
+            try { localStorage.setItem(NUDGE_KEY, '1'); } catch(_){}
+        }
+    });
+
+    // Listen for cart changes (the existing writeCart calls localStorage)
+    const _origSetItem = localStorage.setItem.bind(localStorage);
+    localStorage.setItem = function (key, value) {
+        _origSetItem(key, value);
+        if (key === 'cart') scheduleNudge();
+    };
+
+    // Also schedule on page load if cart already has items
+    document.addEventListener('DOMContentLoaded', () => {
+        // Don't show on checkout or cart pages
+        const path = window.location.pathname;
+        if (path.includes('checkout') || path.includes('cart')) return;
+        scheduleNudge();
+    });
+
+    // Clear dismissed flag when cart is emptied
+    const _observer = setInterval(() => {
+        if (!getCartItems().length) {
+            try { localStorage.removeItem(NUDGE_KEY); sessionStorage.removeItem('ipo_nudge_shown'); } catch(_){}
+            const nudge = document.getElementById('ipoCartNudge');
+            if (nudge) nudge.style.display = 'none';
+        }
+    }, 30000);
+}());
+
+/* =============================================================================
+   IPORDISE — Fragrance Finder Quiz
+   4-question interactive quiz that recommends products from relatedProductCatalog.
+   Opens as a modal from the quiz banner CTA or any [data-open-quiz] element.
+   ============================================================================= */
+(function () {
+    'use strict';
+
+    // Scent profile tags mapped to quiz style answers
+    const PROFILE_MAP = {
+        fresh:  ['aquatic','citrus','aromatic','green','fougere','marine'],
+        woody:  ['woody','oud','sandalwood','cedar','vetiver','leather'],
+        spicy:  ['spicy','oriental','amber','tobacco','incense','resinous'],
+        sweet:  ['gourmand','vanilla','floral','musky','powdery','caramel']
+    };
+
+    // Intensity preference → longevity filter
+    const LONGEVITY_MAP = {
+        light: ['edt','eau de toilette'],
+        medium: ['edp','eau de parfum'],
+        long: ['elixir','intense','parfum'],
+        beast: ['elixir','intense','parfum','extrait']
+    };
+
+    const answers = {};
+    let currentStep = 1;
+    const TOTAL_STEPS = 4;
+
+    const modal = () => document.getElementById('fragranceQuizModal');
+    const card  = () => document.getElementById('fragranceQuizCard');
+    const progress = () => document.getElementById('quizProgress');
+
+    const showStep = (step) => {
+        document.querySelectorAll('.quiz-step').forEach((el) => {
+            el.style.display = (el.dataset.step === String(step) || el.dataset.step === step) ? '' : 'none';
+        });
+        const pct = step === 'result' ? 100 : Math.round(((step - 1) / TOTAL_STEPS) * 100);
+        if (progress()) progress().style.width = pct + '%';
+    };
+
+    const openModal = () => {
+        const m = modal();
+        if (!m) return;
+        m.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        currentStep = 1;
+        Object.keys(answers).forEach((k) => delete answers[k]);
+        document.querySelectorAll('.quiz-opt').forEach((b) => b.classList.remove('selected'));
+        showStep(1);
+    };
+
+    const closeModal = () => {
+        const m = modal();
+        if (!m) return;
+        m.style.display = 'none';
+        document.body.style.overflow = '';
+    };
+
+    const getRecommendations = () => {
+        const catalog = window.relatedProductCatalog || [];
+        if (!catalog.length) return [];
+
+        const styleAccords = PROFILE_MAP[answers.style] || [];
+        const longevityTerms = LONGEVITY_MAP[answers.longevity] || [];
+
+        const scoredCatalog = catalog.map((product) => {
+            let score = 0;
+            const nameLower = (product.name || '').toLowerCase();
+            const familyLower = (product.family || '').toLowerCase();
+            const notesLower = ((product.notes || []).join(' ')).toLowerCase();
+            const combined = `${nameLower} ${familyLower} ${notesLower}`;
+
+            styleAccords.forEach((accord) => { if (combined.includes(accord)) score += 3; });
+            longevityTerms.forEach((term) => { if (nameLower.includes(term)) score += 2; });
+
+            if (answers.occasion === 'daily' && (nameLower.includes('edt') || nameLower.includes('toilette'))) score += 1;
+            if (answers.occasion === 'evening' && (nameLower.includes('intense') || nameLower.includes('elixir') || nameLower.includes('noir'))) score += 2;
+            if (answers.occasion === 'special' && (nameLower.includes('parfum') || nameLower.includes('extrait') || nameLower.includes('privée'))) score += 2;
+
+            return { ...product, _score: score };
+        });
+
+        return scoredCatalog
+            .filter((p) => p._score > 0)
+            .sort((a, b) => b._score - a._score)
+            .slice(0, 3);
+    };
+
+    const showResult = () => {
+        const recs = getRecommendations();
+        const resultEl = document.getElementById('quizResultProducts');
+        const titleEl = document.getElementById('quizResultTitle');
+        const descEl = document.getElementById('quizResultDesc');
+        const emojiEl = document.getElementById('quizResultEmoji');
+
+        const styleEmojis = { fresh:'🌊', woody:'🌲', spicy:'🔥', sweet:'🍯' };
+        if (emojiEl) emojiEl.textContent = styleEmojis[answers.style] || '✨';
+        if (titleEl) titleEl.textContent = 'Your Perfect Match!';
+        if (descEl) descEl.textContent = `Based on your style preference — here are our top picks for you:`;
+
+        if (resultEl) {
+            if (!recs.length) {
+                resultEl.innerHTML = '<p style="font-size:0.82rem;color:#6b7280;text-align:center;">Discover our full collection to find your match.</p>';
+            } else {
+                const path = window.location.pathname.includes('/pages/') ? '' : 'pages/';
+                resultEl.innerHTML = recs.map((p) => {
+                    const params = new URLSearchParams({ id: p.id || p.name, name: p.name, brand: p.brand || '', image: p.image || '' });
+                    const url = `${path}product.html?${params.toString()}`;
+                    return `<div class="quiz-result-product" onclick="window.location.href='${url.replace(/'/g,"\\'")}'" role="button" tabindex="0">
+                        <img src="${(p.image||'').replace(/'/g,"\\'")||''}" alt="${(p.name||'').replace(/"/g,'&quot;')}" onerror="this.style.display='none'" loading="lazy">
+                        <div>
+                            <p class="quiz-result-product-brand">${(p.brand||'IPORDISE').replace(/</g,'&lt;')}</p>
+                            <p class="quiz-result-product-name">${(p.name||'').replace(/</g,'&lt;')}</p>
+                        </div>
+                        <i class="fas fa-chevron-right" style="margin-left:auto;color:#d1d5db;font-size:0.75rem;flex-shrink:0;"></i>
+                    </div>`;
+                }).join('');
+            }
+        }
+        showStep('result');
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Open quiz
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('#openFragranceQuiz, [data-open-quiz]');
+            if (btn) { e.preventDefault(); openModal(); }
+        });
+
+        // Close quiz
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'closeFragranceQuiz' || e.target.closest('#closeFragranceQuiz') ||
+                e.target === modal()) {
+                closeModal();
+            }
+        });
+
+        // Escape key close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal()?.style.display !== 'none') closeModal();
+        });
+
+        // Quiz option selection
+        document.addEventListener('click', (e) => {
+            const opt = e.target.closest('.quiz-opt');
+            if (!opt) return;
+            const stepEl = opt.closest('.quiz-step');
+            if (!stepEl) return;
+            const step = Number(stepEl.dataset.step);
+
+            // Deselect siblings
+            stepEl.querySelectorAll('.quiz-opt').forEach((b) => b.classList.remove('selected'));
+            opt.classList.add('selected');
+
+            // Store answer
+            const stepKey = ['style','occasion','longevity','budget'][step - 1];
+            answers[stepKey] = opt.dataset.value;
+
+            // Advance after short delay
+            setTimeout(() => {
+                if (step < TOTAL_STEPS) {
+                    currentStep = step + 1;
+                    showStep(currentStep);
+                } else {
+                    showResult();
+                }
+            }, 320);
+        });
+
+        // Retake
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'quizRetake') {
+                currentStep = 1;
+                Object.keys(answers).forEach((k) => delete answers[k]);
+                document.querySelectorAll('.quiz-opt').forEach((b) => b.classList.remove('selected'));
+                showStep(1);
+            }
+        });
+    });
+}());

@@ -18,7 +18,9 @@
   <section id="authScreen" class="auth-shell">
     <form id="loginForm" class="auth-card" autocomplete="on">
       <div class="auth-logo-wrap">
-        <div class="auth-logo-icon"><i class="fas fa-gem"></i></div>
+        <div class="auth-logo-icon">
+          <img src="../assets/logo.png" alt="IPORDISE" style="width:50px;height:50px;object-fit:contain;border-radius:14px;">
+        </div>
         <div>
           <div class="auth-logo-name">IPORDISE</div>
           <div class="auth-logo-sub">Command Center</div>
@@ -29,7 +31,7 @@
       <p class="auth-sub">Sign in to manage orders, customers, analytics and live store activity.</p>
       <label class="auth-row" for="loginUsername">
         <span class="auth-label">Admin email</span>
-        <input id="loginUsername" class="auth-input" type="email" name="username" placeholder="admin@ipordise.com" required>
+        <input id="loginUsername" class="auth-input" type="email" name="username" placeholder="Email address" required>
       </label>
       <label class="auth-row" for="loginPassword">
         <span class="auth-label">Password</span>
@@ -51,19 +53,16 @@
         <span id="loginBtnSpinner" class="hidden"><i class="fas fa-circle-notch fa-spin"></i> Signing in...</span>
       </button>
       <div id="authError" class="auth-error hidden" role="alert"></div>
-      <div class="auth-trust">
-        <span class="auth-trust-item"><i class="fas fa-lock" style="color:var(--gold)"></i> SSL Secured</span>
-        <span class="auth-trust-item"><i class="fas fa-shield-halved" style="color:var(--gold)"></i> Admin only</span>
-        <span class="auth-trust-item"><i class="fas fa-fire" style="color:var(--gold)"></i> Firebase Auth</span>
-      </div>
-      <p id="apiHint" class="auth-hint"></p>
+      <p id="apiHint" class="auth-hint hidden"></p>
     </form>
   </section>
 
   <div id="dashboardScreen" class="dashboard-shell hidden">
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-logo">
-        <div class="sidebar-logo-icon"><i class="fas fa-gem"></i></div>
+        <div class="sidebar-logo-icon">
+          <img src="../assets/logo.png" alt="IPORDISE" style="width:40px;height:40px;object-fit:contain;border-radius:8px;">
+        </div>
         <div class="sidebar-logo-texts">
           <div class="sidebar-logo-name">IPORDISE</div>
           <div class="sidebar-logo-sub">Command Center</div>
@@ -78,6 +77,7 @@
         <div class="sidebar-section-label" style="margin-top:14px;">Store</div>
         <a class="sidebar-item" data-view="orders"><i class="fas fa-bag-shopping sidebar-item-icon"></i><span>All Orders</span><span class="sidebar-badge" id="navOrdersBadge" style="display:none">0</span></a>
         <a class="sidebar-item" data-view="customers"><i class="fas fa-users sidebar-item-icon"></i><span>Customers</span><span class="sidebar-badge" id="navCustomersBadge" style="display:none">0</span></a>
+        <a class="sidebar-item" data-view="reviews"><i class="fas fa-star sidebar-item-icon"></i><span>Reviews</span><span class="sidebar-badge" id="navReviewsBadge" style="display:none">0</span></a>
         <div class="sidebar-section-label" style="margin-top:14px;">Export</div>
         <a class="sidebar-item" id="exportCsvBtn"><i class="fas fa-file-csv sidebar-item-icon"></i><span>Export CSV</span></a>
         <a class="sidebar-item" id="exportJsonBtn"><i class="fas fa-file-code sidebar-item-icon"></i><span>Export JSON</span></a>
@@ -329,6 +329,46 @@
             </div>
           </div>
         </section>
+
+        <!-- ── Reviews View ────────────────────────────────────────────── -->
+        <section id="view-reviews" class="view">
+          <div class="view-title">Customer Reviews <span class="view-title-sub" id="reviewsCount"></span></div>
+
+          <div class="card mb-4">
+            <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+              <input type="text" class="select-sm" id="reviewsSearch" placeholder="Search product or reviewer..." style="min-width:220px;">
+              <select class="select-sm" id="reviewsRatingFilter">
+                <option value="">All ratings</option>
+                <option value="5">5 stars</option>
+                <option value="4">4 stars</option>
+                <option value="3">3 stars</option>
+                <option value="2">2 stars</option>
+                <option value="1">1 star</option>
+              </select>
+              <button class="btn btn-xs btn-gold" id="refreshReviewsBtn" style="margin-left:auto"><i class="fas fa-rotate-right"></i> Refresh</button>
+            </div>
+          </div>
+
+          <div id="reviewsList" style="display:flex;flex-direction:column;gap:1rem;">
+            <div style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading reviews...</div>
+          </div>
+        </section>
+
+        <!-- Reply Modal -->
+        <div id="replyModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;">
+          <div style="background:var(--surface);border-radius:1rem;padding:1.5rem;width:min(480px,92vw);box-shadow:0 20px 60px rgba(0,0,0,0.25);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+              <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin:0;">Reply to Review</h3>
+              <button onclick="document.getElementById('replyModal').style.display='none'" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);">&times;</button>
+            </div>
+            <div id="replyModalReviewText" style="background:var(--surface-2,#f9fafb);border-radius:0.5rem;padding:0.75rem;font-size:0.82rem;color:var(--muted);margin-bottom:1rem;font-style:italic;"></div>
+            <textarea id="replyModalInput" rows="4" placeholder="Write your reply as IPORDISE Team..." style="width:100%;border:1.5px solid var(--border);border-radius:0.65rem;padding:0.7rem 0.9rem;font-size:0.88rem;font-family:inherit;resize:vertical;background:var(--surface);color:var(--text);box-sizing:border-box;"></textarea>
+            <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1rem;">
+              <button onclick="document.getElementById('replyModal').style.display='none'" class="btn btn-xs">Cancel</button>
+              <button id="replyModalSubmit" class="btn btn-xs btn-gold"><i class="fas fa-paper-plane"></i> Send Reply</button>
+            </div>
+          </div>
+        </div>
 
       </div>
     </main>

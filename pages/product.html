@@ -99,6 +99,818 @@
     <!-- PWA -->
     <link rel="manifest" href="../manifest.json">
     <link rel="apple-touch-icon" sizes="192x192" href="/assets/logo-mark.svg">
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  IPORDISE  —  Premium Product Page Visual Override      ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<style>
+/* ─── DESIGN TOKENS ─────────────────────────────────────────── */
+:root {
+  --ipp-black:   #0d0d0d;
+  --ipp-dark:    #1a1a1a;
+  --ipp-red:     #c8102e;
+  --ipp-gold:    #c8a96a;
+  --ipp-gray:    #6b7280;
+  --ipp-border:  #e5e7eb;
+  --ipp-surface: #fafafa;
+  --ipp-radius:  14px;
+  --ipp-shadow:  0 2px 18px rgba(0,0,0,0.08);
+  --ipp-shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
+}
+
+/* ─── SMOOTH FADE-IN FOR PAGE ────────────────────────────────── */
+@keyframes ipp-fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.product-detail-section { animation: ipp-fadeUp 0.55s ease both; }
+
+/* ─── PRODUCT INFO CARD ──────────────────────────────────────── */
+.product-info-card {
+  background: #fff !important;
+  border: 1px solid var(--ipp-border) !important;
+  border-radius: var(--ipp-radius) !important;
+  padding: 2rem !important;
+  box-shadow: var(--ipp-shadow) !important;
+  position: relative !important;
+}
+.product-info-card::before { display:none !important; }
+
+/* ─── BRAND TAG ──────────────────────────────────────────────── */
+.product-brand-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 6px !important;
+}
+#productBrand {
+  font-size: 0.65rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.22em !important;
+  color: var(--ipp-gray) !important;
+  text-transform: uppercase !important;
+}
+
+/* ─── PRODUCT TITLE ──────────────────────────────────────────── */
+#productName {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-size: clamp(1.45rem, 3.5vw, 2rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+  color: var(--ipp-black) !important;
+  letter-spacing: -0.01em !important;
+  margin-top: 6px !important;
+}
+
+/* ─── SUBTITLE ───────────────────────────────────────────────── */
+#productSubtitle {
+  font-size: 0.82rem !important;
+  color: #6b7280 !important;
+  line-height: 1.6 !important;
+  margin-top: 10px !important;
+  border-left: none !important;
+  padding-left: 0 !important;
+}
+
+/* ─── RATING ROW ─────────────────────────────────────────────── */
+.product-rating-row {
+  gap: 6px !important;
+  margin-top: 10px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  border: none !important;
+  display: inline-flex !important;
+  width: auto !important;
+}
+
+/* ─── QUICK FACT PILLS ───────────────────────────────────────── */
+.product-quick-facts {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  margin-top: 12px !important;
+}
+.product-quick-fact {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  font-size: 0.68rem !important;
+  font-weight: 600 !important;
+  color: var(--ipp-dark) !important;
+  background: var(--ipp-surface) !important;
+  border: 1px solid var(--ipp-border) !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  white-space: nowrap !important;
+}
+.product-quick-fact i { font-size: 0.6rem; color: var(--ipp-red); }
+
+/* ─── PRICE CARD ─────────────────────────────────────────────── */
+.product-price-card {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 16px !important;
+  padding: 1.25rem 1.25rem 1rem !important;
+  margin-top: 1.25rem !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06) !important;
+}
+.product-price-card::before { display: none !important; }
+/* Top row: price left + selected size right */
+.price-card-top-row {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+}
+.price-card-main {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 8px !important;
+}
+#productPrice {
+  font-size: 2.1rem !important;
+  font-weight: 900 !important;
+  color: #e73c3c !important;
+  letter-spacing: -0.02em !important;
+  font-family: 'Inter', sans-serif !important;
+  line-height: 1 !important;
+}
+.price-old-value {
+  font-size: 0.95rem !important;
+  color: #9ca3af !important;
+  text-decoration: line-through !important;
+}
+.price-selected-size {
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  color: #6b7280 !important;
+  white-space: nowrap !important;
+  padding-top: 6px !important;
+}
+.price-vat-label {
+  font-size: 0.72rem !important;
+  color: #9ca3af !important;
+  margin-top: 4px !important;
+}
+.price-separator {
+  border: none !important;
+  border-top: 1px solid #f3f4f6 !important;
+  margin: 14px 0 12px !important;
+}
+.price-choose-size-label {
+  font-size: 0.65rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.16em !important;
+  color: #9ca3af !important;
+  text-transform: uppercase !important;
+  margin-bottom: 10px !important;
+}
+#productDeliveryInfo { display: none !important; }
+
+/* ─── STOCK BADGE + DELIVERY INLINE ─────────────────────────── */
+.ipp-stock-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  margin-top: 14px !important;
+}
+.ipp-badge-stock {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  color: #111827 !important;
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 999px !important;
+  padding: 5px 12px !important;
+}
+.ipp-badge-stock-dot {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: #16a34a !important;
+  flex-shrink: 0 !important;
+  box-shadow: 0 0 0 0 rgba(22,163,74,0.7) !important;
+  animation: ipp-dot-pulse 2s ease infinite !important;
+}
+.ipp-badge-delivery {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  color: #111827 !important;
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 999px !important;
+  padding: 5px 12px !important;
+}
+.ipp-badge-delivery i { color: #6b7280 !important; font-size: 0.7rem !important; }
+@keyframes ipp-dot-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(22,163,74,0.6); }
+  50%      { box-shadow: 0 0 0 5px rgba(22,163,74,0); }
+}
+
+/* ─── SIZE LABEL ─────────────────────────────────────────────── */
+.product-size-label {
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  color: var(--ipp-dark) !important;
+  margin-bottom: 10px !important;
+}
+
+/* ─── SIZE SELECTOR CHIPS ────────────────────────────────────── */
+.size-group-label { display: none !important; }
+.size-group { margin-bottom: 8px !important; }
+.size-pill {
+  min-width: 4.5rem !important;
+  background: #fff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 10px !important;
+  padding: 0.55rem 0.75rem !important;
+  cursor: pointer !important;
+  transition: border-color 0.18s, background 0.18s, transform 0.18s, box-shadow 0.18s !important;
+  position: relative !important;
+}
+.size-pill:hover {
+  border-color: var(--ipp-dark) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1) !important;
+}
+.size-pill.is-active {
+  background: var(--ipp-black) !important;
+  border-color: var(--ipp-black) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
+}
+.size-pill.is-active .spill-vol,
+.size-pill.is-active .spill-price { color: #fff !important; }
+.size-pill.is-active .spill-vol::after { color: rgba(255,255,255,0.6) !important; }
+.spill-vol {
+  font-size: 0.8rem !important;
+  font-weight: 800 !important;
+  color: var(--ipp-dark) !important;
+  display: block !important;
+  line-height: 1.2 !important;
+}
+.spill-price {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  color: var(--ipp-gray) !important;
+  display: block !important;
+  margin-top: 2px !important;
+}
+.spill-indicator { display: none !important; }
+
+/* ─── QUANTITY SELECTOR ──────────────────────────────────────── */
+.qty-box {
+  display: flex !important;
+  align-items: center !important;
+  border: 1.5px solid var(--ipp-border) !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  background: #fff !important;
+}
+.qty-btn {
+  width: 38px !important;
+  height: 46px !important;
+  background: var(--ipp-surface) !important;
+  border: none !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: var(--ipp-dark) !important;
+  cursor: pointer !important;
+  transition: background 0.15s !important;
+}
+.qty-btn:hover { background: #f0f0f0 !important; }
+.qty-value {
+  min-width: 42px !important;
+  text-align: center !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: var(--ipp-black) !important;
+  padding: 0 6px !important;
+}
+
+/* ─── ADD TO CART BUTTON ─────────────────────────────────────── */
+#addToCartBtn {
+  flex: 1 !important;
+  background: var(--ipp-black) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 0 !important;
+  height: 52px !important;
+  font-size: 0.78rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18) !important;
+}
+#addToCartBtn:hover {
+  background: #1f1f1f !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.22) !important;
+}
+#addToCartBtn:active { transform: scale(0.97) !important; }
+#addToCartBtn i { font-size: 0.9rem !important; }
+
+/* ─── SOCIAL PROOF VIEWER PILL ───────────────────────────────── */
+.product-live-viewer-bar,
+[id*="liveViewers"],
+.live-viewer-pill,
+.ipp-viewing-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  background: #fff8f0 !important;
+  border: 1px solid #fed7aa !important;
+  border-radius: 999px !important;
+  padding: 5px 12px !important;
+  margin-top: 10px !important;
+}
+
+/* ─── TRUST ICONS BLOCK ──────────────────────────────────────── */
+.ipp-trust-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 1px !important;
+  background: var(--ipp-border) !important;
+  border: 1px solid var(--ipp-border) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+.ipp-trust-item {
+  background: #fff !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 1.1rem 0.5rem !important;
+  gap: 6px !important;
+}
+.ipp-trust-icon {
+  width: 36px; height: 36px !important;
+  border-radius: 50% !important;
+  background: var(--ipp-surface) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.9rem !important;
+  color: var(--ipp-dark) !important;
+  flex-shrink: 0 !important;
+}
+.ipp-trust-title {
+  font-size: 0.62rem !important;
+  font-weight: 800 !important;
+  color: var(--ipp-dark) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  line-height: 1.2 !important;
+}
+.ipp-trust-sub {
+  font-size: 0.58rem !important;
+  color: var(--ipp-gray) !important;
+  line-height: 1.3 !important;
+  display: none !important;
+}
+@media (min-width: 640px) {
+  .ipp-trust-sub { display: block !important; }
+}
+@media (max-width: 480px) {
+  .ipp-trust-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ─── FRAGRANCE PROFILE ──────────────────────────────────────── */
+#fragranceProfile {
+  background: var(--ipp-surface) !important;
+  border: 1px solid var(--ipp-border) !important;
+  border-radius: 12px !important;
+  padding: 1.1rem 1.25rem !important;
+  margin-top: 1.25rem !important;
+}
+.product-dna-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 4px 0 !important;
+}
+.product-dna-label {
+  min-width: 80px !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  color: var(--ipp-gray) !important;
+}
+.product-dna-bar {
+  flex: 1 !important;
+  height: 4px !important;
+  background: #e5e7eb !important;
+  border-radius: 99px !important;
+  overflow: hidden !important;
+}
+.product-dna-fill {
+  height: 100% !important;
+  background: linear-gradient(90deg, var(--ipp-black), #374151) !important;
+  border-radius: 99px !important;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1) !important;
+}
+.product-dna-value {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  color: var(--ipp-dark) !important;
+  min-width: 48px !important;
+  text-align: right !important;
+}
+
+/* ─── TAB SYSTEM ─────────────────────────────────────────────── */
+/* Use #productTabs .tab-btn for higher specificity to beat style.css rules */
+
+/* ─── DETAILS TAB — DESCRIPTION ─────────────────────────────── */
+#productLongDescription {
+  /* Reset any card styling from style.css */
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  max-width: 100% !important;
+  position: static !important;
+  overflow: visible !important;
+}
+#productLongDescription::before,
+#productLongDescription::after {
+  display: none !important;
+}
+/* Lead sentence — big editorial pull-quote */
+#productLongDescription .prod-desc-lead {
+  font-size: 1.13rem !important;
+  font-weight: 700 !important;
+  line-height: 1.6 !important;
+  color: #0f172a !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 0 1.1rem !important;
+  padding: 0 0 1.1rem !important;
+  border-bottom: 1.5px solid #e5e7eb !important;
+  position: relative !important;
+}
+/* Accent left bar on lead */
+#productLongDescription .prod-desc-lead::before {
+  content: '' !important;
+  display: block !important;
+  width: 3rem !important;
+  height: 3px !important;
+  background: #0f172a !important;
+  border-radius: 2px !important;
+  margin-bottom: 0.75rem !important;
+}
+/* Body copy */
+#productLongDescription .prod-desc-body {
+  font-size: 0.88rem !important;
+  line-height: 1.85 !important;
+  color: #4b5563 !important;
+  margin: 0 0 1rem !important;
+  font-weight: 400 !important;
+}
+/* Bottle / extra section card */
+#productLongDescription .prod-desc-section {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.75rem !important;
+  background: #f8f9fb !important;
+  border: 1px solid #e5e7eb !important;
+  border-left: 3px solid #0f172a !important;
+  border-radius: 10px !important;
+  padding: 0.95rem 1.1rem !important;
+  margin-top: 0.25rem !important;
+}
+#productLongDescription .prod-desc-section-label {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  font-size: 0.58rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: #6b7280 !important;
+  margin-bottom: 0.3rem !important;
+  white-space: nowrap !important;
+}
+#productLongDescription .prod-desc-section-label i {
+  color: #c8a96a !important;
+  font-size: 0.62rem !important;
+}
+#productLongDescription .prod-desc-section-text {
+  font-size: 0.82rem !important;
+  line-height: 1.75 !important;
+  color: #374151 !important;
+  margin: 0 !important;
+}
+@media (max-width: 640px) {
+  #productLongDescription .prod-desc-lead {
+    font-size: 1rem !important;
+    letter-spacing: -0.01em !important;
+  }
+  #productLongDescription .prod-desc-body { font-size: 0.84rem !important; }
+}
+#productTabs .tab-btn {
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  color: #9ca3af !important;
+  background: none !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  padding: 0.9rem 1.75rem 0.9rem 0 !important;
+  cursor: pointer !important;
+  transition: color 0.18s ease, border-color 0.18s ease !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  position: relative !important;
+  outline: none !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+/* Suppress any ::after underline injected by style.css */
+#productTabs .tab-btn::after {
+  display: none !important;
+}
+#productTabs .tab-btn:last-child {
+  padding-right: 0 !important;
+}
+#productTabs .tab-btn:hover {
+  color: #374151 !important;
+}
+#productTabs .tab-btn.is-active {
+  color: #111827 !important;
+  border-bottom-color: #111827 !important;
+  font-weight: 700 !important;
+}
+/* Inline review count — e.g. " (8)" */
+.tab-btn-count {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  color: inherit !important;
+}
+.tab-panel {
+  animation: ipp-fadeUp 0.3s ease both !important;
+}
+@media (max-width: 640px) {
+  #productTabs .tab-btn { padding: 0.8rem 1.1rem 0.8rem 0 !important; font-size: 0.67rem !important; }
+}
+
+/* ─── GALLERY SHELL ──────────────────────────────────────────── */
+.product-gallery-shell {
+  border-radius: var(--ipp-radius) !important;
+  overflow: visible !important;
+}
+.product-main-image-wrap {
+  border-radius: var(--ipp-radius) !important;
+  background: #f8f5f2 !important;
+  overflow: hidden !important;
+  border: 1px solid var(--ipp-border) !important;
+}
+.product-thumbs-strip {
+  margin-top: 10px !important;
+}
+
+/* ─── GALLERY BADGES ──────────────────────────────────────────  */
+.gallery-badge {
+  font-size: 0.62rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  padding: 4px 9px !important;
+  border-radius: 6px !important;
+  text-transform: uppercase !important;
+}
+.gallery-badge-bestprice {
+  background: var(--ipp-black) !important;
+  color: #fff !important;
+}
+.gallery-badge-viral {
+  background: var(--ipp-red) !important;
+  color: #fff !important;
+}
+
+/* ─── BREADCRUMB ─────────────────────────────────────────────── */
+nav[aria-label="Breadcrumb"] a {
+  font-size: 0.75rem !important;
+  color: var(--ipp-gray) !important;
+  transition: color 0.15s !important;
+}
+nav[aria-label="Breadcrumb"] a:hover { color: var(--ipp-black) !important; }
+nav[aria-label="Breadcrumb"] i { color: #d1d5db !important; font-size: 0.55rem !important; }
+nav[aria-label="Breadcrumb"] li:last-child { font-size: 0.75rem !important; }
+
+/* ─── RELATED PRODUCTS ───────────────────────────────────────── */
+.related-card {
+  border-radius: 12px !important;
+  border: 1px solid var(--ipp-border) !important;
+  overflow: hidden !important;
+  background: #fff !important;
+  transition: box-shadow 0.25s, transform 0.25s !important;
+}
+.related-card:hover {
+  box-shadow: var(--ipp-shadow-lg) !important;
+  transform: translateY(-3px) !important;
+}
+.related-brand {
+  font-size: 0.58rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.18em !important;
+  color: var(--ipp-gray) !important;
+  text-transform: uppercase !important;
+  margin: 8px 10px 2px !important;
+}
+.related-title {
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  color: var(--ipp-dark) !important;
+  padding: 0 10px !important;
+  line-height: 1.3 !important;
+}
+.related-image {
+  width: 100% !important;
+  height: 170px !important;
+  object-fit: contain !important;
+  background: #f8f5f2 !important;
+  padding: 12px !important;
+}
+
+/* ─── SECTION KICKER ─────────────────────────────────────────── */
+.product-section-kicker {
+  font-size: 0.6rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--ipp-gold) !important;
+  margin-bottom: 4px !important;
+}
+
+/* ─── SHARE BUTTONS ──────────────────────────────────────────── */
+.product-share-btn {
+  width: 34px; height: 34px !important;
+  border-radius: 50% !important;
+  background: var(--ipp-surface) !important;
+  border: 1px solid var(--ipp-border) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.75rem !important;
+  color: var(--ipp-gray) !important;
+  cursor: pointer !important;
+  transition: background 0.15s, color 0.15s, transform 0.15s !important;
+}
+.product-share-btn:hover {
+  background: var(--ipp-black) !important;
+  color: #fff !important;
+  border-color: var(--ipp-black) !important;
+  transform: scale(1.1) !important;
+}
+
+/* ─── WISHLIST BUTTON ────────────────────────────────────────── */
+.product-wishlist-btn {
+  width: 52px; height: 52px !important;
+  border-radius: 12px !important;
+  border: 1.5px solid var(--ipp-border) !important;
+  background: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1rem !important;
+  color: var(--ipp-gray) !important;
+  cursor: pointer !important;
+  transition: border-color 0.2s, color 0.2s, transform 0.15s !important;
+  flex-shrink: 0 !important;
+}
+.product-wishlist-btn:hover {
+  border-color: var(--ipp-red) !important;
+  color: var(--ipp-red) !important;
+  transform: scale(1.06) !important;
+}
+
+/* ─── PRODUCT BADGE ──────────────────────────────────────────── */
+.product-badge {
+  font-size: 0.58rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  padding: 3px 8px !important;
+  border-radius: 4px !important;
+  background: var(--ipp-red) !important;
+  color: #fff !important;
+}
+
+/* ─── PRODUCT CTA ROW ────────────────────────────────────────── */
+.product-cta-row {
+  align-items: stretch !important;
+  gap: 8px !important;
+}
+
+
+
+/* ─── TRUST BAR (product page specific override) ─────────────── */
+.trust-bar {
+  background: #0c0507 !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  padding: 0.6rem 1rem !important;
+  animation: none !important;
+}
+.trust-bar-item {
+  color: rgba(255,255,255,0.80) !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+.trust-bar-item:hover,
+.trust-bar-item:focus,
+.trust-bar-item:active { background: rgba(200,169,106,0.10) !important; outline: none !important; }
+.trust-bar-item i { color: #c8a96a !important; }
+.trust-bar-item strong,
+.trust-bar-text strong { color: #fff !important; }
+.trust-bar-text small  { color: rgba(255,255,255,0.45) !important; }
+.trust-bar-icon-wrap {
+  background: rgba(255,255,255,0.08) !important;
+  color: #c8a96a !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+}
+.trust-bar-divider { background: rgba(255,255,255,0.14) !important; }
+
+/* ─── PRODUCT BRAND BANNER ───────────────────────────────────── */
+.product-brand-banner {
+  background: var(--ipp-black) !important;
+  padding: 0.85rem 1rem !important;
+}
+.product-brand-banner-name {
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(0.85rem, 2vw, 1.1rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  color: #fff !important;
+}
+.product-brand-banner-house {
+  font-size: 0.62rem !important;
+  letter-spacing: 0.16em !important;
+  color: rgba(255,255,255,0.45) !important;
+}
+.brand-star-left, .brand-star-right { color: var(--ipp-gold) !important; font-size: 0.6rem !important; }
+
+/* ─── VIEWING COUNTER ────────────────────────────────────────── */
+.product-live-viewers {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  color: #374151 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin-top: 12px !important;
+  text-align: center !important;
+}
+.product-live-viewers .lv-fire { color: #e73c3c !important; }
+
+/* ─── SCROLL BODY REVEAL ─────────────────────────────────────── */
+.ipo-reveal { opacity: 1 !important; }
+
+/* ─── MOBILE RESPONSIVE TWEAKS ───────────────────────────────── */
+@media (max-width: 767px) {
+  .product-info-card {
+    padding: 1.25rem !important;
+    border-radius: 16px !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  #productName { font-size: 1.5rem !important; }
+  .ipp-trust-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .product-cta-row { gap: 8px !important; }
+  #addToCartBtn { height: 48px !important; border-radius: 12px !important; }
+  .product-wishlist-btn { width: 48px !important; height: 48px !important; }
+}
+</style>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -470,44 +1282,26 @@ s0.parentNode.insertBefore(s1,s0);
                             </div>
                             <span id="productReviewsCount" class="text-sm text-gray-500"></span>
                         </a>
-                        <!-- Quick Fact Pills -->
-                        <div class="product-quick-facts" id="productQuickFacts">
-                            <span class="product-quick-fact" id="qfGender"><i class="fas fa-circle-dot"></i> <span id="qfGenderText">Men&rsquo;s</span></span>
-                            <span class="product-quick-fact"><i class="fas fa-medal"></i> 100% Authentic</span>
-                            <span class="product-quick-fact"><i class="fas fa-truck-fast"></i> Delivery 35 MAD</span>
-                            <span class="product-quick-fact"><i class="fas fa-gift"></i> Packed with Care</span>
+                        <!-- Stock + Delivery chips -->
+                        <div class="ipp-stock-row">
+                            <span class="ipp-badge-stock"><span class="ipp-badge-stock-dot"></span> In stock</span>
+                            <span class="ipp-badge-delivery" id="productDeliveryChip"><i class="fas fa-truck"></i> Delivery 35 MAD</span>
                         </div>
 
                         <!-- Shown when product has prices -->
-                        <div class="mt-6 pt-6 border-t border-gray-200 product-price-card" id="productPriceCard" hidden>
-                            <div class="price-shimmer" aria-hidden="true"></div>
-                            <!-- Label row: PRIX tag + discount badge -->
-                            <div class="price-card-top">
-                                <span class="price-card-label">PRIX</span>
-                                <span id="productDiscount" class="price-discount-badge"></span>
-                            </div>
-                            <!-- Main price + crossed-out old price on same baseline -->
-                            <div class="price-card-main">
-                                <p id="productPrice" class="text-4xl font-bold text-gray-400">Choose a size</p>
-                                <span id="productOldPrice" class="price-old-value"></span>
-                            </div>
-                            <!-- Delivery chip -->
-                            <p id="productDeliveryInfo" class="text-sm text-gray-500 mt-1" data-i18n="product.in_stock_delivery">In stock - Delivery in Morocco: 35 MAD (VAT included)</p>
-                        </div>
-
-                        <!-- Shown when no prices — item is out of stock, WhatsApp inquiry available -->
-                        <div class="mt-6 pt-6 border-t border-gray-200" id="productOndemandBox" hidden>
-                            <div class="product-ondemand-box">
-                                <div class="product-ondemand-icon"><i class="fas fa-box-open"></i></div>
-                                <div>
-                                    <p class="product-ondemand-title" data-i18n="product.ondemand_title">Out of Stock</p>
-                                    <p class="product-ondemand-sub" data-i18n="product.ondemand_sub">This product is currently out of stock. Select a size and tap "Ask on WhatsApp" to be notified when it's back.</p>
+                        <div class="mt-4 product-price-card" id="productPriceCard" hidden>
+                            <!-- Price row: value left + selected size right -->
+                            <div class="price-card-top-row">
+                                <div class="price-card-main">
+                                    <p id="productPrice" class="text-4xl font-bold text-gray-400">—</p>
+                                    <span id="productOldPrice" class="price-old-value"></span>
+                                    <span id="productDiscount" class="price-discount-badge"></span>
                                 </div>
+                                <span id="priceSelectedSize" class="price-selected-size"></span>
                             </div>
-                        </div>
-
-                        <div class="mt-6">
-                            <p class="text-sm font-semibold text-gray-700 mb-3 product-size-label" data-i18n="product.size">Size</p>
+                            <hr class="price-separator">
+                            <p class="price-choose-size-label">CHOOSE SIZE</p>
+                            <!-- Size selector (inside the card) -->
                             <div id="sizeSelector" class="size-selector-grid">
                                 <div class="size-group size-group-decants">
                                     <p class="size-group-label"><i class="fas fa-flask"></i> <span data-i18n="product.size_group_decants">D&eacute;cants</span></p>
@@ -550,9 +1344,22 @@ s0.parentNode.insertBefore(s1,s0);
                                     </div>
                                 </div>
                             </div>
+                            <!-- Hidden delivery info (used by JS for chip update) -->
+                            <p id="productDeliveryInfo" class="text-sm text-gray-500 mt-1" style="display:none" data-i18n="product.in_stock_delivery">In stock - Delivery in Morocco: 35 MAD (VAT included)</p>
                         </div>
 
-                        <div class="mt-6 product-cta-wrap">
+                        <!-- Shown when no prices — item is out of stock, WhatsApp inquiry available -->
+                        <div class="mt-6 pt-6 border-t border-gray-200" id="productOndemandBox" hidden>
+                            <div class="product-ondemand-box">
+                                <div class="product-ondemand-icon"><i class="fas fa-box-open"></i></div>
+                                <div>
+                                    <p class="product-ondemand-title" data-i18n="product.ondemand_title">Out of Stock</p>
+                                    <p class="product-ondemand-sub" data-i18n="product.ondemand_sub">This product is currently out of stock. Select a size and tap "Ask on WhatsApp" to be notified when it's back.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 product-cta-wrap">
                             <div class="product-cta-row flex items-center gap-3">
                                 <div id="qtyBoxContainer" class="hidden">
                                     <div class="qty-box" role="group" aria-label="Quantity selector">
@@ -631,17 +1438,41 @@ s0.parentNode.insertBefore(s1,s0);
                             </div>
                         </div>
                     </div>
+
+                    <!-- ── Trust grid (below info card, inside info col) ── -->
+                    <div class="ipp-trust-grid mt-4">
+                        <div class="ipp-trust-item">
+                            <div class="ipp-trust-icon"><i class="fas fa-certificate"></i></div>
+                            <span class="ipp-trust-title">100% Authentic</span>
+                            <span class="ipp-trust-sub">Official brands only</span>
+                        </div>
+                        <div class="ipp-trust-item">
+                            <div class="ipp-trust-icon"><i class="fas fa-money-bill-wave"></i></div>
+                            <span class="ipp-trust-title">Cash on Delivery</span>
+                            <span class="ipp-trust-sub">Pay when you receive</span>
+                        </div>
+                        <div class="ipp-trust-item">
+                            <div class="ipp-trust-icon"><i class="fas fa-truck-fast"></i></div>
+                            <span class="ipp-trust-title">Fast Delivery</span>
+                            <span class="ipp-trust-sub">24–48h across Morocco</span>
+                        </div>
+                        <div class="ipp-trust-item">
+                            <div class="ipp-trust-icon"><i class="fas fa-rotate-left"></i></div>
+                            <span class="ipp-trust-title">Easy Returns</span>
+                            <span class="ipp-trust-sub">7 days to change mind</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
             <div class="border-b border-gray-200">
-                <div class="flex flex-wrap gap-2 md:gap-4" id="productTabs" role="tablist" aria-label="Product information tabs">
+                <div class="flex" id="productTabs" role="tablist" aria-label="Product information tabs">
                     <button class="tab-btn is-active" type="button" data-tab="details" role="tab" aria-selected="true" data-i18n="product.tab_details">Details</button>
                     <button class="tab-btn" type="button" data-tab="notes" role="tab" aria-selected="false" data-i18n="product.tab_notes">Notes</button>
                     <button class="tab-btn" type="button" data-tab="ingredients" role="tab" aria-selected="false" data-i18n="product.tab_ingredients">Ingredients</button>
-                    <button class="tab-btn" type="button" data-tab="reviews" role="tab" aria-selected="false" data-i18n="product.tab_reviews">Reviews</button>
+                    <button class="tab-btn" type="button" data-tab="reviews" role="tab" aria-selected="false" data-i18n="product.tab_reviews">Reviews<span class="tab-btn-count" id="tabBtnReviewBadge" style="display:none"></span></button>
                 </div>
             </div>
 
@@ -781,7 +1612,7 @@ s0.parentNode.insertBefore(s1,s0);
             </div>
         </section>
 
-        <section id="reviews-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 ipo-reveal">
+        <section id="reviews-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 ipo-reveal">
             <div class="flex items-center gap-4 mb-8">
                 <div>
                     <p class="product-section-kicker" data-i18n="product.reviews_kicker">Community</p>
@@ -872,12 +1703,12 @@ s0.parentNode.insertBefore(s1,s0);
             </div>
         </section>
 
-        <section class="ipordise-adv-news py-16 border-t border-gray-200">
+        <section class="ipordise-adv-news py-10 border-t border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h3 class="text-center text-xl font-bold text-gray-800 mb-2 ipordise-adv-title" data-i18n="product.adv_title">IPORDISE Advantages</h3>
                 <p class="text-center text-sm text-gray-500 mb-10">Every order, every time &mdash; the promise we stand by.</p>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 text-center ipordise-adv-grid">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-center ipordise-adv-grid">
                     <div class="flex flex-col items-center justify-center space-y-3 ipordise-adv-item">
                         <span class="ipordise-adv-icon-box"><i class="fas fa-truck-fast ipordise-adv-icon"></i></span>
                         <div>
@@ -1363,9 +2194,32 @@ s0.parentNode.insertBefore(s1,s0);
       import { auth, db } from '../auth/firebase.js';
       import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
       import {
-        collection, doc, setDoc, getDocs, getDoc,
+        collection, doc, setDoc, getDocs, getDoc, deleteDoc,
         query, where, orderBy, serverTimestamp
       } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
+
+      // ── Admin reply helpers ────────────────────────────────────────────
+      // Replies stored in Firestore: adminReplies/{replyId} with fields: reviewId, text, createdAt
+      const _adminRepliesCache = {}; // reviewId -> reply text
+      const loadAdminReplies = async () => {
+        try {
+          const snap = await getDocs(query(collection(db, 'adminReplies'), where('productId', '==', productId)));
+          snap.forEach(d => { const r = d.data(); _adminRepliesCache[r.reviewId] = { text: r.text, docId: d.id }; });
+        } catch(e) { /* non-critical */ }
+      };
+      const renderAdminReply = (replyText) => {
+        if (!replyText) return '';
+        const safe = replyText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return `<div class="admin-reply-block">
+          <div class="admin-reply-logo">
+            <img src="/assets/logo.png" alt="IPORDISE">
+          </div>
+          <div style="flex:1;min-width:0;">
+            <p class="admin-reply-label">IPORDISE Team</p>
+            <p class="admin-reply-text">${safe}</p>
+          </div>
+        </div>`;
+      };
 
       // ── Derive a stable product ID from the URL ────────────────────────
       const params      = new URLSearchParams(window.location.search);
@@ -1477,12 +2331,156 @@ s0.parentNode.insertBefore(s1,s0);
         if (tabVal)   tabVal.textContent = avgStr;
         if (tabStars) tabStars.innerHTML = starsHtml(avg);
         if (tabCount) tabCount.textContent = 'Based on ' + n + ' verified review' + (n === 1 ? '' : 's');
+        const tabBadge = document.getElementById('tabBtnReviewBadge');
+        if (tabBadge) { tabBadge.textContent = ' (' + n + ')'; tabBadge.style.display = ''; }
+      };
+
+      // ── Fake review generator ──────────────────────────────────────────
+      const _fakeHash = (str) => { let h = 0; for (let i = 0; i < str.length; i++) { h = (Math.imul(31, h) + str.charCodeAt(i)) | 0; } return Math.abs(h); };
+      const _fakePick = (arr, seed) => arr[Math.abs(seed) % arr.length];
+      const _fakeNames = {
+        men:   ['Yassine Alaoui', 'Mehdi Benhaddou', 'Omar El Fassi', 'Anas Filali', 'Hamza Kabbaj', 'Rachid Mansouri', 'Karim Drissi', 'Bilal Hajjam', 'Tarik Nadif', 'Zakaria Lahlou', 'Soufiane Rharbaoui', 'Adil Chraibi', 'Mouad Tazi', 'Ismail Kettani', 'Younes Sekkouri'],
+        women: ['Salma Bennani', 'Imane El Idrissi', 'Nadia Hassane', 'Sara Aït Baha', 'Khadija Rbii', 'Aya Mouhib', 'Fatima Zahra', 'Hind Kasmi', 'Meryem Ouali', 'Amina Slaoui', 'Loubna Taoussi', 'Zineb Fassi', 'Hajar Bouazza', 'Kawtar Moussaoui', 'Rim Squalli']
+      };
+      const _fakeCities = ['Casablanca', 'Rabat', 'Marrakech', 'Tanger', 'Agadir', 'Fès', 'Meknès', 'Oujda', 'Kenitra', 'Tétouan', 'El Jadida'];
+      // Three pools per language, each split into male / female / neutral
+      // Male-specific texts use masculine grammar; female-specific use feminine grammar.
+      // Neutral texts are safe for either gender.
+      const _fakeTexts = {
+        ar: {
+          m: [
+            "العطر ماشي غير عطر، هو هوية. كيبقى معي من الصباح حتى العشاء وكل واحد كيسألني عليه.",
+            "كانديرو لعرس وما خرجت حتى جلس بجانبي واحد وسألني عن العطر. السيلاج مذهل.",
+            "الفلاكون وصل مغلف بعناية وفي حالة مثالية. الريحة أعمق وأكثر ثراءً مما توقعت.",
+            "ندمت أنني ما شريتوش بكري. التبقية وحدها تستاهل السعر.",
+            "جربت بزاف ديال العطور في هاد المدى، هاد العطر مستوى مختلف تماما.",
+            "كانديرو للخدمة يوميا — خفيف في الافتتاح وكيصير أعمق بالعصر. ماشي غالب أبدا.",
+            "راني في الفلاكونة التانية ديالي. لا أدري كيفاش كنت كنعيش بلاه.",
+            "الافتتاح حار وتوابلي، ثم كيهبط لشيء خشبي ودافئ. تطور رائع على الجلدة.",
+            "كاتساءل كيفاش عطر بهاد السعر عنده هاد الجودة. IPORDISE ما كيخيبوش.",
+            "طلبتو الجمعة ووصل الاثنين. التغليف أنيق والعطر أحسن مما توقعت بمراحل.",
+            "السيلاج قوي بلا ما يكون غالب. كل واحد كيوقف عندي كيسألني: شنو هاد العطر؟",
+            "ما كنت نتوقعش هاد الجودة من شراء من النت. IPORDISE غيروا نظرتي للأمور."
+          ],
+          f: [
+            "عطر راقي بحق. ريحته كتبقى معي من الصباح لما نوصل للدار بالليل. التوصيل سريع والتغليف فاخر.",
+            "أول مرة نطلب عطر من النت وما ندمتش. الجودة فاقت كل التوقعات والسيلاج لطيف مش ثقيل.",
+            "اشتريته لروحي هدية وما ندمت. الريحة أنثوية وراقية، كل صاحبة كتسألني عليها.",
+            "وصل مغلف بشكل جميل بحال هدية حقيقية. فتحته وإيه — الريحة أحلى بكثير مما كنت ناوية.",
+            "راني في الفلاكونة التانية. الريحة كتتطور بشكل جميل على الجلدة وما كتغلبش.",
+            "صحبتي سألتني عليه وقلتلها تطلبه من IPORDISE. جودة ما كنت ننتظرها بهاد السعر.",
+            "التوصيل جاء اليوم التالي في فاس. التغليف أنيق والريحة خلبت عقلي من أول نفس.",
+            "كانت عندي تردد نشري من النت لكن IPORDISE ما خيبوش. العطر أصلي 100% وجميل.",
+            "السيلاج خفيف ورقيق ومناسب للكتس والسهرات على حد سواء. راضية 100%.",
+            "أول ما فتحت الفلاكون انبسطت — ريحة عميقة ومميزة وتبقى طول النهار.",
+            "هدية من عندي لروحي وما ندمت ولا ثانية. الريحة فاخرة والفلاكون أنيق.",
+            "كاين عطور كتوصل للقلب، هاد منهم. تفاوقات توقعاتي بزاف."
+          ]
+        },
+        en: {
+          m: [
+            "Ma kntch dayyr bali had l3tr ghay9dar yb9a m3aya haka. Min sba7 l lil sallya — sillage kaytayar.",
+            "Darrtو l 3rs u 5 dyal nas w9fu 3ndi u 9alwli: chno had l3tr? Ahsan taw9i3 3mr.",
+            "Jat delivery f nhar wahd, packaging mra7 l3in. L3tr nnfs bhal li khraj mn boutique kbira.",
+            "Darrt fl bureau nhar kaml — raqi bla ma ykun ghlab. Kollachi kaytbassam u kayso2lwni.",
+            "Lqito f Instagram u ddabt l IPORDISE. L7a9 ma kandmch — original u packaging f7al.",
+            "F flakona tania diyali. Ma bghitsh nkhayal rasi bla had l3tr mra okhra.",
+            "Opening bzzaf tayyba : pepper u 3ud, u mn b3d kaynzl l chi boisé dafi. Tatawwul 3ajib.",
+            "Pri9 mzyan u joda li ma kntch ndair baliha. Rja3t nchri 9bal matkhlas.",
+            "Wsal mn ghad l Marrakech. Fla9on zwin u l3tr ahla f 7qi9a mn ay sswara.",
+            "Kont 3ndi chek qbal lma nchri, lkn joda 9n3atni. Rja3t nchri morra tanya.",
+            "Sillage 9awi bla ma ykun 7arj. Dayman kayji wahd kayso2lwni : chno had lkhamra?",
+            "Tbaqiya wahdha tsstahal — 10 nsa3t w mazal 7adra. IPORDISE ma kaykhyyboch."
+          ],
+          f: [
+            "L3tra 3jabatni bzzaf, katsallay 3la 10 nsa3t w sillage ltiif machi ghlab. Jat delivery f nhar wahd.",
+            "Ma kntch kayfa nchari 3tra men lnet, bssah IPORDISE bnaaw 3ndi tt9a. 100% original.",
+            "Sillage ltiif u machi ghlab. Mzyana l bir u l soiree 3la had. Knno9si biha b sa77.",
+            "Rani f flakona ttania — had chi kayqol kol chi. L3tra katbqa 7ta l lil.",
+            "Packaging zwin bhal hdiya 7qi9iya. Ftha7t u l3tra ahla bzzaf mn li kont kantawwa3.",
+            "Sahbati suwlatni 3liha u 9ltlha tchari mn IPORDISE. Joda li ma kntch natawwa3ha.",
+            "Waslat mn ghad l Rabat. Fla9on ro3a u l3tra katkhlab l3a9l mn awwal nafas.",
+            "Kont 3ndi tardid nchri men lnet lkn IPORDISE ma khyybow — original u joda tamam.",
+            "Chofto 3nd wahda u b9it nqallab 3lih. Lqito 3nd IPORDISE u waslni sbi3.",
+            "Awwal ma f7a9t lfla9on n9assit — ri7a 3ami9a u tamayyz, tbqa m3ak nhar kaml.",
+            "Tbaqiya mzyana w 3tra aslia. IPORDISE jadiin, kayjawbu 3la kol chi.",
+            "Kayn 3tra katchi l qalb — hadi menhom. Tfaw9at tawaqo3ati bzzaf."
+          ]
+        },
+        fr: {
+          m: [
+            "Franchement bluffé par la longévité — porté depuis 8h, le sillage est encore là à 18h. Livraison express, emballage parfait.",
+            "Coup de cœur immédiat. L'ouverture est épicée et chaude, puis ça évolue vers quelque chose de boisé et profond. Superbe développement.",
+            "Deuxième flacon commandé. Je ne pensais pas trouver cette qualité à ce prix. IPORDISE m'a définitivement convaincu.",
+            "Porté à un mariage samedi — au moins cinq personnes m'ont demandé le nom du parfum. Sillage discret mais très présent.",
+            "Projection excellente sans être agressive. Idéal au bureau comme en soirée. Je recommande sans la moindre hésitation.",
+            "Reçu en 24h à Rabat, emballage luxueux. Le jus est identique à ce que j'avais testé en boutique à Paris.",
+            "J'avais des doutes sur l'authenticité — ils ont disparu dès l'ouverture du flacon. Parfum irréprochable.",
+            "Beau sillage et développement remarquable sur la peau. L'accord boisé-ambré tient facilement 10 heures.",
+            "Premier achat sur IPORDISE, certainement pas le dernier. Service sérieux, parfum authentique, prix honnête.",
+            "Le fond du parfum est exceptionnel — chaud, sensuel, persistant. Je ne commanderai plus ailleurs.",
+            "Reçu le lendemain à Casablanca. Honnêtement, rapport qualité-prix imbattable.",
+            "Comparé à des achats en duty-free : qualité identique, prix bien inférieur. IPORDISE a tout compris."
+          ],
+          f: [
+            "Vraiment ravie de cet achat. Le sillage est délicat sans être étouffant, et la tenue dépasse les 10 heures. Livraison rapide.",
+            "Coup de cœur absolu. La senteur est féminine et raffinée, avec une belle évolution sur la peau tout au long de la journée.",
+            "J'ai offert ce parfum à une amie — elle me l'a commandé elle-même deux semaines après. Ça se passe de commentaires.",
+            "Deuxième flacon pour moi. C'est devenu mon parfum de signature et je ne reviendrai plus en arrière.",
+            "Livré en 24h à Marrakech, emballage luxueux, parfum authentique. IPORDISE a gagné une cliente fidèle.",
+            "Je cherchais un parfum pour les occasions spéciales et j'ai trouvé bien mieux — un parfum pour tous les jours.",
+            "Commandé à titre d'essai et agréablement surprise par la qualité. Sillage long, élégant, jamais écrasant.",
+            "Projection parfaite — présente sans agresser. Porté au bureau, j'ai reçu de nombreux compliments.",
+            "Colis reçu intact en deux jours à Fès. Le parfum est conforme à la description, je suis vraiment comblée.",
+            "La qualité est irréprochable et le sillage remarquable. Je ne commanderai plus en boutique.",
+            "Première commande sur IPORDISE, très bonne impression générale. Le parfum est exactement ce que je cherchais.",
+            "Le fond du parfum est addictif — chaleureux, persistant, sensuel. Je reçois des compliments à chaque fois."
+          ]
+        }
+      };
+      // Pick language pool randomly per review using seed (ar ~40%, en ~30%, fr ~30%)
+      const _pickTextPool = (seed, gender) => {
+        const lang = (Math.abs(seed) % 10) < 4 ? 'ar' : (Math.abs(seed) % 10) < 7 ? 'en' : 'fr';
+        return _fakeTexts[lang][gender] || _fakeTexts[lang].m;
+      };
+      // Is Arabic pool (needs rtl)?
+      const _isArabicPool = (seed) => (Math.abs(seed) % 10) < 4;
+      // Detect product gender from the subtitle element injected by script.js
+      const _getProductGender = () => {
+        const subtitleEl = document.getElementById('productSubtitle');
+        const text = (subtitleEl ? subtitleEl.textContent : productName).toLowerCase();
+        if (text.includes("women's") || text.includes('womens') || text.includes('femme') || text.includes('for women')) return 'women';
+        if (text.includes("men's") || text.includes('mens') || text.includes('homme') || text.includes('for men')) return 'men';
+        return 'men'; // default — most products in catalog are for men
+      };
+      const buildFakeReviews = (name) => {
+        const h = _fakeHash(name || 'product');
+        const _countPool = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,22,25,28,32];
+        const count = _countPool[h % _countPool.length];
+        const productGender = _getProductGender(); // 'men' | 'women'
+        return Array.from({ length: count }, (_, i) => {
+          // Use product name + index as combined hash key so each product gets unique reviews
+          const seed   = _fakeHash((name || 'product') + '\x00' + i);
+          const stars  = [5,5,5,5,5,4,5,5,4,5][Math.abs(seed) % 10]; // mostly 5
+          // Reviewer gender must match the product's target gender
+          const gender = productGender === 'women' ? 'f' : 'm';
+          const namePool = gender === 'f' ? _fakeNames.women : _fakeNames.men;
+          const rName  = _fakePick(namePool, seed + 3);
+          const city   = _fakePick(_fakeCities, seed + 7);
+          const text   = _fakePick(_pickTextPool(seed + 13, gender), seed + 11);
+          const isRtl  = _isArabicPool(seed + 13);
+          const dayOff = (seed % 60) + 1;
+          const d = new Date(Date.UTC(2026, 0, dayOff));
+          const date = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric', timeZone:'UTC' });
+          return { _fake: true, _fakeId: `fake_${productId}_${i}`, displayName: rName, rating: stars, city, body: text, isRtl, dateStr: date };
+        });
       };
 
       // ── Render reviews list ────────────────────────────────────────────
-      const renderList = (reviews) => {
+      const renderList = (reviews, fakeRevs) => {
         if (!listWrap) return;
-        if (!reviews.length) {
+        const allFake = fakeRevs || buildFakeReviews(productName);
+        if (!reviews.length && !allFake.length) {
           listWrap.innerHTML = `<div style="padding:3rem 1.5rem;text-align:center;border:1.5px dashed #e5e7eb;border-radius:1rem;">
             <div style="width:64px;height:64px;border-radius:50%;background:#fef0f2;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fca5b0;margin:0 auto 1rem;">
               <i class="far fa-comment-dots"></i>
@@ -1493,42 +2491,115 @@ s0.parentNode.insertBefore(s1,s0);
           if (window.ipw && window.ipw.translatePage) window.ipw.translatePage();
           return;
         }
-        listWrap.innerHTML = reviews.map(r => {
+
+        // Avatar colors palette
+        const avatarPalette = ['#c8102e','#1e40af','#059669','#7c3aed','#d97706','#0369a1','#be123c','#0f766e'];
+
+        // Real reviews
+        const realHtml = reviews.map((r, idx) => {
           const initial   = (r.displayName || '?').charAt(0).toUpperCase();
           const savedPic  = r.photoURL || (r.uid ? localStorage.getItem('ipordise-avatar-' + r.uid) : null);
-          const date    = r.createdAt?.toDate
+          const date      = r.createdAt?.toDate
             ? r.createdAt.toDate().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })
             : '';
-          const safeBody = (r.body || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-          const avatarInner = savedPic
+          const safeBody  = (r.body || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          const avatarColor = avatarPalette[idx % avatarPalette.length];
+          const avatarHtml = savedPic
             ? `<img src="${savedPic}" alt="${initial}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
-            : initial;
-          const avatarBg = savedPic
-            ? 'background:none;'
-            : 'background:linear-gradient(145deg,#c8102e,#8c0b1e);font-size:1.15rem;font-weight:700;color:#fff;font-family:Georgia,serif;';
+            : `<span style="font-size:1.1rem;font-weight:800;color:#fff;font-family:Georgia,serif;z-index:1;position:relative;">${initial}</span>`;
+          const avatarStyle = savedPic
+            ? `background:none;`
+            : `background:linear-gradient(145deg,${avatarColor},${avatarColor}cc);`;
+          const helpCount = 2 + ((_fakeHash(r.id||'r') + idx) % 11);
           return `<article class="rev-card" style="margin-bottom:1rem;">
             <div class="rev-card-header">
-              <div style="width:48px;height:48px;border-radius:50%;${avatarBg}
+              <div style="width:48px;height:48px;border-radius:50%;${avatarStyle}
                 display:flex;align-items:center;justify-content:center;
-                flex-shrink:0;overflow:hidden;">
-                ${avatarInner}
+                flex-shrink:0;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.15);">
+                ${avatarHtml}
               </div>
-              <div class="rev-meta">
+              <div class="rev-meta" style="flex:1;min-width:0;">
                 <div class="rev-meta-top">
                   <h3 class="rev-name">${(r.displayName || 'Customer').replace(/</g,'&lt;')}</h3>
                   <span class="rev-verified"><i class="fas fa-circle-check"></i> Verified</span>
                 </div>
                 <div class="rev-meta-bottom">
-                  <span class="rev-stars" style="color:#f59e0b;">${starsHtml(r.rating)}
-                    <span class="rev-score">${Number(r.rating).toFixed(1)}</span>
-                  </span>
-                  ${date ? `<span class="rev-date">${date}</span>` : ''}
+                  <span class="rev-stars" style="color:#f59e0b;">${starsHtml(r.rating)}<span class="rev-score">${Number(r.rating).toFixed(1)}</span></span>
+                  ${date ? `<span class="rev-date"><i class="far fa-calendar" style="font-size:0.55rem;opacity:0.5;"></i> ${date}</span>` : ''}
                 </div>
               </div>
             </div>
-            <blockquote class="rev-body">&#8220;${safeBody}&#8221;</blockquote>
+            <blockquote class="rev-body">${safeBody}</blockquote>
+            ${renderAdminReply(_adminRepliesCache[r.id]?.text)}
+            <div class="rev-footer">
+              <button class="rev-helpful-btn" onclick="this.classList.toggle('is-liked');var c=this.querySelector('.rev-help-count');if(c){var n=parseInt(c.textContent);c.textContent=this.classList.contains('is-liked')?n+1:n-1;}"><i class="fas fa-thumbs-up"></i> Helpful <span class="rev-help-count">${helpCount}</span></button>
+            </div>
           </article>`;
         }).join('');
+
+        // Fake reviews
+        const fakeHtml = allFake.map((r, idx) => {
+          const safeText    = (r.body || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          const fakeInitial = (r.displayName || '?').charAt(0).toUpperCase();
+          const fakeColors  = ['#6366f1','#0891b2','#059669','#d97706','#7c3aed','#be123c','#0369a1','#15803d','#b45309','#1d4ed8'];
+          const fakeColor   = fakeColors[_fakeHash(r.displayName||'x') % fakeColors.length];
+          const _hSeed = _fakeHash((r.displayName||'f') + idx);
+          const helpCount   = 1 + (_hSeed % 11);
+          return `<article class="rev-card" style="margin-bottom:1rem;">
+            <div class="rev-card-header">
+              <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(145deg,${fakeColor},${fakeColor}bb);
+                display:flex;align-items:center;justify-content:center;flex-shrink:0;
+                box-shadow:0 3px 10px rgba(0,0,0,0.14);overflow:hidden;">
+                <span style="font-size:1.1rem;font-weight:800;color:#fff;font-family:Georgia,serif;">${fakeInitial}</span>
+              </div>
+              <div class="rev-meta" style="flex:1;min-width:0;">
+                <div class="rev-meta-top">
+                  <h3 class="rev-name">${(r.displayName||'').replace(/</g,'&lt;')}</h3>
+                  <span class="rev-verified"><i class="fas fa-circle-check"></i> Verified</span>
+                  ${r.city ? `<span class="rev-city"><i class="fas fa-location-dot" style="font-size:0.55rem;opacity:0.7;"></i> ${r.city}</span>` : ''}
+                </div>
+                <div class="rev-meta-bottom">
+                  <span class="rev-stars" style="color:#f59e0b;">${starsHtml(r.rating)}<span class="rev-score">${Number(r.rating).toFixed(1)}</span></span>
+                  <span class="rev-date"><i class="far fa-calendar" style="font-size:0.55rem;opacity:0.5;"></i> ${r.dateStr}</span>
+                </div>
+              </div>
+            </div>
+            <blockquote class="rev-body"${r.isRtl ? ' dir="rtl" style="text-align:right;border-left:none;border-right:3px solid #c9a227;border-radius:0.65rem 0 0 0.65rem;padding-right:1.1rem;padding-left:0.9rem;"' : ''}>${safeText}</blockquote>
+            ${renderAdminReply(_adminRepliesCache[r._fakeId]?.text)}
+            <div class="rev-footer">
+              <button class="rev-helpful-btn" onclick="this.classList.toggle('is-liked');var c=this.querySelector('.rev-help-count');if(c){var n=parseInt(c.textContent);c.textContent=this.classList.contains('is-liked')?n+1:n-1;}"><i class="fas fa-thumbs-up"></i> Helpful <span class="rev-help-count">${helpCount}</span></button>
+            </div>
+          </article>`;
+        }).join('');
+
+        listWrap.innerHTML = (function () {
+          /* Split into individual article strings */
+          const splitArticles = (html) => {
+            const matches = html.match(/<article[\s\S]*?<\/article>/g);
+            return matches || [];
+          };
+          const realArr = splitArticles(realHtml);
+          const fakeArr = splitArticles(fakeHtml);
+          const all = realArr.concat(fakeArr);
+          const INITIAL = 3;
+          if (all.length <= INITIAL) return all.join('');
+          const visible = all.slice(0, INITIAL).join('');
+          const hidden  = all.slice(INITIAL).join('');
+          return visible
+            + `<div id="ippMoreRevs" style="display:none;">${hidden}</div>`
+            + `<div id="ippSeeMoreWrap" style="text-align:center;margin-top:0.5rem;margin-bottom:0.25rem;">
+                <button id="ippSeeMoreBtn" onclick="
+                  document.getElementById('ippMoreRevs').style.display='';
+                  document.getElementById('ippSeeMoreWrap').style.display='none';
+                " style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.6rem 1.5rem;
+                  background:#fff;border:1.5px solid #e5e7eb;border-radius:99px;
+                  font-size:0.78rem;font-weight:700;color:#374151;cursor:pointer;
+                  transition:border-color 0.15s,color 0.15s;">
+                  <i class="fas fa-chevron-down" style="font-size:0.65rem;"></i>
+                  See all ${all.length} reviews
+                </button>
+              </div>`;
+        }());
       };
 
       // ── Load reviews from Firestore ────────────────────────────────────
@@ -1542,8 +2613,10 @@ s0.parentNode.insertBefore(s1,s0);
           const snap = await getDocs(q);
           const revs = [];
           snap.forEach(d => revs.push({ id: d.id, ...d.data() }));
-          renderStats(revs);
-          renderList(revs);
+          await loadAdminReplies();
+          const fakeRevs = buildFakeReviews(productName);
+          renderStats([...revs, ...fakeRevs.map(f => ({ rating: f.rating }))]);
+          renderList(revs, fakeRevs);
         } catch (e) {
           // Composite index may not exist yet — try without orderBy
           try {
@@ -1552,8 +2625,10 @@ s0.parentNode.insertBefore(s1,s0);
             const revs = [];
             snap.forEach(d => revs.push({ id: d.id, ...d.data() }));
             revs.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-            renderStats(revs);
-            renderList(revs);
+            await loadAdminReplies();
+            const fakeRevs = buildFakeReviews(productName);
+            renderStats([...revs, ...fakeRevs.map(f => ({ rating: f.rating }))]);
+            renderList(revs, fakeRevs);
           } catch (e2) {
             console.error('reviews load error:', e2);
             if (listWrap) listWrap.innerHTML = '<p style="color:#dc2626;padding:1rem;font-size:0.82rem;">Could not load reviews.</p>';
@@ -1716,6 +2791,7 @@ s0.parentNode.insertBefore(s1,s0);
 
       // ── Auth observer — init everything ───────────────────────────────
       onAuthStateChanged(auth, async (user) => {
+        currentUser = user;
         let existing = null;
         if (user) {
           try {
@@ -1735,5 +2811,239 @@ s0.parentNode.insertBefore(s1,s0);
     </script>
 
     <script src="/assets/scroll-progress.js" defer></script>
+
+    <!-- ╔══════════════════════════════════════════════════════════╗
+         ║  IPORDISE — Sticky Mobile Bottom Bar + Social Proof     ║
+         ╚══════════════════════════════════════════════════════════╝ -->
+
+
+
+    <script>
+    /* ── Social proof viewing counter ──────────────────────── */
+    (function () {
+        'use strict';
+        var mainBtn  = document.getElementById('addToCartBtn');
+        var mainName = document.getElementById('productName');
+
+        /* ── Social proof viewing counter ────────────────────── */
+        var viewingWrap = document.querySelector('.product-cta-wrap');
+        if (viewingWrap) {
+            if (!document.getElementById('ippViewPillCss')) {
+                var ps = document.createElement('style');
+                ps.id = 'ippViewPillCss';
+                ps.textContent = [
+                    /* Magic entrance — spring pop with blur */
+                    '@keyframes ivpIn{0%{opacity:0;transform:translateY(16px) scale(0.74);filter:blur(7px)}',
+                    '55%{opacity:1;filter:blur(0)}74%{transform:translateY(-4px) scale(1.07)}89%{transform:translateY(1px) scale(0.98)}100%{transform:translateY(0) scale(1)}}',
+                    /* Rotating aurora border */
+                    '@keyframes ivpAurora{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}',
+                    /* Dot ping */
+                    '@keyframes ivpPing{0%{box-shadow:0 0 0 0 rgba(234,88,12,0.85)}',
+                    '45%{box-shadow:0 0 0 7px rgba(234,88,12,0)}58%{box-shadow:0 0 0 0 rgba(234,88,12,0)}',
+                    '75%{box-shadow:0 0 0 0 rgba(234,88,12,0.45)}93%{box-shadow:0 0 0 4px rgba(234,88,12,0)}',
+                    '100%{box-shadow:0 0 0 0 rgba(234,88,12,0)}}',
+                    /* Dot breathe */
+                    '@keyframes ivpBreath{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:0.8}}',
+                    /* Gleam sweep */
+                    '@keyframes ivpGleam{0%,65%{left:-88%;opacity:0}70%{opacity:1}100%{left:128%;opacity:0}}',
+                    /* Number flip out */
+                    '@keyframes ivpNumOut{0%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}',
+                    '100%{opacity:0;transform:translateY(-13px) scale(0.62);filter:blur(5px)}}',
+                    /* Number flip in */
+                    '@keyframes ivpNumIn{0%{opacity:0;transform:translateY(15px) scale(0.62);filter:blur(5px)}',
+                    '52%{filter:blur(0)}78%{transform:translateY(-2px) scale(1.1)}100%{opacity:1;transform:translateY(0) scale(1)}}',
+                    /* Pill bounce on number change */
+                    '@keyframes ivpBounce{0%{transform:scale(1)}35%{transform:scale(1.06)}65%{transform:scale(0.97)}85%{transform:scale(1.02)}100%{transform:scale(1)}}',
+                    /* Sparkle particle flies out */
+                    '@keyframes ivpSpark{0%{opacity:1;transform:translate(0,0) scale(1) rotate(0deg)}',
+                    '100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(0) rotate(var(--sr))}}',
+                    /* Floating star drifts upward */
+                    '@keyframes ivpFloat{0%{opacity:1;transform:translate(0,0) scale(1)}',
+                    '60%{opacity:0.6}100%{opacity:0;transform:translate(var(--fx),var(--fy)) scale(0.25)}}',
+                    /* ── Wrapper: rotating gradient border ── */
+                    '#ippViewingPill-wrap{',
+                    'display:inline-block;',
+                    'padding:1.5px;',
+                    'border-radius:100px;',
+                    'background:linear-gradient(135deg,#f59e0b,#f97316,#fde68a,#ea580c,#fbbf24,#fed7aa,#f59e0b);',
+                    'background-size:300% 300%;',
+                    'animation:ivpAurora 3.8s ease infinite;',
+                    'margin-top:14px;',
+                    'position:relative;',
+                    'box-shadow:0 0 18px rgba(251,146,60,0.25),0 4px 20px rgba(234,88,12,0.12);}',
+                    /* ── Pill ── */
+                    '#ippViewingPill{',
+                    'display:inline-flex;align-items:center;gap:8px;',
+                    'background:rgba(255,255,255,0.97);',
+                    'backdrop-filter:blur(16px) saturate(1.7);-webkit-backdrop-filter:blur(16px) saturate(1.7);',
+                    'border-radius:100px;',
+                    'padding:7px 16px 7px 11px;',
+                    'animation:ivpIn 0.86s cubic-bezier(0.34,1.45,0.64,1) 0.4s both;',
+                    'position:relative;overflow:hidden;cursor:default;}',
+                    /* Top shimmer line */
+                    '#ippViewingPill::before{content:"";position:absolute;top:0;left:10%;width:80%;height:1px;',
+                    'background:linear-gradient(90deg,transparent,rgba(255,255,255,0.92) 50%,transparent);pointer-events:none;}',
+                    /* Gleam sweep */
+                    '#ippViewingPill::after{content:"";position:absolute;top:0;left:-88%;width:46%;height:100%;',
+                    'background:linear-gradient(108deg,transparent 12%,rgba(255,255,255,0.65) 50%,transparent 88%);',
+                    'animation:ivpGleam 5.5s ease-in-out 1.8s infinite;pointer-events:none;}',
+                    /* Dot wrapper */
+                    '#ippViewingPill .ivp-dot-wrap{position:relative;display:inline-flex;align-items:center;',
+                    'justify-content:center;width:16px;height:16px;border-radius:50%;flex-shrink:0;',
+                    'background:rgba(234,88,12,0.11);}',
+                    /* Dot */
+                    '#ippViewingPill .ivp-dot{width:8px;height:8px;border-radius:50%;',
+                    'background:radial-gradient(circle at 35% 35%,#fb923c,#ea580c);flex-shrink:0;',
+                    'box-shadow:0 0 0 0 rgba(234,88,12,0.7);',
+                    'animation:ivpPing 2.2s ease-out infinite,ivpBreath 2.2s ease-in-out infinite;',
+                    'position:relative;z-index:1;}',
+                    /* LIVE micro-label */
+                    '#ippViewingPill .ivp-live{font-size:0.52rem;font-weight:800;letter-spacing:0.09em;',
+                    'color:#ea580c;text-transform:uppercase;line-height:1;opacity:0.9;}',
+                    /* Divider */
+                    '#ippViewingPill .ivp-sep{width:1px;height:12px;background:rgba(234,88,12,0.22);',
+                    'flex-shrink:0;border-radius:1px;}',
+                    /* Text */
+                    '#ippViewingPill .ivp-text{font-size:0.72rem;font-weight:600;color:#374151;',
+                    'letter-spacing:0.012em;white-space:nowrap;display:inline-flex;align-items:baseline;}',
+                    /* Animated number */
+                    '#ippViewingPill .ivp-num{display:inline-block;font-size:0.83rem;font-weight:800;',
+                    'color:#c2410c;font-variant-numeric:tabular-nums;min-width:1.4ch;',
+                    'text-align:right;margin-right:0.26em;line-height:1;}',
+                    '#ippViewingPill .ivp-num.ivp-out{animation:ivpNumOut 0.18s ease-in forwards!important;}',
+                    '#ippViewingPill .ivp-num.ivp-in{animation:ivpNumIn 0.38s cubic-bezier(0.34,1.6,0.64,1) forwards!important;}',
+                    '#ippViewingPill.ivp-bounce{animation:ivpBounce 0.44s cubic-bezier(0.34,1.5,0.64,1)!important;}',
+                    /* Sparkle & float particles */
+                    '.ivp-spark{position:absolute;border-radius:50%;pointer-events:none;z-index:20;',
+                    'animation:ivpSpark 0.68s ease-out forwards;}',
+                    '.ivp-star{position:absolute;pointer-events:none;z-index:20;line-height:1;',
+                    'animation:ivpFloat 1.5s ease-out forwards;}'
+                ].join('');
+                document.head.appendChild(ps);
+            }
+
+            /* ── Spawn sparkle dots in all directions ── */
+            var _ivpColors = ['#f59e0b','#f97316','#fde68a','#fb923c','#fbbf24','#fed7aa'];
+            function _ivpBurst(container, count) {
+                for (var i = 0; i < count; i++) {
+                    (function (i) {
+                        setTimeout(function () {
+                            var sp = document.createElement('span');
+                            sp.className = 'ivp-spark';
+                            var angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.7;
+                            var dist  = 16 + Math.random() * 24;
+                            var size  = 3 + Math.random() * 4;
+                            sp.style.cssText =
+                                'left:'  + (15 + Math.random() * 70) + '%;' +
+                                'top:50%;' +
+                                'width:'  + size + 'px;height:' + size + 'px;' +
+                                'background:' + _ivpColors[i % _ivpColors.length] + ';' +
+                                '--sx:' + Math.round(Math.cos(angle) * dist) + 'px;' +
+                                '--sy:' + Math.round(Math.sin(angle) * dist) + 'px;' +
+                                '--sr:' + Math.round((Math.random() - 0.5) * 400) + 'deg;';
+                            container.appendChild(sp);
+                            setTimeout(function () { if (sp.parentNode) sp.parentNode.removeChild(sp); }, 720);
+                        }, i * 28);
+                    }(i));
+                }
+            }
+
+            /* ── Spawn floating star chars that drift upward ── */
+            var _ivpStars = ['\u2726','\u2727','\u22c6','\u00b7','\u2605'];
+            function _ivpFloatStars(container, count) {
+                for (var i = 0; i < count; i++) {
+                    (function (i) {
+                        setTimeout(function () {
+                            var st = document.createElement('span');
+                            st.className = 'ivp-star';
+                            st.textContent = _ivpStars[Math.floor(Math.random() * _ivpStars.length)];
+                            var xDrift = Math.round((Math.random() - 0.5) * 22);
+                            var yRise  = -(26 + Math.random() * 22);
+                            st.style.cssText =
+                                'left:' + (8 + Math.random() * 84) + '%;' +
+                                'top:'  + (25 + Math.random() * 50) + '%;' +
+                                'font-size:' + (7 + Math.random() * 7) + 'px;' +
+                                'color:' + _ivpColors[i % _ivpColors.length] + ';' +
+                                '--fx:' + xDrift + 'px;--fy:' + Math.round(yRise) + 'px;';
+                            container.appendChild(st);
+                            setTimeout(function () { if (st.parentNode) st.parentNode.removeChild(st); }, 1550);
+                        }, i * 200);
+                    }(i));
+                }
+            }
+
+            var _ivpHour  = new Date().getHours();
+            var _ivpNight = _ivpHour >= 23 || _ivpHour < 6;
+            var base = _ivpNight ? 1 + Math.floor(Math.random() * 2)
+                                 : 1 + Math.floor(Math.random() * 4);
+
+            /* Outer wrapper carries the rotating gradient border */
+            var pillWrap = document.createElement('div');
+            pillWrap.id  = 'ippViewingPill-wrap';
+
+            var pill = document.createElement('div');
+            pill.id  = 'ippViewingPill';
+            pill.innerHTML =
+                '<span class="ivp-dot-wrap"><span class="ivp-dot"></span></span>' +
+                '<span class="ivp-live">Live</span>' +
+                '<span class="ivp-sep"></span>' +
+                '<span class="ivp-text"><span class="ivp-num" id="ippViewCount">' + base + '</span>people viewing this</span>';
+
+            pillWrap.appendChild(pill);
+            viewingWrap.parentNode.insertBefore(pillWrap, viewingWrap.nextSibling);
+
+            /* Entrance sparkle burst after spring animation lands (~1.3s) */
+            setTimeout(function () {
+                _ivpBurst(pillWrap, 12);
+                _ivpFloatStars(pillWrap, 4);
+            }, 1300);
+
+            /* Periodic floating stars every 4–8s */
+            (function _schedule() {
+                setTimeout(function () {
+                    var w = document.getElementById('ippViewingPill-wrap');
+                    if (!w) return;
+                    _ivpFloatStars(w, 2 + Math.floor(Math.random() * 3));
+                    _schedule();
+                }, 4000 + Math.random() * 4000);
+            }());
+
+            /* Fluctuate every 20–40s */
+            setInterval(function () {
+                var numEl = document.getElementById('ippViewCount');
+                if (!numEl) return;
+                var h     = new Date().getHours();
+                var night = h >= 23 || h < 6;
+                var cur   = parseInt(numEl.textContent) || base;
+                var next  = Math.max(1, Math.min(night ? 2 : 4, cur + (Math.random() < 0.55 ? 1 : -1)));
+                if (next === cur) return;
+                numEl.classList.add('ivp-out');
+                setTimeout(function () {
+                    numEl.textContent = next;
+                    numEl.classList.remove('ivp-out');
+                    numEl.classList.add('ivp-in');
+                    var p = document.getElementById('ippViewingPill');
+                    if (p) { p.classList.add('ivp-bounce'); }
+                    /* Mini burst on number change */
+                    var w = document.getElementById('ippViewingPill-wrap');
+                    if (w) { _ivpBurst(w, 7); _ivpFloatStars(w, 2); }
+                    setTimeout(function () {
+                        numEl.classList.remove('ivp-in');
+                        var p2 = document.getElementById('ippViewingPill');
+                        if (p2) { p2.classList.remove('ivp-bounce'); }
+                    }, 450);
+                }, 190);
+            }, 20000 + Math.random() * 20000);
+        }
+
+        /* ── Shake keyframe for size selector nudge ──────────── */
+        if (!document.getElementById('ippShakeKf')) {
+            var kfStyle = document.createElement('style');
+            kfStyle.id = 'ippShakeKf';
+            kfStyle.textContent = '@keyframes ipp-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}';
+            document.head.appendChild(kfStyle);
+        }
+    }());
+    </script>
 </body>
 </html>

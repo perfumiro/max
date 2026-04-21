@@ -1978,6 +1978,77 @@ s0.parentNode.insertBefore(s1,s0);
     </script>
 
     <script src="assets/scroll-progress.js" defer></script>
+
+    <script>
+    /* ── Inject star ratings — exact same logic as product.html buildFakeReviews ── */
+    (function () {
+        /* Identical to _fakeHash() in product.html */
+        function fakeHash(str) {
+            var h = 0;
+            for (var i = 0; i < str.length; i++) {
+                h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+            }
+            return Math.abs(h);
+        }
+        /* Wide varied count pool — 2 to 32 */
+        function getFakeCount(name) {
+            var pool = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 25, 28, 32];
+            return pool[fakeHash(name || 'product') % pool.length];
+        }
+        /* Average the same star pool product.html uses: [5,5,5,5,5,4,5,5,4,5] */
+        function getFakeRating(name) {
+            var count = getFakeCount(name);
+            var pool  = [5,5,5,5,5,4,5,5,4,5];
+            var total = 0;
+            for (var i = 0; i < count; i++) {
+                var seed = fakeHash((name || 'product') + '\x00' + i);
+                total += pool[seed % 10];
+            }
+            return (total / count).toFixed(1);
+        }
+        /* Identical to starsHtml() in product.html */
+        function starsHtml(n) {
+            var h = '';
+            for (var i = 1; i <= 5; i++) {
+                if (n >= i)         h += '<i class="fas fa-star"></i>';
+                else if (n >= i-.5) h += '<i class="fas fa-star-half-alt"></i>';
+                else                h += '<i class="far fa-star" style="color:#d1d5db;"></i>';
+            }
+            return h;
+        }
+        function injectRatings() {
+            var cards = document.querySelectorAll('[data-discover-grid] .js-product-link[data-product-name]');
+            cards.forEach(function (card) {
+                if (card.querySelector('.disc-star-row')) return;
+                var name   = card.dataset.productName || '';
+                var count  = getFakeCount(name);
+                var rating = parseFloat(getFakeRating(name));
+                var label  = count === 1 ? '(1 review)' : '(' + count + ' reviews)';
+                var row = document.createElement('div');
+                row.className = 'disc-star-row';
+                row.style.cssText = 'display:inline-flex;align-items:center;gap:6px;margin-top:2px;margin-bottom:8px;';
+                row.innerHTML =
+                    '<span class="text-yellow-400 text-sm" style="display:flex;gap:1px;">' + starsHtml(rating) + '</span>' +
+                    '<span class="text-sm text-gray-500">' + label + '</span>';
+                var body = card.querySelector('.flex.flex-col.flex-grow');
+                if (!body) return;
+                var badges = body.querySelector('.flex.items-center.flex-wrap.gap-1\\.5, .flex.items-center.gap-1\\.5, .flex.items-center.gap-2');
+                if (badges) body.insertBefore(row, badges);
+                else body.appendChild(row);
+            });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', injectRatings);
+        } else {
+            injectRatings();
+        }
+        var observer = new MutationObserver(function (muts) {
+            muts.forEach(function (m) { if (m.addedNodes.length) injectRatings(); });
+        });
+        var grid = document.querySelector('[data-discover-grid]');
+        if (grid) observer.observe(grid, { childList: true, subtree: true });
+    })();
+    </script>
 </body>
 </html>
 

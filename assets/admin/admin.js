@@ -7,7 +7,7 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
 import {
   getFirestore, collection, doc,
-  getDoc, getDocs, setDoc,
+  getDoc, getDocs, setDoc, deleteDoc,
   query, orderBy, limit, where,
 } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
 
@@ -93,6 +93,7 @@ const switchView = (name) => {
   if (name === 'activity')  loadActivity().catch(e => toast(e.message, 'error'));
   if (name === 'orders')    loadOrdersView().catch(e => toast(e.message, 'error'));
   if (name === 'customers') loadCustomersView().catch(e => toast(e.message, 'error'));
+  if (name === 'reviews')   loadReviewsView().catch(e => toast(e.message, 'error'));
   if (window.innerWidth < 768) closeMobileSidebar();
 };
 const initSidebar = () => {
@@ -972,3 +973,119 @@ const loadCustomersView = async () => {
 
 init();
 _initOrdersFilters();
+
+// ─── REVIEWS VIEW ──────────────────────────────────────────────────────────────
+let _allReviews = [];
+let _pendingReplyId = null;
+
+const starsHtmlAdmin = (n) => {
+  let s = '';
+  for (let i = 1; i <= 5; i++) s += `<i class="${i <= n ? 'fas' : 'far'} fa-star" style="color:#f59e0b;font-size:0.75rem;"></i>`;
+  return s;
+};
+
+const renderReviewsAdmin = (reviews) => {
+  const wrap = qs('#reviewsList');
+  if (!wrap) return;
+  if (!reviews.length) {
+    wrap.innerHTML = `<div style="text-align:center;padding:32px;color:var(--muted)">No reviews found.</div>`;
+    return;
+  }
+  wrap.innerHTML = reviews.map(r => {
+    const date = r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : (r.dateStr || '');
+    const hasReply = !!r.adminReply;
+    return `<div class="card" style="padding:0;overflow:hidden;" data-rid="${esc(r.id)}">
+      <div class="card-body" style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
+        <div style="width:40px;height:40px;border-radius:50%;background:#6366f1;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:1rem;flex-shrink:0;">${esc((r.displayName||'?').charAt(0).toUpperCase())}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:2px;">
+            <span style="font-weight:700;font-size:0.88rem;color:var(--text);">${esc(r.displayName||'Customer')}</span>
+            ${r.city ? `<span style="font-size:0.72rem;color:var(--muted);">${esc(r.city)}</span>` : ''}
+            <span style="font-size:0.72rem;color:var(--muted);margin-left:auto;">${date}</span>
+          </div>
+          <div style="margin-bottom:4px;">${starsHtmlAdmin(r.rating||5)}</div>
+          <p style="font-size:0.85rem;color:var(--text);margin:0 0 4px;" ${r.isRtl ? 'dir="rtl"' : ''}>${esc(r.body||'')}</p>
+          <p style="font-size:0.75rem;color:var(--muted);margin:0;">Product: <strong>${esc(r.productName||r.productId||'')}</strong></p>
+          ${hasReply ? `<div style="margin-top:8px;padding:8px 12px;background:#fef9ec;border-left:3px solid #c8a96a;border-radius:0 6px 6px 0;font-size:0.82rem;color:#374151;">
+            <strong style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.06em;color:#92752a;">IPORDISE Reply:</strong><br>${esc(r.adminReply)}</div>` : ''}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+          <button class="btn btn-xs btn-gold" onclick="openReplyModal('${esc(r.id)}','${esc((r.body||'').substring(0,80))}','${esc(r.adminReply||'')}')">
+            <i class="fas fa-reply"></i> ${hasReply ? 'Edit Reply' : 'Reply'}
+          </button>
+          ${hasReply ? `<button class="btn btn-xs" style="color:#e73c3c;border-color:#e73c3c;" onclick="deleteAdminReply('${esc(r.id)}')"><i class="fas fa-trash"></i> Delete Reply</button>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+};
+
+const applyReviewFilters = () => {
+  const search = (qs('#reviewsSearch')?.value || '').toLowerCase();
+  const rating = qs('#reviewsRatingFilter')?.value;
+  let filtered = _allReviews;
+  if (search) filtered = filtered.filter(r => (r.displayName||'').toLowerCase().includes(search) || (r.productName||r.productId||'').toLowerCase().includes(search) || (r.body||'').toLowerCase().includes(search));
+  if (rating) filtered = filtered.filter(r => String(Math.round(r.rating||5)) === rating);
+  const badge = qs('#navReviewsBadge');
+  if (badge) { badge.textContent = filtered.length; badge.style.display = ''; }
+  renderReviewsAdmin(filtered);
+};
+
+const loadReviewsView = async () => {
+  const wrap = qs('#reviewsList');
+  if (wrap) wrap.innerHTML = `<div style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading reviews...</div>`;
+  const [revSnap, replySnap] = await Promise.all([
+    getDocs(query(collection(db, 'reviews'), orderBy('createdAt', 'desc'))).catch(() => getDocs(collection(db, 'reviews'))),
+    getDocs(collection(db, 'adminReplies')).catch(() => ({ docs: [] }))
+  ]);
+  const repliesMap = {};
+  replySnap.docs?.forEach(d => { const r = d.data(); repliesMap[r.reviewId] = r.text; });
+  _allReviews = revSnap.docs.map(d => ({ id: d.id, ...d.data(), adminReply: repliesMap[d.id] || null }));
+  applyReviewFilters();
+};
+
+window.openReplyModal = (reviewId, snippet, existing) => {
+  _pendingReplyId = reviewId;
+  const modal = qs('#replyModal');
+  const snip = qs('#replyModalReviewText');
+  const input = qs('#replyModalInput');
+  if (snip) snip.textContent = `"${snippet}${snippet.length >= 80 ? '...' : ''}"`;
+  if (input) input.value = existing || '';
+  if (modal) modal.style.display = 'flex';
+  input?.focus();
+};
+
+window.deleteAdminReply = async (reviewId) => {
+  if (!confirm('Delete this reply?')) return;
+  try {
+    await deleteDoc(doc(db, 'adminReplies', 'reply_' + reviewId));
+    toast('Reply deleted');
+    await loadReviewsView();
+  } catch(e) { toast(e.message, 'error'); }
+};
+
+qs('#replyModalSubmit')?.addEventListener('click', async () => {
+  const text = qs('#replyModalInput')?.value.trim();
+  if (!text || !_pendingReplyId) return;
+  const btn = qs('#replyModalSubmit');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  try {
+    const rev = _allReviews.find(r => r.id === _pendingReplyId);
+    await setDoc(doc(db, 'adminReplies', 'reply_' + _pendingReplyId), {
+      reviewId: _pendingReplyId,
+      productId: rev?.productId || '',
+      text,
+      updatedAt: new Date().toISOString()
+    });
+    qs('#replyModal').style.display = 'none';
+    toast('Reply saved!');
+    await loadReviewsView();
+  } catch(e) { toast(e.message, 'error'); }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Reply';
+});
+
+qs('#refreshReviewsBtn')?.addEventListener('click', () => loadReviewsView().catch(e => toast(e.message, 'error')));
+qs('#reviewsSearch')?.addEventListener('input', applyReviewFilters);
+qs('#reviewsRatingFilter')?.addEventListener('change', applyReviewFilters);

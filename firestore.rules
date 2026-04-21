@@ -15,6 +15,12 @@ service cloud.firestore {
                    && request.auth.uid == request.resource.data.uid;
     }
 
+    // ── Admin replies to reviews ─────────────────────────────────────────
+    match /adminReplies/{replyId} {
+      allow read: if true;
+      allow write, delete: if isAdmin();
+    }
+
     // ── User profiles ────────────────────────────────────────────────────
     match /users/{userId} {
       allow read:  if request.auth != null && (request.auth.uid == userId || isAdmin());

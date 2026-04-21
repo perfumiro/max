@@ -149,7 +149,7 @@
 
         /* ===== CLIENT PROOF / TESTIMONIALS ===== */
         'index.metric_rating':    { fr: 'Note moyenne' },
-        'index.metric_orders':    { fr: 'Commandes livrées' },
+        'index.metric_orders':    { fr: 'Parfums de luxe' },
         'index.metric_clients':   { fr: 'Clients satisfaits' },
         'index.metric_authentic': { fr: 'Produits authentiques' },
         'index.proof_title': { fr: 'Ce que nos clients aiment chez IPORDISE' },
@@ -1253,7 +1253,7 @@
         'index.announce4': { fr: 'Parfums 100% authentiques &mdash; chaque flacon vérifié. <a href="pages/our-story.html" class="top-announcement-link">NOTRE HISTOIRE</a>' },
 
         /* ===== INDEX — TRUST BAR RATING ===== */
-        'index.trust_rating': { fr: '<strong>4,9/5</strong>&ensp;&middot;&ensp;+400 Commandes' },
+        'index.trust_rating': { fr: '<strong>4,9/5</strong>&ensp;&middot;&ensp;40+ Parfums' },
 
         /* ===== INDEX — FLASH SECTION ===== */
         'index.flash_word_left':  { fr: 'FLASH' },
