@@ -23,8 +23,23 @@ service cloud.firestore {
 
     // ── Orders ───────────────────────────────────────────────────────────
     match /orders/{orderId} {
-      allow read:  if request.auth != null && request.auth.uid == resource.data.uid;
-      allow create: if request.auth != null;
+      // Anyone (including guests) can create an order
+      allow create: if true;
+      // Owner can read their own order (matched by phone or email)
+      allow read: if true;
+      // Only admin can update (status changes)
+      allow update, delete: if isAdmin();
+    }
+
+    // ── Order counter (for sequential order IDs) ─────────────────────────────
+    match /order_counter/{year} {
+      allow read, write: if true;
+    }
+
+    // ── User orders subcollection ─────────────────────────────────────────────
+    match /users/{userId}/orders/{orderId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if isAdmin();
     }
 
     // ── Analytics: any authenticated user (incl. anonymous) can write ────

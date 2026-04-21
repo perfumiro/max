@@ -397,7 +397,9 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
     </main>
 
-<script>
+<script type="module">
+import { lookupOrder } from '../auth/user-data.js';
+
 (function () {
     var form        = document.getElementById('trackOrderForm');
     var resultPanel = document.getElementById('trackResultPanel');
@@ -406,19 +408,162 @@ s0.parentNode.insertBefore(s1,s0);
 
     if (!form || !resultPanel || !waLink) return;
 
-    form.addEventListener('submit', function (e) {
+    // Pre-fill order number from URL param (set by thank-you.html)
+    const urlParams = new URLSearchParams(window.location.search);
+    const prefilledOrder = urlParams.get('order');
+    if (prefilledOrder) {
+        const input = document.getElementById('trackOrderNum');
+        if (input) input.value = prefilledOrder;
+    }
+
+    // Result HTML builder
+    const STATUS_CONFIG = {
+        pending:    { icon: 'fa-clock',         color: '#f59e0b', label: 'Order Received',   desc: 'Your order has been received and is awaiting processing.' },
+        processing: { icon: 'fa-box-open',       color: '#3b82f6', label: 'Processing',        desc: 'Your order is being packed and prepared for dispatch.' },
+        shipped:    { icon: 'fa-truck-fast',     color: '#8b5cf6', label: 'Shipped',            desc: 'Your order is on its way! Delivery within 24–72 hours.' },
+        delivered:  { icon: 'fa-house-chimney-user', color: '#16a34a', label: 'Delivered',     desc: 'Your order has been delivered. Enjoy your fragrance!' },
+        cancelled:  { icon: 'fa-circle-xmark',  color: '#e73c3c', label: 'Cancelled',          desc: 'This order was cancelled. Contact us for help.' },
+    };
+
+    const STEPS = ['pending', 'processing', 'shipped', 'delivered'];
+
+    const escHtml = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    const formatDate = (d) => {
+        if (!d) return '';
+        try {
+            return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(d instanceof Date ? d : new Date(d));
+        } catch { return ''; }
+    };
+
+    const buildOrderHtml = (order) => {
+        const cfg   = STATUS_CONFIG[order.status] || STATUS_CONFIG.pending;
+        const stepIdx = STEPS.indexOf(order.status);
+        const isCancelled = order.status === 'cancelled';
+
+        const stepsHtml = STEPS.map((s, i) => {
+            const sCfg = STATUS_CONFIG[s];
+            const done   = !isCancelled && i <= stepIdx;
+            const active = !isCancelled && i === stepIdx;
+            return `<div class="flex flex-col items-center gap-1 flex-1">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm transition-all"
+                     style="background:${done ? cfg.color : '#f3f4f6'};color:${done ? '#fff' : '#9ca3af'}">
+                    <i class="fas ${sCfg.icon}"></i>
+                </div>
+                <span class="text-xs font-semibold ${active ? 'text-brand-dark' : 'text-gray-400'}">${escHtml(sCfg.label)}</span>
+            </div>
+            ${i < STEPS.length - 1 ? `<div class="flex-1 h-0.5 mt-4 mx-1 rounded" style="background:${!isCancelled && i < stepIdx ? cfg.color : '#e5e7eb'}"></div>` : ''}`;
+        }).join('');
+
+        const itemsHtml = (order.items || []).map((item) => `
+            <div class="flex items-start justify-between gap-2 py-2 border-b border-gray-100 last:border-0">
+                <div>
+                    <p class="font-semibold text-sm text-gray-800">${escHtml(item.name)}</p>
+                    <p class="text-xs text-gray-500">${escHtml(item.size || '-')} · Qty ${escHtml(item.qty)}</p>
+                </div>
+                <span class="text-sm font-semibold text-gray-700 whitespace-nowrap">
+                    ${item.pricePending ? 'On request' : (item.price > 0 ? `${(item.price * item.qty).toFixed(0)} DH` : '-')}
+                </span>
+            </div>`).join('');
+
+        const trackingHtml = order.trackingNumber
+            ? `<div class="mt-3 p-3 rounded-xl text-xs" style="background:#eff6ff;border:1px solid #bfdbfe">
+                <i class="fas fa-barcode mr-1" style="color:#3b82f6"></i>
+                <strong>Tracking number:</strong> <span class="font-mono">${escHtml(order.trackingNumber)}</span>
+               </div>` : '';
+
+        return `
+            <div class="p-4 rounded-xl border mb-4" style="background:#fff;border-color:#e5e7eb">
+                <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+                    <div>
+                        <p class="text-xs text-gray-500">Order Number</p>
+                        <p class="font-mono font-bold text-brand-dark text-lg">${escHtml(order.orderId || order.id)}</p>
+                    </div>
+                    <span class="text-xs font-bold px-3 py-1.5 rounded-full" style="background:${cfg.color}22;color:${cfg.color}">
+                        <i class="fas ${cfg.icon} mr-1"></i>${escHtml(cfg.label)}
+                    </span>
+                </div>
+                <p class="text-xs text-gray-400 mb-4">${order.createdAt ? 'Ordered on ' + formatDate(order.createdAt) : ''}</p>
+
+                <!-- Progress bar -->
+                ${!isCancelled ? `<div class="flex items-center mb-5">${stepsHtml}</div>` : ''}
+
+                <p class="text-sm text-gray-600 mb-4">${escHtml(cfg.desc)}</p>
+                ${trackingHtml}
+
+                <!-- Items -->
+                ${itemsHtml ? `<div class="mt-4">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Items</p>
+                    ${itemsHtml}
+                </div>` : ''}
+
+                <!-- Customer info -->
+                <div class="mt-4 text-xs text-gray-500">
+                    <p><i class="fas fa-location-dot mr-1"></i>${escHtml((order.customer?.address || '') + (order.customer?.city ? ', ' + order.customer.city : ''))}</p>
+                </div>
+            </div>`;
+    };
+
+    form.addEventListener('submit', async function (e) {
         e.preventDefault();
-        var orderNum = document.getElementById('trackOrderNum').value.trim();
-        var contact  = document.getElementById('trackContact').value.trim();
+        const submitBtn = form.querySelector('[type=submit]');
+        const orderNum = document.getElementById('trackOrderNum').value.trim();
+        const contact  = document.getElementById('trackContact').value.trim();
         if (!orderNum || !contact) return;
 
-        var msg = 'Hi IPORDISE, I want to track my order.'
-                + '\nOrder Number: ' + orderNum
-                + '\nContact: ' + contact;
-        waLink.href = 'https://wa.me/212663750210?text=' + encodeURIComponent(msg);
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Searching...'; }
+
+        const order = await lookupOrder(orderNum, contact);
+
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = 'Track Order <i class="fas fa-arrow-right text-sm"></i>'; }
+
+        if (!order) {
+            // Show not-found message
+            resultPanel.innerHTML = `
+                <div class="flex items-center gap-3 rounded-xl px-5 py-4 text-sm" style="background:#fef2f2;border:1px solid #fecaca">
+                    <i class="fas fa-circle-xmark text-lg flex-shrink-0" style="color:#e73c3c"></i>
+                    <div>
+                        <p class="font-semibold text-gray-800">Order not found</p>
+                        <p class="text-gray-600 text-xs mt-0.5">Please check your order number and the phone/email you used at checkout.</p>
+                    </div>
+                </div>
+                <a href="https://wa.me/212663750210?text=${encodeURIComponent('Hi IPORDISE, I need help tracking my order: ' + orderNum)}" target="_blank" rel="noopener noreferrer"
+                   class="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-white text-sm mt-3"
+                   style="background:#25d366">
+                    <i class="fab fa-whatsapp text-lg"></i> Get help on WhatsApp
+                </a>
+                <button type="button" id="trackReset2" class="w-full text-xs text-gray-500 hover:text-gray-800 transition mt-3">Try again</button>`;
+            form.style.display = 'none';
+            resultPanel.style.display = 'block';
+            document.getElementById('trackReset2')?.addEventListener('click', () => {
+                form.style.display = 'block';
+                resultPanel.style.display = 'none';
+                resultPanel.innerHTML = '';
+            });
+            return;
+        }
+
+        // Build WhatsApp link for follow-up
+        const waMsg = `Hi IPORDISE, I want to follow up on my order:\nOrder Number: ${order.orderId || order.id}\nPhone: ${contact}`;
+        waLink.href = `https://wa.me/212663750210?text=${encodeURIComponent(waMsg)}`;
+
+        resultPanel.innerHTML = buildOrderHtml(order) + `
+            <a id="trackWhatsAppLink" href="${waLink.href}" target="_blank" rel="noopener noreferrer"
+               class="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-white text-sm mt-2"
+               style="background:#25d366">
+                <i class="fab fa-whatsapp text-lg"></i> Follow up on WhatsApp
+            </a>
+            <button type="button" id="trackReset3" class="w-full text-xs text-gray-500 hover:text-gray-800 transition mt-3">Track another order</button>`;
 
         form.style.display = 'none';
         resultPanel.style.display = 'block';
+
+        document.getElementById('trackReset3')?.addEventListener('click', () => {
+            form.style.display = 'block';
+            resultPanel.style.display = 'none';
+            resultPanel.innerHTML = '';
+            form.reset();
+        });
     });
 
     if (resetBtn) {

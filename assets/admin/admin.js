@@ -91,6 +91,7 @@ const switchView = (name) => {
   if (name === 'visitors')  loadVisitors().catch(e => toast(e.message, 'error'));
   if (name === 'analytics') loadAnalyticsView().catch(e => toast(e.message, 'error'));
   if (name === 'activity')  loadActivity().catch(e => toast(e.message, 'error'));
+  if (name === 'orders')    loadOrdersView().catch(e => toast(e.message, 'error'));
   if (window.innerWidth < 768) closeMobileSidebar();
 };
 const initSidebar = () => {
@@ -677,5 +678,202 @@ const init = () => {
     }
   });
 };
+
+// ─── ORDERS VIEW ──────────────────────────────────────────────────────────────
+let _allOrders = [];
+
+const ORDER_STATUS = {
+  pending:    { color: '#f59e0b', label: 'Pending' },
+  processing: { color: '#3b82f6', label: 'Processing' },
+  shipped:    { color: '#8b5cf6', label: 'Shipped' },
+  delivered:  { color: '#16a34a', label: 'Delivered' },
+  cancelled:  { color: '#e73c3c', label: 'Cancelled' },
+};
+
+const fmtMAD = (v) => `${Number(v || 0).toFixed(0)} DH`;
+
+const renderOrdersTable = (orders) => {
+  const tbody = qs('#ordersTableBody');
+  if (!tbody) return;
+  if (!orders.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted)">No orders found.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = orders.map((o) => {
+    const cfg = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
+    const customer = o.customer || {};
+    const name = esc(`${customer.firstName || ''} ${customer.lastName || ''}`.trim() || 'Guest');
+    const phone = esc(customer.phone || '-');
+    const itemCount = (o.items || []).reduce((s, i) => s + (Number(i.qty) || 1), 0);
+    const total = o.summary?.hasPendingPricing ? 'Pending' : fmtMAD(o.summary?.total);
+    const date = o.createdAt ? new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(o.createdAt) : '-';
+    return `<tr style="border-bottom:1px solid var(--border)" data-order-id="${esc(o.id)}">
+      <td style="padding:10px 12px;font-family:monospace;font-weight:700;color:var(--text)">${esc(o.orderId || o.id)}</td>
+      <td style="padding:10px 12px;color:var(--text)">
+        <div style="font-weight:600">${name}</div>
+        <div style="font-size:11px;color:var(--muted)">${phone}</div>
+      </td>
+      <td style="padding:10px 12px;color:var(--muted)">${itemCount} item${itemCount !== 1 ? 's' : ''}</td>
+      <td style="padding:10px 12px;text-align:right;font-weight:700;color:var(--text)">${esc(total)}</td>
+      <td style="padding:10px 12px">
+        <span style="background:${cfg.color}22;color:${cfg.color};padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700">${cfg.label}</span>
+      </td>
+      <td style="padding:10px 12px;color:var(--muted);font-size:12px">${date}</td>
+      <td style="padding:10px 12px">
+        <button class="btn btn-xs" onclick="window._adminViewOrder('${esc(o.id)}')" style="margin-right:4px"><i class="fas fa-eye"></i></button>
+        <select class="select-sm order-status-select" data-id="${esc(o.id)}" style="font-size:11px;padding:3px 6px">
+          ${Object.entries(ORDER_STATUS).map(([k, v]) => `<option value="${k}"${o.status === k ? ' selected' : ''}>${v.label}</option>`).join('')}
+        </select>
+      </td>
+    </tr>`;
+  }).join('');
+};
+
+const applyOrderFilters = () => {
+  const statusFilter = qs('#ordersStatusFilter')?.value || '';
+  const search = (qs('#ordersSearch')?.value || '').toLowerCase().trim();
+  const filtered = _allOrders.filter((o) => {
+    if (statusFilter && o.status !== statusFilter) return false;
+    if (search) {
+      const c = o.customer || {};
+      const haystack = [o.orderId || o.id, c.firstName, c.lastName, c.phone, c.email, c.city].join(' ').toLowerCase();
+      if (!haystack.includes(search)) return false;
+    }
+    return true;
+  });
+  renderOrdersTable(filtered);
+  const countEl = qs('#ordersCount');
+  if (countEl) countEl.textContent = `${filtered.length} order${filtered.length !== 1 ? 's' : ''}`;
+};
+
+const loadOrdersView = async () => {
+  const tbody = qs('#ordersTableBody');
+  if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>`;
+  try {
+    const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
+    _allOrders = snap.docs.map((d) => {
+      const data = d.data();
+      return { ...data, id: d.id, createdAt: data.createdAt?.toDate?.() || null };
+    });
+    const badge = qs('#navOrdersBadge');
+    if (badge) { badge.textContent = _allOrders.length; badge.style.display = ''; }
+    applyOrderFilters();
+  } catch (e) {
+    if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:#e73c3c">Error loading orders: ${esc(e.message)}</td></tr>`;
+  }
+};
+
+// View order detail modal
+window._adminViewOrder = (orderId) => {
+  const order = _allOrders.find((o) => o.id === orderId);
+  if (!order) return;
+  const modal = qs('#orderDetailModal');
+  const body  = qs('#orderDetailBody');
+  const title = qs('#modalOrderTitle');
+  if (!modal || !body) return;
+  const cfg = ORDER_STATUS[order.status] || ORDER_STATUS.pending;
+  const c = order.customer || {};
+  const itemsHtml = (order.items || []).map((item) =>
+    `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <span style="font-weight:600;color:var(--text)">${esc(item.name)}</span>
+        <span style="color:var(--muted);font-size:11px;margin-left:8px">${esc(item.size || '-')} × ${item.qty}</span>
+      </div>
+      <span style="font-weight:600;color:var(--text)">${item.pricePending ? 'Pending' : fmtMAD(item.price * item.qty)}</span>
+    </div>`).join('');
+  if (title) title.textContent = `Order ${order.orderId || order.id}`;
+  body.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <span style="background:${cfg.color}22;color:${cfg.color};padding:4px 12px;border-radius:99px;font-size:12px;font-weight:700">${cfg.label}</span>
+      ${order.createdAt ? `<span style="color:var(--muted);font-size:12px">${new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short' }).format(order.createdAt)}</span>` : ''}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="background:var(--bg);padding:12px;border-radius:10px">
+        <p style="font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:4px">Customer</p>
+        <p style="font-weight:700;color:var(--text)">${esc(`${c.firstName || ''} ${c.lastName || ''}`.trim() || 'Guest')}</p>
+        <p style="color:var(--muted);font-size:12px">${esc(c.phone || '-')}</p>
+        <p style="color:var(--muted);font-size:12px">${esc(c.email || '-')}</p>
+      </div>
+      <div style="background:var(--bg);padding:12px;border-radius:10px">
+        <p style="font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:4px">Delivery</p>
+        <p style="color:var(--text);font-size:13px">${esc(c.address || '-')}</p>
+        <p style="color:var(--muted);font-size:12px">${esc(c.city || '')}, Morocco</p>
+      </div>
+    </div>
+    <div style="margin-bottom:16px">
+      <p style="font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px">Items</p>
+      ${itemsHtml}
+      <div style="display:flex;justify-content:space-between;padding-top:8px;font-weight:700;color:var(--text)">
+        <span>Total</span>
+        <span>${order.summary?.hasPendingPricing ? 'Pending confirmation' : fmtMAD(order.summary?.total)}</span>
+      </div>
+    </div>
+    ${c.notes ? `<div style="background:var(--bg);padding:10px 12px;border-radius:8px;font-size:12px;color:var(--muted);margin-bottom:16px"><strong>Note:</strong> ${esc(c.notes)}</div>` : ''}
+    <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end">
+      <div>
+        <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Update Status</label>
+        <select class="select-sm" id="modalStatusSelect" style="width:100%">
+          ${Object.entries(ORDER_STATUS).map(([k, v]) => `<option value="${k}"${order.status === k ? ' selected' : ''}>${v.label}</option>`).join('')}
+        </select>
+        <input type="text" class="select-sm" id="modalTrackingInput" placeholder="Tracking number (optional)" value="${esc(order.trackingNumber || '')}" style="width:100%;margin-top:6px">
+      </div>
+      <button id="modalSaveStatus" class="btn btn-xs btn-gold" style="height:fit-content;padding:8px 16px">Save</button>
+    </div>
+    <div id="modalSaveMsg" style="font-size:12px;margin-top:8px;display:none"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <a href="https://wa.me/${esc(c.phone?.replace(/\D/g,'') || '212663750210')}?text=${encodeURIComponent(`Hi ${(c.firstName || 'Customer').trim()}, your IPORDISE order ${order.orderId || order.id} is now: ${cfg.label}. Thank you!`)}"
+         target="_blank" rel="noopener noreferrer" class="btn btn-xs" style="background:#25d366;color:#fff;flex:1;justify-content:center">
+        <i class="fab fa-whatsapp"></i> Notify on WhatsApp
+      </a>
+    </div>`;
+  modal.style.display = 'flex';
+
+  qs('#closeOrderModal')?.addEventListener('click', () => { modal.style.display = 'none'; });
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+  qs('#modalSaveStatus')?.addEventListener('click', async () => {
+    const newStatus = qs('#modalStatusSelect')?.value;
+    const tracking  = qs('#modalTrackingInput')?.value.trim();
+    const msgEl = qs('#modalSaveMsg');
+    const btn   = qs('#modalSaveStatus');
+    if (!newStatus) return;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    try {
+      const update = { status: newStatus };
+      if (tracking) update.trackingNumber = tracking;
+      await setDoc(doc(db, 'orders', orderId), update, { merge: true });
+      const ord = _allOrders.find((o) => o.id === orderId);
+      if (ord) { ord.status = newStatus; if (tracking) ord.trackingNumber = tracking; }
+      if (msgEl) { msgEl.textContent = 'Status updated!'; msgEl.style.color = '#16a34a'; msgEl.style.display = 'block'; }
+      applyOrderFilters();
+      setTimeout(() => { modal.style.display = 'none'; }, 800);
+    } catch(e) {
+      if (msgEl) { msgEl.textContent = 'Error: ' + e.message; msgEl.style.color = '#e73c3c'; msgEl.style.display = 'block'; }
+    }
+    btn.disabled = false; btn.innerHTML = 'Save';
+  });
+};
+
+// Wire up order status change from table inline select
+document.addEventListener('change', async (e) => {
+  const sel = e.target.closest('.order-status-select');
+  if (!sel) return;
+  const id = sel.dataset.id;
+  const newStatus = sel.value;
+  try {
+    await setDoc(doc(db, 'orders', id), { status: newStatus }, { merge: true });
+    const ord = _allOrders.find((o) => o.id === id);
+    if (ord) ord.status = newStatus;
+    toast('Order status updated', 'success');
+    applyOrderFilters();
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+});
+
+// Wire up filters
+document.addEventListener('DOMContentLoaded', () => {
+  qs('#ordersStatusFilter')?.addEventListener('change', applyOrderFilters);
+  qs('#ordersSearch')?.addEventListener('input', applyOrderFilters);
+  qs('#refreshOrdersBtn')?.addEventListener('click', () => loadOrdersView().catch(e => toast(e.message, 'error')));
+});
 
 init();

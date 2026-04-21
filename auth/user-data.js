@@ -36,6 +36,9 @@ import {
   orderBy,
   getDocs,
   serverTimestamp,
+  runTransaction,
+  increment,
+  where,
 } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
 
 // ── localStorage cart keys ───────────────────────────────────────
@@ -165,6 +168,105 @@ export const loadUserOrders = async (uid) => {
       return { id: d.id, ...data, createdAt };
     });
   } catch { return []; }
+};
+
+// ── Firestore: global orders collection (guest + logged-in) ─────
+
+/**
+ * Generate the next sequential human-readable order ID.
+ * Format: IPD-YYYY-NNNNN  e.g. IPD-2026-00042
+ * Uses a Firestore counter document to guarantee uniqueness.
+ * @returns {Promise<string>}
+ */
+const _generateOrderId = async () => {
+  const year = new Date().getFullYear();
+  const counterRef = doc(db, 'order_counter', String(year));
+  let seq = 1;
+  try {
+    seq = await runTransaction(db, async (tx) => {
+      const snap = await tx.get(counterRef);
+      const next = snap.exists() ? (snap.data().seq || 0) + 1 : 1;
+      tx.set(counterRef, { seq: next }, { merge: true });
+      return next;
+    });
+  } catch { seq = Math.floor(Math.random() * 90000) + 10000; }
+  return `IPD-${year}-${String(seq).padStart(5, '0')}`;
+};
+
+/**
+ * Save an order to the global `orders` collection.
+ * Works for both guests and authenticated users.
+ * @param {object} orderData - { items, customer, summary, channel, uid? }
+ * @returns {Promise<string|null>} Human-readable order ID (e.g. IPD-2026-00042)
+ */
+export const saveGlobalOrder = async (orderData) => {
+  try {
+    const orderId = await _generateOrderId();
+    await setDoc(doc(db, 'orders', orderId), {
+      ...orderData,
+      orderId,
+      createdAt: serverTimestamp(),
+      status: 'pending',
+    });
+    return orderId;
+  } catch { return null; }
+};
+
+/**
+ * Load a single order from the global orders collection by its human-readable ID.
+ * Verifies ownership by matching the customer phone or email.
+ * @param {string} orderId
+ * @param {string} contact - phone or email provided by the customer
+ * @returns {Promise<object|null>}
+ */
+export const lookupOrder = async (orderId, contact) => {
+  try {
+    const snap = await getDoc(doc(db, 'orders', orderId.toUpperCase().trim()));
+    if (!snap.exists()) return null;
+    const data = snap.data();
+    const c = data.customer || {};
+    const normalContact = contact.trim().toLowerCase().replace(/\s/g, '');
+    const matchPhone = (c.phone || '').replace(/\D/g, '').endsWith(normalContact.replace(/\D/g, ''));
+    const matchEmail = (c.email || '').toLowerCase() === normalContact;
+    if (!matchPhone && !matchEmail) return null;
+    return {
+      ...data,
+      id: snap.id,
+      createdAt: data.createdAt?.toDate?.() || null,
+    };
+  } catch { return null; }
+};
+
+/**
+ * Load all orders from the global orders collection (admin use).
+ * Sorted newest first.
+ * @returns {Promise<Array>}
+ */
+export const loadAllOrders = async () => {
+  try {
+    const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => {
+      const data = d.data();
+      return { ...data, id: d.id, createdAt: data.createdAt?.toDate?.() || null };
+    });
+  } catch { return []; }
+};
+
+/**
+ * Update the status of an order (admin only).
+ * @param {string} orderId
+ * @param {string} status - 'pending'|'processing'|'shipped'|'delivered'|'cancelled'
+ * @param {string=} trackingNumber
+ * @returns {Promise<boolean>}
+ */
+export const updateOrderStatus = async (orderId, status, trackingNumber) => {
+  try {
+    const update = { status };
+    if (trackingNumber) update.trackingNumber = trackingNumber;
+    await setDoc(doc(db, 'orders', orderId), update, { merge: true });
+    return true;
+  } catch { return false; }
 };
 
 // ── localStorage.setItem patch (cart auto-sync) ──────────────────

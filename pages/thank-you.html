@@ -275,6 +275,18 @@ s0.parentNode.insertBefore(s1,s0);
                 <h1 class="text-2xl sm:text-3xl font-serif font-bold text-brand-dark mb-3" data-i18n="thankyou.h1">Order Confirmed!</h1>
                 <p class="text-gray-600 text-sm sm:text-base max-w-md mx-auto leading-relaxed" data-i18n="thankyou.p">Thank you for your order. We're already preparing it for dispatch. You'll receive a confirmation via WhatsApp or email shortly.</p>
 
+                <!-- Order ID display — populated by JS below -->
+                <div id="orderIdBanner" class="hidden mt-5 mb-1 px-5 py-4 rounded-xl border" style="background:#f0fdf4;border-color:#bbf7d0">
+                    <p class="text-xs text-gray-500 mb-1">Your Order Number</p>
+                    <div class="flex items-center justify-center gap-3 flex-wrap">
+                        <span id="orderIdText" class="font-mono font-bold text-lg text-brand-dark tracking-wider"></span>
+                        <button id="copyOrderIdBtn" type="button" class="text-xs px-3 py-1 rounded-full border border-gray-300 text-gray-600 hover:border-brand-red hover:text-brand-red transition flex items-center gap-1">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Use this number to track your order anytime.</p>
+                </div>
+
                 <div class="mt-6 p-4 rounded-xl text-xs text-gray-500 flex items-center justify-center gap-2" style="background:#f9fafb">
                     <i class="fas fa-clock" style="color:#e73c3c"></i>
                     <span data-i18n-html="thankyou.dispatch_note">Orders are typically dispatched within <strong>24 hours</strong> and delivered in <strong>1&ndash;3 business days</strong>.</span>
@@ -305,7 +317,7 @@ s0.parentNode.insertBefore(s1,s0);
 
             <!-- CTAs -->
             <div class="flex flex-col sm:flex-row gap-3 justify-center mb-8">
-                <a href="track-order.html" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white" style="background:#1a1a1a">
+                <a href="track-order.html" id="trackOrderBtn" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white" style="background:#1a1a1a">
                     <i class="fas fa-magnifying-glass-location"></i> <span data-i18n="thankyou.track_btn">Track my order</span>
                 </a>
                 <a href="../discover.html" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm border border-gray-200 text-gray-700 hover:border-brand-red hover:text-brand-red transition">
@@ -404,12 +416,46 @@ s0.parentNode.insertBefore(s1,s0);
     <script type="module">
     import { auth } from '../auth/firebase.js';
     import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
-    import { saveUserOrder, saveUserProfile } from '../auth/user-data.js';
+    import { saveUserOrder, saveUserProfile, saveGlobalOrder } from '../auth/user-data.js';
     import { db } from '../auth/firebase.js';
     import { doc, setDoc } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
 
     const PENDING_ORDER_KEY = 'ipordise-pending-order';
 
+    // ── Show order ID banner ──────────────────────────────────────
+    const showOrderId = (orderId) => {
+        if (!orderId) return;
+        const banner = document.getElementById('orderIdBanner');
+        const text   = document.getElementById('orderIdText');
+        const copyBtn = document.getElementById('copyOrderIdBtn');
+        const trackBtn = document.getElementById('trackOrderBtn');
+        if (text) text.textContent = orderId;
+        if (banner) banner.classList.remove('hidden');
+        if (trackBtn) trackBtn.href = `track-order.html?order=${encodeURIComponent(orderId)}`;
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard?.writeText(orderId).then(() => {
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    copyBtn.style.color = '#16a34a';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                        copyBtn.style.color = '';
+                    }, 2000);
+                }).catch(() => {});
+            });
+        }
+    };
+
+    // Show order ID from sessionStorage immediately (set by checkout.js)
+    try {
+        const raw = sessionStorage.getItem(PENDING_ORDER_KEY);
+        if (raw) {
+            const obj = JSON.parse(raw);
+            if (obj.orderId) showOrderId(obj.orderId);
+        }
+    } catch(e) {}
+
+    // ── Authenticated user: also save to user's subcollection ────
     onAuthStateChanged(auth, async (user) => {
         if (!user) return;
         // Clear cloud cart (order is complete)
@@ -421,7 +467,10 @@ s0.parentNode.insertBefore(s1,s0);
             const orderData = JSON.parse(raw);
             sessionStorage.removeItem(PENDING_ORDER_KEY);
             if (orderData && typeof orderData === 'object') {
-                await saveUserOrder(user.uid, orderData);
+                // Show order ID if not already shown
+                if (orderData.orderId) showOrderId(orderData.orderId);
+                // Save to user's personal orders subcollection
+                await saveUserOrder(user.uid, { ...orderData, orderId: orderData.orderId });
                 // Also save billing info back to profile for future auto-fill
                 if (orderData.customer) {
                     await saveUserProfile(user.uid, {

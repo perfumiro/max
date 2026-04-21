@@ -411,7 +411,28 @@
             placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-sm"></i> Envoi en cours...';
 
             storePendingOrder('email');
-            sendOrderEmail().then(() => {
+
+            // Save to global Firestore orders collection (works for guests too)
+            const _saveGlobalOrder = async () => {
+                try {
+                    const { saveGlobalOrder } = await import('../auth/user-data.js');
+                    const orderData = buildStructuredOrder('email');
+                    const orderId = await saveGlobalOrder(orderData);
+                    if (orderId) {
+                        // Attach the readable order ID to the pending order in sessionStorage
+                        try {
+                            const raw = sessionStorage.getItem('ipordise-pending-order');
+                            if (raw) {
+                                const obj = JSON.parse(raw);
+                                obj.orderId = orderId;
+                                sessionStorage.setItem('ipordise-pending-order', JSON.stringify(obj));
+                            }
+                        } catch(e) {}
+                    }
+                } catch(e) {}
+            };
+
+            Promise.all([sendOrderEmail(), _saveGlobalOrder()]).then(() => {
                 markConfirmationPending('email');
                 sessionStorage.removeItem('ipordise_cart');
                 window.location.href = 'thank-you.html';
@@ -420,6 +441,24 @@
 
         confirmWhatsApp.addEventListener('click', () => {
             updateConfirmationLinks();
+            // Save to global Firestore orders collection on WhatsApp confirm too
+            (async () => {
+                try {
+                    const { saveGlobalOrder } = await import('../auth/user-data.js');
+                    const orderData = buildStructuredOrder('whatsapp');
+                    const orderId = await saveGlobalOrder(orderData);
+                    if (orderId) {
+                        try {
+                            const raw = sessionStorage.getItem('ipordise-pending-order');
+                            if (raw) {
+                                const obj = JSON.parse(raw);
+                                obj.orderId = orderId;
+                                sessionStorage.setItem('ipordise-pending-order', JSON.stringify(obj));
+                            }
+                        } catch(e) {}
+                    }
+                } catch(e) {}
+            })();
             storePendingOrder('whatsapp');
             markConfirmationPending('whatsapp');
         });

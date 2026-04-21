@@ -63,6 +63,8 @@
         <a class="sidebar-item" data-view="visitors"><i class="fas fa-users sidebar-item-icon"></i><span>Visitors</span><span class="sidebar-badge" id="navTodayBadge">0</span></a>
         <a class="sidebar-item" data-view="analytics"><i class="fas fa-chart-line sidebar-item-icon"></i><span>Analytics</span></a>
         <a class="sidebar-item" data-view="activity"><i class="fas fa-satellite-dish sidebar-item-icon"></i><span>Live Feed</span><span class="sidebar-badge live-badge-nav" id="navLiveBadge">live</span></a>
+        <div class="sidebar-section-label" style="margin-top:14px;">Orders</div>
+        <a class="sidebar-item" data-view="orders"><i class="fas fa-bag-shopping sidebar-item-icon"></i><span>All Orders</span><span class="sidebar-badge" id="navOrdersBadge" style="display:none">0</span></a>
         <div class="sidebar-section-label" style="margin-top:14px;">Export</div>
         <a class="sidebar-item" id="exportCsvBtn"><i class="fas fa-file-csv sidebar-item-icon"></i><span>Export CSV</span></a>
         <a class="sidebar-item" id="exportJsonBtn"><i class="fas fa-file-code sidebar-item-icon"></i><span>Export JSON</span></a>
@@ -225,6 +227,60 @@
               <button class="btn btn-xs btn-gold" id="refreshActivityBtn"><i class="fas fa-rotate-right"></i> Refresh</button>
             </div>
             <div class="card-body"><div id="activityFeed" class="activity-feed"></div></div>
+          </div>
+        </section>
+
+        <!-- ── Orders View ───────────────────────────────────────── -->
+        <section id="view-orders" class="view">
+          <div class="view-title">All Orders <span class="view-title-sub" id="ordersCount"></span></div>
+
+          <!-- Filters -->
+          <div class="card mb-4">
+            <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+              <select class="select-sm" id="ordersStatusFilter">
+                <option value="">All statuses</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <input type="text" class="select-sm" id="ordersSearch" placeholder="Search name, phone, ID..." style="min-width:180px;">
+              <button class="btn btn-xs btn-gold" id="refreshOrdersBtn" style="margin-left:auto"><i class="fas fa-rotate-right"></i> Refresh</button>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="card">
+            <div class="card-body" style="overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead>
+                  <tr style="border-bottom:1px solid var(--border)">
+                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Order ID</th>
+                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Customer</th>
+                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Items</th>
+                    <th style="text-align:right;padding:8px 12px;color:var(--muted);font-weight:600">Total</th>
+                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Status</th>
+                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Date</th>
+                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                  <tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading orders...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Order detail modal -->
+          <div id="orderDetailModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:16px">
+            <div style="background:var(--card);border-radius:16px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 0">
+                <h3 style="font-size:16px;font-weight:700;color:var(--text)" id="modalOrderTitle">Order Details</h3>
+                <button id="closeOrderModal" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer"><i class="fas fa-times"></i></button>
+              </div>
+              <div id="orderDetailBody" style="padding:20px 24px 24px"></div>
+            </div>
           </div>
         </section>
 
