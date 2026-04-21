@@ -209,7 +209,10 @@ export const saveGlobalOrder = async (orderData) => {
       status: 'pending',
     });
     return orderId;
-  } catch { return null; }
+  } catch (err) {
+    console.error('[IPORDISE] saveGlobalOrder failed:', err);
+    return null;
+  }
 };
 
 /**

@@ -70,27 +70,48 @@ const _ensureAuth = () => new Promise(resolve => {
 // ── Geo: fetch IP + country + city once per session ───────────
 let _geo = null;
 const GEO_KEY = 'ipo-geo';
+
+// Helper: race a fetch against a timeout so slow networks don't stall boot
+const _fetchWithTimeout = (url, ms = 4000) => {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  return fetch(url, { cache: 'no-store', signal: controller.signal })
+    .finally(() => clearTimeout(timer));
+};
+
 const _fetchGeo = async () => {
   try {
     const cached = sessionStorage.getItem(GEO_KEY);
     if (cached) { _geo = JSON.parse(cached); return; }
 
-    // Try ipwho.is first (free, HTTPS, no daily cap)
     let d = null;
+
+    // 1. ipwho.is — note: removed `j.success` gate; many MENA IPs return false but still have valid data
     try {
-      const r1 = await fetch('https://ipwho.is/', { cache: 'no-store' });
+      const r1 = await _fetchWithTimeout('https://ipwho.is/');
       if (r1.ok) {
         const j = await r1.json();
-        if (j.success && j.ip) d = { ip: j.ip, country: j.country || '', city: j.city || '', region: j.region || '' };
+        if (j.ip) d = { ip: j.ip, country: j.country || '', city: j.city || '', region: j.region || '' };
       }
     } catch {}
 
-    // Fallback: ipapi.co
+    // 2. freeipapi.com — very reliable for MENA region, HTTPS, no key needed
     if (!d) {
       try {
-        const r2 = await fetch('https://ipapi.co/json/', { cache: 'no-store' });
+        const r2 = await _fetchWithTimeout('https://freeipapi.com/api/json/');
         if (r2.ok) {
           const j = await r2.json();
+          if (j.ipAddress) d = { ip: j.ipAddress, country: j.countryName || '', city: j.cityName || '', region: j.regionName || '' };
+        }
+      } catch {}
+    }
+
+    // 3. ipapi.co — last resort
+    if (!d) {
+      try {
+        const r3 = await _fetchWithTimeout('https://ipapi.co/json/');
+        if (r3.ok) {
+          const j = await r3.json();
           if (j.ip) d = { ip: j.ip, country: j.country_name || j.country || '', city: j.city || '', region: j.region || '' };
         }
       } catch {}

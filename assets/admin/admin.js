@@ -331,7 +331,10 @@ const renderAnalyticsChart = (visitsByDay) => {
 
 // ─── FIRESTORE DATA ───────────────────────────────────────────────────────────
 const getVisitsByDay = async (days) => {
-  const sinceKey = new Date(Date.now() - days * 86_400_000).toISOString().slice(0, 10);
+  // days=0 means today only (since midnight)
+  const sinceKey = days === 0
+    ? new Date().toISOString().slice(0, 10)
+    : new Date(Date.now() - days * 86_400_000).toISOString().slice(0, 10);
   try {
     const snap = await getDocs(
       query(collection(db, 'analytics_daily'), where('date', '>=', sinceKey), orderBy('date', 'asc'))
@@ -378,7 +381,14 @@ const getLatestVisitors = async () => {
 };
 
 const aggregateSessions = async (days) => {
-  const since = new Date(Date.now() - days * 86_400_000);
+  // days=0 means today only (since midnight local time)
+  let since;
+  if (days === 0) {
+    since = new Date();
+    since.setHours(0, 0, 0, 0);
+  } else {
+    since = new Date(Date.now() - days * 86_400_000);
+  }
   const pageMap = new Map(), deviceMap = new Map(), referrerMap = new Map();
   const countryMap = new Map(), cityMap = new Map();
   try {
@@ -518,7 +528,7 @@ const initToolbar = () => {
     loadActivity().then(() => toast('Feed refreshed', 'success')).catch(e => toast(e.message, 'error'))
   );
   qs('#trafficRange')?.addEventListener('change', e => {
-    state.trafficRange = parseInt(e.target.value, 10);
+    state.trafficRange = parseInt(e.target.value, 10); // 0 = Today, valid
     loadOverview().catch(e2 => toast(e2.message, 'error'));
   });
   qs('#analyticsRange')?.addEventListener('change', e => {

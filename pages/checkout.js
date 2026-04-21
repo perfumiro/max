@@ -415,9 +415,15 @@
             // Save to global Firestore orders collection (works for guests too)
             const _saveGlobalOrder = async () => {
                 try {
-                    const { saveGlobalOrder } = await import('../auth/user-data.js');
+                    // Prefer the module bridge exposed in checkout.html; fall back to dynamic import
+                    let saveFn = window._ipoSaveOrder;
+                    if (!saveFn) {
+                        const { saveGlobalOrder } = await import('../auth/user-data.js');
+                        saveFn = saveGlobalOrder;
+                        window._ipoSaveOrder = saveFn; // cache for future calls
+                    }
                     const orderData = buildStructuredOrder('email');
-                    const orderId = await saveGlobalOrder(orderData);
+                    const orderId = await saveFn(orderData);
                     if (orderId) {
                         // Attach the readable order ID to the pending order in sessionStorage
                         try {
@@ -429,7 +435,7 @@
                             }
                         } catch(e) {}
                     }
-                } catch(e) {}
+                } catch(e) { console.error('[IPORDISE] Order save failed:', e); }
             };
 
             Promise.all([sendOrderEmail(), _saveGlobalOrder()]).then(() => {
@@ -444,9 +450,14 @@
             // Save to global Firestore orders collection on WhatsApp confirm too
             (async () => {
                 try {
-                    const { saveGlobalOrder } = await import('../auth/user-data.js');
+                    let saveFn = window._ipoSaveOrder;
+                    if (!saveFn) {
+                        const { saveGlobalOrder } = await import('../auth/user-data.js');
+                        saveFn = saveGlobalOrder;
+                        window._ipoSaveOrder = saveFn;
+                    }
                     const orderData = buildStructuredOrder('whatsapp');
-                    const orderId = await saveGlobalOrder(orderData);
+                    const orderId = await saveFn(orderData);
                     if (orderId) {
                         try {
                             const raw = sessionStorage.getItem('ipordise-pending-order');
@@ -457,7 +468,7 @@
                             }
                         } catch(e) {}
                     }
-                } catch(e) {}
+                } catch(e) { console.error('[IPORDISE] WhatsApp order save failed:', e); }
             })();
             storePendingOrder('whatsapp');
             markConfirmationPending('whatsapp');
