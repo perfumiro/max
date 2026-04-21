@@ -17,10 +17,13 @@ service cloud.firestore {
 
     // ── User profiles ────────────────────────────────────────────────────
     match /users/{userId} {
-      allow read:  if request.auth != null && request.auth.uid == userId;
+      allow read:  if request.auth != null && (request.auth.uid == userId || isAdmin());
       allow write: if request.auth != null && request.auth.uid == userId;
     }
-
+    // ── Allow admin to list the users collection ─────────────────────────────
+    match /users/{document=**} {
+      allow read: if isAdmin();
+    }
     // ── Orders ───────────────────────────────────────────────────────────
     match /orders/{orderId} {
       // Anyone (including guests) can create an order

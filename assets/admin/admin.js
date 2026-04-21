@@ -92,6 +92,7 @@ const switchView = (name) => {
   if (name === 'analytics') loadAnalyticsView().catch(e => toast(e.message, 'error'));
   if (name === 'activity')  loadActivity().catch(e => toast(e.message, 'error'));
   if (name === 'orders')    loadOrdersView().catch(e => toast(e.message, 'error'));
+  if (name === 'customers') loadCustomersView().catch(e => toast(e.message, 'error'));
   if (window.innerWidth < 768) closeMobileSidebar();
 };
 const initSidebar = () => {
@@ -869,11 +870,95 @@ document.addEventListener('change', async (e) => {
   } catch(e) { toast('Error: ' + e.message, 'error'); }
 });
 
-// Wire up filters
-document.addEventListener('DOMContentLoaded', () => {
+// Wire up orders filters — runs directly (module is already deferred, DOM is ready)
+const _initOrdersFilters = () => {
   qs('#ordersStatusFilter')?.addEventListener('change', applyOrderFilters);
   qs('#ordersSearch')?.addEventListener('input', applyOrderFilters);
   qs('#refreshOrdersBtn')?.addEventListener('click', () => loadOrdersView().catch(e => toast(e.message, 'error')));
-});
+  qs('#refreshCustomersBtn')?.addEventListener('click', () => loadCustomersView().catch(e => toast(e.message, 'error')));
+  qs('#customersSearch')?.addEventListener('input', applyCustomerFilters);
+};
+
+// ─── CUSTOMERS VIEW ───────────────────────────────────────────────────────────
+let _allCustomers = [];
+
+const renderCustomersTable = (customers) => {
+  const tbody = qs('#customersTableBody');
+  if (!tbody) return;
+  if (!customers.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">No customers found.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = customers.map((c) => {
+    const p = c.profile || {};
+    const name = esc(`${p.firstName || ''} ${p.lastName || ''}`.trim() || 'No name');
+    const phone = esc(p.phone || '-');
+    const city  = esc(p.city  || '-');
+    const orders = c.orderCount || 0;
+    const joined = c.createdAt ? new Intl.DateTimeFormat('en-GB', { day:'2-digit', month:'short', year:'numeric' }).format(c.createdAt) : '-';
+    return `<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:10px 12px;color:var(--text)">
+        <div style="font-weight:600">${name}</div>
+        <div style="font-size:11px;color:var(--muted);font-family:monospace">${esc(c.uid.slice(0,12))}…</div>
+      </td>
+      <td style="padding:10px 12px;color:var(--muted)">${phone}</td>
+      <td style="padding:10px 12px;color:var(--muted)">${city}, Morocco</td>
+      <td style="padding:10px 12px;text-align:center">
+        <span style="background:#fef3c7;color:#d97706;padding:2px 10px;border-radius:99px;font-size:11px;font-weight:700">${orders}</span>
+      </td>
+      <td style="padding:10px 12px;color:var(--muted);font-size:12px">${joined}</td>
+      <td style="padding:10px 12px">
+        ${p.phone ? `<a href="https://wa.me/${esc(p.phone.replace(/\D/g,''))}" target="_blank" rel="noopener noreferrer"
+           class="btn btn-xs" style="background:#25d366;color:#fff"><i class="fab fa-whatsapp"></i></a>` : ''}
+      </td>
+    </tr>`;
+  }).join('');
+};
+
+const applyCustomerFilters = () => {
+  const search = (qs('#customersSearch')?.value || '').toLowerCase().trim();
+  const filtered = search
+    ? _allCustomers.filter((c) => {
+        const p = c.profile || {};
+        const hay = [p.firstName, p.lastName, p.phone, p.city, p.email].join(' ').toLowerCase();
+        return hay.includes(search);
+      })
+    : _allCustomers;
+  renderCustomersTable(filtered);
+  const countEl = qs('#customersCount');
+  if (countEl) countEl.textContent = `${filtered.length} customer${filtered.length !== 1 ? 's' : ''}`;
+};
+
+const loadCustomersView = async () => {
+  const tbody = qs('#customersTableBody');
+  if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>`;
+  try {
+    // Load all user profile docs from Firestore
+    const snap = await getDocs(collection(db, 'users'));
+    // For each user, also count their orders
+    const ordersSnap = await getDocs(collection(db, 'orders'));
+    const orderCountByUid = {};
+    ordersSnap.docs.forEach((d) => {
+      const uid = d.data().uid;
+      if (uid) orderCountByUid[uid] = (orderCountByUid[uid] || 0) + 1;
+    });
+
+    _allCustomers = snap.docs
+      .map((d) => {
+        const data = d.data();
+        const createdAt = data.createdAt?.toDate?.() || null;
+        return { uid: d.id, ...data, createdAt, orderCount: orderCountByUid[d.id] || 0 };
+      })
+      .filter((c) => c.profile) // only users who completed their profile
+      .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+    const badge = qs('#navCustomersBadge');
+    if (badge) { badge.textContent = _allCustomers.length; badge.style.display = ''; }
+    applyCustomerFilters();
+  } catch (e) {
+    if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:#e73c3c">Error: ${esc(e.message)}</td></tr>`;
+  }
+};
 
 init();
+_initOrdersFilters();

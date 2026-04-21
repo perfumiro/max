@@ -63,8 +63,9 @@
         <a class="sidebar-item" data-view="visitors"><i class="fas fa-users sidebar-item-icon"></i><span>Visitors</span><span class="sidebar-badge" id="navTodayBadge">0</span></a>
         <a class="sidebar-item" data-view="analytics"><i class="fas fa-chart-line sidebar-item-icon"></i><span>Analytics</span></a>
         <a class="sidebar-item" data-view="activity"><i class="fas fa-satellite-dish sidebar-item-icon"></i><span>Live Feed</span><span class="sidebar-badge live-badge-nav" id="navLiveBadge">live</span></a>
-        <div class="sidebar-section-label" style="margin-top:14px;">Orders</div>
+        <div class="sidebar-section-label" style="margin-top:14px;">Store</div>
         <a class="sidebar-item" data-view="orders"><i class="fas fa-bag-shopping sidebar-item-icon"></i><span>All Orders</span><span class="sidebar-badge" id="navOrdersBadge" style="display:none">0</span></a>
+        <a class="sidebar-item" data-view="customers"><i class="fas fa-users sidebar-item-icon"></i><span>Customers</span><span class="sidebar-badge" id="navCustomersBadge" style="display:none">0</span></a>
         <div class="sidebar-section-label" style="margin-top:14px;">Export</div>
         <a class="sidebar-item" id="exportCsvBtn"><i class="fas fa-file-csv sidebar-item-icon"></i><span>Export CSV</span></a>
         <a class="sidebar-item" id="exportJsonBtn"><i class="fas fa-file-code sidebar-item-icon"></i><span>Export JSON</span></a>
@@ -280,6 +281,40 @@
                 <button id="closeOrderModal" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer"><i class="fas fa-times"></i></button>
               </div>
               <div id="orderDetailBody" style="padding:20px 24px 24px"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Customers View ─────────────────────────────────────────────── -->
+        <section id="view-customers" class="view">
+          <div class="view-title">Customers <span class="view-title-sub" id="customersCount"></span></div>
+
+          <!-- Search -->
+          <div class="card mb-4">
+            <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+              <input type="text" class="select-sm" id="customersSearch" placeholder="Search name, phone, city..." style="min-width:220px;">
+              <button class="btn btn-xs btn-gold" id="refreshCustomersBtn" style="margin-left:auto"><i class="fas fa-rotate-right"></i> Refresh</button>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="card">
+            <div class="card-body" style="overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead>
+                  <tr style="border-bottom:1px solid var(--border)">
+                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Customer</th>
+                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Phone</th>
+                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">City</th>
+                    <th style="text-align:center;padding:8px 12px;color:var(--muted);font-weight:600">Orders</th>
+                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Joined</th>
+                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Contact</th>
+                  </tr>
+                </thead>
+                <tbody id="customersTableBody">
+                  <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading customers...</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>
