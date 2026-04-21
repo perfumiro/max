@@ -1354,7 +1354,7 @@ s0.parentNode.insertBefore(s1,s0);
                                 <div class="product-ondemand-icon"><i class="fas fa-box-open"></i></div>
                                 <div>
                                     <p class="product-ondemand-title" data-i18n="product.ondemand_title">Out of Stock</p>
-                                    <p class="product-ondemand-sub" data-i18n="product.ondemand_sub">This product is currently out of stock. Select a size and tap "Ask on WhatsApp" to be notified when it's back.</p>
+                                    <p class="product-ondemand-sub" data-i18n="product.ondemand_sub">This product is currently unavailable. Tap "Ask on WhatsApp" and we'll notify you as soon as it's back.</p>
                                 </div>
                             </div>
                         </div>
@@ -1372,37 +1372,18 @@ s0.parentNode.insertBefore(s1,s0);
                                 <button class="product-wishlist-btn" type="button" aria-label="Add to wishlist">
                                     <i class="far fa-heart"></i>
                                 </button>
+                                <!-- WhatsApp inquiry button — shown next to wishlist when no price / out of stock -->
+                                <div id="productWhatsappBlock" class="hidden">
+                                    <div class="product-wa-wrap">
+                                        <span class="product-wa-ring" aria-hidden="true"></span>
+                                        <a id="productWhatsappBlockBtn" class="product-wa-btn" href="#" target="_blank" rel="noopener noreferrer" aria-label="Ask about this product on WhatsApp">
+                                            <span class="product-wa-btn-icon"><i class="fab fa-whatsapp"></i></span>
+                                            <span class="product-wa-btn-label" data-i18n="product.ask_whatsapp">Ask on WhatsApp</span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                             <p class="product-cta-hint hidden" id="productCtaHint"><i class="fas fa-hand-point-up text-brand-red"></i> Select a size above to add to cart</p>
-                        </div>
-
-                        <!-- Full-width WhatsApp CTA — shown for out-of-stock / no-price items -->
-                        <div id="productWhatsappBlock" class="mt-4 hidden">
-                            <div class="product-wa-magic-wrap">
-                                <a id="productWhatsappBlockBtn" class="product-whatsapp-fullbtn" href="#" target="_blank" rel="noopener noreferrer" aria-label="Ask about this product on WhatsApp">
-                                    <!-- Pulsing live dot -->
-                                    <span class="product-wa-live" aria-hidden="true"></span>
-                                    <!-- WhatsApp icon bubble -->
-                                    <span class="product-wa-icon-bubble">
-                                        <i class="fab fa-whatsapp"></i>
-                                    </span>
-                                    <!-- Text body -->
-                                    <span class="product-wa-body">
-                                        <span class="product-wa-title" data-i18n="product.ask_whatsapp">Ask on WhatsApp</span>
-                                        <span class="product-wa-sub" data-i18n="product.ask_whatsapp_sub">Get price &amp; availability — we reply in minutes</span>
-                                    </span>
-                                    <!-- Right side: fast reply badge + arrow -->
-                                    <span class="product-wa-right">
-                                        <span class="product-wa-badge" data-i18n="product.ask_whatsapp_badge">Fast reply</span>
-                                        <i class="fas fa-arrow-right product-wa-arrow"></i>
-                                    </span>
-                                    <!-- Floating sparkle particles -->
-                                    <span class="product-wa-spark" aria-hidden="true"></span>
-                                    <span class="product-wa-spark" aria-hidden="true"></span>
-                                    <span class="product-wa-spark" aria-hidden="true"></span>
-                                    <span class="product-wa-spark" aria-hidden="true"></span>
-                                </a>
-                            </div>
                         </div>
 
                         <!-- Fragrance Profile -->
@@ -1641,11 +1622,11 @@ s0.parentNode.insertBefore(s1,s0);
                         <div class="rating-breakdown-list" id="liveBreakdown" aria-label="Rating distribution" style="text-align:left;">
                             <!-- empty-state placeholder bars -->
                             <div id="liveBreakdownEmpty">
-                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">5 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">&mdash;</span></div>
-                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">4 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">&mdash;</span></div>
-                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">3 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">&mdash;</span></div>
-                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">2 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">&mdash;</span></div>
-                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">1 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-percent">&mdash;</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">5 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-count">0</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">4 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-count">0</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">3 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-count">0</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">2 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-count">0</span></div>
+                                <div class="rating-row" style="opacity:0.3;"><span class="rating-label">1 <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span><div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%"></span></div><span class="rating-count">0</span></div>
                             </div>
                         </div>
                     </div>
@@ -2322,11 +2303,18 @@ s0.parentNode.insertBefore(s1,s0);
             const pct = Math.round((cnt / n) * 100);
             html += `<div class="rating-row">
               <span class="rating-label">${s} <i class="fas fa-star" style="color:#f59e0b;font-size:0.65rem;"></i></span>
-              <div class="rating-bar-track"><span class="rating-bar-fill" style="width:${pct}%"></span></div>
-              <span class="rating-percent">&mdash;</span>
+              <div class="rating-bar-track"><span class="rating-bar-fill" style="width:0%" data-width="${pct}"></span></div>
+              <span class="rating-count">${cnt}</span>
             </div>`;
           }
           realBarsEl.innerHTML = html;
+          // Animate bars in after paint
+          requestAnimationFrame(() => {
+            realBarsEl.querySelectorAll('.rating-bar-fill').forEach(el => {
+              el.style.transition = 'width 0.7s cubic-bezier(0.22,1,0.36,1)';
+              el.style.width = el.dataset.width + '%';
+            });
+          });
         }
         if (tabVal)   tabVal.textContent = avgStr;
         if (tabStars) tabStars.innerHTML = starsHtml(avg);
@@ -2339,13 +2327,29 @@ s0.parentNode.insertBefore(s1,s0);
       const _fakeHash = (str) => { let h = 0; for (let i = 0; i < str.length; i++) { h = (Math.imul(31, h) + str.charCodeAt(i)) | 0; } return Math.abs(h); };
       const _fakePick = (arr, seed) => arr[Math.abs(seed) % arr.length];
       const _fakeNames = {
-        men:   ['Yassine Alaoui', 'Mehdi Benhaddou', 'Omar El Fassi', 'Anas Filali', 'Hamza Kabbaj', 'Rachid Mansouri', 'Karim Drissi', 'Bilal Hajjam', 'Tarik Nadif', 'Zakaria Lahlou', 'Soufiane Rharbaoui', 'Adil Chraibi', 'Mouad Tazi', 'Ismail Kettani', 'Younes Sekkouri'],
-        women: ['Salma Bennani', 'Imane El Idrissi', 'Nadia Hassane', 'Sara Aït Baha', 'Khadija Rbii', 'Aya Mouhib', 'Fatima Zahra', 'Hind Kasmi', 'Meryem Ouali', 'Amina Slaoui', 'Loubna Taoussi', 'Zineb Fassi', 'Hajar Bouazza', 'Kawtar Moussaoui', 'Rim Squalli']
+        men: [
+          'Yassine Alaoui','Mehdi Benhaddou','Omar El Fassi','Anas Filali','Hamza Kabbaj',
+          'Rachid Mansouri','Karim Drissi','Bilal Hajjam','Tarik Nadif','Zakaria Lahlou',
+          'Soufiane Rharbaoui','Adil Chraibi','Mouad Tazi','Ismail Kettani','Younes Sekkouri',
+          'Nasser Berrada','Saad Ouazzani','Hicham Zeghari','Youssef Benali','Khalid El Amrani',
+          'Jawad Cherkaoui','Reda Fassi','Aymane Lahbabi','Imran Bouhlal','Sami Essaidi',
+          'Walid Rochdi','Othmane Benkirane','Marwan El Idrissi','Faisal Tazi','Hakim Squalli'
+        ],
+        women: [
+          'Salma Bennani','Imane El Idrissi','Nadia Hassane','Sara Aït Baha','Khadija Rbii',
+          'Aya Mouhib','Fatima Zahra','Hind Kasmi','Meryem Ouali','Amina Slaoui',
+          'Loubna Taoussi','Zineb Fassi','Hajar Bouazza','Kawtar Moussaoui','Rim Squalli',
+          'Safaa Benali','Dounia El Amrani','Meriem Cherkaoui','Laila Ouazzani','Nora Lahlou',
+          'Yasmine Berrada','Soumia Rharbaoui','Ghita Alami','Houda Benmoussa','Rokia Hajjami',
+          'Sanaa El Kabbaj','Widad Tazi','Nadia Drissi','Samira Kettani','Jihane Lahnini'
+        ]
       };
-      const _fakeCities = ['Casablanca', 'Rabat', 'Marrakech', 'Tanger', 'Agadir', 'Fès', 'Meknès', 'Oujda', 'Kenitra', 'Tétouan', 'El Jadida'];
-      // Three pools per language, each split into male / female / neutral
-      // Male-specific texts use masculine grammar; female-specific use feminine grammar.
-      // Neutral texts are safe for either gender.
+      const _fakeCities = [
+        'Casablanca','Rabat','Marrakech','Tanger','Agadir','Fès','Meknès',
+        'Oujda','Kenitra','Tétouan','El Jadida','Safi','Beni Mellal','Nador','Settat'
+      ];
+
+      // 30 unique texts per language × gender — independent, varied, no duplicates across pools
       const _fakeTexts = {
         ar: {
           m: [
@@ -2360,7 +2364,25 @@ s0.parentNode.insertBefore(s1,s0);
             "كاتساءل كيفاش عطر بهاد السعر عنده هاد الجودة. IPORDISE ما كيخيبوش.",
             "طلبتو الجمعة ووصل الاثنين. التغليف أنيق والعطر أحسن مما توقعت بمراحل.",
             "السيلاج قوي بلا ما يكون غالب. كل واحد كيوقف عندي كيسألني: شنو هاد العطر؟",
-            "ما كنت نتوقعش هاد الجودة من شراء من النت. IPORDISE غيروا نظرتي للأمور."
+            "ما كنت نتوقعش هاد الجودة من شراء من النت. IPORDISE غيروا نظرتي للأمور.",
+            "الفلاكون جميل بحد ذاته، والريحة أجمل. كانعاود نشريه بلا تفكير.",
+            "اختريتو للصيف وكيشتغل مزيان. بارد في البداية وكيدفى مع الوقت على الجلد.",
+            "واحد من أفضل قرارات هاد العام — خسارة ما شريتوش من قبل بزاف.",
+            "البارسيل وصل مغلف بشكل فاخر ومظبوط. الفلاكون سالم مية بالمية والريحة أصيلة.",
+            "كاتحس بيه حتى بعد العشا والحمام. التبقية استثنائية على الصراحة.",
+            "أحسن شراء من النت في حياتي. الجودة والسعر والتوصيل — كل شي مكمل.",
+            "الريحة تطورت بشكل ما كنت ننتظره: الافتتاح راقي والقاع دافئ وخشبي. تجربة كاملة.",
+            "ديال المكتب والسهرة على حد سواء — مرن وما كيغلبش أبدا.",
+            "تجربة خرى مع IPORDISE. دايما أصلي، دايما في الوقت، دايما كيفرحك.",
+            "شريتو هدية لصاحبي وطلب مني نجيبو مرة أخرى لروحه. بلا تعليق.",
+            "ما كنت ناوي اشريه لكن كيفاش شفت السعر ما قدرتش نمشي.",
+            "الريحة غير متوقعة — أعمق وأثخن مما ظهر في الوصف. مفاجأة إيجابية جدا.",
+            "السيلاج كيبقى بعدي فين ما مشيت — ناس في المكتب يلاحظوه من بعيد.",
+            "أول تجربة مع هاد الماركة وكاملة 100%. رجعت نطلب نفس العطر بعد شهرين.",
+            "فلاكون أنيق وتصميم راقي — حتى كيبقى فوق الطاولة كيعطي ستايل.",
+            "خفيف كافي باش تلبسو كل يوم، وكثيف كافي باش يبقى طول النهار. توازن مثالي.",
+            "شريتو من الصور وصدمتني الريحة بالإيجاب — أغنى وأكثر تعقيدا مما ظهر.",
+            "عطر واحد ما كيبدل مزاجي من الصباح لكن هاد العطر كيعطيني ثقة طول اليوم."
           ],
           f: [
             "عطر راقي بحق. ريحته كتبقى معي من الصباح لما نوصل للدار بالليل. التوصيل سريع والتغليف فاخر.",
@@ -2374,23 +2396,59 @@ s0.parentNode.insertBefore(s1,s0);
             "السيلاج خفيف ورقيق ومناسب للكتس والسهرات على حد سواء. راضية 100%.",
             "أول ما فتحت الفلاكون انبسطت — ريحة عميقة ومميزة وتبقى طول النهار.",
             "هدية من عندي لروحي وما ندمت ولا ثانية. الريحة فاخرة والفلاكون أنيق.",
-            "كاين عطور كتوصل للقلب، هاد منهم. تفاوقات توقعاتي بزاف."
+            "كاين عطور كتوصل للقلب، هاد منهم. تفاوقات توقعاتي بزاف.",
+            "الفلاكون خلاني نبتسم من أول ما فتحت البوكسة. التصميم ومع الريحة — كلشي راقي.",
+            "شريتو للمكتب وكل يوم فيه كومبليمان من الزميلات. ما كنت نتوقع هاد التأثير.",
+            "الريحة ما كتغلبش ولا كتخلي حساسية. مناسبة حتى للحساسيات الخفيفة.",
+            "جربت عينة من صاحبتي وكانت أول ما دخلت داري طلبت عطر من IPORDISE.",
+            "التبقية لا تُصدق — لبستو الصباح وما زلت كانحسو بالليل. استثنائي.",
+            "وصل في ظرفين ومغلف بشكل محترم. الفلاكون ما تشقق شي وكامل مية بالمية.",
+            "ريحة ما عمرها كانتتوقعها من الوصف لكن حبيتها بزاف لما ولات على جلدتي.",
+            "لأول مرة نشري عطر من غير ما نتذوقو أول والنتيجة فاجأتني إيجابيا جدا.",
+            "كاتساءل كيفاش عطر بهاد السعر هاد الجودة — IPORDISE كيفهمو الراجل.",
+            "وصلتني رسالة بعد التوصيل تسألني واش كنت راضية — هاد الاهتمام كيفرح.",
+            "اشتريتو هدية لخواتي وهي طلبت نفس العطر لروحها بعد أسبوع.",
+            "ريحة ورد وفانيلا بدون ما تكون ثقيلة — راقية ومتوازنة في نفس الوقت.",
+            "أحسن عطر نسائي جربتيه في هاد الفئة السعرية. ما كنت تتوقعيش هاد الجودة.",
+            "طلبتو مرة للسهرة وطلبتو مرة ثانية للاستعمال اليومي — يصلح للاثنين.",
+            "التغليف الخارجي جميل وداخلو أجمل — كل تفصيل محسوب ومدروس.",
+            "من أحسن ما طلبت من النت. جدية في التوصيل، جودة في المنتج، ما كنتش نتمنى أكثر.",
+            "سيلاجو كيبقى حول الواحدة طول النهار بدون ما يكون غالب على الآخرين.",
+            "عطر كيعطيك ثقة في نفسك مجرد ما تلبسيه — هاد الفارق كيبين من أول يوم."
           ]
         },
         en: {
           m: [
             "Ma kntch dayyr bali had l3tr ghay9dar yb9a m3aya haka. Min sba7 l lil sallya — sillage kaytayar.",
-            "Darrtو l 3rs u 5 dyal nas w9fu 3ndi u 9alwli: chno had l3tr? Ahsan taw9i3 3mr.",
+            "Darrt l 3rs u 5 dyal nas w9fu 3ndi u 9alwli: chno had l3tr? Ahsan taw9i3 3mr.",
             "Jat delivery f nhar wahd, packaging mra7 l3in. L3tr nnfs bhal li khraj mn boutique kbira.",
             "Darrt fl bureau nhar kaml — raqi bla ma ykun ghlab. Kollachi kaytbassam u kayso2lwni.",
             "Lqito f Instagram u ddabt l IPORDISE. L7a9 ma kandmch — original u packaging f7al.",
             "F flakona tania diyali. Ma bghitsh nkhayal rasi bla had l3tr mra okhra.",
-            "Opening bzzaf tayyba : pepper u 3ud, u mn b3d kaynzl l chi boisé dafi. Tatawwul 3ajib.",
+            "Opening bzzaf tayyba: pepper u 3ud, u mn b3d kaynzl l chi boisé dafi. Tatawwul 3ajib.",
             "Pri9 mzyan u joda li ma kntch ndair baliha. Rja3t nchri 9bal matkhlas.",
             "Wsal mn ghad l Marrakech. Fla9on zwin u l3tr ahla f 7qi9a mn ay sswara.",
             "Kont 3ndi chek qbal lma nchri, lkn joda 9n3atni. Rja3t nchri morra tanya.",
-            "Sillage 9awi bla ma ykun 7arj. Dayman kayji wahd kayso2lwni : chno had lkhamra?",
-            "Tbaqiya wahdha tsstahal — 10 nsa3t w mazal 7adra. IPORDISE ma kaykhyyboch."
+            "Sillage 9awi bla ma ykun 7arj. Dayman kayji wahd kayso2lwni: chno had lkhamra?",
+            "Tbaqiya wahdha tsstahal — 10 nsa3t w mazal 7adra. IPORDISE ma kaykhyyboch.",
+            "Knt katkhaf mn chri mn lnet lkn packaging u l3tr sallaw kol chiik. Irja3 nchri.",
+            "L3tr kaytbadal 3la jlda — mn opening frais l base dafi. Tatawwul kayan.",
+            "Writ fih f compte dyal wahd u b9it n9allab lih. Lqito 3nd IPORDISE u ma ndmtch.",
+            "Sillage kaytab3 sba3t ila 9 sa3t. M3a Bureau w soiree, l2 mushkilat.",
+            "Flakon design ro3a u l3tr f nfs lmstawa — kol chi f sa77tu.",
+            "Awwal mra nchri mn lnet w knt 3ndi chi chekk, lkn IPORDISE bnaaw 3ndi tt9a kbira.",
+            "Rah 7 dyal snin kanbi3 3ttr u had lmstawa f had s3r — nadir bezzaf.",
+            "Kol njma w l3tr kaybda mn jadiid — opening kayan, base kayan, kolchi mzyan.",
+            "Had l3tr ktab3 m3ak 7ta l3chiya bla ma yddir f blassa. IPORDISE khedma dyal kbar.",
+            "Delivery sbi3 l Oujda. Packaging ndif u solide. L3tr original bla chek.",
+            "Jat m3aha sample dyal okhra — hadi l khadma li kttmna mn boutique kbira.",
+            "Rani 3la flakon 3 u ma kandmch nchri f IPORDISE f kol mra.",
+            "L3tr kaytayar bchkl mamul 3la jlda — 7arf lmaa u 3ud u chmaa f la7r.",
+            "Sahbi sol2ni 3lih u 9lto chri mn IPORDISE. Wa9ili rj3 u 9ali ferha bezzaf.",
+            "Ma kntch bghit nchri mn lnet, ssab7an 7asit dima khassra. Hna l 7al.",
+            "L3tr 9at3 mashi bhal swwar dialo — ahla w a39ad bkthir. Positive surprise.",
+            "Sillage 7ader bla agression — 3ziza lbiro u lhfla 3la 7ad sawa.",
+            "Packaging bhal hdiya 7qi9iya. Ftha7t u l3tr khlab l3a9l mn awwal nafas."
           ],
           f: [
             "L3tra 3jabatni bzzaf, katsallay 3la 10 nsa3t w sillage ltiif machi ghlab. Jat delivery f nhar wahd.",
@@ -2404,7 +2462,25 @@ s0.parentNode.insertBefore(s1,s0);
             "Chofto 3nd wahda u b9it nqallab 3lih. Lqito 3nd IPORDISE u waslni sbi3.",
             "Awwal ma f7a9t lfla9on n9assit — ri7a 3ami9a u tamayyz, tbqa m3ak nhar kaml.",
             "Tbaqiya mzyana w 3tra aslia. IPORDISE jadiin, kayjawbu 3la kol chi.",
-            "Kayn 3tra katchi l qalb — hadi menhom. Tfaw9at tawaqo3ati bzzaf."
+            "Kayn 3tra katchi l qalb — hadi menhom. Tfaw9at tawaqo3ati bzzaf.",
+            "Knt kanbi3 3ttr u had l3tra wasat mosta3malatiha li 3jabatni kthir f had s3r.",
+            "Compliments f lbiro kol nhar u f soiree — wahda gir ktb3tha w charattha.",
+            "L3tra kaybda fresh u kaysir ahla ma tkdar tchamm — evolution jmila 3la jlda.",
+            "Chritaha b na9s taman w jath fal7al. L3tra 3taat 3liya afdal impression.",
+            "Ma kntch bghit nchri mn lnet, u had chi ghayyr raiyi. Jodda u service kbira.",
+            "L3tra machi ghasha machi ktiira — balanced bha99. Mzyana l kol occasions.",
+            "Waslni 3la zin u mchi mchi. Packaging intact u l3tra original — 3afak IPORDISE.",
+            "Rani nchri f IPORDISE mn modda — dima joda, dima delivery f wa9to, dima mardia.",
+            "L3tra 3jabat sahibati bzzaf — rj3at tchari wahda lruha mn IPORDISE.",
+            "Fla9on design zwin u katshd l3ain — 7ta kanchofha 3la tabla kanfar7.",
+            "Tbaqiya li ma kntch natawwa3ha — labstha s7ib u bat ma zal 7adra.",
+            "Ri7a ward u fa7m khfifa — machi bhal l riayy7 dyal lgheiyrat. Elegant.",
+            "Lmra lawla nchri 3tra online w n9ass 7yati knt ndkhla. Ahla experience.",
+            "Sillage katb9a m3aki fin ma mchiti — zamlat f lbiro la7dhoh mn b3id.",
+            "L3tra machi dyyal occasion w khass — mzyana l yawmiya u lhflat 3la 7ad.",
+            "Packaging mskin wnnis — bhal hdiya mzyana. IPORDISE kayfhmo had chi.",
+            "Ma9drtch nchri wana nchuf s3r u joda — waqliya nghadir bna9s taman.",
+            "L3tra tfarri9 3lik mn lbar3a — sillage u projection li katkhlik tatmayaz."
           ]
         },
         fr: {
@@ -2420,7 +2496,25 @@ s0.parentNode.insertBefore(s1,s0);
             "Premier achat sur IPORDISE, certainement pas le dernier. Service sérieux, parfum authentique, prix honnête.",
             "Le fond du parfum est exceptionnel — chaud, sensuel, persistant. Je ne commanderai plus ailleurs.",
             "Reçu le lendemain à Casablanca. Honnêtement, rapport qualité-prix imbattable.",
-            "Comparé à des achats en duty-free : qualité identique, prix bien inférieur. IPORDISE a tout compris."
+            "Comparé à des achats en duty-free : qualité identique, prix bien inférieur. IPORDISE a tout compris.",
+            "Le flacon est aussi beau que le parfum est bon — un objet de collection autant qu'un parfum quotidien.",
+            "J'utilise ce parfum depuis trois semaines et je reçois des compliments sans exception à chaque port.",
+            "L'évolution sur la peau est remarquable — ouverture fraîche, cœur chaleureux, fond boisé-ambré persistant.",
+            "Livré en parfait état à Tanger. L'emballage est soigné et le flacon n'a souffert d'aucun dommage.",
+            "Un parfum qui s'adapte parfaitement selon les saisons — léger en été, profond en hiver. Polyvalence rare.",
+            "J'offre régulièrement des parfums — celui-ci a été le cadeau le plus apprécié de l'année sans contestation.",
+            "La sillage reste perceptible même après 9 heures. C'est rare dans cette gamme de prix, je suis agréablement surpris.",
+            "Très bonne première expérience avec IPORDISE. Réception rapide, produit conforme, service irréprochable.",
+            "Ce parfum fait partie de ma rotation quotidienne depuis l'achat — je ne peux tout simplement plus m'en passer.",
+            "Les notes de fond perdurent sur la peau bien au-delà de ce que la description laissait entrevoir.",
+            "Sillage élégant et bien dosé — il est présent sans jamais envahir l'espace des autres. L'équilibre idéal.",
+            "Commandé en cadeau pour mon père — il m'a rappelé pour savoir où l'acheter lui-même. Belle réaction.",
+            "Le spray est bien calibré, la projection parfaite. Deux pulvérisations suffisent pour toute la journée.",
+            "Un choix difficile à battre dans cette catégorie de prix. IPORDISE rend le luxe accessible, c'est appréciable.",
+            "Ce parfum m'a surpris par sa complexité — plusieurs facettes se révèlent au fil des heures. Vraiment bien construit.",
+            "L'emballage extérieur est soigné et l'intérieur encore davantage. On sent immédiatement le soin apporté.",
+            "Je porte ce parfum au bureau et à des événements formels — il convient parfaitement aux deux contextes.",
+            "Livré en deux jours à Fès avec un emballage cadeau inclus. IPORDISE soigne vraiment le détail."
           ],
           f: [
             "Vraiment ravie de cet achat. Le sillage est délicat sans être étouffant, et la tenue dépasse les 10 heures. Livraison rapide.",
@@ -2434,44 +2528,73 @@ s0.parentNode.insertBefore(s1,s0);
             "Colis reçu intact en deux jours à Fès. Le parfum est conforme à la description, je suis vraiment comblée.",
             "La qualité est irréprochable et le sillage remarquable. Je ne commanderai plus en boutique.",
             "Première commande sur IPORDISE, très bonne impression générale. Le parfum est exactement ce que je cherchais.",
-            "Le fond du parfum est addictif — chaleureux, persistant, sensuel. Je reçois des compliments à chaque fois."
+            "Le fond du parfum est addictif — chaleureux, persistant, sensuel. Je reçois des compliments à chaque fois.",
+            "Un parfum féminin bien construit : la fleur ne noie pas le bois, les deux coexistent avec élégance.",
+            "L'évolution sur la peau est ce qui m'a conquise — une ouverture fraîche suivie d'un fond chaud et durable.",
+            "J'ai comparé avec un flacon acheté à Paris : identique en tout point. IPORDISE vend du vrai, aucun doute.",
+            "Reçu dans un bel emballage qui aurait pu être un cadeau sans même l'emballer à nouveau. Superbe présentation.",
+            "Ce parfum colle à ma peau de façon unique — les accords semblent se personnaliser au fil du temps. Fascinant.",
+            "J'ai d'abord commandé pour tester, et dès la première utilisation j'ai su que ce serait mon parfum de saison.",
+            "Le sillage est discret mais persistant — exactement ce que je recherchais pour le bureau et les réunions.",
+            "Livraison soignée à Agadir, emballage protecteur. Le flacon est intact et le parfum absolument ravissant.",
+            "Un investissement que je referais les yeux fermés. La qualité justifie largement le prix.",
+            "Très belle découverte via IPORDISE. Ce parfum m'accompagne maintenant à toutes mes sorties sans exception.",
+            "Les amies ont tout de suite remarqué le changement — elles ont toutes voulu connaître le nom du parfum.",
+            "Notes florales bien équilibrées avec un fond boisé discret. Idéal pour le printemps et l'automne.",
+            "Le flacon est élégant et pratique à utiliser. Le spray diffuse parfaitement sans sur-saturer l'air.",
+            "J'hésite toujours à commander des parfums en ligne, mais IPORDISE m'a prouvé qu'on peut avoir confiance.",
+            "Tenue exceptionnelle — porté le matin, encore perceptible le soir au retour. Je suis bluffée.",
+            "Le parfum s'est révélé plus complexe qu'attendu — plusieurs facettes émergent selon la chaleur et le temps.",
+            "Emballage cadeau impeccable, livraison rapide, parfum d'exception. La totale — IPORDISE ne déçoit pas.",
+            "Acheté sur recommandation d'une collègue et j'aurais dû l'écouter plus tôt. Mon nouveau parfum de référence."
           ]
         }
       };
-      // Pick language pool randomly per review using seed (ar ~40%, en ~30%, fr ~30%)
-      const _pickTextPool = (seed, gender) => {
-        const lang = (Math.abs(seed) % 10) < 4 ? 'ar' : (Math.abs(seed) % 10) < 7 ? 'en' : 'fr';
-        return _fakeTexts[lang][gender] || _fakeTexts[lang].m;
-      };
-      // Is Arabic pool (needs rtl)?
-      const _isArabicPool = (seed) => (Math.abs(seed) % 10) < 4;
-      // Detect product gender from the subtitle element injected by script.js
+
+      // Salted seed helpers — each attribute uses a different salt so picks are fully independent
+      const _seedFor = (base, salt) => _fakeHash(base + '\x01' + salt);
+      // Language: ar ~40%, en 30%, fr 30%
+      const _pickLang = (s) => (s % 10) < 4 ? 'ar' : (s % 10) < 7 ? 'en' : 'fr';
+
+      // Detect product gender from subtitle / product name
       const _getProductGender = () => {
         const subtitleEl = document.getElementById('productSubtitle');
         const text = (subtitleEl ? subtitleEl.textContent : productName).toLowerCase();
-        if (text.includes("women's") || text.includes('womens') || text.includes('femme') || text.includes('for women')) return 'women';
-        if (text.includes("men's") || text.includes('mens') || text.includes('homme') || text.includes('for men')) return 'men';
-        return 'men'; // default — most products in catalog are for men
+        if (text.includes("women's") || text.includes('womens') || text.includes('femme') || text.includes('for women') || text.includes('pour femme')) return 'women';
+        if (text.includes("men's") || text.includes('mens') || text.includes('homme') || text.includes('for men') || text.includes('pour homme')) return 'men';
+        return 'men';
       };
+
       const buildFakeReviews = (name) => {
         const h = _fakeHash(name || 'product');
         const _countPool = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,22,25,28,32];
         const count = _countPool[h % _countPool.length];
-        const productGender = _getProductGender(); // 'men' | 'women'
+        const productGender = _getProductGender();
+        const gender = productGender === 'women' ? 'f' : 'm';
+        const namePool = gender === 'f' ? _fakeNames.women : _fakeNames.men;
+
         return Array.from({ length: count }, (_, i) => {
-          // Use product name + index as combined hash key so each product gets unique reviews
-          const seed   = _fakeHash((name || 'product') + '\x00' + i);
-          const stars  = [5,5,5,5,5,4,5,5,4,5][Math.abs(seed) % 10]; // mostly 5
-          // Reviewer gender must match the product's target gender
-          const gender = productGender === 'women' ? 'f' : 'm';
-          const namePool = gender === 'f' ? _fakeNames.women : _fakeNames.men;
-          const rName  = _fakePick(namePool, seed + 3);
-          const city   = _fakePick(_fakeCities, seed + 7);
-          const text   = _fakePick(_pickTextPool(seed + 13, gender), seed + 11);
-          const isRtl  = _isArabicPool(seed + 13);
-          const dayOff = (seed % 60) + 1;
+          // Primary seed — unique per product + review index
+          const base = (name || 'product') + '\x00' + i;
+          // Each attribute gets its OWN independent hash — no correlation between them
+          const sStar = _seedFor(base, 'star');
+          const sName = _seedFor(base, 'name');
+          const sCity = _seedFor(base, 'city');
+          const sLang = _seedFor(base, 'lang');
+          const sTxt  = _seedFor(base, 'text');
+          const sDate = _seedFor(base, 'date');
+
+          const stars  = [5,5,5,5,5,4,5,5,4,5][sStar % 10];
+          const rName  = _fakePick(namePool, sName);
+          const city   = _fakePick(_fakeCities, sCity);
+          const lang   = _pickLang(sLang);
+          const pool   = _fakeTexts[lang][gender];
+          const text   = _fakePick(pool, sTxt);
+          const isRtl  = lang === 'ar';
+          const dayOff = (sDate % 80) + 1;
           const d = new Date(Date.UTC(2026, 0, dayOff));
           const date = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric', timeZone:'UTC' });
+
           return { _fake: true, _fakeId: `fake_${productId}_${i}`, displayName: rName, rating: stars, city, body: text, isRtl, dateStr: date };
         });
       };

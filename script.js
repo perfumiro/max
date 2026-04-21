@@ -7108,12 +7108,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            const orderedVisible = (activeFilter === 'new-in' || activeFilter === '2026')
+            const rawOrdered = (activeFilter === 'new-in' || activeFilter === '2026')
                 ? visibleCards
                     .slice()
                     .sort((a, b) => getCardAddedScore(b, addedIndexMap.get(b)) - getCardAddedScore(a, addedIndexMap.get(a)))
                     .slice(0, activeFilter === 'new-in' ? 15 : undefined)
                 : getShuffledVisible(visibleCards);
+
+            /* Always pin data-pinned-first="1" cards to the very top */
+            const pinnedCards = rawOrdered.filter((c) => c.dataset.pinnedFirst === '1');
+            const unpinnedCards = rawOrdered.filter((c) => c.dataset.pinnedFirst !== '1');
+            const orderedVisible = pinnedCards.concat(unpinnedCards);
 
             const totalPages = Math.max(1, Math.ceil(orderedVisible.length / pageSize));
             if (currentPage > totalPages) currentPage = 1;

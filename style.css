@@ -5387,291 +5387,156 @@ button.product-favorite-btn.is-active {
     initial-value: 0deg;
 }
 
-/* ── Spinning gradient border wrapper ── */
-.product-wa-magic-wrap {
+/* ── WhatsApp inquiry button ───────────────────────────────── */
+
+/* Wrapper — positions the pulse ring */
+.product-wa-wrap {
     position: relative;
-    padding: 2.5px;
-    border-radius: 1.3rem;
-    /* Spinning conic gradient = animated border */
-    background: conic-gradient(
-        from var(--ipo-wa-angle),
-        rgba(7,94,64,0.5)   0deg,
-        #25D366            72deg,
-        #4ade80           144deg,
-        rgba(255,255,255,0.9) 180deg,
-        #4ade80           216deg,
-        #25D366           288deg,
-        rgba(7,94,64,0.5) 360deg
-    );
-    animation: ipoWaAngleSpin 3.2s linear infinite;
-    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
 }
-/* Diffuse outer glow — blurred copy of the spinning border */
-.product-wa-magic-wrap::before {
+
+/* Expanding pulse ring */
+.product-wa-ring {
+    position: absolute;
+    inset: -3px;
+    border-radius: 15px;
+    border: 2px solid #25D366;
+    opacity: 0;
+    pointer-events: none;
+    animation: ipoWaRing 2.2s ease-out infinite;
+}
+.product-wa-ring::after {
     content: '';
     position: absolute;
     inset: -5px;
-    border-radius: 1.6rem;
-    background: conic-gradient(
-        from var(--ipo-wa-angle),
-        transparent         0deg,
-        rgba(37,211,102,0.55) 90deg,
-        rgba(74,222,128,0.45) 160deg,
-        transparent         200deg,
-        rgba(37,211,102,0.4)  270deg,
-        transparent         360deg
-    );
-    filter: blur(12px);
-    animation: ipoWaAngleSpin 3.2s linear infinite;
-    z-index: -1;
-    pointer-events: none;
+    border-radius: 18px;
+    border: 1.5px solid rgba(37,211,102,0.4);
+    opacity: 0;
+    animation: ipoWaRing 2.2s ease-out 0.55s infinite;
 }
-@keyframes ipoWaAngleSpin {
-    to { --ipo-wa-angle: 360deg; }
+@keyframes ipoWaRing {
+    0%   { transform: scale(1);    opacity: 0.7; }
+    80%  { transform: scale(1.18); opacity: 0;   }
+    100% { transform: scale(1.18); opacity: 0;   }
 }
 
-/* Block entry pop — springs in every time it becomes visible */
-#productWhatsappBlock:not(.hidden) {
-    animation: ipoWaBlockEntry 0.6s cubic-bezier(.34,1.56,.64,1) both;
-}
-@keyframes ipoWaBlockEntry {
-    from { transform: scale(0.86) translateY(10px); opacity: 0; }
-    to   { transform: scale(1)    translateY(0);    opacity: 1; }
-}
-
-/* ── Full-width WhatsApp CTA button ── */
-.product-whatsapp-fullbtn {
-    display: flex;
+/* Button */
+.product-wa-btn {
+    display: inline-flex;
     align-items: center;
-    gap: 0.9rem;
-    width: 100%;
-    text-decoration: none;
-    background: linear-gradient(130deg, #064e35 0%, #0a6b44 40%, #0f7a6e 100%);
+    gap: 0.5rem;
+    height: 52px;
+    padding: 0 1.15rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 55%, #15803d 100%);
     color: #ffffff;
-    border-radius: 1.1rem;
-    padding: 1rem 1.15rem 1rem 1.1rem;
+    text-decoration: none;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    box-shadow:
+        0 4px 18px rgba(37,211,102,0.35),
+        0 1px 0 rgba(255,255,255,0.18) inset;
+    transition:
+        transform        0.22s cubic-bezier(0.34,1.56,0.64,1),
+        box-shadow       0.22s ease,
+        background       0.22s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    cursor: pointer;
     position: relative;
     overflow: hidden;
-    box-shadow:
-        0 6px 24px rgba(18,140,126,0.32),
-        0 1px 0 rgba(255,255,255,0.12) inset,
-        0 -2px 0 rgba(0,0,0,0.18) inset;
-    transition:
-        transform 0.24s cubic-bezier(.34,1.56,.64,1),
-        box-shadow 0.24s ease;
     -webkit-tap-highlight-color: transparent;
 }
-/* Auto-looping shimmer sweep */
-.product-whatsapp-fullbtn::before {
+
+/* Shimmer sweep — loops every 3.5 s */
+.product-wa-btn::before {
     content: '';
     position: absolute;
-    top: 0; left: -130%;
-    width: 75%;
+    top: 0; left: -110%;
+    width: 60%;
     height: 100%;
     background: linear-gradient(110deg,
-        transparent 0%,
-        rgba(255,255,255,0.10) 35%,
-        rgba(255,255,255,0.26) 50%,
-        rgba(255,255,255,0.10) 65%,
-        transparent 100%);
-    animation: ipoWaShimmerLoop 3.2s ease-in-out infinite;
+        transparent       0%,
+        rgba(255,255,255,0.07) 30%,
+        rgba(255,255,255,0.22) 50%,
+        rgba(255,255,255,0.07) 70%,
+        transparent      100%);
+    animation: ipoWaShimmer 3.5s ease-in-out infinite;
     pointer-events: none;
 }
-@keyframes ipoWaShimmerLoop {
-    0%        { left: -130%; }
-    45%, 100% { left: 165%;  }
+@keyframes ipoWaShimmer {
+    0%        { left: -110%; }
+    40%, 100% { left: 160%;  }
 }
-/* Top highlight line */
-.product-whatsapp-fullbtn::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 1.5px;
-    background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(255,255,255,0.4) 40%,
-        rgba(74,222,128,0.8)  60%,
-        transparent 100%);
-    pointer-events: none;
-}
-.product-whatsapp-fullbtn:hover {
-    transform: translateY(-2px);
+
+/* Hover */
+.product-wa-btn:hover {
+    transform: translateY(-2px) scale(1.03);
     box-shadow:
-        0 14px 40px rgba(18,140,126,0.5),
-        0 1px 0 rgba(255,255,255,0.16) inset,
-        0 -2px 0 rgba(0,0,0,0.18) inset;
+        0 10px 32px rgba(37,211,102,0.45),
+        0 1px 0 rgba(255,255,255,0.22) inset;
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 55%, #16a34a 100%);
 }
-.product-whatsapp-fullbtn:active {
-    transform: translateY(0) scale(0.985);
-    box-shadow: 0 4px 14px rgba(18,140,126,0.3);
-}
-
-/* Pulsing live dot */
-.product-wa-live {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #4ade80;
-    animation: ipoWaLivePulse 1.8s ease-out infinite;
-}
-@keyframes ipoWaLivePulse {
-    0%   { box-shadow: 0 0 0 0   rgba(74,222,128,0.9); }
-    70%  { box-shadow: 0 0 0 8px rgba(74,222,128,0);   }
-    100% { box-shadow: 0 0 0 0   rgba(74,222,128,0);   }
+.product-wa-btn:hover .product-wa-ring {
+    animation-play-state: paused;
 }
 
-/* Icon bubble — periodic wiggle */
-.product-wa-icon-bubble {
-    flex-shrink: 0;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.14);
-    border: 1.5px solid rgba(255,255,255,0.25);
+/* Press */
+.product-wa-btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 2px 10px rgba(37,211,102,0.3);
+    transition-duration: 0.08s;
+}
+
+/* WhatsApp icon — periodic bounce */
+.product-wa-btn-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.55rem;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.22);
-    animation: ipoWaIconWiggle 3.5s ease-in-out infinite;
-    transition: background 0.22s ease;
-}
-@keyframes ipoWaIconWiggle {
-    0%, 75%, 100% { transform: scale(1)    rotate(0deg);  }
-    80%           { transform: scale(1.14) rotate(-8deg); }
-    87%           { transform: scale(1.10) rotate(6deg);  }
-    93%           { transform: scale(1.05) rotate(-3deg); }
-}
-.product-whatsapp-fullbtn:hover .product-wa-icon-bubble {
-    background: rgba(255,255,255,0.22);
-    animation-play-state: paused;
-    transform: scale(1.08);
-}
-
-/* Text body */
-.product-wa-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.22rem;
-    min-width: 0;
-}
-.product-wa-title {
-    font-size: 0.92rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    line-height: 1.15;
-    white-space: nowrap;
-}
-.product-wa-sub {
-    font-size: 0.7rem;
-    font-weight: 400;
-    opacity: 0.82;
-    letter-spacing: 0.01em;
-    line-height: 1.4;
-    white-space: normal;
-}
-
-/* Right side */
-.product-wa-right {
+    font-size: 1.3rem;
+    line-height: 1;
     flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.3rem;
+    animation: ipoWaIconBounce 2.8s ease-in-out infinite;
 }
-.product-wa-badge {
-    font-size: 0.62rem;
-    font-weight: 700;
+@keyframes ipoWaIconBounce {
+    0%, 55%, 100%  { transform: scale(1)    rotate(0deg);  }
+    60%            { transform: scale(1.22) rotate(-12deg); }
+    68%            { transform: scale(1.14) rotate(8deg);  }
+    75%            { transform: scale(1.07) rotate(-4deg); }
+    82%            { transform: scale(1)    rotate(0deg);  }
+}
+.product-wa-btn:hover .product-wa-btn-icon {
+    animation: none;
+    transform: scale(1.15);
+    transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* Label */
+.product-wa-btn-label {
+    font-size: 0.76rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    background: rgba(255,255,255,0.18);
-    border: 1px solid rgba(255,255,255,0.32);
-    color: #ffffff;
-    padding: 0.18rem 0.5rem;
-    border-radius: 999px;
-    white-space: nowrap;
-    backdrop-filter: blur(4px);
-    animation: ipoWaBadgeGlow 2.4s ease-in-out infinite;
-}
-@keyframes ipoWaBadgeGlow {
-    0%, 100% { box-shadow: none; border-color: rgba(255,255,255,0.32); }
-    50%      { box-shadow: 0 0 8px rgba(74,222,128,0.55); border-color: rgba(74,222,128,0.6); }
+    letter-spacing: 0.09em;
+    line-height: 1;
+    position: relative;
 }
 
-/* Arrow — bouncing */
-.product-wa-arrow {
-    font-size: 0.75rem;
-    opacity: 0.7;
-    animation: ipoWaArrowBounce 1.6s ease-in-out infinite;
+/* Block entry — elastic spring in */
+#productWhatsappBlock:not(.hidden) .product-wa-wrap {
+    animation: ipoWaBtnEntry 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
-@keyframes ipoWaArrowBounce {
-    0%, 100% { transform: translateX(0);   opacity: 0.7; }
-    50%      { transform: translateX(5px); opacity: 1;   }
-}
-.product-whatsapp-fullbtn:hover .product-wa-arrow {
-    animation-play-state: paused;
-    transform: translateX(5px);
-    opacity: 1;
+@keyframes ipoWaBtnEntry {
+    from { transform: scale(0.6) translateX(-8px); opacity: 0; }
+    to   { transform: scale(1)   translateX(0);    opacity: 1; }
 }
 
-/* Floating sparkle particles */
-.product-wa-spark {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.92);
-    pointer-events: none;
-    animation: ipoWaSparkFloat linear infinite;
-}
-.product-wa-spark:nth-child(5) {
-    width: 4px; height: 4px;
-    left: 12%; bottom: 6px;
-    animation-duration: 3.0s;
-    animation-delay: 0s;
-}
-.product-wa-spark:nth-child(6) {
-    width: 3px; height: 3px;
-    left: 32%; bottom: 10px;
-    animation-duration: 2.6s;
-    animation-delay: 0.8s;
-    background: rgba(74,222,128,0.95);
-}
-.product-wa-spark:nth-child(7) {
-    width: 5px; height: 5px;
-    left: 58%; bottom: 8px;
-    animation-duration: 3.4s;
-    animation-delay: 1.5s;
-}
-.product-wa-spark:nth-child(8) {
-    width: 3px; height: 3px;
-    left: 80%; bottom: 12px;
-    animation-duration: 2.8s;
-    animation-delay: 0.4s;
-    background: rgba(74,222,128,0.9);
-}
-@keyframes ipoWaSparkFloat {
-    0%   { transform: translateY(0)    scale(1);   opacity: 0;   }
-    15%  { opacity: 1; }
-    80%  { opacity: 0.6; }
-    100% { transform: translateY(-32px) scale(0.2); opacity: 0; }
-}
-
-/* Reduced motion — strip all animations */
 @media (prefers-reduced-motion: reduce) {
-    .product-wa-live,
-    .product-wa-icon-bubble,
-    .product-wa-arrow,
-    .product-wa-badge,
-    .product-wa-spark,
-    #productWhatsappBlock:not(.hidden),
-    .product-wa-magic-wrap,
-    .product-wa-magic-wrap::before { animation: none; }
-    .product-whatsapp-fullbtn::before { display: none; }
+    .product-wa-ring,
+    .product-wa-ring::after,
+    .product-wa-btn-icon,
+    #productWhatsappBlock:not(.hidden) .product-wa-wrap { animation: none; }
+    .product-wa-btn::before { display: none; }
 }
 
 .product-cta {
@@ -5837,9 +5702,9 @@ button.product-favorite-btn.is-active {
 
 .rating-row {
     display: grid;
-    grid-template-columns: 2.5rem minmax(0, 1fr) 3.2rem;
+    grid-template-columns: 2.5rem minmax(0, 1fr) 2.4rem;
     align-items: center;
-    gap: 0.55rem;
+    gap: 0.5rem;
 }
 
 .rating-label {
@@ -5850,24 +5715,32 @@ button.product-favorite-btn.is-active {
 
 .rating-bar-track {
     width: 100%;
-    height: 0.46rem;
+    height: 7px;
     border-radius: 999px;
-    background: #e5e7eb;
+    background: #f0f1f3;
     overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
 }
 
 .rating-bar-fill {
     display: block;
     height: 100%;
     border-radius: 999px;
-    background: #1f2937;
+    background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 1px 4px rgba(245,158,11,0.35);
+    transform-origin: left;
 }
 
-.rating-percent {
-    font-size: 0.75rem;
+.rating-count {
+    font-size: 0.72rem;
     font-weight: 700;
-    color: #6b7280;
+    color: #374151;
     text-align: right;
+    min-width: 1.6rem;
+    background: #f3f4f6;
+    border-radius: 999px;
+    padding: 1px 6px;
+    line-height: 1.6;
 }
 
 .customer-rating-footnote {

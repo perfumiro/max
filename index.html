@@ -1183,6 +1183,100 @@ s0.parentNode.insertBefore(s1,s0);
 .quiz-result-product-name { font-size: 0.82rem; font-weight: 700; color: #111827; margin: 0 0 2px; }
 .quiz-result-product-brand { font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
     letter-spacing: 0.1em; color: #9ca3af; margin: 0; }
+
+/* ── Professional Refinements ────────────────────── */
+
+/* Announcement bar — darker luxury strip with gold CTA links */
+.top-announcement {
+    background: linear-gradient(90deg, #080608, #120a0d, #080608) !important;
+    border-bottom: 1px solid rgba(200,169,106,0.18) !important;
+}
+.top-announcement-link {
+    color: #c8a96a !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em !important;
+    text-decoration: none !important;
+    border-bottom: 1px solid rgba(200,169,106,0.35) !important;
+    transition: color 0.18s, border-color 0.18s !important;
+}
+.top-announcement-link:hover {
+    color: #e4c98e !important;
+    border-bottom-color: #e4c98e !important;
+}
+
+/* Hero banner — bolder, more commanding headline */
+.hero-banner-htitle {
+    font-weight: 700 !important;
+    letter-spacing: 0.14em !important;
+    font-size: clamp(1.55rem, 3.4vw, 2.9rem) !important;
+    text-shadow: 0 2px 30px rgba(0,0,0,0.75), 0 1px 6px rgba(0,0,0,0.9) !important;
+}
+.hero-banner-hlabel {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.52em !important;
+    font-weight: 700 !important;
+    color: #D4AF37 !important;
+    text-shadow: 0 1px 10px rgba(0,0,0,0.9) !important;
+}
+.hero-banner-hdivider {
+    width: 56px !important;
+    height: 1px !important;
+    background: linear-gradient(to right, transparent, #C9A84C 30%, #C9A84C 70%, transparent) !important;
+    opacity: 0.85 !important;
+}
+
+/* Flash Offers — more editorial headline treatment */
+#flashOffersSection .flash-offers-title .flash-word {
+    font-weight: 900 !important;
+    letter-spacing: 0.22em !important;
+}
+#flashOffersSection .text-sm.text-gray-500 {
+    color: #5f6372 !important;
+    line-height: 1.75 !important;
+    font-size: 0.82rem !important;
+    letter-spacing: 0.01em !important;
+}
+
+/* New Arrivals — section header refinement */
+.new-arrivals-cta {
+    letter-spacing: 0.14em !important;
+    font-weight: 700 !important;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s !important;
+}
+.new-arrivals-cta:hover {
+    background: #111827 !important;
+    color: #fff !important;
+    border-color: #111827 !important;
+    box-shadow: 0 4px 16px rgba(17,24,39,0.18) !important;
+}
+
+/* Product cards — crisper hover shadow */
+#productCarousel > div.js-product-link {
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04) !important;
+    transition: box-shadow 0.3s ease, transform 0.3s ease !important;
+}
+#productCarousel > div.js-product-link:hover {
+    box-shadow: 0 20px 60px rgba(0,0,0,0.13), 0 4px 14px rgba(0,0,0,0.07) !important;
+    transform: translateY(-4px) !important;
+}
+
+/* Quick cat pills — tighter, more refined */
+.quick-cat-pill {
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    transition: all 0.2s ease !important;
+}
+
+/* Section divider accent above Flash Offers */
+#flashOffersSection {
+    border-top: 2px solid #f3f4f6 !important;
+}
+
+/* Perfume nav — slightly tighter, more refined */
+.perfume-nav-link {
+    letter-spacing: 0.13em !important;
+    font-size: 0.65rem !important;
+}
 </style>
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
@@ -1224,11 +1318,11 @@ s0.parentNode.insertBefore(s1,s0);
     <!-- Top Announcement Banner -->
     <div class="top-announcement text-center py-2 text-sm font-medium tracking-wide">
         <div class="top-announcement-marquee">
-            <span class="top-announcement-marquee-item" data-i18n-html="index.announce1" data-i18n-orig-html="Niche to designer, find your signature scent today. <a href=&quot;discover.html?filter=all&quot; class=&quot;top-announcement-link&quot; data-announcement-target=&quot;all&quot;>SHOP COLLECTION</a>">Niche to designer, find your signature scent today. <a href="discover.html?filter=all" class="top-announcement-link" data-announcement-target="all">SHOP COLLECTION</a></span>
+            <span class="top-announcement-marquee-item" data-i18n-html="index.announce1" data-i18n-orig-html="Designer to Arabian — find your signature scent today. <a href=&quot;discover.html?filter=all&quot; class=&quot;top-announcement-link&quot; data-announcement-target=&quot;all&quot;>SHOP COLLECTION</a>">Designer to Arabian &mdash; find your signature scent today. <a href="discover.html?filter=all" class="top-announcement-link" data-announcement-target="all">SHOP COLLECTION</a></span>
             <span class="top-announcement-marquee-item" data-i18n-html="index.announce2" data-i18n-orig-html="Fresh drops just landed in our perfume edit. <a href=&quot;discover.html?filter=new-in&quot; class=&quot;top-announcement-link&quot; data-announcement-target=&quot;new-in&quot;>EXPLORE NEW IN</a>">Fresh drops just landed in our perfume edit. <a href="discover.html?filter=new-in" class="top-announcement-link" data-announcement-target="new-in">EXPLORE NEW IN</a></span>
             <span class="top-announcement-marquee-item" data-i18n-html="index.announce3" data-i18n-orig-html="Free delivery across all Morocco &amp;mdash; orders from 35 MAD. <a href=&quot;discover.html?filter=best-sellers&quot; class=&quot;top-announcement-link&quot;>BEST SELLERS</a>">Free delivery across all Morocco &mdash; orders from 35 MAD. <a href="discover.html?filter=best-sellers" class="top-announcement-link">BEST SELLERS</a></span>
             <span class="top-announcement-marquee-item" data-i18n-html="index.announce4" data-i18n-orig-html="100% authentic fragrances &amp;mdash; every bottle verified. <a href=&quot;our-story.html&quot; class=&quot;top-announcement-link&quot;>OUR STORY</a>">100% authentic fragrances &mdash; every bottle verified. <a href="pages/our-story.html" class="top-announcement-link">OUR STORY</a></span>
-            <span class="top-announcement-marquee-item" aria-hidden="true" data-i18n-html="index.announce1">Niche to designer, find your signature scent today. <a href="discover.html?filter=all" class="top-announcement-link" data-announcement-target="all">SHOP COLLECTION</a></span>
+            <span class="top-announcement-marquee-item" aria-hidden="true" data-i18n-html="index.announce1">Designer to Arabian &mdash; find your signature scent today. <a href="discover.html?filter=all" class="top-announcement-link" data-announcement-target="all">SHOP COLLECTION</a></span>
             <span class="top-announcement-marquee-item" aria-hidden="true" data-i18n-html="index.announce2">Fresh drops just landed in our perfume edit. <a href="discover.html?filter=new-in" class="top-announcement-link" data-announcement-target="new-in">EXPLORE NEW IN</a></span>
             <span class="top-announcement-marquee-item" aria-hidden="true" data-i18n-html="index.announce3">Free delivery across all Morocco &mdash; orders from 35 MAD. <a href="discover.html?filter=best-sellers" class="top-announcement-link">BEST SELLERS</a></span>
             <span class="top-announcement-marquee-item" aria-hidden="true" data-i18n-html="index.announce4">100% authentic fragrances &mdash; every bottle verified. <a href="pages/our-story.html" class="top-announcement-link">OUR STORY</a></span>
@@ -1323,7 +1417,6 @@ s0.parentNode.insertBefore(s1,s0);
                     <li><a href="discover.html?filter=for-men" class="perfume-nav-link" data-i18n="index.nav.men" data-i18n-orig="MEN">MEN</a></li>
                     <li><a href="discover.html?filter=for-women" class="perfume-nav-link" data-i18n="index.nav.women" data-i18n-orig="WOMEN">WOMEN</a></li>
                     <li><a href="discover.html?filter=unisex" class="perfume-nav-link" data-i18n="index.nav.unisex" data-i18n-orig="UNISEX">UNISEX</a></li>
-                    <li><a href="discover.html?filter=niche" class="perfume-nav-link" data-i18n="index.nav.niche" data-i18n-orig="NICHE">NICHE</a></li>
                     <li><a href="discover.html?filter=arabian" class="perfume-nav-link" data-i18n="index.nav.arabian" data-i18n-orig="ARABIAN">ARABIAN</a></li>
                     <li><a href="discover.html?filter=designer" class="perfume-nav-link" data-i18n="index.nav.designer" data-i18n-orig="DESIGNER">DESIGNER</a></li>
                     <li><a href="discover.html?filter=discovery-sets" class="perfume-nav-link" data-i18n="index.nav.discovery" data-i18n-orig="DISCOVERY SETS">DISCOVERY SETS</a></li>
@@ -1389,7 +1482,6 @@ s0.parentNode.insertBefore(s1,s0);
             <li><a href="discover.html?filter=for-men" class="mobile-menu-link"><i class="fas fa-mars"></i> <span data-i18n="index.mobile.men">Men</span></a></li>
             <li><a href="discover.html?filter=for-women" class="mobile-menu-link"><i class="fas fa-venus"></i> <span data-i18n="index.mobile.women">Women</span></a></li>
             <li><a href="discover.html?filter=unisex" class="mobile-menu-link"><i class="fas fa-transgender-alt"></i> <span data-i18n="index.mobile.unisex">Unisex</span></a></li>
-            <li><a href="discover.html?filter=niche" class="mobile-menu-link"><i class="fas fa-gem"></i> <span data-i18n="index.mobile.niche">Niche</span></a></li>
             <li><a href="discover.html?filter=designer" class="mobile-menu-link"><i class="fas fa-crown"></i> <span data-i18n="index.mobile.designer">Designer</span></a></li>
             <li><a href="discover.html?filter=arabian" class="mobile-menu-link"><i class="fas fa-mosque"></i> <span data-i18n="index.mobile.arabian">Arabian</span></a></li>
             <li><a href="discover.html?filter=best-sellers" class="mobile-menu-link"><i class="fas fa-fire"></i> <span data-i18n="index.mobile.bestsellers">Best Sellers</span></a></li>
@@ -1410,7 +1502,6 @@ s0.parentNode.insertBefore(s1,s0);
             <a href="discover.html?filter=best-sellers" class="quick-cat-pill"><i class="fas fa-fire"></i> <span data-i18n="index.quick.bestsellers">Best Sellers</span></a>
             <a href="discover.html?filter=for-men" class="quick-cat-pill" data-i18n="index.quick.men">Men</a>
             <a href="discover.html?filter=for-women" class="quick-cat-pill" data-i18n="index.quick.women">Women</a>
-            <a href="discover.html?filter=niche" class="quick-cat-pill" data-i18n="index.quick.niche">Niche</a>
             <a href="discover.html?filter=designer" class="quick-cat-pill" data-i18n="index.quick.designer">Designer</a>
         </div>
     </div>
@@ -1453,7 +1544,7 @@ s0.parentNode.insertBefore(s1,s0);
                 </a>
                 <div class="hero-banner-headline" aria-hidden="true">
                     <p class="hero-banner-hlabel" data-i18n="index.hero_slide2_label">Curated for the Discerning</p>
-                    <h2 class="hero-banner-htitle" data-i18n="index.hero_slide2_title">Niche Fragrances</h2>
+                    <h2 class="hero-banner-htitle" data-i18n="index.hero_slide2_title">Designer Fragrances</h2>
                     <div class="hero-banner-hdivider"></div>
                 </div>
             </div>
@@ -1642,7 +1733,7 @@ s0.parentNode.insertBefore(s1,s0);
                     </span>
                 </h2>
                 <p class="text-sm text-gray-500 mt-3 max-w-2xl mx-auto" data-i18n="index.flash_subtitle">
-                    Discover today's most wanted perfumes, rare niche selections, and limited-edition sets. Flash offers are available for 24 hours only.
+                    Discover today's most coveted fragrances &mdash; designer icons, Arabian exclusives, and limited-edition sets. Renewed every 24 hours.
                 </p>
                 <!-- Live Viewer Pill -->
                 <div class="lvc-pill mt-5" id="flashStockBar" aria-live="polite" aria-atomic="true">
