@@ -3642,7 +3642,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     return response.json();
                 })
                 .then((pricesById) => (pricesById && typeof pricesById === 'object' ? pricesById : {}))
-                .catch(() => ({}));
+                .catch(() => ({}))
+                .then(async (pricesById) => {
+                    // Merge Firestore productOverrides on top of prices.json
+                    try {
+                        const { db: fsDb } = await import('./auth/firebase.js');
+                        const { collection: col, getDocs: gDocs } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
+                        const snap = await gDocs(col(fsDb, 'productOverrides'));
+                        snap.forEach(d => {
+                            const slug = d.id;
+                            const ov = d.data();
+                            if (!pricesById[slug]) pricesById[slug] = {};
+                            // Apply overridden prices
+                            if (ov.prices && typeof ov.prices === 'object') {
+                                Object.assign(pricesById[slug], ov.prices);
+                            }
+                            // Zero-out removed sizes so they disappear from the storefront
+                            if (Array.isArray(ov.removedSizes)) {
+                                ov.removedSizes.forEach(sz => { pricesById[slug][sz] = 0; });
+                            }
+                        });
+                    } catch (_) { /* non-blocking — storefront still works from prices.json */ }
+                    return pricesById;
+                });
         }
 
         return pricesJsonPromise;
