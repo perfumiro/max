@@ -2055,21 +2055,30 @@ const loadProductsView = async () => {
       const base       = pricesRes[slug] || {};
       const ov         = overrides[slug] || {};
       const pendingSet = pendingRemovals[slug] || new Set();
-      // Already-saved removals respect "prices WIN" rule (a price override un-removes a size).
-      // But pendingRemovals (UI click ×) ALWAYS win — admin explicitly wants this size gone.
+      const hasFsPrices = ov.prices && Object.keys(ov.prices).length > 0;
+
+      if (hasFsPrices) {
+        // Firestore prices are AUTHORITATIVE — use them as the complete size list.
+        // This ensures renames (old key gone, new key added) are reflected correctly
+        // and the base prices.json whitelist cannot re-inject stale old sizes.
+        const merged = {};
+        Object.entries(ov.prices).forEach(([sz, price]) => {
+          if (price > 0 && !pendingSet.has(sz)) merged[sz] = price;
+        });
+        return merged;
+      }
+
+      // No Firestore prices yet — derive from base (prices.json) minus removals.
+      // Already-saved removals respect "prices WIN" rule.
+      // pendingRemovals (UI click ×) ALWAYS win.
       const removed = new Set([
         ...(ov.removedSizes || []).map(normSizeKey).filter(sz => !(ov.prices?.[sz] > 0)),
         ...[...pendingSet].map(normSizeKey),
       ]);
       const merged = {};
       Object.keys(base).forEach(sz => {
-        if (!removed.has(sz)) merged[sz] = (ov.prices?.[sz] > 0) ? ov.prices[sz] : base[sz];
+        if (!removed.has(sz)) merged[sz] = base[sz];
       });
-      if (ov.prices) {
-        Object.keys(ov.prices).forEach(sz => {
-          if (!base[sz] && !removed.has(sz) && ov.prices[sz] > 0) merged[sz] = ov.prices[sz];
-        });
-      }
       return merged;
     };
 
