@@ -2019,22 +2019,23 @@ const loadNewsletterView = async () => {
 
 // ─── PRODUCTS MANAGER VIEW ──────────────────────────────────────────────────
 const loadProductsView = async () => {
-  const tbody    = document.getElementById('productsTableBody');
+  const grid     = document.getElementById('productsGrid');
   const countEl  = document.getElementById('productsCount');
   const searchEl = document.getElementById('productsSearch');
-  if (!tbody) return;
-  tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>`;
+  const filterEl = document.getElementById('productsStatusFilter');
+  if (!grid) return;
+  grid.innerHTML = `<div style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading products...</div>`;
   try {
     const [pricesRes, overridesSnap] = await Promise.all([
       fetch('/prices.json').then(r=>r.json()),
       getDocs(collection(db,'productOverrides'))
     ]);
-    // Normalize size keys: "10" → "10ml", "50 ml" → "50ml"
+
+    // ── Helpers ────────────────────────────────────────────────────────────
     const normSizeKey = (sz) => {
       const s = (sz || '').trim().toLowerCase().replace(/\s+/g, '');
       return /^\d+$/.test(s) ? s + 'ml' : s;
     };
-    // Normalize all keys in a Firestore override document
     const normalizeOv = (ov) => {
       if (!ov) return {};
       const prices = {};
@@ -2045,32 +2046,22 @@ const loadProductsView = async () => {
 
     const overrides = {};
     overridesSnap.docs.forEach(d => { overrides[d.id] = normalizeOv(d.data()); });
-
     const slugs = Object.keys(pricesRes);
-    if(countEl) countEl.textContent = slugs.length + ' products';
+    // Track unsaved changes per slug
+    const dirty = new Set();
+    const pendingRemovals = {};
 
-    // Track explicitly removed sizes per slug (during this session)
-    const pendingRemovals = {}; // { [slug]: Set<sizeName> }
-
-    // Build the effective size map for a slug.
-    // Rule: if a size has a positive price override it is NEVER treated as removed
-    // (prices win over removedSizes — prevents stale data from hiding sizes).
     const effectiveSizes = (slug) => {
       const base       = pricesRes[slug] || {};
       const ov         = overrides[slug] || {};
       const pendingSet = pendingRemovals[slug] || new Set();
-      // Only treat a size as removed if it has no positive price override
       const removed = new Set(
-        [...(ov.removedSizes || []), ...pendingSet]
-          .map(normSizeKey)
-          .filter(sz => !(ov.prices?.[sz] > 0))
+        [...(ov.removedSizes || []), ...pendingSet].map(normSizeKey).filter(sz => !(ov.prices?.[sz] > 0))
       );
       const merged = {};
-      // Base sizes: use override price if set, otherwise base price
       Object.keys(base).forEach(sz => {
         if (!removed.has(sz)) merged[sz] = (ov.prices?.[sz] > 0) ? ov.prices[sz] : base[sz];
       });
-      // Extra sizes added by admin (not in base prices.json)
       if (ov.prices) {
         Object.keys(ov.prices).forEach(sz => {
           if (!base[sz] && !removed.has(sz) && ov.prices[sz] > 0) merged[sz] = ov.prices[sz];
@@ -2079,188 +2070,278 @@ const loadProductsView = async () => {
       return merged;
     };
 
-    const render = (filter='') => {
-      const filtered = filter ? slugs.filter(s=>s.toLowerCase().replace(/-/g,' ').includes(filter.toLowerCase())) : slugs;
-      if(filtered.length===0){ tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)">No products found</td></tr>`; return; }
-      tbody.innerHTML = filtered.map(slug => {
+    const productName = (slug) => slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+
+    // ── Render ─────────────────────────────────────────────────────────────
+    const render = () => {
+      const q      = (searchEl?.value || '').toLowerCase();
+      const status = filterEl?.value || '';
+      const filtered = slugs.filter(slug => {
         const ov       = overrides[slug] || {};
         const disabled = ov.disabled || false;
-        const hasOverride = !!(ov.prices || (ov.removedSizes && ov.removedSizes.length));
-        const name     = slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-        const sizes    = effectiveSizes(slug);
-        const baseKeys = Object.keys(pricesRes[slug] || {});
+        const hasOv    = !!(Object.keys(ov.prices||{}).length || (ov.removedSizes||[]).length);
+        if (q && !slug.replace(/-/g,' ').includes(q)) return false;
+        if (status === 'active'    && disabled) return false;
+        if (status === 'disabled'  && !disabled) return false;
+        if (status === 'overridden'&& (!hasOv || disabled)) return false;
+        return true;
+      });
 
-        const sizeHtml = Object.keys(sizes).map(sz => {
+      const total   = slugs.length;
+      const nActive = slugs.filter(s => !(overrides[s]||{}).disabled).length;
+      const nOv     = slugs.filter(s => {
+        const ov = overrides[s]||{};
+        return !ov.disabled && (Object.keys(ov.prices||{}).length || (ov.removedSizes||[]).length);
+      }).length;
+      if (countEl) countEl.textContent = `${total} products · ${nActive} active · ${nOv} overridden`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="text-align:center;padding:48px;color:var(--muted)">No products match this filter</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(slug => {
+        const ov         = overrides[slug] || {};
+        const disabled   = ov.disabled || false;
+        const hasOverride= !!(Object.keys(ov.prices||{}).length || (ov.removedSizes||[]).length);
+        const isDirty    = dirty.has(slug);
+        const name       = productName(slug);
+        const sizes      = effectiveSizes(slug);
+        const baseKeys   = Object.keys(pricesRes[slug] || {});
+
+        const sizeChips = Object.keys(sizes).sort((a,b)=>{
+          const n = s => parseInt(s.replace(/\D/g,''),10) || 0;
+          return n(a) - n(b);
+        }).map(sz => {
           const price     = sizes[sz];
-          const isNew     = !baseKeys.includes(sz);   // added by admin, not in prices.json
-          const isChanged = !isNew && (ov.prices?.[sz] !== undefined && ov.prices[sz] !== (pricesRes[slug]||{})[sz]);
-          const chipBorder = isNew ? 'var(--gold)' : isChanged ? 'var(--amber)' : 'var(--border)';
-          const chipTitle  = isNew ? 'New size (not in prices.json)' : isChanged ? `Original: ${(pricesRes[slug]||{})[sz]} MAD` : sz;
+          const isNew     = !baseKeys.includes(sz);
+          const isChanged = !isNew && ov.prices?.[sz] !== undefined && ov.prices[sz] !== (pricesRes[slug]||{})[sz];
+          const border    = isNew ? 'var(--gold)' : isChanged ? 'var(--amber)' : 'var(--border)';
+          const tip       = isNew ? 'New size added by admin' : isChanged ? `Original: ${(pricesRes[slug]||{})[sz]} MAD` : `${sz}`;
           return `<span class="prod-size-chip" data-slug="${esc(slug)}" data-size="${esc(sz)}"
-            style="display:inline-flex;align-items:center;gap:3px;background:var(--s3);border:1.5px solid ${chipBorder};border-radius:6px;padding:3px 8px;font-size:12px;margin:2px"
-            title="${esc(chipTitle)}">
-            <span style="color:var(--muted);font-weight:600;min-width:30px;text-align:center">${esc(sz)}</span>
+            style="display:inline-flex;align-items:center;gap:4px;background:var(--s3);border:1.5px solid ${border};border-radius:8px;padding:4px 8px 4px 10px;font-size:12px;margin:2px;transition:border-color .15s"
+            title="${esc(tip)}">
+            <span style="font-weight:700;color:var(--muted);white-space:nowrap">${esc(sz)}</span>
             <input type="number" min="0" value="${price}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
-              style="width:60px;border:1px solid var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right">
-            <span style="color:var(--muted);font-size:10px">MAD</span>
+              style="width:62px;border:1px solid var(--border);border-radius:5px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right;font-weight:600">
+            <span style="color:var(--dim);font-size:10px;font-weight:500">MAD</span>
             <button class="prod-remove-size" data-slug="${esc(slug)}" data-size="${esc(sz)}"
-              style="background:none;border:none;cursor:pointer;color:var(--rose);font-size:13px;line-height:1;padding:0 2px"
-              title="Remove this size">×</button>
+              style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:14px;line-height:1;padding:0 1px;border-radius:3px;transition:color .15s"
+              onmouseover="this.style.color='var(--rose)'" onmouseout="this.style.color='var(--dim)'"
+              title="Remove ${esc(sz)}">×</button>
           </span>`;
         }).join('');
 
-        return `<tr style="border-bottom:1px solid var(--border);opacity:${disabled?0.5:1}" data-slug="${esc(slug)}">
-          <td style="padding:10px 14px;font-size:13px;font-weight:600;color:var(--ink);max-width:200px;word-break:break-word">
-            ${esc(name)}
-            ${disabled ? '<span style="font-size:10px;background:var(--rose);color:#fff;padding:1px 6px;border-radius:99px;margin-left:6px">disabled</span>' : ''}
-            ${hasOverride && !disabled ? '<span style="font-size:10px;background:var(--amber);color:#fff;padding:1px 6px;border-radius:99px;margin-left:6px">overridden</span>' : ''}
-          </td>
-          <td style="padding:8px 14px">
-            <div class="prod-sizes-wrap" data-slug="${esc(slug)}" style="display:flex;flex-wrap:wrap;align-items:center;gap:2px">
-              ${sizeHtml}
-              <span class="prod-add-size-form" data-slug="${esc(slug)}" style="display:inline-flex;align-items:center;gap:3px;margin:2px">
-                <input type="text" class="prod-new-size-name" placeholder="e.g. 75ml"
-                  style="width:54px;border:1px dashed var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink)" maxlength="10">
-                <input type="number" min="1" class="prod-new-size-price" placeholder="Price MAD"
-                  style="width:72px;border:1px dashed var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink)">
-                <button class="prod-add-size btn btn-xs btn-gold" data-slug="${esc(slug)}" style="padding:2px 8px;font-size:11px" title="Add size">＋ Add</button>
+        const statusDot  = disabled
+          ? `<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--rose);font-weight:600"><span style="width:7px;height:7px;border-radius:99px;background:var(--rose);display:inline-block"></span>Disabled</span>`
+          : `<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--emerald);font-weight:600"><span style="width:7px;height:7px;border-radius:99px;background:var(--emerald);display:inline-block"></span>Active</span>`;
+
+        return `<div class="card prod-card" data-slug="${esc(slug)}" style="transition:box-shadow .15s;${disabled?'opacity:.6':''}">
+          <div class="card-body" style="padding:14px 16px">
+            <!-- Header row -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.3">${esc(name)}</div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap">
+                  ${statusDot}
+                  ${hasOverride && !disabled ? `<span style="font-size:10px;background:rgba(245,158,11,.15);color:var(--amber);font-weight:700;padding:1px 7px;border-radius:99px;border:1px solid var(--amber)">OVERRIDDEN</span>` : ''}
+                  ${isDirty ? `<span class="prod-dirty-badge" style="font-size:10px;background:rgba(56,189,248,.15);color:var(--sky);font-weight:700;padding:1px 7px;border-radius:99px;border:1px solid var(--sky)">UNSAVED</span>` : ''}
+                </div>
+              </div>
+              <div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;align-items:center">
+                <button class="btn btn-xs btn-gold prod-save" data-slug="${esc(slug)}" style="gap:5px">
+                  <i class="fas fa-floppy-disk"></i> Save
+                </button>
+                <button class="btn btn-xs btn-outline prod-toggle" data-slug="${esc(slug)}"
+                  style="gap:5px${disabled?'':';color:var(--rose);border-color:var(--rose)'}">
+                  <i class="fas fa-${disabled?'eye':'eye-slash'}"></i> ${disabled?'Enable':'Disable'}
+                </button>
+                ${hasOverride ? `<button class="btn btn-xs btn-outline prod-reset" data-slug="${esc(slug)}"
+                  title="Remove all overrides and restore original prices.json"
+                  style="gap:5px;color:var(--rose);border-color:var(--rose)">
+                  <i class="fas fa-arrow-rotate-left"></i> Reset
+                </button>` : ''}
+                <a href="/pages/product.html?id=${esc(slug)}" target="_blank"
+                  style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);text-decoration:none;padding:3px 8px;border:1px solid var(--border);border-radius:6px"
+                  title="Preview product on site" onmouseover="this.style.color='var(--sky)';this.style.borderColor='var(--sky)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">
+                  <i class="fas fa-arrow-up-right-from-square" style="font-size:10px"></i> Preview
+                </a>
+              </div>
+            </div>
+            <!-- Sizes row -->
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:2px">
+              ${sizeChips}
+              <!-- Add size form -->
+              <span class="prod-add-size-form" data-slug="${esc(slug)}"
+                style="display:inline-flex;align-items:center;gap:4px;margin:2px;background:var(--s4);border:1px dashed var(--border);border-radius:8px;padding:3px 8px">
+                <i class="fas fa-plus" style="font-size:9px;color:var(--dim)"></i>
+                <input type="text" class="prod-new-size-name" placeholder="size" maxlength="10"
+                  style="width:44px;border:none;background:transparent;font-size:12px;color:var(--ink);font-weight:600;outline:none"
+                  title="Size label e.g. 75ml">
+                <input type="number" min="1" class="prod-new-size-price" placeholder="price"
+                  style="width:54px;border:none;background:transparent;font-size:12px;color:var(--ink);outline:none;text-align:right"
+                  title="Price in MAD">
+                <span style="font-size:10px;color:var(--dim)">MAD</span>
+                <button class="prod-add-size btn btn-xs btn-gold" data-slug="${esc(slug)}"
+                  style="padding:2px 7px;font-size:11px;margin-left:2px">Add</button>
               </span>
             </div>
-            <div style="font-size:10px;color:var(--dim);margin-top:4px">
-              <span style="color:var(--gold)">■</span> new &nbsp;
-              <span style="color:var(--amber)">■</span> price changed &nbsp;
-              Click <b>× </b> to remove · <b>Save</b> to apply · <b>Reset</b> to restore defaults
-            </div>
-          </td>
-          <td style="padding:10px 14px">
-            <span style="font-size:12px;font-weight:600;color:${disabled?'var(--rose)':'var(--emerald)'}">${disabled?'Disabled':'Active'}</span>
-          </td>
-          <td style="padding:10px 14px">
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="btn btn-xs btn-gold prod-save" data-slug="${esc(slug)}"><i class="fas fa-floppy-disk"></i> Save</button>
-              <button class="btn btn-xs btn-outline prod-toggle" data-slug="${esc(slug)}" style="${disabled?'':'color:var(--rose);border-color:var(--rose)'}">
-                <i class="fas fa-${disabled?'eye':'eye-slash'}"></i> ${disabled?'Enable':'Disable'}
-              </button>
-              <button class="btn btn-xs btn-outline prod-reset" data-slug="${esc(slug)}"
-                title="Delete all overrides and restore original prices.json data"
-                style="color:var(--muted);border-color:var(--border)${hasOverride?';color:var(--rose);border-color:var(--rose)':''}">
-                <i class="fas fa-arrow-rotate-left"></i> Reset
-              </button>
-            </div>
-          </td>
-        </tr>`;
+          </div>
+        </div>`;
       }).join('');
+
+      // Wire price input changes → mark dirty
+      grid.querySelectorAll('.prod-price-input').forEach(inp => {
+        inp.addEventListener('input', () => {
+          const slug = inp.dataset.slug;
+          dirty.add(slug);
+          const badge = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-dirty-badge`);
+          if (badge) { badge.style.display=''; }
+          else {
+            const headerSub = grid.querySelector(`.prod-card[data-slug="${slug}"] [data-slug="${slug}"].prod-toggle`)?.closest('[style*="display:flex"]')?.previousElementSibling?.querySelector('div:last-child');
+            // re-render will pick up dirty state on next render pass
+          }
+        });
+      });
+
+      // Wire Enter key on add-size inputs
+      grid.querySelectorAll('.prod-add-size-form').forEach(form => {
+        form.querySelectorAll('input').forEach(inp => {
+          inp.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              form.querySelector('.prod-add-size')?.click();
+            }
+          });
+        });
+      });
     };
+
     render();
 
-    if(searchEl){ searchEl.value=''; searchEl.addEventListener('input',()=>render(searchEl.value)); }
+    // Search + filter
+    if (searchEl) { searchEl.value = ''; searchEl.addEventListener('input', render); }
+    if (filterEl) { filterEl.value = ''; filterEl.addEventListener('change', render); }
     const refreshBtn = document.getElementById('refreshProductsBtn');
-    if(refreshBtn){ const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadProductsView()); }
+    if (refreshBtn) { const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadProductsView()); }
 
-    // All interactions via delegation
-    tbody.addEventListener('click', async(e)=>{
+    // ── Event delegation ───────────────────────────────────────────────────
+    grid.addEventListener('click', async (e) => {
       const saveBtn   = e.target.closest('.prod-save');
       const toggleBtn = e.target.closest('.prod-toggle');
       const removeBtn = e.target.closest('.prod-remove-size');
       const addBtn    = e.target.closest('.prod-add-size');
       const resetBtn  = e.target.closest('.prod-reset');
-      if(!saveBtn && !toggleBtn && !removeBtn && !addBtn && !resetBtn) return;
+      if (!saveBtn && !toggleBtn && !removeBtn && !addBtn && !resetBtn) return;
 
-      const slug = (saveBtn||toggleBtn||removeBtn||addBtn).dataset.slug;
+      const slug = (saveBtn||toggleBtn||removeBtn||addBtn||resetBtn).dataset.slug;
       const ov   = overrides[slug] || {};
       const base = pricesRes[slug] || {};
 
+      // ── Remove size ─────────────────────────────────────────────────────
       if (removeBtn) {
         const sz = removeBtn.dataset.size;
-        // Track explicitly removed size
         if (!pendingRemovals[slug]) pendingRemovals[slug] = new Set();
         pendingRemovals[slug].add(sz);
-        // Remove chip from DOM
-        const chip = removeBtn.closest('.prod-size-chip');
-        if (chip) chip.remove();
-        toast(`Size "${sz}" removed — click Save to apply`, 'info');
+        dirty.add(slug);
+        removeBtn.closest('.prod-size-chip')?.remove();
+        // mark unsaved banner
+        render();
       }
 
+      // ── Add size ────────────────────────────────────────────────────────
       if (addBtn) {
-        const form      = addBtn.closest('.prod-add-size-form');
-        const nameInput = form?.querySelector('.prod-new-size-name');
-        const priceInput= form?.querySelector('.prod-new-size-price');
-        const sz        = normSizeKey((nameInput?.value||'').trim());
-        const price     = parseFloat(priceInput?.value)||0;
-        if (!sz) { toast('Enter a size name (e.g. 75ml)', 'error'); return; }
-        if (price <= 0) { toast('Enter a valid price greater than 0', 'error'); return; }
-        // Remove from pendingRemovals if it was removed this session
+        const form       = addBtn.closest('.prod-add-size-form');
+        const nameInput  = form?.querySelector('.prod-new-size-name');
+        const priceInput = form?.querySelector('.prod-new-size-price');
+        const sz    = normSizeKey((nameInput?.value||'').trim());
+        const price = parseFloat(priceInput?.value)||0;
+        if (!sz) { toast('Enter a size label first (e.g. 75ml)', 'error'); nameInput?.focus(); return; }
+        if (price <= 0) { toast('Enter a valid price > 0 MAD', 'error'); priceInput?.focus(); return; }
         pendingRemovals[slug]?.delete(sz);
-        // Update in-memory overrides so it appears immediately on re-render
         if (!overrides[slug]) overrides[slug] = {};
         if (!overrides[slug].prices) overrides[slug].prices = {};
         overrides[slug].prices[sz] = price;
-        render(searchEl?.value||'');
-        if(nameInput) nameInput.value='';
-        if(priceInput) priceInput.value='';
+        dirty.add(slug);
+        if (nameInput)  nameInput.value  = '';
+        if (priceInput) priceInput.value = '';
+        render();
       }
 
+      // ── Save ────────────────────────────────────────────────────────────
       if (saveBtn) {
-        const row = tbody.querySelector(`tr[data-slug="${slug}"]`);
-        if (!row) { toast('Could not find product row', 'error'); return; }
-
-        // Collect prices — normalize size keys so "10" → "10ml" before saving
-        const chips  = row.querySelectorAll('.prod-size-chip');
+        const card = grid.querySelector(`.prod-card[data-slug="${slug}"]`);
+        if (!card) { toast('Could not find product card', 'error'); return; }
+        const chips = card.querySelectorAll('.prod-size-chip');
         const prices = {};
         let hasError = false;
         chips.forEach(chip => {
-          const sz         = normSizeKey(chip.dataset.size);
-          const priceInput = chip.querySelector('.prod-price-input');
-          const price      = parseFloat(priceInput?.value ?? '');
+          const sz    = normSizeKey(chip.dataset.size);
+          const inp   = chip.querySelector('.prod-price-input');
+          const price = parseFloat(inp?.value ?? '');
           if (!sz) return;
           if (isNaN(price) || price < 0) { hasError = true; return; }
           prices[sz] = price;
         });
         if (hasError) { toast('Fix invalid prices before saving', 'error'); return; }
 
-        // Removed sizes = base sizes not currently visible + explicit removals
-        // Exclude any size that has a positive price override (prices win)
         const pendingSet   = pendingRemovals[slug] || new Set();
         const removedSizes = [
           ...Object.keys(base).map(normSizeKey).filter(sz => !(sz in prices)),
           ...[...pendingSet].map(normSizeKey),
-        ]
-          .filter((v, i, a) => a.indexOf(v) === i)  // unique
-          .filter(sz => !(prices[sz] > 0));           // prices win over removals
+        ].filter((v,i,a) => a.indexOf(v)===i).filter(sz => !(prices[sz]>0));
 
-        // Clear pending removals for this slug (they're now persisted)
         delete pendingRemovals[slug];
+        overrides[slug] = { ...(ov.disabled !== undefined ? {disabled: ov.disabled} : {}), prices, removedSizes };
 
-        overrides[slug] = { ...(ov.disabled !== undefined ? { disabled: ov.disabled } : {}), prices, removedSizes };
+        // Optimistic UI — show saving state
+        const btn = card.querySelector('.prod-save');
+        if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
         try {
           await setDoc(doc(db,'productOverrides',slug), overrides[slug]);
-          toast('Saved: ' + slug.replace(/-/g,' '), 'success');
+          dirty.delete(slug);
+          toast(`✓ ${productName(slug)} saved`, 'success');
+          render();
         } catch(err) {
           toast('Save failed: ' + err.message, 'error');
+          if (btn) { btn.disabled=false; btn.innerHTML='<i class="fas fa-floppy-disk"></i> Save'; }
         }
       }
 
-      if(toggleBtn){
+      // ── Toggle enable/disable ───────────────────────────────────────────
+      if (toggleBtn) {
         const newDisabled = !ov.disabled;
         overrides[slug] = { ...ov, disabled: newDisabled };
-        await setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true});
-        render(searchEl?.value||'');
-        toast(`Product ${newDisabled?'disabled':'enabled'}`, 'success');
+        const btn = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-toggle`);
+        if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
+        try {
+          await setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true});
+          toast(`${productName(slug)} ${newDisabled?'disabled':'enabled'}`, 'success');
+          render();
+        } catch(err) {
+          toast(err.message, 'error');
+          overrides[slug].disabled = !newDisabled; // rollback
+          render();
+        }
       }
 
-      if(resetBtn){
-        if(!confirm(`Reset "${slug.replace(/-/g,' ')}" to defaults?\n\nThis deletes all price and size overrides and restores prices.json data.`)) return;
+      // ── Reset ───────────────────────────────────────────────────────────
+      if (resetBtn) {
+        if (!confirm(`Reset "${productName(slug)}" to defaults?\n\nAll price and size overrides will be deleted.`)) return;
+        const btn = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-reset`);
+        if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
         try {
           await deleteDoc(doc(db,'productOverrides',slug));
           delete overrides[slug];
           delete pendingRemovals[slug];
-          render(searchEl?.value||'');
-          toast(`"${slug.replace(/-/g,' ')}" reset to defaults`, 'success');
-        } catch(err) { toast('Reset failed: '+err.message,'error'); }
+          dirty.delete(slug);
+          toast(`"${productName(slug)}" reset to defaults`, 'success');
+          render();
+        } catch(err) { toast('Reset failed: '+err.message,'error'); if(btn){btn.disabled=false;btn.innerHTML='<i class="fas fa-arrow-rotate-left"></i> Reset';} }
       }
     });
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--rose)">${esc(e.message)}</td></tr>`;
+    grid.innerHTML = `<div class="card"><div class="card-body" style="color:var(--rose);text-align:center;padding:32px"><i class="fas fa-triangle-exclamation"></i> ${esc(e.message)}</div></div>`;
     throw e;
   }
 };
