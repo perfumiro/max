@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="assets/admin/admin.css?v=2">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script type="module" src="assets/admin/admin.js?v=15"></script>
+  <script type="module" src="assets/admin/admin.js?v=16"></script>
 </head>
 <body data-theme="dark">
   <div id="toastContainer" aria-live="polite"></div>
@@ -80,6 +80,10 @@
         <a class="sidebar-item" data-view="reviews"><i class="fas fa-star sidebar-item-icon"></i><span>Reviews</span><span class="sidebar-badge" id="navReviewsBadge" style="display:none">0</span></a>
         <a class="sidebar-item" data-view="discounts"><i class="fas fa-tag sidebar-item-icon"></i><span>Discounts</span><span class="sidebar-badge" id="navDiscountsBadge" style="display:none">0</span></a>
         <a class="sidebar-item" data-view="revenue"><i class="fas fa-coins sidebar-item-icon"></i><span>Revenue</span></a>
+        <a class="sidebar-item" data-view="messages"><i class="fas fa-envelope sidebar-item-icon"></i><span>Messages</span><span class="sidebar-badge" id="navMessagesBadge" style="display:none">0</span></a>
+        <a class="sidebar-item" data-view="newsletter"><i class="fas fa-paper-plane sidebar-item-icon"></i><span>Newsletter</span><span class="sidebar-badge" id="navNewsletterBadge" style="display:none">0</span></a>
+        <a class="sidebar-item" data-view="products"><i class="fas fa-bottle-droplet sidebar-item-icon"></i><span>Products</span></a>
+        <a class="sidebar-item" data-view="settings"><i class="fas fa-gear sidebar-item-icon"></i><span>Settings</span></a>
         <div class="sidebar-section-label" style="margin-top:14px;">Export</div>
         <a class="sidebar-item" id="exportCsvBtn"><i class="fas fa-file-csv sidebar-item-icon"></i><span>Export CSV</span></a>
         <a class="sidebar-item" id="exportJsonBtn"><i class="fas fa-file-code sidebar-item-icon"></i><span>Export JSON</span></a>
@@ -105,6 +109,19 @@
         <div class="topbar-right">
           <span class="topbar-updated" id="lastUpdated">Loading...</span>
           <button class="topbar-icon-btn" id="refreshBtn" title="Refresh"><i class="fas fa-rotate-right"></i></button>
+          <!-- Notification bell -->
+          <button class="topbar-icon-btn" id="notifBellBtn" title="Notifications" style="position:relative">
+            <i class="fas fa-bell"></i>
+            <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:var(--rose);color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:99px;display:none;align-items:center;justify-content:center;padding:0 4px">0</span>
+          </button>
+          <!-- Notification dropdown -->
+          <div id="notifDropdown" style="display:none;position:absolute;top:52px;right:12px;width:320px;max-height:420px;overflow-y:auto;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);z-index:9999;">
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+              <span style="font-weight:700;font-size:13px;color:var(--ink)"><i class="fas fa-bell" style="color:var(--gold);margin-right:6px"></i>Notifications</span>
+              <button id="notifClearBtn" style="font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer">Clear all</button>
+            </div>
+            <div id="notifList" style="padding:8px 0"></div>
+          </div>
           <button class="topbar-icon-btn" id="themeToggle" title="Toggle theme"><i class="fas fa-moon" id="themeIcon"></i></button>
         </div>
       </header>
@@ -500,6 +517,149 @@
             <div class="card-body card-body-list" id="revenueTopProducts">
               <div style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
             </div>
+          </div>
+        </section>
+
+        <!-- ── Messages View ──────────────────────────────────────────────── -->
+        <section id="view-messages" class="view">
+          <div class="view-title">Messages <span class="view-title-sub" id="messagesCount"></span></div>
+          <div class="card mb-4">
+            <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+              <input type="text" class="select-sm" id="messagesSearch" placeholder="Search name, email, subject..." style="min-width:220px">
+              <select class="select-sm" id="messagesStatusFilter">
+                <option value="">All</option>
+                <option value="unread">Unread</option>
+                <option value="read">Read</option>
+              </select>
+              <button class="btn btn-xs btn-gold" id="refreshMessagesBtn" style="margin-left:auto"><i class="fas fa-rotate-right"></i> Refresh</button>
+            </div>
+          </div>
+          <div id="messagesList" style="display:flex;flex-direction:column;gap:10px">
+            <div style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+          </div>
+        </section>
+
+        <!-- ── Newsletter View ────────────────────────────────────────────── -->
+        <section id="view-newsletter" class="view">
+          <div class="view-title">Newsletter <span class="view-title-sub" id="newsletterCount"></span></div>
+          <div class="card mb-4">
+            <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+              <input type="text" class="select-sm" id="newsletterSearch" placeholder="Search email or name..." style="min-width:220px">
+              <button class="btn btn-xs btn-gold" id="exportNewsletterCsvBtn"><i class="fas fa-download"></i> Export CSV</button>
+              <button class="btn btn-xs btn-gold" id="refreshNewsletterBtn" style="margin-left:auto"><i class="fas fa-rotate-right"></i> Refresh</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" style="overflow-x:auto;padding:0">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:500px">
+                <thead>
+                  <tr style="border-bottom:2px solid var(--border);background:var(--s3)">
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Email</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Name</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Gender</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Subscribed</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="newsletterTableBody">
+                  <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Products Manager View ──────────────────────────────────────── -->
+        <section id="view-products" class="view">
+          <div class="view-title">Product Manager <span class="view-title-sub" id="productsCount"></span></div>
+          <div class="card mb-4">
+            <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+              <input type="text" class="select-sm" id="productsSearch" placeholder="Search product name..." style="min-width:220px">
+              <button class="btn btn-xs btn-gold" id="refreshProductsBtn" style="margin-left:auto"><i class="fas fa-rotate-right"></i> Refresh</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" style="overflow-x:auto;padding:0">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:600px">
+                <thead>
+                  <tr style="border-bottom:2px solid var(--border);background:var(--s3)">
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Product</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Sizes & Prices (MAD)</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Status</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                  <tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Settings View ──────────────────────────────────────────────── -->
+        <section id="view-settings" class="view">
+          <div class="view-title">Settings <span class="view-title-sub">store configuration</span></div>
+
+          <div class="card mb-4">
+            <div class="card-head"><span class="card-title"><i class="fas fa-store card-title-icon"></i> Store Status</span></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:18px">
+              <!-- Store open/closed -->
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+                <div>
+                  <div style="font-weight:600;font-size:13px;color:var(--ink)">Store Open</div>
+                  <div style="font-size:12px;color:var(--muted);margin-top:2px">When closed, customers see a "closed" banner and can't checkout</div>
+                </div>
+                <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+                  <input type="checkbox" id="settingStoreOpen" style="accent-color:var(--gold);width:18px;height:18px">
+                  <span id="settingStoreOpenLabel" style="font-size:13px;font-weight:600;color:var(--muted)">Loading…</span>
+                </label>
+              </div>
+              <!-- Announcement banner -->
+              <div>
+                <label style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Announcement Banner</label>
+                <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap">
+                  <input type="text" id="settingBanner" class="select-sm" placeholder="e.g. Free shipping on orders over 300 MAD 🚀" style="flex:1;min-width:200px" maxlength="120">
+                  <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap">
+                    <input type="checkbox" id="settingBannerActive" style="accent-color:var(--gold)"> Show banner
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-head"><span class="card-title"><i class="fab fa-whatsapp card-title-icon" style="color:#25d366"></i> WhatsApp & Contact</span></div>
+            <div class="card-body" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px">
+              <div>
+                <label style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Order WhatsApp Number</label>
+                <input type="text" id="settingWhatsappOrder" class="select-sm" placeholder="e.g. 212663750210" style="width:100%">
+                <div style="font-size:11px;color:var(--dim);margin-top:4px">International format, no + or spaces</div>
+              </div>
+              <div>
+                <label style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Support WhatsApp Number</label>
+                <input type="text" id="settingWhatsappSupport" class="select-sm" placeholder="e.g. 212699000000" style="width:100%">
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-head"><span class="card-title"><i class="fas fa-truck card-title-icon"></i> Shipping</span></div>
+            <div class="card-body" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px">
+              <div>
+                <label style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Shipping Cost (MAD)</label>
+                <input type="number" id="settingShipping" class="select-sm" min="0" value="35" style="width:100%">
+              </div>
+              <div>
+                <label style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Free Shipping Above (MAD)</label>
+                <input type="number" id="settingFreeShipping" class="select-sm" min="0" placeholder="0 = disabled" style="width:100%">
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;align-items:center">
+            <button class="btn btn-gold" id="saveSettingsBtn" style="padding:10px 28px"><i class="fas fa-floppy-disk"></i> Save Settings</button>
+            <span id="settingsSavedMsg" style="display:none;font-size:12px;color:#16a34a;font-weight:600">✓ Settings saved!</span>
           </div>
         </section>
 

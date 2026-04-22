@@ -9682,6 +9682,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     setSubmittingState(true);
                     await submitToFormspree(payload);
+                    // Also save to Firestore newsletterSubscribers collection
+                    try {
+                        const { db: fsDb } = await import('./auth/firebase.js');
+                        const { doc: fsDoc, setDoc: fsSet, serverTimestamp: sTs } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
+                        await fsSet(fsDoc(fsDb, 'newsletterSubscribers', email), {
+                            email, name, gender,
+                            source: payload.source || '',
+                            createdAt: sTs(),
+                        }, { merge: true });
+                    } catch (_) { /* non-blocking */ }
 
                     if (existingIndex >= 0) {
                         subscribers[existingIndex] = { ...subscribers[existingIndex], ...payload };
@@ -9799,6 +9809,22 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 setSubmittingState(true);
                 await submitToFormspree(payload);
+                // Also save to Firestore contactMessages collection
+                try {
+                    const { db: fsDb } = await import('./auth/firebase.js');
+                    const { collection: col, addDoc: addD, serverTimestamp: sTs } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
+                    await addD(col(fsDb, 'contactMessages'), {
+                        name: payload.name || '',
+                        email: payload.email || '',
+                        phone: payload.phone || '',
+                        subject: payload.subject || '',
+                        message: payload.message || '',
+                        orderNumber: payload.orderNumber || '',
+                        source: payload.source || '',
+                        read: false,
+                        createdAt: sTs(),
+                    });
+                } catch (_) { /* non-blocking */ }
                 form.reset();
                 if (charCounter) charCounter.textContent = '0 / 1000';
                 if (orderNumberField) orderNumberField.classList.add('hidden');

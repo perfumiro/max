@@ -84,5 +84,23 @@ service cloud.firestore {
       allow write, delete: if isAdmin();
     }
 
+    // ── Contact messages ─────────────────────────────────────────────────
+    match /contactMessages/{id} {
+      allow create: if true;          // anyone can send a contact form
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ── Newsletter subscribers ───────────────────────────────────────────
+    match /newsletterSubscribers/{id} {
+      allow create, update: if true;  // anyone can subscribe
+      allow read, delete: if isAdmin();
+    }
+
+    // ── Product overrides (admin-managed price/status overrides) ─────────
+    match /productOverrides/{slug} {
+      allow read: if true;            // storefront may check disabled status
+      allow write, delete: if isAdmin();
+    }
+
   }
 }

@@ -7,8 +7,9 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
 import {
   getFirestore, collection, doc,
-  getDoc, getDocs, setDoc, deleteDoc,
+  getDoc, getDocs, setDoc, addDoc, deleteDoc,
   query, orderBy, limit, where, onSnapshot,
+  serverTimestamp, updateDoc,
 } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
 
 // ─── FIREBASE ─────────────────────────────────────────────────────────────────
@@ -96,6 +97,10 @@ const switchView = (name) => {
   if (name === 'reviews')   loadReviewsView().catch(e => toast(e.message, 'error'));
   if (name === 'discounts') loadDiscountsView().catch(e => toast(e.message, 'error'));
   if (name === 'revenue')   loadRevenueView().catch(e => toast(e.message, 'error'));
+  if (name === 'messages')  loadMessagesView().catch(e => toast(e.message, 'error'));
+  if (name === 'newsletter') loadNewsletterView().catch(e => toast(e.message, 'error'));
+  if (name === 'products')  loadProductsView().catch(e => toast(e.message, 'error'));
+  if (name === 'settings')  loadSettingsView().catch(e => toast(e.message, 'error'));
   if (window.innerWidth < 768) closeMobileSidebar();
 };
 const initSidebar = () => {
@@ -1774,3 +1779,392 @@ document.addEventListener('click', async (e) => {
     } catch (e) { toast(e.message, 'error'); }
   }
 });
+
+// ─── NOTIFICATIONS BELL ─────────────────────────────────────────────────────
+let _notifUnsubscribe = null;
+
+const initNotifications = () => {
+  const bellBtn    = document.getElementById('notifBellBtn');
+  const dropdown   = document.getElementById('notifDropdown');
+  const badge      = document.getElementById('notifBadge');
+  const list       = document.getElementById('notifList');
+  const clearBtn   = document.getElementById('notifClearBtn');
+  if (!bellBtn || !dropdown) return;
+
+  // Toggle dropdown
+  bellBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = dropdown.style.display === 'block';
+    dropdown.style.display = open ? 'none' : 'block';
+    if (!open) badge.style.display = 'none';
+  });
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target) && e.target !== bellBtn)
+      dropdown.style.display = 'none';
+  });
+
+  // Clear all
+  if (clearBtn) clearBtn.addEventListener('click', () => {
+    if (list) list.innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);font-size:12px">No new notifications</div>';
+    badge.style.display = 'none';
+    dropdown.style.display = 'none';
+  });
+
+  // Live listener: pending orders
+  if (_notifUnsubscribe) _notifUnsubscribe();
+  const pendingQ = query(collection(db, 'orders'), where('status', '==', 'pending'), orderBy('createdAt', 'desc'), limit(20));
+  _notifUnsubscribe = onSnapshot(pendingQ, (snap) => {
+    const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    if (items.length === 0) {
+      if (list) list.innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);font-size:12px">No pending orders</div>';
+      badge.style.display = 'none';
+      return;
+    }
+    badge.style.display = 'flex';
+    badge.textContent = items.length;
+    if (list) list.innerHTML = items.map(o => {
+      const name = esc(o.customerName || o.name || '—');
+      const total = fmtMAD(o.total || 0);
+      const when = o.createdAt?.toDate ? new Date(o.createdAt.toDate()).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
+      return `<div style="padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s"
+                  onmouseover="this.style.background='var(--s3)'" onmouseout="this.style.background=''"
+                  onclick="document.querySelector('[data-view=orders]').click()">
+        <div style="font-size:12px;font-weight:600;color:var(--ink)">${name} · ${total}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${when} · <span style="color:var(--amber);font-weight:600">Pending</span></div>
+      </div>`;
+    }).join('');
+  }, () => {});
+};
+
+// ─── MESSAGES VIEW ─────────────────────────────────────────────────────────
+const loadMessagesView = async () => {
+  const container = document.getElementById('messagesList');
+  const countEl   = document.getElementById('messagesCount');
+  const unreadBadge = document.getElementById('navMessagesBadge');
+  if (!container) return;
+  container.innerHTML = '<div style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+  try {
+    const snap = await getDocs(query(collection(db, 'contactMessages'), orderBy('createdAt','desc')));
+    let msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    const renderMessages = (filter = '', status = '') => {
+      let filtered = msgs;
+      if (filter) {
+        const f = filter.toLowerCase();
+        filtered = filtered.filter(m =>
+          (m.name||'').toLowerCase().includes(f) ||
+          (m.email||'').toLowerCase().includes(f) ||
+          (m.subject||'').toLowerCase().includes(f) ||
+          (m.message||'').toLowerCase().includes(f)
+        );
+      }
+      if (status === 'unread') filtered = filtered.filter(m => !m.read);
+      if (status === 'read')   filtered = filtered.filter(m => m.read);
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:48px;color:var(--muted)">No messages found</div>';
+        return;
+      }
+      container.innerHTML = filtered.map(m => {
+        const name    = esc(m.name || '—');
+        const email   = esc(m.email || '');
+        const subject = esc(m.subject || 'No subject');
+        const body    = esc(m.message || '');
+        const phone   = esc(m.phone || '');
+        const orderNo = esc(m.orderNumber || '');
+        const when    = m.createdAt?.toDate ? new Date(m.createdAt.toDate()).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+        const unread  = !m.read;
+        return `<div class="card" style="${unread ? 'border-left:3px solid var(--gold)' : ''}">
+          <div class="card-body">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+              <div>
+                <span style="font-weight:700;font-size:13px;color:var(--ink)">${name}</span>
+                ${unread ? '<span style="background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:8px">NEW</span>' : ''}
+                <div style="font-size:12px;color:var(--muted);margin-top:2px">
+                  ${email ? `<a href="mailto:${email}" style="color:var(--sky)">${email}</a>` : ''}
+                  ${phone ? ` · ${phone}` : ''}
+                  ${orderNo ? ` · Order #${orderNo}` : ''}
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:12px;color:var(--muted)">${when}</div>
+                <div style="font-weight:600;font-size:12px;color:var(--ink);margin-top:2px">${subject}</div>
+              </div>
+            </div>
+            <div style="font-size:13px;color:var(--ink);background:var(--s3);padding:10px 14px;border-radius:8px;white-space:pre-wrap;word-break:break-word">${body}</div>
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+              ${email ? `<a href="mailto:${email}?subject=Re: ${encodeURIComponent(m.subject||'Your enquiry')}" class="btn btn-xs btn-gold"><i class="fas fa-reply"></i> Reply</a>` : ''}
+              ${unread ? `<button class="btn btn-xs btn-outline msg-mark-read" data-id="${esc(m.id)}"><i class="fas fa-check"></i> Mark Read</button>` : '<span style="font-size:11px;color:var(--dim)"><i class="fas fa-check-double"></i> Read</span>'}
+              <button class="btn btn-xs btn-outline msg-delete" data-id="${esc(m.id)}" style="color:var(--rose);border-color:var(--rose)"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    };
+
+    const unreadCount = msgs.filter(m => !m.read).length;
+    if (countEl) countEl.textContent = msgs.length + ' message' + (msgs.length!==1?'s':'');
+    if (unreadBadge) { unreadBadge.textContent = unreadCount; unreadBadge.style.display = unreadCount ? '' : 'none'; }
+    renderMessages();
+
+    // Search + filter
+    const searchEl = document.getElementById('messagesSearch');
+    const statusEl = document.getElementById('messagesStatusFilter');
+    const rerender = () => renderMessages(searchEl?.value || '', statusEl?.value || '');
+    if (searchEl) { searchEl.value=''; searchEl.addEventListener('input', rerender); }
+    if (statusEl) { statusEl.value=''; statusEl.addEventListener('change', rerender); }
+
+    // Refresh
+    const refreshBtn = document.getElementById('refreshMessagesBtn');
+    if (refreshBtn) { const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadMessagesView()); }
+
+    // Mark read / delete via delegation
+    container.addEventListener('click', async (e) => {
+      const markBtn = e.target.closest('.msg-mark-read');
+      const delBtn  = e.target.closest('.msg-delete');
+      if (markBtn) {
+        const id = markBtn.dataset.id;
+        await updateDoc(doc(db,'contactMessages',id),{read:true});
+        const idx = msgs.findIndex(m=>m.id===id);
+        if(idx>=0) msgs[idx].read = true;
+        rerender();
+      }
+      if (delBtn) {
+        if (!confirm('Delete this message?')) return;
+        const id = delBtn.dataset.id;
+        await deleteDoc(doc(db,'contactMessages',id));
+        msgs = msgs.filter(m=>m.id!==id);
+        rerender();
+        toast('Message deleted','success');
+      }
+    });
+  } catch(e) {
+    container.innerHTML = `<div style="text-align:center;padding:48px;color:var(--rose)">${esc(e.message)}</div>`;
+    throw e;
+  }
+};
+
+// ─── NEWSLETTER VIEW ────────────────────────────────────────────────────────
+const loadNewsletterView = async () => {
+  const tbody   = document.getElementById('newsletterTableBody');
+  const countEl = document.getElementById('newsletterCount');
+  const badge   = document.getElementById('navNewsletterBadge');
+  if (!tbody) return;
+  tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>`;
+  try {
+    const snap = await getDocs(query(collection(db,'newsletterSubscribers'), orderBy('createdAt','desc')));
+    let subs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    const render = (filter='') => {
+      const list = filter ? subs.filter(s =>
+        (s.email||'').toLowerCase().includes(filter.toLowerCase()) ||
+        (s.name||'').toLowerCase().includes(filter.toLowerCase())
+      ) : subs;
+      if(list.length===0){ tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted)">No subscribers found</td></tr>`; return; }
+      tbody.innerHTML = list.map(s => {
+        const email = esc(s.email||'—');
+        const name  = esc(s.name ||'—');
+        const gender= esc(s.gender||'—');
+        const when  = s.createdAt?.toDate ? new Date(s.createdAt.toDate()).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+        return `<tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:10px 14px;font-size:13px;color:var(--ink)">${email}</td>
+          <td style="padding:10px 14px;font-size:13px;color:var(--ink)">${name}</td>
+          <td style="padding:10px 14px;font-size:13px;color:var(--muted)">${gender}</td>
+          <td style="padding:10px 14px;font-size:12px;color:var(--muted)">${when}</td>
+          <td style="padding:10px 14px">
+            <button class="btn btn-xs btn-outline nl-delete" data-id="${esc(s.id)}" style="color:var(--rose);border-color:var(--rose)"><i class="fas fa-trash"></i> Remove</button>
+          </td>
+        </tr>`;
+      }).join('');
+    };
+
+    if(countEl) countEl.textContent = subs.length + ' subscriber' + (subs.length!==1?'s':'');
+    if(badge){ badge.textContent = subs.length; badge.style.display = subs.length ? '' : 'none'; }
+    render();
+
+    const searchEl = document.getElementById('newsletterSearch');
+    if(searchEl){ searchEl.value=''; searchEl.addEventListener('input',()=>render(searchEl.value)); }
+
+    // Export CSV
+    const exportBtn = document.getElementById('exportNewsletterCsvBtn');
+    if(exportBtn){ const b=exportBtn.cloneNode(true); exportBtn.replaceWith(b);
+      b.addEventListener('click',()=>{
+        const rows = [['Email','Name','Gender','Subscribed'],...subs.map(s=>[s.email||'',s.name||'',s.gender||'',s.createdAt?.toDate?new Date(s.createdAt.toDate()).toISOString():''])];
+        const csv = rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+        const a = Object.assign(document.createElement('a'),{href:'data:text/csv;charset=utf-8,'+encodeURIComponent(csv),download:'newsletter-subscribers.csv'});
+        document.body.appendChild(a); a.click(); a.remove();
+      });
+    }
+
+    // Refresh
+    const refreshBtn = document.getElementById('refreshNewsletterBtn');
+    if(refreshBtn){ const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadNewsletterView()); }
+
+    // Delete via delegation
+    const tableBody = document.getElementById('newsletterTableBody');
+    if(tableBody){ tableBody.addEventListener('click', async(e)=>{
+      const delBtn = e.target.closest('.nl-delete');
+      if(!delBtn) return;
+      if(!confirm('Remove subscriber?')) return;
+      const id = delBtn.dataset.id;
+      await deleteDoc(doc(db,'newsletterSubscribers',id));
+      subs = subs.filter(s=>s.id!==id);
+      render(searchEl?.value||'');
+      toast('Subscriber removed','success');
+    }); }
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--rose)">${esc(e.message)}</td></tr>`;
+    throw e;
+  }
+};
+
+// ─── PRODUCTS MANAGER VIEW ──────────────────────────────────────────────────
+const loadProductsView = async () => {
+  const tbody    = document.getElementById('productsTableBody');
+  const countEl  = document.getElementById('productsCount');
+  const searchEl = document.getElementById('productsSearch');
+  if (!tbody) return;
+  tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>`;
+  try {
+    const [pricesRes, overridesSnap] = await Promise.all([
+      fetch('/prices.json').then(r=>r.json()),
+      getDocs(collection(db,'productOverrides'))
+    ]);
+    const overrides = {};
+    overridesSnap.docs.forEach(d => { overrides[d.id] = d.data(); });
+
+    const slugs = Object.keys(pricesRes);
+    if(countEl) countEl.textContent = slugs.length + ' products';
+
+    const render = (filter='') => {
+      const filtered = filter ? slugs.filter(s=>s.toLowerCase().replace(/-/g,' ').includes(filter.toLowerCase())) : slugs;
+      if(filtered.length===0){ tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)">No products found</td></tr>`; return; }
+      tbody.innerHTML = filtered.map(slug => {
+        const sizes = pricesRes[slug] || {};
+        const ov = overrides[slug] || {};
+        const disabled = ov.disabled || false;
+        const name = slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+        const sizeHtml = Object.keys(sizes).map(sz => {
+          const basePrice = sizes[sz];
+          const overPrice = ov.prices?.[sz] ?? basePrice;
+          return `<span style="display:inline-flex;align-items:center;gap:4px;background:var(--s3);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:12px;margin:2px">
+            <span style="color:var(--muted)">${esc(sz)}</span>
+            <input type="number" min="0" value="${overPrice}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
+              style="width:62px;border:1px solid var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right">
+            <span style="color:var(--muted);font-size:11px">MAD</span>
+          </span>`;
+        }).join('');
+        return `<tr style="border-bottom:1px solid var(--border);opacity:${disabled?0.5:1}" data-slug="${esc(slug)}">
+          <td style="padding:10px 14px;font-size:13px;font-weight:600;color:var(--ink);max-width:220px;word-break:break-word">${esc(name)}</td>
+          <td style="padding:8px 14px">${sizeHtml}</td>
+          <td style="padding:10px 14px">
+            <span style="font-size:12px;font-weight:600;color:${disabled?'var(--rose)':'var(--emerald)'}">${disabled?'Disabled':'Active'}</span>
+          </td>
+          <td style="padding:10px 14px;white-space:nowrap;display:flex;gap:6px;align-items:center">
+            <button class="btn btn-xs btn-gold prod-save" data-slug="${esc(slug)}"><i class="fas fa-floppy-disk"></i> Save</button>
+            <button class="btn btn-xs btn-outline prod-toggle" data-slug="${esc(slug)}" style="${disabled?'':'color:var(--rose);border-color:var(--rose)'}">
+              <i class="fas fa-${disabled?'eye':'eye-slash'}"></i> ${disabled?'Enable':'Disable'}
+            </button>
+          </td>
+        </tr>`;
+      }).join('');
+    };
+    render();
+
+    if(searchEl){ searchEl.value=''; searchEl.addEventListener('input',()=>render(searchEl.value)); }
+    const refreshBtn = document.getElementById('refreshProductsBtn');
+    if(refreshBtn){ const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadProductsView()); }
+
+    // Save + toggle via delegation on tbody
+    tbody.addEventListener('click', async(e)=>{
+      const saveBtn   = e.target.closest('.prod-save');
+      const toggleBtn = e.target.closest('.prod-toggle');
+      if(!saveBtn && !toggleBtn) return;
+      const slug = (saveBtn||toggleBtn).dataset.slug;
+      const ov = overrides[slug] || {};
+      if(saveBtn){
+        const row = tbody.querySelector(`tr[data-slug="${slug}"]`);
+        const inputs = row ? row.querySelectorAll('.prod-price-input') : [];
+        const prices = {};
+        inputs.forEach(inp => { prices[inp.dataset.size] = parseFloat(inp.value)||0; });
+        overrides[slug] = { ...ov, prices };
+        await setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true});
+        toast('Prices saved for '+slug.replace(/-/g,' '),'success');
+      }
+      if(toggleBtn){
+        const newDisabled = !ov.disabled;
+        overrides[slug] = { ...ov, disabled: newDisabled };
+        await setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true});
+        render(searchEl?.value||'');
+        toast(`Product ${newDisabled?'disabled':'enabled'}`,'success');
+      }
+    });
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--rose)">${esc(e.message)}</td></tr>`;
+    throw e;
+  }
+};
+
+// ─── SETTINGS VIEW ──────────────────────────────────────────────────────────
+const loadSettingsView = async () => {
+  const docRef = doc(db,'admin_config','settings');
+  const setMsg = document.getElementById('settingsSavedMsg');
+  try {
+    const snap = await getDoc(docRef);
+    const cfg  = snap.exists() ? snap.data() : {};
+    const set  = (id,v) => { const el=document.getElementById(id); if(el){ if(el.type==='checkbox') el.checked=!!v; else el.value=v??''; } };
+    set('settingStoreOpen',    cfg.storeOpen !== false); // default true
+    set('settingBanner',       cfg.banner || '');
+    set('settingBannerActive', cfg.bannerActive || false);
+    set('settingWhatsappOrder',   cfg.whatsappOrder || '');
+    set('settingWhatsappSupport', cfg.whatsappSupport || '');
+    set('settingShipping',     cfg.shippingCost ?? 35);
+    set('settingFreeShipping', cfg.freeShippingAbove ?? '');
+    // Update label
+    const openEl = document.getElementById('settingStoreOpen');
+    const label  = document.getElementById('settingStoreOpenLabel');
+    if(openEl && label){
+      label.textContent = openEl.checked ? 'Open' : 'Closed';
+      label.style.color = openEl.checked ? 'var(--emerald)' : 'var(--rose)';
+      openEl.addEventListener('change',()=>{
+        label.textContent = openEl.checked ? 'Open' : 'Closed';
+        label.style.color = openEl.checked ? 'var(--emerald)' : 'var(--rose)';
+      });
+    }
+  } catch(e) { toast(e.message,'error'); }
+
+  const saveBtn = document.getElementById('saveSettingsBtn');
+  if(!saveBtn) return;
+  const fresh = saveBtn.cloneNode(true);
+  saveBtn.replaceWith(fresh);
+  fresh.addEventListener('click', async () => {
+    const get  = (id) => { const el=document.getElementById(id); return el? (el.type==='checkbox'?el.checked:el.value) : null; };
+    const payload = {
+      storeOpen:         !!get('settingStoreOpen'),
+      banner:            (get('settingBanner')||'').trim(),
+      bannerActive:      !!get('settingBannerActive'),
+      whatsappOrder:     (get('settingWhatsappOrder')||'').trim(),
+      whatsappSupport:   (get('settingWhatsappSupport')||'').trim(),
+      shippingCost:      parseFloat(get('settingShipping'))||35,
+      freeShippingAbove: parseFloat(get('settingFreeShipping'))||0,
+      updatedAt:         serverTimestamp(),
+    };
+    try {
+      await setDoc(docRef, payload, {merge:true});
+      if(setMsg){ setMsg.style.display='inline'; setTimeout(()=>setMsg.style.display='none',3000); }
+      toast('Settings saved','success');
+    } catch(e){ toast(e.message,'error'); }
+  });
+};
+
+// ─── WIRE NOTIFICATIONS ON LOAD ──────────────────────────────────────────────
+// initNotifications is called once auth is confirmed (already wired into onAuthStateChanged below)
+// Patch: hook into existing auth listener
+const _origOnAuth = window.__adminOnAuthHook;
+if (typeof initNotifications === 'function') {
+  // Wait for DOM ready then init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNotifications);
+  } else {
+    initNotifications();
+  }
+}
