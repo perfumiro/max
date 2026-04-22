@@ -2105,6 +2105,9 @@ const loadProductsView = async () => {
               <button class="btn btn-xs btn-outline prod-toggle" data-slug="${esc(slug)}" style="${disabled?'':'color:var(--rose);border-color:var(--rose)'}">
                 <i class="fas fa-${disabled?'eye':'eye-slash'}"></i> ${disabled?'Enable':'Disable'}
               </button>
+              <button class="btn btn-xs btn-outline prod-reset" data-slug="${esc(slug)}" title="Delete all overrides and restore prices.json defaults" style="color:var(--muted);border-color:var(--border)">
+                <i class="fas fa-arrow-rotate-left"></i> Reset
+              </button>
             </div>
           </td>
         </tr>`;
@@ -2122,7 +2125,8 @@ const loadProductsView = async () => {
       const toggleBtn = e.target.closest('.prod-toggle');
       const removeBtn = e.target.closest('.prod-remove-size');
       const addBtn    = e.target.closest('.prod-add-size');
-      if(!saveBtn && !toggleBtn && !removeBtn && !addBtn) return;
+      const resetBtn  = e.target.closest('.prod-reset');
+      if(!saveBtn && !toggleBtn && !removeBtn && !addBtn && !resetBtn) return;
 
       const slug = (saveBtn||toggleBtn||removeBtn||addBtn).dataset.slug;
       const ov   = overrides[slug] || {};
@@ -2201,6 +2205,17 @@ const loadProductsView = async () => {
         await setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true});
         render(searchEl?.value||'');
         toast(`Product ${newDisabled?'disabled':'enabled'}`, 'success');
+      }
+
+      if(resetBtn){
+        if(!confirm(`Reset "${slug.replace(/-/g,' ')}" to defaults?\n\nThis deletes all price and size overrides and restores prices.json data.`)) return;
+        try {
+          await deleteDoc(doc(db,'productOverrides',slug));
+          delete overrides[slug];
+          delete pendingRemovals[slug];
+          render(searchEl?.value||'');
+          toast(`"${slug.replace(/-/g,' ')}" reset to defaults`, 'success');
+        } catch(err) { toast('Reset failed: '+err.message,'error'); }
       }
     });
   } catch(e) {
