@@ -2055,9 +2055,12 @@ const loadProductsView = async () => {
       const base       = pricesRes[slug] || {};
       const ov         = overrides[slug] || {};
       const pendingSet = pendingRemovals[slug] || new Set();
-      const removed = new Set(
-        [...(ov.removedSizes || []), ...pendingSet].map(normSizeKey).filter(sz => !(ov.prices?.[sz] > 0))
-      );
+      // Already-saved removals respect "prices WIN" rule (a price override un-removes a size).
+      // But pendingRemovals (UI click ×) ALWAYS win — admin explicitly wants this size gone.
+      const removed = new Set([
+        ...(ov.removedSizes || []).map(normSizeKey).filter(sz => !(ov.prices?.[sz] > 0)),
+        ...[...pendingSet].map(normSizeKey),
+      ]);
       const merged = {};
       Object.keys(base).forEach(sz => {
         if (!removed.has(sz)) merged[sz] = (ov.prices?.[sz] > 0) ? ov.prices[sz] : base[sz];
