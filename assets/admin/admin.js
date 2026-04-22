@@ -2035,20 +2035,23 @@ const loadProductsView = async () => {
     const slugs = Object.keys(pricesRes);
     if(countEl) countEl.textContent = slugs.length + ' products';
 
-    // Build the effective size map for a slug: base sizes merged with extra sizes, minus removed sizes
+    // Track explicitly removed sizes per slug (during this session)
+    const pendingRemovals = {}; // { [slug]: Set<sizeName> }
+
+    // Build the effective size map for a slug
     const effectiveSizes = (slug) => {
-      const base = pricesRes[slug] || {};
-      const ov   = overrides[slug] || {};
-      const removed = ov.removedSizes || [];
-      // Start with base prices, apply overrides
-      const merged = {};
+      const base    = pricesRes[slug] || {};
+      const ov      = overrides[slug] || {};
+      const removed = new Set([...(ov.removedSizes || []), ...(pendingRemovals[slug] || [])]);
+      const merged  = {};
+      // Base sizes with override prices
       Object.keys(base).forEach(sz => {
-        if (!removed.includes(sz)) merged[sz] = ov.prices?.[sz] ?? base[sz];
+        if (!removed.has(sz)) merged[sz] = ov.prices?.[sz] ?? base[sz];
       });
-      // Add extra sizes stored in overrides but not in base
+      // Extra sizes added via admin (in ov.prices but not in base)
       if (ov.prices) {
         Object.keys(ov.prices).forEach(sz => {
-          if (!base[sz] && !removed.includes(sz)) merged[sz] = ov.prices[sz];
+          if (!base[sz] && !removed.has(sz)) merged[sz] = ov.prices[sz];
         });
       }
       return merged;
@@ -2058,45 +2061,45 @@ const loadProductsView = async () => {
       const filtered = filter ? slugs.filter(s=>s.toLowerCase().replace(/-/g,' ').includes(filter.toLowerCase())) : slugs;
       if(filtered.length===0){ tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)">No products found</td></tr>`; return; }
       tbody.innerHTML = filtered.map(slug => {
-        const ov = overrides[slug] || {};
+        const ov       = overrides[slug] || {};
         const disabled = ov.disabled || false;
-        const name = slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-        const sizes = effectiveSizes(slug);
+        const name     = slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+        const sizes    = effectiveSizes(slug);
 
         const sizeHtml = Object.keys(sizes).map(sz => {
           const price = sizes[sz];
-          return `<span class="prod-size-chip" style="display:inline-flex;align-items:center;gap:3px;background:var(--s3);border:1px solid var(--border);border-radius:6px;padding:3px 7px;font-size:12px;margin:2px">
-            <input type="text" value="${esc(sz)}" data-orig="${esc(sz)}" data-slug="${esc(slug)}" class="prod-size-name"
-              style="width:44px;border:none;background:transparent;font-size:12px;color:var(--muted);font-weight:600;text-align:center;padding:0;outline:none"
-              title="Size name (e.g. 10ml, 50ml)">
+          return `<span class="prod-size-chip" data-slug="${esc(slug)}" data-size="${esc(sz)}"
+            style="display:inline-flex;align-items:center;gap:3px;background:var(--s3);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:12px;margin:2px">
+            <span style="color:var(--muted);font-weight:600;min-width:30px;text-align:center">${esc(sz)}</span>
             <input type="number" min="0" value="${price}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
-              style="width:58px;border:1px solid var(--border);border-radius:4px;padding:2px 4px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right">
+              style="width:60px;border:1px solid var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right">
             <span style="color:var(--muted);font-size:10px">MAD</span>
             <button class="prod-remove-size" data-slug="${esc(slug)}" data-size="${esc(sz)}"
-              style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:11px;padding:0 2px;line-height:1"
+              style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:13px;line-height:1;padding:0 2px"
               title="Remove this size">×</button>
           </span>`;
         }).join('');
 
+        // Rename form per slug
+        const renameSlug = esc(slug);
         return `<tr style="border-bottom:1px solid var(--border);opacity:${disabled?0.5:1}" data-slug="${esc(slug)}">
           <td style="padding:10px 14px;font-size:13px;font-weight:600;color:var(--ink);max-width:200px;word-break:break-word">${esc(name)}</td>
           <td style="padding:8px 14px">
             <div class="prod-sizes-wrap" data-slug="${esc(slug)}" style="display:flex;flex-wrap:wrap;align-items:center;gap:2px">
               ${sizeHtml}
-              <!-- Add-size inline form -->
               <span class="prod-add-size-form" data-slug="${esc(slug)}" style="display:inline-flex;align-items:center;gap:3px;margin:2px">
-                <input type="text" class="prod-new-size-name" placeholder="e.g. 30ml"
-                  style="width:54px;border:1px dashed var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink)">
-                <input type="number" min="0" class="prod-new-size-price" placeholder="Price"
+                <input type="text" class="prod-new-size-name" placeholder="e.g. 75ml"
+                  style="width:54px;border:1px dashed var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink)" maxlength="10">
+                <input type="number" min="1" class="prod-new-size-price" placeholder="Price"
                   style="width:58px;border:1px dashed var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink)">
-                <button class="prod-add-size btn btn-xs btn-gold" data-slug="${esc(slug)}" style="padding:2px 7px;font-size:11px" title="Add size">＋</button>
+                <button class="prod-add-size btn btn-xs btn-gold" data-slug="${esc(slug)}" style="padding:2px 8px;font-size:11px" title="Add size">＋ Add</button>
               </span>
             </div>
           </td>
           <td style="padding:10px 14px">
             <span style="font-size:12px;font-weight:600;color:${disabled?'var(--rose)':'var(--emerald)'}">${disabled?'Disabled':'Active'}</span>
           </td>
-          <td style="padding:10px 14px;white-space:nowrap">
+          <td style="padding:10px 14px">
             <div style="display:flex;gap:6px;flex-wrap:wrap">
               <button class="btn btn-xs btn-gold prod-save" data-slug="${esc(slug)}"><i class="fas fa-floppy-disk"></i> Save</button>
               <button class="btn btn-xs btn-outline prod-toggle" data-slug="${esc(slug)}" style="${disabled?'':'color:var(--rose);border-color:var(--rose)'}">
@@ -2106,20 +2109,6 @@ const loadProductsView = async () => {
           </td>
         </tr>`;
       }).join('');
-
-      // Keep size-name inputs in sync with their data-size attribute (for save logic)
-      tbody.querySelectorAll('.prod-size-name').forEach(inp => {
-        inp.addEventListener('change', () => {
-          // update sibling price input's data-size
-          const chip = inp.closest('.prod-size-chip');
-          if (chip) {
-            const priceInp = chip.querySelector('.prod-price-input');
-            const removeBtn = chip.querySelector('.prod-remove-size');
-            if (priceInp) priceInp.dataset.size = inp.value;
-            if (removeBtn) removeBtn.dataset.size = inp.value;
-          }
-        });
-      });
     };
     render();
 
@@ -2129,10 +2118,10 @@ const loadProductsView = async () => {
 
     // All interactions via delegation
     tbody.addEventListener('click', async(e)=>{
-      const saveBtn      = e.target.closest('.prod-save');
-      const toggleBtn    = e.target.closest('.prod-toggle');
-      const removeBtn    = e.target.closest('.prod-remove-size');
-      const addBtn       = e.target.closest('.prod-add-size');
+      const saveBtn   = e.target.closest('.prod-save');
+      const toggleBtn = e.target.closest('.prod-toggle');
+      const removeBtn = e.target.closest('.prod-remove-size');
+      const addBtn    = e.target.closest('.prod-add-size');
       if(!saveBtn && !toggleBtn && !removeBtn && !addBtn) return;
 
       const slug = (saveBtn||toggleBtn||removeBtn||addBtn).dataset.slug;
@@ -2140,54 +2129,70 @@ const loadProductsView = async () => {
       const base = pricesRes[slug] || {};
 
       if (removeBtn) {
-        // Visually remove the chip
+        const sz = removeBtn.dataset.size;
+        // Track explicitly removed size
+        if (!pendingRemovals[slug]) pendingRemovals[slug] = new Set();
+        pendingRemovals[slug].add(sz);
+        // Remove chip from DOM
         const chip = removeBtn.closest('.prod-size-chip');
         if (chip) chip.remove();
-        toast('Size removed — click Save to apply', 'info');
+        toast(`Size "${sz}" removed — click Save to apply`, 'info');
       }
 
       if (addBtn) {
-        const form = addBtn.closest('.prod-add-size-form');
-        const nameInp  = form?.querySelector('.prod-new-size-name');
-        const priceInp = form?.querySelector('.prod-new-size-price');
-        const sz    = (nameInp?.value||'').trim();
-        const price = parseFloat(priceInp?.value)||0;
-        if (!sz) { toast('Enter a size name first (e.g. 30ml)', 'error'); return; }
-        // Insert chip before the add-form span
-        const wrap = addBtn.closest('.prod-sizes-wrap');
-        const newChip = document.createElement('span');
-        newChip.className = 'prod-size-chip';
-        newChip.style.cssText = 'display:inline-flex;align-items:center;gap:3px;background:var(--s3);border:1px solid var(--gold);border-radius:6px;padding:3px 7px;font-size:12px;margin:2px';
-        newChip.innerHTML = `
-          <input type="text" value="${esc(sz)}" data-orig="" data-slug="${esc(slug)}" class="prod-size-name"
-            style="width:44px;border:none;background:transparent;font-size:12px;color:var(--muted);font-weight:600;text-align:center;padding:0;outline:none">
-          <input type="number" min="0" value="${price}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
-            style="width:58px;border:1px solid var(--border);border-radius:4px;padding:2px 4px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right">
-          <span style="color:var(--muted);font-size:10px">MAD</span>
-          <button class="prod-remove-size" data-slug="${esc(slug)}" data-size="${esc(sz)}"
-            style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:11px;padding:0 2px;line-height:1" title="Remove">×</button>`;
-        wrap.insertBefore(newChip, form);
-        if(nameInp) nameInp.value = '';
-        if(priceInp) priceInp.value = '';
+        const form      = addBtn.closest('.prod-add-size-form');
+        const nameInput = form?.querySelector('.prod-new-size-name');
+        const priceInput= form?.querySelector('.prod-new-size-price');
+        const sz        = (nameInput?.value||'').trim().toLowerCase().replace(/\s+/g,'');
+        const price     = parseFloat(priceInput?.value)||0;
+        if (!sz) { toast('Enter a size name (e.g. 75ml)', 'error'); return; }
+        if (price <= 0) { toast('Enter a valid price greater than 0', 'error'); return; }
+        // Remove from pendingRemovals if it was removed this session
+        pendingRemovals[slug]?.delete(sz);
+        // Update in-memory overrides so it appears immediately on re-render
+        if (!overrides[slug]) overrides[slug] = {};
+        if (!overrides[slug].prices) overrides[slug].prices = {};
+        overrides[slug].prices[sz] = price;
+        render(searchEl?.value||'');
+        if(nameInput) nameInput.value='';
+        if(priceInput) priceInput.value='';
       }
 
       if (saveBtn) {
         const row = tbody.querySelector(`tr[data-slug="${slug}"]`);
-        if (!row) return;
-        // Collect all visible size chips
-        const chips = row.querySelectorAll('.prod-size-chip');
+        if (!row) { toast('Could not find product row', 'error'); return; }
+
+        // Collect prices from visible chips (size name is read from data-size, not editable input)
+        const chips  = row.querySelectorAll('.prod-size-chip');
         const prices = {};
+        let hasError = false;
         chips.forEach(chip => {
-          const nameInp  = chip.querySelector('.prod-size-name');
-          const priceInp = chip.querySelector('.prod-price-input');
-          const sz = (nameInp?.value || priceInp?.dataset.size || '').trim();
-          if (sz) prices[sz] = parseFloat(priceInp?.value)||0;
+          const sz         = chip.dataset.size;
+          const priceInput = chip.querySelector('.prod-price-input');
+          const price      = parseFloat(priceInput?.value ?? '');
+          if (!sz) return;
+          if (isNaN(price) || price < 0) { hasError = true; return; }
+          prices[sz] = price;
         });
-        // Determine which base sizes were removed
-        const removedSizes = Object.keys(base).filter(sz => !prices[sz]);
-        overrides[slug] = { ...ov, prices, removedSizes };
-        await setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:false});
-        toast('Saved: ' + slug.replace(/-/g,' '), 'success');
+        if (hasError) { toast('Fix invalid prices before saving', 'error'); return; }
+
+        // Removed sizes = base sizes not in current visible chips + any pending removals
+        const pendingSet   = pendingRemovals[slug] || new Set();
+        const removedSizes = [
+          ...Object.keys(base).filter(sz => !(sz in prices)),
+          ...pendingSet,
+        ].filter((v, i, a) => a.indexOf(v) === i); // unique
+
+        // Clear pending removals for this slug (they're now persisted)
+        delete pendingRemovals[slug];
+
+        overrides[slug] = { ...(ov.disabled !== undefined ? { disabled: ov.disabled } : {}), prices, removedSizes };
+        try {
+          await setDoc(doc(db,'productOverrides',slug), overrides[slug]);
+          toast('Saved: ' + slug.replace(/-/g,' '), 'success');
+        } catch(err) {
+          toast('Save failed: ' + err.message, 'error');
+        }
       }
 
       if(toggleBtn){

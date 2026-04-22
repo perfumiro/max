@@ -3653,13 +3653,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             const slug = d.id;
                             const ov = d.data();
                             if (!pricesById[slug]) pricesById[slug] = {};
-                            // Apply overridden prices
+                            // Apply overridden prices (only positive values)
                             if (ov.prices && typeof ov.prices === 'object') {
-                                Object.assign(pricesById[slug], ov.prices);
+                                Object.entries(ov.prices).forEach(([sz, price]) => {
+                                    if (typeof price === 'number' && price > 0) {
+                                        pricesById[slug][sz] = price;
+                                    }
+                                });
                             }
-                            // Zero-out removed sizes so they disappear from the storefront
+                            // Delete removed sizes entirely so they vanish from size pickers
                             if (Array.isArray(ov.removedSizes)) {
-                                ov.removedSizes.forEach(sz => { pricesById[slug][sz] = 0; });
+                                ov.removedSizes.forEach(sz => { delete pricesById[slug][sz]; });
                             }
                         });
                     } catch (_) { /* non-blocking — storefront still works from prices.json */ }
