@@ -2084,6 +2084,70 @@ const loadProductsView = async () => {
 
     const productName = (slug) => slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 
+    // ── Product image lookup ────────────────────────────────────────────────
+    const PRODUCT_IMG = {
+      'armani-stronger-with-you-absolutely-perfume': '/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp',
+      'armani-stronger-with-you-powerfully-eau-de-parfum': '/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
+      'emporio-armani-stronger-with-you-intensely-edp': '/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp',
+      'azzaro-forever-wanted-elixir-eau-de-parfum': '/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
+      'azzaro-the-most-wanted-eau-de-parfum-intense': '/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp',
+      'azzaro-the-most-wanted-parfum': '/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp',
+      'carolina-herrera-bad-boy-eau-de-toilette': '/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg',
+      'bleu-de-chanel-eau-de-parfum-spray': '/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg',
+      'dior-homme-intense-eau-de-parfum': '/assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg',
+      'dior-sauvage-eau-de-parfum': '/assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg',
+      'gentleman-private-reserve-eau-de-parfum': '/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png',
+      'givenchy-gentleman-society-amber-eau-de-parfum': '/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg',
+      'givenchy-gentleman-society-extreme-eau-de-parfum': '/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp',
+      'givenchy-gentleman-society-nomade-eau-de-parfum': '/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/1.webp',
+      'gucci-guilty-absolu-de-parfum-pour-homme': '/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp',
+      'gucci-guilty-elixir-pour-homme': '/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp',
+      'lhomme-ideal-extreme': '/assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg',
+      'lhomme-ideal-lintense-eau-de-parfum': '/assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp',
+      'boss-bottled-absolu-intense': '/assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg',
+      'hugo-boss-boss-bottled-elixir-intense': '/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg',
+      'hugo-boss-the-scent-for-him-elixir': '/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png',
+      'jean-paul-gaultier-le-beau-eau-de-parfum': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp',
+      'jean-paul-gaultier-le-male-elixir': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp',
+      'jean-paul-gaultier-le-male-in-blue-eau-de-parfum': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg',
+      'jean-paul-gaultier-le-male-le-parfum-eau-de-parfum': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp',
+      'jean-paul-gaultier-scandal-elixir': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg',
+      'jean-paul-gaultier-scandal-intense-eau-de-parfum': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg',
+      'le-male-eau-de-toilette': '/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png',
+      'montale-arabians-tonka': '/assets/images/products/montale/montale-arabians-tonka/1.webp',
+      'prada-lhomme-edt': '/assets/images/products/prada/prada-lhomme-edt/1.jpg',
+      'prada-luna-rossa-black-eau-de-parfum': '/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg',
+      'prada-luna-rossa-carbon-edt': '/assets/images/products/prada/prada-luna-rossa-carbon-edt/1.jpg',
+      'prada-luna-rossa-men-edt': '/assets/images/products/prada/prada-luna-rossa-men-edt/1.jfif',
+      'prada-luna-rossa-ocean-eau-de-parfum': '/assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg',
+      'prada-luna-rossa-ocean-le-parfum': '/assets/images/products/prada/prada-luna-rossa-ocean-le-parfum/1.jpg',
+      'prada-paradigme-eau-de-parfum': '/assets/images/products/prada/prada-paradigme-eau-de-parfum/1.png',
+      'rabanne-one-million-elixir-intense': '/assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp',
+      'rabanne-one-million-parfum': '/assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg',
+      'akdeniz': '/assets/images/products/unique-luxury/akdeniz/1.webp',
+      'aphrodisiac-touch': '/assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
+      'beril': '/assets/images/products/unique-luxury/beril/1.webp',
+      'beverly-hills-exclusive': '/assets/images/products/unique-luxury/beverly-hills-exclusive/1.webp',
+      'kutay': '/assets/images/products/unique-luxury/kutay/1.webp',
+      'valentino-born-in-roma-donna-intense-eau-de-parfum': '/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp',
+      'valentino-born-in-roma-uomo-intense-eau-de-parfum': '/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp',
+      'valentino-born-in-rome-extradose': '/assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg',
+      'valentino-donna-born-in-roma-eau-de-parfum': '/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/1.webp',
+      'valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette': '/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/1.webp',
+      'valentino-uomo-born-in-roma-eau-de-toilette': '/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/1.jpg',
+      'valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette': '/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/1.jpg',
+      'versace-dylan-blue-eau-de-toilette': '/assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg',
+      'versace-eros-eau-de-parfum': '/assets/images/products/versace/versace-eros-eau-de-parfum/1.webp',
+      'versace-eros-energy-eau-de-parfum': '/assets/images/products/versace/versace-eros-energy-eau-de-parfum/1.jpg',
+      'versace-eros-flame-eau-de-parfum': '/assets/images/products/versace/versace-eros-flame-eau-de-parfum/1.jpg',
+      'xerjoff-alexandria-ll-eau-de-parfum': '/assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp',
+      'xerjoff-erba-pura': '/assets/images/products/xerjoff/xerjoff-erba-pura/1.webp',
+      'xerjoff-naxos': '/assets/images/products/xerjoff/xerjoff-naxos/1.webp',
+      'yves-saint-laurent-myslf-eau-de-parfum': '/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/1.jpg',
+      'yves-saint-laurent-myslf-le-parfum': '/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/1.webp',
+      'yves-saint-laurent-y-eau-de-parfum': '/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp',
+    };
+
     // ── Render ─────────────────────────────────────────────────────────────
     const render = () => {
       const q      = (searchEl?.value || '').toLowerCase();
@@ -2128,78 +2192,116 @@ const loadProductsView = async () => {
           const price     = sizes[sz];
           const isNew     = !baseKeys.includes(sz);
           const isChanged = !isNew && ov.prices?.[sz] !== undefined && ov.prices[sz] !== (pricesRes[slug]||{})[sz];
-          const border    = isNew ? 'var(--gold)' : isChanged ? 'var(--amber)' : 'var(--border)';
-          const tip       = isNew ? 'New size added by admin' : isChanged ? `Original: ${(pricesRes[slug]||{})[sz]} MAD` : `${sz}`;
-          return `<span class="prod-size-chip" data-slug="${esc(slug)}" data-size="${esc(sz)}"
-            style="display:inline-flex;align-items:center;gap:4px;background:var(--s3);border:1.5px solid ${border};border-radius:8px;padding:4px 8px 4px 10px;font-size:12px;margin:2px;transition:border-color .15s"
+          const accentClr = isNew ? 'var(--gold)' : isChanged ? 'var(--amber)' : 'transparent';
+          const bgClr     = isNew ? 'rgba(200,169,106,.08)' : isChanged ? 'rgba(245,158,11,.07)' : 'var(--s3)';
+          const tip       = isNew ? 'New size added by admin' : isChanged ? `Original: ${(pricesRes[slug]||{})[sz]} MAD` : sz;
+          return `<div class="prod-size-chip" data-slug="${esc(slug)}" data-size="${esc(sz)}"
+            style="display:inline-flex;align-items:stretch;border-radius:9px;overflow:hidden;border:1.5px solid ${accentClr === 'transparent' ? 'var(--border)' : accentClr};background:${bgClr};margin:3px;transition:border-color .15s;box-shadow:0 1px 3px rgba(0,0,0,.06)"
             title="${esc(tip)}">
-            <input type="text" class="prod-size-name-input" value="${esc(sz)}" maxlength="12"
-              style="width:46px;border:none;background:transparent;font-size:12px;font-weight:700;color:var(--muted);outline:none;text-align:center;padding:0;cursor:text"
-              title="Edit size label">
-            <input type="number" min="0" value="${price}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
-              style="width:62px;border:1px solid var(--border);border-radius:5px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right;font-weight:600">
-            <span style="color:var(--dim);font-size:10px;font-weight:500">MAD</span>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 7px;border-right:1px solid var(--border);min-width:40px;gap:1px">
+              <span style="font-size:9px;color:var(--dim);font-weight:500;letter-spacing:.4px;text-transform:uppercase">Size</span>
+              <input type="text" class="prod-size-name-input" value="${esc(sz)}" maxlength="12"
+                style="width:42px;border:none;background:transparent;font-size:12px;font-weight:800;color:var(--ink);outline:none;text-align:center;padding:0;cursor:text;line-height:1"
+                title="Click to rename size">
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 7px;min-width:64px;gap:1px">
+              <span style="font-size:9px;color:var(--dim);font-weight:500;letter-spacing:.4px;text-transform:uppercase">Price</span>
+              <div style="display:flex;align-items:center;gap:2px">
+                <input type="number" min="0" value="${price}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
+                  style="width:52px;border:none;background:transparent;font-size:12px;color:var(--ink);text-align:center;font-weight:700;outline:none;padding:0"
+                  title="Edit price">
+                <span style="color:var(--dim);font-size:9px;font-weight:600">MAD</span>
+              </div>
+            </div>
             <button class="prod-remove-size" data-slug="${esc(slug)}" data-size="${esc(sz)}"
-              style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:14px;line-height:1;padding:0 1px;border-radius:3px;transition:color .15s"
-              onmouseover="this.style.color='var(--rose)'" onmouseout="this.style.color='var(--dim)'"
+              style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:13px;padding:0 7px;border-left:1px solid var(--border);transition:all .15s;align-self:stretch;display:flex;align-items:center"
+              onmouseover="this.style.background='rgba(244,63,94,.1)';this.style.color='var(--rose)'"
+              onmouseout="this.style.background='none';this.style.color='var(--dim)'"
               title="Remove ${esc(sz)}">×</button>
-          </span>`;
+          </div>`;
         }).join('');
 
-        const statusDot  = disabled
-          ? `<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--rose);font-weight:600"><span style="width:7px;height:7px;border-radius:99px;background:var(--rose);display:inline-block"></span>Disabled</span>`
-          : `<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--emerald);font-weight:600"><span style="width:7px;height:7px;border-radius:99px;background:var(--emerald);display:inline-block"></span>Active</span>`;
+        const accentColor = disabled ? 'var(--rose)' : isDirty ? 'var(--sky)' : hasOverride ? 'var(--gold)' : 'var(--border)';
 
-        return `<div class="card prod-card" data-slug="${esc(slug)}" style="transition:box-shadow .15s;${disabled?'opacity:.6':''}">
-          <div class="card-body" style="padding:14px 16px">
-            <!-- Header row -->
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+        const statusBadge = disabled
+          ? `<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--rose);background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.25);padding:2px 8px;border-radius:99px"><span style="width:5px;height:5px;border-radius:99px;background:var(--rose);display:inline-block"></span>Disabled</span>`
+          : `<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--emerald);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);padding:2px 8px;border-radius:99px"><span style="width:5px;height:5px;border-radius:99px;background:var(--emerald);display:inline-block"></span>Active</span>`;
+
+        const imgSrc = PRODUCT_IMG[slug] || '';
+        const imgHtml = imgSrc
+          ? `<img src="${imgSrc}" alt="" loading="lazy"
+              style="width:60px;height:76px;object-fit:contain;border-radius:8px;background:var(--s3);flex-shrink:0;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.08)"
+              onerror="this.style.display='none'">`
+          : `<div style="width:60px;height:76px;border-radius:8px;background:var(--s4);flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)"><i class="fas fa-spray-can" style="color:var(--dim);font-size:22px"></i></div>`;
+
+        return `<div class="card prod-card" data-slug="${esc(slug)}"
+          style="transition:box-shadow .2s,border-color .2s;border-left:3px solid ${accentColor};${disabled?'opacity:.7':''}">
+          <div style="padding:14px 16px 12px 14px">
+
+            <!-- ── Top row: image + meta + actions ── -->
+            <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px">
+              ${imgHtml}
               <div style="flex:1;min-width:0">
-                <div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.3">${esc(name)}</div>
-                <div style="display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap">
-                  ${statusDot}
-                  ${hasOverride && !disabled ? `<span style="font-size:10px;background:rgba(245,158,11,.15);color:var(--amber);font-weight:700;padding:1px 7px;border-radius:99px;border:1px solid var(--amber)">OVERRIDDEN</span>` : ''}
-                  ${isDirty ? `<span class="prod-dirty-badge" style="font-size:10px;background:rgba(56,189,248,.15);color:var(--sky);font-weight:700;padding:1px 7px;border-radius:99px;border:1px solid var(--sky)">UNSAVED</span>` : ''}
+                <div style="font-size:13px;font-weight:800;color:var(--ink);line-height:1.3;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${esc(name)}">${esc(name)}</div>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                  ${statusBadge}
+                  ${hasOverride && !disabled ? `<span style="font-size:10px;font-weight:700;color:var(--amber);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);padding:2px 8px;border-radius:99px"><i class="fas fa-pen-to-square" style="font-size:9px;margin-right:3px"></i>Overridden</span>` : ''}
+                  ${isDirty ? `<span class="prod-dirty-badge" style="font-size:10px;font-weight:700;color:var(--sky);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:2px 8px;border-radius:99px"><i class="fas fa-circle-dot" style="font-size:9px;margin-right:3px"></i>Unsaved</span>` : ''}
                 </div>
               </div>
-              <div style="display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;align-items:center">
-                <button class="btn btn-xs btn-gold prod-save" data-slug="${esc(slug)}" style="gap:5px">
-                  <i class="fas fa-floppy-disk"></i> Save
-                </button>
-                <button class="btn btn-xs btn-outline prod-toggle" data-slug="${esc(slug)}"
-                  style="gap:5px${disabled?'':';color:var(--rose);border-color:var(--rose)'}">
-                  <i class="fas fa-${disabled?'eye':'eye-slash'}"></i> ${disabled?'Enable':'Disable'}
-                </button>
-                ${hasOverride ? `<button class="btn btn-xs btn-outline prod-reset" data-slug="${esc(slug)}"
-                  title="Remove all overrides and restore original prices.json"
-                  style="gap:5px;color:var(--rose);border-color:var(--rose)">
-                  <i class="fas fa-arrow-rotate-left"></i> Reset
-                </button>` : ''}
-                <a href="/pages/product.html?id=${esc(slug)}" target="_blank"
-                  style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);text-decoration:none;padding:3px 8px;border:1px solid var(--border);border-radius:6px"
-                  title="Preview product on site" onmouseover="this.style.color='var(--sky)';this.style.borderColor='var(--sky)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">
-                  <i class="fas fa-arrow-up-right-from-square" style="font-size:10px"></i> Preview
-                </a>
+
+              <!-- Action buttons -->
+              <div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;align-items:flex-end">
+                <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end">
+                  <button class="btn btn-xs btn-gold prod-save" data-slug="${esc(slug)}" style="gap:4px;font-size:11px;padding:4px 10px">
+                    <i class="fas fa-floppy-disk"></i> Save
+                  </button>
+                  <button class="btn btn-xs prod-toggle" data-slug="${esc(slug)}"
+                    style="gap:4px;font-size:11px;padding:4px 10px;${disabled ? 'background:rgba(34,197,94,.12);color:var(--emerald);border:1px solid rgba(34,197,94,.3)' : 'background:rgba(244,63,94,.08);color:var(--rose);border:1px solid rgba(244,63,94,.25)'}">
+                    <i class="fas fa-${disabled?'circle-check':'circle-xmark'}"></i> ${disabled?'Enable':'Disable'}
+                  </button>
+                </div>
+                <div style="display:flex;gap:5px;justify-content:flex-end">
+                  ${hasOverride ? `<button class="btn btn-xs btn-outline prod-reset" data-slug="${esc(slug)}"
+                    title="Restore original prices from prices.json"
+                    style="gap:4px;font-size:11px;padding:3px 9px;color:var(--muted);border-color:var(--border)">
+                    <i class="fas fa-arrow-rotate-left"></i> Reset
+                  </button>` : ''}
+                  <a href="/pages/product.html?id=${esc(slug)}" target="_blank"
+                    style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);text-decoration:none;padding:3px 9px;border:1px solid var(--border);border-radius:6px;background:var(--s3);transition:all .15s"
+                    onmouseover="this.style.color='var(--sky)';this.style.borderColor='var(--sky)';this.style.background='rgba(56,189,248,.08)'"
+                    onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)';this.style.background='var(--s3)'">
+                    <i class="fas fa-arrow-up-right-from-square" style="font-size:9px"></i> Preview
+                  </a>
+                </div>
               </div>
             </div>
-            <!-- Sizes row -->
-            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:2px">
+
+            <!-- ── Divider ── -->
+            <div style="height:1px;background:var(--border);margin:0 -2px 10px -2px"></div>
+
+            <!-- ── Sizes row ── -->
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0">
               ${sizeChips}
               <!-- Add size form -->
-              <span class="prod-add-size-form" data-slug="${esc(slug)}"
-                style="display:inline-flex;align-items:center;gap:4px;margin:2px;background:var(--s4);border:1px dashed var(--border);border-radius:8px;padding:3px 8px">
-                <i class="fas fa-plus" style="font-size:9px;color:var(--dim)"></i>
-                <input type="text" class="prod-new-size-name" placeholder="size" maxlength="10"
-                  style="width:44px;border:none;background:transparent;font-size:12px;color:var(--ink);font-weight:600;outline:none"
-                  title="Size label e.g. 75ml">
-                <input type="number" min="1" class="prod-new-size-price" placeholder="price"
-                  style="width:54px;border:none;background:transparent;font-size:12px;color:var(--ink);outline:none;text-align:right"
-                  title="Price in MAD">
-                <span style="font-size:10px;color:var(--dim)">MAD</span>
+              <div class="prod-add-size-form" data-slug="${esc(slug)}"
+                style="display:inline-flex;align-items:center;gap:0;margin:3px;border-radius:9px;overflow:hidden;border:1.5px dashed var(--border);background:var(--s4)">
+                <div style="display:flex;align-items:center;padding:5px 8px;gap:5px">
+                  <i class="fas fa-plus" style="font-size:9px;color:var(--dim)"></i>
+                  <input type="text" class="prod-new-size-name" placeholder="size" maxlength="10"
+                    style="width:40px;border:none;background:transparent;font-size:12px;color:var(--ink);font-weight:700;outline:none"
+                    title="e.g. 75ml">
+                  <span style="color:var(--border);font-size:14px;line-height:1">|</span>
+                  <input type="number" min="1" class="prod-new-size-price" placeholder="price"
+                    style="width:48px;border:none;background:transparent;font-size:12px;color:var(--ink);font-weight:700;outline:none;text-align:right"
+                    title="Price in MAD">
+                  <span style="font-size:9px;color:var(--dim);font-weight:600">MAD</span>
+                </div>
                 <button class="prod-add-size btn btn-xs btn-gold" data-slug="${esc(slug)}"
-                  style="padding:2px 7px;font-size:11px;margin-left:2px">Add</button>
-              </span>
+                  style="padding:0 10px;font-size:11px;border-radius:0;align-self:stretch;margin:0">Add</button>
+              </div>
             </div>
+
           </div>
         </div>`;
       }).join('');
@@ -2213,14 +2315,17 @@ const loadProductsView = async () => {
           dirty.add(slug);
           // Show UNSAVED badge on the card without full re-render
           const card = grid.querySelector(`.prod-card[data-slug="${slug}"]`);
-          if (card && !card.querySelector('.prod-dirty-badge')) {
-            const subRow = card.querySelector('[style*="display:flex"][style*="align-items:center"][style*="gap:8px"]');
-            if (subRow) {
-              const badge = document.createElement('span');
-              badge.className = 'prod-dirty-badge';
-              badge.style.cssText = 'font-size:10px;background:rgba(56,189,248,.15);color:var(--sky);font-weight:700;padding:1px 7px;border-radius:99px;border:1px solid var(--sky)';
-              badge.textContent = 'UNSAVED';
-              subRow.appendChild(badge);
+          if (card) {
+            card.style.borderLeftColor = 'var(--sky)';
+            if (!card.querySelector('.prod-dirty-badge')) {
+              const subRow = card.querySelector('[style*="gap:6px"]');
+              if (subRow) {
+                const badge = document.createElement('span');
+                badge.className = 'prod-dirty-badge';
+                badge.style.cssText = 'font-size:10px;font-weight:700;color:var(--sky);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:2px 8px;border-radius:99px';
+                badge.innerHTML = '<i class="fas fa-circle-dot" style="font-size:9px;margin-right:3px"></i>Unsaved';
+                subRow.appendChild(badge);
+              }
             }
           }
         });

@@ -4071,6 +4071,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // Hide card completely when admin has disabled this product
+            if (_firestoreProductOverridesCache[productId]?.disabled) {
+                card.style.display = 'none';
+                return;
+            }
+
             const resolvedSizeLabels = getCatalogCardSizeLabels(
                 card.dataset.productName || '',
                 productId,
@@ -5486,12 +5492,29 @@ document.addEventListener('DOMContentLoaded', () => {
         // When Firestore admin has explicit price overrides, they are fully authoritative
         // and must bypass ALL static size lists (sizes.json whitelist, URL fallback, etc.)
         const _fsOvForPid = _firestoreProductOverridesCache[_normalizedPid];
-        const _fsHasPrices = _fsOvForPid && !_fsOvForPid.disabled
+        const _fsDisabled  = Boolean(_fsOvForPid?.disabled);
+        const _fsHasPrices = _fsOvForPid && !_fsDisabled
             && _fsOvForPid.prices && typeof _fsOvForPid.prices === 'object'
             && Object.keys(_fsOvForPid.prices).length > 0;
 
+        // ── Disabled product: show unavailable banner and skip all size rendering ──
+        if (_fsDisabled) {
+            const sizeSelEl = document.getElementById('sizeSelector');
+            if (sizeSelEl) {
+                sizeSelEl.innerHTML = `<div style="padding:18px 0;text-align:center;color:var(--muted,#888);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px"><i class="fas fa-ban" style="color:#f43f5e"></i> This product is currently unavailable</div>`;
+            }
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            if (addToCartBtn) { addToCartBtn.disabled = true; addToCartBtn.style.opacity = '0.45'; addToCartBtn.style.pointerEvents = 'none'; }
+            const buyNowBtn = document.getElementById('buyNowBtn');
+            if (buyNowBtn) { buyNowBtn.disabled = true; buyNowBtn.style.opacity = '0.45'; buyNowBtn.style.pointerEvents = 'none'; }
+            const priceEl = document.getElementById('productPrice');
+            if (priceEl) priceEl.textContent = 'Unavailable';
+        }
+
         let productSizePriceOptions;
-        if (jsonControlsThisProduct && !_fsHasPrices) {
+        if (_fsDisabled) {
+            productSizePriceOptions = [];
+        } else if (jsonControlsThisProduct && !_fsHasPrices) {
             // sizes.json is fully authoritative — build options DIRECTLY from it.
             // This bypasses getAvailableSizePriceOptions / getConfiguredSizeKeys
             // entirely so nothing else can drop or reorder custom size keys.
