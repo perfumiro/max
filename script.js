@@ -3633,6 +3633,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let pricesJsonPromise = null;
     let priceConfigWatcherStarted = false;
     let lastKnownPricesSnapshot = '';
+    // Firestore productOverrides cache — populated inside loadPricesJson.
+    // Used by getConfiguredSizeKeys to honour admin size changes even for
+    // products that have a per-product whitelist in sizes.json.
+    let _firestoreProductOverridesCache = {};
 
     const loadPricesJson = async () => {
         if (!pricesJsonPromise) {
@@ -3649,12 +3653,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         const { db: fsDb } = await import('./auth/firebase.js');
                         const { collection: col, getDocs: gDocs } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
                         const snap = await gDocs(col(fsDb, 'productOverrides'));
+                        _firestoreProductOverridesCache = {}; // reset on each fresh load
                         snap.forEach(d => {
                             const slug = d.id;
                             const ov = d.data();
+                            // Store raw override so getConfiguredSizeKeys can read it
+                            _firestoreProductOverridesCache[slug] = ov;
                             if (!pricesById[slug]) pricesById[slug] = {};
+                            // If admin disabled this product, zero all its prices
+                            if (ov.disabled) {
+                                Object.keys(pricesById[slug]).forEach(sz => { pricesById[slug][sz] = 0; });
+                            }
                             // Apply overridden prices (only positive values)
-                            if (ov.prices && typeof ov.prices === 'object') {
+                            if (!ov.disabled && ov.prices && typeof ov.prices === 'object') {
                                 Object.entries(ov.prices).forEach(([sz, price]) => {
                                     if (typeof price === 'number' && price > 0) {
                                         pricesById[slug][sz] = price;
@@ -3775,14 +3786,38 @@ document.addEventListener('DOMContentLoaded', () => {
         })();
 
         // Determine which sizes to actually display:
-        // - If sizes.json has a per-product list, it is fully authoritative —
-        //   render exactly those sizes regardless of what prices.json contains.
-        //   Sizes without a price render as "price on request".
+        // - If sizes.json has a per-product list, use it as a starting point.
         // - Otherwise, prices.json positive-price keys are the canonical source.
+        // - In both cases, Firestore productOverrides (admin Product Manager) is
+        //   applied LAST and overrides everything: removedSizes are filtered out,
+        //   and extra sizes added by admin are appended.
         const fromJsonWhitelist = _runtimeProductSizes[normalizedId];
-        const canonicalKeys = fromJsonWhitelist && fromJsonWhitelist.length
+        let canonicalKeys = fromJsonWhitelist && fromJsonWhitelist.length
             ? fromJsonWhitelist
             : positivePriceKeys.length ? positivePriceKeys : baseKeys;
+
+        // ── Apply Firestore admin overrides (highest priority) ────────────
+        const _fsOv = _firestoreProductOverridesCache[normalizedId];
+        if (_fsOv) {
+            // 1. Remove sizes explicitly deleted by admin
+            const _fsRemoved = new Set(_fsOv.removedSizes || []);
+            if (_fsRemoved.size > 0) {
+                canonicalKeys = canonicalKeys.filter(k => !_fsRemoved.has(k));
+            }
+            // 2. Add sizes added by admin that aren't already in the list
+            if (_fsOv.prices && typeof _fsOv.prices === 'object' && !_fsOv.disabled) {
+                Object.entries(_fsOv.prices).forEach(([sz, price]) => {
+                    const normSz = normalizeSizeLabelToKey(sz);
+                    if (normSz && Number(price) > 0 && !canonicalKeys.includes(normSz) && !_fsRemoved.has(normSz)) {
+                        canonicalKeys = [...canonicalKeys, normSz];
+                    }
+                });
+            }
+            // 3. If product disabled, clear all sizes so nothing shows
+            if (_fsOv.disabled) {
+                canonicalKeys = [];
+            }
+        }
 
         return Array.from(new Set(canonicalKeys))
             .sort((left, right) => {

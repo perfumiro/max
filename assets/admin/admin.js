@@ -2063,37 +2063,51 @@ const loadProductsView = async () => {
       tbody.innerHTML = filtered.map(slug => {
         const ov       = overrides[slug] || {};
         const disabled = ov.disabled || false;
+        const hasOverride = !!(ov.prices || (ov.removedSizes && ov.removedSizes.length));
         const name     = slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
         const sizes    = effectiveSizes(slug);
+        const baseKeys = Object.keys(pricesRes[slug] || {});
 
         const sizeHtml = Object.keys(sizes).map(sz => {
-          const price = sizes[sz];
+          const price     = sizes[sz];
+          const isNew     = !baseKeys.includes(sz);   // added by admin, not in prices.json
+          const isChanged = !isNew && (ov.prices?.[sz] !== undefined && ov.prices[sz] !== (pricesRes[slug]||{})[sz]);
+          const chipBorder = isNew ? 'var(--gold)' : isChanged ? 'var(--amber)' : 'var(--border)';
+          const chipTitle  = isNew ? 'New size (not in prices.json)' : isChanged ? `Original: ${(pricesRes[slug]||{})[sz]} MAD` : sz;
           return `<span class="prod-size-chip" data-slug="${esc(slug)}" data-size="${esc(sz)}"
-            style="display:inline-flex;align-items:center;gap:3px;background:var(--s3);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:12px;margin:2px">
+            style="display:inline-flex;align-items:center;gap:3px;background:var(--s3);border:1.5px solid ${chipBorder};border-radius:6px;padding:3px 8px;font-size:12px;margin:2px"
+            title="${esc(chipTitle)}">
             <span style="color:var(--muted);font-weight:600;min-width:30px;text-align:center">${esc(sz)}</span>
             <input type="number" min="0" value="${price}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
               style="width:60px;border:1px solid var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right">
             <span style="color:var(--muted);font-size:10px">MAD</span>
             <button class="prod-remove-size" data-slug="${esc(slug)}" data-size="${esc(sz)}"
-              style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:13px;line-height:1;padding:0 2px"
+              style="background:none;border:none;cursor:pointer;color:var(--rose);font-size:13px;line-height:1;padding:0 2px"
               title="Remove this size">×</button>
           </span>`;
         }).join('');
 
-        // Rename form per slug
-        const renameSlug = esc(slug);
         return `<tr style="border-bottom:1px solid var(--border);opacity:${disabled?0.5:1}" data-slug="${esc(slug)}">
-          <td style="padding:10px 14px;font-size:13px;font-weight:600;color:var(--ink);max-width:200px;word-break:break-word">${esc(name)}</td>
+          <td style="padding:10px 14px;font-size:13px;font-weight:600;color:var(--ink);max-width:200px;word-break:break-word">
+            ${esc(name)}
+            ${disabled ? '<span style="font-size:10px;background:var(--rose);color:#fff;padding:1px 6px;border-radius:99px;margin-left:6px">disabled</span>' : ''}
+            ${hasOverride && !disabled ? '<span style="font-size:10px;background:var(--amber);color:#fff;padding:1px 6px;border-radius:99px;margin-left:6px">overridden</span>' : ''}
+          </td>
           <td style="padding:8px 14px">
             <div class="prod-sizes-wrap" data-slug="${esc(slug)}" style="display:flex;flex-wrap:wrap;align-items:center;gap:2px">
               ${sizeHtml}
               <span class="prod-add-size-form" data-slug="${esc(slug)}" style="display:inline-flex;align-items:center;gap:3px;margin:2px">
                 <input type="text" class="prod-new-size-name" placeholder="e.g. 75ml"
                   style="width:54px;border:1px dashed var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink)" maxlength="10">
-                <input type="number" min="1" class="prod-new-size-price" placeholder="Price"
-                  style="width:58px;border:1px dashed var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink)">
+                <input type="number" min="1" class="prod-new-size-price" placeholder="Price MAD"
+                  style="width:72px;border:1px dashed var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink)">
                 <button class="prod-add-size btn btn-xs btn-gold" data-slug="${esc(slug)}" style="padding:2px 8px;font-size:11px" title="Add size">＋ Add</button>
               </span>
+            </div>
+            <div style="font-size:10px;color:var(--dim);margin-top:4px">
+              <span style="color:var(--gold)">■</span> new &nbsp;
+              <span style="color:var(--amber)">■</span> price changed &nbsp;
+              Click <b>× </b> to remove · <b>Save</b> to apply · <b>Reset</b> to restore defaults
             </div>
           </td>
           <td style="padding:10px 14px">
@@ -2105,7 +2119,9 @@ const loadProductsView = async () => {
               <button class="btn btn-xs btn-outline prod-toggle" data-slug="${esc(slug)}" style="${disabled?'':'color:var(--rose);border-color:var(--rose)'}">
                 <i class="fas fa-${disabled?'eye':'eye-slash'}"></i> ${disabled?'Enable':'Disable'}
               </button>
-              <button class="btn btn-xs btn-outline prod-reset" data-slug="${esc(slug)}" title="Delete all overrides and restore prices.json defaults" style="color:var(--muted);border-color:var(--border)">
+              <button class="btn btn-xs btn-outline prod-reset" data-slug="${esc(slug)}"
+                title="Delete all overrides and restore original prices.json data"
+                style="color:var(--muted);border-color:var(--border)${hasOverride?';color:var(--rose);border-color:var(--rose)':''}">
                 <i class="fas fa-arrow-rotate-left"></i> Reset
               </button>
             </div>
