@@ -2029,8 +2029,22 @@ const loadProductsView = async () => {
       fetch('/prices.json').then(r=>r.json()),
       getDocs(collection(db,'productOverrides'))
     ]);
+    // Normalize size keys: "10" → "10ml", "50 ml" → "50ml"
+    const normSizeKey = (sz) => {
+      const s = (sz || '').trim().toLowerCase().replace(/\s+/g, '');
+      return /^\d+$/.test(s) ? s + 'ml' : s;
+    };
+    // Normalize all keys in a Firestore override document
+    const normalizeOv = (ov) => {
+      if (!ov) return {};
+      const prices = {};
+      if (ov.prices) Object.entries(ov.prices).forEach(([k, v]) => { prices[normSizeKey(k)] = v; });
+      const removedSizes = (ov.removedSizes || []).map(normSizeKey);
+      return { ...ov, prices, removedSizes };
+    };
+
     const overrides = {};
-    overridesSnap.docs.forEach(d => { overrides[d.id] = d.data(); });
+    overridesSnap.docs.forEach(d => { overrides[d.id] = normalizeOv(d.data()); });
 
     const slugs = Object.keys(pricesRes);
     if(countEl) countEl.textContent = slugs.length + ' products';
@@ -2038,20 +2052,28 @@ const loadProductsView = async () => {
     // Track explicitly removed sizes per slug (during this session)
     const pendingRemovals = {}; // { [slug]: Set<sizeName> }
 
-    // Build the effective size map for a slug
+    // Build the effective size map for a slug.
+    // Rule: if a size has a positive price override it is NEVER treated as removed
+    // (prices win over removedSizes — prevents stale data from hiding sizes).
     const effectiveSizes = (slug) => {
-      const base    = pricesRes[slug] || {};
-      const ov      = overrides[slug] || {};
-      const removed = new Set([...(ov.removedSizes || []), ...(pendingRemovals[slug] || [])]);
-      const merged  = {};
-      // Base sizes with override prices
+      const base       = pricesRes[slug] || {};
+      const ov         = overrides[slug] || {};
+      const pendingSet = pendingRemovals[slug] || new Set();
+      // Only treat a size as removed if it has no positive price override
+      const removed = new Set(
+        [...(ov.removedSizes || []), ...pendingSet]
+          .map(normSizeKey)
+          .filter(sz => !(ov.prices?.[sz] > 0))
+      );
+      const merged = {};
+      // Base sizes: use override price if set, otherwise base price
       Object.keys(base).forEach(sz => {
-        if (!removed.has(sz)) merged[sz] = ov.prices?.[sz] ?? base[sz];
+        if (!removed.has(sz)) merged[sz] = (ov.prices?.[sz] > 0) ? ov.prices[sz] : base[sz];
       });
-      // Extra sizes added via admin (in ov.prices but not in base)
+      // Extra sizes added by admin (not in base prices.json)
       if (ov.prices) {
         Object.keys(ov.prices).forEach(sz => {
-          if (!base[sz] && !removed.has(sz)) merged[sz] = ov.prices[sz];
+          if (!base[sz] && !removed.has(sz) && ov.prices[sz] > 0) merged[sz] = ov.prices[sz];
         });
       }
       return merged;
@@ -2163,7 +2185,7 @@ const loadProductsView = async () => {
         const form      = addBtn.closest('.prod-add-size-form');
         const nameInput = form?.querySelector('.prod-new-size-name');
         const priceInput= form?.querySelector('.prod-new-size-price');
-        const sz        = (nameInput?.value||'').trim().toLowerCase().replace(/\s+/g,'');
+        const sz        = normSizeKey((nameInput?.value||'').trim());
         const price     = parseFloat(priceInput?.value)||0;
         if (!sz) { toast('Enter a size name (e.g. 75ml)', 'error'); return; }
         if (price <= 0) { toast('Enter a valid price greater than 0', 'error'); return; }
@@ -2182,12 +2204,12 @@ const loadProductsView = async () => {
         const row = tbody.querySelector(`tr[data-slug="${slug}"]`);
         if (!row) { toast('Could not find product row', 'error'); return; }
 
-        // Collect prices from visible chips (size name is read from data-size, not editable input)
+        // Collect prices — normalize size keys so "10" → "10ml" before saving
         const chips  = row.querySelectorAll('.prod-size-chip');
         const prices = {};
         let hasError = false;
         chips.forEach(chip => {
-          const sz         = chip.dataset.size;
+          const sz         = normSizeKey(chip.dataset.size);
           const priceInput = chip.querySelector('.prod-price-input');
           const price      = parseFloat(priceInput?.value ?? '');
           if (!sz) return;
@@ -2196,12 +2218,15 @@ const loadProductsView = async () => {
         });
         if (hasError) { toast('Fix invalid prices before saving', 'error'); return; }
 
-        // Removed sizes = base sizes not in current visible chips + any pending removals
+        // Removed sizes = base sizes not currently visible + explicit removals
+        // Exclude any size that has a positive price override (prices win)
         const pendingSet   = pendingRemovals[slug] || new Set();
         const removedSizes = [
-          ...Object.keys(base).filter(sz => !(sz in prices)),
-          ...pendingSet,
-        ].filter((v, i, a) => a.indexOf(v) === i); // unique
+          ...Object.keys(base).map(normSizeKey).filter(sz => !(sz in prices)),
+          ...[...pendingSet].map(normSizeKey),
+        ]
+          .filter((v, i, a) => a.indexOf(v) === i)  // unique
+          .filter(sz => !(prices[sz] > 0));           // prices win over removals
 
         // Clear pending removals for this slug (they're now persisted)
         delete pendingRemovals[slug];

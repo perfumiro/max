@@ -3638,6 +3638,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // products that have a per-product whitelist in sizes.json.
     let _firestoreProductOverridesCache = {};
 
+    // Normalize a size key so "10" → "10ml", "50 ml" → "50ml", "10ml" → "10ml"
+    const _normSzKey = (sz) => {
+        const s = String(sz || '').trim().toLowerCase().replace(/\s+/g, '');
+        return /^\d+$/.test(s) ? s + 'ml' : s;
+    };
+
     const loadPricesJson = async () => {
         if (!pricesJsonPromise) {
             pricesJsonPromise = fetch(getPricesJsonPath(), { cache: 'no-store' })
@@ -3656,26 +3662,35 @@ document.addEventListener('DOMContentLoaded', () => {
                         _firestoreProductOverridesCache = {}; // reset on each fresh load
                         snap.forEach(d => {
                             const slug = d.id;
-                            const ov = d.data();
-                            // Store raw override so getConfiguredSizeKeys can read it
-                            _firestoreProductOverridesCache[slug] = ov;
-                            if (!pricesById[slug]) pricesById[slug] = {};
-                            // If admin disabled this product, zero all its prices
-                            if (ov.disabled) {
-                                Object.keys(pricesById[slug]).forEach(sz => { pricesById[slug][sz] = 0; });
-                            }
-                            // Apply overridden prices (only positive values)
-                            if (!ov.disabled && ov.prices && typeof ov.prices === 'object') {
-                                Object.entries(ov.prices).forEach(([sz, price]) => {
-                                    if (typeof price === 'number' && price > 0) {
-                                        pricesById[slug][sz] = price;
-                                    }
+                            const raw  = d.data();
+                            // Normalize all size keys ("10" → "10ml") for consistency
+                            const normPrices = {};
+                            if (raw.prices && typeof raw.prices === 'object') {
+                                Object.entries(raw.prices).forEach(([sz, price]) => {
+                                    normPrices[_normSzKey(sz)] = price;
                                 });
                             }
-                            // Delete removed sizes entirely so they vanish from size pickers
-                            if (Array.isArray(ov.removedSizes)) {
-                                ov.removedSizes.forEach(sz => { delete pricesById[slug][sz]; });
+                            const normRemoved = Array.isArray(raw.removedSizes)
+                                ? raw.removedSizes.map(_normSzKey) : [];
+                            // Prices WIN over removedSizes: if admin set a positive price for a size,
+                            // that size is never treated as removed (prevents stale data from breaking products)
+                            const effectiveRemoved = normRemoved.filter(sz => !(normPrices[sz] > 0));
+                            const ov = { ...raw, prices: normPrices, removedSizes: effectiveRemoved };
+                            // Store normalized override for getConfiguredSizeKeys
+                            _firestoreProductOverridesCache[slug] = ov;
+                            if (!pricesById[slug]) pricesById[slug] = {};
+                            if (ov.disabled) {
+                                Object.keys(pricesById[slug]).forEach(sz => { pricesById[slug][sz] = 0; });
+                                return;
                             }
+                            // Apply overridden prices
+                            Object.entries(normPrices).forEach(([sz, price]) => {
+                                if (typeof price === 'number' && price > 0) {
+                                    pricesById[slug][sz] = price;
+                                }
+                            });
+                            // Delete only sizes with no positive price override
+                            effectiveRemoved.forEach(sz => { delete pricesById[slug][sz]; });
                         });
                     } catch (_) { /* non-blocking — storefront still works from prices.json */ }
                     return pricesById;
@@ -3797,25 +3812,29 @@ document.addEventListener('DOMContentLoaded', () => {
             : positivePriceKeys.length ? positivePriceKeys : baseKeys;
 
         // ── Apply Firestore admin overrides (highest priority) ────────────
+        // Keys in the cache are already normalized ("10"→"10ml") and effectiveRemoved
+        // already excludes any size that has a positive price override.
         const _fsOv = _firestoreProductOverridesCache[normalizedId];
         if (_fsOv) {
-            // 1. Remove sizes explicitly deleted by admin
-            const _fsRemoved = new Set(_fsOv.removedSizes || []);
-            if (_fsRemoved.size > 0) {
-                canonicalKeys = canonicalKeys.filter(k => !_fsRemoved.has(k));
-            }
-            // 2. Add sizes added by admin that aren't already in the list
-            if (_fsOv.prices && typeof _fsOv.prices === 'object' && !_fsOv.disabled) {
-                Object.entries(_fsOv.prices).forEach(([sz, price]) => {
-                    const normSz = normalizeSizeLabelToKey(sz);
-                    if (normSz && Number(price) > 0 && !canonicalKeys.includes(normSz) && !_fsRemoved.has(normSz)) {
-                        canonicalKeys = [...canonicalKeys, normSz];
-                    }
-                });
-            }
-            // 3. If product disabled, clear all sizes so nothing shows
             if (_fsOv.disabled) {
+                // Product disabled — show no sizes
                 canonicalKeys = [];
+            } else {
+                // 1. Remove sizes the admin explicitly deleted (excludes price-overridden ones)
+                const _fsRemoved = new Set(_fsOv.removedSizes || []);
+                if (_fsRemoved.size > 0) {
+                    canonicalKeys = canonicalKeys.filter(k => !_fsRemoved.has(k));
+                }
+                // 2. Ensure every size that has a positive price override is visible,
+                //    even if it was somehow filtered out above
+                if (_fsOv.prices && typeof _fsOv.prices === 'object') {
+                    Object.entries(_fsOv.prices).forEach(([sz, price]) => {
+                        // sz is already normalized; add to visible list if not already present
+                        if (sz && Number(price) > 0 && !canonicalKeys.includes(sz)) {
+                            canonicalKeys = [...canonicalKeys, sz];
+                        }
+                    });
+                }
             }
         }
 
