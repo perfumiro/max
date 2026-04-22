@@ -3395,6 +3395,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setHeaderCartCount();
     };
 
+    // Expose globally so cart.js (dedicated cart page) can call it too
+    window.setHeaderCartCount = setHeaderCartCount;
+
     const showAddedToCartToast = (name, size) => {
         const existing = document.getElementById('ipordise-cart-toast');
         if (existing) existing.remove();

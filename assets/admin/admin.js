@@ -251,7 +251,7 @@ const renderRankList = (selector, rows) => {
   const max = rows[0]?.value || 1;
   el.innerHTML = rows.map((r, i) => `<div class="rank-item">
     <span class="rank-num">${i + 1}</span>
-    <span class="rank-label">${esc(r.name)}</span>
+    <span class="rank-label" title="${esc(r.name)}">${esc(r.name)}</span>
     <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:${Math.round(r.value / max * 100)}%"></div></div>
     <span class="rank-count">${fmtNum(r.value)}</span>
   </div>`).join('');

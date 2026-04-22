@@ -161,6 +161,29 @@
             document.getElementById('billingPhone')
         ].filter(Boolean);
 
+        const promoCodeInput = document.getElementById('promoCodeInput');
+        const applyPromoBtn  = document.getElementById('applyPromoBtn');
+        const promoMsgEl     = document.getElementById('promoMsg');
+
+        // ── Pre-load discount applied on cart page ──────────────────────────
+        const savedDiscount = sessionStorage.getItem('ipordise-cart-discount');
+        if (savedDiscount) {
+            try {
+                _appliedDiscount = JSON.parse(savedDiscount);
+                if (promoCodeInput) { promoCodeInput.value = _appliedDiscount.code; promoCodeInput.disabled = true; }
+                if (applyPromoBtn) {
+                    applyPromoBtn.textContent = '✓ Applied';
+                    applyPromoBtn.disabled = true;
+                    applyPromoBtn.style.background = '#16a34a';
+                }
+                if (promoMsgEl) {
+                    const label = _appliedDiscount.type === 'percentage' ? _appliedDiscount.value + '%' : _appliedDiscount.value + ' MAD';
+                    promoMsgEl.textContent = `✓ Code "${_appliedDiscount.code}" applied — ${label} off`;
+                    promoMsgEl.style.cssText = 'display:block;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;font-size:12px;padding:7px 11px;border-radius:7px';
+                }
+            } catch (_) { _appliedDiscount = null; }
+        }
+
         const subtotalEl = document.getElementById('checkoutSubtotal');
         const shippingEl = document.getElementById('checkoutShipping');
         const promoEl = document.getElementById('checkoutPromo');
@@ -266,6 +289,7 @@
         const storePendingOrder = (channel) => {
             try {
                 sessionStorage.setItem('ipordise-pending-order', JSON.stringify(buildStructuredOrder(channel)));
+                sessionStorage.removeItem('ipordise-cart-discount'); // clear discount after order placed
             } catch(e) {}
         };
 
@@ -383,10 +407,6 @@
         });
 
         // ── Promo code apply ───────────────────────────────────────────────
-        const applyPromoBtn = document.getElementById('applyPromoBtn');
-        const promoCodeInput = document.getElementById('promoCodeInput');
-        const promoMsgEl = document.getElementById('promoMsg');
-
         const showPromoMsg = (txt, ok) => {
             if (!promoMsgEl) return;
             promoMsgEl.textContent = txt;

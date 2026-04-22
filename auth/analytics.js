@@ -34,7 +34,7 @@ const _device = () => {
   if (/mobile|android|iphone/i.test(ua)) return 'mobile';
   return 'desktop';
 };
-const _page  = () => { const b = window.location.pathname.split('/').pop().replace(/\.html$/,'') || 'home'; const id = new URLSearchParams(location.search).get('id'); return id ? `${b}:${id.slice(0,24)}` : b; };
+const _page  = () => { const b = window.location.pathname.split('/').pop().replace(/\.html$/,'') || 'home'; const id = new URLSearchParams(location.search).get('id'); return id ? `${b}:${id}` : b; };
 const _today = () => new Date().toISOString().slice(0,10);
 const _isNew = () => !localStorage.getItem('ipo-v');
 const _markV = () => localStorage.setItem('ipo-v','1');

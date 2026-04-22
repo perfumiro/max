@@ -4,13 +4,8 @@
     const CHECKOUT_ACCESS_KEY = 'ipordise-checkout-access';
     const SHIPPING_MAD = 35;
 
-    /* Promo codes: code -> percentage discount */
-    const PROMO_CODES = {
-        'IPORDISE10': 10,
-        'WELCOME5':    5,
-        'SPRING15':   15,
-        'VIP20':      20,
-    };
+    /* Promo codes: legacy hardcoded list (fallback only — Firestore is primary) */
+    const PROMO_CODES = {};
 
     const parsePrice = (rawPrice) => {
         if (typeof rawPrice === 'number') return Number.isFinite(rawPrice) ? rawPrice : 0;
@@ -98,6 +93,10 @@
 
     const writeCart = (items) => {
         localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+        // Update header badge & bottom-nav badge instantly (defined in script.js)
+        if (typeof window.setHeaderCartCount === 'function') {
+            window.setHeaderCartCount();
+        }
     };
 
     // One-time bridge so previously saved products keep working with the new required "cart" key.
@@ -148,9 +147,16 @@
         return `${formatter.format(safeValue)} MAD`;
     };
 
-    const summarize = (items, discountPct = 0) => {
+    const summarize = (items, appliedDiscount = null) => {
         const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
-        const discount = discountPct > 0 ? Math.round(subtotal * discountPct) / 100 : 0;
+        let discount = 0;
+        if (appliedDiscount) {
+            if (appliedDiscount.type === 'percentage') {
+                discount = Math.min(Math.round(subtotal * appliedDiscount.value / 100), subtotal);
+            } else {
+                discount = Math.min(appliedDiscount.value, subtotal);
+            }
+        }
         const shipping = items.length ? SHIPPING_MAD : 0;
         const hasPendingPricing = items.some((item) => item.pricePending);
         return {
@@ -238,7 +244,7 @@
         const promoFeedback = document.getElementById('promoFeedback');
         migrateLegacyCartIfNeeded();
 
-        let activePromo = { code: '', pct: 0 };
+        let activePromo = null; // { code, type, value }
 
         const setCheckoutState = (isEmpty) => {
             if (!checkoutBtn) return;
@@ -266,7 +272,7 @@
                 ? items.map((item) => buildCartItemHtml(item)).join('')
                 : buildEmptyStateHtml();
 
-            const summary = summarize(items, activePromo.pct);
+            const summary = summarize(items, activePromo);
 
             if (subtotalEl) subtotalEl.textContent = summary.hasPendingPricing ? 'Pending confirmation' : formatMAD(summary.subtotal);
             if (shippingEl) shippingEl.textContent = items.length ? `${formatMAD(summary.shipping)} (VAT incl.)` : formatMAD(0);
@@ -307,29 +313,119 @@
         });
 
         if (promoApplyBtn && promoInput && promoFeedback) {
-            promoApplyBtn.addEventListener('click', () => {
+            // Auto-uppercase
+            promoInput.addEventListener('input', function () {
+                this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            });
+
+            const applyPromo = async () => {
                 const code = (promoInput.value || '').trim().toUpperCase();
                 if (!code) return;
 
-                const pct = PROMO_CODES[code];
-                if (pct) {
-                    activePromo = { code, pct };
-                    promoFeedback.textContent = `\u2713 Code "${code}" applied — ${pct}% off!`;
-                    promoFeedback.style.color = '#16a34a';
-                    promoInput.disabled = true;
-                    promoApplyBtn.textContent = 'Applied';
-                    promoApplyBtn.disabled = true;
-                } else {
-                    activePromo = { code: '', pct: 0 };
-                    promoFeedback.textContent = 'Invalid promo code. Please try again.';
-                    promoFeedback.style.color = '#dc2626';
-                }
-                promoFeedback.style.display = 'block';
-                render();
-            });
+                promoApplyBtn.disabled = true;
+                promoApplyBtn.textContent = '…';
+                promoFeedback.style.display = 'none';
 
+                try {
+                    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js');
+                    const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
+                    const { firebaseConfig } = await import('../auth/firebase.js');
+                    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+                    const db = getFirestore(app);
+
+                    const snap = await getDoc(doc(db, 'discountCodes', code));
+                    if (!snap.exists()) {
+                        promoFeedback.textContent = 'Invalid promo code. Please try again.';
+                        promoFeedback.style.color = '#dc2626';
+                        promoFeedback.style.display = 'block';
+                        activePromo = null;
+                        sessionStorage.removeItem('ipordise-cart-discount');
+                        promoApplyBtn.disabled = false;
+                        promoApplyBtn.textContent = 'Apply';
+                        render();
+                        return;
+                    }
+
+                    const dc = snap.data();
+                    const now = Date.now();
+
+                    if (dc.active === false) {
+                        promoFeedback.textContent = 'This code is currently disabled.';
+                        promoFeedback.style.color = '#dc2626';
+                        promoFeedback.style.display = 'block';
+                        activePromo = null;
+                        sessionStorage.removeItem('ipordise-cart-discount');
+                        promoApplyBtn.disabled = false;
+                        promoApplyBtn.textContent = 'Apply';
+                        render();
+                        return;
+                    }
+
+                    const expiresMs = dc.expiresAt?.toMillis?.() || (dc.expiresAt ? new Date(dc.expiresAt).getTime() : null);
+                    if (expiresMs && expiresMs < now) {
+                        promoFeedback.textContent = 'This code has expired.';
+                        promoFeedback.style.color = '#dc2626';
+                        promoFeedback.style.display = 'block';
+                        activePromo = null;
+                        sessionStorage.removeItem('ipordise-cart-discount');
+                        promoApplyBtn.disabled = false;
+                        promoApplyBtn.textContent = 'Apply';
+                        render();
+                        return;
+                    }
+
+                    if (dc.usageLimit > 0 && (dc.usedCount || 0) >= dc.usageLimit) {
+                        promoFeedback.textContent = 'This code has reached its usage limit.';
+                        promoFeedback.style.color = '#dc2626';
+                        promoFeedback.style.display = 'block';
+                        activePromo = null;
+                        sessionStorage.removeItem('ipordise-cart-discount');
+                        promoApplyBtn.disabled = false;
+                        promoApplyBtn.textContent = 'Apply';
+                        render();
+                        return;
+                    }
+
+                    const items = readCart();
+                    const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+                    if (dc.minOrder > 0 && subtotal < dc.minOrder) {
+                        promoFeedback.textContent = `Minimum order of ${dc.minOrder} MAD required for this code.`;
+                        promoFeedback.style.color = '#dc2626';
+                        promoFeedback.style.display = 'block';
+                        activePromo = null;
+                        sessionStorage.removeItem('ipordise-cart-discount');
+                        promoApplyBtn.disabled = false;
+                        promoApplyBtn.textContent = 'Apply';
+                        render();
+                        return;
+                    }
+
+                    // ✓ Valid
+                    activePromo = { code, type: dc.type, value: dc.value };
+                    sessionStorage.setItem('ipordise-cart-discount', JSON.stringify(activePromo));
+                    const discountLabel = dc.type === 'percentage' ? `${dc.value}% off` : `${dc.value} MAD off`;
+                    promoFeedback.textContent = `✓ Code "${code}" applied — ${discountLabel}!`;
+                    promoFeedback.style.color = '#16a34a';
+                    promoFeedback.style.display = 'block';
+                    promoInput.disabled = true;
+                    promoApplyBtn.textContent = 'Applied ✓';
+                    promoApplyBtn.disabled = true;
+                    promoApplyBtn.style.background = '#16a34a';
+                    promoApplyBtn.style.borderColor = '#16a34a';
+                    promoApplyBtn.style.color = '#fff';
+                    render();
+                } catch (err) {
+                    promoFeedback.textContent = 'Error checking code. Try again.';
+                    promoFeedback.style.color = '#dc2626';
+                    promoFeedback.style.display = 'block';
+                    promoApplyBtn.disabled = false;
+                    promoApplyBtn.textContent = 'Apply';
+                }
+            };
+
+            promoApplyBtn.addEventListener('click', applyPromo);
             promoInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') promoApplyBtn.click();
+                if (e.key === 'Enter') applyPromo();
             });
         }
 
