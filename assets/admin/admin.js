@@ -2410,11 +2410,20 @@ const loadProductsView = async () => {
       });
     };
 
+    // Clear search/filter BEFORE render so stale values don't hide products
+    if (searchEl) { searchEl.value = ''; }
+    if (filterEl) { filterEl.value = ''; }
     render();
 
+    // Abort any event listeners from a previous loadProductsView call
+    if (grid._prodAC) grid._prodAC.abort();
+    const prodAC = new AbortController();
+    grid._prodAC = prodAC;
+    const prodSig = prodAC.signal;
+
     // Search + filter
-    if (searchEl) { searchEl.value = ''; searchEl.addEventListener('input', render); }
-    if (filterEl) { filterEl.value = ''; filterEl.addEventListener('change', render); }
+    if (searchEl) { searchEl.addEventListener('input', render, { signal: prodSig }); }
+    if (filterEl) { filterEl.addEventListener('change', render, { signal: prodSig }); }
     const refreshBtn = document.getElementById('refreshProductsBtn');
     if (refreshBtn) { const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadProductsView()); }
 
@@ -2423,6 +2432,7 @@ const loadProductsView = async () => {
       const saveBtn   = e.target.closest('.prod-save');
       const toggleBtn = e.target.closest('.prod-toggle');
       const removeBtn = e.target.closest('.prod-remove-size');
+
       const addBtn    = e.target.closest('.prod-add-size');
       const resetBtn  = e.target.closest('.prod-reset');
       if (!saveBtn && !toggleBtn && !removeBtn && !addBtn && !resetBtn) return;
@@ -2533,7 +2543,7 @@ const loadProductsView = async () => {
           render();
         } catch(err) { toast('Reset failed: '+err.message,'error'); if(btn){btn.disabled=false;btn.innerHTML='<i class="fas fa-arrow-rotate-left"></i> Reset';} }
       }
-    });
+    }, { signal: prodSig });
   } catch(e) {
     grid.innerHTML = `<div class="card"><div class="card-body" style="color:var(--rose);text-align:center;padding:32px"><i class="fas fa-triangle-exclamation"></i> ${esc(e.message)}</div></div>`;
     throw e;
