@@ -1951,8 +1951,14 @@ const loadNewsletterView = async () => {
   if (!tbody) return;
   tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>`;
   try {
-    const snap = await getDocs(query(collection(db,'newsletterSubscribers'), orderBy('createdAt','desc')));
+    const snap = await getDocs(collection(db,'newsletterSubscribers'));
     let subs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // Sort newest-first client-side (avoids requiring a Firestore composite index)
+    subs.sort((a,b) => {
+      const ta = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0;
+      const tb = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0;
+      return tb - ta;
+    });
 
     const render = (filter='') => {
       const list = filter ? subs.filter(s =>
@@ -1998,6 +2004,68 @@ const loadNewsletterView = async () => {
     // Refresh
     const refreshBtn = document.getElementById('refreshNewsletterBtn');
     if(refreshBtn){ const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadNewsletterView()); }
+
+    // ── Compose panel ──────────────────────────────────────────────────────
+    const composeToggle = document.getElementById('nlComposeToggle');
+    const composeBody   = document.getElementById('nlComposeBody');
+    const composeChevron= document.getElementById('nlComposeChevron');
+    if(composeToggle && composeBody){
+      // start collapsed
+      composeBody.style.display = 'none';
+      composeToggle.addEventListener('click', () => {
+        const open = composeBody.style.display !== 'none';
+        composeBody.style.display = open ? 'none' : 'flex';
+        if(composeChevron) composeChevron.innerHTML = open ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        updateAudienceCount();
+      });
+    }
+
+    const audienceEl  = document.getElementById('nlAudience');
+    const countLabel  = document.getElementById('nlAudienceCount');
+
+    const getAudience = () => {
+      const v = audienceEl?.value || 'all';
+      if(v === 'male')   return subs.filter(s => (s.gender||'').toLowerCase() === 'male');
+      if(v === 'female') return subs.filter(s => (s.gender||'').toLowerCase() === 'female');
+      return subs;
+    };
+
+    const updateAudienceCount = () => {
+      if(!countLabel) return;
+      const n = getAudience().length;
+      countLabel.textContent = n + ' recipient' + (n!==1?'s':'');
+    };
+
+    if(audienceEl){ audienceEl.addEventListener('change', updateAudienceCount); updateAudienceCount(); }
+
+    // Open in mail client
+    const openMailBtn = document.getElementById('nlOpenMailBtn');
+    if(openMailBtn){ const b=openMailBtn.cloneNode(true); openMailBtn.replaceWith(b);
+      b.addEventListener('click', () => {
+        const audience = getAudience();
+        if(!audience.length){ toast('No recipients in this audience','error'); return; }
+        const subject = document.getElementById('nlSubject')?.value.trim() || '';
+        const body    = document.getElementById('nlBody')?.value.trim() || '';
+        const bcc     = audience.map(s=>s.email).filter(Boolean).join(',');
+        const mailto  = `mailto:?bcc=${encodeURIComponent(bcc)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailto;
+      });
+    }
+
+    // Copy emails to clipboard
+    const copyEmailsBtn = document.getElementById('nlCopyEmailsBtn');
+    if(copyEmailsBtn){ const b=copyEmailsBtn.cloneNode(true); copyEmailsBtn.replaceWith(b);
+      b.addEventListener('click', async () => {
+        const audience = getAudience();
+        const emails = audience.map(s=>s.email).filter(Boolean).join(', ');
+        try {
+          await navigator.clipboard.writeText(emails);
+          toast(`${audience.length} email${audience.length!==1?'s':''} copied to clipboard — paste into BCC`, 'success');
+        } catch(_) {
+          toast('Copy failed — your browser blocked clipboard access','error');
+        }
+      });
+    }
 
     // Delete via delegation
     const tableBody = document.getElementById('newsletterTableBody');

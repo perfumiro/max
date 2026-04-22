@@ -542,6 +542,49 @@
         <!-- ── Newsletter View ────────────────────────────────────────────── -->
         <section id="view-newsletter" class="view">
           <div class="view-title">Newsletter <span class="view-title-sub" id="newsletterCount"></span></div>
+
+          <!-- Compose card -->
+          <div class="card mb-4">
+            <div class="card-head" style="cursor:pointer;user-select:none" id="nlComposeToggle">
+              <span class="card-title"><i class="fas fa-paper-plane card-title-icon" style="color:var(--gold)"></i> Compose & Send</span>
+              <span style="font-size:11px;color:var(--muted);margin-left:auto" id="nlComposeChevron"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <div id="nlComposeBody" style="display:none;padding:16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                <div style="flex:1;min-width:180px">
+                  <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Send to</label>
+                  <select id="nlAudience" class="select-sm" style="width:100%">
+                    <option value="all">All subscribers</option>
+                    <option value="male">Male subscribers</option>
+                    <option value="female">Female subscribers</option>
+                  </select>
+                </div>
+                <div style="flex:2;min-width:220px">
+                  <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Subject</label>
+                  <input type="text" id="nlSubject" class="select-sm" placeholder="e.g. New arrivals at IPORDISE 🌿" style="width:100%">
+                </div>
+              </div>
+              <div>
+                <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Message</label>
+                <textarea id="nlBody" rows="5" placeholder="Write your newsletter message here..." style="width:100%;border:1px solid var(--border);border-radius:8px;background:var(--s3);color:var(--ink);font-size:13px;padding:10px 12px;outline:none;resize:vertical;font-family:inherit;transition:border-color .15s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                <button class="btn btn-xs btn-gold" id="nlOpenMailBtn" style="gap:6px">
+                  <i class="fas fa-envelope-open-text"></i> Open in Mail Client
+                </button>
+                <button class="btn btn-xs btn-outline" id="nlCopyEmailsBtn" style="gap:6px">
+                  <i class="fas fa-copy"></i> Copy Emails (BCC)
+                </button>
+                <span id="nlAudienceCount" style="font-size:11px;color:var(--muted);margin-left:4px"></span>
+              </div>
+              <div style="font-size:11px;color:var(--dim);background:var(--s3);border-radius:6px;padding:8px 12px;line-height:1.6">
+                <i class="fas fa-circle-info" style="margin-right:5px;color:var(--gold)"></i>
+                <strong>Open in Mail Client</strong> will open your default email app (Gmail, Outlook…) with all recipient emails pre-filled in BCC and your subject + message ready to send.
+              </div>
+            </div>
+          </div>
+
+          <!-- Subscriber list controls -->
           <div class="card mb-4">
             <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
               <input type="text" class="select-sm" id="newsletterSearch" placeholder="Search email or name..." style="min-width:220px">
