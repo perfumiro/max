@@ -2035,38 +2035,91 @@ const loadProductsView = async () => {
     const slugs = Object.keys(pricesRes);
     if(countEl) countEl.textContent = slugs.length + ' products';
 
+    // Build the effective size map for a slug: base sizes merged with extra sizes, minus removed sizes
+    const effectiveSizes = (slug) => {
+      const base = pricesRes[slug] || {};
+      const ov   = overrides[slug] || {};
+      const removed = ov.removedSizes || [];
+      // Start with base prices, apply overrides
+      const merged = {};
+      Object.keys(base).forEach(sz => {
+        if (!removed.includes(sz)) merged[sz] = ov.prices?.[sz] ?? base[sz];
+      });
+      // Add extra sizes stored in overrides but not in base
+      if (ov.prices) {
+        Object.keys(ov.prices).forEach(sz => {
+          if (!base[sz] && !removed.includes(sz)) merged[sz] = ov.prices[sz];
+        });
+      }
+      return merged;
+    };
+
     const render = (filter='') => {
       const filtered = filter ? slugs.filter(s=>s.toLowerCase().replace(/-/g,' ').includes(filter.toLowerCase())) : slugs;
       if(filtered.length===0){ tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)">No products found</td></tr>`; return; }
       tbody.innerHTML = filtered.map(slug => {
-        const sizes = pricesRes[slug] || {};
         const ov = overrides[slug] || {};
         const disabled = ov.disabled || false;
         const name = slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+        const sizes = effectiveSizes(slug);
+
         const sizeHtml = Object.keys(sizes).map(sz => {
-          const basePrice = sizes[sz];
-          const overPrice = ov.prices?.[sz] ?? basePrice;
-          return `<span style="display:inline-flex;align-items:center;gap:4px;background:var(--s3);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:12px;margin:2px">
-            <span style="color:var(--muted)">${esc(sz)}</span>
-            <input type="number" min="0" value="${overPrice}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
-              style="width:62px;border:1px solid var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right">
-            <span style="color:var(--muted);font-size:11px">MAD</span>
+          const price = sizes[sz];
+          return `<span class="prod-size-chip" style="display:inline-flex;align-items:center;gap:3px;background:var(--s3);border:1px solid var(--border);border-radius:6px;padding:3px 7px;font-size:12px;margin:2px">
+            <input type="text" value="${esc(sz)}" data-orig="${esc(sz)}" data-slug="${esc(slug)}" class="prod-size-name"
+              style="width:44px;border:none;background:transparent;font-size:12px;color:var(--muted);font-weight:600;text-align:center;padding:0;outline:none"
+              title="Size name (e.g. 10ml, 50ml)">
+            <input type="number" min="0" value="${price}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
+              style="width:58px;border:1px solid var(--border);border-radius:4px;padding:2px 4px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right">
+            <span style="color:var(--muted);font-size:10px">MAD</span>
+            <button class="prod-remove-size" data-slug="${esc(slug)}" data-size="${esc(sz)}"
+              style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:11px;padding:0 2px;line-height:1"
+              title="Remove this size">×</button>
           </span>`;
         }).join('');
+
         return `<tr style="border-bottom:1px solid var(--border);opacity:${disabled?0.5:1}" data-slug="${esc(slug)}">
-          <td style="padding:10px 14px;font-size:13px;font-weight:600;color:var(--ink);max-width:220px;word-break:break-word">${esc(name)}</td>
-          <td style="padding:8px 14px">${sizeHtml}</td>
+          <td style="padding:10px 14px;font-size:13px;font-weight:600;color:var(--ink);max-width:200px;word-break:break-word">${esc(name)}</td>
+          <td style="padding:8px 14px">
+            <div class="prod-sizes-wrap" data-slug="${esc(slug)}" style="display:flex;flex-wrap:wrap;align-items:center;gap:2px">
+              ${sizeHtml}
+              <!-- Add-size inline form -->
+              <span class="prod-add-size-form" data-slug="${esc(slug)}" style="display:inline-flex;align-items:center;gap:3px;margin:2px">
+                <input type="text" class="prod-new-size-name" placeholder="e.g. 30ml"
+                  style="width:54px;border:1px dashed var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink)">
+                <input type="number" min="0" class="prod-new-size-price" placeholder="Price"
+                  style="width:58px;border:1px dashed var(--border);border-radius:4px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink)">
+                <button class="prod-add-size btn btn-xs btn-gold" data-slug="${esc(slug)}" style="padding:2px 7px;font-size:11px" title="Add size">＋</button>
+              </span>
+            </div>
+          </td>
           <td style="padding:10px 14px">
             <span style="font-size:12px;font-weight:600;color:${disabled?'var(--rose)':'var(--emerald)'}">${disabled?'Disabled':'Active'}</span>
           </td>
-          <td style="padding:10px 14px;white-space:nowrap;display:flex;gap:6px;align-items:center">
-            <button class="btn btn-xs btn-gold prod-save" data-slug="${esc(slug)}"><i class="fas fa-floppy-disk"></i> Save</button>
-            <button class="btn btn-xs btn-outline prod-toggle" data-slug="${esc(slug)}" style="${disabled?'':'color:var(--rose);border-color:var(--rose)'}">
-              <i class="fas fa-${disabled?'eye':'eye-slash'}"></i> ${disabled?'Enable':'Disable'}
-            </button>
+          <td style="padding:10px 14px;white-space:nowrap">
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="btn btn-xs btn-gold prod-save" data-slug="${esc(slug)}"><i class="fas fa-floppy-disk"></i> Save</button>
+              <button class="btn btn-xs btn-outline prod-toggle" data-slug="${esc(slug)}" style="${disabled?'':'color:var(--rose);border-color:var(--rose)'}">
+                <i class="fas fa-${disabled?'eye':'eye-slash'}"></i> ${disabled?'Enable':'Disable'}
+              </button>
+            </div>
           </td>
         </tr>`;
       }).join('');
+
+      // Keep size-name inputs in sync with their data-size attribute (for save logic)
+      tbody.querySelectorAll('.prod-size-name').forEach(inp => {
+        inp.addEventListener('change', () => {
+          // update sibling price input's data-size
+          const chip = inp.closest('.prod-size-chip');
+          if (chip) {
+            const priceInp = chip.querySelector('.prod-price-input');
+            const removeBtn = chip.querySelector('.prod-remove-size');
+            if (priceInp) priceInp.dataset.size = inp.value;
+            if (removeBtn) removeBtn.dataset.size = inp.value;
+          }
+        });
+      });
     };
     render();
 
@@ -2074,28 +2127,75 @@ const loadProductsView = async () => {
     const refreshBtn = document.getElementById('refreshProductsBtn');
     if(refreshBtn){ const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadProductsView()); }
 
-    // Save + toggle via delegation on tbody
+    // All interactions via delegation
     tbody.addEventListener('click', async(e)=>{
-      const saveBtn   = e.target.closest('.prod-save');
-      const toggleBtn = e.target.closest('.prod-toggle');
-      if(!saveBtn && !toggleBtn) return;
-      const slug = (saveBtn||toggleBtn).dataset.slug;
-      const ov = overrides[slug] || {};
-      if(saveBtn){
-        const row = tbody.querySelector(`tr[data-slug="${slug}"]`);
-        const inputs = row ? row.querySelectorAll('.prod-price-input') : [];
-        const prices = {};
-        inputs.forEach(inp => { prices[inp.dataset.size] = parseFloat(inp.value)||0; });
-        overrides[slug] = { ...ov, prices };
-        await setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true});
-        toast('Prices saved for '+slug.replace(/-/g,' '),'success');
+      const saveBtn      = e.target.closest('.prod-save');
+      const toggleBtn    = e.target.closest('.prod-toggle');
+      const removeBtn    = e.target.closest('.prod-remove-size');
+      const addBtn       = e.target.closest('.prod-add-size');
+      if(!saveBtn && !toggleBtn && !removeBtn && !addBtn) return;
+
+      const slug = (saveBtn||toggleBtn||removeBtn||addBtn).dataset.slug;
+      const ov   = overrides[slug] || {};
+      const base = pricesRes[slug] || {};
+
+      if (removeBtn) {
+        // Visually remove the chip
+        const chip = removeBtn.closest('.prod-size-chip');
+        if (chip) chip.remove();
+        toast('Size removed — click Save to apply', 'info');
       }
+
+      if (addBtn) {
+        const form = addBtn.closest('.prod-add-size-form');
+        const nameInp  = form?.querySelector('.prod-new-size-name');
+        const priceInp = form?.querySelector('.prod-new-size-price');
+        const sz    = (nameInp?.value||'').trim();
+        const price = parseFloat(priceInp?.value)||0;
+        if (!sz) { toast('Enter a size name first (e.g. 30ml)', 'error'); return; }
+        // Insert chip before the add-form span
+        const wrap = addBtn.closest('.prod-sizes-wrap');
+        const newChip = document.createElement('span');
+        newChip.className = 'prod-size-chip';
+        newChip.style.cssText = 'display:inline-flex;align-items:center;gap:3px;background:var(--s3);border:1px solid var(--gold);border-radius:6px;padding:3px 7px;font-size:12px;margin:2px';
+        newChip.innerHTML = `
+          <input type="text" value="${esc(sz)}" data-orig="" data-slug="${esc(slug)}" class="prod-size-name"
+            style="width:44px;border:none;background:transparent;font-size:12px;color:var(--muted);font-weight:600;text-align:center;padding:0;outline:none">
+          <input type="number" min="0" value="${price}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
+            style="width:58px;border:1px solid var(--border);border-radius:4px;padding:2px 4px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right">
+          <span style="color:var(--muted);font-size:10px">MAD</span>
+          <button class="prod-remove-size" data-slug="${esc(slug)}" data-size="${esc(sz)}"
+            style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:11px;padding:0 2px;line-height:1" title="Remove">×</button>`;
+        wrap.insertBefore(newChip, form);
+        if(nameInp) nameInp.value = '';
+        if(priceInp) priceInp.value = '';
+      }
+
+      if (saveBtn) {
+        const row = tbody.querySelector(`tr[data-slug="${slug}"]`);
+        if (!row) return;
+        // Collect all visible size chips
+        const chips = row.querySelectorAll('.prod-size-chip');
+        const prices = {};
+        chips.forEach(chip => {
+          const nameInp  = chip.querySelector('.prod-size-name');
+          const priceInp = chip.querySelector('.prod-price-input');
+          const sz = (nameInp?.value || priceInp?.dataset.size || '').trim();
+          if (sz) prices[sz] = parseFloat(priceInp?.value)||0;
+        });
+        // Determine which base sizes were removed
+        const removedSizes = Object.keys(base).filter(sz => !prices[sz]);
+        overrides[slug] = { ...ov, prices, removedSizes };
+        await setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:false});
+        toast('Saved: ' + slug.replace(/-/g,' '), 'success');
+      }
+
       if(toggleBtn){
         const newDisabled = !ov.disabled;
         overrides[slug] = { ...ov, disabled: newDisabled };
         await setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true});
         render(searchEl?.value||'');
-        toast(`Product ${newDisabled?'disabled':'enabled'}`,'success');
+        toast(`Product ${newDisabled?'disabled':'enabled'}`, 'success');
       }
     });
   } catch(e) {
