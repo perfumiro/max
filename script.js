@@ -5483,11 +5483,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const _jsonSizeList    = _runtimeProductSizes[_normalizedPid];
         const jsonControlsThisProduct = Boolean(_jsonSizeList && _jsonSizeList.length);
 
+        // When Firestore admin has explicit price overrides, they are fully authoritative
+        // and must bypass ALL static size lists (sizes.json whitelist, URL fallback, etc.)
+        const _fsOvForPid = _firestoreProductOverridesCache[_normalizedPid];
+        const _fsHasPrices = _fsOvForPid && !_fsOvForPid.disabled
+            && _fsOvForPid.prices && typeof _fsOvForPid.prices === 'object'
+            && Object.keys(_fsOvForPid.prices).length > 0;
+
         let productSizePriceOptions;
-        if (jsonControlsThisProduct) {
+        if (jsonControlsThisProduct && !_fsHasPrices) {
             // sizes.json is fully authoritative — build options DIRECTLY from it.
             // This bypasses getAvailableSizePriceOptions / getConfiguredSizeKeys
             // entirely so nothing else can drop or reorder custom size keys.
+            // (Skipped when Firestore admin has explicit overrides — those take priority.)
             const _rawPrices = pricesById && typeof pricesById === 'object' ? pricesById[_normalizedPid] : null;
             productSizePriceOptions = _jsonSizeList.map((sizeKey) => {
                 // Use priceKey to read prices.json so renamed keys still find their price
@@ -5506,21 +5514,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             });
         } else {
-            // No sizes.json entry — fall back to the original pipeline
+            // No sizes.json entry, or Firestore admin has explicit overrides — use the standard pipeline
             productSizePriceOptions = getAvailableSizePriceOptions(productId, pricesById, requestedSizeKeys);
 
-            if (Array.isArray(productOverride?.sizes) && productOverride.sizes.length) {
-                const allowedSizeKeys = new Set(
-                    productOverride.sizes
-                        .map((entry) => normalizeSizeOptionEntry(entry, ''))
-                        .map((entry) => normalizeSizeLabelToKey(entry.volumeLabel || entry.label))
-                        .filter(Boolean)
-                );
-                if (allowedSizeKeys.size) {
-                    productSizePriceOptions = productSizePriceOptions.filter((entry) => allowedSizeKeys.has(normalizeSizeLabelToKey(entry.volumeLabel || entry.label)));
+            if (!_fsHasPrices) {
+                // Only apply static filters when Firestore is NOT overriding sizes
+                if (Array.isArray(productOverride?.sizes) && productOverride.sizes.length) {
+                    const allowedSizeKeys = new Set(
+                        productOverride.sizes
+                            .map((entry) => normalizeSizeOptionEntry(entry, ''))
+                            .map((entry) => normalizeSizeLabelToKey(entry.volumeLabel || entry.label))
+                            .filter(Boolean)
+                    );
+                    if (allowedSizeKeys.size) {
+                        productSizePriceOptions = productSizePriceOptions.filter((entry) => allowedSizeKeys.has(normalizeSizeLabelToKey(entry.volumeLabel || entry.label)));
+                    }
+                } else if (fallbackSizeKeys.size) {
+                    productSizePriceOptions = productSizePriceOptions.filter((entry) => fallbackSizeKeys.has(normalizeSizeLabelToKey(entry.volumeLabel || entry.label)));
                 }
-            } else if (fallbackSizeKeys.size) {
-                productSizePriceOptions = productSizePriceOptions.filter((entry) => fallbackSizeKeys.has(normalizeSizeLabelToKey(entry.volumeLabel || entry.label)));
             }
         }
 
