@@ -3800,40 +3800,33 @@ document.addEventListener('DOMContentLoaded', () => {
             return _runtimeSizeOrder;
         })();
 
-        // Determine which sizes to actually display:
-        // - If sizes.json has a per-product list, use it as a starting point.
-        // - Otherwise, prices.json positive-price keys are the canonical source.
-        // - In both cases, Firestore productOverrides (admin Product Manager) is
-        //   applied LAST and overrides everything: removedSizes are filtered out,
-        //   and extra sizes added by admin are appended.
         const fromJsonWhitelist = _runtimeProductSizes[normalizedId];
         let canonicalKeys = fromJsonWhitelist && fromJsonWhitelist.length
             ? fromJsonWhitelist
             : positivePriceKeys.length ? positivePriceKeys : baseKeys;
 
-        // ── Apply Firestore admin overrides (highest priority) ────────────
-        // Keys in the cache are already normalized ("10"→"10ml") and effectiveRemoved
-        // already excludes any size that has a positive price override.
+        // ── Apply Firestore admin overrides (HIGHEST PRIORITY) ────────────
+        // When the admin has saved price/size overrides, those are the AUTHORITATIVE
+        // size list — the sizes.json whitelist is bypassed completely.
+        // This ensures renamed, added, or removed sizes always reflect exactly
+        // what was saved in the admin Product Manager.
         const _fsOv = _firestoreProductOverridesCache[normalizedId];
         if (_fsOv) {
             if (_fsOv.disabled) {
-                // Product disabled — show no sizes
                 canonicalKeys = [];
             } else {
-                // 1. Remove sizes the admin explicitly deleted (excludes price-overridden ones)
                 const _fsRemoved = new Set(_fsOv.removedSizes || []);
-                if (_fsRemoved.size > 0) {
+                const _fsPrices  = _fsOv.prices;
+                const hasFsPrices = _fsPrices && typeof _fsPrices === 'object' && Object.keys(_fsPrices).length > 0;
+                if (hasFsPrices) {
+                    // Firestore has explicit prices → derive the size list ENTIRELY from those.
+                    // Any size with a positive price that is not in removedSizes is shown.
+                    canonicalKeys = Object.entries(_fsPrices)
+                        .filter(([sz, price]) => sz && Number(price) > 0 && !_fsRemoved.has(sz))
+                        .map(([sz]) => sz);
+                } else if (_fsRemoved.size > 0) {
+                    // No Firestore prices but some sizes were removed → filter the whitelist.
                     canonicalKeys = canonicalKeys.filter(k => !_fsRemoved.has(k));
-                }
-                // 2. Ensure every size that has a positive price override is visible,
-                //    even if it was somehow filtered out above
-                if (_fsOv.prices && typeof _fsOv.prices === 'object') {
-                    Object.entries(_fsOv.prices).forEach(([sz, price]) => {
-                        // sz is already normalized; add to visible list if not already present
-                        if (sz && Number(price) > 0 && !canonicalKeys.includes(sz)) {
-                            canonicalKeys = [...canonicalKeys, sz];
-                        }
-                    });
                 }
             }
         }

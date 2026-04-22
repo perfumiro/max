@@ -2192,11 +2192,25 @@ const loadProductsView = async () => {
         </div>`;
       }).join('');
 
-      // Wire price + name input changes → mark dirty
+      // Wire price + name input changes → mark dirty and show badge instantly
       grid.querySelectorAll('.prod-price-input, .prod-size-name-input').forEach(inp => {
         inp.addEventListener('input', () => {
-          const slug = inp.closest('.prod-size-chip')?.dataset.slug || inp.dataset.slug;
-          if (slug) dirty.add(slug);
+          const chip = inp.closest('.prod-size-chip');
+          const slug = chip?.dataset.slug || inp.dataset.slug;
+          if (!slug) return;
+          dirty.add(slug);
+          // Show UNSAVED badge on the card without full re-render
+          const card = grid.querySelector(`.prod-card[data-slug="${slug}"]`);
+          if (card && !card.querySelector('.prod-dirty-badge')) {
+            const subRow = card.querySelector('[style*="display:flex"][style*="align-items:center"][style*="gap:8px"]');
+            if (subRow) {
+              const badge = document.createElement('span');
+              badge.className = 'prod-dirty-badge';
+              badge.style.cssText = 'font-size:10px;background:rgba(56,189,248,.15);color:var(--sky);font-weight:700;padding:1px 7px;border-radius:99px;border:1px solid var(--sky)';
+              badge.textContent = 'UNSAVED';
+              subRow.appendChild(badge);
+            }
+          }
         });
       });
 
