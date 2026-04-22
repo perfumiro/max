@@ -3862,9 +3862,14 @@ document.addEventListener('DOMContentLoaded', () => {
             ? pricesById[normalizedId]
             : null;
 
+        const _fsOvPrices = _firestoreProductOverridesCache[normalizedId]?.prices || {};
         return getConfiguredSizeKeys(productId, pricesById, extraSizeKeys).reduce((accumulator, sizeKey) => {
-            // Always look up the price via priceKey, never via the visible label.
-            // This lets you rename a size key without losing its price.
+            // 1. If Firestore has a direct price for this key, use it (covers renamed sizes).
+            if (Number(_fsOvPrices[sizeKey]) > 0) {
+                accumulator[sizeKey] = Number(_fsOvPrices[sizeKey]);
+                return accumulator;
+            }
+            // 2. Fall back to prices.json via the priceKey mapping.
             const priceLookup = _runtimePriceKeyBySizeKey[sizeKey] || sizeKey;
             const rawValue = rawPrices && typeof rawPrices === 'object' ? rawPrices[priceLookup] : 0;
             const parsedValue = Number(rawValue);
