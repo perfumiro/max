@@ -1916,19 +1916,32 @@ s0.parentNode.insertBefore(s1,s0);
                 // No real reviews ? show nothing
                 if (!data || data.count === 0) return;
 
-                const avg = data.sum / data.count;
+                // Merge real reviews with fake baseline for a fuller count
+                const productName = card.dataset.productName || card.querySelector('.product-title')?.textContent || '';
+                const fakeCount  = typeof window._ipoGetFakeCount  === 'function' ? window._ipoGetFakeCount(productName)          : 0;
+                const fakeRating = typeof window._ipoGetFakeRating === 'function' ? parseFloat(window._ipoGetFakeRating(productName)) : 0;
+                const fakeSum    = fakeRating * fakeCount;
+
+                const totalCount = data.count + fakeCount;
+                const totalSum   = data.sum   + fakeSum;
+                const avg        = totalSum / totalCount;
+
                 const row = document.createElement('div');
                 row.className = 'ipo-card-rating';
                 row.innerHTML =
                     '<span class="ipo-card-rating__stars">' + buildStars(avg) + '</span>' +
                     '<span class="ipo-card-rating__score">' + avg.toFixed(1) + '</span>' +
                     '<span class="ipo-card-rating__dot" aria-hidden="true"></span>' +
-                    '<span class="ipo-card-rating__count">' + data.count + (data.count === 1 ? ' review' : ' reviews') + '</span>';
+                    '<span class="ipo-card-rating__count">' + totalCount + ' reviews</span>';
 
                 const title = card.querySelector('.product-title');
                 if (title && title.parentNode) {
                     title.parentNode.insertBefore(row, title.nextSibling);
                 }
+
+                // Remove fake disc-star-row — now merged into ipo-card-rating
+                const fakeRow = card.querySelector('.disc-star-row');
+                if (fakeRow) fakeRow.remove();
             });
         }
 
@@ -2002,6 +2015,9 @@ s0.parentNode.insertBefore(s1,s0);
             }
             return (total / count).toFixed(1);
         }
+        // Expose globally so the Firestore rating script can merge fake + real counts
+        window._ipoGetFakeCount  = getFakeCount;
+        window._ipoGetFakeRating = getFakeRating;
         /* Identical to starsHtml() in product.html */
         function starsHtml(n) {
             var h = '';
@@ -2016,21 +2032,28 @@ s0.parentNode.insertBefore(s1,s0);
             var cards = document.querySelectorAll('[data-discover-grid] .js-product-link[data-product-name]');
             cards.forEach(function (card) {
                 if (card.querySelector('.disc-star-row')) return;
+                // Skip cards that already have real Firestore reviews (handled by Firestore script)
+                if (card.querySelector('.ipo-card-rating')) return;
                 var name   = card.dataset.productName || '';
                 var count  = getFakeCount(name);
                 var rating = parseFloat(getFakeRating(name));
-                var label  = count === 1 ? '(1 review)' : '(' + count + ' reviews)';
                 var row = document.createElement('div');
-                row.className = 'disc-star-row';
-                row.style.cssText = 'display:inline-flex;align-items:center;gap:6px;margin-top:2px;margin-bottom:8px;';
+                row.className = 'disc-star-row ipo-card-rating';
                 row.innerHTML =
-                    '<span class="text-yellow-400 text-sm" style="display:flex;gap:1px;">' + starsHtml(rating) + '</span>' +
-                    '<span class="text-sm text-gray-500">' + label + '</span>';
+                    '<span class="ipo-card-rating__stars">' + starsHtml(rating) + '</span>' +
+                    '<span class="ipo-card-rating__score">' + rating.toFixed(1) + '</span>' +
+                    '<span class="ipo-card-rating__dot" aria-hidden="true"></span>' +
+                    '<span class="ipo-card-rating__count">' + count + ' reviews</span>';
                 var body = card.querySelector('.flex.flex-col.flex-grow');
                 if (!body) return;
-                var badges = body.querySelector('.flex.items-center.flex-wrap.gap-1\\.5, .flex.items-center.gap-1\\.5, .flex.items-center.gap-2');
-                if (badges) body.insertBefore(row, badges);
-                else body.appendChild(row);
+                var title = card.querySelector('.product-title');
+                if (title && title.parentNode) {
+                    title.parentNode.insertBefore(row, title.nextSibling);
+                } else {
+                    var badges = body.querySelector('.flex.items-center.flex-wrap.gap-1\\.5, .flex.items-center.gap-1\\.5, .flex.items-center.gap-2');
+                    if (badges) body.insertBefore(row, badges);
+                    else body.appendChild(row);
+                }
             });
         }
         if (document.readyState === 'loading') {

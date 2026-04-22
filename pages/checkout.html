@@ -406,6 +406,23 @@ s0.parentNode.insertBefore(s1,s0);
                                 <p class="text-sm text-gray-400 pb-3 border-b border-gray-100">No items yet.</p>
                             </div>
 
+                            <!-- Promo code -->
+                            <div class="mb-3">
+                                <div style="display:flex;gap:8px">
+                                    <input type="text" id="promoCodeInput"
+                                        placeholder="Discount code"
+                                        maxlength="20"
+                                        style="flex:1;padding:9px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;font-family:inherit;text-transform:uppercase;outline:none;transition:border-color .15s"
+                                        onfocus="this.style.borderColor='#c8a96a'" onblur="this.style.borderColor='#e5e7eb'">
+                                    <button id="applyPromoBtn"
+                                        style="padding:9px 16px;background:#111128;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:opacity .15s"
+                                        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+                                        Apply
+                                    </button>
+                                </div>
+                                <div id="promoMsg" style="display:none;margin-top:7px;font-size:12px;padding:7px 11px;border-radius:7px"></div>
+                            </div>
+
                             <div class="space-y-0.5 mb-3">
                                 <div class="order-line">
                                     <span class="lbl" data-i18n="checkout.subtotal">Subtotal</span>

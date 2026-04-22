@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="assets/admin/admin.css?v=2">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script type="module" src="assets/admin/admin.js?v=2"></script>
+  <script type="module" src="assets/admin/admin.js?v=14"></script>
 </head>
 <body data-theme="dark">
   <div id="toastContainer" aria-live="polite"></div>
@@ -78,6 +78,8 @@
         <a class="sidebar-item" data-view="orders"><i class="fas fa-bag-shopping sidebar-item-icon"></i><span>All Orders</span><span class="sidebar-badge" id="navOrdersBadge" style="display:none">0</span></a>
         <a class="sidebar-item" data-view="customers"><i class="fas fa-users sidebar-item-icon"></i><span>Customers</span><span class="sidebar-badge" id="navCustomersBadge" style="display:none">0</span></a>
         <a class="sidebar-item" data-view="reviews"><i class="fas fa-star sidebar-item-icon"></i><span>Reviews</span><span class="sidebar-badge" id="navReviewsBadge" style="display:none">0</span></a>
+        <a class="sidebar-item" data-view="discounts"><i class="fas fa-tag sidebar-item-icon"></i><span>Discounts</span><span class="sidebar-badge" id="navDiscountsBadge" style="display:none">0</span></a>
+        <a class="sidebar-item" data-view="revenue"><i class="fas fa-coins sidebar-item-icon"></i><span>Revenue</span></a>
         <div class="sidebar-section-label" style="margin-top:14px;">Export</div>
         <a class="sidebar-item" id="exportCsvBtn"><i class="fas fa-file-csv sidebar-item-icon"></i><span>Export CSV</span></a>
         <a class="sidebar-item" id="exportJsonBtn"><i class="fas fa-file-code sidebar-item-icon"></i><span>Export JSON</span></a>
@@ -264,34 +266,45 @@
 
           <!-- Table -->
           <div class="card">
-            <div class="card-body" style="overflow-x:auto">
-              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <div class="card-body" style="overflow-x:auto;padding:0">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:700px">
                 <thead>
-                  <tr style="border-bottom:1px solid var(--border)">
-                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Order ID</th>
-                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Customer</th>
-                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Items</th>
-                    <th style="text-align:right;padding:8px 12px;color:var(--muted);font-weight:600">Total</th>
-                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Status</th>
-                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Date</th>
-                    <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600">Actions</th>
+                  <tr style="border-bottom:2px solid var(--border);background:var(--s3)">
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap">Order · Date</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Customer</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Products</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap">Total</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Status</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="ordersTableBody">
-                  <tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading orders...</td></tr>
+                  <tr><td colspan="6" style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading orders...</td></tr>
                 </tbody>
               </table>
             </div>
           </div>
 
           <!-- Order detail modal -->
-          <div id="orderDetailModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:16px">
-            <div style="background:var(--card);border-radius:16px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)">
-              <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 0">
-                <h3 style="font-size:16px;font-weight:700;color:var(--text)" id="modalOrderTitle">Order Details</h3>
-                <button id="closeOrderModal" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer"><i class="fas fa-times"></i></button>
+          <div id="orderDetailModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.65);align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)">
+            <div style="background:var(--s2);border-radius:20px;max-width:580px;width:100%;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.45);">
+              <!-- Modal header -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--s2)">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:36px;height:36px;border-radius:10px;background:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <i class="fas fa-bag-shopping" style="color:#fff;font-size:15px"></i>
+                  </div>
+                  <div>
+                    <div style="font-size:11px;color:var(--muted);font-weight:500">Order Details</div>
+                    <div style="font-size:15px;font-weight:700;color:var(--ink);font-family:monospace" id="modalOrderTitle">—</div>
+                  </div>
+                </div>
+                <button id="closeOrderModal" style="width:32px;height:32px;border-radius:8px;background:var(--s4);border:none;color:var(--muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s" onmouseover="this.style.background='var(--s5)'" onmouseout="this.style.background='var(--s4)'">
+                  <i class="fas fa-times"></i>
+                </button>
               </div>
-              <div id="orderDetailBody" style="padding:20px 24px 24px"></div>
+              <!-- Modal scrollable body -->
+              <div id="orderDetailBody" style="padding:20px 24px 24px;overflow-y:auto;flex:1"></div>
             </div>
           </div>
         </section>
@@ -354,18 +367,192 @@
           </div>
         </section>
 
-        <!-- Reply Modal -->
-        <div id="replyModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;">
-          <div style="background:var(--surface);border-radius:1rem;padding:1.5rem;width:min(480px,92vw);box-shadow:0 20px 60px rgba(0,0,0,0.25);">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-              <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin:0;">Reply to Review</h3>
-              <button onclick="document.getElementById('replyModal').style.display='none'" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);">&times;</button>
+        <!-- ── Discounts View ─────────────────────────────────────────────── -->
+        <section id="view-discounts" class="view">
+          <div class="view-title">Discount Codes <span class="view-title-sub" id="discountsCount"></span></div>
+
+          <!-- Create new code -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;margin-bottom:14px">
+                <i class="fas fa-plus" style="margin-right:5px"></i> Create Discount Code
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;align-items:end">
+                <div>
+                  <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Code *</label>
+                  <input type="text" id="dcCode" class="select-sm" placeholder="e.g. WELCOME10" style="width:100%;text-transform:uppercase" maxlength="20">
+                </div>
+                <div>
+                  <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Type *</label>
+                  <select id="dcType" class="select-sm" style="width:100%">
+                    <option value="percentage">Percentage (%)</option>
+                    <option value="fixed">Fixed (MAD)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Value *</label>
+                  <input type="number" id="dcValue" class="select-sm" placeholder="e.g. 10" min="1" style="width:100%">
+                </div>
+                <div>
+                  <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Min Order (MAD)</label>
+                  <input type="number" id="dcMinOrder" class="select-sm" placeholder="0 = none" min="0" value="0" style="width:100%">
+                </div>
+                <div>
+                  <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Usage Limit</label>
+                  <input type="number" id="dcUsageLimit" class="select-sm" placeholder="0 = unlimited" min="0" value="0" style="width:100%">
+                </div>
+                <div>
+                  <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Expires (optional)</label>
+                  <input type="date" id="dcExpiry" class="select-sm" style="width:100%">
+                </div>
+                <div style="display:flex;align-items:flex-end;gap:8px">
+                  <button id="dcCreateBtn" class="btn btn-xs btn-gold" style="padding:9px 18px;white-space:nowrap">
+                    <i class="fas fa-plus"></i> Create
+                  </button>
+                </div>
+              </div>
+              <div id="dcCreateMsg" style="display:none;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:8px"></div>
             </div>
-            <div id="replyModalReviewText" style="background:var(--surface-2,#f9fafb);border-radius:0.5rem;padding:0.75rem;font-size:0.82rem;color:var(--muted);margin-bottom:1rem;font-style:italic;"></div>
-            <textarea id="replyModalInput" rows="4" placeholder="Write your reply as IPORDISE Team..." style="width:100%;border:1.5px solid var(--border);border-radius:0.65rem;padding:0.7rem 0.9rem;font-size:0.88rem;font-family:inherit;resize:vertical;background:var(--surface);color:var(--text);box-sizing:border-box;"></textarea>
-            <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1rem;">
-              <button onclick="document.getElementById('replyModal').style.display='none'" class="btn btn-xs">Cancel</button>
-              <button id="replyModalSubmit" class="btn btn-xs btn-gold"><i class="fas fa-paper-plane"></i> Send Reply</button>
+          </div>
+
+          <!-- Codes table -->
+          <div class="card">
+            <div class="card-body" style="overflow-x:auto;padding:0">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:700px">
+                <thead>
+                  <tr style="border-bottom:2px solid var(--border);background:var(--s3)">
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Code</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Discount</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Min Order</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Usage</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Expires</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Status</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="discountsTableBody">
+                  <tr><td colspan="7" style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Revenue View ──────────────────────────────────────────────── -->
+        <section id="view-revenue" class="view">
+          <div class="view-title">Revenue <span class="view-title-sub" id="revenueSubtitle">delivered orders only</span></div>
+
+          <!-- KPI cards -->
+          <div class="stats-grid" style="margin-bottom:20px">
+            <div class="stat-card" style="--stat-accent:var(--gold)">
+              <div class="stat-card-icon"><i class="fas fa-coins"></i></div>
+              <div class="stat-card-val" id="revTotalRevenue">—</div>
+              <div class="stat-card-label">Total Revenue (MAD)</div>
+            </div>
+            <div class="stat-card" style="--stat-accent:var(--emerald)">
+              <div class="stat-card-icon"><i class="fas fa-check-circle"></i></div>
+              <div class="stat-card-val" id="revDeliveredCount">—</div>
+              <div class="stat-card-label">Delivered Orders</div>
+            </div>
+            <div class="stat-card" style="--stat-accent:var(--sky)">
+              <div class="stat-card-icon"><i class="fas fa-receipt"></i></div>
+              <div class="stat-card-val" id="revAvgOrder">—</div>
+              <div class="stat-card-label">Avg. Order Value</div>
+            </div>
+            <div class="stat-card" style="--stat-accent:var(--amber)">
+              <div class="stat-card-icon"><i class="fas fa-clock"></i></div>
+              <div class="stat-card-val" id="revThisMonth">—</div>
+              <div class="stat-card-label">This Month (MAD)</div>
+            </div>
+            <div class="stat-card" style="--stat-accent:var(--rose)">
+              <div class="stat-card-icon"><i class="fas fa-truck"></i></div>
+              <div class="stat-card-val" id="revPendingCount">—</div>
+              <div class="stat-card-label">Pending / Processing</div>
+            </div>
+          </div>
+
+          <!-- Monthly breakdown -->
+          <div class="card">
+            <div class="card-head">
+              <span class="card-title"><i class="fas fa-calendar-alt card-title-icon"></i> Monthly Breakdown</span>
+              <button class="btn btn-xs btn-gold" id="refreshRevenueBtn"><i class="fas fa-rotate-right"></i> Refresh</button>
+            </div>
+            <div class="card-body" style="overflow-x:auto;padding:0">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:500px">
+                <thead>
+                  <tr style="border-bottom:2px solid var(--border);background:var(--s3)">
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Month</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Orders</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Revenue (MAD)</th>
+                    <th style="text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Avg. Order</th>
+                  </tr>
+                </thead>
+                <tbody id="revenueMonthlyBody">
+                  <tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Top products -->
+          <div class="card" style="margin-top:16px">
+            <div class="card-head"><span class="card-title"><i class="fas fa-trophy card-title-icon"></i> Top Products by Revenue</span></div>
+            <div class="card-body card-body-list" id="revenueTopProducts">
+              <div style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Reply Modal -->
+        <div id="replyModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)">
+          <div style="background:var(--s2);border-radius:20px;width:min(500px,92vw);box-shadow:0 24px 80px rgba(0,0,0,.4);overflow:hidden;display:flex;flex-direction:column;">
+            <!-- Header -->
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);background:var(--s2)">
+              <div style="display:flex;align-items:center;gap:10px">
+                <span style="width:34px;height:34px;border-radius:10px;background:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                  <i class="fas fa-reply" style="color:#fff;font-size:13px"></i>
+                </span>
+                <div>
+                  <div style="font-size:11px;color:var(--muted);font-weight:500">Reviews</div>
+                  <div style="font-size:15px;font-weight:700;color:var(--ink)">Reply to Review</div>
+                </div>
+              </div>
+              <button onclick="document.getElementById('replyModal').style.display='none'"
+                style="width:32px;height:32px;border-radius:8px;background:var(--s4);border:none;color:var(--muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center"
+                onmouseover="this.style.background='var(--s5)'" onmouseout="this.style.background='var(--s4)'">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <!-- Body -->
+            <div style="padding:20px 22px 22px;display:flex;flex-direction:column;gap:14px">
+              <!-- Customer quote -->
+              <div style="background:var(--s3);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 14px">
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;margin-bottom:6px">Customer Review</div>
+                <div id="replyModalReviewText" style="font-size:13px;color:var(--ink);font-style:italic;line-height:1.5"></div>
+              </div>
+              <!-- Reply textarea -->
+              <div>
+                <label style="display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px">
+                  <i class="fas fa-pen" style="margin-right:4px;color:var(--dim)"></i> Your Reply
+                </label>
+                <textarea id="replyModalInput" rows="4"
+                  placeholder="Write your reply as IPORDISE Team..."
+                  style="width:100%;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-size:13px;font-family:inherit;resize:vertical;background:var(--s2);color:var(--ink);outline:none;transition:border-color .15s;line-height:1.5"
+                  onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+              </div>
+              <!-- Error message -->
+              <div id="replyModalError" style="display:none;padding:9px 13px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;font-size:12px;color:#dc2626"></div>
+              <!-- Action buttons -->
+              <div style="display:flex;gap:10px;justify-content:flex-end">
+                <button onclick="document.getElementById('replyModal').style.display='none'"
+                  class="btn btn-xs"
+                  style="padding:9px 18px;font-size:13px">Cancel</button>
+                <button id="replyModalSubmit"
+                  class="btn btn-xs btn-gold"
+                  style="padding:9px 20px;font-size:13px">
+                  <i class="fas fa-paper-plane"></i> Send Reply
+                </button>
+              </div>
             </div>
           </div>
         </div>

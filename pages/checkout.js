@@ -12,6 +12,17 @@
     const ORDER_CONFIRM_LEFT_PAGE_KEY = 'ipordise-order-confirm-left-page';
     const SHIPPING_MAD = 35;
 
+    // ── Discount state ──────────────────────────────────────────────────────
+    let _appliedDiscount = null; // { code, type, value, discountAmount }
+
+    const getDiscountAmount = (subtotal) => {
+        if (!_appliedDiscount) return 0;
+        if (_appliedDiscount.type === 'percentage') {
+            return Math.min(Math.round(subtotal * _appliedDiscount.value / 100), subtotal);
+        }
+        return Math.min(_appliedDiscount.value, subtotal);
+    };
+
     const parsePrice = (rawPrice) => {
         if (typeof rawPrice === 'number') return Number.isFinite(rawPrice) ? rawPrice : 0;
         if (typeof rawPrice !== 'string') return 0;
@@ -118,10 +129,12 @@
         const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
         const shipping = items.length ? SHIPPING_MAD : 0;
         const hasPendingPricing = items.some((item) => item.pricePending);
+        const discount = getDiscountAmount(subtotal);
         return {
             subtotal,
             shipping,
-            total: subtotal + shipping,
+            discount,
+            total: Math.max(0, subtotal + shipping - discount),
             hasPendingPricing
         };
     };
@@ -180,7 +193,7 @@
             const summary = summarize(items);
             if (subtotalEl) subtotalEl.textContent = summary.hasPendingPricing ? pendingTxt : formatMAD(summary.subtotal);
             if (shippingEl) shippingEl.textContent = summary.shipping ? `${formatMAD(summary.shipping)} ${vatTxt}` : formatMAD(0);
-            if (promoEl) promoEl.textContent = '0 MAD';
+            if (promoEl) promoEl.textContent = summary.discount > 0 ? `- ${formatMAD(summary.discount)}` : '— MAD';
             if (totalEl) totalEl.textContent = summary.hasPendingPricing ? pendingTxt : formatMAD(summary.total);
         };
 
@@ -221,6 +234,7 @@
                 '',
                 `Sous-total : ${summary.hasPendingPricing ? 'En attente de confirmation' : formatMAD(summary.subtotal)}`,
                 `Livraison : ${summary.shipping ? `${formatMAD(summary.shipping)} (TVA incl.)` : formatMAD(0)}`,
+                ...(_appliedDiscount ? [`Code promo : ${_appliedDiscount.code} (-${formatMAD(summary.discount)})`] : []),
                 `Total : ${summary.hasPendingPricing ? 'En attente de confirmation' : formatMAD(summary.total)}`,
                 ...(notes ? ['', '--- Notes de commande ---', notes] : [])
             ].join('\n');
@@ -243,7 +257,8 @@
                 channel,
                 items:    items.map((i) => ({ id: i.id, name: i.name, size: i.size || '', qty: i.qty, price: i.price, pricePending: i.pricePending })),
                 customer: { firstName, lastName, address, city, phone, email, notes },
-                summary:  { subtotal: summary.subtotal, shipping: summary.shipping, total: summary.total, hasPendingPricing: summary.hasPendingPricing },
+                summary:  { subtotal: summary.subtotal, shipping: summary.shipping, discount: summary.discount, total: summary.total, hasPendingPricing: summary.hasPendingPricing },
+                ..._appliedDiscount ? { discountCode: _appliedDiscount.code } : {},
             };
         };
 
@@ -367,7 +382,65 @@
             checkFormValidity();
         });
 
-        /* Re-render dynamic content when the user switches language */
+        // ── Promo code apply ───────────────────────────────────────────────
+        const applyPromoBtn = document.getElementById('applyPromoBtn');
+        const promoCodeInput = document.getElementById('promoCodeInput');
+        const promoMsgEl = document.getElementById('promoMsg');
+
+        const showPromoMsg = (txt, ok) => {
+            if (!promoMsgEl) return;
+            promoMsgEl.textContent = txt;
+            promoMsgEl.style.cssText = `display:block;${ok
+                ? 'background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;'
+                : 'background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;'}font-size:12px;padding:7px 11px;border-radius:7px`;
+        };
+
+        applyPromoBtn?.addEventListener('click', async () => {
+            const code = (promoCodeInput?.value || '').trim().toUpperCase();
+            if (!code) { showPromoMsg('Please enter a discount code.', false); return; }
+
+            applyPromoBtn.textContent = '...';
+            applyPromoBtn.disabled = true;
+
+            try {
+                const { db } = await import('../auth/firebase.js');
+                const { doc, getDoc, setDoc, increment } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
+
+                const snap = await getDoc(doc(db, 'discountCodes', code));
+                if (!snap.exists()) { showPromoMsg('Code "' + code + '" not found.', false); return; }
+
+                const dc = snap.data();
+                const now = Date.now();
+
+                if (dc.active === false) { showPromoMsg('This code is currently disabled.', false); return; }
+                if (dc.expiresAt && dc.expiresAt.toMillis?.() < now) { showPromoMsg('This code has expired.', false); return; }
+                if (dc.usageLimit > 0 && (dc.usedCount || 0) >= dc.usageLimit) { showPromoMsg('This code has reached its usage limit.', false); return; }
+
+                const items = readCheckoutCart();
+                const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
+                if (dc.minOrder > 0 && subtotal < dc.minOrder) {
+                    showPromoMsg(`Minimum order of ${dc.minOrder} MAD required for this code.`, false);
+                    return;
+                }
+
+                _appliedDiscount = { code: dc.code, type: dc.type, value: dc.value };
+                const discountAmt = getDiscountAmount(subtotal);
+                const label = dc.type === 'percentage' ? dc.value + '%' : dc.value + ' MAD';
+                showPromoMsg(`✓ Code "${code}" applied — ${label} off (- ${discountAmt} MAD)`, true);
+                if (promoCodeInput) promoCodeInput.disabled = true;
+                applyPromoBtn.textContent = '✓ Applied';
+                applyPromoBtn.style.background = '#16a34a';
+                renderOrder();
+                checkFormValidity();
+            } catch (e) {
+                showPromoMsg('Error: ' + e.message, false);
+            } finally {
+                if (!_appliedDiscount) {
+                    applyPromoBtn.textContent = 'Apply';
+                    applyPromoBtn.disabled = false;
+                }
+            }
+        });
         window.addEventListener('ipordise:langchange', () => {
             renderOrder();
             checkFormValidity();
