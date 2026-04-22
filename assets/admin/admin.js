@@ -2192,31 +2192,24 @@ const loadProductsView = async () => {
           const price     = sizes[sz];
           const isNew     = !baseKeys.includes(sz);
           const isChanged = !isNew && ov.prices?.[sz] !== undefined && ov.prices[sz] !== (pricesRes[slug]||{})[sz];
-          const accentClr = isNew ? 'var(--gold)' : isChanged ? 'var(--amber)' : 'transparent';
-          const bgClr     = isNew ? 'rgba(200,169,106,.08)' : isChanged ? 'rgba(245,158,11,.07)' : 'var(--s3)';
-          const tip       = isNew ? 'New size added by admin' : isChanged ? `Original: ${(pricesRes[slug]||{})[sz]} MAD` : sz;
+          const accentClr = isNew ? 'var(--gold)' : isChanged ? 'var(--amber)' : 'var(--border)';
+          const bgClr     = isNew ? 'rgba(200,169,106,.07)' : isChanged ? 'rgba(245,158,11,.06)' : 'var(--s2)';
+          const tip       = isNew ? 'New size (admin added)' : isChanged ? `Original: ${(pricesRes[slug]||{})[sz]} MAD` : sz;
           return `<div class="prod-size-chip" data-slug="${esc(slug)}" data-size="${esc(sz)}"
-            style="display:inline-flex;align-items:stretch;border-radius:9px;overflow:hidden;border:1.5px solid ${accentClr === 'transparent' ? 'var(--border)' : accentClr};background:${bgClr};margin:3px;transition:border-color .15s;box-shadow:0 1px 3px rgba(0,0,0,.06)"
+            style="display:inline-flex;align-items:center;border-radius:7px;border:1.5px solid ${accentClr};background:${bgClr};margin:3px 3px 3px 0;transition:border-color .15s,box-shadow .15s;box-shadow:0 1px 3px rgba(0,0,0,.05)"
             title="${esc(tip)}">
-            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 7px;border-right:1px solid var(--border);min-width:40px;gap:1px">
-              <span style="font-size:9px;color:var(--dim);font-weight:500;letter-spacing:.4px;text-transform:uppercase">Size</span>
-              <input type="text" class="prod-size-name-input" value="${esc(sz)}" maxlength="12"
-                style="width:42px;border:none;background:transparent;font-size:12px;font-weight:800;color:var(--ink);outline:none;text-align:center;padding:0;cursor:text;line-height:1"
-                title="Click to rename size">
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 7px;min-width:64px;gap:1px">
-              <span style="font-size:9px;color:var(--dim);font-weight:500;letter-spacing:.4px;text-transform:uppercase">Price</span>
-              <div style="display:flex;align-items:center;gap:2px">
-                <input type="number" min="0" value="${price}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
-                  style="width:52px;border:none;background:transparent;font-size:12px;color:var(--ink);text-align:center;font-weight:700;outline:none;padding:0"
-                  title="Edit price">
-                <span style="color:var(--dim);font-size:9px;font-weight:600">MAD</span>
-              </div>
-            </div>
+            <input type="text" class="prod-size-name-input" value="${esc(sz)}" maxlength="12"
+              style="width:44px;border:none;background:transparent;font-size:12px;font-weight:700;color:var(--ink);outline:none;text-align:center;padding:5px 6px;cursor:text"
+              title="Click to rename">
+            <span style="width:1px;align-self:stretch;background:${accentClr};opacity:.4;flex-shrink:0"></span>
+            <input type="number" min="0" value="${price}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
+              style="width:50px;border:none;background:transparent;font-size:12px;color:var(--ink);text-align:center;font-weight:600;outline:none;padding:5px 4px"
+              title="Edit price">
+            <span style="font-size:10px;color:var(--dim);font-weight:500;padding-right:5px;flex-shrink:0">MAD</span>
             <button class="prod-remove-size" data-slug="${esc(slug)}" data-size="${esc(sz)}"
-              style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:13px;padding:0 7px;border-left:1px solid var(--border);transition:all .15s;align-self:stretch;display:flex;align-items:center"
-              onmouseover="this.style.background='rgba(244,63,94,.1)';this.style.color='var(--rose)'"
-              onmouseout="this.style.background='none';this.style.color='var(--dim)'"
+              style="width:24px;align-self:stretch;background:none;border:none;border-left:1px solid ${accentClr === 'var(--border)' ? 'var(--border)' : accentClr};opacity:${accentClr === 'var(--border)' ? '1' : '.5'};cursor:pointer;color:var(--dim);font-size:14px;display:flex;align-items:center;justify-content:center;border-radius:0 5px 5px 0;transition:all .15s;flex-shrink:0"
+              onmouseover="this.style.background='rgba(244,63,94,.12)';this.style.color='var(--rose)';this.style.borderColor='var(--rose)';this.style.opacity='1'"
+              onmouseout="this.style.background='none';this.style.color='var(--dim)';this.style.borderColor='${accentClr === 'var(--border)' ? 'var(--border)' : accentClr}';this.style.opacity='${accentClr === 'var(--border)' ? '1' : '.5'}'"
               title="Remove ${esc(sz)}">×</button>
           </div>`;
         }).join('');
@@ -2281,25 +2274,30 @@ const loadProductsView = async () => {
             <div style="height:1px;background:var(--border);margin:0 -2px 10px -2px"></div>
 
             <!-- ── Sizes row ── -->
-            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0">
-              ${sizeChips}
-              <!-- Add size form -->
-              <div class="prod-add-size-form" data-slug="${esc(slug)}"
-                style="display:inline-flex;align-items:center;gap:0;margin:3px;border-radius:9px;overflow:hidden;border:1.5px dashed var(--border);background:var(--s4)">
-                <div style="display:flex;align-items:center;padding:5px 8px;gap:5px">
-                  <i class="fas fa-plus" style="font-size:9px;color:var(--dim)"></i>
-                  <input type="text" class="prod-new-size-name" placeholder="size" maxlength="10"
-                    style="width:40px;border:none;background:transparent;font-size:12px;color:var(--ink);font-weight:700;outline:none"
-                    title="e.g. 75ml">
-                  <span style="color:var(--border);font-size:14px;line-height:1">|</span>
-                  <input type="number" min="1" class="prod-new-size-price" placeholder="price"
-                    style="width:48px;border:none;background:transparent;font-size:12px;color:var(--ink);font-weight:700;outline:none;text-align:right"
-                    title="Price in MAD">
-                  <span style="font-size:9px;color:var(--dim);font-weight:600">MAD</span>
-                </div>
-                <button class="prod-add-size btn btn-xs btn-gold" data-slug="${esc(slug)}"
-                  style="padding:0 10px;font-size:11px;border-radius:0;align-self:stretch;margin:0">Add</button>
-              </div>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0;min-height:32px">
+              ${sizeChips || `<span style="font-size:11px;color:var(--dim);font-style:italic;padding:4px 2px">No sizes — add one below</span>`}
+            </div>
+
+            <!-- ── Add size form ── -->
+            <div class="prod-add-size-form" data-slug="${esc(slug)}"
+              style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 10px;background:var(--s3);border-radius:8px;border:1px dashed var(--border)">
+              <span style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;flex-shrink:0">
+                <i class="fas fa-plus" style="font-size:9px;margin-right:3px"></i>New size
+              </span>
+              <input type="text" class="prod-new-size-name" placeholder="e.g. 75ml" maxlength="10"
+                style="flex:1;min-width:60px;max-width:90px;border:1px solid var(--border);border-radius:6px;background:var(--s2);padding:5px 8px;font-size:12px;color:var(--ink);font-weight:600;outline:none;transition:border-color .15s"
+                onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'"
+                title="Size label, e.g. 75ml">
+              <div style="height:20px;width:1px;background:var(--border);flex-shrink:0"></div>
+              <input type="number" min="1" class="prod-new-size-price" placeholder="Price"
+                style="flex:1;min-width:64px;max-width:96px;border:1px solid var(--border);border-radius:6px;background:var(--s2);padding:5px 8px;font-size:12px;color:var(--ink);font-weight:600;outline:none;text-align:right;transition:border-color .15s"
+                onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'"
+                title="Price in MAD">
+              <span style="font-size:11px;color:var(--muted);font-weight:600;flex-shrink:0">MAD</span>
+              <button class="prod-add-size btn btn-xs btn-gold" data-slug="${esc(slug)}"
+                style="padding:5px 14px;font-size:11px;flex-shrink:0;gap:4px">
+                <i class="fas fa-plus" style="font-size:9px"></i> Add
+              </button>
             </div>
 
           </div>
