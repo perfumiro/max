@@ -2121,7 +2121,9 @@ const loadProductsView = async () => {
           return `<span class="prod-size-chip" data-slug="${esc(slug)}" data-size="${esc(sz)}"
             style="display:inline-flex;align-items:center;gap:4px;background:var(--s3);border:1.5px solid ${border};border-radius:8px;padding:4px 8px 4px 10px;font-size:12px;margin:2px;transition:border-color .15s"
             title="${esc(tip)}">
-            <span style="font-weight:700;color:var(--muted);white-space:nowrap">${esc(sz)}</span>
+            <input type="text" class="prod-size-name-input" value="${esc(sz)}" maxlength="12"
+              style="width:46px;border:none;background:transparent;font-size:12px;font-weight:700;color:var(--muted);outline:none;text-align:center;padding:0;cursor:text"
+              title="Edit size label">
             <input type="number" min="0" value="${price}" data-slug="${esc(slug)}" data-size="${esc(sz)}" class="prod-price-input"
               style="width:62px;border:1px solid var(--border);border-radius:5px;padding:2px 5px;font-size:12px;background:var(--s2);color:var(--ink);text-align:right;font-weight:600">
             <span style="color:var(--dim);font-size:10px;font-weight:500">MAD</span>
@@ -2190,17 +2192,11 @@ const loadProductsView = async () => {
         </div>`;
       }).join('');
 
-      // Wire price input changes → mark dirty
-      grid.querySelectorAll('.prod-price-input').forEach(inp => {
+      // Wire price + name input changes → mark dirty
+      grid.querySelectorAll('.prod-price-input, .prod-size-name-input').forEach(inp => {
         inp.addEventListener('input', () => {
-          const slug = inp.dataset.slug;
-          dirty.add(slug);
-          const badge = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-dirty-badge`);
-          if (badge) { badge.style.display=''; }
-          else {
-            const headerSub = grid.querySelector(`.prod-card[data-slug="${slug}"] [data-slug="${slug}"].prod-toggle`)?.closest('[style*="display:flex"]')?.previousElementSibling?.querySelector('div:last-child');
-            // re-render will pick up dirty state on next render pass
-          }
+          const slug = inp.closest('.prod-size-chip')?.dataset.slug || inp.dataset.slug;
+          if (slug) dirty.add(slug);
         });
       });
 
@@ -2276,9 +2272,10 @@ const loadProductsView = async () => {
         const prices = {};
         let hasError = false;
         chips.forEach(chip => {
-          const sz    = normSizeKey(chip.dataset.size);
-          const inp   = chip.querySelector('.prod-price-input');
-          const price = parseFloat(inp?.value ?? '');
+          const nameInp = chip.querySelector('.prod-size-name-input');
+          const sz      = normSizeKey((nameInp?.value || chip.dataset.size || '').trim());
+          const inp     = chip.querySelector('.prod-price-input');
+          const price   = parseFloat(inp?.value ?? '');
           if (!sz) return;
           if (isNaN(price) || price < 0) { hasError = true; return; }
           prices[sz] = price;
