@@ -4200,8 +4200,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const initCatalogPrices = async () => {
+        const carousel = document.getElementById('newArrivalsCarousel');
         const cards = Array.from(document.querySelectorAll('.js-product-link[data-id]'));
-        if (!cards.length) return;
+
+        // Always inject Firestore products if carousel exists, even if no static cards
+        if (!cards.length && !carousel) return;
 
         // Load both configs in parallel — sizes + prices
         const [pricesById] = await Promise.all([loadPricesJson(), loadSizesJson()]);
@@ -4211,6 +4214,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Inject Firestore products into carousel + pricesById
         void injectFirestoreProductCards(pricesById);
+
+        if (!cards.length) return;
 
         // Re-run new arrivals filtering now that we have real price data
         limitNewArrivalsToLatest(pricesById);
