@@ -2645,9 +2645,9 @@ const initAddProductModal = () => {
   if (document.getElementById('addProductModal')) return;
   const modal = document.createElement('div');
   modal.id = 'addProductModal';
-  modal.style.cssText = 'display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.72);overflow-y:auto;padding:20px;backdrop-filter:blur(2px)';
+  modal.style.cssText = 'display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.72);overflow-y:auto;padding:12px;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)';
   modal.innerHTML = `
-    <div style="max-width:520px;margin:40px auto;background:var(--s2);border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.5)">
+    <div style="max-width:520px;width:100%;margin:20px auto 40px;background:var(--s2);border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.5)">
       <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start">
         <div>
           <div style="font-size:1rem;font-weight:700;color:var(--text)"><i class="fas fa-plus-circle" style="color:var(--gold);margin-right:8px"></i>Add New Product</div>
@@ -2655,7 +2655,7 @@ const initAddProductModal = () => {
         </div>
         <button id="closeAddProductModal" type="button" style="background:none;border:none;color:var(--muted);font-size:1.25rem;cursor:pointer;line-height:1;padding:2px 6px"><i class="fas fa-xmark"></i></button>
       </div>
-      <form id="addProductForm" style="padding:20px 24px;display:flex;flex-direction:column;gap:16px">
+      <form id="addProductForm" style="padding:16px;display:flex;flex-direction:column;gap:14px">
         <div>
           <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Product Image <span style="color:var(--rose)">*</span></label>
           <div id="addProductImageDrop" style="border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:border-color 0.2s;position:relative;background:var(--s3)">
