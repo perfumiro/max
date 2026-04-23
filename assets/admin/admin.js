@@ -11,6 +11,7 @@ import {
   query, orderBy, limit, where, onSnapshot,
   serverTimestamp, updateDoc,
 } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
+// Image uploads use Cloudinary (unsigned preset — no Firebase Storage needed)
 
 // ─── FIREBASE ─────────────────────────────────────────────────────────────────
 const firebaseConfig = {
@@ -24,6 +25,10 @@ const firebaseConfig = {
 const fbApp = initializeApp(firebaseConfig);
 const auth  = getAuth(fbApp);
 const db    = getFirestore(fbApp);
+
+// ─── CLOUDINARY CONFIG ────────────────────────────────────────────────────────
+const CLOUDINARY_CLOUD = 'dp5eszu4p';
+const CLOUDINARY_PRESET = 'IPORIDSE_PRODUCTS';
 
 // Change this to match the admin account email in your Firebase Auth console
 const ADMIN_EMAIL = 'admin@ipordise.com';
@@ -2427,6 +2432,17 @@ const loadProductsView = async () => {
     const refreshBtn = document.getElementById('refreshProductsBtn');
     if (refreshBtn) { const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadProductsView()); }
 
+    // ── Add New Product button ────────────────────────────────────────────
+    const addNewProductBtn = document.getElementById('addNewProductBtn');
+    if (addNewProductBtn) {
+      const fresh = addNewProductBtn.cloneNode(true);
+      addNewProductBtn.replaceWith(fresh);
+      fresh.addEventListener('click', () => openAddProductModal());
+    }
+
+    // ── Load Firestore products section ──────────────────────────────────
+    loadFirestoreProductsSection();
+
     // ── Event delegation ───────────────────────────────────────────────────
     grid.addEventListener('click', async (e) => {
       const saveBtn   = e.target.closest('.prod-save');
@@ -2600,6 +2616,322 @@ const loadSettingsView = async () => {
       toast('Settings saved','success');
     } catch(e){ toast(e.message,'error'); }
   });
+};
+
+// ─── ADD NEW PRODUCT FEATURE ─────────────────────────────────────────────────
+
+const _apToSlug = (name) => String(name).trim().toLowerCase()
+  .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+const _apAddSizeRow = (container, sizeVal = '', priceVal = '') => {
+  const row = document.createElement('div');
+  row.className = 'prod-size-row';
+  row.style.cssText = 'display:flex;gap:8px;align-items:center';
+  row.innerHTML = `
+    <input type="text" placeholder="Size (e.g. 50ml)" class="prod-size-key" value="${esc(sizeVal)}"
+      style="flex:1;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box">
+    <input type="number" placeholder="Price (MAD)" class="prod-size-price" min="0" value="${esc(priceVal)}"
+      style="flex:1;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box">
+    <button type="button" class="prod-remove-size-row"
+      style="background:none;border:none;color:var(--muted);cursor:pointer;padding:6px;border-radius:6px;flex-shrink:0" title="Remove size">
+      <i class="fas fa-xmark"></i>
+    </button>`;
+  row.querySelector('.prod-remove-size-row').addEventListener('click', () => row.remove());
+  container.appendChild(row);
+};
+
+const initAddProductModal = () => {
+  if (document.getElementById('addProductModal')) return;
+  const modal = document.createElement('div');
+  modal.id = 'addProductModal';
+  modal.style.cssText = 'display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.72);overflow-y:auto;padding:20px;backdrop-filter:blur(2px)';
+  modal.innerHTML = `
+    <div style="max-width:520px;margin:40px auto;background:var(--s2);border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.5)">
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="font-size:1rem;font-weight:700;color:var(--text)"><i class="fas fa-plus-circle" style="color:var(--gold);margin-right:8px"></i>Add New Product</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px">Product will appear live in the New Arrivals section immediately after saving.</div>
+        </div>
+        <button id="closeAddProductModal" type="button" style="background:none;border:none;color:var(--muted);font-size:1.25rem;cursor:pointer;line-height:1;padding:2px 6px"><i class="fas fa-xmark"></i></button>
+      </div>
+      <form id="addProductForm" style="padding:20px 24px;display:flex;flex-direction:column;gap:16px">
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Product Image <span style="color:var(--rose)">*</span></label>
+          <div id="addProductImageDrop" style="border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:border-color 0.2s;position:relative;background:var(--s3)">
+            <input type="file" id="addProductImageInput" accept="image/jpeg,image/png,image/webp,image/jpg" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
+            <div id="addProductImagePreviewWrap" style="display:none">
+              <img id="addProductImagePreview" style="max-height:130px;max-width:100%;object-fit:contain;border-radius:8px;margin:0 auto;display:block">
+              <div style="font-size:0.7rem;color:var(--muted);margin-top:6px" id="addProductImageName"></div>
+            </div>
+            <div id="addProductImagePlaceholder">
+              <i class="fas fa-cloud-arrow-up" style="font-size:1.8rem;color:var(--muted)"></i>
+              <div style="font-size:0.8rem;color:var(--text);margin-top:8px;font-weight:500">Click to upload image</div>
+              <div style="font-size:0.7rem;color:var(--muted);margin-top:2px">JPG, PNG, WebP · max 5MB</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Product Name <span style="color:var(--rose)">*</span></label>
+          <input type="text" id="addProductName" placeholder="e.g. Dior Sauvage Elixir"
+            style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+        </div>
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Brand <span style="color:var(--rose)">*</span></label>
+          <input type="text" id="addProductBrand" placeholder="e.g. DIOR"
+            style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+        </div>
+        <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Sizes &amp; Prices (MAD) <span style="color:var(--rose)">*</span> <span style="font-weight:400;font-size:0.7rem">— at least one required</span></label>
+          <div id="addProductSizesContainer" style="display:flex;flex-direction:column;gap:8px"></div>
+          <button type="button" id="addProductAddSizeBtn"
+            style="margin-top:8px;background:none;border:1px dashed var(--border);border-radius:8px;padding:8px 14px;font-size:0.75rem;color:var(--muted);cursor:pointer;width:100%;transition:border-color 0.2s">
+            <i class="fas fa-plus"></i> Add Size
+          </button>
+        </div>
+        <div id="addProductProgress" style="display:none">
+          <div style="font-size:0.75rem;color:var(--muted);margin-bottom:6px" id="addProductProgressLabel">Uploading image...</div>
+          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+            <div id="addProductProgressBar" style="height:100%;width:0%;background:var(--gold);transition:width 0.25s;border-radius:3px"></div>
+          </div>
+        </div>
+        <div id="addProductError" style="display:none;color:var(--rose);font-size:0.78rem;padding:8px 12px;background:rgba(239,68,68,0.08);border-radius:6px;border:1px solid rgba(239,68,68,0.2)"></div>
+        <div style="display:flex;gap:10px;padding-top:4px">
+          <button type="button" id="cancelAddProductBtn" class="btn btn-sm" style="flex:1">Cancel</button>
+          <button type="submit" id="saveAddProductBtn" class="btn btn-sm btn-gold" style="flex:2"><i class="fas fa-floppy-disk"></i> Save Product</button>
+        </div>
+      </form>
+    </div>`;
+  document.body.appendChild(modal);
+
+  const closeModal = () => { modal.style.display = 'none'; };
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.getElementById('closeAddProductModal').addEventListener('click', closeModal);
+  document.getElementById('cancelAddProductBtn').addEventListener('click', closeModal);
+
+  // Image preview
+  const imageInput = document.getElementById('addProductImageInput');
+  imageInput.addEventListener('change', () => {
+    const file = imageInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      document.getElementById('addProductImagePreview').src = ev.target.result;
+      document.getElementById('addProductImageName').textContent = file.name;
+      document.getElementById('addProductImagePreviewWrap').style.display = 'block';
+      document.getElementById('addProductImagePlaceholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Add size row button
+  const sizesContainer = document.getElementById('addProductSizesContainer');
+  document.getElementById('addProductAddSizeBtn').addEventListener('click', () => {
+    _apAddSizeRow(sizesContainer);
+  });
+
+  // Form submit
+  document.getElementById('addProductForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errEl        = document.getElementById('addProductError');
+    const progressEl   = document.getElementById('addProductProgress');
+    const progressBar  = document.getElementById('addProductProgressBar');
+    const progressLabel = document.getElementById('addProductProgressLabel');
+    const saveBtn      = document.getElementById('saveAddProductBtn');
+    errEl.style.display = 'none';
+
+    const name      = (document.getElementById('addProductName').value || '').trim();
+    const brand     = (document.getElementById('addProductBrand').value || '').trim();
+    const imageFile = imageInput.files[0];
+
+    if (!name)       { errEl.textContent = 'Product name is required.'; errEl.style.display = 'block'; return; }
+    if (!brand)      { errEl.textContent = 'Brand name is required.'; errEl.style.display = 'block'; return; }
+    if (!imageFile)  { errEl.textContent = 'Please upload a product image.'; errEl.style.display = 'block'; return; }
+    if (imageFile.size > 5 * 1024 * 1024) { errEl.textContent = 'Image must be smaller than 5MB.'; errEl.style.display = 'block'; return; }
+
+    const sizes = {};
+    let sizeError = false;
+    document.querySelectorAll('#addProductSizesContainer .prod-size-row').forEach(row => {
+      const sizeKey   = (row.querySelector('.prod-size-key').value || '').trim().toLowerCase();
+      const sizePrice = parseFloat(row.querySelector('.prod-size-price').value);
+      if (sizeKey && sizePrice > 0) { sizes[sizeKey] = sizePrice; }
+      else if (sizeKey || (row.querySelector('.prod-size-price').value || '').trim()) { sizeError = true; }
+    });
+    if (Object.keys(sizes).length === 0) {
+      errEl.textContent = 'Add at least one size with a valid price.'; errEl.style.display = 'block'; return;
+    }
+    if (sizeError) {
+      errEl.textContent = 'Some size rows are incomplete — fill in both size name and price, or remove empty rows.';
+      errEl.style.display = 'block'; return;
+    }
+
+    const slug = _apToSlug(name);
+    if (!slug) { errEl.textContent = 'Product name is invalid.'; errEl.style.display = 'block'; return; }
+
+    try {
+      const existing = await getDoc(doc(db, 'products', slug));
+      if (existing.exists()) {
+        errEl.textContent = `A product named "${name}" already exists. Use a different name.`;
+        errEl.style.display = 'block'; return;
+      }
+    } catch (_) {}
+
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
+    progressEl.style.display = 'block';
+    progressLabel.textContent = 'Uploading image...';
+    progressBar.style.width = '10%';
+
+    try {
+      // ── Upload to Cloudinary via unsigned preset ──────────────────────
+      const formData = new FormData();
+      formData.append('file', imageFile);
+      formData.append('upload_preset', CLOUDINARY_PRESET);
+
+      const xhr = new XMLHttpRequest();
+      const cloudUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`;
+      xhr.open('POST', cloudUrl);
+
+      const cloudResult = await new Promise((resolve, reject) => {
+        xhr.upload.addEventListener('progress', (ev) => {
+          if (ev.lengthComputable) {
+            progressBar.style.width = Math.round(10 + (ev.loaded / ev.total) * 70) + '%';
+          }
+        });
+        xhr.addEventListener('load', () => {
+          let parsed;
+          try { parsed = JSON.parse(xhr.responseText); } catch(_) { parsed = {}; }
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve(parsed);
+          } else {
+            reject(new Error(parsed.error?.message || 'Upload failed: ' + xhr.status));
+          }
+        });
+        xhr.addEventListener('error', () => reject(new Error('Network error during upload.')));
+        xhr.send(formData);
+      });
+
+      const downloadURL = cloudResult.secure_url;
+      if (!downloadURL) throw new Error('Cloudinary did not return an image URL. Check your preset name.');
+
+      progressLabel.textContent = 'Saving product data...';
+      progressBar.style.width = '90%';
+      await setDoc(doc(db, 'products', slug), {
+        name, brand: brand.toUpperCase(), slug,
+        image: downloadURL, sizes, active: true,
+        addedAt: serverTimestamp(), source: 'admin',
+      });
+      progressBar.style.width = '100%';
+      progressLabel.textContent = 'Product saved!';
+      setTimeout(() => {
+        closeModal();
+        toast(`"${name}" is now live on the site.`, 'success', 5000);
+        loadProductsView();
+      }, 600);
+    } catch (err) {
+      progressEl.style.display = 'none';
+      errEl.textContent = 'Failed: ' + err.message;
+      errEl.style.display = 'block';
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = '<i class="fas fa-floppy-disk"></i> Save Product';
+    }
+  });
+};
+
+const openAddProductModal = () => {
+  initAddProductModal();
+  document.getElementById('addProductForm').reset();
+  document.getElementById('addProductImagePreviewWrap').style.display = 'none';
+  document.getElementById('addProductImagePlaceholder').style.display = 'block';
+  document.getElementById('addProductError').style.display = 'none';
+  document.getElementById('addProductProgress').style.display = 'none';
+  document.getElementById('addProductProgressBar').style.width = '0%';
+  document.getElementById('saveAddProductBtn').disabled = false;
+  document.getElementById('saveAddProductBtn').innerHTML = '<i class="fas fa-floppy-disk"></i> Save Product';
+  const sizesContainer = document.getElementById('addProductSizesContainer');
+  sizesContainer.innerHTML = '';
+  _apAddSizeRow(sizesContainer, '50ml', '');
+  _apAddSizeRow(sizesContainer, '100ml', '');
+  document.getElementById('addProductModal').style.display = 'block';
+};
+
+const loadFirestoreProductsSection = async () => {
+  const section = document.getElementById('firestoreProductsSection');
+  if (!section) return;
+  try {
+    const snap = await getDocs(query(collection(db, 'products'), orderBy('addedAt', 'desc')));
+    if (snap.empty) { section.innerHTML = ''; return; }
+
+    const cards = snap.docs.map(d => {
+      const p = d.data();
+      const sizesHtml = Object.entries(p.sizes || {}).map(([sz, price], i) =>
+        `<span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:1px solid ${i===0?'#1f2937':'#d1d5db'};color:${i===0?'#111':'#6b7280'};background:transparent">${sz.toUpperCase()} — ${price} MAD</span>`
+      ).join('');
+      const statusBadge = p.active === false
+        ? '<span style="font-size:10px;font-weight:700;background:rgba(239,68,68,0.12);color:var(--rose);padding:3px 8px;border-radius:20px;border:1px solid rgba(239,68,68,0.25)">Disabled</span>'
+        : '<span style="font-size:10px;font-weight:700;background:rgba(34,197,94,0.12);color:var(--emerald);padding:3px 8px;border-radius:20px;border:1px solid rgba(34,197,94,0.25)">Live</span>';
+      return `
+        <div style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:flex-start" data-fsprod-slug="${esc(p.slug||d.id)}">
+          <img src="${esc(p.image||'')}" alt="${esc(p.name||'')}" style="width:64px;height:64px;object-fit:contain;border-radius:8px;background:var(--s3);flex-shrink:0" onerror="this.style.display='none'">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+              <span style="font-size:0.85rem;font-weight:700;color:var(--text)">${esc(p.name||'')}</span>
+              ${statusBadge}
+            </div>
+            <div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px">${esc(p.brand||'')} · Added via Admin</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">${sizesHtml}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+            <button class="btn btn-xs fsprod-toggle" data-slug="${esc(p.slug||d.id)}" data-active="${p.active!==false}"
+              style="font-size:11px">${p.active===false?'Enable':'Disable'}</button>
+            <button class="btn btn-xs fsprod-delete" data-slug="${esc(p.slug||d.id)}"
+              style="font-size:11px;background:rgba(239,68,68,0.1);color:var(--rose);border-color:rgba(239,68,68,0.25)">
+              <i class="fas fa-trash-can"></i> Delete
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+
+    section.innerHTML = `
+      <div style="margin-bottom:10px">
+        <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px">
+          <i class="fas fa-database" style="color:var(--gold)"></i> Products Added via Admin Panel
+          <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">(${snap.size} product${snap.size!==1?'s':''})</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">${cards}</div>
+      </div>
+      <div style="height:1px;background:var(--border);margin:16px 0"></div>`;
+
+    // Wire toggle + delete
+    section.addEventListener('click', async (e) => {
+      const toggleBtn = e.target.closest('.fsprod-toggle');
+      const deleteBtn = e.target.closest('.fsprod-delete');
+
+      if (toggleBtn) {
+        const slug = toggleBtn.dataset.slug;
+        const isActive = toggleBtn.dataset.active === 'true';
+        try {
+          await setDoc(doc(db, 'products', slug), { active: !isActive }, { merge: true });
+          toast(isActive ? 'Product disabled (hidden from site)' : 'Product enabled (live on site)', 'success');
+          loadFirestoreProductsSection();
+        } catch (err) { toast(err.message, 'error'); }
+      }
+
+      if (deleteBtn) {
+        const slug = deleteBtn.dataset.slug;
+        const card = deleteBtn.closest('[data-fsprod-slug]');
+        const name = card?.querySelector('span[style*="font-weight:700"]')?.textContent || slug;
+        if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+        try {
+          await deleteDoc(doc(db, 'products', slug));
+          toast(`"${name}" deleted.`, 'success');
+          loadFirestoreProductsSection();
+        } catch (err) { toast(err.message, 'error'); }
+      }
+    });
+  } catch (err) {
+    section.innerHTML = `<div style="font-size:0.78rem;color:var(--muted);padding:8px">Could not load admin products: ${esc(err.message)}</div>`;
+  }
 };
 
 // ─── WIRE NOTIFICATIONS ON LOAD ──────────────────────────────────────────────

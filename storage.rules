@@ -1,0 +1,14 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ── Product images uploaded via admin panel ───────────────────────────
+    // Only authenticated admin can upload; everyone can read (public CDN URLs)
+    match /products/{allPaths=**} {
+      allow read: if true;
+      allow write, delete: if request.auth != null
+                           && request.auth.token.email == 'admin@ipordise.com';
+    }
+
+  }
+}

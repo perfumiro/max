@@ -1422,7 +1422,6 @@ s0.parentNode.insertBefore(s1,s0);
                 });
             }
             localStorage.setItem('cart', JSON.stringify(cart));
-            localStorage.setItem('ipordise-cart-items', JSON.stringify(cart));
             var totalQty = cart.reduce(function(s, i) { return s + Math.max(1, parseInt(i.qty) || 1); }, 0);
             var cartBtns = Array.from(document.querySelectorAll('.header-icon-btn')).filter(function(b) {
                 var al = (b.getAttribute('aria-label') || '').toLowerCase();

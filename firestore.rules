@@ -102,5 +102,11 @@ service cloud.firestore {
       allow write, delete: if isAdmin();
     }
 
+    // ── Products (added via admin panel — no-code product manager) ────────
+    match /products/{slug} {
+      allow read: if true;            // storefront reads active products
+      allow write, delete: if isAdmin();
+    }
+
   }
 }

@@ -101,15 +101,22 @@
 
     // One-time bridge so previously saved products keep working with the new required "cart" key.
     const migrateLegacyCartIfNeeded = () => {
-        const currentCart = readCart();
         const legacyItems = readStorageArray(LEGACY_CART_STORAGE_KEY)
             .map(normalizeItem)
             .filter(Boolean);
 
-        if (!legacyItems.length) return;
+        // No legacy data at all — nothing to do.
+        if (!legacyItems.length) {
+            localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
+            return;
+        }
+
+        const currentCart = readCart();
 
         if (!currentCart.length) {
             writeCart(legacyItems);
+            // Clear legacy key so a future empty-cart state doesn't re-import.
+            localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
             return;
         }
 
@@ -135,6 +142,9 @@
         if (hasChanges) {
             writeCart(repairedItems);
         }
+
+        // Migration done — remove legacy key to prevent stale re-imports.
+        localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
     };
 
     const formatMAD = (value) => {

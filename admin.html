@@ -625,6 +625,7 @@
                 <option value="overridden">Overridden only</option>
               </select>
               <button class="btn btn-xs btn-gold" id="refreshProductsBtn"><i class="fas fa-rotate-right"></i> Refresh</button>
+              <button class="btn btn-xs btn-gold" id="addNewProductBtn"><i class="fas fa-plus"></i> Add New Product</button>
             </div>
           </div>
           <!-- Legend -->
@@ -633,6 +634,8 @@
             <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--s3);border:1.5px solid var(--amber);margin-right:4px;vertical-align:middle"></span>Price changed</span>
             <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--s3);border:1.5px solid var(--gold);margin-right:4px;vertical-align:middle"></span>New size added</span>
           </div>
+          <!-- Firestore-managed products section (added via admin panel) -->
+          <div id="firestoreProductsSection" style="margin-bottom:20px"></div>
           <div id="productsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(520px,1fr));gap:14px">
             <div style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
           </div>

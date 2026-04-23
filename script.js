@@ -4035,12 +4035,182 @@ document.addEventListener('DOMContentLoaded', () => {
         return priceEl;
     };
 
+    // ── Firestore product cards injected into New Arrivals ───────────────────
+    let _firestoreProductsInjected = false;
+
+    const injectFirestoreProductCards = async (pricesById) => {
+        if (_firestoreProductsInjected) return;
+        const carousel = document.getElementById('newArrivalsCarousel');
+        if (!carousel) return;
+        try {
+            const { db: fsDb } = await import('./auth/firebase.js');
+            const { collection: col, getDocs: gDocs, query: fsQuery, orderBy: fsOrderBy, where: fsWhere }
+                = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
+            const snap = await gDocs(fsQuery(col(fsDb, 'products'), fsOrderBy('addedAt', 'desc')));
+            if (snap.empty) return;
+
+            const toSlugLocal = (name) => String(name).trim().toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+            const fmtMad = (v) => `${Number(v).toLocaleString('fr-FR')} MAD`;
+
+            snap.forEach(docSnap => {
+                const p = docSnap.data();
+                if (p.active === false) return;
+                const slug  = p.slug || toSlugLocal(p.name || docSnap.id);
+                const sizes = p.sizes && typeof p.sizes === 'object' ? p.sizes : {};
+
+                // Inject into pricesById so Add to Cart works
+                if (!pricesById[slug]) pricesById[slug] = {};
+                Object.entries(sizes).forEach(([sz, price]) => {
+                    if (price > 0) pricesById[slug][sz] = price;
+                });
+
+                // Skip if a card for this product already exists in the carousel
+                if (carousel.querySelector(`[data-id="${CSS.escape(slug)}"]`)) return;
+
+                const sizeKeys = Object.keys(sizes).sort();
+                const sizeBadgesHtml = sizeKeys.map((sz, i) =>
+                    `<span class="card-size-badge text-[10px] font-extrabold px-4 py-1.5 rounded-full leading-none ${i === 0 ? 'bg-[#111827] text-white' : 'border border-gray-200 text-gray-500'}">${sz.toUpperCase()}</span>`
+                ).join('');
+
+                const priceText = sizeKeys.map(sz => `${sz.toUpperCase()} ${fmtMad(sizes[sz])}`).join(' · ');
+                const today = new Date().toISOString().slice(0, 10);
+
+                const article = document.createElement('article');
+                article.className = 'bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 min-w-[280px] max-w-[280px] snap-start shrink-0 js-firestore-product flex flex-col overflow-hidden';
+                article.dataset.added          = today;
+                article.dataset.productName    = p.name || '';
+                article.dataset.id             = slug;
+                article.dataset.productBrand   = p.brand || '';
+                article.dataset.productPrice   = priceText;
+                article.dataset.productImage   = p.image || '';
+                article.dataset.firestoreProduct = 'true';
+                article.innerHTML = `
+                    <div class="relative bg-white w-full flex items-center justify-center" style="background:#fff;padding:8px 4px;min-height:190px;height:190px;">
+                        <span style="position:absolute;top:9px;left:9px;z-index:20;background:#111;color:#fff;font-size:7px;font-weight:800;letter-spacing:0.2em;padding:3px 8px;border-radius:999px;line-height:1.5;">NEW</span>
+                        <button type="button" class="product-favorite-btn absolute top-2 right-2 w-[28px] h-[28px] bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-900 hover:border-gray-900 transition-colors z-10 shadow-sm" aria-label="Add to wishlist"><i class="far fa-heart text-[12px]"></i></button>
+                        <img src="${p.image || ''}" alt="${p.name || ''}" style="height:170px;max-height:170px;width:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,0.11));" loading="lazy">
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow bg-white z-10 relative">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-2 leading-none">${p.brand || ''}</p>
+                        <h4 class="text-[15px] font-bold text-gray-900 leading-[1.3] min-h-[40px] mb-4">${p.name || ''}</h4>
+                        <div class="flex items-center gap-2 mt-auto mb-5 catalog-size-badges">${sizeBadgesHtml}</div>
+                        <div class="border-t border-gray-100 pt-3">
+                            <button type="button" class="js-firestore-add-btn w-full bg-[#111827] text-white text-[11px] font-extrabold py-3.5 rounded-xl hover:bg-black transition-colors uppercase tracking-[0.1em]">ADD TO CART</button>
+                        </div>
+                    </div>`;
+                carousel.prepend(article);
+            });
+
+            _firestoreProductsInjected = true;
+        } catch (_) { /* non-blocking */ }
+    };
+
+    // ── Size picker for Firestore product cards ───────────────────────────────
+    const initFirestoreCartPicker = () => {
+        let pickerModal = document.getElementById('ipo-fs-picker-modal');
+        if (!pickerModal) {
+            pickerModal = document.createElement('div');
+            pickerModal.id = 'ipo-fs-picker-modal';
+            pickerModal.style.cssText = 'display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,0.5);align-items:flex-end;justify-content:center';
+            pickerModal.innerHTML = `
+                <div id="ipo-fs-picker-sheet" style="background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 36px;width:100%;max-width:480px;margin:0 auto">
+                    <div style="width:40px;height:4px;background:#e5e7eb;border-radius:2px;margin:0 auto 20px"></div>
+                    <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.12em;color:#9ca3af;text-transform:uppercase;margin-bottom:4px" id="ipo-fs-picker-brand"></div>
+                    <div style="font-size:1rem;font-weight:700;color:#111827;margin-bottom:16px" id="ipo-fs-picker-name"></div>
+                    <div style="font-size:0.75rem;font-weight:600;color:#6b7280;margin-bottom:10px">Choose size:</div>
+                    <div id="ipo-fs-picker-sizes" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px"></div>
+                    <button id="ipo-fs-picker-cancel" style="width:100%;padding:12px;background:none;border:1px solid #e5e7eb;border-radius:12px;font-size:0.85rem;font-weight:600;color:#6b7280;cursor:pointer">Cancel</button>
+                </div>`;
+            document.body.appendChild(pickerModal);
+            pickerModal.addEventListener('click', (e) => { if (e.target === pickerModal) pickerModal.style.display = 'none'; });
+            document.getElementById('ipo-fs-picker-cancel').addEventListener('click', () => { pickerModal.style.display = 'none'; });
+        }
+    };
+
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.js-firestore-add-btn');
+        if (!btn) return;
+        e.preventDefault(); e.stopPropagation();
+        const card = btn.closest('.js-firestore-product');
+        if (!card) return;
+
+        initFirestoreCartPicker();
+        const modal     = document.getElementById('ipo-fs-picker-modal');
+        const sizesDiv  = document.getElementById('ipo-fs-picker-sizes');
+        const nameEl    = document.getElementById('ipo-fs-picker-name');
+        const brandEl   = document.getElementById('ipo-fs-picker-brand');
+
+        const productName  = card.dataset.productName || '';
+        const productBrand = card.dataset.productBrand || '';
+        const productImage = card.dataset.productImage || '';
+        const slug         = card.dataset.id || '';
+
+        nameEl.textContent  = productName;
+        brandEl.textContent = productBrand;
+
+        // Load sizes from pricesById cache if available
+        const badges = Array.from(card.querySelectorAll('.card-size-badge'));
+        const sizePriceHtml = badges.map(b => {
+            const szLabel = b.textContent.trim().toLowerCase();
+            const price   = typeof window._ipordisePricesById === 'object'
+                ? (window._ipordisePricesById[slug] || {})[szLabel] || 0 : 0;
+            const priceStr = price > 0 ? `${price.toLocaleString('fr-FR')} MAD` : 'Price on request';
+            return `<button class="ipo-fs-size-opt" data-size="${szLabel}" data-price="${price}" data-price-str="${priceStr}"
+                style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:12px;background:#fff;cursor:pointer;font-size:0.85rem;font-weight:600;color:#111827;transition:all 0.15s">
+                <span>${szLabel.toUpperCase()}</span>
+                <span style="color:#6b7280;font-weight:500">${priceStr}</span>
+            </button>`;
+        }).join('');
+        sizesDiv.innerHTML = sizePriceHtml;
+
+        sizesDiv.addEventListener('click', (ev) => {
+            const opt = ev.target.closest('.ipo-fs-size-opt');
+            if (!opt) return;
+            const sizeLabel = opt.dataset.size;
+            const unitPrice = parseFloat(opt.dataset.price) || 0;
+            const priceStr  = opt.dataset.priceStr || '';
+
+            const cartKey = 'cart';
+            let cart = [];
+            try { cart = JSON.parse(localStorage.getItem(cartKey)) || []; } catch (_) { cart = []; }
+            if (!Array.isArray(cart)) cart = [];
+
+            const existingIdx = cart.findIndex(i => i.name === productName && i.size === sizeLabel);
+            if (existingIdx >= 0) {
+                cart[existingIdx].qty = Math.min(99, (parseInt(cart[existingIdx].qty) || 1) + 1);
+                cart[existingIdx].price = unitPrice;
+            } else {
+                cart.unshift({
+                    id: `fs-${slug}-${sizeLabel}-${Date.now()}`,
+                    name: productName, brand: productBrand, size: sizeLabel,
+                    qty: 1, price: unitPrice, priceText: priceStr,
+                    pricePending: unitPrice <= 0, image: productImage,
+                });
+            }
+            localStorage.setItem(cartKey, JSON.stringify(cart));
+            if (typeof window.setHeaderCartCount === 'function') window.setHeaderCartCount();
+            modal.style.display = 'none';
+            showAddedToCartToast(productName, sizeLabel.toUpperCase());
+        }, { once: true });
+
+        modal.style.display = 'flex';
+    });
+
     const initCatalogPrices = async () => {
         const cards = Array.from(document.querySelectorAll('.js-product-link[data-id]'));
         if (!cards.length) return;
 
         // Load both configs in parallel — sizes + prices
         const [pricesById] = await Promise.all([loadPricesJson(), loadSizesJson()]);
+
+        // Expose globally so the Firestore size picker can read prices
+        window._ipordisePricesById = pricesById;
+
+        // Inject Firestore products into carousel + pricesById
+        void injectFirestoreProductCards(pricesById);
 
         // Re-run new arrivals filtering now that we have real price data
         limitNewArrivalsToLatest(pricesById);
