@@ -2643,9 +2643,361 @@ const loadSettingsView = async () => {
 
 // ─── ADD NEW PRODUCT FEATURE ─────────────────────────────────────────────────
 
+// All known accords with their display colors (mirrors script.js accordDefinitions)
+const _ACCORD_PALETTE = [
+  { label: 'lavender',    color: '#b8addf', textColor: '#233044' },
+  { label: 'vanilla',     color: '#efe8c6', textColor: '#2b2b2b' },
+  { label: 'amber',       color: '#d4a373', textColor: '#ffffff' },
+  { label: 'aromatic',    color: '#61c3b1', textColor: '#163b38' },
+  { label: 'woody',       color: '#9b7a5f', textColor: '#ffffff' },
+  { label: 'fresh spicy', color: '#b6cf84', textColor: '#26321d' },
+  { label: 'warm spicy',  color: '#c2885d', textColor: '#ffffff' },
+  { label: 'fruity',      color: '#e88c8b', textColor: '#ffffff' },
+  { label: 'floral',      color: '#dfa7b8', textColor: '#402633' },
+  { label: 'white floral',color: '#f2e8ef', textColor: '#533a47' },
+  { label: 'powdery',     color: '#f2ede5', textColor: '#5a5350' },
+  { label: 'citrus',      color: '#e7d67a', textColor: '#413a12' },
+  { label: 'leather',     color: '#7c5a46', textColor: '#ffffff' },
+  { label: 'tobacco',     color: '#8b6847', textColor: '#ffffff' },
+  { label: 'smoky',       color: '#7b7b88', textColor: '#ffffff' },
+  { label: 'sweet',       color: '#e3b1b2', textColor: '#ffffff' },
+  { label: 'earthy',      color: '#8c8880', textColor: '#ffffff' },
+  { label: 'fresh',       color: '#bbddd2', textColor: '#21433c' },
+  { label: 'boozy',       color: '#8d5a3b', textColor: '#ffffff' },
+  { label: 'coffee',      color: '#6e4c39', textColor: '#ffffff' },
+  { label: 'musky',       color: '#d9d5d0', textColor: '#49433f' },
+  { label: 'oriental',    color: '#c9813a', textColor: '#ffffff' },
+  { label: 'marine',      color: '#5b9fc2', textColor: '#ffffff' },
+  { label: 'herbal',      color: '#c8d5cb', textColor: '#33423a' },
+  { label: 'resinous',    color: '#b59374', textColor: '#ffffff' },
+];
+
+/**
+ * Build a visual accord picker inside `containerEl`.
+ * Returns two helpers on the container:
+ *   containerEl._getAccords()  → string[] of selected accord labels
+ *   containerEl._setAccords(arr) → replace selection
+ */
+const _apInitAccordPicker = (containerEl, initial = []) => {
+  const _MAX = 8;
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  // Entry is either a plain string (predefined) or {label, color, textColor} (custom)
+  const _getLabel  = e => typeof e === 'string' ? e : (e?.label || '');
+  const _resolveColor = e => {
+    if (typeof e === 'object' && e?.color) return { color: e.color, textColor: e.textColor || '#fff' };
+    return _ACCORD_PALETTE.find(a => a.label === _getLabel(e)) || { color: '#b59374', textColor: '#fff' };
+  };
+  const _luma = hex => {
+    const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    return (r*299 + g*587 + b*114) / 1000;
+  };
+  const _autoText = hex => _luma(hex) > 140 ? '#111827' : '#ffffff';
+
+  // ── Normalise initial selection ───────────────────────────────────────────
+  let _selected = (initial || []).map(e => {
+    if (typeof e === 'object' && e?.label) {
+      const label = String(e.label).trim().toLowerCase();
+      if (_ACCORD_PALETTE.some(a => a.label === label)) return label; // predefined → string
+      return { label, color: e.color || '#b59374', textColor: e.textColor || '#fff' };
+    }
+    return String(e).trim().toLowerCase();
+  }).filter(e => _getLabel(e));
+
+  const _render = () => {
+    containerEl.innerHTML = '';
+
+    // ── Live preview bar chart ──────────────────────────────────────────────
+    const previewWrap = document.createElement('div');
+    previewWrap.style.cssText = 'margin-bottom:12px';
+    if (_selected.length) {
+      const widths = ['100%','93%','85%','72%','69%','62%','58%','54%'];
+      const previewLabel = document.createElement('div');
+      previewLabel.style.cssText = 'font-size:0.7rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em';
+      previewLabel.textContent = 'Preview';
+      previewWrap.appendChild(previewLabel);
+      _selected.slice(0,8).forEach((entry, i) => {
+        const label = _getLabel(entry);
+        const meta  = _resolveColor(entry);
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;margin-bottom:4px';
+        row.innerHTML = `
+          <div style="height:26px;width:${widths[i]};background:${meta.color};border-radius:20px;display:flex;align-items:center;padding:0 12px;transition:width 0.3s">
+            <span style="font-size:11px;font-weight:700;color:${meta.textColor};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</span>
+          </div>`;
+        previewWrap.appendChild(row);
+      });
+    } else {
+      previewWrap.innerHTML = `<div style="font-size:0.75rem;color:var(--dim);padding:8px 0">Select accords below to see a preview</div>`;
+    }
+    containerEl.appendChild(previewWrap);
+
+    // ── Selected pills strip ────────────────────────────────────────────────
+    const selectedWrap = document.createElement('div');
+    selectedWrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;min-height:32px;margin-bottom:10px;padding:6px;background:var(--s4);border-radius:8px;border:1px dashed var(--border)';
+    if (_selected.length) {
+      _selected.forEach(entry => {
+        const label = _getLabel(entry);
+        const meta  = _resolveColor(entry);
+        const pill = document.createElement('span');
+        pill.style.cssText = `display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;background:${meta.color};color:${meta.textColor};cursor:pointer;user-select:none`;
+        pill.innerHTML = `${label} <span style="font-size:13px;line-height:1;opacity:0.7">×</span>`;
+        pill.title = 'Click to remove';
+        pill.addEventListener('click', () => {
+          _selected = _selected.filter(e => _getLabel(e) !== label);
+          _render();
+        });
+        selectedWrap.appendChild(pill);
+      });
+    } else {
+      const hint = document.createElement('span');
+      hint.style.cssText = 'font-size:0.75rem;color:var(--dim);padding:4px;align-self:center';
+      hint.textContent = 'No accords selected — click below to add';
+      selectedWrap.appendChild(hint);
+    }
+    containerEl.appendChild(selectedWrap);
+
+    // ── Counter ─────────────────────────────────────────────────────────────
+    const counter = document.createElement('div');
+    counter.style.cssText = 'font-size:0.7rem;color:var(--muted);margin-bottom:8px;text-align:right';
+    counter.textContent = `${_selected.length} / ${_MAX} accords selected`;
+    containerEl.appendChild(counter);
+
+    // ── Palette grid ────────────────────────────────────────────────────────
+    const paletteLabel = document.createElement('div');
+    paletteLabel.style.cssText = 'font-size:0.7rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em';
+    paletteLabel.textContent = 'All Accords — click to select';
+    containerEl.appendChild(paletteLabel);
+
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px';
+    _ACCORD_PALETTE.forEach(acc => {
+      const isSelected = _selected.some(e => _getLabel(e) === acc.label);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.style.cssText = [
+        'padding:5px 12px', 'border-radius:20px', 'font-size:11px', 'font-weight:700',
+        'cursor:pointer', 'user-select:none', 'transition:opacity 0.15s,transform 0.1s',
+        `border:2px solid ${isSelected ? acc.color : 'transparent'}`,
+        `background:${isSelected ? acc.color : acc.color + '33'}`,
+        `color:${isSelected ? acc.textColor : 'var(--text)'}`,
+        isSelected ? 'box-shadow:0 0 0 2px rgba(0,0,0,0.1)' : 'opacity:0.7'
+      ].join(';');
+      btn.textContent = acc.label;
+      btn.title = isSelected ? 'Click to remove' : (_selected.length >= _MAX ? `Maximum ${_MAX} accords` : 'Click to add');
+      btn.addEventListener('click', () => {
+        if (isSelected) { _selected = _selected.filter(e => _getLabel(e) !== acc.label); }
+        else { if (_selected.length >= _MAX) return; _selected = [..._selected, acc.label]; }
+        _render();
+      });
+      grid.appendChild(btn);
+    });
+    containerEl.appendChild(grid);
+
+    // ── Custom accord input ─────────────────────────────────────────────────
+    const customSep = document.createElement('div');
+    customSep.style.cssText = 'height:1px;background:var(--border);margin:12px 0';
+    containerEl.appendChild(customSep);
+
+    const customLabel = document.createElement('div');
+    customLabel.style.cssText = 'font-size:0.7rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em';
+    customLabel.textContent = 'Custom Accord — not in the list above?';
+    containerEl.appendChild(customLabel);
+
+    const customRow = document.createElement('div');
+    customRow.style.cssText = 'display:flex;gap:8px;align-items:center';
+
+    const customInput = document.createElement('input');
+    customInput.type = 'text';
+    customInput.placeholder = 'e.g. oud, iris, saffron…';
+    customInput.maxLength = 32;
+    customInput.style.cssText = 'flex:1;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:7px 11px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box;font-family:inherit';
+
+    const customAddBtn = document.createElement('button');
+    customAddBtn.type = 'button';
+    customAddBtn.style.cssText = 'padding:7px 16px;border-radius:8px;background:rgba(200,169,106,0.15);color:var(--gold);border:1px solid rgba(200,169,106,0.4);font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0';
+    customAddBtn.innerHTML = '<i class="fas fa-plus" style="margin-right:5px"></i>Add';
+
+    // ── Color picker preset swatches ─────────────────────────────────────────
+    const PRESET_SWATCHES = [
+      '#b8addf','#d4a373','#61c3b1','#9b7a5f','#e88c8b','#b6cf84',
+      '#c2885d','#dfa7b8','#7c5a46','#5b9fc2','#e7d67a','#c9813a',
+      '#7b7b88','#8d5a3b','#bbddd2','#e3b1b2','#6e4c39','#c8d5cb',
+    ];
+
+    const showColorPicker = (val) => {
+      // Remove any existing picker panel
+      const old = containerEl.querySelector('.ap-cpanel');
+      if (old) old.remove();
+
+      let pickerColor = PRESET_SWATCHES[0];
+
+      const panel = document.createElement('div');
+      panel.className = 'ap-cpanel';
+      panel.style.cssText = 'margin-top:10px;padding:12px;background:var(--s4);border-radius:10px;border:1px solid var(--border)';
+
+      // Title + live preview pill
+      const titleRow = document.createElement('div');
+      titleRow.style.cssText = 'display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap';
+      const titleText = document.createElement('span');
+      titleText.style.cssText = 'font-size:12px;font-weight:700;color:var(--text)';
+      titleText.textContent = 'Choose color for:';
+      const previewPill = document.createElement('span');
+      previewPill.style.cssText = `font-size:12px;font-weight:800;padding:3px 12px;border-radius:20px;background:${pickerColor};color:${_autoText(pickerColor)};transition:background 0.15s,color 0.15s`;
+      previewPill.textContent = val;
+      titleRow.appendChild(titleText);
+      titleRow.appendChild(previewPill);
+      panel.appendChild(titleRow);
+
+      const updateColor = (hex) => {
+        pickerColor = hex;
+        previewPill.style.background = hex;
+        previewPill.style.color = _autoText(hex);
+        colorNative.value = hex;
+        swatchGrid.querySelectorAll('[data-sw]').forEach(s => {
+          const active = s.dataset.sw === hex;
+          s.style.outline = active ? '2px solid var(--gold)' : 'none';
+          s.style.transform = active ? 'scale(1.18)' : 'scale(1)';
+        });
+      };
+
+      // Swatch grid
+      const swatchGrid = document.createElement('div');
+      swatchGrid.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px';
+      PRESET_SWATCHES.forEach((c, i) => {
+        const sw = document.createElement('button');
+        sw.type = 'button';
+        sw.dataset.sw = c;
+        sw.style.cssText = `width:26px;height:26px;border-radius:50%;background:${c};border:none;cursor:pointer;transition:transform 0.12s,outline 0.1s;flex-shrink:0;${i===0?'outline:2px solid var(--gold);transform:scale(1.18)':''}`;
+        sw.addEventListener('click', () => updateColor(c));
+        swatchGrid.appendChild(sw);
+      });
+      panel.appendChild(swatchGrid);
+
+      // Native color input row
+      const nativeRow = document.createElement('div');
+      nativeRow.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:12px';
+      const nativeLabel = document.createElement('span');
+      nativeLabel.style.cssText = 'font-size:0.72rem;color:var(--muted)';
+      nativeLabel.textContent = 'Or pick any color:';
+      const colorNative = document.createElement('input');
+      colorNative.type = 'color';
+      colorNative.value = pickerColor;
+      colorNative.style.cssText = 'width:36px;height:28px;border:1px solid var(--border);border-radius:6px;cursor:pointer;padding:2px;background:var(--s3)';
+      colorNative.addEventListener('input', () => updateColor(colorNative.value));
+      nativeRow.appendChild(nativeLabel);
+      nativeRow.appendChild(colorNative);
+      panel.appendChild(nativeRow);
+
+      // Action buttons
+      const btns = document.createElement('div');
+      btns.style.cssText = 'display:flex;gap:8px';
+
+      const confirmBtn = document.createElement('button');
+      confirmBtn.type = 'button';
+      confirmBtn.style.cssText = 'flex:1;padding:8px;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;border:none;background:var(--gold);color:#111827';
+      confirmBtn.innerHTML = '<i class="fas fa-check" style="margin-right:5px"></i>Add accord';
+      confirmBtn.addEventListener('click', () => {
+        const textColor = _autoText(pickerColor);
+        _selected = [..._selected, { label: val, color: pickerColor, textColor }];
+        customInput.value = '';
+        _render();
+      });
+
+      const cancelBtn = document.createElement('button');
+      cancelBtn.type = 'button';
+      cancelBtn.style.cssText = 'padding:8px 14px;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;border:1px solid var(--border);background:none;color:var(--muted)';
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.addEventListener('click', () => panel.remove());
+
+      btns.appendChild(confirmBtn);
+      btns.appendChild(cancelBtn);
+      panel.appendChild(btns);
+
+      customRow.after(panel);
+    };
+
+    const doAddCustom = () => {
+      const val = customInput.value.trim().toLowerCase();
+      if (!val) return;
+      if (_selected.some(e => _getLabel(e) === val)) { customInput.value = ''; return; }
+      if (_selected.length >= _MAX) {
+        customInput.style.borderColor = 'var(--rose)';
+        setTimeout(() => { customInput.style.borderColor = ''; }, 1200);
+        return;
+      }
+      // If it's already in the predefined palette, add directly (color known)
+      if (_ACCORD_PALETTE.some(a => a.label === val)) {
+        _selected = [..._selected, val];
+        customInput.value = '';
+        _render();
+        return;
+      }
+      // Custom accord — ask for color
+      showColorPicker(val);
+    };
+
+    customAddBtn.addEventListener('click', doAddCustom);
+    customInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doAddCustom(); } });
+
+    customRow.appendChild(customInput);
+    customRow.appendChild(customAddBtn);
+    containerEl.appendChild(customRow);
+  };
+
+  // Returns mixed: string for predefined, {label,color,textColor} for custom
+  containerEl._getAccords = () => _selected.map(e => {
+    if (typeof e === 'object') return { label: e.label, color: e.color, textColor: e.textColor };
+    return e;
+  });
+
+  containerEl._setAccords = (arr) => {
+    _selected = (arr || []).map(e => {
+      if (typeof e === 'object' && e?.label) {
+        const label = String(e.label).trim().toLowerCase();
+        if (_ACCORD_PALETTE.some(a => a.label === label)) return label;
+        return { label, color: e.color || '#b59374', textColor: e.textColor || '#fff' };
+      }
+      return String(e).trim().toLowerCase();
+    }).filter(e => _getLabel(e));
+    _render();
+  };
+  _render();
+};
+
 const _apToSlug = (name) => String(name).trim().toLowerCase()
   .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+// ─── Fragrance profile label helpers ─────────────────────────────────────────
+const _fpLongevityLabel = v => {
+  v = +v;
+  if (v <= 20) return '1-2h';
+  if (v <= 35) return '2-4h';
+  if (v <= 50) return '4-6h';
+  if (v <= 65) return '6-8h';
+  if (v <= 73) return '7-9h';
+  if (v <= 83) return '8-10h';
+  if (v <= 89) return '9-11h';
+  if (v <= 95) return '10-12h';
+  return '12h+';
+};
+const _fpSillageLabel = v => {
+  v = +v;
+  if (v <= 35) return 'Light';
+  if (v <= 55) return 'Moderate';
+  if (v <= 68) return 'Moderate-Strong';
+  if (v <= 83) return 'Strong';
+  return 'Very Strong';
+};
+const _fpSeasonLabel = v => {
+  v = +v;
+  if (v <= 30) return 'Winter';
+  if (v <= 58) return 'Fall/Winter';
+  if (v <= 75) return 'All Year';
+  if (v <= 88) return 'Spring/Summer';
+  return 'All Year';
+};
 
 // Upload a single File to Cloudinary; calls progressCb(0–100)
 const _apUploadToCloudinary = (file, progressCb) => new Promise((resolve, reject) => {
@@ -2746,20 +3098,76 @@ const _apCreateImageGallery = (wrapEl) => {
   };
 };
 
-const _apAddSizeRow = (container, sizeVal = '', priceVal = '') => {
+const _apAddSizeRow = (container, sizeVal = '', priceVal = '', origPriceVal = '') => {
   const row = document.createElement('div');
   row.className = 'prod-size-row';
-  row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr auto auto;gap:8px;align-items:center';
+  const initHasSale = origPriceVal && parseFloat(origPriceVal) > parseFloat(priceVal || 0);
+  row.style.cssText = 'background:var(--s3);border:1px solid var(--border);border-radius:12px;padding:14px 14px 12px;position:relative;transition:border-color 0.2s,box-shadow 0.2s';
   row.innerHTML = `
-    <input type="text" placeholder="Size (e.g. 50ml)" class="prod-size-key" value="${esc(sizeVal)}"
-      style="background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:0.84rem;color:var(--text);outline:none;box-sizing:border-box">
-    <input type="number" placeholder="Price" class="prod-size-price" min="0" value="${esc(priceVal)}"
-      style="background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:0.84rem;color:var(--text);outline:none;box-sizing:border-box">
-    <span style="font-size:0.78rem;font-weight:600;color:var(--muted);white-space:nowrap">MAD</span>
-    <button type="button" class="prod-remove-size-row"
-      style="width:34px;height:34px;border-radius:8px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:var(--rose);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0" title="Remove size">
-      <i class="fas fa-trash-can" style="font-size:11px"></i>
-    </button>`;
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end">
+      <div>
+        <label style="font-size:0.67rem;font-weight:700;color:var(--muted);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">Size</label>
+        <input type="text" placeholder="e.g. 50ml" class="prod-size-key" value="${esc(sizeVal)}"
+          style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:0.85rem;font-weight:600;color:var(--text);outline:none;box-sizing:border-box;transition:border-color 0.15s">
+      </div>
+      <div>
+        <label style="font-size:0.67rem;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:4px;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">
+          <i class="fas fa-tag" style="font-size:9px"></i> Price
+        </label>
+        <div style="position:relative">
+          <input type="number" placeholder="0" class="prod-size-price" min="0" value="${esc(priceVal)}"
+            style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:9px 38px 9px 11px;font-size:0.9rem;font-weight:700;color:var(--text);outline:none;box-sizing:border-box;transition:border-color 0.15s">
+          <span style="position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:0.65rem;font-weight:800;color:var(--muted)">MAD</span>
+        </div>
+      </div>
+      <div>
+        <label style="font-size:0.67rem;font-weight:700;color:rgba(200,169,106,0.9);display:flex;align-items:center;gap:4px;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.05em">
+          <i class="fas fa-scissors" style="font-size:9px"></i> Before Sale
+        </label>
+        <div style="position:relative">
+          <input type="number" placeholder="Optional" class="prod-size-orig-price" min="0" value="${esc(origPriceVal)}"
+            title="Fill this if the product is on sale — enter the original (higher) price"
+            style="width:100%;background:var(--s2);border:1px dashed rgba(200,169,106,0.45);border-radius:8px;padding:9px 38px 9px 11px;font-size:0.9rem;font-weight:600;color:var(--text);outline:none;box-sizing:border-box;transition:border-color 0.15s">
+          <span style="position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:0.65rem;font-weight:800;color:var(--gold)">MAD</span>
+        </div>
+      </div>
+      <button type="button" class="prod-remove-size-row"
+        style="width:34px;height:34px;border-radius:8px;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.18);color:var(--rose);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0" title="Remove this size">
+        <i class="fas fa-trash-can" style="font-size:11px"></i>
+      </button>
+    </div>
+    <div class="prod-size-sale-preview" style="display:${initHasSale ? 'flex' : 'none'};align-items:center;gap:8px;margin-top:10px;padding:7px 11px;background:rgba(21,128,61,0.09);border-radius:8px;border:1px solid rgba(21,128,61,0.2)">
+      <i class="fas fa-circle-check" style="font-size:12px;color:#16a34a;flex-shrink:0"></i>
+      <span class="prod-sale-preview-text" style="font-size:0.76rem;font-weight:700;color:#15803d"></span>
+    </div>`;
+
+  const priceInput    = row.querySelector('.prod-size-price');
+  const origInput     = row.querySelector('.prod-size-orig-price');
+  const salePreview   = row.querySelector('.prod-size-sale-preview');
+  const saleText      = row.querySelector('.prod-sale-preview-text');
+
+  const updateSalePreview = () => {
+    const p = parseFloat(priceInput.value);
+    const o = parseFloat(origInput.value);
+    if (p > 0 && o > p) {
+      const pct = Math.round((1 - p / o) * 100);
+      saleText.textContent = `Sale active — ${pct}% off · Customers will see ${o} MAD crossed out, paying ${p} MAD`;
+      salePreview.style.display = 'flex';
+      row.style.borderColor = 'rgba(21,128,61,0.35)';
+      origInput.style.borderColor = 'rgba(21,128,61,0.5)';
+      origInput.style.borderStyle = 'solid';
+    } else {
+      salePreview.style.display = 'none';
+      row.style.borderColor = '';
+      origInput.style.borderColor = 'rgba(200,169,106,0.45)';
+      origInput.style.borderStyle = 'dashed';
+    }
+  };
+
+  priceInput.addEventListener('input', updateSalePreview);
+  origInput.addEventListener('input', updateSalePreview);
+  if (initHasSale) { saleText.textContent = `Sale active`; updateSalePreview(); }
+
   row.querySelector('.prod-remove-size-row').addEventListener('click', () => row.remove());
   container.appendChild(row);
 };
@@ -2820,13 +3228,109 @@ const initAddProductModal = () => {
           </div>
         </div>
         <div>
-          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Sizes &amp; Prices (MAD) <span style="color:var(--rose)">*</span> <span style="font-weight:400;font-size:0.7rem">— at least one required</span></label>
-          <div id="addProductSizesContainer" style="display:flex;flex-direction:column;gap:6px"></div>
+          <div style="margin-bottom:8px">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:3px">Sizes &amp; Prices <span style="color:var(--rose)">*</span></div>
+            <div style="font-size:0.7rem;color:var(--muted);line-height:1.5">Set a price per size. Want to run a <strong style="color:var(--gold)">sale</strong>? Fill in the &ldquo;Before Sale&rdquo; field too — the site shows the old price crossed out automatically.</div>
+          </div>
+          <div id="addProductSizesContainer" style="display:flex;flex-direction:column;gap:8px"></div>
           <button type="button" id="addProductAddSizeBtn"
-            style="margin-top:8px;background:none;border:1px dashed var(--border);border-radius:8px;padding:8px 14px;font-size:0.75rem;color:var(--muted);cursor:pointer;width:100%;transition:border-color 0.2s">
-            <i class="fas fa-plus"></i> Add Size
+            style="margin-top:10px;background:none;border:1px dashed var(--border);border-radius:10px;padding:9px 14px;font-size:0.75rem;color:var(--muted);cursor:pointer;width:100%;transition:border-color 0.2s,color 0.2s;display:flex;align-items:center;justify-content:center;gap:7px">
+            <i class="fas fa-plus" style="font-size:10px"></i> Add Another Size
           </button>
         </div>
+
+        <!-- Fragrance Profile -->
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;flex-shrink:0"><i class="fas fa-chart-simple" style="font-size:0.65rem"></i></div>
+            <div style="font-size:0.88rem;font-weight:700;color:var(--text)">Fragrance Profile <span style="font-weight:400;color:var(--muted);font-size:0.78rem">— optional</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:5px"><i class="fas fa-clock" style="color:#c8102e"></i> Longevity</label>
+                <span id="addFpLongevityLabel" style="font-size:0.72rem;font-weight:700;color:var(--text);background:var(--s4);padding:2px 8px;border-radius:20px">8-10h</span>
+              </div>
+              <input type="range" id="addFpLongevity" min="0" max="100" step="1" value="80" style="width:100%;accent-color:var(--gold);cursor:pointer;height:4px">
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:5px"><i class="fas fa-wind" style="color:#c8102e"></i> Sillage</label>
+                <span id="addFpSillageLabel" style="font-size:0.72rem;font-weight:700;color:var(--text);background:var(--s4);padding:2px 8px;border-radius:20px">Strong</span>
+              </div>
+              <input type="range" id="addFpSillage" min="0" max="100" step="1" value="75" style="width:100%;accent-color:var(--gold);cursor:pointer;height:4px">
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:5px"><i class="fas fa-sun" style="color:#c8102e"></i> Season</label>
+                <span id="addFpSeasonLabel" style="font-size:0.72rem;font-weight:700;color:var(--text);background:var(--s4);padding:2px 8px;border-radius:20px">All Year</span>
+              </div>
+              <input type="range" id="addFpSeason" min="0" max="100" step="1" value="75" style="width:100%;accent-color:var(--gold);cursor:pointer;height:4px">
+            </div>
+          </div>
+        </div>
+
+        <!-- Stock & Badge -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div>
+            <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
+              Stock Left <span style="font-weight:400;font-size:0.7rem">— shows "Only X left!" when low</span>
+            </label>
+            <input type="number" id="addProductStockLeft" min="0" max="9999" placeholder="e.g. 12 (empty = unlimited)"
+              style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+          </div>
+          <div>
+            <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
+              Product Badge <span style="font-weight:400;font-size:0.7rem">— shown on card &amp; product page</span>
+            </label>
+            <div id="addBadgePresets" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+              <button type="button" data-badge-preset="NEW" style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #111;background:#111;color:#fff">NEW</button>
+              <button type="button" data-badge-preset="LIMITED" style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #b8860b;background:#b8860b;color:#fff">LIMITED</button>
+              <button type="button" data-badge-preset="BESTSELLER" style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #1d4ed8;background:#1d4ed8;color:#fff">BESTSELLER</button>
+              <button type="button" data-badge-preset="HOT" style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #dc2626;background:#dc2626;color:#fff">HOT</button>
+              <button type="button" data-badge-preset="SALE" style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #15803d;background:#15803d;color:#fff">SALE</button>
+              <button type="button" data-badge-preset="EXCLUSIVE" style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #7e22ce;background:#7e22ce;color:#fff">EXCLUSIVE</button>
+              <button type="button" data-badge-preset="" style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--s4);color:var(--muted)">None</button>
+            </div>
+            <input type="text" id="addProductBadge" maxlength="20" placeholder="Custom or leave empty"
+              style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+          </div>
+        </div>
+
+        <!-- Optional Details -->
+        <details style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+          <summary style="padding:10px 14px;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--muted);list-style:none;display:flex;align-items:center;gap:8px;background:var(--s3)">
+            <i class="fas fa-leaf" style="color:var(--gold)"></i> Optional Details — Accords, Notes &amp; Ingredients
+          </summary>
+          <div style="padding:12px 14px;display:flex;flex-direction:column;gap:10px;background:var(--s3)">
+            <div>
+              <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Main Accords <span style="font-weight:400">— click to select (up to 8)</span></label>
+              <div id="addProductAccordsPicker" style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;box-sizing:border-box"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <div>
+                <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Top Notes</label>
+                <input type="text" id="addProductNotesTop" placeholder="e.g. Bergamot, pepper"
+                  style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box">
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Heart Notes</label>
+                <input type="text" id="addProductNotesHeart" placeholder="e.g. Jasmine, rose"
+                  style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box">
+              </div>
+              <div>
+                <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Base Notes</label>
+                <input type="text" id="addProductNotesBase" placeholder="e.g. Sandalwood, musk"
+                  style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box">
+              </div>
+            </div>
+            <div>
+              <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Ingredients (INCI) <span style="font-weight:400">— comma-separated</span></label>
+              <textarea id="addProductIngredients" rows="3" placeholder="e.g. Alcohol Denat., Parfum, Aqua, Limonene, Linalool"
+                style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit"></textarea>
+            </div>
+          </div>
+        </details>
 
         <div id="addProductProgress" style="display:none">
           <div style="font-size:0.75rem;color:var(--muted);margin-bottom:6px" id="addProductProgressLabel">Uploading image...</div>
@@ -2852,6 +3356,43 @@ const initAddProductModal = () => {
   const gallery = _apCreateImageGallery(document.getElementById('addProductImagesGallery'));
   modal._gallery = gallery;
 
+  // Accord picker
+  const _addAccordPicker = document.getElementById('addProductAccordsPicker');
+  _apInitAccordPicker(_addAccordPicker, []);
+
+  // Fragrance profile sliders for Add modal
+  const _addFpSliders = [
+    { id: 'addFpLongevity', labelId: 'addFpLongevityLabel', fn: _fpLongevityLabel },
+    { id: 'addFpSillage',   labelId: 'addFpSillageLabel',   fn: _fpSillageLabel   },
+    { id: 'addFpSeason',    labelId: 'addFpSeasonLabel',    fn: _fpSeasonLabel    },
+  ];
+  _addFpSliders.forEach(({ id, labelId, fn }) => {
+    const sl = document.getElementById(id);
+    const lb = document.getElementById(labelId);
+    if (!sl || !lb) return;
+    sl.addEventListener('input', () => { lb.textContent = fn(sl.value); });
+    lb.textContent = fn(sl.value);
+  });
+
+  // Badge preset picker for Add modal
+  const _addBadgeInput   = document.getElementById('addProductBadge');
+  const _addBadgePresets = document.getElementById('addBadgePresets');
+  const _syncAddBadgeBtns = () => {
+    const cur = _addBadgeInput.value.trim();
+    _addBadgePresets.querySelectorAll('[data-badge-preset]').forEach(btn => {
+      const active = btn.dataset.badgePreset === cur;
+      btn.style.outline = active ? '2px solid var(--gold)' : 'none';
+      btn.style.outlineOffset = active ? '2px' : '0';
+    });
+  };
+  _addBadgePresets.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-badge-preset]');
+    if (!btn) return;
+    _addBadgeInput.value = btn.dataset.badgePreset;
+    _syncAddBadgeBtns();
+  });
+  _addBadgeInput.addEventListener('input', _syncAddBadgeBtns);
+
   // Size rows
   const sizesContainer = document.getElementById('addProductSizesContainer');
   document.getElementById('addProductAddSizeBtn').addEventListener('click', () => {
@@ -2873,16 +3414,33 @@ const initAddProductModal = () => {
     const gender    = (document.getElementById('addProductGender').value || 'for-men').trim();
     const category  = (document.getElementById('addProductCategory').value || 'designer').trim();
     const description = (document.getElementById('addProductDescription').value || '').trim();
+    const accordsRaw  = document.getElementById('addProductAccordsPicker')._getAccords();
+    const notesTop    = (document.getElementById('addProductNotesTop').value || '').trim();
+    const notesHeart  = (document.getElementById('addProductNotesHeart').value || '').trim();
+    const notesBase   = (document.getElementById('addProductNotesBase').value || '').trim();
+    const ingredients = (document.getElementById('addProductIngredients').value || '').trim();
+    const addStockRaw = parseInt(document.getElementById('addProductStockLeft').value, 10);
+    const addStockLeft = Number.isFinite(addStockRaw) && addStockRaw >= 0 ? addStockRaw : null;
+    const addBadge    = (document.getElementById('addProductBadge').value || '').trim() || null;
+    const _aFpLon = parseInt(document.getElementById('addFpLongevity').value, 10);
+    const _aFpSil = parseInt(document.getElementById('addFpSillage').value, 10);
+    const _aFpSea = parseInt(document.getElementById('addFpSeason').value, 10);
+    const addFragranceProfile = { longevity: _aFpLon, longevityLabel: _fpLongevityLabel(_aFpLon), sillage: _aFpSil, sillageLabel: _fpSillageLabel(_aFpSil), season: _aFpSea, seasonLabel: _fpSeasonLabel(_aFpSea) };
     if (!name)                { errEl.textContent = 'Product name is required.'; errEl.style.display = 'block'; return; }
     if (!brand)               { errEl.textContent = 'Brand name is required.'; errEl.style.display = 'block'; return; }
     if (!gallery.hasImages()) { errEl.textContent = 'Please add at least one product image.'; errEl.style.display = 'block'; return; }
 
     const sizes = {};
+    const originalPrices = {};
     let sizeError = false;
     document.querySelectorAll('#addProductSizesContainer .prod-size-row').forEach(row => {
       const sizeKey   = (row.querySelector('.prod-size-key').value || '').trim().toLowerCase();
       const sizePrice = parseFloat(row.querySelector('.prod-size-price').value);
-      if (sizeKey && sizePrice > 0) { sizes[sizeKey] = sizePrice; }
+      const origRaw   = parseFloat(row.querySelector('.prod-size-orig-price')?.value);
+      if (sizeKey && sizePrice > 0) {
+        sizes[sizeKey] = sizePrice;
+        if (Number.isFinite(origRaw) && origRaw > sizePrice) originalPrices[sizeKey] = origRaw;
+      }
       else if (sizeKey || (row.querySelector('.prod-size-price').value || '').trim()) { sizeError = true; }
     });
     if (Object.keys(sizes).length === 0) {
@@ -2921,6 +3479,13 @@ const initAddProductModal = () => {
         image: downloadURL, images: allImages, sizes, active: true,
         filters: ['new-in', gender, category],
         ...(description ? { description } : {}),
+        ...(accordsRaw.length ? { accords: accordsRaw } : {}),
+        ...(notesTop || notesHeart || notesBase ? { notes: { top: notesTop, heart: notesHeart, base: notesBase } } : {}),
+        ...(ingredients ? { ingredients } : {}),
+        ...(addStockLeft !== null ? { stockLeft: addStockLeft } : {}),
+        ...(addBadge ? { badge: addBadge } : {}),
+        ...(Object.keys(originalPrices).length ? { originalPrices } : {}),
+        fragranceProfile: addFragranceProfile,
         addedAt: serverTimestamp(), source: 'admin',
       });
       progressBar.style.width = '100%';
@@ -2950,6 +3515,9 @@ const openAddProductModal = () => {
   document.getElementById('saveAddProductBtn').innerHTML = '<i class="fas fa-floppy-disk"></i> Save Product';
   const modal = document.getElementById('addProductModal');
   if (modal._gallery) modal._gallery.reset();
+  // Reset accord picker
+  const _addPicker = document.getElementById('addProductAccordsPicker');
+  if (_addPicker && _addPicker._setAccords) _addPicker._setAccords([]);
   const sizesContainer = document.getElementById('addProductSizesContainer');
   sizesContainer.innerHTML = '';
   _apAddSizeRow(sizesContainer, '50ml', '');
@@ -3082,18 +3650,124 @@ const initEditProductModal = () => {
 
         <!-- Section 4: Sizes & Prices -->
         <div>
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
-            <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">4</div>
-            <div style="font-size:0.95rem;font-weight:700;color:var(--text)">
-              Sizes &amp; Prices <span style="font-weight:400;color:var(--muted);font-size:0.82rem">(MAD)</span>
-              <span style="color:var(--rose)"> *</span>
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0;margin-top:2px">4</div>
+            <div style="flex:1">
+              <div style="font-size:0.95rem;font-weight:700;color:var(--text)">Sizes &amp; Prices <span style="color:var(--rose)">*</span></div>
+              <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;line-height:1.5">Set the price for each size. To run a <strong style="color:var(--gold)">sale</strong>, also fill in the &ldquo;Before Sale&rdquo; field — the site will automatically show the old price crossed out with a discount %.</div>
             </div>
           </div>
-          <div id="editProductSizesContainer" style="display:flex;flex-direction:column;gap:8px"></div>
+          <div id="editProductSizesContainer" style="display:flex;flex-direction:column;gap:8px;margin-top:14px"></div>
           <button type="button" id="editProductAddSizeBtn"
-            style="margin-top:10px;background:none;border:1px dashed var(--border);border-radius:8px;padding:9px 14px;font-size:0.78rem;color:var(--muted);cursor:pointer;width:100%;transition:border-color 0.2s;display:flex;align-items:center;justify-content:center;gap:6px">
-            <i class="fas fa-plus"></i> Add Size
+            style="margin-top:10px;background:none;border:1px dashed var(--border);border-radius:10px;padding:10px 14px;font-size:0.78rem;color:var(--muted);cursor:pointer;width:100%;transition:border-color 0.2s,color 0.2s;display:flex;align-items:center;justify-content:center;gap:7px">
+            <i class="fas fa-plus" style="font-size:10px"></i> Add Another Size
           </button>
+        </div>
+
+        <!-- Section 5: Fragrance Profile -->
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">5</div>
+            <div style="font-size:0.95rem;font-weight:700;color:var(--text)">
+              Fragrance Profile <span style="font-weight:400;color:var(--muted);font-size:0.82rem">— optional, shown on product page</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px"><i class="fas fa-clock" style="color:var(--ipp-red,#c8102e)"></i> Longevity</label>
+                <span id="editFpLongevityLabel" style="font-size:0.75rem;font-weight:700;color:var(--text);background:var(--s4);padding:2px 10px;border-radius:20px">8-10h</span>
+              </div>
+              <input type="range" id="editFpLongevity" min="0" max="100" step="1" value="80" style="width:100%;accent-color:var(--gold);cursor:pointer;height:4px">
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px"><i class="fas fa-wind" style="color:var(--ipp-red,#c8102e)"></i> Sillage</label>
+                <span id="editFpSillageLabel" style="font-size:0.75rem;font-weight:700;color:var(--text);background:var(--s4);padding:2px 10px;border-radius:20px">Strong</span>
+              </div>
+              <input type="range" id="editFpSillage" min="0" max="100" step="1" value="75" style="width:100%;accent-color:var(--gold);cursor:pointer;height:4px">
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px"><i class="fas fa-sun" style="color:var(--ipp-red,#c8102e)"></i> Season</label>
+                <span id="editFpSeasonLabel" style="font-size:0.75rem;font-weight:700;color:var(--text);background:var(--s4);padding:2px 10px;border-radius:20px">All Year</span>
+              </div>
+              <input type="range" id="editFpSeason" min="0" max="100" step="1" value="75" style="width:100%;accent-color:var(--gold);cursor:pointer;height:4px">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 6: Optional Details -->
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">6</div>
+            <div style="font-size:0.95rem;font-weight:700;color:var(--text)">
+              Optional Details <span style="font-weight:400;color:var(--muted);font-size:0.82rem">— Accords, Notes &amp; Ingredients</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Main Accords <span style="font-weight:400;font-size:0.7rem">— click to select (up to 8)</span></label>
+              <div id="editProductAccordsPicker" style="background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;box-sizing:border-box"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+              <div>
+                <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Top Notes</label>
+                <input type="text" id="editProductNotesTop" placeholder="e.g. Bergamot, pepper"
+                  style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+              </div>
+              <div>
+                <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Heart Notes</label>
+                <input type="text" id="editProductNotesHeart" placeholder="e.g. Jasmine, rose"
+                  style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+              </div>
+              <div>
+                <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Base Notes</label>
+                <input type="text" id="editProductNotesBase" placeholder="e.g. Sandalwood, musk"
+                  style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+              </div>
+            </div>
+            <div>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Ingredients (INCI) <span style="font-weight:400;font-size:0.7rem">— comma-separated</span></label>
+              <textarea id="editProductIngredients" rows="3" placeholder="e.g. Alcohol Denat., Parfum, Aqua, Limonene, Linalool"
+                style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit;line-height:1.6"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 7: Stock & Badge -->
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">7</div>
+            <div style="font-size:0.95rem;font-weight:700;color:var(--text)">
+              Stock &amp; Badge <span style="font-weight:400;color:var(--muted);font-size:0.82rem">— optional display info for site</span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
+                Stock Left <span style="font-weight:400;font-size:0.7rem">— shows "Only X left!" when low (leave empty = unlimited)</span>
+              </label>
+              <input type="number" id="editProductStockLeft" min="0" max="9999" placeholder="e.g. 12"
+                style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+            </div>
+            <div>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
+                Product Badge <span style="font-weight:400;font-size:0.7rem">— shown on card &amp; product page</span>
+              </label>
+              <div id="editBadgePresets" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+                <button type="button" data-badge-preset="NEW" style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #111;background:#111;color:#fff;letter-spacing:0.05em">NEW</button>
+                <button type="button" data-badge-preset="LIMITED" style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #b8860b;background:#b8860b;color:#fff;letter-spacing:0.05em">LIMITED</button>
+                <button type="button" data-badge-preset="BESTSELLER" style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #1d4ed8;background:#1d4ed8;color:#fff;letter-spacing:0.05em">BESTSELLER</button>
+                <button type="button" data-badge-preset="HOT" style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #dc2626;background:#dc2626;color:#fff;letter-spacing:0.05em">HOT</button>
+                <button type="button" data-badge-preset="SALE" style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #15803d;background:#15803d;color:#fff;letter-spacing:0.05em">SALE</button>
+                <button type="button" data-badge-preset="EXCLUSIVE" style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #7e22ce;background:#7e22ce;color:#fff;letter-spacing:0.05em">EXCLUSIVE</button>
+                <button type="button" data-badge-preset="" style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--s4);color:var(--muted)">None</button>
+              </div>
+              <input type="text" id="editProductBadge" maxlength="20" placeholder="Custom text or leave empty for no badge"
+                style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+            </div>
+          </div>
         </div>
 
         <!-- Progress & Error -->
@@ -3104,6 +3778,16 @@ const initEditProductModal = () => {
           </div>
         </div>
         <div id="editProductError" style="display:none;color:var(--rose);font-size:0.78rem;padding:8px 12px;background:rgba(239,68,68,0.08);border-radius:6px;border:1px solid rgba(239,68,68,0.2)"></div>
+
+        <!-- Bottom action bar -->
+        <div style="display:flex;justify-content:flex-end;gap:10px;padding-top:8px;border-top:1px solid var(--border);margin-top:4px">
+          <button type="button" id="cancelEditProductBtnBottom" class="btn btn-sm" style="display:flex;align-items:center;gap:6px">
+            <i class="fas fa-xmark"></i> Close
+          </button>
+          <button type="button" id="saveEditProductBtnBottom" class="btn btn-sm btn-gold" style="display:flex;align-items:center;gap:6px">
+            <i class="fas fa-floppy-disk"></i> Save Changes
+          </button>
+        </div>
       </form>
     </div>`;
   document.body.appendChild(modal);
@@ -3111,6 +3795,46 @@ const initEditProductModal = () => {
   const closeModal = () => { modal.style.display = 'none'; };
   modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
   document.getElementById('cancelEditProductBtn').addEventListener('click', closeModal);
+  document.getElementById('cancelEditProductBtnBottom').addEventListener('click', closeModal);
+
+  // ── Badge preset picker ───────────────────────────────────────────────────
+  const _badgeInput    = document.getElementById('editProductBadge');
+  const _badgePresets  = document.getElementById('editBadgePresets');
+  const _syncBadgeBtns = () => {
+    const cur = _badgeInput.value.trim();
+    _badgePresets.querySelectorAll('[data-badge-preset]').forEach(btn => {
+      const active = btn.dataset.badgePreset === cur;
+      btn.style.outline = active ? '2px solid var(--gold)' : 'none';
+      btn.style.outlineOffset = active ? '2px' : '0';
+    });
+  };
+  _badgePresets.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-badge-preset]');
+    if (!btn) return;
+    _badgeInput.value = btn.dataset.badgePreset;
+    _syncBadgeBtns();
+  });
+  _badgeInput.addEventListener('input', _syncBadgeBtns);
+
+  // ── Fragrance profile sliders ─────────────────────────────────────────────
+  const _fpSliders = [
+    { id: 'editFpLongevity', labelId: 'editFpLongevityLabel', fn: _fpLongevityLabel },
+    { id: 'editFpSillage',   labelId: 'editFpSillageLabel',   fn: _fpSillageLabel   },
+    { id: 'editFpSeason',    labelId: 'editFpSeasonLabel',    fn: _fpSeasonLabel    },
+  ];
+  _fpSliders.forEach(({ id, labelId, fn }) => {
+    const sl = document.getElementById(id);
+    const lb = document.getElementById(labelId);
+    if (!sl || !lb) return;
+    sl.addEventListener('input', () => { lb.textContent = fn(sl.value); });
+    lb.textContent = fn(sl.value); // init
+  });
+
+  document.getElementById('saveEditProductBtnBottom').addEventListener('click', () => {
+    document.getElementById('editProductForm').requestSubmit
+      ? document.getElementById('editProductForm').requestSubmit()
+      : document.getElementById('editProductForm').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+  });
 
   // ── Main image state ──────────────────────────────────────────────────────
   let _mainState = null; // { type:'url'|'file', src, file? }
@@ -3205,6 +3929,13 @@ const initEditProductModal = () => {
     _renderGallery();
   };
 
+  // Accord picker for Edit modal
+  const _editAccordPickerEl = document.getElementById('editProductAccordsPicker');
+  _apInitAccordPicker(_editAccordPickerEl, []);
+  modal._setAccords = (arr) => {
+    if (_editAccordPickerEl && _editAccordPickerEl._setAccords) _editAccordPickerEl._setAccords(arr);
+  };
+
   // Add size row button
   document.getElementById('editProductAddSizeBtn').addEventListener('click', () => {
     _apAddSizeRow(document.getElementById('editProductSizesContainer'));
@@ -3225,6 +3956,7 @@ const initEditProductModal = () => {
     const progressBar   = document.getElementById('editProductProgressBar');
     const progressLabel = document.getElementById('editProductProgressLabel');
     const saveBtn       = document.getElementById('saveEditProductBtn');
+    const saveBtnBottom = document.getElementById('saveEditProductBtnBottom');
     errEl.style.display = 'none';
 
     const originalSlug = document.getElementById('editProductSlug').value;
@@ -3237,14 +3969,31 @@ const initEditProductModal = () => {
     if (!brand)        { errEl.textContent = 'Brand name is required.';   errEl.style.display = 'block'; return; }
     if (!_mainState)   { errEl.textContent = 'A main product image is required.'; errEl.style.display = 'block'; return; }
 
-    const description = (document.getElementById('editProductDescription').value || '').trim();
+    const description  = (document.getElementById('editProductDescription').value || '').trim();
+    const accordsRaw   = document.getElementById('editProductAccordsPicker')._getAccords();
+    const notesTop     = (document.getElementById('editProductNotesTop').value || '').trim();
+    const notesHeart   = (document.getElementById('editProductNotesHeart').value || '').trim();
+    const notesBase    = (document.getElementById('editProductNotesBase').value || '').trim();
+    const ingredients  = (document.getElementById('editProductIngredients').value || '').trim();
+    const stockLeftRaw = parseInt(document.getElementById('editProductStockLeft').value, 10);
+    const stockLeft    = Number.isFinite(stockLeftRaw) && stockLeftRaw >= 0 ? stockLeftRaw : null;
+    const badge        = (document.getElementById('editProductBadge').value || '').trim() || null;
+    const _fpLon = parseInt(document.getElementById('editFpLongevity').value, 10);
+    const _fpSil = parseInt(document.getElementById('editFpSillage').value, 10);
+    const _fpSea = parseInt(document.getElementById('editFpSeason').value, 10);
+    const fragranceProfile = { longevity: _fpLon, longevityLabel: _fpLongevityLabel(_fpLon), sillage: _fpSil, sillageLabel: _fpSillageLabel(_fpSil), season: _fpSea, seasonLabel: _fpSeasonLabel(_fpSea) };
 
     const sizes = {};
+    const originalPrices = {};
     let sizeError = false;
     document.querySelectorAll('#editProductSizesContainer .prod-size-row').forEach(row => {
       const sizeKey   = (row.querySelector('.prod-size-key').value || '').trim().toLowerCase();
       const sizePrice = parseFloat(row.querySelector('.prod-size-price').value);
-      if (sizeKey && sizePrice > 0) { sizes[sizeKey] = sizePrice; }
+      const origRaw   = parseFloat(row.querySelector('.prod-size-orig-price')?.value);
+      if (sizeKey && sizePrice > 0) {
+        sizes[sizeKey] = sizePrice;
+        if (Number.isFinite(origRaw) && origRaw > sizePrice) originalPrices[sizeKey] = origRaw;
+      }
       else if (sizeKey || (row.querySelector('.prod-size-price').value || '').trim()) { sizeError = true; }
     });
     if (Object.keys(sizes).length === 0) {
@@ -3257,6 +4006,7 @@ const initEditProductModal = () => {
 
     saveBtn.disabled = true;
     saveBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
+    if (saveBtnBottom) { saveBtnBottom.disabled = true; saveBtnBottom.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...'; }
     progressEl.style.display = 'block';
     progressBar.style.width = '5%';
 
@@ -3293,6 +4043,13 @@ const initEditProductModal = () => {
         image: mainUrl, images: allImages, sizes, active: true,
         filters: ['new-in', gender, category],
         ...(description ? { description } : {}),
+        ...(accordsRaw.length ? { accords: accordsRaw } : {}),
+        ...(notesTop || notesHeart || notesBase ? { notes: { top: notesTop, heart: notesHeart, base: notesBase } } : {}),
+        ...(ingredients ? { ingredients } : {}),
+        ...(stockLeft !== null ? { stockLeft } : {}),
+        ...(badge ? { badge } : {}),
+        originalPrices: Object.keys(originalPrices).length ? originalPrices : null,
+        fragranceProfile,
       };
 
       if (newSlug !== originalSlug) {
@@ -3341,6 +4098,7 @@ const initEditProductModal = () => {
       errEl.style.display = 'block';
       saveBtn.disabled = false;
       saveBtn.innerHTML = '<i class="fas fa-floppy-disk"></i> Save Changes';
+      if (saveBtnBottom) { saveBtnBottom.disabled = false; saveBtnBottom.innerHTML = '<i class="fas fa-floppy-disk"></i> Save Changes'; }
     }
   });
 };
@@ -3355,6 +4113,8 @@ const openEditProductModal = (slug, data) => {
   document.getElementById('editProductProgressBar').style.width = '0%';
   document.getElementById('saveEditProductBtn').disabled = false;
   document.getElementById('saveEditProductBtn').innerHTML = '<i class="fas fa-floppy-disk"></i> Save Changes';
+  const _bsb = document.getElementById('saveEditProductBtnBottom');
+  if (_bsb) { _bsb.disabled = false; _bsb.innerHTML = '<i class="fas fa-floppy-disk"></i> Save Changes'; }
 
   // Main image
   const mainUrl = (Array.isArray(data.images) && data.images[0]) ? data.images[0] : (data.image || '');
@@ -3378,16 +4138,57 @@ const openEditProductModal = (slug, data) => {
   // Description
   document.getElementById('editProductDescription').value = data.description || '';
 
+  // Optional details: accords, notes, ingredients
+  const _accordsArr = Array.isArray(data.accords) ? data.accords : (data.accords ? String(data.accords).split(',').map(s=>s.trim()).filter(Boolean) : []);
+  modal._setAccords(_accordsArr);
+  const _notes = data.notes && typeof data.notes === 'object' ? data.notes : {};
+  document.getElementById('editProductNotesTop').value   = _notes.top   || '';
+  document.getElementById('editProductNotesHeart').value = _notes.heart || '';
+  document.getElementById('editProductNotesBase').value  = _notes.base  || '';
+  document.getElementById('editProductIngredients').value = data.ingredients || '';
+
+  // Stock & Badge
+  const _stockEl = document.getElementById('editProductStockLeft');
+  const _badgeEl = document.getElementById('editProductBadge');
+  if (_stockEl) _stockEl.value = data.stockLeft != null ? String(data.stockLeft) : '';
+  if (_badgeEl) {
+    _badgeEl.value = data.badge || '';
+    // Sync preset button highlights
+    const _presets = document.getElementById('editBadgePresets');
+    if (_presets) {
+      _presets.querySelectorAll('[data-badge-preset]').forEach(btn => {
+        const active = btn.dataset.badgePreset === (data.badge || '');
+        btn.style.outline = active ? '2px solid var(--gold)' : 'none';
+        btn.style.outlineOffset = active ? '2px' : '0';
+      });
+    }
+  }
+
   // Sizes
   const sizesContainer = document.getElementById('editProductSizesContainer');
   sizesContainer.innerHTML = '';
   const sizesObj    = data.sizes && typeof data.sizes === 'object' ? data.sizes : {};
+  const origPricesObj = data.originalPrices && typeof data.originalPrices === 'object' ? data.originalPrices : {};
   const sizeEntries = Object.entries(sizesObj);
   if (sizeEntries.length) {
-    sizeEntries.forEach(([sz, price]) => _apAddSizeRow(sizesContainer, sz, price));
+    sizeEntries.forEach(([sz, price]) => _apAddSizeRow(sizesContainer, sz, price, origPricesObj[sz] || ''));
   } else {
     _apAddSizeRow(sizesContainer, '50ml', '');
   }
+
+  // Fragrance profile sliders
+  const _fp = data.fragranceProfile && typeof data.fragranceProfile === 'object' ? data.fragranceProfile : {};
+  const _fpDefaults = { longevity: 80, sillage: 75, season: 75 };
+  [['editFpLongevity','editFpLongevityLabel',_fpLongevityLabel,'longevity'],
+   ['editFpSillage',  'editFpSillageLabel',  _fpSillageLabel,  'sillage'],
+   ['editFpSeason',   'editFpSeasonLabel',   _fpSeasonLabel,   'season']].forEach(([sid, lid, fn, key]) => {
+    const sl = document.getElementById(sid);
+    const lb = document.getElementById(lid);
+    if (!sl || !lb) return;
+    const val = _fp[key] != null ? +_fp[key] : _fpDefaults[key];
+    sl.value = val;
+    lb.textContent = fn(val);
+  });
 
   modal.style.display = 'block';
 };

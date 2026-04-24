@@ -3767,6 +3767,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
                                     _firestoreProductOverridesCache[slug].badge = p.badge.trim();
                                 }
+                                // Cache fragrance profile set by admin
+                                if (p.fragranceProfile && typeof p.fragranceProfile === 'object') {
+                                    if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
+                                    _firestoreProductOverridesCache[slug].fragranceProfile = p.fragranceProfile;
+                                }
+                                // Cache per-size original (before-sale) prices set by admin
+                                if (p.originalPrices && typeof p.originalPrices === 'object') {
+                                    if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
+                                    _firestoreProductOverridesCache[slug].originalPrices = p.originalPrices;
+                                }
                             });
                         } catch (_) { /* non-blocking */ }
                     } catch (_) { /* non-blocking — storefront still works from prices.json */ }
@@ -5652,10 +5662,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const normalizeAccordEntries = (entries) => entries.slice(0, 8).map((entry, index) => {
         const label = String(typeof entry === 'string' ? entry : entry?.label || '').trim().toLowerCase();
         const configuredWidth = typeof entry === 'object' && entry?.width ? entry.width : '';
-        const accordMeta = accordLookup[label] || {
-            color: '#b59374',
-            textColor: '#ffffff'
-        };
+        // Use the entry's own color if it was saved with a custom color (admin custom accord)
+        const hasCustomColor = typeof entry === 'object' && entry?.color;
+        const accordMeta = hasCustomColor
+            ? { color: entry.color, textColor: entry.textColor || '#ffffff' }
+            : (accordLookup[label] || { color: '#b59374', textColor: '#ffffff' });
 
         return {
             label,
@@ -5922,7 +5933,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Update fragrance profile bars dynamically
-        const fp = productOverride?.fragranceProfile;
+        // For admin products, prefer Firestore fragranceProfile; fallback to static productOverride
+        const fp = (_fsOvForPid?.fragranceProfile) || productOverride?.fragranceProfile;
         if (fp) {
             const sillageFr = { 'Strong': 'Fort', 'Very Strong': 'Très fort', 'Moderate': 'Modéré', 'Moderate-Strong': 'Modéré-Fort', 'Powerful': 'Puissant' };
             const seasonFr = { 'All Year': "Toute l'année", 'Fall/Winter': 'Automne/Hiver', 'Spring/Summer': 'Printemps/Été' };
@@ -5966,9 +5978,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // For admin products: merge _fsOvForPid extra data into override so accords/notes/ingredients work
-        const _fsAccordsOverride = productOverride
-            ? (productOverride.mainAccords ? productOverride : Object.assign({}, productOverride, { mainAccords: _fsOvForPid?.mainAccords }))
-            : (_fsOvForPid?.mainAccords ? { mainAccords: _fsOvForPid.mainAccords } : null);
+        // Admin-set accords always take priority over static catalog data
+        const _fsAccordsOverride = _fsOvForPid?.mainAccords
+            ? (productOverride ? Object.assign({}, productOverride, { mainAccords: _fsOvForPid.mainAccords }) : { mainAccords: _fsOvForPid.mainAccords })
+            : productOverride;
         renderMainAccords(productName, _fsAccordsOverride, subtitle?.textContent || '');
 
         const currentGender = getProductGenderKey(productName, productOverride, subtitle?.textContent || '');
@@ -6045,42 +6058,74 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (_fsBadge) {
                     const _bc = (() => {
                         const b = _fsBadge.toUpperCase();
-                        if (b === 'NEW')        return { bg: '#111827', color: '#fff' };
-                        if (b === 'LIMITED')    return { bg: '#b8860b', color: '#fff' };
-                        if (b === 'BESTSELLER') return { bg: '#1d4ed8', color: '#fff' };
-                        if (b === 'HOT')        return { bg: '#dc2626', color: '#fff' };
-                        if (b === 'SALE')       return { bg: '#15803d', color: '#fff' };
-                        if (b === 'EXCLUSIVE')  return { bg: '#7e22ce', color: '#fff' };
-                        return { bg: '#111827', color: '#fff' };
+                        if (b === 'NEW')        return { bg: '#111827', color: '#fff', shadow: 'none' };
+                        if (b === 'LIMITED')    return { bg: '#b8860b', color: '#fff', shadow: '0 3px 12px rgba(184,134,11,0.45)' };
+                        if (b === 'BESTSELLER') return { bg: '#1d4ed8', color: '#fff', shadow: '0 3px 12px rgba(29,78,216,0.45)' };
+                        if (b === 'HOT')        return { bg: '#dc2626', color: '#fff', shadow: '0 3px 12px rgba(220,38,38,0.45)' };
+                        if (b === 'SALE')       return { bg: '#15803d', color: '#fff', shadow: '0 3px 12px rgba(21,128,61,0.45)' };
+                        if (b === 'EXCLUSIVE')  return { bg: '#7e22ce', color: '#fff', shadow: '0 3px 12px rgba(126,34,206,0.45)' };
+                        return { bg: '#111827', color: '#fff', shadow: 'none' };
                     })();
                     _badgeEl.textContent = _fsBadge.toUpperCase();
-                    _badgeEl.style.background = _bc.bg;
-                    _badgeEl.style.color = _bc.color;
-                    _badgeEl.style.display = '';
+                    // Use setProperty with 'important' to override CSS !important rules
+                    _badgeEl.style.setProperty('background', _bc.bg, 'important');
+                    _badgeEl.style.setProperty('color', _bc.color, 'important');
+                    _badgeEl.style.setProperty('box-shadow', _bc.shadow, 'important');
+                    _badgeEl.style.setProperty('animation', 'none', 'important');
+                    _badgeEl.style.setProperty('display', '', 'important');
                 } else {
-                    _badgeEl.style.display = 'none';
+                    _badgeEl.style.setProperty('display', 'none', 'important');
                 }
             }
 
             // ── Stock info bar near the size selector ────────────────────────
             const _sizeSelEl = document.getElementById('sizeSelector');
             if (_sizeSelEl && !document.getElementById('fsProdInfoBar')) {
-                const _stockParts = [];
+                let _stockIcon = '', _stockText = '', _stockColor = '', _stockBg = '', _stockBorder = '';
                 if (typeof _fsStockLeft === 'number' && _fsStockLeft === 0) {
-                    _stockParts.push(`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#6b7280;background:rgba(107,114,128,0.08);border:1px solid rgba(107,114,128,0.2);border-radius:8px;padding:5px 12px;"><i class="fas fa-ban"></i> Out of stock</span>`);
+                    _stockIcon = 'fa-circle-xmark'; _stockText = 'Out of stock';
+                    _stockColor = '#6b7280'; _stockBg = 'rgba(107,114,128,0.07)'; _stockBorder = 'rgba(107,114,128,0.18)';
                 } else if (typeof _fsStockLeft === 'number' && _fsStockLeft <= 5) {
-                    _stockParts.push(`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#dc2626;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);border-radius:8px;padding:5px 12px;"><i class="fas fa-fire"></i> Only ${_fsStockLeft} left!</span>`);
+                    _stockIcon = 'fa-fire'; _stockText = `Only <strong>${_fsStockLeft} left</strong> — order soon`;
+                    _stockColor = '#dc2626'; _stockBg = 'rgba(220,38,38,0.06)'; _stockBorder = 'rgba(220,38,38,0.2)';
                 } else if (typeof _fsStockLeft === 'number' && _fsStockLeft <= 15) {
-                    _stockParts.push(`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#b8860b;background:rgba(184,134,11,0.08);border:1px solid rgba(184,134,11,0.2);border-radius:8px;padding:5px 12px;"><i class="fas fa-exclamation-circle"></i> ${_fsStockLeft} left in stock</span>`);
-                } else if (typeof _fsStockLeft === 'number' && _fsStockLeft > 15) {
-                    _stockParts.push(`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#059669;background:rgba(5,150,105,0.07);border:1px solid rgba(5,150,105,0.2);border-radius:8px;padding:5px 12px;"><i class="fas fa-check"></i> ${_fsStockLeft} in stock</span>`);
+                    _stockIcon = 'fa-triangle-exclamation'; _stockText = `<strong>${_fsStockLeft} remaining</strong> in stock`;
+                    _stockColor = '#b45309'; _stockBg = 'rgba(180,83,9,0.06)'; _stockBorder = 'rgba(180,83,9,0.2)';
+                } else if (typeof _fsStockLeft === 'number') {
+                    _stockIcon = 'fa-circle-check'; _stockText = `<strong>${_fsStockLeft} units</strong> available`;
+                    _stockColor = '#059669'; _stockBg = 'rgba(5,150,105,0.06)'; _stockBorder = 'rgba(5,150,105,0.18)';
                 }
-                if (_stockParts.length) {
+                if (_stockIcon) {
                     const _infoBar = document.createElement('div');
                     _infoBar.id = 'fsProdInfoBar';
-                    _infoBar.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px';
-                    _infoBar.innerHTML = _stockParts.join('');
+                    _infoBar.style.cssText = `display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:10px 14px;background:${_stockBg};border:1px solid ${_stockBorder};border-radius:10px;`;
+                    _infoBar.innerHTML = `
+                        <i class="fas ${_stockIcon}" style="font-size:14px;color:${_stockColor};flex-shrink:0"></i>
+                        <span style="font-size:12px;font-weight:600;color:${_stockColor};line-height:1.4">${_stockText}</span>`;
                     _sizeSelEl.parentNode.insertBefore(_infoBar, _sizeSelEl);
+                }
+            }
+
+            // ── Sale badge in the stock row ────────────────────────────────────
+            const _origPricesMap = _fsOvForPid?.originalPrices;
+            const _stockRowEl = document.querySelector('.ipp-stock-row');
+            if (_stockRowEl && _origPricesMap && typeof _origPricesMap === 'object') {
+                // Find the best (highest) discount % across all sizes
+                const _sizePriceMap = _fsOvForPid?.prices || {};
+                let _bestPct = 0;
+                Object.entries(_origPricesMap).forEach(([sz, origP]) => {
+                    const saleP = _sizePriceMap[sz] || _sizePriceMap[sz.toLowerCase()];
+                    if (saleP > 0 && origP > saleP) {
+                        const pct = Math.round((1 - saleP / origP) * 100);
+                        if (pct > _bestPct) _bestPct = pct;
+                    }
+                });
+                if (_bestPct > 0 && !_stockRowEl.querySelector('.ipp-sale-badge')) {
+                    const _saleBadge = document.createElement('span');
+                    _saleBadge.className = 'ipp-sale-badge';
+                    _saleBadge.style.cssText = 'display:inline-flex;align-items:center;gap:5px;font-size:0.7rem;font-weight:800;color:#fff;background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:999px;padding:5px 12px;letter-spacing:0.04em;box-shadow:0 2px 8px rgba(21,128,61,0.32);text-transform:uppercase';
+                    _saleBadge.innerHTML = `<i class="fas fa-bolt" style="font-size:9px"></i> Sale · Up to ${_bestPct}% off`;
+                    _stockRowEl.appendChild(_saleBadge);
                 }
             }
         }
@@ -6216,16 +6261,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const stickyAddToCartBtn = document.getElementById('stickyAddToCartBtn');
 
         const sizeButtons = Array.from(document.querySelectorAll('#sizeSelector .size-pill'));
+        const _adminOrigPrices = _fsOvForPid?.originalPrices || null;
         const sizeOptions = sizeButtons.map((btn) => {
             const sizeKey = String(btn.dataset.sizeKey || '').trim().toLowerCase();
             const matchedOption = productSizePriceOptions.find((entry) => entry.sizeKey === sizeKey);
+            const origPrice = _adminOrigPrices ? (_adminOrigPrices[sizeKey] || 0) : 0;
 
             return {
                 button: btn,
                 label: matchedOption?.label || btn.dataset.label || btn.textContent.trim(),
                 priceText: matchedOption?.priceText || '',
                 unitPrice: matchedOption?.unitPrice || 0,
-                isDecante: Boolean(matchedOption?.isDecante)
+                isDecante: Boolean(matchedOption?.isDecante),
+                originalPrice: origPrice
             };
         });
 
@@ -6309,6 +6357,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const sizeHasPrice = selectedSize && selectedSize.unitPrice > 0;
             const isDecante = Boolean(selectedSize?.isDecante);
             const deliveryFee = isDecante ? '35 MAD' : '35 MAD (VAT included)';
+
+            // Sale price: update old-price and discount badge dynamically per selected size
+            if (selectedSize && selectedSize.originalPrice > selectedSize.unitPrice && selectedSize.unitPrice > 0) {
+                const pct = Math.round((1 - selectedSize.unitPrice / selectedSize.originalPrice) * 100);
+                if (oldPriceEl) {
+                    oldPriceEl.innerHTML = `${selectedSize.originalPrice}<span style="font-size:0.65em;font-weight:600;margin-left:2px">DH</span>`;
+                    oldPriceEl.style.display = '';
+                }
+                if (discountEl) {
+                    discountEl.innerHTML = `<i class="fas fa-bolt" style="font-size:8px;margin-right:2px"></i>-${pct}%`;
+                    discountEl.style.display = '';
+                }
+            } else if (selectedSize) {
+                // No sale for this size — clear any previously shown values (but restore URL-param ones for non-admin products)
+                if (oldPriceEl && _adminOrigPrices !== null) { oldPriceEl.innerHTML = ''; oldPriceEl.style.display = 'none'; }
+                if (discountEl && _adminOrigPrices !== null) { discountEl.innerHTML = ''; discountEl.style.display = 'none'; }
+            }
 
             // Update the selected-size top-right label inside the price card
             if (priceSelectedSizeEl) {
