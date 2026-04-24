@@ -4272,7 +4272,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const today = new Date().toISOString().slice(0, 10);
 
                 const article = document.createElement('article');
-                article.className = 'bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 min-w-[280px] max-w-[280px] snap-start shrink-0 js-product-link flex flex-col overflow-hidden';
+                article.className = 'ipo-card snap-start shrink-0 js-product-link cursor-pointer';
                 article.dataset.productName    = p.name || '';
                 article.dataset.id             = slug;
                 article.dataset.productBrand   = p.brand || '';
@@ -4285,19 +4285,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 article.dataset.firestoreProduct = 'true';
                 article.dataset.noFakeReviews  = 'true';
                 article.innerHTML = `
-                    <div class="relative bg-white w-full flex items-center justify-center" style="background:#fff;padding:8px 4px;min-height:190px;height:190px;">
-                        <span style="position:absolute;top:9px;left:9px;z-index:20;background:${_badgeBg};color:#fff;font-size:7px;font-weight:800;letter-spacing:0.2em;padding:3px 8px;border-radius:999px;line-height:1.5;">${_badgeText}</span>
-                        <button type="button" class="product-favorite-btn absolute top-2 right-2 w-[28px] h-[28px] bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-900 hover:border-gray-900 transition-colors z-10 shadow-sm" aria-label="Add to wishlist"><i class="far fa-heart text-[12px]"></i></button>
-                        <img src="${p.image || ''}" alt="${p.name || ''}" style="height:170px;max-height:170px;width:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,0.11));" loading="lazy">
+                    <div class="ipo-card__image-wrap"><span class="ipo-card-badge">${_badgeText}</span><button type="button" class="product-favorite-btn absolute top-2 right-2 w-[28px] h-[28px] bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-900 hover:border-gray-900 transition-colors z-10 shadow-sm" aria-label="Add to wishlist"><i class="far fa-heart text-[12px]"></i></button>
+                        <img src="${p.image || ''}" alt="${p.name || ''}" class="ipo-card-img" loading="lazy">
                     </div>
-                    <div class="p-5 flex flex-col flex-grow bg-white z-10 relative">
+                    <div class="ipo-card__body">
                         <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-2 leading-none">${p.brand || ''}</p>
-                        <h4 class="text-[15px] font-bold text-gray-900 leading-[1.3] min-h-[40px] mb-4">${p.name || ''}</h4>
-                        <div class="flex items-center gap-2 mt-auto mb-5 catalog-size-badges">
+                        <h4 class="text-[15px] font-bold text-gray-900 leading-[1.3] mb-2">${p.name || ''}</h4>
+                        <div class="flex items-center gap-2 mb-2 catalog-size-badges">
                             ${visibleSizes.map((sz, i) => i === 0
-                                ? `<span class="card-size-badge text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">${sz.toUpperCase()}</span>`
-                                : `<span class="card-size-badge text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">${sz.toUpperCase()}</span>`
-                            ).join('')}${hiddenCount > 0 ? `<span class="card-size-badge text-[10px] font-bold border border-dashed border-gray-300 text-gray-400 px-2 py-1 rounded">+${hiddenCount}</span>` : ''}
+                                ? `<span class="ipo-size-badge ipo-size-badge--active">${sz.toUpperCase()}</span>`
+                                : `<span class="ipo-size-badge">${sz.toUpperCase()}</span>`
+                            ).join('')}${hiddenCount > 0 ? `<span class="ipo-size-badge">+${hiddenCount}</span>` : ''}
                         </div>
                         <div>
                             <button type="button" class="js-card-add-btn w-full bg-[#111827] text-white text-[11px] font-extrabold py-3.5 rounded-xl hover:bg-black transition-colors uppercase tracking-[0.1em]" data-i18n="index.add_to_cart" data-i18n-orig="ADD TO CART">${_addToCartLabel}</button>
