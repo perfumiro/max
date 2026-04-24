@@ -463,66 +463,87 @@ document.addEventListener('DOMContentLoaded', () => {
         const languageButtons = document.querySelectorAll('.header-lang-btn');
         if (!languageButtons.length) return;
 
-        const allLangMenus = [];
+        // Create ONE shared fixed menu appended to <body> — escapes all stacking contexts
+        let sharedMenu = document.getElementById('ipo-lang-menu-fixed');
+        if (!sharedMenu) {
+            sharedMenu = document.createElement('div');
+            sharedMenu.id = 'ipo-lang-menu-fixed';
+            sharedMenu.className = 'header-lang-menu';
+            sharedMenu.innerHTML = `
+                <button type="button" class="header-lang-option" data-lang="en">English (EN)</button>
+                <button type="button" class="header-lang-option" data-lang="fr">Français (FR)</button>
+            `;
+            document.body.appendChild(sharedMenu);
+        }
 
-        const closeAllLangMenus = () => {
-            allLangMenus.forEach((menu) => menu.classList.remove('is-open'));
+        let activeButton = null;
+
+        const positionMenu = (btn) => {
+            const rect = btn.getBoundingClientRect();
+            sharedMenu.style.top  = (rect.bottom + 8) + 'px';
+            sharedMenu.style.left = Math.max(4, rect.right - sharedMenu.offsetWidth) + 'px';
         };
+
+        const syncLangMenuUI = () => {
+            sharedMenu.querySelectorAll('.header-lang-option').forEach((option) => {
+                option.classList.toggle('is-active', option.dataset.lang === currentLanguage);
+            });
+        };
+
+        const closeMenu = () => {
+            sharedMenu.classList.remove('is-open');
+            activeButton = null;
+        };
+
+        syncLangMenuUI();
+        onLanguageChange(syncLangMenuUI);
 
         languageButtons.forEach((button) => {
             if (button.dataset.langBound === 'true') return;
             button.dataset.langBound = 'true';
 
+            // Keep wrap class so outside-click detection still works
             const wrap = button.parentElement;
-            if (!wrap) return;
-            wrap.classList.add('header-lang-wrap');
-
-            const menu = document.createElement('div');
-            menu.className = 'header-lang-menu';
-            menu.innerHTML = `
-                <button type="button" class="header-lang-option" data-lang="en">English (EN)</button>
-                <button type="button" class="header-lang-option" data-lang="fr">Français (FR)</button>
-            `;
-
-            wrap.appendChild(menu);
-            allLangMenus.push(menu);
-
-            const syncLangMenuUI = () => {
-                menu.querySelectorAll('.header-lang-option').forEach((option) => {
-                    option.classList.toggle('is-active', option.dataset.lang === currentLanguage);
-                });
-            };
-
-            syncLangMenuUI();
-            onLanguageChange(syncLangMenuUI);
+            if (wrap) wrap.classList.add('header-lang-wrap');
 
             button.addEventListener('click', (event) => {
                 event.preventDefault();
                 event.stopPropagation();
-                const shouldOpen = !menu.classList.contains('is-open');
-                closeAllLangMenus();
-                menu.classList.toggle('is-open', shouldOpen);
-            });
-
-            menu.addEventListener('click', (event) => {
-                event.stopPropagation();
-                const langOption = event.target.closest('.header-lang-option');
-                if (!langOption) return;
-                setLanguage(langOption.dataset.lang);
-                closeAllLangMenus();
+                if (sharedMenu.classList.contains('is-open') && activeButton === button) {
+                    closeMenu();
+                } else {
+                    activeButton = button;
+                    positionMenu(button);
+                    sharedMenu.classList.add('is-open');
+                    syncLangMenuUI();
+                }
             });
         });
 
+        sharedMenu.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const langOption = event.target.closest('.header-lang-option');
+            if (!langOption) return;
+            setLanguage(langOption.dataset.lang);
+            closeMenu();
+        });
+
         document.addEventListener('click', (event) => {
-            if (!event.target.closest('.header-lang-wrap')) {
-                closeAllLangMenus();
+            if (!event.target.closest('.header-lang-wrap') && !event.target.closest('#ipo-lang-menu-fixed')) {
+                closeMenu();
             }
         });
 
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                closeAllLangMenus();
-            }
+            if (event.key === 'Escape') closeMenu();
+        });
+
+        window.addEventListener('scroll', () => {
+            if (activeButton) positionMenu(activeButton);
+        }, { passive: true });
+
+        window.addEventListener('resize', () => {
+            if (activeButton) positionMenu(activeButton);
         });
 
         applyStaticLanguage();
@@ -582,9 +603,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             </a>
 
                             <div class="flex items-center gap-2 md:gap-3 text-lg">
-                                <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
-                                    <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
-                                </button>
+                                <div class="header-lang-wrap">
+                                    <button class="header-lang-btn hover:text-brand-red transition flex items-center text-xs md:text-sm font-semibold">
+                                        <span class="mr-1">EN</span> <i class="fas fa-chevron-down text-[10px]"></i>
+                                    </button>
+                                </div>
                                 <button class="header-icon-btn header-search-btn md:hidden hover:text-brand-red transition" aria-label="Search">
                                     <i class="fas fa-search"></i>
                                 </button>
