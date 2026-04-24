@@ -4233,9 +4233,50 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button type="button" style="width:100%;background:#111827;color:#fff;font-size:11px;font-weight:800;padding:12px 0;border-radius:10px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:0.1em;" class="js-firestore-add-btn">ADD TO CART</button>
                     </div>`;
                 carousel.prepend(article);
+
+                // ── Also inject into Discover page grid ───────────────────
+                const discoverGrid = document.querySelector('[data-discover-grid]');
+                if (discoverGrid && !discoverGrid.querySelector(`[data-id="${CSS.escape(slug)}"][data-firestore-product="true"]`)) {
+                    const discoverFilters = Array.isArray(p.filters) ? p.filters.join(',') : 'new-in';
+                    const discoverSizeHtml = sizeKeys.slice(0, 3).map((sz, i) =>
+                        `<span class="text-[10px] font-${i === 0 ? 'bold bg-gray-900 text-white' : 'medium border border-gray-200 bg-gray-50 text-gray-600'} px-2 py-1 rounded">${sz.toUpperCase()}</span>`
+                    ).join('');
+                    const discoverBadgeHtml = `<span class="absolute top-3 left-3 shadow-sm text-[9px] uppercase font-bold px-2 py-0.5 rounded-full tracking-wide" style="background:${_badgeBg};color:#fff">${_badgeText}</span>`;
+                    const discoverArt = document.createElement('article');
+                    discoverArt.className = 'group js-product-link bg-white rounded-2xl shadow border border-gray-100/50 hover:shadow-2xl hover:-translate-y-1 overflow-hidden flex flex-col h-full transition-all duration-300';
+                    discoverArt.dataset.filters       = discoverFilters;
+                    discoverArt.dataset.added         = today;
+                    discoverArt.dataset.productName   = p.name || '';
+                    discoverArt.dataset.id            = slug;
+                    discoverArt.dataset.productBrand  = p.brand || '';
+                    discoverArt.dataset.productPrice  = priceText;
+                    discoverArt.dataset.productOldPrice = '';
+                    discoverArt.dataset.productDiscount = '';
+                    discoverArt.dataset.productReviews  = '0';
+                    discoverArt.dataset.productImage  = p.image || '';
+                    discoverArt.dataset.firestoreProduct = 'true';
+                    discoverArt.dataset.pinnedFirst   = '1';
+                    discoverArt.dataset.noFakeReviews = 'true';
+                    discoverArt.innerHTML = `
+                        <div class="relative bg-[#f8f6f3] flex items-center justify-center aspect-square p-5">
+                            ${discoverBadgeHtml}
+                            <button class="absolute top-2.5 right-3 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow text-gray-400 hover:text-brand-red hover:shadow-md transition product-favorite-btn" type="button" aria-label="Add to wishlist"><i class="far fa-heart text-sm"></i></button>
+                            <img src="${p.image || ''}" alt="${p.name || ''}" class="max-h-full object-contain group-hover:scale-105 transition duration-500" loading="lazy">
+                        </div>
+                        <div class="flex flex-col flex-grow p-4">
+                            <p class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1 line-clamp-1">${p.brand || ''}</p>
+                            <h3 class="product-title text-[13px] font-bold text-gray-800 leading-[1.3] mb-2 flex-grow line-clamp-2">${p.name || ''}</h3>
+                            <div class="flex items-center flex-wrap gap-1.5 mb-3">${discoverSizeHtml}</div>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-bold py-2 rounded-lg hover:bg-brand-redHover shadow-md active:scale-95 transition mt-auto">Add to Cart</button>
+                        </div>`;
+                    discoverGrid.prepend(discoverArt);
+                }
             });
 
             _firestoreProductsInjected = true;
+            // Bind click-to-navigate on newly injected carousel cards + re-sync favourite hearts
+            bindProductLinks();
+            window.__ipordise_sync_fav_ui?.();
         } catch (_) { /* non-blocking */ }
     };
 
