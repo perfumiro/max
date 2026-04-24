@@ -3738,6 +3738,35 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
                                     _firestoreProductOverridesCache[slug].longDescription = p.description;
                                 }
+                                // Cache accords (array of strings from admin)
+                                if (Array.isArray(p.accords) && p.accords.length) {
+                                    if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
+                                    _firestoreProductOverridesCache[slug].mainAccords = p.accords;
+                                }
+                                // Cache notes (top/heart/base) — convert to the array format used by the renderer
+                                if (p.notes && typeof p.notes === 'object' && (p.notes.top || p.notes.heart || p.notes.base)) {
+                                    if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
+                                    const _notesArr = [];
+                                    if (p.notes.top)   _notesArr.push({ text: p.notes.top });
+                                    if (p.notes.heart) _notesArr.push({ text: p.notes.heart });
+                                    if (p.notes.base)  _notesArr.push({ text: p.notes.base });
+                                    _firestoreProductOverridesCache[slug].notes = _notesArr;
+                                }
+                                // Cache ingredients (INCI string)
+                                if (p.ingredients && typeof p.ingredients === 'string' && p.ingredients.trim()) {
+                                    if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
+                                    _firestoreProductOverridesCache[slug].ingredients = p.ingredients.trim();
+                                }
+                                // Cache stockLeft (how many units remain)
+                                if (typeof p.stockLeft === 'number' && p.stockLeft >= 0) {
+                                    if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
+                                    _firestoreProductOverridesCache[slug].stockLeft = p.stockLeft;
+                                }
+                                // Cache admin-set badge text
+                                if (p.badge && typeof p.badge === 'string' && p.badge.trim()) {
+                                    if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
+                                    _firestoreProductOverridesCache[slug].badge = p.badge.trim();
+                                }
                             });
                         } catch (_) { /* non-blocking */ }
                     } catch (_) { /* non-blocking — storefront still works from prices.json */ }
@@ -4140,12 +4169,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Price line — one entry per size
                 const priceText = sizeKeys.map(sz => `${sz.toUpperCase()} ${fmtMad(sizes[sz])}`).join(' · ');
 
-                // 7-day NEW → LIMITED badge logic
+                // 7-day NEW → LIMITED badge logic (overridden by admin badge if set)
                 const addedAt = p.addedAt?.toDate ? p.addedAt.toDate() : new Date(p.addedAt || 0);
                 const isNew7Days = (Date.now() - addedAt.getTime()) < 7 * 24 * 60 * 60 * 1000;
-                const statusBadgeHtml = isNew7Days
-                    ? `<span style="position:absolute;top:9px;left:9px;z-index:20;background:#111;color:#fff;font-size:7px;font-weight:800;letter-spacing:0.2em;padding:3px 8px;border-radius:999px;line-height:1.5;">NEW</span>`
-                    : `<span style="position:absolute;top:9px;left:9px;z-index:20;background:#b8860b;color:#fff;font-size:7px;font-weight:800;letter-spacing:0.2em;padding:3px 8px;border-radius:999px;line-height:1.5;">LIMITED</span>`;
+                const _badgeText = p.badge ? p.badge.toUpperCase() : (isNew7Days ? 'NEW' : 'LIMITED');
+                const _badgeBg   = (() => {
+                    const b = _badgeText;
+                    if (b === 'NEW')       return '#111';
+                    if (b === 'LIMITED')   return '#b8860b';
+                    if (b === 'BESTSELLER') return '#1d4ed8';
+                    if (b === 'HOT')       return '#dc2626';
+                    if (b === 'SALE')      return '#15803d';
+                    if (b === 'EXCLUSIVE') return '#7e22ce';
+                    return '#111';
+                })();
+                const statusBadgeHtml = `<span style="position:absolute;top:9px;left:9px;z-index:20;background:${_badgeBg};color:#fff;font-size:10px;font-weight:800;letter-spacing:0.15em;padding:4px 10px;border-radius:999px;line-height:1.5;">${_badgeText}</span>`;
+
+                // Stock indicator — show whenever admin has set stockLeft
+                const _stockLeft = typeof p.stockLeft === 'number' ? p.stockLeft : null;
+                const _stockHtml = _stockLeft === null ? ''
+                    : _stockLeft === 0
+                        ? `<span style="display:inline-block;margin-bottom:8px;font-size:10px;font-weight:700;color:#6b7280;background:rgba(107,114,128,0.08);border:1px solid rgba(107,114,128,0.2);border-radius:6px;padding:3px 9px;"><i class="fas fa-ban" style="margin-right:4px;font-size:9px"></i>Out of stock</span>`
+                    : _stockLeft <= 5
+                        ? `<span style="display:inline-block;margin-bottom:8px;font-size:10px;font-weight:700;color:#dc2626;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);border-radius:6px;padding:3px 9px;"><i class="fas fa-fire" style="margin-right:4px;font-size:9px"></i>Only ${_stockLeft} left!</span>`
+                    : _stockLeft <= 15
+                        ? `<span style="display:inline-block;margin-bottom:8px;font-size:10px;font-weight:700;color:#b8860b;background:rgba(184,134,11,0.08);border:1px solid rgba(184,134,11,0.2);border-radius:6px;padding:3px 9px;"><i class="fas fa-exclamation-circle" style="margin-right:4px;font-size:9px"></i>${_stockLeft} left in stock</span>`
+                        : `<span style="display:inline-block;margin-bottom:8px;font-size:10px;font-weight:700;color:#059669;background:rgba(5,150,105,0.07);border:1px solid rgba(5,150,105,0.2);border-radius:6px;padding:3px 9px;"><i class="fas fa-check" style="margin-right:4px;font-size:9px"></i>${_stockLeft} in stock</span>`;
 
                 const today = new Date().toISOString().slice(0, 10);
 
@@ -4169,7 +4218,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;color:#9ca3af;margin-bottom:4px;line-height:1;display:block;">${p.brand || ''}</span>
                         <h4 style="font-size:14px;font-weight:700;color:#111827;line-height:1.35;margin-bottom:6px;min-height:38px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.name || ''}</h4>
                         <div class="ipo-fs-price">${priceText}</div>
-                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">${sizeBadgesHtml}</div>
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">${sizeBadgesHtml}</div>
+                        ${_stockHtml}
                         <button type="button" style="width:100%;background:#111827;color:#fff;font-size:11px;font-weight:800;padding:12px 0;border-radius:10px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:0.1em;" class="js-firestore-add-btn">ADD TO CART</button>
                     </div>`;
                 carousel.prepend(article);
@@ -5915,7 +5965,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 || `${productName} by ${resolvedBrand}: an elegant choice crafted for a modern signature and long-lasting trail.`;
         }
 
-        renderMainAccords(productName, productOverride, subtitle?.textContent || '');
+        // For admin products: merge _fsOvForPid extra data into override so accords/notes/ingredients work
+        const _fsAccordsOverride = productOverride
+            ? (productOverride.mainAccords ? productOverride : Object.assign({}, productOverride, { mainAccords: _fsOvForPid?.mainAccords }))
+            : (_fsOvForPid?.mainAccords ? { mainAccords: _fsOvForPid.mainAccords } : null);
+        renderMainAccords(productName, _fsAccordsOverride, subtitle?.textContent || '');
 
         const currentGender = getProductGenderKey(productName, productOverride, subtitle?.textContent || '');
         renderRelatedProducts(productName, resolvedBrand, currentGender);
@@ -5931,7 +5985,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const activeNotes = (currentLanguage === 'fr' && Array.isArray(productOverride?.fr?.notes))
             ? productOverride.fr.notes
-            : productOverride?.notes;
+            : productOverride?.notes || _fsOvForPid?.notes;
+        // Hide Notes tab for admin products with no notes data
+        if (_isCloudinaryAdminImg && !activeNotes) {
+            const notesTabBtn = document.querySelector('[data-tab="notes"]');
+            if (notesTabBtn) notesTabBtn.style.display = 'none';
+        }
         if (Array.isArray(activeNotes)) {
             const noteCards = document.querySelectorAll('#tab-notes .note-card');
             activeNotes.forEach((note, index) => {
@@ -5948,7 +6007,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const ingredientsPanel = document.getElementById('tab-ingredients');
         if (ingredientsPanel) {
             const inciKey = canonicalProductName(productName);
-            const inciRaw = PRODUCT_INCI[inciKey] || productOverride?.ingredients || null;
+            const inciRaw = PRODUCT_INCI[inciKey] || productOverride?.ingredients || _fsOvForPid?.ingredients || null;
+            // Hide Ingredients tab for admin products with no ingredients data
+            if (_isCloudinaryAdminImg && !inciRaw) {
+                const ingTabBtn = document.querySelector('[data-tab="ingredients"]');
+                if (ingTabBtn) ingTabBtn.style.display = 'none';
+            }
             if (inciRaw) {
                 const terms = inciRaw.replace(/\.\s*$/, '').split(/,\s*/);
                 let allergenCount = 0;
@@ -5968,6 +6032,56 @@ document.addEventListener('DOMContentLoaded', () => {
                         <hr class="inci-divider">
                         <p class="inci-legal">Ingredients listed in descending order of concentration per EU Cosmetics Regulation 1223/2009. Allergens highlighted per EU 2023/1545.</p>
                     </div>`;
+            }
+        }
+
+        // ── Stock warning & admin badge banner on product detail page ────────
+        const _fsStockLeft = _fsOvForPid?.stockLeft;
+        const _fsBadge     = _fsOvForPid?.badge;
+        if (_isCloudinaryAdminImg) {
+            // ── Inject admin badge into the brand-row badge span ─────────────
+            const _badgeEl = document.getElementById('productBadge');
+            if (_badgeEl) {
+                if (_fsBadge) {
+                    const _bc = (() => {
+                        const b = _fsBadge.toUpperCase();
+                        if (b === 'NEW')        return { bg: '#111827', color: '#fff' };
+                        if (b === 'LIMITED')    return { bg: '#b8860b', color: '#fff' };
+                        if (b === 'BESTSELLER') return { bg: '#1d4ed8', color: '#fff' };
+                        if (b === 'HOT')        return { bg: '#dc2626', color: '#fff' };
+                        if (b === 'SALE')       return { bg: '#15803d', color: '#fff' };
+                        if (b === 'EXCLUSIVE')  return { bg: '#7e22ce', color: '#fff' };
+                        return { bg: '#111827', color: '#fff' };
+                    })();
+                    _badgeEl.textContent = _fsBadge.toUpperCase();
+                    _badgeEl.style.background = _bc.bg;
+                    _badgeEl.style.color = _bc.color;
+                    _badgeEl.style.display = '';
+                } else {
+                    _badgeEl.style.display = 'none';
+                }
+            }
+
+            // ── Stock info bar near the size selector ────────────────────────
+            const _sizeSelEl = document.getElementById('sizeSelector');
+            if (_sizeSelEl && !document.getElementById('fsProdInfoBar')) {
+                const _stockParts = [];
+                if (typeof _fsStockLeft === 'number' && _fsStockLeft === 0) {
+                    _stockParts.push(`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#6b7280;background:rgba(107,114,128,0.08);border:1px solid rgba(107,114,128,0.2);border-radius:8px;padding:5px 12px;"><i class="fas fa-ban"></i> Out of stock</span>`);
+                } else if (typeof _fsStockLeft === 'number' && _fsStockLeft <= 5) {
+                    _stockParts.push(`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#dc2626;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);border-radius:8px;padding:5px 12px;"><i class="fas fa-fire"></i> Only ${_fsStockLeft} left!</span>`);
+                } else if (typeof _fsStockLeft === 'number' && _fsStockLeft <= 15) {
+                    _stockParts.push(`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#b8860b;background:rgba(184,134,11,0.08);border:1px solid rgba(184,134,11,0.2);border-radius:8px;padding:5px 12px;"><i class="fas fa-exclamation-circle"></i> ${_fsStockLeft} left in stock</span>`);
+                } else if (typeof _fsStockLeft === 'number' && _fsStockLeft > 15) {
+                    _stockParts.push(`<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#059669;background:rgba(5,150,105,0.07);border:1px solid rgba(5,150,105,0.2);border-radius:8px;padding:5px 12px;"><i class="fas fa-check"></i> ${_fsStockLeft} in stock</span>`);
+                }
+                if (_stockParts.length) {
+                    const _infoBar = document.createElement('div');
+                    _infoBar.id = 'fsProdInfoBar';
+                    _infoBar.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px';
+                    _infoBar.innerHTML = _stockParts.join('');
+                    _sizeSelEl.parentNode.insertBefore(_infoBar, _sizeSelEl);
+                }
             }
         }
 
