@@ -4303,8 +4303,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>`;
                 window._ipordiseFsCarouselCards.unshift(article); // keep cache in same prepend order
                 carousel.prepend(article);
-
-                // ── Also inject into Discover page grid ───────────────────
+                // Re-run mobile fix so the newly injected card gets the same inline styles
+                requestAnimationFrame(() => { if (window._fixNewArrivalCards) window._fixNewArrivalCards(); });
                 const discoverGrid = document.querySelector('[data-discover-grid]');
                 if (discoverGrid && !discoverGrid.querySelector(`[data-id="${CSS.escape(slug)}"][data-firestore-product="true"]`)) {
                     const discoverFilters = Array.isArray(p.filters) ? p.filters.join(',') : 'new-in';
@@ -9010,7 +9010,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── New Arrivals mobile card fix ─────────────────────────────────────
     // CSS cannot reliably override Tailwind's inline-generated bg-[#111827]
     // and pt-12 classes.  Inline styles set here always win.
-    const fixNewArrivalCards = () => {
+    const fixNewArrivalCards = window._fixNewArrivalCards = () => {
         if (window.innerWidth >= 768) return;
         document.querySelectorAll('#newArrivalsCarousel > article').forEach((card) => {
             // Image wrapper — kill pt-12 (48px) and force pure white
