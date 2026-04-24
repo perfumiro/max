@@ -18205,6 +18205,19 @@ select {
    Shared layout, header, hero, and product-card fixes
    ============================================================= */
 
+/* ── Admin-uploaded Firestore product price — always visible ── */
+.ipo-fs-price {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #b8860b !important;
+    margin-bottom: 10px !important;
+    line-height: 1.4 !important;
+    background: none !important;
+}
+
 /* ── New-Arrivals dynamically-injected heart button ── */
 #newArrivalsCarousel > article > button.product-favorite-btn {
     position: absolute;

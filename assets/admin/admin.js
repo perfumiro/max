@@ -2480,6 +2480,29 @@ const loadProductsView = async () => {
         pendingRemovals[slug]?.delete(sz);
         if (!overrides[slug]) overrides[slug] = {};
         if (!overrides[slug].prices) overrides[slug].prices = {};
+        // Merge all currently visible sizes into override prices first so that
+        // existing base sizes (from prices.json) are not dropped when Firestore
+        // switches to "prices are authoritative" mode after this first override.
+        const currentSizes = effectiveSizes(slug);
+        Object.entries(currentSizes).forEach(([k, v]) => {
+          if (!overrides[slug].prices[k]) overrides[slug].prices[k] = v;
+        });
+        // Also restore any base sizes (from prices.json) that ended up in
+        // removedSizes due to the previous bug — unless the user explicitly
+        // removed them in this session via pendingRemovals.
+        const baseForSlug = pricesRes[slug] || {};
+        Object.entries(baseForSlug).forEach(([k, v]) => {
+          const nk = normSizeKey(k);
+          if (!overrides[slug].prices[nk] && !(pendingRemovals[slug]?.has(nk))) {
+            overrides[slug].prices[nk] = v;
+          }
+        });
+        // Also clear those base sizes out of removedSizes (in memory only)
+        if (Array.isArray(overrides[slug].removedSizes)) {
+          overrides[slug].removedSizes = overrides[slug].removedSizes.filter(
+            s => pendingRemovals[slug]?.has(s)
+          );
+        }
         overrides[slug].prices[sz] = price;
         dirty.add(slug);
         if (nameInput)  nameInput.value  = '';
@@ -2624,18 +2647,118 @@ const _apToSlug = (name) => String(name).trim().toLowerCase()
   .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
+// Upload a single File to Cloudinary; calls progressCb(0–100)
+const _apUploadToCloudinary = (file, progressCb) => new Promise((resolve, reject) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`);
+  if (progressCb) {
+    xhr.upload.addEventListener('progress', (ev) => {
+      if (ev.lengthComputable) progressCb(Math.round((ev.loaded / ev.total) * 100));
+    });
+  }
+  xhr.addEventListener('load', () => {
+    let parsed; try { parsed = JSON.parse(xhr.responseText); } catch(_) { parsed = {}; }
+    if (xhr.status >= 200 && xhr.status < 300 && parsed.secure_url) resolve(parsed.secure_url);
+    else reject(new Error(parsed.error?.message || 'Upload failed: ' + xhr.status));
+  });
+  xhr.addEventListener('error', () => reject(new Error('Network error during upload.')));
+  xhr.send(formData);
+});
+
+// Thumbnail image gallery widget — items: { type:'url'|'file', src, file? }
+// First item = MAIN (gold border). Returns controller object.
+const _apCreateImageGallery = (wrapEl) => {
+  let items = [];
+
+  const render = () => {
+    wrapEl.innerHTML = '';
+    items.forEach((item, i) => {
+      const isMain = (i === 0);
+      const size = isMain ? 116 : 76;
+      const radius = isMain ? 12 : 10;
+      const thumb = document.createElement('div');
+      thumb.style.cssText = `position:relative;width:${size}px;height:${size}px;flex-shrink:0`;
+      const imgSrc = item.type === 'url' ? esc(item.src) : item.src;
+      thumb.innerHTML = `
+        <img src="${imgSrc}" alt="" style="width:${size}px;height:${size}px;object-fit:contain;border-radius:${radius}px;border:${isMain ? '2px solid var(--gold)' : '1px solid var(--border)'};background:var(--s3);display:block">
+        ${isMain ? '<span style="position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:8px;font-weight:800;color:#fff;background:var(--gold);border-radius:0 0 10px 10px;padding:3px 0;letter-spacing:0.06em">MAIN</span>' : ''}
+        ${item.type === 'file' ? '<span style="position:absolute;top:4px;left:4px;font-size:7px;font-weight:800;color:#fff;background:rgba(0,0,0,0.55);padding:1px 4px;border-radius:3px;line-height:1.4">NEW</span>' : ''}
+        <button type="button" title="Remove" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1">×</button>`;
+      thumb.querySelector('button').addEventListener('click', () => {
+        if (item.type === 'file') URL.revokeObjectURL(item.src);
+        items.splice(i, 1);
+        render();
+      });
+      wrapEl.appendChild(thumb);
+    });
+
+    const addLabel = document.createElement('label');
+    addLabel.style.cssText = 'width:76px;height:76px;flex-shrink:0;border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);gap:4px;background:var(--s3);box-sizing:border-box;align-self:center';
+    addLabel.innerHTML = `
+      <i class="fas fa-plus" style="font-size:1rem"></i>
+      <span style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em">${items.length === 0 ? 'Add Image' : 'Add More'}</span>
+      <input type="file" accept="image/jpeg,image/png,image/webp,image/jpg" multiple style="display:none">`;
+    addLabel.querySelector('input').addEventListener('change', (e) => {
+      Array.from(e.target.files).forEach(file => {
+        if (file.size > 5 * 1024 * 1024) { toast('Image must be smaller than 5MB.', 'error'); return; }
+        items.push({ type: 'file', src: URL.createObjectURL(file), file });
+      });
+      e.target.value = '';
+      render();
+    });
+    wrapEl.appendChild(addLabel);
+  };
+
+  render();
+
+  return {
+    hasImages: () => items.length > 0,
+    reset: () => {
+      items.forEach(it => { if (it.type === 'file') URL.revokeObjectURL(it.src); });
+      items = [];
+      render();
+    },
+    setUrls: (urls) => {
+      items.forEach(it => { if (it.type === 'file') URL.revokeObjectURL(it.src); });
+      items = urls.filter(Boolean).map(src => ({ type: 'url', src }));
+      render();
+    },
+    getFinalUrls: async (labelEl, barEl) => {
+      const urls = [];
+      const fileItems = items.filter(it => it.type === 'file');
+      let done = 0;
+      for (const item of items) {
+        if (item.type === 'url') {
+          urls.push(item.src);
+        } else {
+          if (labelEl) labelEl.textContent = `Uploading image ${done + 1} of ${fileItems.length}\u2026`;
+          if (barEl) barEl.style.width = Math.round(10 + (done / Math.max(fileItems.length, 1)) * 75) + '%';
+          const url = await _apUploadToCloudinary(item.file);
+          urls.push(url);
+          done++;
+        }
+      }
+      return urls;
+    },
+  };
+};
+
 const _apAddSizeRow = (container, sizeVal = '', priceVal = '') => {
   const row = document.createElement('div');
   row.className = 'prod-size-row';
-  row.style.cssText = 'display:flex;gap:8px;align-items:center';
+  row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr auto auto;gap:8px;align-items:center';
   row.innerHTML = `
     <input type="text" placeholder="Size (e.g. 50ml)" class="prod-size-key" value="${esc(sizeVal)}"
-      style="flex:1;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box">
-    <input type="number" placeholder="Price (MAD)" class="prod-size-price" min="0" value="${esc(priceVal)}"
-      style="flex:1;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box">
+      style="background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:0.84rem;color:var(--text);outline:none;box-sizing:border-box">
+    <input type="number" placeholder="Price" class="prod-size-price" min="0" value="${esc(priceVal)}"
+      style="background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:0.84rem;color:var(--text);outline:none;box-sizing:border-box">
+    <span style="font-size:0.78rem;font-weight:600;color:var(--muted);white-space:nowrap">MAD</span>
     <button type="button" class="prod-remove-size-row"
-      style="background:none;border:none;color:var(--muted);cursor:pointer;padding:6px;border-radius:6px;flex-shrink:0" title="Remove size">
-      <i class="fas fa-xmark"></i>
+      style="width:34px;height:34px;border-radius:8px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:var(--rose);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0" title="Remove size">
+      <i class="fas fa-trash-can" style="font-size:11px"></i>
     </button>`;
   row.querySelector('.prod-remove-size-row').addEventListener('click', () => row.remove());
   container.appendChild(row);
@@ -2657,19 +2780,11 @@ const initAddProductModal = () => {
       </div>
       <form id="addProductForm" style="padding:16px;display:flex;flex-direction:column;gap:14px">
         <div>
-          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Product Image <span style="color:var(--rose)">*</span></label>
-          <div id="addProductImageDrop" style="border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:border-color 0.2s;position:relative;background:var(--s3)">
-            <input type="file" id="addProductImageInput" accept="image/jpeg,image/png,image/webp,image/jpg" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
-            <div id="addProductImagePreviewWrap" style="display:none">
-              <img id="addProductImagePreview" style="max-height:130px;max-width:100%;object-fit:contain;border-radius:8px;margin:0 auto;display:block">
-              <div style="font-size:0.7rem;color:var(--muted);margin-top:6px" id="addProductImageName"></div>
-            </div>
-            <div id="addProductImagePlaceholder">
-              <i class="fas fa-cloud-arrow-up" style="font-size:1.8rem;color:var(--muted)"></i>
-              <div style="font-size:0.8rem;color:var(--text);margin-top:8px;font-weight:500">Click to upload image</div>
-              <div style="font-size:0.7rem;color:var(--muted);margin-top:2px">JPG, PNG, WebP · max 5MB</div>
-            </div>
-          </div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:8px">
+            Product Images <span style="color:var(--rose)">*</span>
+            <span style="font-weight:400;font-size:0.7rem"> — first image is the main photo</span>
+          </label>
+          <div id="addProductImagesGallery" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;padding:2px 0"></div>
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Product Name <span style="color:var(--rose)">*</span></label>
@@ -2682,13 +2797,37 @@ const initAddProductModal = () => {
             style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
         </div>
         <div>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Description <span style="font-weight:400;font-size:0.7rem;color:var(--muted)">— shown on product page</span></label>
+          <textarea id="addProductDescription" rows="4" placeholder="e.g. A bold and seductive fragrance that opens with bergamot and cloves..."
+            style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit;line-height:1.6"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div>
+            <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Gender <span style="color:var(--rose)">*</span></label>
+            <select id="addProductGender" style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+              <option value="for-men">For Men</option>
+              <option value="for-women">For Women</option>
+              <option value="unisex">Unisex</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Category <span style="color:var(--rose)">*</span></label>
+            <select id="addProductCategory" style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+              <option value="designer">Designer</option>
+              <option value="niche">Niche</option>
+              <option value="arabian">Arabian</option>
+            </select>
+          </div>
+        </div>
+        <div>
           <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Sizes &amp; Prices (MAD) <span style="color:var(--rose)">*</span> <span style="font-weight:400;font-size:0.7rem">— at least one required</span></label>
-          <div id="addProductSizesContainer" style="display:flex;flex-direction:column;gap:8px"></div>
+          <div id="addProductSizesContainer" style="display:flex;flex-direction:column;gap:6px"></div>
           <button type="button" id="addProductAddSizeBtn"
             style="margin-top:8px;background:none;border:1px dashed var(--border);border-radius:8px;padding:8px 14px;font-size:0.75rem;color:var(--muted);cursor:pointer;width:100%;transition:border-color 0.2s">
             <i class="fas fa-plus"></i> Add Size
           </button>
         </div>
+
         <div id="addProductProgress" style="display:none">
           <div style="font-size:0.75rem;color:var(--muted);margin-bottom:6px" id="addProductProgressLabel">Uploading image...</div>
           <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
@@ -2709,22 +2848,11 @@ const initAddProductModal = () => {
   document.getElementById('closeAddProductModal').addEventListener('click', closeModal);
   document.getElementById('cancelAddProductBtn').addEventListener('click', closeModal);
 
-  // Image preview
-  const imageInput = document.getElementById('addProductImageInput');
-  imageInput.addEventListener('change', () => {
-    const file = imageInput.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      document.getElementById('addProductImagePreview').src = ev.target.result;
-      document.getElementById('addProductImageName').textContent = file.name;
-      document.getElementById('addProductImagePreviewWrap').style.display = 'block';
-      document.getElementById('addProductImagePlaceholder').style.display = 'none';
-    };
-    reader.readAsDataURL(file);
-  });
+  // Image gallery
+  const gallery = _apCreateImageGallery(document.getElementById('addProductImagesGallery'));
+  modal._gallery = gallery;
 
-  // Add size row button
+  // Size rows
   const sizesContainer = document.getElementById('addProductSizesContainer');
   document.getElementById('addProductAddSizeBtn').addEventListener('click', () => {
     _apAddSizeRow(sizesContainer);
@@ -2742,12 +2870,12 @@ const initAddProductModal = () => {
 
     const name      = (document.getElementById('addProductName').value || '').trim();
     const brand     = (document.getElementById('addProductBrand').value || '').trim();
-    const imageFile = imageInput.files[0];
-
-    if (!name)       { errEl.textContent = 'Product name is required.'; errEl.style.display = 'block'; return; }
-    if (!brand)      { errEl.textContent = 'Brand name is required.'; errEl.style.display = 'block'; return; }
-    if (!imageFile)  { errEl.textContent = 'Please upload a product image.'; errEl.style.display = 'block'; return; }
-    if (imageFile.size > 5 * 1024 * 1024) { errEl.textContent = 'Image must be smaller than 5MB.'; errEl.style.display = 'block'; return; }
+    const gender    = (document.getElementById('addProductGender').value || 'for-men').trim();
+    const category  = (document.getElementById('addProductCategory').value || 'designer').trim();
+    const description = (document.getElementById('addProductDescription').value || '').trim();
+    if (!name)                { errEl.textContent = 'Product name is required.'; errEl.style.display = 'block'; return; }
+    if (!brand)               { errEl.textContent = 'Brand name is required.'; errEl.style.display = 'block'; return; }
+    if (!gallery.hasImages()) { errEl.textContent = 'Please add at least one product image.'; errEl.style.display = 'block'; return; }
 
     const sizes = {};
     let sizeError = false;
@@ -2779,46 +2907,20 @@ const initAddProductModal = () => {
     saveBtn.disabled = true;
     saveBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
     progressEl.style.display = 'block';
-    progressLabel.textContent = 'Uploading image...';
-    progressBar.style.width = '10%';
+    progressBar.style.width = '5%';
 
     try {
-      // ── Upload to Cloudinary via unsigned preset ──────────────────────
-      const formData = new FormData();
-      formData.append('file', imageFile);
-      formData.append('upload_preset', CLOUDINARY_PRESET);
-
-      const xhr = new XMLHttpRequest();
-      const cloudUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`;
-      xhr.open('POST', cloudUrl);
-
-      const cloudResult = await new Promise((resolve, reject) => {
-        xhr.upload.addEventListener('progress', (ev) => {
-          if (ev.lengthComputable) {
-            progressBar.style.width = Math.round(10 + (ev.loaded / ev.total) * 70) + '%';
-          }
-        });
-        xhr.addEventListener('load', () => {
-          let parsed;
-          try { parsed = JSON.parse(xhr.responseText); } catch(_) { parsed = {}; }
-          if (xhr.status >= 200 && xhr.status < 300) {
-            resolve(parsed);
-          } else {
-            reject(new Error(parsed.error?.message || 'Upload failed: ' + xhr.status));
-          }
-        });
-        xhr.addEventListener('error', () => reject(new Error('Network error during upload.')));
-        xhr.send(formData);
-      });
-
-      const downloadURL = cloudResult.secure_url;
-      if (!downloadURL) throw new Error('Cloudinary did not return an image URL. Check your preset name.');
+      const allImages = await gallery.getFinalUrls(progressLabel, progressBar);
+      if (!allImages.length) throw new Error('No image URLs returned. Check your Cloudinary preset.');
+      const downloadURL = allImages[0];
 
       progressLabel.textContent = 'Saving product data...';
-      progressBar.style.width = '90%';
+      progressBar.style.width = '92%';
       await setDoc(doc(db, 'products', slug), {
         name, brand: brand.toUpperCase(), slug,
-        image: downloadURL, sizes, active: true,
+        image: downloadURL, images: allImages, sizes, active: true,
+        filters: ['new-in', gender, category],
+        ...(description ? { description } : {}),
         addedAt: serverTimestamp(), source: 'admin',
       });
       progressBar.style.width = '100%';
@@ -2841,18 +2943,453 @@ const initAddProductModal = () => {
 const openAddProductModal = () => {
   initAddProductModal();
   document.getElementById('addProductForm').reset();
-  document.getElementById('addProductImagePreviewWrap').style.display = 'none';
-  document.getElementById('addProductImagePlaceholder').style.display = 'block';
   document.getElementById('addProductError').style.display = 'none';
   document.getElementById('addProductProgress').style.display = 'none';
   document.getElementById('addProductProgressBar').style.width = '0%';
   document.getElementById('saveAddProductBtn').disabled = false;
   document.getElementById('saveAddProductBtn').innerHTML = '<i class="fas fa-floppy-disk"></i> Save Product';
+  const modal = document.getElementById('addProductModal');
+  if (modal._gallery) modal._gallery.reset();
   const sizesContainer = document.getElementById('addProductSizesContainer');
   sizesContainer.innerHTML = '';
   _apAddSizeRow(sizesContainer, '50ml', '');
   _apAddSizeRow(sizesContainer, '100ml', '');
-  document.getElementById('addProductModal').style.display = 'block';
+  modal.style.display = 'block';
+};
+
+const initEditProductModal = () => {
+  // Always destroy and recreate so HTML/JS changes take effect without hard reload
+  const old = document.getElementById('editProductModal');
+  if (old) old.remove();
+  const modal = document.createElement('div');
+  modal.id = 'editProductModal';
+  modal.style.cssText = 'display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.72);overflow-y:auto;padding:16px;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)';
+  modal.innerHTML = `
+    <div style="max-width:780px;width:100%;margin:20px auto 40px;background:var(--s2);border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.5)">
+
+      <!-- Header -->
+      <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(200,169,106,0.12);border:1px solid rgba(200,169,106,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <i class="fas fa-pen" style="color:var(--gold);font-size:0.9rem"></i>
+          </div>
+          <div>
+            <div style="font-size:1.02rem;font-weight:700;color:var(--text)">Edit Product</div>
+            <div style="font-size:0.72rem;color:var(--muted);margin-top:1px">Update your product information and images</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button type="button" id="cancelEditProductBtn" class="btn btn-sm" style="display:flex;align-items:center;gap:6px">
+            <i class="fas fa-xmark"></i> Cancel
+          </button>
+          <button type="button" id="saveEditProductBtn" class="btn btn-sm btn-gold" style="display:flex;align-items:center;gap:6px">
+            <i class="fas fa-floppy-disk"></i> Save Changes
+          </button>
+        </div>
+      </div>
+
+      <!-- Form body -->
+      <form id="editProductForm" style="padding:28px;display:flex;flex-direction:column;gap:32px">
+        <input type="hidden" id="editProductSlug">
+
+        <!-- Section 1: Main Image -->
+        <div>
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0;margin-top:1px">1</div>
+            <div>
+              <div style="font-size:0.95rem;font-weight:700;color:var(--text)">Main Product Image</div>
+              <div style="font-size:0.72rem;color:var(--muted);margin-top:2px">This image will be displayed as the main product image on your store.</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div id="editMainImgBox" style="position:relative;border-radius:12px;border:1px solid var(--border);background:var(--s3);display:flex;align-items:center;justify-content:center;min-height:200px;overflow:hidden">
+              <img id="editMainImgPreview" alt="" style="width:100%;height:200px;object-fit:contain;display:block">
+              <div id="editMainImgEmpty" style="display:none;text-align:center;padding:30px 20px">
+                <i class="fas fa-image" style="font-size:2.4rem;color:var(--muted)"></i>
+                <div style="font-size:0.75rem;color:var(--muted);margin-top:8px">No main image selected</div>
+              </div>
+              <button type="button" id="editMainImgRemoveBtn" title="Remove image"
+                style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,0.25)">×</button>
+            </div>
+            <label id="editMainImgDrop" style="border:2px dashed var(--border);border-radius:12px;padding:24px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:8px;min-height:200px;background:var(--s3);text-align:center;box-sizing:border-box;transition:border-color 0.2s">
+              <input type="file" id="editMainImgInput" accept="image/jpeg,image/png,image/webp,image/jpg" style="display:none">
+              <i class="fas fa-cloud-arrow-up" style="font-size:2rem;color:var(--gold)"></i>
+              <span style="font-size:0.9rem;font-weight:700;color:var(--gold)">Change Image</span>
+              <span style="font-size:0.75rem;color:var(--muted)">Click to upload or drag and drop</span>
+              <span style="font-size:0.7rem;color:var(--dim);background:var(--s4);padding:3px 12px;border-radius:20px">JPG, PNG, WebP (Max 5MB)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Section 2: Gallery Images -->
+        <div>
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0;margin-top:1px">2</div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+                <div>
+                  <span style="font-size:0.95rem;font-weight:700;color:var(--text)">Gallery Images</span>
+                  <span style="font-size:0.82rem;color:var(--muted);margin-left:6px">(Optional)</span>
+                </div>
+                <span id="editGalleryCount" style="font-size:0.72rem;font-weight:600;color:var(--muted);background:var(--s4);padding:3px 12px;border-radius:20px">0 / 10 images</span>
+              </div>
+              <div style="font-size:0.72rem;color:var(--muted);margin-top:2px">Add multiple images to showcase your product from different angles.</div>
+            </div>
+          </div>
+          <div id="editGalleryRow" style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start"></div>
+        </div>
+
+        <!-- Section 3: Product Information -->
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">3</div>
+            <div style="font-size:0.95rem;font-weight:700;color:var(--text)">Product Information</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Product Name <span style="color:var(--rose)">*</span></label>
+              <input type="text" id="editProductName" placeholder="e.g. Dior Sauvage Elixir"
+                style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+            </div>
+            <div>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Gender</label>
+              <select id="editProductGender" style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+                <option value="for-men">For Men</option>
+                <option value="for-women">For Women</option>
+                <option value="unisex">Unisex</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Brand <span style="color:var(--rose)">*</span></label>
+              <input type="text" id="editProductBrand" placeholder="e.g. DIOR"
+                style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+            </div>
+            <div style="grid-column:1/-1">
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Description <span style="font-weight:400;font-size:0.7rem">— shown on product page</span></label>
+              <textarea id="editProductDescription" rows="4" placeholder="e.g. A bold and seductive fragrance that opens with bergamot and cloves..."
+                style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit;line-height:1.6"></textarea>
+            </div>
+            <div>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Category</label>
+              <select id="editProductCategory" style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
+                <option value="designer">Designer</option>
+                <option value="niche">Niche</option>
+                <option value="arabian">Arabian</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Sizes & Prices -->
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">4</div>
+            <div style="font-size:0.95rem;font-weight:700;color:var(--text)">
+              Sizes &amp; Prices <span style="font-weight:400;color:var(--muted);font-size:0.82rem">(MAD)</span>
+              <span style="color:var(--rose)"> *</span>
+            </div>
+          </div>
+          <div id="editProductSizesContainer" style="display:flex;flex-direction:column;gap:8px"></div>
+          <button type="button" id="editProductAddSizeBtn"
+            style="margin-top:10px;background:none;border:1px dashed var(--border);border-radius:8px;padding:9px 14px;font-size:0.78rem;color:var(--muted);cursor:pointer;width:100%;transition:border-color 0.2s;display:flex;align-items:center;justify-content:center;gap:6px">
+            <i class="fas fa-plus"></i> Add Size
+          </button>
+        </div>
+
+        <!-- Progress & Error -->
+        <div id="editProductProgress" style="display:none">
+          <div style="font-size:0.75rem;color:var(--muted);margin-bottom:6px" id="editProductProgressLabel">Uploading...</div>
+          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+            <div id="editProductProgressBar" style="height:100%;width:0%;background:var(--gold);transition:width 0.25s;border-radius:3px"></div>
+          </div>
+        </div>
+        <div id="editProductError" style="display:none;color:var(--rose);font-size:0.78rem;padding:8px 12px;background:rgba(239,68,68,0.08);border-radius:6px;border:1px solid rgba(239,68,68,0.2)"></div>
+      </form>
+    </div>`;
+  document.body.appendChild(modal);
+
+  const closeModal = () => { modal.style.display = 'none'; };
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.getElementById('cancelEditProductBtn').addEventListener('click', closeModal);
+
+  // ── Main image state ──────────────────────────────────────────────────────
+  let _mainState = null; // { type:'url'|'file', src, file? }
+
+  const _renderMain = () => {
+    const imgEl     = document.getElementById('editMainImgPreview');
+    const emptyEl   = document.getElementById('editMainImgEmpty');
+    const removeBtn = document.getElementById('editMainImgRemoveBtn');
+    if (_mainState) {
+      imgEl.src = _mainState.type === 'url' ? esc(_mainState.src) : _mainState.src;
+      imgEl.style.display   = 'block';
+      emptyEl.style.display = 'none';
+      removeBtn.style.display = 'flex';
+    } else {
+      imgEl.src = '';
+      imgEl.style.display   = 'none';
+      emptyEl.style.display = 'block';
+      removeBtn.style.display = 'none';
+    }
+  };
+
+  document.getElementById('editMainImgRemoveBtn').addEventListener('click', () => {
+    if (_mainState?.type === 'file') URL.revokeObjectURL(_mainState.src);
+    _mainState = null;
+    _renderMain();
+  });
+
+  document.getElementById('editMainImgInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast('Image must be smaller than 5MB.', 'error'); return; }
+    if (_mainState?.type === 'file') URL.revokeObjectURL(_mainState.src);
+    _mainState = { type: 'file', src: URL.createObjectURL(file), file };
+    _renderMain();
+    e.target.value = '';
+  });
+
+  // ── Gallery state ─────────────────────────────────────────────────────────
+  let _galleryItems = [];
+
+  const _renderGallery = () => {
+    const rowEl   = document.getElementById('editGalleryRow');
+    const countEl = document.getElementById('editGalleryCount');
+    rowEl.innerHTML = '';
+
+    // "Add Image" button (always first)
+    const addLabel = document.createElement('label');
+    addLabel.style.cssText = 'width:112px;height:112px;flex-shrink:0;border:2px dashed var(--border);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:5px;background:var(--s3);box-sizing:border-box';
+    addLabel.innerHTML = `
+      <i class="fas fa-plus" style="font-size:1.2rem;color:var(--gold)"></i>
+      <span style="font-size:0.72rem;font-weight:700;color:var(--gold)">Add Image</span>
+      <span style="font-size:0.65rem;color:var(--muted)">JPG, PNG, WebP</span>
+      <input type="file" accept="image/jpeg,image/png,image/webp,image/jpg" multiple style="display:none">`;
+    addLabel.querySelector('input').addEventListener('change', (e) => {
+      Array.from(e.target.files).forEach(file => {
+        if (file.size > 5 * 1024 * 1024) { toast('Image must be smaller than 5MB.', 'error'); return; }
+        if (_galleryItems.length >= 10)   { toast('Maximum 10 gallery images.', 'error'); return; }
+        _galleryItems.push({ type: 'file', src: URL.createObjectURL(file), file });
+      });
+      e.target.value = '';
+      _renderGallery();
+    });
+    rowEl.appendChild(addLabel);
+
+    _galleryItems.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.style.cssText = 'position:relative;width:112px;height:112px;flex-shrink:0';
+      const src = item.type === 'url' ? esc(item.src) : item.src;
+      div.innerHTML = `
+        <img src="${src}" alt="" style="width:112px;height:112px;object-fit:cover;border-radius:12px;border:1px solid var(--border);background:var(--s3);display:block">
+        <button type="button" title="Remove" style="position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,0.2)">×</button>`;
+      div.querySelector('button').addEventListener('click', () => {
+        if (item.type === 'file') URL.revokeObjectURL(item.src);
+        _galleryItems.splice(i, 1);
+        _renderGallery();
+      });
+      rowEl.appendChild(div);
+    });
+
+    if (countEl) countEl.textContent = `${_galleryItems.length} / 10 images`;
+  };
+
+  // Expose state setters for openEditProductModal
+  modal._setMainState = (state) => {
+    if (_mainState?.type === 'file') URL.revokeObjectURL(_mainState.src);
+    _mainState = state;
+    _renderMain();
+  };
+  modal._setGalleryItems = (items) => {
+    _galleryItems.forEach(it => { if (it.type === 'file') URL.revokeObjectURL(it.src); });
+    _galleryItems = [...items];
+    _renderGallery();
+  };
+
+  // Add size row button
+  document.getElementById('editProductAddSizeBtn').addEventListener('click', () => {
+    _apAddSizeRow(document.getElementById('editProductSizesContainer'));
+  });
+
+  // Save button triggers form submit
+  document.getElementById('saveEditProductBtn').addEventListener('click', () => {
+    document.getElementById('editProductForm').requestSubmit
+      ? document.getElementById('editProductForm').requestSubmit()
+      : document.getElementById('editProductForm').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+  });
+
+  // Form submit handler
+  document.getElementById('editProductForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errEl         = document.getElementById('editProductError');
+    const progressEl    = document.getElementById('editProductProgress');
+    const progressBar   = document.getElementById('editProductProgressBar');
+    const progressLabel = document.getElementById('editProductProgressLabel');
+    const saveBtn       = document.getElementById('saveEditProductBtn');
+    errEl.style.display = 'none';
+
+    const originalSlug = document.getElementById('editProductSlug').value;
+    const name         = (document.getElementById('editProductName').value || '').trim();
+    const brand        = (document.getElementById('editProductBrand').value || '').trim();
+    const gender       = document.getElementById('editProductGender').value || 'for-men';
+    const category     = document.getElementById('editProductCategory').value || 'designer';
+
+    if (!name)         { errEl.textContent = 'Product name is required.'; errEl.style.display = 'block'; return; }
+    if (!brand)        { errEl.textContent = 'Brand name is required.';   errEl.style.display = 'block'; return; }
+    if (!_mainState)   { errEl.textContent = 'A main product image is required.'; errEl.style.display = 'block'; return; }
+
+    const description = (document.getElementById('editProductDescription').value || '').trim();
+
+    const sizes = {};
+    let sizeError = false;
+    document.querySelectorAll('#editProductSizesContainer .prod-size-row').forEach(row => {
+      const sizeKey   = (row.querySelector('.prod-size-key').value || '').trim().toLowerCase();
+      const sizePrice = parseFloat(row.querySelector('.prod-size-price').value);
+      if (sizeKey && sizePrice > 0) { sizes[sizeKey] = sizePrice; }
+      else if (sizeKey || (row.querySelector('.prod-size-price').value || '').trim()) { sizeError = true; }
+    });
+    if (Object.keys(sizes).length === 0) {
+      errEl.textContent = 'Add at least one size with a valid price.'; errEl.style.display = 'block'; return;
+    }
+    if (sizeError) {
+      errEl.textContent = 'Some size rows are incomplete — fill in both size name and price, or remove them.';
+      errEl.style.display = 'block'; return;
+    }
+
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
+    progressEl.style.display = 'block';
+    progressBar.style.width = '5%';
+
+    try {
+      // Upload main image if it's a new file
+      let mainUrl = _mainState.type === 'url' ? _mainState.src : '';
+      if (_mainState.type === 'file') {
+        progressLabel.textContent = 'Uploading main image...';
+        mainUrl = await _apUploadToCloudinary(_mainState.file);
+        progressBar.style.width = '35%';
+      }
+
+      // Upload gallery images
+      const galleryUrls = [];
+      const galleryFiles = _galleryItems.filter(it => it.type === 'file');
+      let done = 0;
+      for (const item of _galleryItems) {
+        if (item.type === 'url') {
+          galleryUrls.push(item.src);
+        } else {
+          progressLabel.textContent = `Uploading gallery image ${++done} of ${galleryFiles.length}…`;
+          progressBar.style.width = Math.round(35 + (done / Math.max(galleryFiles.length, 1)) * 50) + '%';
+          galleryUrls.push(await _apUploadToCloudinary(item.file));
+        }
+      }
+
+      const allImages = [mainUrl, ...galleryUrls];
+      progressLabel.textContent = 'Saving changes...';
+      progressBar.style.width = '90%';
+
+      const newSlug = _apToSlug(name);
+      const payload = {
+        name, brand: brand.toUpperCase(), slug: newSlug,
+        image: mainUrl, images: allImages, sizes, active: true,
+        filters: ['new-in', gender, category],
+        ...(description ? { description } : {}),
+      };
+
+      if (newSlug !== originalSlug) {
+        const existing = await getDoc(doc(db, 'products', newSlug));
+        if (existing.exists()) throw new Error(`A product named "${name}" already exists. Use a different name.`);
+        const origSnap = await getDoc(doc(db, 'products', originalSlug));
+        if (origSnap.exists()) {
+          payload.addedAt = origSnap.data().addedAt || serverTimestamp();
+          payload.source  = origSnap.data().source  || 'admin';
+        } else {
+          payload.addedAt = serverTimestamp();
+          payload.source  = 'admin';
+        }
+        await setDoc(doc(db, 'products', newSlug), payload);
+        await deleteDoc(doc(db, 'products', originalSlug));
+        // Remove any stale productOverrides entries — admin products are managed
+        // exclusively via products.sizes, never via productOverrides.
+        try { await deleteDoc(doc(db, 'productOverrides', newSlug)); } catch (_) {}
+        try { await deleteDoc(doc(db, 'productOverrides', originalSlug)); } catch (_) {}
+      } else {
+        // Fetch preserved fields (addedAt, source) so the full overwrite retains them
+        const origSnap2 = await getDoc(doc(db, 'products', originalSlug));
+        if (origSnap2.exists()) {
+          payload.addedAt = origSnap2.data().addedAt || serverTimestamp();
+          payload.source  = origSnap2.data().source  || 'admin';
+        } else {
+          payload.addedAt = serverTimestamp();
+          payload.source  = 'admin';
+        }
+        // Full overwrite (no merge) so removed sizes are actually deleted
+        await setDoc(doc(db, 'products', originalSlug), payload);
+        // Remove any stale productOverrides entry for the same reason.
+        try { await deleteDoc(doc(db, 'productOverrides', originalSlug)); } catch (_) {}
+      }
+
+      progressBar.style.width = '100%';
+      progressLabel.textContent = 'Saved!';
+      setTimeout(() => {
+        closeModal();
+        toast(`"${name}" updated successfully.`, 'success', 4000);
+        loadFirestoreProductsSection();
+      }, 500);
+    } catch (err) {
+      progressEl.style.display = 'none';
+      errEl.textContent = 'Failed: ' + err.message;
+      errEl.style.display = 'block';
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = '<i class="fas fa-floppy-disk"></i> Save Changes';
+    }
+  });
+};
+
+const openEditProductModal = (slug, data) => {
+  initEditProductModal();
+  const modal = document.getElementById('editProductModal');
+
+  // Reset UI
+  document.getElementById('editProductError').style.display    = 'none';
+  document.getElementById('editProductProgress').style.display = 'none';
+  document.getElementById('editProductProgressBar').style.width = '0%';
+  document.getElementById('saveEditProductBtn').disabled = false;
+  document.getElementById('saveEditProductBtn').innerHTML = '<i class="fas fa-floppy-disk"></i> Save Changes';
+
+  // Main image
+  const mainUrl = (Array.isArray(data.images) && data.images[0]) ? data.images[0] : (data.image || '');
+  modal._setMainState(mainUrl ? { type: 'url', src: mainUrl } : null);
+
+  // Gallery (images[1+])
+  const galleryUrls = Array.isArray(data.images) ? data.images.slice(1).filter(Boolean) : [];
+  modal._setGalleryItems(galleryUrls.map(src => ({ type: 'url', src })));
+
+  // Form fields
+  document.getElementById('editProductSlug').value = slug;
+  document.getElementById('editProductName').value  = data.name  || '';
+  document.getElementById('editProductBrand').value = (data.brand || '').replace(/^(.+)$/, m => m.toUpperCase() === m ? m.slice(0,1).toUpperCase() + m.slice(1).toLowerCase() : m);
+
+  const filters  = Array.isArray(data.filters) ? data.filters : [];
+  const gender   = filters.find(f => ['for-men','for-women','unisex'].includes(f)) || 'for-men';
+  const category = filters.find(f => ['designer','niche','arabian'].includes(f))  || 'designer';
+  document.getElementById('editProductGender').value   = gender;
+  document.getElementById('editProductCategory').value = category;
+
+  // Description
+  document.getElementById('editProductDescription').value = data.description || '';
+
+  // Sizes
+  const sizesContainer = document.getElementById('editProductSizesContainer');
+  sizesContainer.innerHTML = '';
+  const sizesObj    = data.sizes && typeof data.sizes === 'object' ? data.sizes : {};
+  const sizeEntries = Object.entries(sizesObj);
+  if (sizeEntries.length) {
+    sizeEntries.forEach(([sz, price]) => _apAddSizeRow(sizesContainer, sz, price));
+  } else {
+    _apAddSizeRow(sizesContainer, '50ml', '');
+  }
+
+  modal.style.display = 'block';
 };
 
 const loadFirestoreProductsSection = async () => {
@@ -2882,6 +3419,10 @@ const loadFirestoreProductsSection = async () => {
             <div style="display:flex;gap:6px;flex-wrap:wrap">${sizesHtml}</div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+            <button class="btn btn-xs fsprod-edit" data-slug="${esc(p.slug||d.id)}"
+              style="font-size:11px;background:rgba(200,169,106,0.12);color:var(--gold);border-color:rgba(200,169,106,0.35)">
+              <i class="fas fa-pen"></i> Edit
+            </button>
             <button class="btn btn-xs fsprod-toggle" data-slug="${esc(p.slug||d.id)}" data-active="${p.active!==false}"
               style="font-size:11px">${p.active===false?'Enable':'Disable'}</button>
             <button class="btn btn-xs fsprod-delete" data-slug="${esc(p.slug||d.id)}"
@@ -2902,10 +3443,21 @@ const loadFirestoreProductsSection = async () => {
       </div>
       <div style="height:1px;background:var(--border);margin:16px 0"></div>`;
 
-    // Wire toggle + delete
+    // Wire toggle + delete + edit
     section.addEventListener('click', async (e) => {
+      const editBtn   = e.target.closest('.fsprod-edit');
       const toggleBtn = e.target.closest('.fsprod-toggle');
       const deleteBtn = e.target.closest('.fsprod-delete');
+
+      if (editBtn) {
+        const slug = editBtn.dataset.slug;
+        try {
+          const snap = await getDoc(doc(db, 'products', slug));
+          if (!snap.exists()) { toast('Product not found.', 'error'); return; }
+          openEditProductModal(slug, snap.data());
+        } catch (err) { toast(err.message, 'error'); }
+        return;
+      }
 
       if (toggleBtn) {
         const slug = toggleBtn.dataset.slug;

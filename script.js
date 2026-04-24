@@ -3638,6 +3638,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // products that have a per-product whitelist in sizes.json.
     let _firestoreProductOverridesCache = {};
 
+    // Cache for extra images array saved on admin-uploaded products
+    let _firestoreProductImagesCache = {}; // slug → string[]
+
     // Normalize a size key so "10" → "10ml", "50 ml" → "50ml", "10ml" → "10ml"
     const _normSzKey = (sz) => {
         const s = String(sz || '').trim().toLowerCase().replace(/\s+/g, '');
@@ -3692,6 +3695,51 @@ document.addEventListener('DOMContentLoaded', () => {
                             // Delete only sizes with no positive price override
                             effectiveRemoved.forEach(sz => { delete pricesById[slug][sz]; });
                         });
+
+                        // Also merge admin-uploaded products (products collection) into pricesById
+                        // so their sizes show with correct prices on the product detail page
+                        try {
+                            const toSlugAdmin = (name) => String(name).trim().toLowerCase()
+                                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                                .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+                            const prodSnap = await gDocs(col(fsDb, 'products'));
+                            _firestoreProductImagesCache = {};
+                            prodSnap.forEach(docSnap => {
+                                const p = docSnap.data();
+                                if (p.active === false) return;
+                                const slug = p.slug || toSlugAdmin(p.name || docSnap.id);
+                                if (!slug) return;
+                                const sizes = p.sizes && typeof p.sizes === 'object' ? p.sizes : {};
+                                // Admin products from the `products` collection are the sole
+                                // source of truth. Completely replace pricesById[slug] so any
+                                // stale sizes injected by the productOverrides pass are gone.
+                                const _normAdminSizes = {};
+                                Object.entries(sizes).forEach(([sz, price]) => {
+                                    const normSz = _normSzKey(sz);
+                                    const numPrice = Number(price);
+                                    if (numPrice > 0) _normAdminSizes[normSz] = numPrice;
+                                });
+                                pricesById[slug] = { ..._normAdminSizes };
+                                // Always overwrite _firestoreProductOverridesCache so that
+                                // getConfiguredSizeKeys derives its list exclusively from the
+                                // current products.sizes (including the case where all sizes
+                                // have been removed, which must clear any stale cached prices).
+                                if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
+                                _firestoreProductOverridesCache[slug].prices = _normAdminSizes;
+                                _firestoreProductOverridesCache[slug].removedSizes = [];
+                                // Cache the images array for the gallery
+                                if (Array.isArray(p.images) && p.images.length) {
+                                    _firestoreProductImagesCache[slug] = p.images.filter(Boolean);
+                                } else if (p.image) {
+                                    _firestoreProductImagesCache[slug] = [p.image];
+                                }
+                                // Cache description so product page can display it
+                                if (p.description) {
+                                    if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
+                                    _firestoreProductOverridesCache[slug].longDescription = p.description;
+                                }
+                            });
+                        } catch (_) { /* non-blocking */ }
                     } catch (_) { /* non-blocking — storefront still works from prices.json */ }
                     return pricesById;
                 });
@@ -4006,14 +4054,26 @@ document.addEventListener('DOMContentLoaded', () => {
             .join('');
     };
 
-    const getResolvedProductImageGallery = (primaryImage, productOverride) => {
+    const getResolvedProductImageGallery = (primaryImage, productOverride, productId) => {
         const normalizedPrimaryImage = normalizeImagePathForCurrentPage(primaryImage || '');
         const overrideImages = Array.isArray(productOverride?.images)
             ? productOverride.images.map((src) => normalizeImagePathForCurrentPage(src)).filter(Boolean)
             : [];
-        const seenImages = new Set();
 
-        return [normalizedPrimaryImage, ...overrideImages].filter((src) => {
+        // Also pull extra images saved in the Firestore admin products collection
+        const lookupId = productId || productOverride?.id || productOverride?.slug || '';
+        const fsImages = lookupId && Array.isArray(_firestoreProductImagesCache[lookupId])
+            ? _firestoreProductImagesCache[lookupId].map((src) => normalizeImagePathForCurrentPage(src)).filter(Boolean)
+            : [];
+
+        const seenImages = new Set();
+        // If Firestore has images for this product (admin product), they are fully
+        // authoritative — do NOT include the URL-param image, which may be stale
+        // (e.g. the old main image after it has been replaced in the admin panel).
+        const orderedImages = fsImages.length > 0
+            ? [...fsImages, ...overrideImages]
+            : [normalizedPrimaryImage, ...overrideImages];
+        return orderedImages.filter((src) => {
             if (!src || seenImages.has(src)) return false;
             seenImages.add(src);
             return true;
@@ -4047,6 +4107,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const { collection: col, getDocs: gDocs, query: fsQuery, orderBy: fsOrderBy, where: fsWhere }
                 = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
             const snap = await gDocs(fsQuery(col(fsDb, 'products'), fsOrderBy('addedAt', 'desc')));
+            // Remove any previously injected Firestore cards so deleted products disappear immediately
+            carousel.querySelectorAll('[data-firestore-product="true"]').forEach(el => el.remove());
             if (snap.empty) return;
 
             const toSlugLocal = (name) => String(name).trim().toLowerCase()
@@ -4075,7 +4137,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     `<span class="card-size-badge text-[10px] font-extrabold px-4 py-1.5 rounded-full leading-none ${i === 0 ? 'bg-[#111827] text-white' : 'border border-gray-200 text-gray-500'}">${sz.toUpperCase()}</span>`
                 ).join('');
 
+                // Price line — one entry per size
                 const priceText = sizeKeys.map(sz => `${sz.toUpperCase()} ${fmtMad(sizes[sz])}`).join(' · ');
+
+                // 7-day NEW → LIMITED badge logic
+                const addedAt = p.addedAt?.toDate ? p.addedAt.toDate() : new Date(p.addedAt || 0);
+                const isNew7Days = (Date.now() - addedAt.getTime()) < 7 * 24 * 60 * 60 * 1000;
+                const statusBadgeHtml = isNew7Days
+                    ? `<span style="position:absolute;top:9px;left:9px;z-index:20;background:#111;color:#fff;font-size:7px;font-weight:800;letter-spacing:0.2em;padding:3px 8px;border-radius:999px;line-height:1.5;">NEW</span>`
+                    : `<span style="position:absolute;top:9px;left:9px;z-index:20;background:#b8860b;color:#fff;font-size:7px;font-weight:800;letter-spacing:0.2em;padding:3px 8px;border-radius:999px;line-height:1.5;">LIMITED</span>`;
+
                 const today = new Date().toISOString().slice(0, 10);
 
                 const article = document.createElement('article');
@@ -4087,19 +4158,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 article.dataset.productPrice   = priceText;
                 article.dataset.productImage   = p.image || '';
                 article.dataset.firestoreProduct = 'true';
+                article.dataset.noFakeReviews  = 'true';
                 article.innerHTML = `
                     <div class="relative bg-white w-full flex items-center justify-center" style="background:#fff;padding:8px 4px;min-height:190px;height:190px;">
-                        <span style="position:absolute;top:9px;left:9px;z-index:20;background:#111;color:#fff;font-size:7px;font-weight:800;letter-spacing:0.2em;padding:3px 8px;border-radius:999px;line-height:1.5;">NEW</span>
+                        ${statusBadgeHtml}
                         <button type="button" class="product-favorite-btn absolute top-2 right-2 w-[28px] h-[28px] bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-900 hover:border-gray-900 transition-colors z-10 shadow-sm" aria-label="Add to wishlist"><i class="far fa-heart text-[12px]"></i></button>
                         <img src="${p.image || ''}" alt="${p.name || ''}" style="height:170px;max-height:170px;width:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,0.11));" loading="lazy">
                     </div>
-                    <div class="p-5 flex flex-col flex-grow bg-white z-10 relative">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-2 leading-none">${p.brand || ''}</p>
-                        <h4 class="text-[15px] font-bold text-gray-900 leading-[1.3] min-h-[40px] mb-4">${p.name || ''}</h4>
-                        <div class="flex items-center gap-2 mt-auto mb-5 catalog-size-badges">${sizeBadgesHtml}</div>
-                        <div class="border-t border-gray-100 pt-3">
-                            <button type="button" class="js-firestore-add-btn w-full bg-[#111827] text-white text-[11px] font-extrabold py-3.5 rounded-xl hover:bg-black transition-colors uppercase tracking-[0.1em]">ADD TO CART</button>
-                        </div>
+                    <div style="padding:12px 14px 14px;display:flex;flex-direction:column;background:#fff;">
+                        <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;color:#9ca3af;margin-bottom:4px;line-height:1;display:block;">${p.brand || ''}</span>
+                        <h4 style="font-size:14px;font-weight:700;color:#111827;line-height:1.35;margin-bottom:6px;min-height:38px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.name || ''}</h4>
+                        <div class="ipo-fs-price">${priceText}</div>
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">${sizeBadgesHtml}</div>
+                        <button type="button" style="width:100%;background:#111827;color:#fff;font-size:11px;font-weight:800;padding:12px 0;border-radius:10px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:0.1em;" class="js-firestore-add-btn">ADD TO CART</button>
                     </div>`;
                 carousel.prepend(article);
             });
@@ -5640,7 +5711,8 @@ document.addEventListener('DOMContentLoaded', () => {
         /* ── Show the product image immediately, before prices load ── */
         const earlyImage = normalizeImagePathForCurrentPage(params.get('image') || '');
         const earlyOverride = productDetailOverrides[canonicalProductName(productName)] || null;
-        const earlyResolvedImages = getResolvedProductImageGallery(earlyImage, earlyOverride);
+        if (earlyOverride && !earlyOverride.slug) earlyOverride && (earlyOverride._slug = productId);
+        const earlyResolvedImages = getResolvedProductImageGallery(earlyImage, earlyOverride, productId);
         const earlyDefaultImage = earlyResolvedImages[0] || '';
         if (earlyDefaultImage) {
             const mainImageEl = document.getElementById('productMainImage');
@@ -5649,6 +5721,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Load sizes and prices in parallel
         const [pricesById] = await Promise.all([loadPricesJson(), loadSizesJson()]);
+
+        // Guard: if this is an admin-uploaded product (Cloudinary image) and it's no
+        // longer in Firestore (deleted/not found in cache), redirect away.
+        const _rawImage = params.get('image') || '';
+        const _isCloudinaryAdminImg = _rawImage.includes('res.cloudinary.com/dp5eszu4p');
+        const _normalizedPidEarly = String(productId || '').trim();
+        if (_isCloudinaryAdminImg
+            && !_firestoreProductImagesCache[_normalizedPidEarly]
+            && !productDetailOverrides[canonicalProductName(productName)]) {
+            // Product was deleted from admin panel — redirect to discover page
+            const _discoverPath = window.location.pathname.includes('/pages/')
+                ? '../discover.html' : 'discover.html';
+            window.location.replace(_discoverPath);
+            return;
+        }
+
         const productPrice = formatCatalogPrice(productId, pricesById) || params.get('price') || '/';
         const productOldPrice = params.get('oldPrice') || '';
         const productDiscount = params.get('discount') || '';
@@ -5740,41 +5828,48 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const resolvedBrand = productOverride?.brand || productBrand;
-        const honestReviews = getHonestReviewCount(productName, productReviews);
-        const honestRating = getHonestRatingValue(productName);
+        // Admin-uploaded products (Cloudinary) have no fake reviews — show only real ones
+        const honestReviews = _isCloudinaryAdminImg ? 0 : getHonestReviewCount(productName, productReviews);
+        const honestRating = _isCloudinaryAdminImg ? null : getHonestRatingValue(productName);
         setText('productName', productName);
         setText('productBrand', resolvedBrand);
         setText('productBrandBannerName', resolvedBrand);
         setText('productPrice', productPrice);
         setText('productOldPrice', productOldPrice || '');
         setText('productDiscount', productDiscount || '');
-        setText('productReviewsCount', `(${honestReviews} reviews)`);
+        // For admin products, skip fake review count — real reviews script handles this
+        if (!_isCloudinaryAdminImg) {
+            setText('productReviewsCount', `(${honestReviews} reviews)`);
+        }
         setText('productBreadcrumb', productName);
         setText('stickyName', productName);
         setText('stickyPrice', productPrice);
 
         const ratingSummaryValue = document.querySelector('.review-summary .text-5xl.font-bold.text-brand-dark');
-        if (ratingSummaryValue) {
+        if (ratingSummaryValue && !_isCloudinaryAdminImg) {
             ratingSummaryValue.textContent = honestRating;
         }
 
         const ratingSummaryCount = document.querySelector('.review-summary .text-sm.text-gray-500.mt-1');
-        if (ratingSummaryCount) {
+        if (ratingSummaryCount && !_isCloudinaryAdminImg) {
             ratingSummaryCount.textContent = `Based on ${honestReviews} verified reviews`;
         }
 
         const moreReviewsRatingValue = document.querySelector('.customer-rating-value');
-        if (moreReviewsRatingValue) {
+        if (moreReviewsRatingValue && !_isCloudinaryAdminImg) {
             moreReviewsRatingValue.textContent = Number.parseFloat(honestRating).toFixed(2);
         }
 
         const moreReviewsToolbar = document.querySelector('.customer-reviews-toolbar p');
-        if (moreReviewsToolbar) {
+        if (moreReviewsToolbar && !_isCloudinaryAdminImg) {
             moreReviewsToolbar.textContent = `5 star · ${honestReviews} reviews`;
         }
 
-        assignReviewerNames(productName, productOverride);
-        applyReviewVisibility(productName);
+        // Skip fake review content for admin-uploaded products
+        if (!_isCloudinaryAdminImg) {
+            assignReviewerNames(productName, productOverride);
+            applyReviewVisibility(productName);
+        }
 
         // Update fragrance profile bars dynamically
         const fp = productOverride?.fragranceProfile;
@@ -5828,6 +5923,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const longDescription = document.getElementById('productLongDescription');
         if (longDescription) {
             const _ldText = (currentLanguage === 'fr' ? productOverride?.fr?.longDescription : null)
+                || _fsOvForPid?.longDescription
                 || productOverride?.longDescription
                 || `${productName} balances freshness and depth for a sophisticated daily scent. The composition opens bright, evolves into a refined floral-spiced heart, then settles into a warm and memorable base that stays close and elegant on skin.`;
             longDescription.innerHTML = formatLongDesc(_ldText);
@@ -5919,7 +6015,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const mainImage = document.getElementById('productMainImage');
         const stickyImage = document.getElementById('stickyImage');
         const productThumbs = document.getElementById('productThumbs');
-        const resolvedGalleryImages = getResolvedProductImageGallery(productImage, productOverride);
+        const resolvedGalleryImages = getResolvedProductImageGallery(productImage, productOverride, productId);
 
         if (productThumbs && resolvedGalleryImages.length) {
             productThumbs.innerHTML = resolvedGalleryImages.map((src, index) => `
@@ -6437,6 +6533,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const longDescEl = document.getElementById('productLongDescription');
             if (longDescEl) {
                 const _ldText2 = (currentLanguage === 'fr' ? productOverride?.fr?.longDescription : null)
+                    || _fsOvForPid?.longDescription
                     || productOverride?.longDescription
                     || `${productName} balances freshness and depth for a sophisticated daily scent. The composition opens bright, evolves into a refined floral-spiced heart, then settles into a warm and memorable base that stays close and elegant on skin.`;
                 longDescEl.innerHTML = formatLongDesc(_ldText2);
@@ -7554,6 +7651,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 applyFilter();
             }
         });
+
+        // Pick up product cards injected after init (e.g. from Firestore async load)
+        const dynamicCardObserver = new MutationObserver((mutations) => {
+            let added = false;
+            mutations.forEach((m) => {
+                m.addedNodes.forEach((node) => {
+                    if (node.nodeType === 1 && node.classList && node.classList.contains('js-product-link') && !productCards.includes(node)) {
+                        productCards.push(node);
+                        addedIndexMap.set(node, productCards.length - 1);
+                        added = true;
+                    }
+                });
+            });
+            if (added) applyFilter();
+        });
+        dynamicCardObserver.observe(productsGrid, { childList: true });
     };
 
     const buildCartItemHtml = (item) => {
@@ -8682,6 +8795,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         detail: { favourites: window.__ipordise_favs.getFavourites() }
                     }));
                 }
+                // Re-check Firestore carousel: deleted/disabled products must disappear
+                // even when page is restored from bfcache.
+                _firestoreProductsInjected = false;
+                loadPricesJson().then(pb => injectFirestoreProductCards(pb)).catch(() => {});
             });
         }
     });
