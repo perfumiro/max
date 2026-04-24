@@ -1088,9 +1088,10 @@ body {
 /* Mobile: full-width pill button with red fill */
 @media (max-width: 767px) {
     .new-arrivals-cta {
-        background: #e73c3c;
+        background: #e73c3c !important;
+        background-color: #e73c3c !important;
         color: #ffffff !important;
-        border-color: #e73c3c;
+        border-color: #e73c3c !important;
         padding: 0.6rem 1.3rem;
         font-size: 0.74rem;
         font-weight: 700;
@@ -1099,8 +1100,9 @@ body {
         box-shadow: 0 4px 14px rgba(231, 60, 60, 0.32);
     }
     .new-arrivals-cta:hover {
-        background: #c0392b;
-        border-color: #c0392b;
+        background: #c0392b !important;
+        background-color: #c0392b !important;
+        border-color: #c0392b !important;
         box-shadow: 0 6px 20px rgba(231, 60, 60, 0.45);
     }
 }
