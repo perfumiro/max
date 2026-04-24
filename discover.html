@@ -68,7 +68,7 @@
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="script.js?v=9"></script>
+    <script src="script.js?v=19"></script>
     <script src="i18n.js"></script>
     <link rel="stylesheet" href="style.css">
 <!--Start of Tawk.to Script-->
@@ -1885,6 +1885,9 @@ s0.parentNode.insertBefore(s1,s0);
             const snap = await getDocs(query(collection(db, 'products'), orderBy('addedAt', 'desc')));
             if (snap.empty) return;
 
+            const _isFr = (localStorage.getItem('ipordise-language') || 'en') === 'fr';
+            const _addToCartLabel = _isFr ? 'Ajouter au panier' : 'Add to Cart';
+
             const toSlug = (name) => String(name).trim().toLowerCase()
                 .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
                 .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -1905,23 +1908,37 @@ s0.parentNode.insertBefore(s1,s0);
                 // Skip if already in grid (e.g. hardcoded)
                 if (grid.querySelector(`[data-id="${CSS.escape(slug)}"]`)) return;
 
+                const rawSizeKeys = Object.keys(p.sizes || {});
+                // Normalize: lowercase, filter < 50ml, sort numerically
+                const normSizes = {};
+                rawSizeKeys.forEach(k => {
+                    let nk = k.trim().toLowerCase().replace(/\s+/g, '');
+                    if (!nk.endsWith('ml')) nk = parseFloat(nk) + 'ml';
+                    const ml = parseFloat(nk);
+                    if (Number.isFinite(ml) && ml >= 50) normSizes[nk] = p.sizes[k];
+                });
+                const sizeKeys = Object.keys(
+                    Object.keys(normSizes).length > 0 ? normSizes : { '50ml': 0, '100ml': 0 }
+                ).sort((a, b) => parseFloat(a) - parseFloat(b));
+                const visibleSizes = sizeKeys.slice(0, 2);
+                const hiddenCount = sizeKeys.length - visibleSizes.length;
+                const sizeBadgesHtml = visibleSizes.map((sz, i) =>
+                    i === 0
+                        ? `<span class="text-[10px] font-bold bg-gray-900 text-white px-2 py-1 rounded">${sz.toUpperCase()}</span>`
+                        : `<span class="text-[10px] font-medium border border-gray-200 bg-gray-50 text-gray-600 px-2 py-1 rounded">${sz.toUpperCase()}</span>`
+                ).join('') + (hiddenCount > 0 ? `<span class="text-[10px] font-medium border border-dashed border-gray-300 text-gray-400 px-2 py-1 rounded">+${hiddenCount}</span>` : '');
+
                 // Expose prices so the size picker can read them
                 if (!window._ipordisePricesById) window._ipordisePricesById = {};
                 if (!window._ipordisePricesById[slug]) window._ipordisePricesById[slug] = {};
-                Object.entries(p.sizes || {}).forEach(([sz, price]) => {
+                sizeKeys.forEach(sz => {
+                    const price = normSizes[sz] ?? p.sizes[sz] ?? 0;
                     if (price > 0) window._ipordisePricesById[slug][sz] = price;
                 });
 
                 const filters = Array.isArray(p.filters) && p.filters.length
                     ? p.filters.join(',')
                     : 'new-in';
-
-                const sizeKeys = Object.keys(p.sizes || {}).sort();
-                const sizeBadgesHtml = sizeKeys.map((sz, i) =>
-                    i === 0
-                        ? `<span class="text-[10px] font-bold bg-gray-900 text-white px-2 py-1 rounded">${sz.toUpperCase()}</span>`
-                        : `<span class="text-[10px] font-medium border border-gray-200 bg-gray-50 text-gray-600 px-2 py-1 rounded">${sz.toUpperCase()}</span>`
-                ).join('');
 
                     const priceDisplay = fmtPrice(p.sizes);
 
@@ -1956,7 +1973,7 @@ s0.parentNode.insertBefore(s1,s0);
                             <p class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1 line-clamp-1">${p.brand || ''}</p>
                             <h3 class="product-title text-[13px] font-bold text-gray-800 leading-[1.3] mb-2 flex-grow line-clamp-2">${p.name || ''}</h3>
                             <div class="flex items-center gap-1.5 mb-3 flex-wrap">${sizeBadgesHtml}</div>
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-bold py-2 rounded-lg hover:bg-brand-redHover shadow-md active:scale-95 transition mt-auto">Add to Cart</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-bold py-2 rounded-lg hover:bg-brand-redHover shadow-md active:scale-95 transition mt-auto" data-i18n="index.add_to_cart" data-i18n-orig="Add to Cart">${_addToCartLabel}</button>
                         </div>`;
                     grid.appendChild(article);
                     injected++;
@@ -1965,8 +1982,18 @@ s0.parentNode.insertBefore(s1,s0);
             if (injected > 0) {
                 // Trigger the ratings refresh so new cards get star ratings
                 document.dispatchEvent(new CustomEvent('discover:filtered'));
-                // Rebind wishlist buttons on newly added cards
-                if (typeof window.__ipordise_sync_fav_ui === 'function') window.__ipordise_sync_fav_ui();
+                // Bind wishlist heart buttons on newly injected cards
+                const bindHearts = () => {
+                    if (typeof window.initWishlistButtons === 'function') {
+                        window.initWishlistButtons();
+                    }
+                    if (typeof window.__ipordise_sync_fav_ui === 'function') {
+                        window.__ipordise_sync_fav_ui();
+                    }
+                };
+                // Try immediately, then retry once script.js has fully initialised
+                bindHearts();
+                setTimeout(bindHearts, 600);
             }
         } catch (err) {
             console.warn('Could not load Firestore products:', err);

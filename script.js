@@ -4136,6 +4136,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Firestore product cards injected into New Arrivals ───────────────────
     let _firestoreProductsInjected = false;
+    // Cache injected carousel card nodes so limitNewArrivalsToLatest always finds them
+    // even if called before or during Firestore injection.
+    window._ipordiseFsCarouselCards = window._ipordiseFsCarouselCards || [];
 
     const injectFirestoreProductCards = async (pricesById) => {
         if (_firestoreProductsInjected) return;
@@ -4148,6 +4151,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const snap = await gDocs(fsQuery(col(fsDb, 'products'), fsOrderBy('addedAt', 'desc')));
             // Remove any previously injected Firestore cards so deleted products disappear immediately
             carousel.querySelectorAll('[data-firestore-product="true"]').forEach(el => el.remove());
+            window._ipordiseFsCarouselCards = []; // reset cache
             if (snap.empty) return;
 
             const toSlugLocal = (name) => String(name).trim().toLowerCase()
@@ -4156,11 +4160,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const fmtMad = (v) => `${Number(v).toLocaleString('fr-FR')} MAD`;
 
+            // Normalise Firestore product data before rendering:
+            // - lowercase size keys matching prices.json convention (50ml, 100ml)
+            // - drop tester/sample sizes under 50 ml (5ml, 10ml, 20ml, 30ml)
+            // - default to 50ml + 100ml if nothing valid remains
+            // - parse "Brand / Name" compound strings typed into the name field
+            const normalizeAdminProduct = (raw) => {
+                let name  = (raw.name  || raw.title || '').trim();
+                let brand = (raw.brand || '').trim().toUpperCase();
+                if (!brand && name.includes('/')) {
+                    const sep = name.indexOf('/');
+                    brand = name.slice(0, sep).trim().toUpperCase();
+                    name  = name.slice(sep + 1).trim();
+                }
+                const rawSizes = raw.sizes && typeof raw.sizes === 'object' ? raw.sizes : {};
+                const normSizes = {};
+                Object.entries(rawSizes).forEach(([key, price]) => {
+                    let k = key.trim().toLowerCase().replace(/\s+/g, '');
+                    if (!k.endsWith('ml')) k = parseFloat(k) + 'ml';
+                    const ml = parseFloat(k);
+                    if (Number.isFinite(ml) && ml >= 50) normSizes[k] = price;
+                });
+                const finalSizes = Object.keys(normSizes).length > 0
+                    ? normSizes
+                    : { '50ml': rawSizes['50ml'] || rawSizes['50ML'] || 0,
+                        '100ml': rawSizes['100ml'] || rawSizes['100ML'] || 0 };
+                return { ...raw, name, brand, sizes: finalSizes };
+            };
+
             snap.forEach(docSnap => {
-                const p = docSnap.data();
+                const p = normalizeAdminProduct(docSnap.data());
                 if (p.active === false) return;
                 const slug  = p.slug || toSlugLocal(p.name || docSnap.id);
-                const sizes = p.sizes && typeof p.sizes === 'object' ? p.sizes : {};
+                const sizes = p.sizes;
 
                 // Inject into pricesById so Add to Cart works
                 if (!pricesById[slug]) pricesById[slug] = {};
@@ -4171,7 +4203,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Skip if a card for this product already exists in the carousel
                 if (carousel.querySelector(`[data-id="${CSS.escape(slug)}"]`)) return;
 
-                const sizeKeys = Object.keys(sizes).sort();
+                // Sort sizes numerically (20ML < 50ML < 100ML) so smallest show first
+                const sizeKeys = Object.keys(sizes).sort((a, b) => parseFloat(a) - parseFloat(b));
                 // Show at most 2 sizes on the card; a +N badge reveals the rest on product page
                 const visibleSizes = sizeKeys.slice(0, 2);
                 const hiddenCount  = sizeKeys.length - visibleSizes.length;
@@ -4216,35 +4249,45 @@ document.addEventListener('DOMContentLoaded', () => {
                 const today = new Date().toISOString().slice(0, 10);
 
                 const article = document.createElement('article');
-                article.className = 'bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 min-w-[280px] max-w-[280px] snap-start shrink-0 js-firestore-product flex flex-col overflow-hidden';
-                article.dataset.added          = today;
+                article.className = 'bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 min-w-[280px] max-w-[280px] snap-start shrink-0 js-product-link flex flex-col overflow-hidden';
                 article.dataset.productName    = p.name || '';
                 article.dataset.id             = slug;
                 article.dataset.productBrand   = p.brand || '';
                 article.dataset.productPrice   = priceText;
+                article.dataset.productOldPrice  = '';
+                article.dataset.productDiscount  = '';
+                article.dataset.productReviews   = '0';
                 article.dataset.productImage   = p.image || '';
+                article.dataset.added          = today;
                 article.dataset.firestoreProduct = 'true';
                 article.dataset.noFakeReviews  = 'true';
                 article.innerHTML = `
                     <div class="relative bg-white w-full flex items-center justify-center" style="background:#fff;padding:8px 4px;min-height:190px;height:190px;">
-                        ${statusBadgeHtml}
+                        <span style="position:absolute;top:9px;left:9px;z-index:20;background:${_badgeBg};color:#fff;font-size:7px;font-weight:800;letter-spacing:0.2em;padding:3px 8px;border-radius:999px;line-height:1.5;">${_badgeText}</span>
                         <button type="button" class="product-favorite-btn absolute top-2 right-2 w-[28px] h-[28px] bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-900 hover:border-gray-900 transition-colors z-10 shadow-sm" aria-label="Add to wishlist"><i class="far fa-heart text-[12px]"></i></button>
                         <img src="${p.image || ''}" alt="${p.name || ''}" style="height:170px;max-height:170px;width:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,0.11));" loading="lazy">
                     </div>
-                    <div style="padding:12px 14px 14px;display:flex;flex-direction:column;background:#fff;">
-                        <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;color:#9ca3af;margin-bottom:4px;line-height:1;display:block;">${p.brand || ''}</span>
-                        <h4 style="font-size:14px;font-weight:700;color:#111827;line-height:1.35;margin-bottom:6px;min-height:38px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.name || ''}</h4>
-                        <div class="ipo-fs-price">${priceText}</div>
-                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">${sizeBadgesHtml}</div>
-                        ${_stockHtml}
-                        <button type="button" style="width:100%;background:#111827;color:#fff;font-size:11px;font-weight:800;padding:12px 0;border-radius:10px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:0.1em;" class="js-firestore-add-btn">${_addToCartLabel}</button>
+                    <div class="p-5 flex flex-col flex-grow bg-white z-10 relative">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-2 leading-none">${p.brand || ''}</p>
+                        <h4 class="text-[15px] font-bold text-gray-900 leading-[1.3] min-h-[40px] mb-4">${p.name || ''}</h4>
+                        <div class="flex items-center gap-2 mt-auto mb-5 catalog-size-badges">
+                            ${visibleSizes.map((sz, i) => i === 0
+                                ? `<span class="card-size-badge text-[10px] font-bold border border-gray-800 px-2 py-1 rounded">${sz.toUpperCase()}</span>`
+                                : `<span class="card-size-badge text-[10px] font-bold border border-gray-300 text-gray-500 px-2 py-1 rounded">${sz.toUpperCase()}</span>`
+                            ).join('')}${hiddenCount > 0 ? `<span class="card-size-badge text-[10px] font-bold border border-dashed border-gray-300 text-gray-400 px-2 py-1 rounded">+${hiddenCount}</span>` : ''}
+                        </div>
+                        <div>
+                            <button type="button" class="js-card-add-btn w-full bg-[#111827] text-white text-[11px] font-extrabold py-3.5 rounded-xl hover:bg-black transition-colors uppercase tracking-[0.1em]" data-i18n="index.add_to_cart" data-i18n-orig="ADD TO CART">${_addToCartLabel}</button>
+                        </div>
                     </div>`;
+                window._ipordiseFsCarouselCards.unshift(article); // keep cache in same prepend order
                 carousel.prepend(article);
 
                 // ── Also inject into Discover page grid ───────────────────
                 const discoverGrid = document.querySelector('[data-discover-grid]');
                 if (discoverGrid && !discoverGrid.querySelector(`[data-id="${CSS.escape(slug)}"][data-firestore-product="true"]`)) {
                     const discoverFilters = Array.isArray(p.filters) ? p.filters.join(',') : 'new-in';
+                    // sizeKeys already sorted numerically above; show first 2
                     const _dVisibleSizes = sizeKeys.slice(0, 2);
                     const _dHiddenCount  = sizeKeys.length - _dVisibleSizes.length;
                     const discoverSizeHtml = _dVisibleSizes.map((sz, i) =>
@@ -4276,16 +4319,20 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1 line-clamp-1">${p.brand || ''}</p>
                             <h3 class="product-title text-[13px] font-bold text-gray-800 leading-[1.3] mb-2 flex-grow line-clamp-2">${p.name || ''}</h3>
                             <div class="flex items-center flex-wrap gap-1.5 mb-3">${discoverSizeHtml}</div>
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-bold py-2 rounded-lg hover:bg-brand-redHover shadow-md active:scale-95 transition mt-auto">${_isFr ? 'Ajouter au panier' : 'Add to Cart'}</button>
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-bold py-2 rounded-lg hover:bg-brand-redHover shadow-md active:scale-95 transition mt-auto" data-i18n="index.add_to_cart">${_isFr ? 'Ajouter au panier' : 'Add to Cart'}</button>
                         </div>`;
                     discoverGrid.prepend(discoverArt);
                 }
             });
 
             _firestoreProductsInjected = true;
+            // Always scroll carousel back to the first card after injection
+            if (carousel) carousel.scrollLeft = 0;
             // Bind click-to-navigate on newly injected carousel cards + re-sync favourite hearts
             bindProductLinks();
             window.__ipordise_sync_fav_ui?.();
+            // Re-apply i18n translations so dynamically-built buttons are translated
+            window.__i18n?.applyTranslations();
         } catch (err) { console.error('[ipordise] Firestore product injection failed:', err); }
     };
 
@@ -8768,8 +8815,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const limitNewArrivalsToLatest = (pricesById = {}) => {
         const carousel = document.getElementById('newArrivalsCarousel');
         if (!carousel) return;
-        // Preserve Firestore-injected admin cards — they always appear first
-        const fsCards = Array.from(carousel.querySelectorAll('[data-firestore-product="true"]'));
+        // Preserve Firestore-injected admin cards — use global cache so they always appear first
+        // even when this function runs before or between Firestore async operations.
+        const fsCards = (window._ipordiseFsCarouselCards && window._ipordiseFsCarouselCards.length)
+            ? [...window._ipordiseFsCarouselCards]
+            : Array.from(carousel.querySelectorAll('[data-firestore-product="true"]'));
         const staticCards = Array.from(carousel.querySelectorAll('article:not([data-firestore-product="true"])'));
         if (!staticCards.length && !fsCards.length) return;
 
@@ -8796,6 +8846,8 @@ document.addEventListener('DOMContentLoaded', () => {
         latest.forEach((card) => {
             carousel.appendChild(card);
         });
+        // Always reset scroll to the first card after rebuilding
+        carousel.scrollLeft = 0;
     };
 
     const populate2026Section = () => {
@@ -9034,6 +9086,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Re-check Firestore carousel: deleted/disabled products must disappear
                 // even when page is restored from bfcache.
                 _firestoreProductsInjected = false;
+                window._ipordiseFsCarouselCards = []; // reset cache before re-injection
                 loadPricesJson().then(pb => injectFirestoreProductCards(pb)).catch(() => {});
             });
         }
@@ -10514,6 +10567,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initCheckoutPage();
     initAccountMenu();
     initWishlistButtons();
+    // Expose globally so module scripts (e.g. discover.html Firestore injection) can rebind hearts
+    window.initWishlistButtons = initWishlistButtons;
     setHeaderCartCount();
     initDiscoverFilters();
     void initCatalogPrices();
