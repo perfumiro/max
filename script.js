@@ -4277,7 +4277,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Bind click-to-navigate on newly injected carousel cards + re-sync favourite hearts
             bindProductLinks();
             window.__ipordise_sync_fav_ui?.();
-        } catch (_) { /* non-blocking */ }
+        } catch (err) { console.error('[ipordise] Firestore product injection failed:', err); }
     };
 
     // ── Size picker for Firestore product cards ───────────────────────────────
@@ -4384,12 +4384,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Expose globally so the Firestore size picker can read prices
         window._ipordisePricesById = pricesById;
 
-        // Inject Firestore products into carousel + pricesById
-        void injectFirestoreProductCards(pricesById);
+        // Sort static cards immediately (visible while Firestore fetch is in flight)
+        if (cards.length) limitNewArrivalsToLatest(pricesById);
+
+        // Inject Firestore admin products — awaited so they're in DOM before final re-sort
+        await injectFirestoreProductCards(pricesById);
 
         if (!cards.length) return;
 
-        // Re-run new arrivals filtering now that we have real price data
+        // Re-run after injection so Firestore cards are kept and static cards re-sorted
         limitNewArrivalsToLatest(pricesById);
         // After price-based re-sort the same DOM nodes are re-appended (data-favorite-id
         // and wishlistClickBound are preserved), but any card that was re-ordered or
@@ -8756,19 +8759,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const limitNewArrivalsToLatest = (pricesById = {}) => {
         const carousel = document.getElementById('newArrivalsCarousel');
         if (!carousel) return;
-        const cards = Array.from(carousel.querySelectorAll('article'));
-        if (!cards.length) return;
+        // Preserve Firestore-injected admin cards — they always appear first
+        const fsCards = Array.from(carousel.querySelectorAll('[data-firestore-product="true"]'));
+        const staticCards = Array.from(carousel.querySelectorAll('article:not([data-firestore-product="true"])'));
+        if (!staticCards.length && !fsCards.length) return;
 
         // Only filter by price when real price data has been loaded (non-empty pricesById)
         const hasPriceData = pricesById && typeof pricesById === 'object' && Object.keys(pricesById).length > 0;
-        const pricedCards = hasPriceData ? cards.filter((card) => {
+        const pricedCards = hasPriceData ? staticCards.filter((card) => {
             const productId = card.dataset.id;
             if (!productId) return true;
             // Keep cards that already have price text set via data-product-price attribute
             if (card.dataset.productPrice && card.dataset.productPrice.trim()) return true;
             const options = getAvailableSizePriceOptions(productId, pricesById);
             return options.some((entry) => entry.price > 0);
-        }) : cards;
+        }) : staticCards;
 
         const indexMap = new Map(pricedCards.map((card, index) => [card, index]));
         const sorted = pricedCards
@@ -8777,6 +8782,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const latest = sorted.slice(0, 12);
 
         carousel.innerHTML = '';
+        // Admin products pinned first (newest Firestore products at the front)
+        fsCards.forEach((card) => { carousel.appendChild(card); });
         latest.forEach((card) => {
             carousel.appendChild(card);
         });
