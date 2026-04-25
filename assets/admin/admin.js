@@ -2258,6 +2258,24 @@ const loadProductsView = async () => {
         const sizes      = effectiveSizes(slug);
         const baseKeys   = Object.keys(pricesRes[slug] || {});
 
+        // ── Promotion helpers ───────────────────────────────────────────
+        const origPricesMap = ov.promoPrices && typeof ov.promoPrices === 'object' ? ov.promoPrices : {};
+        const hasPromo = Object.keys(origPricesMap).some(sz => origPricesMap[sz] > 0);
+        let bestDiscount = 0;
+        let hasInvalidPromoEntry = false;
+        if (hasPromo) {
+          Object.entries(origPricesMap).forEach(([sz, promoP]) => {
+            const fullP = sizes[sz];
+            if (fullP > 0 && promoP > 0 && promoP < fullP) {
+              const pct = Math.round((1 - promoP / fullP) * 100);
+              if (pct > bestDiscount) bestDiscount = pct;
+            } else if (promoP > 0) {
+              hasInvalidPromoEntry = true;
+            }
+          });
+        }
+        const hasValidPromo = bestDiscount > 0;
+
         const sizeChips = Object.keys(sizes).sort((a,b)=>{
           const n = s => parseInt(s.replace(/\D/g,''),10) || 0;
           return n(a) - n(b);
@@ -2312,6 +2330,7 @@ const loadProductsView = async () => {
                 <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
                   ${statusBadge}
                   ${hasOverride && !disabled ? `<span style="font-size:10px;font-weight:700;color:var(--amber);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);padding:2px 8px;border-radius:99px"><i class="fas fa-pen-to-square" style="font-size:9px;margin-right:3px"></i>Overridden</span>` : ''}
+                  ${hasPromo ? `<span style="font-size:10px;font-weight:700;color:var(--emerald);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);padding:2px 8px;border-radius:99px"><i class="fas fa-tag" style="font-size:9px;margin-right:3px"></i>Promo${bestDiscount > 0 ? ' ·&nbsp;-' + bestDiscount + '%' : ''}</span>` : ''}
                   ${isDirty ? `<span class="prod-dirty-badge" style="font-size:10px;font-weight:700;color:var(--sky);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:2px 8px;border-radius:99px"><i class="fas fa-circle-dot" style="font-size:9px;margin-right:3px"></i>Unsaved</span>` : ''}
                 </div>
               </div>
@@ -2373,6 +2392,54 @@ const loadProductsView = async () => {
               </button>
             </div>
 
+            <!-- ── Promotion panel ── -->
+            <div class="prod-promo-panel" data-slug="${esc(slug)}" style="margin-top:6px">
+              <button class="prod-promo-toggle-btn" data-slug="${esc(slug)}" type="button"
+                style="width:100%;display:flex;align-items:center;gap:8px;padding:7px 10px;background:${hasValidPromo ? 'rgba(200,169,106,.08)' : hasInvalidPromoEntry ? 'rgba(244,63,94,.06)' : 'var(--s3)'};border:1px dashed ${hasValidPromo ? 'var(--gold)' : hasInvalidPromoEntry ? 'var(--rose)' : 'var(--border)'};border-radius:${hasPromo ? '8px 8px 0 0' : '8px'};cursor:pointer;transition:all .15s;outline:none;text-align:left">
+                <i class="fas fa-${hasValidPromo ? 'tag' : hasInvalidPromoEntry ? 'triangle-exclamation' : 'tag'}" style="font-size:10px;color:${hasValidPromo ? 'var(--gold)' : hasInvalidPromoEntry ? 'var(--rose)' : 'var(--gold)'};flex-shrink:0"></i>
+                <span style="font-size:10px;font-weight:700;color:${hasValidPromo ? 'var(--gold)' : hasInvalidPromoEntry ? 'var(--rose)' : 'var(--gold)'};letter-spacing:.4px;text-transform:uppercase;flex:1">
+                  ${hasValidPromo ? `Promotion Active · Up to -${bestDiscount}%` : hasInvalidPromoEntry ? '⚠ Promotion Invalid — Must Fix & Save' : 'Add Promotion'}
+                </span>
+                <i class="fas fa-chevron-${hasPromo ? 'up' : 'down'} prod-promo-chevron" style="font-size:9px;color:var(--muted)"></i>
+              </button>
+              <div class="prod-promo-content" style="display:${hasPromo ? 'block' : 'none'};padding:10px 10px 10px;background:${hasInvalidPromoEntry && !hasValidPromo ? 'rgba(244,63,94,.04)' : 'rgba(200,169,106,.04)'};border:1px dashed ${hasInvalidPromoEntry && !hasValidPromo ? 'var(--rose)' : 'var(--gold)'};border-top:none;border-radius:0 0 8px 8px">
+                ${hasInvalidPromoEntry ? `<div style="background:rgba(244,63,94,.12);border:1px solid var(--rose);border-radius:6px;padding:7px 10px;margin-bottom:8px;display:flex;align-items:flex-start;gap:7px">
+                  <i class="fas fa-triangle-exclamation" style="color:var(--rose);font-size:12px;flex-shrink:0;margin-top:1px"></i>
+                  <span style="font-size:10px;font-weight:700;color:var(--rose);line-height:1.5">The stored "Was" price is <strong>lower than or equal to the current sale price</strong> — it won't show on the product page. Enter a value <strong>HIGHER</strong> than the current price (shown as "→ Sale: X") and click <strong>Save</strong>.</span>
+                </div>` : ''}
+                <p style="font-size:10px;color:var(--muted);margin-bottom:8px;font-weight:600;line-height:1.4">
+                  <i class="fas fa-circle-info" style="margin-right:4px"></i>Enter the <strong style="color:var(--ink)">original (before-sale) price</strong> per size — it <strong style="color:var(--rose)">must be higher</strong> than the current price. The current price will appear as the discounted sale price with a strikethrough on the product page.
+                </p>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+                  ${Object.keys(sizes).sort((a,b)=>{ const n=s=>parseInt(s.replace(/\D/g,''),10)||0; return n(a)-n(b); }).map(sz => {
+                    const fullP  = sizes[sz];
+                    const promoP = origPricesMap[sz] || '';
+                    const pct    = (promoP && fullP && promoP < fullP) ? Math.round((1 - promoP / fullP) * 100) : 0;
+                    const isInvalid = promoP && promoP >= fullP;
+                    const rowBorder = promoP ? (isInvalid ? 'var(--rose)' : 'var(--gold)') : 'var(--border)';
+                    const badgeBg   = pct > 0 ? 'var(--emerald)' : (isInvalid ? 'var(--rose)' : 'var(--s4)');
+                    const badgeTxt  = pct > 0 ? '-' + pct + '%' : (isInvalid ? '⚠' : '');
+                    const suggestedPromo = Math.max(1, Math.floor(fullP * 0.85));
+                    return `<div class="prod-promo-size-row" data-slug="${esc(slug)}" data-size="${esc(sz)}" data-sale="${fullP}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 8px;background:var(--s2);border:1px solid ${rowBorder};border-radius:7px;transition:border-color .15s">
+                      <span style="font-size:11px;font-weight:700;color:var(--ink);min-width:32px">${esc(sz)}</span>
+                      <span style="font-size:9px;color:var(--dim);white-space:nowrap">Sale:</span>
+                      <input type="number" min="0" class="prod-orig-price-input" data-slug="${esc(slug)}" data-size="${esc(sz)}" value="${esc(String(promoP))}" placeholder="e.g. ${suggestedPromo}"
+                        style="width:64px;border:1px solid ${isInvalid ? 'var(--rose)' : 'var(--border)'};border-radius:5px;background:var(--s3);padding:3px 6px;font-size:12px;color:var(--ink);font-weight:600;outline:none;text-align:right;transition:border-color .15s"
+                        onfocus="this.style.borderColor='var(--gold)'" onblur="const v=parseFloat(this.value)||0,s=parseFloat(this.closest('.prod-promo-size-row').dataset.sale||0);this.style.borderColor=v>0&&v>=s?'var(--rose)':v>0&&v<s?'var(--gold)':'var(--border)'"
+                        title="Sale (promo) price for ${esc(sz)} — must be LOWER than ${fullP} MAD">
+                      <span style="font-size:10px;color:var(--dim);font-weight:500">MAD</span>
+                      <span style="font-size:9px;color:var(--dim);white-space:nowrap;margin-left:2px">Full: <strong style="color:var(--muted)">${fullP}</strong></span>
+                      <span class="prod-promo-pct-badge" style="font-size:10px;font-weight:800;color:#fff;background:${badgeBg};border-radius:99px;padding:2px 7px;min-width:36px;text-align:center;transition:background .2s">${badgeTxt}</span>
+                    </div>`;
+                  }).join('')}
+                </div>
+                <button class="prod-promo-clear btn btn-xs" data-slug="${esc(slug)}" type="button"
+                  style="font-size:10px;color:var(--rose);background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);gap:4px;padding:3px 10px">
+                  <i class="fas fa-trash-can" style="font-size:9px"></i> Clear Promotion
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>`;
       }).join('');
@@ -2398,6 +2465,66 @@ const loadProductsView = async () => {
                 subRow.appendChild(badge);
               }
             }
+          }
+        });
+      });
+
+      // Wire original price inputs → update discount % badge + mark dirty
+      grid.querySelectorAll('.prod-orig-price-input').forEach(inp => {
+        inp.addEventListener('input', () => {
+          const slug  = inp.dataset.slug;
+          const sz    = inp.dataset.size;
+          const promoP = parseFloat(inp.value) || 0;
+          // Find current full price from the size chip
+          const chip = grid.querySelector(`.prod-size-chip[data-slug="${slug}"][data-size="${sz}"]`);
+          const fullP = parseFloat(chip?.querySelector('.prod-price-input')?.value) || 0;
+          // Update the % badge in this row
+          const row = inp.closest('.prod-promo-size-row');
+          if (row) {
+            const badge    = row.querySelector('.prod-promo-pct-badge');
+            const isInvalid = promoP > 0 && promoP >= fullP;
+            const pct      = (promoP > 0 && promoP < fullP && fullP > 0) ? Math.round((1 - promoP / fullP) * 100) : 0;
+            if (badge) {
+              badge.textContent = pct > 0 ? '-' + pct + '%' : (isInvalid ? '⚠' : '');
+              badge.style.background = pct > 0 ? 'var(--emerald)' : (isInvalid ? 'var(--rose)' : 'var(--s4)');
+            }
+            inp.style.borderColor = isInvalid ? 'var(--rose)' : (promoP > 0 ? 'var(--gold)' : 'var(--border)');
+            row.style.borderColor  = promoP > 0 ? (isInvalid ? 'var(--rose)' : 'var(--gold)') : 'var(--border)';
+          }
+          // Mark dirty
+          if (slug) {
+            dirty.add(slug);
+            const card = grid.querySelector(`.prod-card[data-slug="${slug}"]`);
+            if (card) {
+              card.style.borderLeftColor = 'var(--sky)';
+              if (!card.querySelector('.prod-dirty-badge')) {
+                const subRow = card.querySelector('[style*="gap:6px"]');
+                if (subRow) {
+                  const badge = document.createElement('span');
+                  badge.className = 'prod-dirty-badge';
+                  badge.style.cssText = 'font-size:10px;font-weight:700;color:var(--sky);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:2px 8px;border-radius:99px';
+                  badge.innerHTML = '<i class="fas fa-circle-dot" style="font-size:9px;margin-right:3px"></i>Unsaved';
+                  subRow.appendChild(badge);
+                }
+              }
+            }
+          }
+        });
+      });
+
+      // Wire promo toggle buttons → expand/collapse panel
+      grid.querySelectorAll('.prod-promo-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const panel   = btn.closest('.prod-promo-panel');
+          const content = panel?.querySelector('.prod-promo-content');
+          const chevron = btn.querySelector('.prod-promo-chevron');
+          if (!content) return;
+          const open = content.style.display !== 'none';
+          content.style.display = open ? 'none' : 'block';
+          btn.style.borderRadius = open ? '8px' : '8px 8px 0 0';
+          if (chevron) {
+            chevron.classList.toggle('fa-chevron-down', open);
+            chevron.classList.toggle('fa-chevron-up', !open);
           }
         });
       });
@@ -2448,12 +2575,12 @@ const loadProductsView = async () => {
       const saveBtn   = e.target.closest('.prod-save');
       const toggleBtn = e.target.closest('.prod-toggle');
       const removeBtn = e.target.closest('.prod-remove-size');
-
       const addBtn    = e.target.closest('.prod-add-size');
       const resetBtn  = e.target.closest('.prod-reset');
-      if (!saveBtn && !toggleBtn && !removeBtn && !addBtn && !resetBtn) return;
+      const promoClearBtn = e.target.closest('.prod-promo-clear');
+      if (!saveBtn && !toggleBtn && !removeBtn && !addBtn && !resetBtn && !promoClearBtn) return;
 
-      const slug = (saveBtn||toggleBtn||removeBtn||addBtn||resetBtn).dataset.slug;
+      const slug = (saveBtn||toggleBtn||removeBtn||addBtn||resetBtn||promoClearBtn).dataset.slug;
       const ov   = overrides[slug] || {};
       const base = pricesRes[slug] || {};
 
@@ -2528,6 +2655,31 @@ const loadProductsView = async () => {
         });
         if (hasError) { toast('Fix invalid prices before saving', 'error'); return; }
 
+        // ── Collect original prices from promotion panel ─────────────────
+        const originalPrices = {};
+        let promoError = false;
+        card.querySelectorAll('.prod-orig-price-input').forEach(inp => {
+          const sz    = normSizeKey((inp.dataset.size || '').trim());
+          const promoP = parseFloat(inp.value);
+          if (!sz || !inp.value.trim()) return; // skip empty
+          if (isNaN(promoP) || promoP <= 0) return; // skip zero/invalid
+          const fullP = prices[sz] || 0;
+          if (promoP >= fullP) {
+            promoError = true;
+            inp.style.borderColor = 'var(--rose)';
+            inp.closest('.prod-promo-size-row').style.borderColor = 'var(--rose)';
+          } else {
+            originalPrices[sz] = promoP;
+          }
+        });
+        if (promoError) {
+          // Expand the promo panel so user sees the errors
+          const promoContent = card.querySelector('.prod-promo-content');
+          if (promoContent) promoContent.style.display = 'block';
+          toast('Promotion error: sale price must be LOWER than the current price for each size', 'error');
+          return;
+        }
+
         const pendingSet   = pendingRemovals[slug] || new Set();
         const removedSizes = [
           ...Object.keys(base).map(normSizeKey).filter(sz => !(sz in prices)),
@@ -2535,7 +2687,9 @@ const loadProductsView = async () => {
         ].filter((v,i,a) => a.indexOf(v)===i).filter(sz => !(prices[sz]>0));
 
         delete pendingRemovals[slug];
-        overrides[slug] = { ...(ov.disabled !== undefined ? {disabled: ov.disabled} : {}), prices, removedSizes };
+        const savePayload = { ...(ov.disabled !== undefined ? {disabled: ov.disabled} : {}), prices, removedSizes };
+        if (Object.keys(originalPrices).length > 0) savePayload.promoPrices = originalPrices;
+        overrides[slug] = savePayload;
 
         // Optimistic UI — show saving state
         const btn = card.querySelector('.prod-save');
@@ -2570,7 +2724,7 @@ const loadProductsView = async () => {
 
       // ── Reset ───────────────────────────────────────────────────────────
       if (resetBtn) {
-        if (!confirm(`Reset "${productName(slug)}" to defaults?\n\nAll price and size overrides will be deleted.`)) return;
+        if (!confirm(`Reset "${productName(slug)}" to defaults?\n\nAll price, size overrides and promotions will be deleted.`)) return;
         const btn = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-reset`);
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
         try {
@@ -2581,6 +2735,41 @@ const loadProductsView = async () => {
           toast(`"${productName(slug)}" reset to defaults`, 'success');
           render();
         } catch(err) { toast('Reset failed: '+err.message,'error'); if(btn){btn.disabled=false;btn.innerHTML='<i class="fas fa-arrow-rotate-left"></i> Reset';} }
+      }
+
+      // ── Clear promotion ──────────────────────────────────────────────────
+      if (promoClearBtn) {
+        const card = grid.querySelector(`.prod-card[data-slug="${slug}"]`);
+        if (!card) return;
+        // Clear all original price inputs in the panel
+        card.querySelectorAll('.prod-orig-price-input').forEach(inp => { inp.value = ''; });
+        // Reset the % badges
+        card.querySelectorAll('.prod-promo-pct-badge').forEach(b => { b.textContent = ''; b.style.background = 'var(--s4)'; });
+        // Reset row borders
+        card.querySelectorAll('.prod-promo-size-row').forEach(r => { r.style.borderColor = 'var(--border)'; });
+        // Clear in-memory promoPrices so save doesn't re-save them
+        if (overrides[slug]) delete overrides[slug].promoPrices;
+        dirty.add(slug);
+        // Update the toggle button text
+        const promoToggleBtn = card.querySelector('.prod-promo-toggle-btn');
+        if (promoToggleBtn) {
+          promoToggleBtn.style.background = 'var(--s3)';
+          promoToggleBtn.style.borderColor = 'var(--border)';
+          const span = promoToggleBtn.querySelector('span');
+          if (span) span.textContent = 'Add Promotion';
+        }
+        card.style.borderLeftColor = 'var(--sky)';
+        if (!card.querySelector('.prod-dirty-badge')) {
+          const subRow = card.querySelector('[style*="gap:6px"]');
+          if (subRow) {
+            const badge = document.createElement('span');
+            badge.className = 'prod-dirty-badge';
+            badge.style.cssText = 'font-size:10px;font-weight:700;color:var(--sky);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:2px 8px;border-radius:99px';
+            badge.innerHTML = '<i class="fas fa-circle-dot" style="font-size:9px;margin-right:3px"></i>Unsaved';
+            subRow.appendChild(badge);
+          }
+        }
+        toast('Promotion cleared — click Save to apply', 'success');
       }
     }, { signal: prodSig });
   } catch(e) {

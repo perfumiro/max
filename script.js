@@ -3800,6 +3800,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
                                     _firestoreProductOverridesCache[slug].originalPrices = p.originalPrices;
                                 }
+                                // Cache admin-set promo (sale) prices — lower than full price
+                                if (p.promoPrices && typeof p.promoPrices === 'object') {
+                                    if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
+                                    _firestoreProductOverridesCache[slug].promoPrices = p.promoPrices;
+                                }
                             });
                         } catch (_) { /* non-blocking */ }
                     } catch (_) { /* non-blocking — storefront still works from prices.json */ }
@@ -6228,16 +6233,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // ── Sale badge in the stock row ────────────────────────────────────
-            const _origPricesMap = _fsOvForPid?.originalPrices;
+            const _promoPricesMap = _fsOvForPid?.promoPrices || _fsOvForPid?.originalPrices;
             const _stockRowEl = document.querySelector('.ipp-stock-row');
-            if (_stockRowEl && _origPricesMap && typeof _origPricesMap === 'object') {
+            if (_stockRowEl && _promoPricesMap && typeof _promoPricesMap === 'object') {
                 // Find the best (highest) discount % across all sizes
                 const _sizePriceMap = _fsOvForPid?.prices || {};
                 let _bestPct = 0;
-                Object.entries(_origPricesMap).forEach(([sz, origP]) => {
-                    const saleP = _sizePriceMap[sz] || _sizePriceMap[sz.toLowerCase()];
-                    if (saleP > 0 && origP > saleP) {
-                        const pct = Math.round((1 - saleP / origP) * 100);
+                Object.entries(_promoPricesMap).forEach(([sz, promoP]) => {
+                    const fullP = _sizePriceMap[sz] || _sizePriceMap[sz.toLowerCase()];
+                    if (fullP > 0 && promoP > 0 && promoP < fullP) {
+                        const pct = Math.round((1 - promoP / fullP) * 100);
+                        if (pct > _bestPct) _bestPct = pct;
+                    } else if (fullP > 0 && promoP > fullP) {
+                        // legacy: originalPrices stored as WAS price (higher) — still works
+                        const pct = Math.round((1 - fullP / promoP) * 100);
                         if (pct > _bestPct) _bestPct = pct;
                     }
                 });
@@ -6382,11 +6391,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const stickyAddToCartBtn = document.getElementById('stickyAddToCartBtn');
 
         const sizeButtons = Array.from(document.querySelectorAll('#sizeSelector .size-pill'));
-        const _adminOrigPrices = _fsOvForPid?.originalPrices || null;
+        const _adminPromoPrices = _fsOvForPid?.promoPrices || null;
+        const _adminOrigPrices  = _fsOvForPid?.originalPrices || null; // legacy
+        // Debug: log what Firestore returned for promotion prices
+        console.log('[IPORDISE] Promotion data for', _normalizedPid, '→ promoPrices:', JSON.stringify(_adminPromoPrices), '| originalPrices(legacy):', JSON.stringify(_adminOrigPrices), '| prices:', JSON.stringify(_fsOvForPid?.prices || {}));
         const sizeOptions = sizeButtons.map((btn) => {
             const sizeKey = String(btn.dataset.sizeKey || '').trim().toLowerCase();
             const matchedOption = productSizePriceOptions.find((entry) => entry.sizeKey === sizeKey);
-            const origPrice = _adminOrigPrices ? (_adminOrigPrices[sizeKey] || 0) : 0;
+            // promoPrice: lower sale price (new system)
+            const promoPrice = _adminPromoPrices ? (_adminPromoPrices[sizeKey] || 0) : 0;
+            // originalPrice: legacy higher-was-price system
+            const origPrice  = _adminOrigPrices ? (_adminOrigPrices[sizeKey] || 0) : 0;
 
             return {
                 button: btn,
@@ -6394,8 +6409,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 priceText: matchedOption?.priceText || '',
                 unitPrice: matchedOption?.unitPrice || 0,
                 isDecante: Boolean(matchedOption?.isDecante),
+                promoPrice: promoPrice,
                 originalPrice: origPrice
             };
+        });
+
+        // Update size pill prices to show promo price where active
+        sizeOptions.forEach((option) => {
+            if (option.promoPrice > 0 && option.promoPrice < option.unitPrice) {
+                const pillPriceEl = option.button.querySelector('.spill-price');
+                if (pillPriceEl) pillPriceEl.textContent = `${option.promoPrice} DH`;
+            }
         });
 
         let selectedSize = null;
@@ -6479,8 +6503,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const isDecante = Boolean(selectedSize?.isDecante);
             const deliveryFee = isDecante ? '35 MAD' : '35 MAD (VAT included)';
 
-            // Sale price: update old-price and discount badge dynamically per selected size
-            if (selectedSize && selectedSize.originalPrice > selectedSize.unitPrice && selectedSize.unitPrice > 0) {
+            // Promotion: promoPrice is the NEW lower sale price, unitPrice is the full/original price
+            const _hasActivePromo = selectedSize && selectedSize.promoPrice > 0 && selectedSize.promoPrice < selectedSize.unitPrice && selectedSize.unitPrice > 0;
+            // Legacy: originalPrice is a higher "was" price stored by old system
+            const _hasLegacyPromo = !_hasActivePromo && selectedSize && selectedSize.originalPrice > selectedSize.unitPrice && selectedSize.unitPrice > 0;
+            if (_hasActivePromo) {
+                const pct = Math.round((1 - selectedSize.promoPrice / selectedSize.unitPrice) * 100);
+                if (oldPriceEl) {
+                    oldPriceEl.innerHTML = `${selectedSize.unitPrice}<span style="font-size:0.65em;font-weight:600;margin-left:2px">DH</span>`;
+                    oldPriceEl.style.display = '';
+                }
+                if (discountEl) {
+                    discountEl.innerHTML = `<i class="fas fa-bolt" style="font-size:8px;margin-right:2px"></i>-${pct}%`;
+                    discountEl.style.display = '';
+                }
+            } else if (_hasLegacyPromo) {
                 const pct = Math.round((1 - selectedSize.unitPrice / selectedSize.originalPrice) * 100);
                 if (oldPriceEl) {
                     oldPriceEl.innerHTML = `${selectedSize.originalPrice}<span style="font-size:0.65em;font-weight:600;margin-left:2px">DH</span>`;
@@ -6491,9 +6528,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     discountEl.style.display = '';
                 }
             } else if (selectedSize) {
-                // No sale for this size — clear any previously shown values (but restore URL-param ones for non-admin products)
-                if (oldPriceEl && _adminOrigPrices !== null) { oldPriceEl.innerHTML = ''; oldPriceEl.style.display = 'none'; }
-                if (discountEl && _adminOrigPrices !== null) { discountEl.innerHTML = ''; discountEl.style.display = 'none'; }
+                // No sale for this size — clear any previously shown values
+                if (oldPriceEl && (_adminPromoPrices !== null || _adminOrigPrices !== null)) { oldPriceEl.innerHTML = ''; oldPriceEl.style.display = 'none'; }
+                if (discountEl && (_adminPromoPrices !== null || _adminOrigPrices !== null)) { discountEl.innerHTML = ''; discountEl.style.display = 'none'; }
             }
 
             // Update the selected-size top-right label inside the price card
@@ -6515,24 +6552,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!selectedSize) {
                         mainPriceEl.textContent = '—';
                     } else if (sizeHasPrice) {
-                        // Split "270 DH" → number + styled unit span
-                        const priceMatch = selectedPrice.match(/^(.+?)\s*(DH)$/);
-                        if (priceMatch) {
-                            mainPriceEl.innerHTML = `${priceMatch[1]}<span class="price-unit"> ${priceMatch[2]}</span>`;
+                        if (_hasActivePromo) {
+                            // Show the lower promo price as the main price
+                            mainPriceEl.innerHTML = `${selectedSize.promoPrice}<span class="price-unit"> DH</span>`;
                         } else {
-                            mainPriceEl.textContent = selectedPrice;
+                            // Split "270 DH" → number + styled unit span
+                            const priceMatch = selectedPrice.match(/^(.+?)\s*(DH)$/);
+                            if (priceMatch) {
+                                mainPriceEl.innerHTML = `${priceMatch[1]}<span class="price-unit"> ${priceMatch[2]}</span>`;
+                            } else {
+                                mainPriceEl.textContent = selectedPrice;
+                            }
                         }
                     } else {
                         mainPriceEl.textContent = t('product_out_of_stock');
                     }
                 }
                 if (stickyPriceEl) {
-                    stickyPriceEl.textContent = sizeHasPrice ? selectedPrice : (selectedSize ? t('product_out_of_stock') : t('product_choose_size_sticky'));
+                    const _stickyPrice = _hasActivePromo ? `${selectedSize.promoPrice} DH` : selectedPrice;
+                    stickyPriceEl.textContent = sizeHasPrice ? _stickyPrice : (selectedSize ? t('product_out_of_stock') : t('product_choose_size_sticky'));
                 }
                 if (deliveryInfoEl) {
                     deliveryInfoEl.textContent = `${t('product_delivery_in_stock')}: ${deliveryFee}`;
                 }
-                syncPriceCardState(sizeHasPrice ? selectedPrice : '');
+                syncPriceCardState(_hasActivePromo ? `${selectedSize.promoPrice} DH` : (sizeHasPrice ? selectedPrice : ''));
             }
             if (deliveryChipEl) {
                 deliveryChipEl.innerHTML = `<i class="fas fa-truck text-brand-red"></i> ${t('product_delivery_fee')}: ${deliveryFee}`;
