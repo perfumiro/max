@@ -795,3 +795,128 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   PRODUCT MANAGER CARDS
+══════════════════════════════════════════════════════════════ */
+
+/* Grid: 2-col on large, 1-col on small */
+#productsGrid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)) !important;
+  gap: 12px !important;
+}
+@media (max-width: 900px) {
+  #productsGrid { grid-template-columns: 1fr !important; }
+}
+
+/* Card base overrides */
+.prod-card {
+  overflow: visible !important; /* allow chips to breathe */
+  margin-bottom: 0 !important;
+  border-radius: var(--radius-lg) !important;
+  transition: box-shadow .22s ease, border-color .22s ease, transform .22s ease !important;
+}
+.prod-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Product image thumbnail */
+.prod-card img[style*="width:60px"] {
+  border-radius: 10px !important;
+  object-fit: contain !important;
+  background: var(--s3) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,.18) !important;
+}
+
+/* Product name */
+.prod-card [style*="font-size:13px;font-weight:800"] {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+  letter-spacing: -.01em;
+}
+
+/* Size chips area — allow wrap cleanly */
+.prod-size-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  border-radius: 8px !important;
+  font-size: 11.5px !important;
+  transition: box-shadow .15s, border-color .15s !important;
+  overflow: hidden;
+}
+.prod-size-chip:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,.22) !important;
+}
+
+/* Editable price input — subtle focus ring */
+.prod-price-input:focus {
+  outline: none;
+  background: rgba(200,169,106,.06) !important;
+}
+.prod-size-name-input:focus {
+  outline: none;
+  background: rgba(56,189,248,.06) !important;
+}
+
+/* Remove size button */
+.prod-remove-size {
+  opacity: .55;
+  transition: opacity .15s, background .15s, color .15s !important;
+}
+.prod-remove-size:hover { opacity: 1 !important; }
+
+/* "Add size" input row */
+.prod-add-size-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.prod-add-size-row input {
+  background: var(--s4);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--ink);
+  padding: 5px 9px;
+  font-size: 12px;
+  transition: border-color .15s;
+}
+.prod-add-size-row input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: var(--s3);
+}
+
+/* Dirty / unsaved badge pulse */
+.prod-dirty-badge {
+  animation: prodDirtyPulse 2s ease-in-out infinite;
+}
+@keyframes prodDirtyPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .65; }
+}
+
+/* Action buttons row — consistent spacing */
+.prod-card .btn-xs {
+  padding: 5px 11px !important;
+  font-size: 11px !important;
+  gap: 5px !important;
+}
+
+/* Firestored products section header */
+#firestoreProductsSection {
+  margin-bottom: 16px !important;
+}
+
+/* No-image placeholder */
+.prod-card [style*="fas fa-spray-can"] {
+  font-size: 20px;
+  opacity: .4;
+}

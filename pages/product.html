@@ -45,7 +45,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../script.js?v=9"></script>
+    <script src="../script.js?v=20"></script>
     <script src="../i18n.js?v=20260329c"></script>
     <link rel="stylesheet" href="../style.css?v=20260329c">
     <!-- Dynamic canonical — updated per-product via URL params -->
@@ -1103,7 +1103,7 @@ s0.parentNode.insertBefore(s1,s0);
                         </button>
                         <a href="login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
                         <div class="header-wishlist-wrap relative">
-                            <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                            <a href="dashboard.html#section-wishlist" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist" onclick="if(!window.__ipordise_user){event.preventDefault();var m=document.getElementById('wishlistAuthModal');if(m){m.style.display='flex';document.body.style.overflow='hidden';function _cwm2(){m.style.display='none';document.body.style.overflow='';}document.getElementById('wishlistAuthClose')?.addEventListener('click',_cwm2,{once:true});document.getElementById('wishlistAuthBackdrop')?.addEventListener('click',_cwm2,{once:true});}}"><i class="far fa-heart"></i></a>
                         </div>
                         <a href="cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart" id="cartIconLink">
                             <i class="fas fa-shopping-bag"></i>
@@ -1369,7 +1369,7 @@ s0.parentNode.insertBefore(s1,s0);
                                     </div>
                                 </div>
                                 <button id="addToCartBtn" class="hidden" type="button"><i class="fas fa-bag-shopping"></i> Add to Cart</button>
-                                <button class="product-wishlist-btn" type="button" aria-label="Add to wishlist">
+                                <button class="product-wishlist-btn" type="button" aria-label="Add to wishlist" onclick="if(!window.__ipordise_user){var m=document.getElementById('wishlistAuthModal');if(m){m.style.display='flex';document.body.style.overflow='hidden';function _cwm(){m.style.display='none';document.body.style.overflow='';}document.getElementById('wishlistAuthClose')?.addEventListener('click',_cwm,{once:true});document.getElementById('wishlistAuthBackdrop')?.addEventListener('click',_cwm,{once:true});}return false;}">
                                     <i class="far fa-heart"></i>
                                 </button>
                                 <!-- WhatsApp inquiry button — shown next to wishlist when no price / out of stock -->
@@ -3422,6 +3422,55 @@ s0.parentNode.insertBefore(s1,s0);
             kfStyle.textContent = '@keyframes ipp-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}';
             document.head.appendChild(kfStyle);
         }
+    }());
+    </script>
+
+    <!-- ── Wishlist Sign-in Modal ── -->
+    <div id="wishlistAuthModal" style="display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;">
+        <div id="wishlistAuthBackdrop" style="position:absolute;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px);"></div>
+        <div style="position:relative;background:#fff;border-radius:20px;padding:2.5rem 2rem 2rem;max-width:360px;width:calc(100% - 32px);box-shadow:0 24px 64px rgba(0,0,0,0.18);text-align:center;animation:wishlistModalIn 0.32s cubic-bezier(0.22,1,0.36,1);">
+            <button id="wishlistAuthClose" type="button" aria-label="Close" style="position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;font-size:18px;color:#9ca3af;line-height:1;">&#x2715;</button>
+            <div style="width:56px;height:56px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;margin:0 auto 1.1rem;">
+                <i class="fas fa-heart" style="font-size:22px;color:#e74c4c;"></i>
+            </div>
+            <h3 style="font-size:1.2rem;font-weight:800;color:#111827;margin:0 0 0.45rem;font-family:'Playfair Display',serif;">Save to Wishlist</h3>
+            <p style="font-size:0.85rem;color:#6b7280;margin:0 0 1.6rem;line-height:1.5;">Sign in or create a free account to save your favourite perfumes and access them anywhere.</p>
+            <a id="wishlistAuthSignIn" href="login.html" style="display:block;background:#111827;color:#fff;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:13px 0;border-radius:12px;text-decoration:none;margin-bottom:10px;">Sign In</a>
+            <a id="wishlistAuthRegister" href="register.html" style="display:block;background:#fff;color:#111827;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-radius:12px;text-decoration:none;border:1.5px solid #e5e7eb;">Create Account</a>
+        </div>
+    </div>
+    <style>
+        @keyframes wishlistModalIn {
+            from { opacity:0; transform:translateY(24px) scale(0.96); }
+            to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+    </style>
+    <script>
+    // ── Wishlist auth guard (inline — works regardless of script.js cache) ──
+    (function () {
+        function showWishlistModal() {
+            var modal = document.getElementById('wishlistAuthModal');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            function closeModal() {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+            var closeBtn = document.getElementById('wishlistAuthClose');
+            var backdrop = document.getElementById('wishlistAuthBackdrop');
+            if (closeBtn)  closeBtn.addEventListener('click',  closeModal, { once: true });
+            if (backdrop) backdrop.addEventListener('click', closeModal, { once: true });
+        }
+        document.addEventListener('click', function (e) {
+            var btn = e.target.closest('.product-wishlist-btn, .product-favorite-btn');
+            if (!btn) return;
+            if (!window.__ipordise_user) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                showWishlistModal();
+            }
+        }, true);
     }());
     </script>
 </body>

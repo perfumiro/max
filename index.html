@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <!-- SEO: Canonical redirect — normalises /index.html ? / and www ? apex -->
     <script>(function(){var u=window.location.href,h=window.location.hostname,p=window.location.pathname;if(h==='www.ipordise.com')u=u.replace('://www.ipordise.com','://ipordise.com');if(p==='/index.html')u=u.replace('/index.html','/');if(u!==window.location.href)window.location.replace(u);}());</script>
     <!-- Google tag (gtag.js) -->
@@ -129,9 +132,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="script.js?v=19"></script>
+    <script src="script.js?v=21"></script>
     <script src="i18n.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
 <!--Start of Tawk.to Script-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{};
@@ -524,7 +527,8 @@ s0.parentNode.insertBefore(s1,s0);
 /* ── IMAGE AREA ── */
 .ipo-card__image-wrap {
     position: relative;
-    background: #f6f3ef;
+    background: #f8f5f2 !important;
+    background-color: #f8f5f2 !important;
     height: 210px;
     display: flex;
     align-items: center;
@@ -540,6 +544,7 @@ s0.parentNode.insertBefore(s1,s0);
     object-fit: contain;
     display: block;
     filter: none;
+    mix-blend-mode: multiply;
     transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
 }
 .ipo-card:hover .ipo-card-img { transform: scale(1.06); }
@@ -586,7 +591,8 @@ s0.parentNode.insertBefore(s1,s0);
 /* ── TEXT BODY ── */
 .ipo-card__body {
     padding: 13px 15px 15px;
-    background: #ffffff;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -698,6 +704,9 @@ s0.parentNode.insertBefore(s1,s0);
     margin-bottom: 0 !important;
     height: 170px !important;
 }
+#productCarousel .h-48 img {
+    mix-blend-mode: multiply !important;
+}
 #productCarousel .flex-grow.flex.flex-col {
     padding: 10px 12px 12px !important;
 }
@@ -721,11 +730,11 @@ s0.parentNode.insertBefore(s1,s0);
 
 /* ── MOBILE ── */
 @media (max-width: 639px) {
-    .ipo-card__image-wrap { height: 160px; padding: 12px; }
-    .ipo-card__image-wrap img.ipo-card-img { max-height: 136px; }
+    .ipo-card__image-wrap { height: 210px !important; padding: 20px !important; }
+    .ipo-card__image-wrap img.ipo-card-img { max-height: 168px; }
     .ipo-card__body { padding: 10px 12px 12px; }
-    .ipo-card__body h4 { font-size: 11.5px !important; min-height: 32px !important; }
-    .ipo-card__body .js-card-add-btn { font-size: 9px !important; padding: 10px 0 !important; }
+    .ipo-card__body h4 { font-size: 12px !important; min-height: 32px !important; }
+    .ipo-card__body .js-card-add-btn { font-size: 10px !important; padding: 11px 0 !important; }
 }
 
 /* ── IPO CARD COMPONENT CLASSES (legacy compat) ── */
@@ -819,8 +828,8 @@ s0.parentNode.insertBefore(s1,s0);
 /* ── IMAGE AREA ── */
 #newArrivalsCarousel > article > div:first-child,
 #productCarousel > div.js-product-link > div.h-48 {
-    background: #f5f2ee !important;
-    background-color: #f5f2ee !important;
+    background: #f8f5f2 !important;
+    background-color: #f8f5f2 !important;
     height: 210px !important;
     min-height: 210px !important;
     margin: 0 !important;
@@ -849,6 +858,7 @@ s0.parentNode.insertBefore(s1,s0);
     object-fit: contain !important;
     display: block !important;
     background: transparent !important;
+    mix-blend-mode: multiply !important;
     transition: transform 0.35s cubic-bezier(0.22,1,0.36,1) !important;
 }
 #newArrivalsCarousel > article:hover > div:first-child img,
@@ -1447,7 +1457,7 @@ s0.parentNode.insertBefore(s1,s0);
                             <a href="pages/login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
                         </div>
                         <div class="header-wishlist-wrap relative" style="overflow:visible">
-                            <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                            <a href="pages/dashboard.html#section-wishlist" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist" onclick="if(!window.__ipordise_user){event.preventDefault();var m=document.getElementById('wishlistAuthModal');if(m){m.style.display='flex';document.body.style.overflow='hidden';function _cwm(){m.style.display='none';document.body.style.overflow='';}document.getElementById('wishlistAuthClose')?.addEventListener('click',_cwm,{once:true});document.getElementById('wishlistAuthBackdrop')?.addEventListener('click',_cwm,{once:true});}}"><i class="far fa-heart"></i></a>
                         </div>
                         <a href="pages/cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart" id="cartIconLink">
                             <i class="fas fa-shopping-bag"></i>
@@ -3950,6 +3960,55 @@ s0.parentNode.insertBefore(s1,s0);
             </div>
         </div>
     </div>
+
+    <!-- ── Wishlist Sign-in Modal ── -->
+    <div id="wishlistAuthModal" style="display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;">
+        <div id="wishlistAuthBackdrop" style="position:absolute;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px);"></div>
+        <div style="position:relative;background:#fff;border-radius:20px;padding:2.5rem 2rem 2rem;max-width:360px;width:calc(100% - 32px);box-shadow:0 24px 64px rgba(0,0,0,0.18);text-align:center;animation:wishlistModalIn 0.32s cubic-bezier(0.22,1,0.36,1);">
+            <button id="wishlistAuthClose" type="button" aria-label="Close" style="position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;font-size:18px;color:#9ca3af;line-height:1;">&#x2715;</button>
+            <div style="width:56px;height:56px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;margin:0 auto 1.1rem;">
+                <i class="fas fa-heart" style="font-size:22px;color:#e74c4c;"></i>
+            </div>
+            <h3 style="font-size:1.2rem;font-weight:800;color:#111827;margin:0 0 0.45rem;font-family:'Playfair Display',serif;">Save to Wishlist</h3>
+            <p style="font-size:0.85rem;color:#6b7280;margin:0 0 1.6rem;line-height:1.5;">Sign in or create a free account to save your favourite perfumes and access them anywhere.</p>
+            <a id="wishlistAuthSignIn" href="pages/login.html" style="display:block;background:#111827;color:#fff;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:13px 0;border-radius:12px;text-decoration:none;margin-bottom:10px;transition:background 0.2s;">Sign In</a>
+            <a id="wishlistAuthRegister" href="pages/register.html" style="display:block;background:#fff;color:#111827;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-radius:12px;text-decoration:none;border:1.5px solid #e5e7eb;transition:background 0.2s;">Create Account</a>
+        </div>
+    </div>
+    <style>
+        @keyframes wishlistModalIn {
+            from { opacity:0; transform:translateY(24px) scale(0.96); }
+            to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+    </style>
+    <script>
+    // ── Wishlist auth guard (inline — works regardless of script.js cache) ──
+    (function () {
+        function showWishlistModal() {
+            var modal = document.getElementById('wishlistAuthModal');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            function closeModal() {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+            var closeBtn = document.getElementById('wishlistAuthClose');
+            var backdrop = document.getElementById('wishlistAuthBackdrop');
+            if (closeBtn)  closeBtn.addEventListener('click',  closeModal, { once: true });
+            if (backdrop) backdrop.addEventListener('click', closeModal, { once: true });
+        }
+        document.addEventListener('click', function (e) {
+            var btn = e.target.closest('.product-wishlist-btn, .product-favorite-btn');
+            if (!btn) return;
+            if (!window.__ipordise_user) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                showWishlistModal();
+            }
+        }, true);
+    }());
+    </script>
 
     <script src="assets/scroll-progress.js" defer></script>
 </body>

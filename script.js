@@ -7432,10 +7432,28 @@ document.addEventListener('DOMContentLoaded', () => {
             button.dataset.wishlistClickBound = 'true';
 
             button.addEventListener('click', () => {
-                // If not signed in → redirect to login instead of saving to localStorage
+                // If not signed in → show sign-in modal
                 if (!window.__ipordise_user) {
-                    const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
+                    const modal = document.getElementById('wishlistAuthModal');
+                    if (modal) {
+                        const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
+                        const base = inPages ? '' : 'pages/';
+                        const signInLink = document.getElementById('wishlistAuthSignIn');
+                        const registerLink = document.getElementById('wishlistAuthRegister');
+                        if (signInLink)   signInLink.href   = base + 'login.html';
+                        if (registerLink) registerLink.href = base + 'register.html';
+                        modal.style.display = 'flex';
+                        document.body.style.overflow = 'hidden';
+                        const close = () => {
+                            modal.style.display = 'none';
+                            document.body.style.overflow = '';
+                        };
+                        document.getElementById('wishlistAuthClose')?.addEventListener('click', close, { once: true });
+                        document.getElementById('wishlistAuthBackdrop')?.addEventListener('click', close, { once: true });
+                    } else {
+                        const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
                         navigateWithTransition(inPages ? 'login.html' : 'pages/login.html');
+                    }
                     return;
                 }
 
@@ -9050,64 +9068,30 @@ document.addEventListener('DOMContentLoaded', () => {
     initCarousel('newArrivalsCarousel');
     enableCarouselAutoplay('brandCarousel', 180, 2400);
 
-    // ── New Arrivals mobile card fix ─────────────────────────────────────
-    // CSS cannot reliably override Tailwind's inline-generated bg-[#111827]
-    // and pt-12 classes.  Inline styles set here always win.
+    // ── New Arrivals card fix — consistent on all screen sizes ──────────
     const fixNewArrivalCards = window._fixNewArrivalCards = () => {
-        if (window.innerWidth >= 768) return;
         document.querySelectorAll('#newArrivalsCarousel > article').forEach((card) => {
-            // Image wrapper — kill pt-12 (48px) and force pure white
             const imgWrap = card.querySelector(':scope > div:first-child');
             if (imgWrap) {
-                imgWrap.style.setProperty('background-color', '#ffffff', 'important');
-                imgWrap.style.setProperty('background', '#ffffff', 'important');
-                imgWrap.style.setProperty('padding-top', '6px', 'important');
-                imgWrap.style.setProperty('padding-bottom', '6px', 'important');
-                imgWrap.style.setProperty('padding-left', '4px', 'important');
-                imgWrap.style.setProperty('padding-right', '4px', 'important');
-                imgWrap.style.setProperty('min-height', '240px', 'important');
-                imgWrap.style.setProperty('height', '240px', 'important');
-                imgWrap.style.setProperty('overflow', 'visible', 'important');
+                imgWrap.style.setProperty('background-color', '#f8f5f2', 'important');
+                imgWrap.style.setProperty('background', '#f8f5f2', 'important');
+                imgWrap.style.setProperty('padding', '20px', 'important');
+                imgWrap.style.setProperty('height', '210px', 'important');
+                imgWrap.style.setProperty('min-height', '210px', 'important');
+                imgWrap.style.setProperty('overflow', 'hidden', 'important');
+                imgWrap.style.setProperty('display', 'flex', 'important');
+                imgWrap.style.setProperty('align-items', 'center', 'important');
+                imgWrap.style.setProperty('justify-content', 'center', 'important');
+                imgWrap.style.setProperty('border-radius', '0', 'important');
             }
-            // Badge bar div — make fully transparent, shrink to chip
-            const badgeBar = card.querySelector(':scope > div:first-child > div:not(.product-favorite-btn):not(button)');
-            if (badgeBar) {
-                badgeBar.style.setProperty('background', 'transparent', 'important');
-                badgeBar.style.setProperty('background-color', 'transparent', 'important');
-                badgeBar.style.setProperty('height', 'auto', 'important');
-                badgeBar.style.setProperty('width', 'auto', 'important');
-                badgeBar.style.setProperty('top', '8px', 'important');
-                badgeBar.style.setProperty('left', '8px', 'important');
-                badgeBar.style.setProperty('right', 'auto', 'important');
-                badgeBar.style.setProperty('bottom', 'auto', 'important');
-                badgeBar.style.setProperty('padding', '0', 'important');
-                badgeBar.style.setProperty('z-index', '20', 'important');
-                // Style the "NEW" span inside as a pill chip
-                const span = badgeBar.querySelector('span');
-                if (span) {
-                    span.style.setProperty('background', '#111', 'important');
-                    span.style.setProperty('background-color', '#111', 'important');
-                    span.style.setProperty('color', '#fff', 'important');
-                    span.style.setProperty('font-size', '7px', 'important');
-                    span.style.setProperty('font-weight', '800', 'important');
-                    span.style.setProperty('letter-spacing', '0.2em', 'important');
-                    span.style.setProperty('padding', '3px 7px', 'important');
-                    span.style.setProperty('border-radius', '999px', 'important');
-                    span.style.setProperty('line-height', '1.5', 'important');
-                    span.style.setProperty('display', 'inline-block', 'important');
-                }
-            }
-            // Product image — fill the white area fully
             const img = card.querySelector('img');
             if (img) {
-                img.style.setProperty('height', '225px', 'important');
-                img.style.setProperty('max-height', '225px', 'important');
-                img.style.setProperty('width', '100%', 'important');
+                img.style.setProperty('max-height', '168px', 'important');
+                img.style.setProperty('height', 'auto', 'important');
+                img.style.setProperty('width', 'auto', 'important');
                 img.style.setProperty('max-width', '100%', 'important');
                 img.style.setProperty('object-fit', 'contain', 'important');
-                img.style.setProperty('filter', 'drop-shadow(0 10px 14px rgba(0,0,0,0.12))', 'important');
-                img.style.setProperty('position', 'relative', 'important');
-                img.style.setProperty('z-index', '1', 'important');
+                img.style.setProperty('mix-blend-mode', 'multiply', 'important');
             }
         });
     };
@@ -10633,6 +10617,28 @@ document.addEventListener('DOMContentLoaded', () => {
     initWishlistButtons();
     // Expose globally so module scripts (e.g. discover.html Firestore injection) can rebind hearts
     window.initWishlistButtons = initWishlistButtons;
+
+    // ── Product-page wishlist button: delegated auth guard ──────────────
+    // .product-wishlist-btn is rendered dynamically so a delegated listener
+    // is the only reliable way to catch it regardless of load timing.
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.product-wishlist-btn');
+        if (!btn) return;
+        if (!window.__ipordise_user) {
+            e.stopImmediatePropagation();
+            const modal = document.getElementById('wishlistAuthModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                const closeModal = () => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                };
+                document.getElementById('wishlistAuthClose')?.addEventListener('click', closeModal, { once: true });
+                document.getElementById('wishlistAuthBackdrop')?.addEventListener('click', closeModal, { once: true });
+            }
+        }
+    }, true); // capture phase so it runs before any other listener
     setHeaderCartCount();
     initDiscoverFilters();
     void initCatalogPrices();
