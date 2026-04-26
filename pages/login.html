@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -43,7 +43,7 @@ Tawk_API.onLoad=function(){
   style.textContent='\
     #ipo-tawk-wrap{\
       position:fixed;\
-      bottom:calc(72px + 0.75rem + env(safe-area-inset-bottom,0px));\
+      bottom:calc(100px + 0.75rem + env(safe-area-inset-bottom,0px));\
       right:1.25rem;\
       z-index:99999;\
       display:flex;\
@@ -127,7 +127,7 @@ Tawk_API.onLoad=function(){
       #ipo-tawk-wrap{animation:none;}\
     }\
     @media(min-width:640px){\
-      #ipo-tawk-wrap{bottom:2rem;right:2rem;}\
+      #ipo-tawk-wrap{bottom:6rem;right:2rem;}\
       #ipo-tawk-btn{width:64px;height:64px;}\
     }\
   ';
@@ -186,7 +186,7 @@ s0.parentNode.insertBefore(s1,s0);
                     </a>
                 </div>
 
-                <!-- Search trigger â€” opens full overlay on click -->
+                <!-- Search trigger — opens full overlay on click -->
                 <div class="flex-1 max-w-2xl mx-8 hidden md:block">
                     <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
                         <i class="fas fa-search ipo-search-trigger-icon"></i>
@@ -470,7 +470,7 @@ s0.parentNode.insertBefore(s1,s0);
         }
         .auth-forgot:hover { color: #b91c1c; text-decoration: underline; }
         /* -----------------------------------------------
-           Reset-password modal â€” IPORDISE luxury rebuild
+           Reset-password modal — IPORDISE luxury rebuild
            ----------------------------------------------- */
 
         /* -- Backdrop -- */
@@ -546,7 +546,7 @@ s0.parentNode.insertBefore(s1,s0);
             );
         }
 
-        /* Decorative orb â€” top right */
+        /* Decorative orb — top right */
         .rp-modal-header::before {
             content: '';
             position: absolute;
@@ -919,7 +919,7 @@ s0.parentNode.insertBefore(s1,s0);
             <!-- --- SIGN UP PANEL --- -->
             <div class="auth-panel" id="panelSignup" role="tabpanel">
                 <h2 class="auth-heading" data-i18n="login.signup_heading">Create your account</h2>
-                <p class="auth-subheading" data-i18n="login.signup_subheading">Join IPORDISE â€” it only takes a minute.</p>
+                <p class="auth-subheading" data-i18n="login.signup_subheading">Join IPORDISE — it only takes a minute.</p>
 
                 <form id="signupForm" novalidate>
                     <div class="auth-name-row auth-field">
@@ -1075,7 +1075,7 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
     </footer>
 
-    <!-- Server-down overlay removed â€” Firebase Authentication is now active -->
+    <!-- Server-down overlay removed — Firebase Authentication is now active -->
 
     <!-- -- Firebase Auth ---------------------------------------- -->
     <script type="module">
@@ -1182,7 +1182,7 @@ s0.parentNode.insertBefore(s1,s0);
         try {
           const user = await signIn(email, password);
           if (!user.emailVerified) {
-            // Block unverified users â€” sign them out and show a clear message
+            // Block unverified users — sign them out and show a clear message
             await logOut();
             showMsg(msg, m().email_not_verified, 'error');
             setLoading(btn, false);
@@ -1217,7 +1217,7 @@ s0.parentNode.insertBefore(s1,s0);
           await signUp(email, password, `${firstName} ${lastName}`);
           showMsg(msg, m().welcome_new(firstName), 'success');
           setLoading(btn, false);
-          // Do NOT redirect â€” user must verify email first
+          // Do NOT redirect — user must verify email first
         } catch (err) {
           showMsg(msg, getErrorMessage(err), 'error');
           setLoading(btn, false);

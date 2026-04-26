@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,7 +48,7 @@ Tawk_API.onLoad=function(){
   style.textContent='\
     #ipo-tawk-wrap{\
       position:fixed;\
-      bottom:calc(72px + 0.75rem + env(safe-area-inset-bottom,0px));\
+      bottom:calc(100px + 0.75rem + env(safe-area-inset-bottom,0px));\
       right:1.25rem;\
       z-index:99999;\
       display:flex;\
@@ -132,7 +132,7 @@ Tawk_API.onLoad=function(){
       #ipo-tawk-wrap{animation:none;}\
     }\
     @media(min-width:640px){\
-      #ipo-tawk-wrap{bottom:2rem;right:2rem;}\
+      #ipo-tawk-wrap{bottom:6rem;right:2rem;}\
       #ipo-tawk-btn{width:64px;height:64px;}\
     }\
   ';
@@ -193,7 +193,7 @@ s0.parentNode.insertBefore(s1,s0);
                     </a>
                 </div>
 
-                <!-- Search trigger â€” opens full overlay on click -->
+                <!-- Search trigger — opens full overlay on click -->
                 <div class="flex-1 max-w-2xl mx-8 hidden md:block">
                     <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
                         <i class="fas fa-search ipo-search-trigger-icon"></i>
@@ -420,7 +420,7 @@ import { lookupOrder } from '../auth/user-data.js';
     const STATUS_CONFIG = {
         pending:    { icon: 'fa-clock',         color: '#f59e0b', label: 'Order Received',   desc: 'Your order has been received and is awaiting processing.' },
         processing: { icon: 'fa-box-open',       color: '#3b82f6', label: 'Processing',        desc: 'Your order is being packed and prepared for dispatch.' },
-        shipped:    { icon: 'fa-truck-fast',     color: '#8b5cf6', label: 'Shipped',            desc: 'Your order is on its way! Delivery within 24â€“72 hours.' },
+        shipped:    { icon: 'fa-truck-fast',     color: '#8b5cf6', label: 'Shipped',            desc: 'Your order is on its way! Delivery within 24–72 hours.' },
         delivered:  { icon: 'fa-house-chimney-user', color: '#16a34a', label: 'Delivered',     desc: 'Your order has been delivered. Enjoy your fragrance!' },
         cancelled:  { icon: 'fa-circle-xmark',  color: '#e73c3c', label: 'Cancelled',          desc: 'This order was cancelled. Contact us for help.' },
     };
@@ -459,7 +459,7 @@ import { lookupOrder } from '../auth/user-data.js';
             <div class="flex items-start justify-between gap-2 py-2 border-b border-gray-100 last:border-0">
                 <div>
                     <p class="font-semibold text-sm text-gray-800">${escHtml(item.name)}</p>
-                    <p class="text-xs text-gray-500">${escHtml(item.size || '-')} Â· Qty ${escHtml(item.qty)}</p>
+                    <p class="text-xs text-gray-500">${escHtml(item.size || '-')} · Qty ${escHtml(item.qty)}</p>
                 </div>
                 <span class="text-sm font-semibold text-gray-700 whitespace-nowrap">
                     ${item.pricePending ? 'On request' : (item.price > 0 ? `${(item.price * item.qty).toFixed(0)} DH` : '-')}
