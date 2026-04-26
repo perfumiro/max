@@ -1056,84 +1056,143 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
     </section>
 
+    <!-- Module script: fetches Firestore overrides then triggers dynamic size rendering -->
+    <script type="module">
+        import { db } from '../auth/firebase.js';
+        import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
+        const XERJ_SLUGS = ['alexandria-ii', 'erba-pura', 'naxos'];
+        const normSz = sz => { const s = String(sz||'').trim().toLowerCase().replace(/\s+/g,''); return /^\d+$/.test(s) ? s+'ml' : s; };
+        // Returns { slugId: { prices: {sizeKey: price}, removedSizes: [...] } }
+        window._xerjoffFetchOverrides = async function() {
+            try {
+                const snap = await getDocs(collection(db, 'productOverrides'));
+                const result = {};
+                snap.forEach(d => {
+                    if (!XERJ_SLUGS.includes(d.id)) return;
+                    const raw = d.data();
+                    if (raw.disabled) return;
+                    result[d.id] = {
+                        prices: raw.prices || {},
+                        removedSizes: raw.removedSizes || []
+                    };
+                });
+                return result;
+            } catch(e) { return {}; }
+        };
+        // Module scripts are deferred — by the time this runs, the regular script below
+        // has already defined initXerjoffSizes(). Call it now.
+        if (typeof initXerjoffSizes === 'function') initXerjoffSizes();
+    </script>
+
     <script>
         var xerjoffPrices = {};
-        var xerjoffPricesPromise = null;
-        var xerjoffPricesWatcherStarted = false;
-        var lastKnownXerjoffPricesSnapshot = '';
-        var XERJOFF_PRICES_REFRESH_MS = 3000;
 
         function getXerjoffPricesPath() {
             return '../xerjoff-prices.json';
         }
 
+        // Called by the module script above once Firebase is ready.
+        // Fetches Firestore overrides + base JSON, computes effective sizes,
+        // renders the correct size buttons, and stores prices in xerjoffPrices.
+        async function initXerjoffSizes() {
+            var overrides = {};
+            try {
+                if (typeof window._xerjoffFetchOverrides === 'function') {
+                    overrides = await window._xerjoffFetchOverrides();
+                }
+            } catch(e) {}
+
+            var baseData = {};
+            try {
+                var r = await fetch(getXerjoffPricesPath(), { cache: 'no-store' });
+                if (r.ok) baseData = await r.json();
+            } catch(e) {}
+            if (!baseData || typeof baseData !== 'object') baseData = {};
+
+            var normSz = function(sz) {
+                var s = String(sz||'').trim().toLowerCase().replace(/\s+/g,'');
+                return /^\d+$/.test(s) ? s + 'ml' : s;
+            };
+
+            // Build xerjoffPrices: start from base, apply Firestore overrides
+            xerjoffPrices = {};
+            Object.keys(baseData).forEach(function(slug) {
+                xerjoffPrices[slug] = {};
+                Object.keys(baseData[slug]).forEach(function(sz) {
+                    xerjoffPrices[slug][normSz(sz)] = Number(baseData[slug][sz]) || 0;
+                });
+            });
+            Object.keys(overrides).forEach(function(slug) {
+                if (!xerjoffPrices[slug]) xerjoffPrices[slug] = {};
+                var ov = overrides[slug];
+                Object.keys(ov.prices || {}).forEach(function(sz) {
+                    xerjoffPrices[slug][normSz(sz)] = Number(ov.prices[sz]) || 0;
+                });
+                // Remove deleted sizes
+                (ov.removedSizes || []).forEach(function(sz) {
+                    delete xerjoffPrices[slug][normSz(sz)];
+                });
+            });
+
+            // Render size buttons dynamically for each product
+            document.querySelectorAll('.xerjoff-product-entry').forEach(function(entry) {
+                var productId = entry.getAttribute('data-product-id');
+                var sizeRow = entry.querySelector('.xerjoff-size-row');
+                var priceEl = entry.querySelector('.xerjoff-price-display');
+                if (!sizeRow || !priceEl) return;
+
+                var priceId = priceEl.id;
+                var base = baseData[productId] || {};
+                var ov = overrides[productId] || {};
+
+                // Effective sizes = union(base keys, override price keys) − removedSizes
+                var allSizes = new Set([
+                    ...Object.keys(base).map(normSz),
+                    ...Object.keys(ov.prices || {}).map(normSz)
+                ]);
+                var removed = new Set((ov.removedSizes || []).map(normSz));
+                var effectiveSizes = Array.from(allSizes).filter(function(sz) { return !removed.has(sz); });
+
+                // Sort: numeric sizes ascending (5ml < 10ml < 15ml), then alphabetical
+                effectiveSizes.sort(function(a, b) {
+                    var na = parseInt(a, 10), nb = parseInt(b, 10);
+                    if (!isNaN(na) && !isNaN(nb)) return na - nb;
+                    return a.localeCompare(b);
+                });
+
+                // Render buttons
+                sizeRow.innerHTML = '';
+                effectiveSizes.forEach(function(sz, i) {
+                    var btn = document.createElement('button');
+                    btn.className = 'xerjoff-size-btn' + (i === 0 ? ' is-active' : '');
+                    btn.type = 'button';
+                    btn.setAttribute('data-size-key', sz);
+                    // Label: "5ml" → "5 ML", "15ml" → "15 ML", custom → uppercase
+                    btn.textContent = sz.toUpperCase().replace(/(\d)(ML)$/, '$1 $2');
+                    btn.addEventListener('click', function() { xerjoffSize(this, priceId); });
+                    sizeRow.appendChild(btn);
+                });
+
+                // Show the price for the first size immediately
+                if (effectiveSizes.length > 0) {
+                    var firstSz = effectiveSizes[0];
+                    var price = getXerjoffPrice(productId, firstSz);
+                    var hasPrice = price > 0;
+                    var lang = localStorage.getItem('ipordise-language') || 'en';
+                    priceEl.textContent = hasPrice ? formatXerjoffPrice(price) : (lang === 'fr' ? 'Rupture de stock' : 'Out of Stock');
+                    priceEl.style.color = hasPrice ? '#1a1a1a' : '#dc2626';
+                    priceEl.style.fontSize = hasPrice ? '1.9rem' : '1.1rem';
+                    priceEl.style.fontWeight = hasPrice ? '800' : '700';
+                    priceEl.dataset.price = hasPrice ? formatXerjoffPrice(price) : '';
+                    priceEl.dataset.size = btn ? btn.textContent.trim() : firstSz.toUpperCase();
+                }
+            });
+        }
+
+        // loadXerjoffPrices: prices already loaded by initXerjoffSizes() on page load.
+        // Returns immediately — no extra Firestore fetch needed on button click.
         function loadXerjoffPrices() {
-            if (xerjoffPricesPromise) return xerjoffPricesPromise;
-
-            xerjoffPricesPromise = fetch(getXerjoffPricesPath(), { cache: 'no-store' })
-                .then(function(response) {
-                    if (!response.ok) return {};
-                    return response.json();
-                })
-                .then(function(data) {
-                    xerjoffPrices = data && typeof data === 'object' ? data : {};
-                    return xerjoffPrices;
-                })
-                .catch(function() {
-                    xerjoffPrices = {};
-                    return xerjoffPrices;
-                });
-
-            return xerjoffPricesPromise;
-        }
-
-        function fetchXerjoffPricesSnapshot() {
-            return fetch(getXerjoffPricesPath() + '?t=' + Date.now(), { cache: 'no-store' })
-                .then(function(response) {
-                    if (!response.ok) return '';
-                    return response.text();
-                })
-                .catch(function() {
-                    return '';
-                });
-        }
-
-        function checkForXerjoffPricesUpdate() {
-            return fetchXerjoffPricesSnapshot().then(function(nextSnapshot) {
-                if (!nextSnapshot) return;
-
-                if (!lastKnownXerjoffPricesSnapshot) {
-                    lastKnownXerjoffPricesSnapshot = nextSnapshot;
-                    return;
-                }
-
-                if (nextSnapshot !== lastKnownXerjoffPricesSnapshot) {
-                    lastKnownXerjoffPricesSnapshot = nextSnapshot;
-                    window.location.reload();
-                }
-            });
-        }
-
-        function watchXerjoffPricesChanges() {
-            if (xerjoffPricesWatcherStarted) return;
-
-            xerjoffPricesWatcherStarted = true;
-            checkForXerjoffPricesUpdate();
-
-            window.setInterval(function() {
-                if (document.hidden) return;
-                checkForXerjoffPricesUpdate();
-            }, XERJOFF_PRICES_REFRESH_MS);
-
-            window.addEventListener('focus', function() {
-                checkForXerjoffPricesUpdate();
-            });
-
-            document.addEventListener('visibilitychange', function() {
-                if (!document.hidden) {
-                    checkForXerjoffPricesUpdate();
-                }
-            });
+            return Promise.resolve(xerjoffPrices);
         }
 
         function getXerjoffPrice(productId, sizeKey) {
@@ -1152,10 +1211,12 @@ s0.parentNode.insertBefore(s1,s0);
             thumb.closest('.xerjoff-gallery-thumbs').querySelectorAll('.xerjoff-gallery-thumb').forEach(function(t){ t.classList.remove('is-active'); });
             thumb.classList.add('is-active');
         }
+
         async function xerjoffSize(btn, priceId) {
-            await loadXerjoffPrices();
+            // Switch active button immediately
             btn.closest('.xerjoff-size-row').querySelectorAll('.xerjoff-size-btn').forEach(function(b){ b.classList.remove('is-active'); });
             btn.classList.add('is-active');
+            await loadXerjoffPrices(); // resolves instantly (prices already loaded)
             var el = document.getElementById(priceId);
             var productEntry = btn.closest('.xerjoff-product-entry');
             var productId = productEntry ? productEntry.getAttribute('data-product-id') : '';
@@ -1163,13 +1224,14 @@ s0.parentNode.insertBefore(s1,s0);
             var price = formatXerjoffPrice(getXerjoffPrice(productId, sizeKey));
             var hasPrice = !!String(price || '').trim();
             var curLang = localStorage.getItem('ipordise-language') || 'en';
-            el.textContent = hasPrice ? price : (curLang === 'fr' ? 'Prix sur demande' : 'Price on Request');
-            el.style.color = hasPrice ? '#1a1a1a' : '#16a34a';
+            el.textContent = hasPrice ? price : (curLang === 'fr' ? 'Rupture de stock' : 'Out of Stock');
+            el.style.color = hasPrice ? '#1a1a1a' : '#dc2626';
             el.style.fontSize = hasPrice ? '1.9rem' : '1.1rem';
             el.style.fontWeight = hasPrice ? '800' : '700';
             el.dataset.price = price || '';
             el.dataset.size = btn.textContent.trim();
         }
+
         function xerjoffQty(qtyId, delta) {
             var el = document.getElementById(qtyId);
             el.textContent = Math.max(1, parseInt(el.textContent) + delta);

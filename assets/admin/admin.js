@@ -2128,29 +2128,27 @@ const loadProductsView = async () => {
       const base       = pricesRes[slug] || {};
       const ov         = overrides[slug] || {};
       const pendingSet = pendingRemovals[slug] || new Set();
-      const hasFsPrices = ov.prices && Object.keys(ov.prices).length > 0;
 
-      if (hasFsPrices) {
-        // Firestore prices are AUTHORITATIVE — use them as the complete size list.
-        // This ensures renames (old key gone, new key added) are reflected correctly
-        // and the base prices.json whitelist cannot re-inject stale old sizes.
-        const merged = {};
-        Object.entries(ov.prices).forEach(([sz, price]) => {
-          if (price > 0 && !pendingSet.has(sz)) merged[sz] = price;
-        });
-        return merged;
-      }
-
-      // No Firestore prices yet — derive from base (prices.json) minus removals.
-      // Already-saved removals respect "prices WIN" rule.
-      // pendingRemovals (UI click ×) ALWAYS win.
+      // Sizes to hide: explicitly removed (× button or rename-away) + pending UI removals
       const removed = new Set([
-        ...(ov.removedSizes || []).map(normSizeKey).filter(sz => !(ov.prices?.[sz] > 0)),
+        ...(ov.removedSizes || []).map(normSizeKey),
         ...[...pendingSet].map(normSizeKey),
       ]);
+
+      // Union of base sizes + any extra sizes added/renamed in admin (in ov.prices)
+      // This ensures zero-base products (Xerjoff/UL) keep unpriced sizes visible,
+      // while renamed sizes (tracked in removedSizes) stay hidden.
+      const allSizes = new Set([
+        ...Object.keys(base).map(normSizeKey),
+        ...Object.keys(ov.prices || {}),
+      ]);
+
       const merged = {};
-      Object.keys(base).forEach(sz => {
-        if (!removed.has(sz)) merged[sz] = base[sz];
+      allSizes.forEach(sz => {
+        if (removed.has(sz)) return;
+        const fsPrice = ov.prices?.[sz];
+        // Use FS price if positive, otherwise fall back to base price (may be 0)
+        merged[sz] = (fsPrice > 0) ? fsPrice : (base[normSizeKey(sz)] ?? 0);
       });
       return merged;
     };
@@ -2159,72 +2157,118 @@ const loadProductsView = async () => {
 
     // ── Product image lookup ────────────────────────────────────────────────
     const PRODUCT_IMG = {
-      'armani-stronger-with-you-absolutely-perfume': '/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp',
+      // ── Armani ──────────────────────────────────────────────────────────
+      'armani-stronger-with-you-absolutely-perfume':     '/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp',
       'armani-stronger-with-you-powerfully-eau-de-parfum': '/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
-      'emporio-armani-stronger-with-you-intensely-edp': '/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp',
-      'azzaro-forever-wanted-elixir-eau-de-parfum': '/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
-      'azzaro-the-most-wanted-eau-de-parfum-intense': '/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp',
-      'azzaro-the-most-wanted-parfum': '/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp',
-      'carolina-herrera-bad-boy-eau-de-toilette': '/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg',
-      'bleu-de-chanel-eau-de-parfum-spray': '/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg',
-      'dior-homme-intense-eau-de-parfum': '/assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg',
-      'dior-sauvage-eau-de-parfum': '/assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg',
-      'gentleman-private-reserve-eau-de-parfum': '/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png',
-      'givenchy-gentleman-society-amber-eau-de-parfum': '/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg',
-      'givenchy-gentleman-society-extreme-eau-de-parfum': '/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp',
+      'emporio-armani-stronger-with-you-intensely-edp':  '/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp',
+      // ── Azzaro ──────────────────────────────────────────────────────────
+      'azzaro-forever-wanted-elixir-eau-de-parfum':      '/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
+      'azzaro-the-most-wanted-eau-de-parfum-intense':    '/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp',
+      'azzaro-the-most-wanted-parfum':                   '/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp',
+      // ── Carolina Herrera ────────────────────────────────────────────────
+      'carolina-herrera-bad-boy-eau-de-toilette':        '/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg',
+      // ── Chanel ──────────────────────────────────────────────────────────
+      'bleu-de-chanel-eau-de-parfum-spray':              '/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg',
+      // ── Dior ────────────────────────────────────────────────────────────
+      'dior-homme-intense-eau-de-parfum':                '/assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg',
+      'dior-sauvage-eau-de-parfum':                      '/assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg',
+      // ── Givenchy ────────────────────────────────────────────────────────
+      'gentleman-private-reserve-eau-de-parfum':         '/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png',
+      'givenchy-gentleman-society-amber-eau-de-parfum':  '/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg',
+      'givenchy-gentleman-society-extreme-eau-de-parfum':'/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp',
       'givenchy-gentleman-society-nomade-eau-de-parfum': '/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/1.webp',
-      'gucci-guilty-absolu-de-parfum-pour-homme': '/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp',
-      'gucci-guilty-elixir-pour-homme': '/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp',
-      'lhomme-ideal-extreme': '/assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg',
-      'lhomme-ideal-lintense-eau-de-parfum': '/assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp',
-      'boss-bottled-absolu-intense': '/assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg',
-      'hugo-boss-boss-bottled-elixir-intense': '/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg',
-      'hugo-boss-the-scent-for-him-elixir': '/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png',
-      'jean-paul-gaultier-le-beau-eau-de-parfum': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp',
-      'jean-paul-gaultier-le-male-elixir': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp',
-      'jean-paul-gaultier-le-male-in-blue-eau-de-parfum': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg',
-      'jean-paul-gaultier-le-male-le-parfum-eau-de-parfum': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp',
-      'jean-paul-gaultier-scandal-elixir': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg',
-      'jean-paul-gaultier-scandal-intense-eau-de-parfum': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg',
-      'le-male-eau-de-toilette': '/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png',
-      'montale-arabians-tonka': '/assets/images/products/montale/montale-arabians-tonka/1.webp',
-      'prada-lhomme-edt': '/assets/images/products/prada/prada-lhomme-edt/1.jpg',
-      'prada-luna-rossa-black-eau-de-parfum': '/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg',
-      'prada-luna-rossa-carbon-edt': '/assets/images/products/prada/prada-luna-rossa-carbon-edt/1.jpg',
-      'prada-luna-rossa-men-edt': '/assets/images/products/prada/prada-luna-rossa-men-edt/1.jfif',
-      'prada-luna-rossa-ocean-eau-de-parfum': '/assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg',
-      'prada-luna-rossa-ocean-le-parfum': '/assets/images/products/prada/prada-luna-rossa-ocean-le-parfum/1.jpg',
-      'prada-paradigme-eau-de-parfum': '/assets/images/products/prada/prada-paradigme-eau-de-parfum/1.png',
-      'rabanne-one-million-elixir-intense': '/assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp',
-      'rabanne-one-million-parfum': '/assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg',
-      'akdeniz': '/assets/images/products/unique-luxury/akdeniz/1.webp',
-      'aphrodisiac-touch': '/assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
-      'beril': '/assets/images/products/unique-luxury/beril/1.webp',
-      'beverly-hills-exclusive': '/assets/images/products/unique-luxury/beverly-hills-exclusive/1.webp',
-      'kutay': '/assets/images/products/unique-luxury/kutay/1.webp',
-      'valentino-born-in-roma-donna-intense-eau-de-parfum': '/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp',
-      'valentino-born-in-roma-uomo-intense-eau-de-parfum': '/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp',
-      'valentino-born-in-rome-extradose': '/assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg',
-      'valentino-donna-born-in-roma-eau-de-parfum': '/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/1.webp',
-      'valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette': '/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/1.webp',
-      'valentino-uomo-born-in-roma-eau-de-toilette': '/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/1.jpg',
-      'valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette': '/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/1.jpg',
-      'versace-dylan-blue-eau-de-toilette': '/assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg',
-      'versace-eros-eau-de-parfum': '/assets/images/products/versace/versace-eros-eau-de-parfum/1.webp',
-      'versace-eros-energy-eau-de-parfum': '/assets/images/products/versace/versace-eros-energy-eau-de-parfum/1.jpg',
-      'versace-eros-flame-eau-de-parfum': '/assets/images/products/versace/versace-eros-flame-eau-de-parfum/1.jpg',
-      'xerjoff-alexandria-ll-eau-de-parfum': '/assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp',
-      'xerjoff-erba-pura': '/assets/images/products/xerjoff/xerjoff-erba-pura/1.webp',
-      'xerjoff-naxos': '/assets/images/products/xerjoff/xerjoff-naxos/1.webp',
-      'yves-saint-laurent-myslf-eau-de-parfum': '/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/1.jpg',
-      'yves-saint-laurent-myslf-le-parfum': '/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/1.webp',
-      'yves-saint-laurent-y-eau-de-parfum': '/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp',
+      // ── Gucci ───────────────────────────────────────────────────────────
+      'gucci-guilty-absolu-de-parfum-pour-homme':        '/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp',
+      'gucci-guilty-elixir-pour-homme':                  '/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp',
+      // ── Guerlain ────────────────────────────────────────────────────────
+      'guerlain-l-homme-ideal-extreme':                  '/assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg',
+      'guerlain-l-homme-ideal-l-intense-eau-de-parfum':  '/assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp',
+      // legacy keys (keep for any existing Firestore overrides)
+      'lhomme-ideal-extreme':                            '/assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg',
+      'lhomme-ideal-lintense-eau-de-parfum':             '/assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp',
+      // ── Hugo Boss ───────────────────────────────────────────────────────
+      'boss-bottled-absolu-intense':                     '/assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg',
+      'hugo-boss-boss-bottled-elixir-intense':           '/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg',
+      'hugo-boss-the-scent-for-him-elixir':              '/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png',
+      // ── Jean Paul Gaultier ──────────────────────────────────────────────
+      'jean-paul-gaultier-le-beau-eau-de-parfum':        '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp',
+      'jean-paul-gaultier-le-male-elixir':               '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp',
+      'jean-paul-gaultier-le-male-elixir-eau-de-parfum': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp',
+      'jean-paul-gaultier-le-male-in-blue-eau-de-parfum':'/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg',
+      'jean-paul-gaultier-le-male-le-parfum-eau-de-parfum':'/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp',
+      'jean-paul-gaultier-le-male-eau-de-toilette':      '/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png',
+      'jean-paul-gaultier-scandal-elixir':               '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg',
+      'jean-paul-gaultier-scandal-intense-eau-de-parfum':'/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg',
+      'le-male-eau-de-toilette':                         '/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png',
+      // ── Montale ─────────────────────────────────────────────────────────
+      'montale-arabians-tonka':                          '/assets/images/products/montale/montale-arabians-tonka/1.webp',
+      // ── Prada ───────────────────────────────────────────────────────────
+      'prada-l-homme-edt':                               '/assets/images/products/prada/prada-lhomme-edt/1.jpg',
+      'prada-lhomme-edt':                                '/assets/images/products/prada/prada-lhomme-edt/1.jpg',
+      'prada-luna-rossa-black-eau-de-parfum':            '/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg',
+      'prada-luna-rossa-carbon-edt':                     '/assets/images/products/prada/prada-luna-rossa-carbon-edt/1.jpg',
+      'prada-luna-rossa-men-edt':                        '/assets/images/products/prada/prada-luna-rossa-men-edt/1.jfif',
+      'prada-luna-rossa-ocean-eau-de-parfum':            '/assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg',
+      'prada-luna-rossa-ocean-le-parfum':                '/assets/images/products/prada/prada-luna-rossa-ocean-le-parfum/1.jpg',
+      'prada-paradigme-eau-de-parfum':                   '/assets/images/products/prada/prada-paradigme-eau-de-parfum/1.png',
+      // ── Rabanne ─────────────────────────────────────────────────────────
+      'rabanne-one-million-elixir-intense':              '/assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp',
+      'rabanne-one-million-parfum':                      '/assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg',
+      // ── Unique'e Luxury ─────────────────────────────────────────────────
+      'akdeniz':                                         '/assets/images/products/unique-luxury/akdeniz/1.webp',
+      'aphrodisiac-touch':                               '/assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
+      'beril':                                           '/assets/images/products/unique-luxury/beril/1.webp',
+      'beverly-hills-exclusive':                         '/assets/images/products/unique-luxury/beverly-hills-exclusive/1.webp',
+      'kutay':                                           '/assets/images/products/unique-luxury/kutay/1.webp',
+      // ── Valentino ───────────────────────────────────────────────────────
+      'valentino-born-in-roma-donna-intense-eau-de-parfum':       '/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp',
+      'valentino-born-in-roma-uomo-intense-eau-de-parfum':        '/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp',
+      'valentino-born-in-roma-extradose-eau-de-toilette':         '/assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg',
+      'valentino-born-in-rome-extradose':                         '/assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg',
+      'valentino-donna-born-in-roma-eau-de-parfum':               '/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/1.webp',
+      'valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette':'/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/1.webp',
+      'valentino-uomo-born-in-roma-eau-de-toilette':              '/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/1.jpg',
+      'valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette':'/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/1.jpg',
+      // ── Versace ─────────────────────────────────────────────────────────
+      'versace-dylan-blue-eau-de-toilette':              '/assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg',
+      'versace-eros-eau-de-parfum':                      '/assets/images/products/versace/versace-eros-eau-de-parfum/1.webp',
+      'versace-eros-energy-eau-de-parfum':               '/assets/images/products/versace/versace-eros-energy-eau-de-parfum/1.jpg',
+      'versace-eros-flame-eau-de-parfum':                '/assets/images/products/versace/versace-eros-flame-eau-de-parfum/1.jpg',
+      // ── XERJOFF ─────────────────────────────────────────────────────────
+      'alexandria-ii':                                   '/assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp',
+      'erba-pura':                                       '/assets/images/products/xerjoff/xerjoff-erba-pura/1.webp',
+      'naxos':                                           '/assets/images/products/xerjoff/xerjoff-naxos/1.webp',
+      'xerjoff-alexandria-ll-eau-de-parfum':             '/assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp',
+      'xerjoff-erba-pura':                               '/assets/images/products/xerjoff/xerjoff-erba-pura/1.webp',
+      'xerjoff-naxos':                                   '/assets/images/products/xerjoff/xerjoff-naxos/1.webp',
+      // ── YSL ─────────────────────────────────────────────────────────────
+      'yves-saint-laurent-myslf-eau-de-parfum':          '/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/1.jpg',
+      'yves-saint-laurent-myslf-le-parfum':              '/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/1.webp',
+      'yves-saint-laurent-y-eau-de-parfum':              '/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp',
     };
 
     // ── Render ─────────────────────────────────────────────────────────────
     const render = () => {
       const q      = (searchEl?.value || '').toLowerCase();
       const status = filterEl?.value || '';
+
+      // ── Admin Added: scroll to Firestore section, clear grid ──────────
+      if (status === 'admin-added') {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:36px 24px;color:var(--muted);border:2px dashed var(--border);border-radius:12px">
+          <i class="fas fa-arrow-up" style="font-size:22px;color:var(--gold);display:block;margin-bottom:10px;animation:bounce .8s ease-in-out infinite alternate"></i>
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">Admin-Added Products are shown above</div>
+          <div style="font-size:11px;color:var(--muted)">Products added via the <strong style="color:var(--gold)">&plus; Add New Product</strong> button appear in the section above this grid.</div>
+        </div>`;
+        const fsSection = document.getElementById('firestoreProductsSection');
+        if (fsSection) {
+          fsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          fsSection.style.outline = '2px solid var(--gold)';
+          fsSection.style.borderRadius = '10px';
+          setTimeout(() => { fsSection.style.outline = ''; fsSection.style.borderRadius = ''; }, 2200);
+        }
+        return;
+      }
+
       const filtered = slugs.filter(slug => {
         const ov       = overrides[slug] || {};
         const disabled = ov.disabled || false;
@@ -2233,6 +2277,16 @@ const loadProductsView = async () => {
         if (status === 'active'    && disabled) return false;
         if (status === 'disabled'  && !disabled) return false;
         if (status === 'overridden'&& (!hasOv || disabled)) return false;
+        if (status === 'xerjoff'   && !['alexandria-ii','erba-pura','naxos'].includes(slug)) return false;
+        if (status === 'unique'    && !['akdeniz','aphrodisiac-touch','beril','beverly-hills-exclusive','kutay'].includes(slug)) return false;
+        if (status === 'has-price') {
+          const sizes = effectiveSizes(slug);
+          if (!Object.values(sizes).some(p => p > 0)) return false;
+        }
+        if (status === 'no-price') {
+          const sizes = effectiveSizes(slug);
+          if (Object.values(sizes).some(p => p > 0)) return false;
+        }
         return true;
       });
 
@@ -2249,7 +2303,7 @@ const loadProductsView = async () => {
         return;
       }
 
-      grid.innerHTML = filtered.map(slug => {
+      const renderCard = (slug) => {
         const ov         = overrides[slug] || {};
         const disabled   = ov.disabled || false;
         const hasOverride= !!(Object.keys(ov.prices||{}).length || (ov.removedSizes||[]).length);
@@ -2370,7 +2424,8 @@ const loadProductsView = async () => {
               ${sizeChips || `<span style="font-size:11px;color:var(--dim);font-style:italic;padding:4px 2px">No sizes — add one below</span>`}
             </div>
 
-            <!-- ── Add size form ── -->
+            <!-- ── Add size form (hidden for fixed-size brands) ── -->
+            ${(['alexandria-ii','erba-pura','naxos','akdeniz','aphrodisiac-touch','beril','beverly-hills-exclusive','kutay'].includes(slug)) ? '' : `
             <div class="prod-add-size-form" data-slug="${esc(slug)}"
               style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 10px;background:var(--s3);border-radius:8px;border:1px dashed var(--border)">
               <span style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;flex-shrink:0">
@@ -2390,7 +2445,7 @@ const loadProductsView = async () => {
                 style="padding:5px 14px;font-size:11px;flex-shrink:0;gap:4px">
                 <i class="fas fa-plus" style="font-size:9px"></i> Add
               </button>
-            </div>
+            </div>`}
 
             <!-- ── Promotion panel ── -->
             <div class="prod-promo-panel" data-slug="${esc(slug)}" style="margin-top:6px">
@@ -2442,7 +2497,48 @@ const loadProductsView = async () => {
 
           </div>
         </div>`;
-      }).join('');
+      };
+
+      // ── Group products by brand section ────────────────────────────────
+      const _XERJ_SET = new Set(['alexandria-ii', 'erba-pura', 'naxos']);
+      const _UNIQ_SET = new Set(['akdeniz', 'aphrodisiac-touch', 'beril', 'beverly-hills-exclusive', 'kutay']);
+      const _xerjSlugs = filtered.filter(s => _XERJ_SET.has(s));
+      const _uniqSlugs = filtered.filter(s => _UNIQ_SET.has(s));
+      const _mainSlugs = filtered.filter(s => !_XERJ_SET.has(s) && !_UNIQ_SET.has(s));
+
+      const _brandSection = (label, sub, icon, accent, groupSlugs) => {
+        if (groupSlugs.length === 0) return '';
+        return '<div class="prod-brand-section" style="margin-bottom:28px">' +
+          '<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--s3);border-radius:10px 10px 0 0;border:1px solid var(--border);border-bottom:3px solid ' + accent + '">' +
+          '<i class="' + icon + '" style="color:' + accent + ';font-size:18px;flex-shrink:0"></i>' +
+          '<div style="flex:1;min-width:0">' +
+          '<div style="font-size:13px;font-weight:800;color:var(--ink);letter-spacing:.5px;text-transform:uppercase">' + label + '</div>' +
+          '<div style="font-size:10px;color:var(--muted);margin-top:2px">' + sub + '</div>' +
+          '</div>' +
+          '<span style="font-size:11px;font-weight:700;color:' + accent + ';padding:3px 12px;border-radius:99px;border:1.5px solid ' + accent + ';background:var(--s4);white-space:nowrap">' + groupSlugs.length + ' product' + (groupSlugs.length !== 1 ? 's' : '') + '</span>' +
+          '</div>' +
+          '<div style="display:grid;gap:10px;padding:10px 0 4px 0">' + groupSlugs.map(renderCard).join('') + '</div>' +
+          '</div>';
+      };
+
+      const _mainSection = _mainSlugs.length > 0
+        ? '<div class="prod-brand-section" style="margin-bottom:28px">' +
+          '<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--s3);border-radius:10px 10px 0 0;border:1px solid var(--border);border-bottom:3px solid var(--sky)">' +
+          '<i class="fas fa-bottle-droplet" style="color:var(--sky);font-size:18px;flex-shrink:0"></i>' +
+          '<div style="flex:1;min-width:0">' +
+          '<div style="font-size:13px;font-weight:800;color:var(--ink);letter-spacing:.5px;text-transform:uppercase">Main Collection</div>' +
+          '<div style="font-size:10px;color:var(--muted);margin-top:2px">Standard products — prices.json</div>' +
+          '</div>' +
+          '<span style="font-size:11px;font-weight:700;color:var(--sky);padding:3px 12px;border-radius:99px;border:1.5px solid var(--sky);background:var(--s4);white-space:nowrap">' + _mainSlugs.length + ' products</span>' +
+          '</div>' +
+          '<div style="display:grid;gap:10px;padding:10px 0 4px 0">' + _mainSlugs.map(renderCard).join('') + '</div>' +
+          '</div>'
+        : '';
+
+      grid.innerHTML =
+        _brandSection('XERJOFF', 'Italian Haute Parfumerie \u00b7 Decants (5 ML & 10 ML)', 'fas fa-gem', '#7c3aed', _xerjSlugs) +
+        _brandSection('Unique\u2019e Luxury', 'House of Unique\u2019e Luxury \u00b7 Extrait de Parfum', 'fas fa-crown', '#c9a227', _uniqSlugs) +
+        _mainSection;
 
       // Wire price + name input changes → mark dirty and show badge instantly
       grid.querySelectorAll('.prod-price-input, .prod-size-name-input').forEach(inp => {
@@ -2643,17 +2739,31 @@ const loadProductsView = async () => {
         if (!card) { toast('Could not find product card', 'error'); return; }
         const chips = card.querySelectorAll('.prod-size-chip');
         const prices = {};
+        const renamedAway = new Set(); // original size names that were renamed to something new
         let hasError = false;
         chips.forEach(chip => {
+          const originalSz = normSizeKey(chip.dataset.size || '');
           const nameInp = chip.querySelector('.prod-size-name-input');
           const sz      = normSizeKey((nameInp?.value || chip.dataset.size || '').trim());
           const inp     = chip.querySelector('.prod-price-input');
           const price   = parseFloat(inp?.value ?? '');
           if (!sz) return;
           if (isNaN(price) || price < 0) { hasError = true; return; }
+          // Detect duplicate size name: another chip already wrote this key
+          if (sz in prices) {
+            hasError = true;
+            if (nameInp) nameInp.style.borderBottom = '2px solid var(--rose)';
+            return;
+          }
+          const isRename = originalSz && sz !== originalSz;
+          // Skip zero-priced chips ONLY if the name was NOT changed.
+          // Renamed sizes must always be saved (even at 0) so the new name
+          // persists in ov.prices and effectiveSizes() can include it in allSizes.
+          if (price === 0 && !isRename) return;
           prices[sz] = price;
+          if (isRename) renamedAway.add(originalSz);
         });
-        if (hasError) { toast('Fix invalid prices before saving', 'error'); return; }
+        if (hasError) { toast('Fix invalid prices before saving — duplicate or invalid size names', 'error'); return; }
 
         // ── Collect original prices from promotion panel ─────────────────
         const originalPrices = {};
@@ -2681,12 +2791,37 @@ const loadProductsView = async () => {
         }
 
         const pendingSet   = pendingRemovals[slug] || new Set();
+        // removedSizes = previously saved removals + × clicks + renamed-away originals
+        // Do NOT include base keys missing from prices — zero-base products (Xerjoff/UL)
+        // leave unpriced sizes as 0 which get skipped, but those sizes must stay visible.
+        const prevRemoved  = (ov.removedSizes || []).map(normSizeKey);
         const removedSizes = [
-          ...Object.keys(base).map(normSizeKey).filter(sz => !(sz in prices)),
+          ...prevRemoved.filter(sz => !(sz in prices)),
           ...[...pendingSet].map(normSizeKey),
+          ...[...renamedAway].filter(sz => !(sz in prices)),
         ].filter((v,i,a) => a.indexOf(v)===i).filter(sz => !(prices[sz]>0));
 
         delete pendingRemovals[slug];
+
+        // If no positive prices remain, treat Save as a Reset (delete the override doc)
+        // This prevents writing a corrupt {prices:{}, removedSizes:[...]} state for
+        // Xerjoff/Unique Luxury products whose base prices.json values are all 0.
+        if (Object.keys(prices).length === 0) {
+          const btn2 = card.querySelector('.prod-save');
+          if (btn2) { btn2.disabled=true; btn2.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
+          try {
+            await deleteDoc(doc(db,'productOverrides',slug));
+            delete overrides[slug];
+            dirty.delete(slug);
+            toast(`✓ ${productName(slug)} saved (no prices set — override cleared)`, 'success');
+            render();
+          } catch(err) {
+            toast('Save failed: ' + err.message, 'error');
+            if (btn2) { btn2.disabled=false; btn2.innerHTML='<i class="fas fa-floppy-disk"></i> Save'; }
+          }
+          return;
+        }
+
         const savePayload = { ...(ov.disabled !== undefined ? {disabled: ov.disabled} : {}), prices, removedSizes };
         if (Object.keys(originalPrices).length > 0) savePayload.promoPrices = originalPrices;
         overrides[slug] = savePayload;

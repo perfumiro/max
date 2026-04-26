@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="assets/admin/admin.css?v=2">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script type="module" src="assets/admin/admin.js?v=27"></script>
+  <script type="module" src="assets/admin/admin.js?v=30"></script>
 </head>
 <body data-theme="dark">
   <div id="toastContainer" aria-live="polite"></div>
@@ -618,11 +618,24 @@
           <div class="card mb-4">
             <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
               <input type="text" class="select-sm" id="productsSearch" placeholder="Search product name..." style="min-width:220px;flex:1">
-              <select class="select-sm" id="productsStatusFilter" style="min-width:130px">
+              <select class="select-sm" id="productsStatusFilter" style="min-width:160px">
                 <option value="">All Products</option>
-                <option value="active">Active only</option>
-                <option value="disabled">Disabled only</option>
-                <option value="overridden">Overridden only</option>
+                <optgroup label="── Status ──">
+                  <option value="active">Active only</option>
+                  <option value="disabled">Disabled only</option>
+                  <option value="overridden">Overridden only</option>
+                </optgroup>
+                <optgroup label="── Pricing ──">
+                  <option value="has-price">Has Price (Live)</option>
+                  <option value="no-price">No Price (Out of Stock)</option>
+                </optgroup>
+                <optgroup label="── Brand ──">
+                  <option value="xerjoff">XERJOFF</option>
+                  <option value="unique">Unique&#8217;e Luxury</option>
+                </optgroup>
+                <optgroup label="── Source ──">
+                  <option value="admin-added">Admin Added</option>
+                </optgroup>
               </select>
               <button class="btn btn-xs btn-gold" id="refreshProductsBtn"><i class="fas fa-rotate-right"></i> Refresh</button>
               <button class="btn btn-xs btn-gold" id="addNewProductBtn"><i class="fas fa-plus"></i> Add New Product</button>

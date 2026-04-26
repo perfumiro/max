@@ -356,5 +356,37 @@
     "30ml": 0,
     "50ml": 0,
     "100ml": 0
+  },
+  "akdeniz": {
+    "5ml": 0,
+    "10ml": 0
+  },
+  "aphrodisiac-touch": {
+    "5ml": 0,
+    "10ml": 0
+  },
+  "beril": {
+    "5ml": 0,
+    "10ml": 0
+  },
+  "beverly-hills-exclusive": {
+    "5ml": 0,
+    "10ml": 0
+  },
+  "kutay": {
+    "5ml": 0,
+    "10ml": 0
+  },
+  "alexandria-ii": {
+    "5ml": 0,
+    "10ml": 0
+  },
+  "erba-pura": {
+    "5ml": 0,
+    "10ml": 0
+  },
+  "naxos": {
+    "5ml": 0,
+    "10ml": 0
   }
 }
