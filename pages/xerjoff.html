@@ -13,7 +13,7 @@
       gtag('config', 'G-70NCC2RZM6');
     </script>
     <title data-i18n-title="xerjoff.page_title">IPORDISE - XERJOFF Collection | Italian Haute Parfumerie</title>
-    <meta name="description" content="Explore the exclusive XERJOFF collection at IPORDISE Morocco. Italian haute parfumerie — Naxos, Erba Pura, Alexandria II and more. 100% authentic. Free delivery 35 MAD.">
+    <meta name="description" content="Explore the exclusive XERJOFF collection at IPORDISE Morocco. Italian haute parfumerie â€” Naxos, Erba Pura, Alexandria II and more. 100% authentic. Free delivery 35 MAD.">
     <link rel="canonical" href="https://ipordise.com/pages/xerjoff">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <meta property="og:type" content="website">
@@ -779,7 +779,7 @@ s0.parentNode.insertBefore(s1,s0);
                     </a>
                 </div>
 
-                <!-- Search trigger — opens full overlay on click -->
+                <!-- Search trigger â€” opens full overlay on click -->
                 <div class="flex-1 max-w-2xl mx-8 hidden md:block">
                     <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
                         <i class="fas fa-search ipo-search-trigger-icon"></i>
@@ -1079,7 +1079,7 @@ s0.parentNode.insertBefore(s1,s0);
                 return result;
             } catch(e) { return {}; }
         };
-        // Module scripts are deferred — by the time this runs, the regular script below
+        // Module scripts are deferred â€” by the time this runs, the regular script below
         // has already defined initXerjoffSizes(). Call it now.
         if (typeof initXerjoffSizes === 'function') initXerjoffSizes();
     </script>
@@ -1190,7 +1190,7 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         // loadXerjoffPrices: prices already loaded by initXerjoffSizes() on page load.
-        // Returns immediately — no extra Firestore fetch needed on button click.
+        // Returns immediately â€” no extra Firestore fetch needed on button click.
         function loadXerjoffPrices() {
             return Promise.resolve(xerjoffPrices);
         }
@@ -1249,7 +1249,7 @@ s0.parentNode.insertBefore(s1,s0);
             var priceText = priceEl && priceEl.dataset.price;
             if (!sizeLabel) {
                 var lang = localStorage.getItem('ipordise-language') || 'en';
-                alert(lang === 'fr' ? 'Veuillez s—lectionner une taille.' : 'Please select a size first.');
+                alert(lang === 'fr' ? 'Veuillez sâ€”lectionner une taille.' : 'Please select a size first.');
                 return;
             }
             var qty = parseInt(document.getElementById(prefix + '-qty').textContent) || 1;
@@ -1300,10 +1300,10 @@ s0.parentNode.insertBefore(s1,s0);
                     badge.remove();
                 }
             });
-            // Show confirmation on the button — no redirect
+            // Show confirmation on the button â€” no redirect
             var btn = document.querySelector('#product-' + prefix + ' .xerjoff-cart-btn');
             var lang = localStorage.getItem('ipordise-language') || 'en';
-            btn.textContent = lang === 'fr' ? '? Ajout— au panier' : '? Added to Cart';
+            btn.textContent = lang === 'fr' ? '? Ajoutâ€” au panier' : '? Added to Cart';
             btn.style.background = '#16a34a';
             btn.disabled = true;
             setTimeout(function() {

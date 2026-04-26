@@ -25,7 +25,7 @@
     <meta property="og:image" content="https://ipordise.com/assets/Herosectionphotos/logo%20area.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="IPORDISE PARFUMS — Luxury Perfumes in Morocco">
+    <meta property="og:image:alt" content="IPORDISE PARFUMS â€” Luxury Perfumes in Morocco">
     <meta property="og:locale" content="en_US">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
@@ -597,7 +597,7 @@
                 overflow: hidden;
             }
 
-            /* Size buttons — full width row */
+            /* Size buttons â€” full width row */
             .hul-size-row {
                 gap: 0.5rem;
             }
@@ -951,7 +951,7 @@ s0.parentNode.insertBefore(s1,s0);
                     </a>
                 </div>
 
-                <!-- Search trigger — opens full overlay on click -->
+                <!-- Search trigger â€” opens full overlay on click -->
                 <div class="flex-1 max-w-2xl mx-8 hidden md:block">
                     <button type="button" class="ipo-search-trigger-btn" id="ipoSearchTriggerDesktop" aria-label="Open search">
                         <i class="fas fa-search ipo-search-trigger-icon"></i>
@@ -1037,7 +1037,7 @@ s0.parentNode.insertBefore(s1,s0);
             <span class="hul-hero-kicker" data-i18n="ul.hero_kicker">Rare Independent Perfumery</span>
             <h1 class="hul-hero-title">House of<br>Unique Luxury</h1>
             <p class="hul-hero-sub" data-i18n="ul.hero_sub">
-                An independent vision born from the belief that true luxury has no formula. House of Unique Luxury blends arcane raw materials, obsessive craftsmanship, and a fearless artistic spirit — each fragrance a singular statement never made twice.
+                An independent vision born from the belief that true luxury has no formula. House of Unique Luxury blends arcane raw materials, obsessive craftsmanship, and a fearless artistic spirit â€” each fragrance a singular statement never made twice.
             </p>
             <span class="hul-hero-badge"><i class="fas fa-crown"></i> <span data-i18n="ul.hero_badge">Exclusive Niche Collection</span></span>
         </div>
@@ -1054,9 +1054,9 @@ s0.parentNode.insertBefore(s1,s0);
                     <p class="hul-story-label" data-i18n="ul.story_label">The House</p>
                     <h2 class="hul-story-title" data-i18n="ul.story_title">Where Rarity Becomes Art</h2>
                     <p class="hul-story-text" data-i18n-html="ul.story_text">
-                        House of Unique Luxury was founded on one principle: every fragrance must be unrepeatable. Drawing from the world's rarest botanical extracts, precious resins, and age-old distillation traditions, each creation is a story of obsessive craftsmanship — sculpted by master perfumers who answer to no trend.
+                        House of Unique Luxury was founded on one principle: every fragrance must be unrepeatable. Drawing from the world's rarest botanical extracts, precious resins, and age-old distillation traditions, each creation is a story of obsessive craftsmanship â€” sculpted by master perfumers who answer to no trend.
                         <br><br>
-                        From the smoky depth of Obsidian Oud to the luminous opulence of Lumi—re d'Or and the nocturnal mystery of Nuit —ternelle, every bottle carries a signature that is wholly its own — unapologetically rare, unmistakably luxurious.
+                        From the smoky depth of Obsidian Oud to the luminous opulence of Lumiâ€”re d'Or and the nocturnal mystery of Nuit â€”ternelle, every bottle carries a signature that is wholly its own â€” unapologetically rare, unmistakably luxurious.
                     </p>
                 </div>
             </div>
@@ -1354,7 +1354,7 @@ s0.parentNode.insertBefore(s1,s0);
                 return result;
             } catch(e) { return {}; }
         };
-        // Module scripts are deferred — by the time this runs, the regular script below
+        // Module scripts are deferred â€” by the time this runs, the regular script below
         // has already defined initHulSizes(). Call it now.
         if (typeof initHulSizes === 'function') initHulSizes();
     </script>
@@ -1509,7 +1509,7 @@ s0.parentNode.insertBefore(s1,s0);
             var priceText = priceEl && priceEl.dataset.price;
             if (!sizeLabel) {
                 var lang = localStorage.getItem('ipordise-language') || 'en';
-                alert(lang === 'fr' ? 'Veuillez s—lectionner une taille.' : 'Please select a size first.');
+                alert(lang === 'fr' ? 'Veuillez sâ€”lectionner une taille.' : 'Please select a size first.');
                 return;
             }
             var qty = parseInt(document.getElementById(prefix + '-qty').textContent) || 1;
@@ -1560,7 +1560,7 @@ s0.parentNode.insertBefore(s1,s0);
             });
             var cartBtn = document.querySelector('#product-' + prefix + ' .hul-cart-btn');
             var lang = localStorage.getItem('ipordise-language') || 'en';
-            cartBtn.textContent = lang === 'fr' ? '? Ajout— au panier' : '? Added to Cart';
+            cartBtn.textContent = lang === 'fr' ? '? Ajoutâ€” au panier' : '? Added to Cart';
             cartBtn.style.background = '#16a34a';
             cartBtn.disabled = true;
             setTimeout(function() {
