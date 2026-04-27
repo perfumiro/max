@@ -3759,19 +3759,24 @@ const initAddProductModal = () => {
     let sizeError = false;
     document.querySelectorAll('#addProductSizesContainer .prod-size-row').forEach(row => {
       const sizeKey   = (row.querySelector('.prod-size-key').value || '').trim().toLowerCase();
-      const sizePrice = parseFloat(row.querySelector('.prod-size-price').value);
+      const priceRaw  = (row.querySelector('.prod-size-price').value || '').trim();
+      const sizePrice = priceRaw === '' ? 0 : parseFloat(priceRaw);
       const origRaw   = parseFloat(row.querySelector('.prod-size-orig-price')?.value);
+      if (!sizeKey && priceRaw === '') return; // completely blank row — skip silently
       if (sizeKey && sizePrice > 0) {
         sizes[sizeKey] = sizePrice;
         if (Number.isFinite(origRaw) && origRaw > sizePrice) originalPrices[sizeKey] = origRaw;
+      } else if (sizeKey && sizePrice === 0) {
+        sizes[sizeKey] = 0; // price 0 — size saved but hidden on site; all-zero = product out of stock
+      } else {
+        sizeError = true; // price filled but no size name
       }
-      else if (sizeKey || (row.querySelector('.prod-size-price').value || '').trim()) { sizeError = true; }
     });
     if (Object.keys(sizes).length === 0) {
-      errEl.textContent = 'Add at least one size with a valid price.'; errEl.style.display = 'block'; return;
+      errEl.textContent = 'Add at least one size name.'; errEl.style.display = 'block'; return;
     }
     if (sizeError) {
-      errEl.textContent = 'Some size rows are incomplete — fill in both size name and price, or remove empty rows.';
+      errEl.textContent = 'Some size rows are missing a size name.';
       errEl.style.display = 'block'; return;
     }
 
@@ -4312,19 +4317,24 @@ const initEditProductModal = () => {
     let sizeError = false;
     document.querySelectorAll('#editProductSizesContainer .prod-size-row').forEach(row => {
       const sizeKey   = (row.querySelector('.prod-size-key').value || '').trim().toLowerCase();
-      const sizePrice = parseFloat(row.querySelector('.prod-size-price').value);
+      const priceRaw  = (row.querySelector('.prod-size-price').value || '').trim();
+      const sizePrice = priceRaw === '' ? 0 : parseFloat(priceRaw);
       const origRaw   = parseFloat(row.querySelector('.prod-size-orig-price')?.value);
+      if (!sizeKey && priceRaw === '') return; // completely blank row — skip silently
       if (sizeKey && sizePrice > 0) {
         sizes[sizeKey] = sizePrice;
         if (Number.isFinite(origRaw) && origRaw > sizePrice) originalPrices[sizeKey] = origRaw;
+      } else if (sizeKey && sizePrice === 0) {
+        sizes[sizeKey] = 0; // price 0 — size saved but hidden on site; all-zero = product out of stock
+      } else {
+        sizeError = true; // price filled but no size name
       }
-      else if (sizeKey || (row.querySelector('.prod-size-price').value || '').trim()) { sizeError = true; }
     });
     if (Object.keys(sizes).length === 0) {
-      errEl.textContent = 'Add at least one size with a valid price.'; errEl.style.display = 'block'; return;
+      errEl.textContent = 'Add at least one size name.'; errEl.style.display = 'block'; return;
     }
     if (sizeError) {
-      errEl.textContent = 'Some size rows are incomplete — fill in both size name and price, or remove them.';
+      errEl.textContent = 'Some size rows are missing a size name.';
       errEl.style.display = 'block'; return;
     }
 
@@ -4526,7 +4536,8 @@ const loadFirestoreProductsSection = async () => {
 
     const cards = snap.docs.map(d => {
       const p = d.data();
-      const sizesHtml = Object.entries(p.sizes || {}).map(([sz, price], i) =>
+      const _visibleSizes = Object.entries(p.sizes || {}).filter(([, price]) => Number(price) > 0);
+      const sizesHtml = _visibleSizes.map(([sz, price], i) =>
         `<span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:1px solid ${i===0?'#1f2937':'#d1d5db'};color:${i===0?'#111':'#6b7280'};background:transparent">${sz.toUpperCase()} — ${price} MAD</span>`
       ).join('');
       const statusBadge = p.active === false
