@@ -3742,6 +3742,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     const numPrice = Number(price);
                                     if (numPrice > 0) _normAdminSizes[normSz] = numPrice;
                                 });
+                                // All sizes have price 0 — treat as out of stock, don't inject
+                                if (Object.keys(_normAdminSizes).length === 0) return;
                                 pricesById[slug] = { ..._normAdminSizes };
                                 // Always overwrite _firestoreProductOverridesCache so that
                                 // getConfiguredSizeKeys derives its list exclusively from the
@@ -4222,6 +4224,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const slug  = p.slug || toSlugLocal(p.name || docSnap.id);
                 const sizes = p.sizes;
 
+                // All sizes have price 0 — treat as out of stock, skip card
+                if (!Object.values(sizes).some(price => Number(price) > 0)) return;
+
                 // Inject into pricesById so Add to Cart works
                 if (!pricesById[slug]) pricesById[slug] = {};
                 Object.entries(sizes).forEach(([sz, price]) => {
@@ -4274,8 +4279,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         ? `<span style="display:inline-block;margin-bottom:8px;font-size:10px;font-weight:700;color:#b8860b;background:rgba(184,134,11,0.08);border:1px solid rgba(184,134,11,0.2);border-radius:6px;padding:3px 9px;"><i class="fas fa-exclamation-circle" style="margin-right:4px;font-size:9px"></i>${_isFr ? `${_stockLeft} en stock` : `${_stockLeft} left in stock`}</span>`
                         : `<span style="display:inline-block;margin-bottom:8px;font-size:10px;font-weight:700;color:#059669;background:rgba(5,150,105,0.07);border:1px solid rgba(5,150,105,0.2);border-radius:6px;padding:3px 9px;"><i class="fas fa-check" style="margin-right:4px;font-size:9px"></i>${_isFr ? `${_stockLeft} en stock` : `${_stockLeft} in stock`}</span>`;
 
-                const today = new Date().toISOString().slice(0, 10);
-
                 const article = document.createElement('article');
                 article.className = 'ipo-card snap-start shrink-0 js-product-link cursor-pointer';
                 article.dataset.productName    = p.name || '';
@@ -4286,7 +4289,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 article.dataset.productDiscount  = '';
                 article.dataset.productReviews   = '0';
                 article.dataset.productImage   = p.image || '';
-                article.dataset.added          = today;
+                article.dataset.added          = addedAt.toISOString().slice(0, 10);
                 article.dataset.firestoreProduct = 'true';
                 article.dataset.noFakeReviews  = 'true';
                 article.innerHTML = `
@@ -4306,8 +4309,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button type="button" class="js-card-add-btn w-full bg-[#111827] text-white text-[11px] font-extrabold py-3.5 rounded-xl hover:bg-black transition-colors uppercase tracking-[0.1em]" data-i18n="index.add_to_cart" data-i18n-orig="ADD TO CART">${_addToCartLabel}</button>
                         </div>
                     </div>`;
-                window._ipordiseFsCarouselCards.unshift(article); // keep cache in same prepend order
-                carousel.prepend(article);
+                // Append (not prepend) to avoid CSS scroll-anchoring shifting the viewport.
+                // limitNewArrivalsToLatest re-sorts into correct date order right after injection.
+                window._ipordiseFsCarouselCards.push(article);
+                carousel.appendChild(article);
                 // Re-run mobile fix so the newly injected card gets the same inline styles
                 requestAnimationFrame(() => { if (window._fixNewArrivalCards) window._fixNewArrivalCards(); });
                 const discoverGrid = document.querySelector('[data-discover-grid]');
@@ -4352,8 +4357,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             _firestoreProductsInjected = true;
-            // Always scroll carousel back to the first card after injection
-            if (carousel) carousel.scrollLeft = 0;
+            // Refresh flash offers carousel to include newly loaded Firestore products
+            window._refreshFlashAfterFs?.();
+            // Invalidate search cache so Firestore products appear in search immediately
+            window._ipoInvalidateSearchCache?.();
+            // Scroll reset handled by limitNewArrivalsToLatest (called in initCatalogPrices after this)
             // Bind click-to-navigate on newly injected carousel cards + re-sync favourite hearts
             bindProductLinks();
             window.__ipordise_sync_fav_ui?.();
@@ -8610,7 +8618,23 @@ document.addEventListener('DOMContentLoaded', () => {
         let pricesById = {};
         try { pricesById = await loadPricesJson(); } catch (_) { /* keep empty */ }
 
-        const validProducts = FLASH_POOL.filter((product) => {
+        // Merge Firestore products (already-injected admin products) into the pool
+        const _fsProd = (window._ipordiseFsCarouselCards || []).filter(card =>
+            card.dataset && card.dataset.id && card.dataset.productPrice && card.dataset.productPrice.trim()
+        ).map(card => ({
+            id: card.dataset.id,
+            name: card.dataset.productName || '',
+            brand: card.dataset.productBrand || '',
+            image: card.dataset.productImage || '',
+            badge: 'NEW',
+            badgeRotate: 'NEW|EXCLUSIVE|LIMITED',
+            reviews: 0,
+            _fsPrice: card.dataset.productPrice
+        }));
+        const combinedPool = [...FLASH_POOL, ..._fsProd];
+
+        const validProducts = combinedPool.filter((product) => {
+            if (product._fsPrice) return true;
             const formatted = formatCatalogPrice(product.id, pricesById);
             return typeof formatted === 'string' && formatted.trim().length > 0;
         });
@@ -8618,10 +8642,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // If nothing priced, do not touch the existing static HTML
         if (!validProducts.length) return;
 
-        /* ── Pick today's set (persist in localStorage for consistency) ───── */
-        const dateKey   = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-        const storeKey  = `ipordise-flash-rotation-${dateKey}`;
-        const SHOW_COUNT = 10;
+        /* ── Pick current 2-hour block set (persist in localStorage) ────── */
+        const _now = new Date();
+        const _twoHourBlock = Math.floor(_now.getHours() / 2) * 2;
+        const timeKey  = _now.toISOString().slice(0, 10) + '-' + String(_twoHourBlock).padStart(2, '0') + 'h';
+        const storeKey = `ipordise-flash-rotation-${timeKey}`;
+        const SHOW_COUNT = 20;
 
         let todayProducts = null;
         try {
@@ -8629,25 +8655,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (stored) {
                 const storedIds = JSON.parse(stored);
                 const validMap  = new Map(validProducts.map((p) => [p.id, p]));
-                const PINNED_LAST_ID = 'gucci-guilty-absolu-de-parfum-pour-homme';
-                let restored = storedIds.map((id) => validMap.get(id)).filter(Boolean);
-                // Ensure pinned product is always last
-                const pinnedIdx = restored.findIndex((p) => p.id === PINNED_LAST_ID);
-                if (pinnedIdx > -1 && pinnedIdx !== restored.length - 1) {
-                    const [pinned] = restored.splice(pinnedIdx, 1);
-                    restored.push(pinned);
-                }
+                const restored  = storedIds.map((id) => validMap.get(id)).filter(Boolean);
                 if (restored.length >= Math.min(SHOW_COUNT, validProducts.length)) todayProducts = restored;
             }
         } catch (_) { /* ignore */ }
 
         if (!todayProducts) {
-            // Pin Gucci Guilty Absolu as the last card — always
-            const PINNED_LAST_ID = 'gucci-guilty-absolu-de-parfum-pour-homme';
-            const pinnedProduct  = validProducts.find((p) => p.id === PINNED_LAST_ID);
-            const shufflePool    = validProducts.filter((p) => p.id !== PINNED_LAST_ID);
-            const shuffled       = seededShuffle(shufflePool, dateKey).slice(0, pinnedProduct ? SHOW_COUNT - 1 : SHOW_COUNT);
-            todayProducts = pinnedProduct ? [...shuffled, pinnedProduct] : shuffled;
+            const shuffled = seededShuffle(validProducts, timeKey).slice(0, SHOW_COUNT);
+            todayProducts = shuffled;
             try { localStorage.setItem(storeKey, JSON.stringify(todayProducts.map((p) => p.id))); } catch (_) { /* ignore */ }
         }
 
@@ -8666,8 +8681,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const esc = (str) => String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
         const buildFlashCard = (product) => {
-            const priceText  = formatCatalogPrice(product.id, pricesById);
-            const sizeLabels = getCatalogCardSizeLabels(product.name, product.id, priceText, pricesById, []);
+            const priceText  = product._fsPrice || formatCatalogPrice(product.id, pricesById);
+            const sizeLabels = product._fsPrice
+                ? priceText.split(/\s*[·\-]\s*/).slice(0, 2).map(s => s.split(/\s+/)[0]).filter(Boolean)
+                : getCatalogCardSizeLabels(product.name, product.id, priceText, pricesById, []);
 
             // Strip brand prefix from display name (brand is shown separately)
             const displayName = product.name
@@ -8706,6 +8723,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // Reset scroll to start
             carousel.scrollLeft = 0;
         }, 290);
+
+        // Expose a one-time hook so Firestore injection can refresh the carousel with new products
+        window._refreshFlashAfterFs = () => {
+            try { localStorage.removeItem(storeKey); } catch (_) { /* ignore */ }
+            window._refreshFlashAfterFs = null; // prevent infinite loops
+            void initFlashOffersRotation();
+        };
     };
 
     const initCarousel = (carouselId) => {
@@ -8897,39 +8921,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const limitNewArrivalsToLatest = (pricesById = {}) => {
         const carousel = document.getElementById('newArrivalsCarousel');
         if (!carousel) return;
-        // Preserve Firestore-injected admin cards — use global cache so they always appear first
-        // even when this function runs before or between Firestore async operations.
+
         const fsCards = (window._ipordiseFsCarouselCards && window._ipordiseFsCarouselCards.length)
             ? [...window._ipordiseFsCarouselCards]
             : Array.from(carousel.querySelectorAll('[data-firestore-product="true"]'));
         const staticCards = Array.from(carousel.querySelectorAll('article:not([data-firestore-product="true"])'));
         if (!staticCards.length && !fsCards.length) return;
 
-        // Only filter by price when real price data has been loaded (non-empty pricesById)
+        // Only filter static cards by price when real price data has been loaded
         const hasPriceData = pricesById && typeof pricesById === 'object' && Object.keys(pricesById).length > 0;
-        const pricedCards = hasPriceData ? staticCards.filter((card) => {
+        const pricedStatic = hasPriceData ? staticCards.filter((card) => {
             const productId = card.dataset.id;
             if (!productId) return true;
-            // Keep cards that already have price text set via data-product-price attribute
             if (card.dataset.productPrice && card.dataset.productPrice.trim()) return true;
             const options = getAvailableSizePriceOptions(productId, pricesById);
             return options.some((entry) => entry.price > 0);
         }) : staticCards;
 
-        const indexMap = new Map(pricedCards.map((card, index) => [card, index]));
-        const sorted = pricedCards
+        // Merge all cards and sort entirely by data-added date, newest first
+        const allCards = [...fsCards, ...pricedStatic];
+        const indexMap = new Map(allCards.map((card, index) => [card, index]));
+        const sorted = allCards
             .slice()
             .sort((a, b) => getCardAddedScore(b, indexMap.get(b)) - getCardAddedScore(a, indexMap.get(a)));
         const latest = sorted.slice(0, 12);
 
         carousel.innerHTML = '';
-        // Admin products pinned first (newest Firestore products at the front)
-        fsCards.forEach((card) => { carousel.appendChild(card); });
-        latest.forEach((card) => {
-            carousel.appendChild(card);
-        });
-        // Always reset scroll to the first card after rebuilding
-        carousel.scrollLeft = 0;
+        latest.forEach((card) => { carousel.appendChild(card); });
+        // Reset scroll to the first (newest) card after the browser commits the new DOM
+        requestAnimationFrame(() => { carousel.scrollTo({ left: 0, behavior: 'instant' }); });
     };
 
     const populate2026Section = () => {
@@ -9501,7 +9521,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const popularSearches = [
-            'Valentino', 'Xerjoff', 'Armani', 'Dior', 'Creed',
+            'New Arrivals', 'Valentino', 'Xerjoff', 'Armani', 'Dior', 'Creed',
             'Tom Ford', 'Rabanne', 'Givenchy', 'Vanilla',
             'Oud & Rose', 'Blue Fragrances', 'For Women'
         ];
@@ -9514,6 +9534,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         let catalogCache = null;
+        let catalogCacheTs = 0;
+        const CATALOG_TTL = 8000; // rebuild after 8 s so Firestore products are included
         const buildCatalog = () => {
             const catalog = [];
             const seen = new Set();
@@ -9521,6 +9543,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // regardless of class name or parent carousel
             document.querySelectorAll('.js-product-link[data-id]').forEach((card) => {
                 const data = extractProductDataFromCard(card);
+                // Also carry the added date so we can boost new products in search
+                data.added = card.dataset.added || card.dataset.addedAt || '';
+                data.isFirestore = card.dataset.firestoreProduct === 'true';
                 const key = (data.name || '').toLowerCase() + '|' + (data.brand || '').toLowerCase();
                 if (!data.name || seen.has(key)) return;
                 seen.add(key);
@@ -9531,12 +9556,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     const key = (item.name || '').toLowerCase() + '|' + (item.brand || '').toLowerCase();
                     if (!item.name || seen.has(key)) return;
                     seen.add(key);
-                    catalog.push({ name: item.name, brand: item.brand, price: item.price, image: item.image });
+                    catalog.push({ name: item.name, brand: item.brand, price: item.price, image: item.image, added: '' });
                 });
             }
             return catalog;
         };
-        const getCatalog = () => { if (!catalogCache) catalogCache = buildCatalog(); return catalogCache; };
+        const getCatalog = () => {
+            const now = Date.now();
+            if (!catalogCache || (now - catalogCacheTs) > CATALOG_TTL) {
+                catalogCache = buildCatalog();
+                catalogCacheTs = now;
+            }
+            return catalogCache;
+        };
+        // Invalidate cache when Firestore products load so they appear in search
+        window._ipoInvalidateSearchCache = () => { catalogCache = null; catalogCacheTs = 0; };
 
         const pickRandomItems = (items, count = 10) => {
             const pool = Array.isArray(items) ? items.slice() : [];
@@ -9578,11 +9612,82 @@ document.addEventListener('DOMContentLoaded', () => {
             'absolute':'absolu',
             'extreme': 'extreme',
             'elixr':   'elixir',
+            'elixir':  'elixir',
             '1m':      'one million',
             'million': 'one million',
             'eros':    'eros',
             'eross':   'eros',
+            // brand typos / shortcuts
+            'jb':      'jean paul gaultier',
+            'jpgaultier': 'jean paul gaultier',
+            'jpg':     'jean paul gaultier',
+            'gaultier':'jean paul gaultier',
+            'le male': 'le male',
+            'lemale':  'le male',
+            'armany':  'armani',
+            'armany':  'armani',
+            'givenchy':'givenchy',
+            'givenshy':'givenchy',
+            'chanell': 'chanel',
+            'chanel':  'chanel',
+            'dior':    'dior',
+            'diore':   'dior',
+            'versac':  'versace',
+            'versa':   'versace',
+            'guuci':   'gucci',
+            'guci':    'gucci',
+            'rabanee': 'rabanne',
+            'rabanné': 'rabanne',
+            'paco':    'rabanne',
+            'boss':    'hugo boss',
+            'hugoboss':'hugo boss',
+            'montale': 'montale',
+            'xerjof':  'xerjoff',
+            'xerjoff': 'xerjoff',
+            'creed':   'creed',
+            'aventus': 'aventus',
+            'azzarro': 'azzaro',
+            'azzaro':  'azzaro',
+            'carolina':'carolina herrera',
+            'herrera': 'carolina herrera',
+            // notes / accords
+            'vanille': 'vanilla',
+            'vanilla': 'vanilla',
+            'oud':     'oud',
+            'wood':    'woody',
+            'woody':   'woody',
+            'citrus':  'citrus',
+            'citrique':'citrus',
+            'floral':  'floral',
+            'flower':  'floral',
+            'fresh':   'fresh',
+            'aqua':    'aquatic',
+            'aquatic': 'aquatic',
+            'marine':  'aquatic',
+            'ocean':   'aquatic',
+            'pepper':  'spicy',
+            'spicy':   'spicy',
+            'sweet':   'sweet',
+            'musque':  'musk',
+            'musk':    'musk',
+            'rose':    'rose',
+            'jasmin':  'jasmine',
+            'jasmine': 'jasmine',
+            'ambre':   'amber',
+            'amber':   'amber',
+            'patchouli':'patchouli',
+            'santal':  'sandalwood',
+            'sandal':  'sandalwood',
+            'cedr':    'cedar',
+            'cedar':   'cedar',
         };
+
+        /* NEW-ARRIVAL intent keywords — these bypass normal scoring */
+        const NEW_ARRIVAL_INTENTS = new Set([
+            'new', 'nouveau', 'nouvelle', 'nouveaute', 'nouveautés', 'nouveautes',
+            'new arrival', 'new arrivals', 'latest', 'fresh', 'recent', 'just in',
+            'just added', 'dernier', 'derniers', 'nouvelles', 'fresh drops'
+        ]);
 
         /* expand query tokens with synonyms */
         const expandTokens = (tokens) => {
@@ -9626,7 +9731,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const normQ = norm(q);
             const rawTokens = normQ.split(/\s+/).filter(Boolean);
             if (!rawTokens.length) return [];
+
+            // ── New-arrival intent: "new", "latest", "nouveau", etc. ──────────
+            const isNewIntent = NEW_ARRIVAL_INTENTS.has(normQ)
+                || rawTokens.every((t) => NEW_ARRIVAL_INTENTS.has(t));
+            if (isNewIntent) {
+                const now = Date.now();
+                return getCatalog()
+                    .filter((item) => item.added)
+                    .sort((a, b) => {
+                        const da = Date.parse(a.added) || 0;
+                        const db = Date.parse(b.added) || 0;
+                        // Firestore (admin-added) products get a small tie-breaking bonus
+                        return (db + (b.isFirestore ? 3600000 : 0)) - (da + (a.isFirestore ? 3600000 : 0));
+                    })
+                    .slice(0, 16);
+            }
+
             const tokens = expandTokens(rawTokens);
+
+            // Compute max possible age bonus (days since oldest product in catalog)
+            const allAdded = getCatalog().map((i) => Date.parse(i.added) || 0).filter(Boolean);
+            const oldestMs  = allAdded.length ? Math.min(...allAdded) : 0;
+            const rangeMs   = allAdded.length ? (Date.now() - oldestMs) : 1;
 
             return getCatalog()
                 .map((item) => {
@@ -9644,15 +9771,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Score against name, brand, and notes — take best
                         const ns = tokenScore(token, nameN,  nameWords);
                         const bs = tokenScore(token, brandN, brandWords);
-                        const ks = notesN ? tokenScore(token, notesN, notesWords) * 0.6 : 0; // notes = lower priority
+                        const ks = notesN ? tokenScore(token, notesN, notesWords) * 0.6 : 0;
                         const best = Math.max(ns, bs, ks);
                         if (best > 0) { totalScore += best; matchedTokens++; }
                     }
 
                     if (matchedTokens === 0) return null;
 
-                    // Penalty when not all tokens match (partial query still works but ranks lower)
-                    // Coverage based on original query tokens, not expanded synonyms
+                    // Penalty when not all tokens match
                     const coverage = matchedTokens / rawTokens.length;
                     totalScore *= (0.4 + 0.6 * coverage);
 
@@ -9660,13 +9786,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (nameN.includes(normQ) || brandN.includes(normQ)) totalScore += 40;
                     // Boost: name or brand starts with full query
                     if (nameN.startsWith(normQ) || brandN.startsWith(normQ)) totalScore += 25;
+                    // Boost: Firestore / admin-added products (always newest)
+                    if (item.isFirestore) totalScore += 18;
+                    // Recency boost: up to +15 for products added in the last 30 days
+                    if (item.added) {
+                        const addedMs = Date.parse(item.added) || 0;
+                        if (addedMs > 0) {
+                            const ageFraction = Math.max(0, 1 - (Date.now() - addedMs) / (30 * 24 * 3600 * 1000));
+                            totalScore += ageFraction * 15;
+                        }
+                    }
 
                     return { item, score: totalScore };
                 })
                 .filter(Boolean)
                 .sort((a, b) => b.score - a.score)
                 .map(({ item }) => item)
-                .slice(0, 12);
+                .slice(0, 16);
         };
 
         const fmtPrice = (v) => {

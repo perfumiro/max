@@ -1181,6 +1181,7 @@
         'discover.filter_niche':         { fr: 'Niche' },
         'discover.filter_arabian':       { fr: 'Arabian' },
         'discover.filter_designer':      { fr: 'Designer' },
+        'discover.filter_niche':         { fr: 'Niche' },
         'discover.filter_sets':          { fr: 'Coffrets Découverte' },
         'discover.filter_offers':        { fr: 'Offres' },
         'discover.announce':             { fr: '-15% supplémentaire sur des catégories sélectionnées - Code : <span class="font-bold border-b border-white border-dashed">GLAM15</span> - <a href="#" class="underline hover:text-gray-200">ACHETER !</a>' },
