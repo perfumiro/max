@@ -28144,3 +28144,547 @@ body.ipo-is-transitioning * {
 .ipo-already-installed-msg.is-visible {
     display: block;
 }
+
+/* ------------------------------------------------------------------
+   Mobile performance guard
+   Keeps the visual identity, but avoids expensive decorative motion on
+   constrained devices and respects reduced-motion preferences.
+------------------------------------------------------------------ */
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+    .ip-hero-orb,
+    .discover-hero-orb,
+    .ipo-page-transition__ambient,
+    .hero-banner-sweep,
+    .price-spark,
+    .brand-star,
+    .scroll-progress::before,
+    .scroll-progress::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .sect-reveal,
+    .lux-reveal,
+    .ipo-reveal,
+    .val-anim,
+    .discover-filter-btn,
+    .card-2026,
+    .related-card,
+    .testimonial-card {
+        opacity: 1 !important;
+        transform: none !important;
+        transition-duration: 0.01ms !important;
+        animation: none !important;
+    }
+
+    .hero-banner-img,
+    .mobile-flash-bg-img,
+    .aether-main-img,
+    .aether-featured-img,
+    .product-main-image,
+    .related-image,
+    .ipo-card-img {
+        animation: none !important;
+        transition-duration: 0.12s !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .top-announcement-marquee,
+    .top-announcement-marquee-item {
+        animation-duration: 42s !important;
+    }
+
+    .product-favorite-btn,
+    .header-icon-btn,
+    .js-card-add-btn,
+    .card-2026-btn {
+        transition-duration: 0.12s !important;
+    }
+}
+
+/* Product view: smoother low-mobile rendering without changing layout identity. */
+.product-detail-section,
+.product-gallery-shell,
+.product-info-card {
+    contain: layout paint;
+}
+
+.product-main-image-wrap,
+.product-gallery-v2 .product-main-image-wrap {
+    isolation: isolate;
+    overflow: hidden !important;
+    touch-action: pan-y;
+}
+
+.product-main-image {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+.product-thumbs-row {
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+}
+
+.product-thumb-btn,
+.product-share-btn,
+.gallery-share-btn,
+.size-pill,
+.qty-btn,
+#addToCartBtn,
+.product-wishlist-btn {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+@media (hover: none), (pointer: coarse) {
+    .product-zoom-hint {
+        display: none !important;
+    }
+
+    .product-zoom-wrap .product-main-image,
+    .product-main-image:hover,
+    .product-zoom-wrap:hover .product-main-image {
+        transform: translateZ(0) !important;
+        filter: none !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .product-detail-section {
+        padding-top: 1rem !important;
+    }
+
+    .product-detail-grid {
+        gap: 1.15rem !important;
+    }
+
+    .product-media-col,
+    .product-info-col {
+        min-width: 0;
+    }
+
+    .product-gallery-shell,
+    .product-gallery-shell.product-gallery-v2 {
+        border-radius: 16px !important;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08) !important;
+        transform: none !important;
+    }
+
+    .product-main-image-wrap,
+    .product-gallery-v2 .product-main-image-wrap {
+        min-height: clamp(300px, 78vw, 390px) !important;
+        aspect-ratio: 1 / 1 !important;
+        padding: 1rem !important;
+        background: #faf8f5 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    .product-main-image {
+        max-height: min(72vw, 340px) !important;
+        width: 100% !important;
+        object-fit: contain !important;
+        will-change: auto !important;
+    }
+
+    .gallery-badges-wrap {
+        top: 0.7rem !important;
+        left: 0.7rem !important;
+        gap: 0.35rem !important;
+    }
+
+    .gallery-badge {
+        font-size: 0.58rem !important;
+        padding: 0.28rem 0.48rem !important;
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.1) !important;
+    }
+
+    .gallery-share-btn {
+        top: 0.7rem !important;
+        right: 0.7rem !important;
+        width: 38px !important;
+        height: 38px !important;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12) !important;
+    }
+
+    .product-thumbs-strip {
+        margin-top: 0.75rem !important;
+        padding: 0 0.25rem !important;
+    }
+
+    .product-thumbs-row {
+        gap: 0.55rem !important;
+        padding: 0.15rem 0.15rem 0.35rem !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-snap-type: x mandatory !important;
+    }
+
+    .product-thumb-btn,
+    .product-thumbs-row .product-thumb-btn {
+        width: 58px !important;
+        height: 58px !important;
+        min-width: 58px !important;
+        border-radius: 12px !important;
+        transform: none !important;
+        scroll-snap-align: center !important;
+    }
+
+    .product-info-card {
+        border-radius: 16px !important;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08) !important;
+    }
+
+    .product-price-card,
+    .product-ondemand-box,
+    .fragrance-profile,
+    .product-main-accords-card {
+        contain: layout paint;
+    }
+}
+
+.ipo-low-mobile .product-brand-banner canvas,
+.ipo-low-mobile .banner-canvas,
+.ipo-low-mobile .ip-hero-orbs,
+.ipo-low-mobile .discover-hero-orb,
+.ipo-low-mobile .hul-orb,
+.ipo-low-mobile .xerjoff-orb {
+    display: none !important;
+}
+
+.ipo-low-mobile .product-gallery-shell,
+.ipo-low-mobile .product-info-card,
+.ipo-low-mobile .product-price-card,
+.ipo-low-mobile .related-card,
+.ipo-low-mobile .card-2026,
+.ipo-low-mobile .js-product-link {
+    box-shadow: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.ipo-low-mobile .product-main-image,
+.ipo-low-mobile .hero-banner-img,
+.ipo-low-mobile .mobile-flash-bg-img,
+.ipo-low-mobile .ipo-card-img,
+.ipo-low-mobile .related-image {
+    will-change: auto !important;
+    transform: none !important;
+    transition: opacity 0.12s ease !important;
+}
+
+.ipo-low-mobile .product-main-image-wrap,
+.ipo-low-mobile .product-gallery-v2 .product-main-image-wrap {
+    transform: translateZ(0);
+}
+
+.ipo-low-mobile section,
+.ipo-low-mobile .related-card,
+.ipo-low-mobile .js-product-link {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 520px;
+}
+
+/* New Arrivals carousel: clean edges, no side fade blocks. */
+#newArrivalsSection .carousel-shell {
+    padding-inline: 0 !important;
+    background: transparent !important;
+    overflow: visible;
+}
+
+#newArrivalsSection .carousel-left-fade,
+#newArrivalsSection .carousel-shell > .pointer-events-none[class*="bg-gradient-to-l"] {
+    display: none !important;
+}
+
+#newArrivalsCarousel {
+    --new-arrivals-gap: clamp(0.85rem, 1.8vw, 1.25rem);
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    gap: var(--new-arrivals-gap) !important;
+    background: transparent !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-padding-inline: 0 !important;
+    scroll-snap-type: x mandatory !important;
+    overscroll-behavior-x: contain !important;
+}
+
+#newArrivalsCarousel > article {
+    scroll-snap-align: start !important;
+    scroll-snap-stop: normal !important;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    #newArrivalsCarousel > article {
+        flex: 0 0 calc((100% - var(--new-arrivals-gap)) / 2) !important;
+        width: calc((100% - var(--new-arrivals-gap)) / 2) !important;
+        min-width: calc((100% - var(--new-arrivals-gap)) / 2) !important;
+        max-width: calc((100% - var(--new-arrivals-gap)) / 2) !important;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+    #newArrivalsCarousel > article {
+        flex: 0 0 calc((100% - var(--new-arrivals-gap) - var(--new-arrivals-gap)) / 3) !important;
+        width: calc((100% - var(--new-arrivals-gap) - var(--new-arrivals-gap)) / 3) !important;
+        min-width: calc((100% - var(--new-arrivals-gap) - var(--new-arrivals-gap)) / 3) !important;
+        max-width: calc((100% - var(--new-arrivals-gap) - var(--new-arrivals-gap)) / 3) !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    #newArrivalsSection .carousel-nav-prev {
+        left: -1rem !important;
+    }
+
+    #newArrivalsSection .carousel-nav-next {
+        right: -1rem !important;
+    }
+}
+
+@media (min-width: 1280px) {
+    #newArrivalsCarousel > article {
+        flex: 0 0 calc((100% - var(--new-arrivals-gap) - var(--new-arrivals-gap) - var(--new-arrivals-gap)) / 4) !important;
+        width: calc((100% - var(--new-arrivals-gap) - var(--new-arrivals-gap) - var(--new-arrivals-gap)) / 4) !important;
+        min-width: calc((100% - var(--new-arrivals-gap) - var(--new-arrivals-gap) - var(--new-arrivals-gap)) / 4) !important;
+        max-width: calc((100% - var(--new-arrivals-gap) - var(--new-arrivals-gap) - var(--new-arrivals-gap)) / 4) !important;
+    }
+
+    #newArrivalsSection .carousel-nav-prev {
+        left: -1.35rem !important;
+    }
+
+    #newArrivalsSection .carousel-nav-next {
+        right: -1.35rem !important;
+    }
+}
+
+@media (max-width: 767px) {
+    #newArrivalsSection .carousel-shell {
+        overflow: hidden;
+    }
+
+    #newArrivalsCarousel {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 0.5rem 0 1rem !important;
+        gap: 0.75rem !important;
+        scroll-padding-inline: 0 !important;
+    }
+
+    #newArrivalsCarousel > article {
+        flex: 0 0 min(78vw, 260px) !important;
+        width: min(78vw, 260px) !important;
+        min-width: min(78vw, 260px) !important;
+        max-width: min(78vw, 260px) !important;
+    }
+}
+
+/* Flash Offers carousel: match the clean card-edge treatment. */
+#flashOffersSection .carousel-shell {
+    padding-inline: 0 !important;
+    background: transparent !important;
+    overflow: visible;
+}
+
+#flashOffersSection .carousel-left-fade,
+#flashOffersSection .carousel-shell > .pointer-events-none[class*="bg-gradient-to-l"] {
+    display: none !important;
+}
+
+#productCarousel {
+    --flash-offers-gap: clamp(0.85rem, 1.8vw, 1.25rem);
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    gap: var(--flash-offers-gap) !important;
+    background: transparent !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-padding-inline: 0 !important;
+    scroll-snap-type: x mandatory !important;
+    overscroll-behavior-x: contain !important;
+}
+
+#productCarousel > .group,
+#productCarousel > .js-product-link {
+    scroll-snap-align: start !important;
+    scroll-snap-stop: normal !important;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    #productCarousel > .group,
+    #productCarousel > .js-product-link {
+        flex: 0 0 calc((100% - var(--flash-offers-gap)) / 2) !important;
+        width: calc((100% - var(--flash-offers-gap)) / 2) !important;
+        min-width: calc((100% - var(--flash-offers-gap)) / 2) !important;
+        max-width: calc((100% - var(--flash-offers-gap)) / 2) !important;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+    #productCarousel > .group,
+    #productCarousel > .js-product-link {
+        flex: 0 0 calc((100% - var(--flash-offers-gap) - var(--flash-offers-gap)) / 3) !important;
+        width: calc((100% - var(--flash-offers-gap) - var(--flash-offers-gap)) / 3) !important;
+        min-width: calc((100% - var(--flash-offers-gap) - var(--flash-offers-gap)) / 3) !important;
+        max-width: calc((100% - var(--flash-offers-gap) - var(--flash-offers-gap)) / 3) !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    #flashOffersSection .carousel-nav-prev {
+        left: -1rem !important;
+    }
+
+    #flashOffersSection .carousel-nav-next {
+        right: -1rem !important;
+    }
+}
+
+@media (min-width: 1280px) {
+    #productCarousel > .group,
+    #productCarousel > .js-product-link {
+        flex: 0 0 calc((100% - var(--flash-offers-gap) - var(--flash-offers-gap) - var(--flash-offers-gap)) / 4) !important;
+        width: calc((100% - var(--flash-offers-gap) - var(--flash-offers-gap) - var(--flash-offers-gap)) / 4) !important;
+        min-width: calc((100% - var(--flash-offers-gap) - var(--flash-offers-gap) - var(--flash-offers-gap)) / 4) !important;
+        max-width: calc((100% - var(--flash-offers-gap) - var(--flash-offers-gap) - var(--flash-offers-gap)) / 4) !important;
+    }
+
+    #flashOffersSection .carousel-nav-prev {
+        left: -1.35rem !important;
+    }
+
+    #flashOffersSection .carousel-nav-next {
+        right: -1.35rem !important;
+    }
+}
+
+@media (max-width: 767px) {
+    #flashOffersSection .carousel-shell {
+        overflow: hidden;
+    }
+
+    #productCarousel {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 0.5rem 0 1rem !important;
+        gap: 0.75rem !important;
+        scroll-padding-inline: 0 !important;
+    }
+
+    #productCarousel > .group,
+    #productCarousel > .js-product-link {
+        flex: 0 0 min(78vw, 260px) !important;
+        width: min(78vw, 260px) !important;
+        min-width: min(78vw, 260px) !important;
+        max-width: min(78vw, 260px) !important;
+    }
+}
+
+/* Product cards: stable premium hover with no image/card shrinking. */
+#productCarousel > .group.js-product-link,
+#productCarousel > .js-product-link,
+#newArrivalsCarousel > article.js-product-link,
+#newArrivalsCarousel > article,
+[data-discover-grid] > .js-product-link,
+.product-grid > .js-product-link,
+.discover-grid > .js-product-link,
+.ipo-card,
+.related-card,
+.rv-card,
+.pf-card {
+    transition:
+        box-shadow 0.25s ease,
+        border-color 0.25s ease,
+        background-color 0.25s ease,
+        opacity 0.25s ease !important;
+}
+
+#productCarousel > .group.js-product-link:hover,
+#productCarousel > .group.js-product-link:focus-within,
+#productCarousel > .js-product-link:hover,
+#productCarousel > .js-product-link:focus-within,
+#newArrivalsCarousel > article.js-product-link:hover,
+#newArrivalsCarousel > article.js-product-link:focus-within,
+#newArrivalsCarousel > article:hover,
+#newArrivalsCarousel > article:focus-within,
+[data-discover-grid] > .js-product-link:hover,
+[data-discover-grid] > .js-product-link:focus-within,
+.product-grid > .js-product-link:hover,
+.product-grid > .js-product-link:focus-within,
+.discover-grid > .js-product-link:hover,
+.discover-grid > .js-product-link:focus-within,
+.ipo-card:hover,
+.ipo-card:focus-within,
+.related-card:hover,
+.related-card:focus-within,
+.rv-card:hover,
+.rv-card:focus-within,
+.pf-card:hover,
+.pf-card:focus-within {
+    transform: none !important;
+    scale: 1 !important;
+    border-color: rgba(212, 44, 44, 0.14) !important;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.95) inset,
+        0 14px 34px rgba(15, 23, 42, 0.10),
+        0 4px 12px rgba(15, 23, 42, 0.05) !important;
+}
+
+#productCarousel > .group.js-product-link img,
+#productCarousel > .js-product-link img,
+#newArrivalsCarousel > article.js-product-link img,
+#newArrivalsCarousel > article img,
+[data-discover-grid] > .js-product-link img,
+.product-grid > .js-product-link img,
+.discover-grid > .js-product-link img,
+.ipo-card img,
+.related-card img,
+.rv-card img,
+.pf-card img {
+    transition:
+        filter 0.25s ease,
+        opacity 0.25s ease !important;
+}
+
+#productCarousel > .group.js-product-link:hover img,
+#productCarousel > .group.js-product-link:focus-within img,
+#productCarousel > .js-product-link:hover img,
+#productCarousel > .js-product-link:focus-within img,
+#newArrivalsCarousel > article.js-product-link:hover img,
+#newArrivalsCarousel > article.js-product-link:focus-within img,
+#newArrivalsCarousel > article:hover img,
+#newArrivalsCarousel > article:focus-within img,
+[data-discover-grid] > .js-product-link:hover img,
+[data-discover-grid] > .js-product-link:focus-within img,
+.product-grid > .js-product-link:hover img,
+.product-grid > .js-product-link:focus-within img,
+.discover-grid > .js-product-link:hover img,
+.discover-grid > .js-product-link:focus-within img,
+.ipo-card:hover img,
+.ipo-card:focus-within img,
+.related-card:hover img,
+.related-card:focus-within img,
+.rv-card:hover img,
+.rv-card:focus-within img,
+.pf-card:hover img,
+.pf-card:focus-within img {
+    transform: none !important;
+    scale: 1 !important;
+}

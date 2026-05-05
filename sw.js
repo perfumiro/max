@@ -6,13 +6,14 @@
  *   - External CDN resources → Stale-While-Revalidate
  */
 
-const CACHE_VERSION = 'v14';
+const CACHE_VERSION = 'v15';
 const STATIC_CACHE  = `ipordise-static-${CACHE_VERSION}`;
 const CDN_CACHE     = `ipordise-cdn-${CACHE_VERSION}`;
 
 /* ── Assets to pre-cache on install ── */
 const PRECACHE_ASSETS = [
     '/style.css',
+    '/assets/tailwind.min.css',
     '/script.js',
     '/i18n.js',
     '/pages/cart.js',
@@ -78,12 +79,11 @@ self.addEventListener('fetch', (event) => {
         url.hostname === 'www.google-analytics.com'
     ) return;
 
-    // External CDN (fonts, FA icons, tailwind) → Stale-While-Revalidate
+    // External CDN (fonts and FA icons) -> Stale-While-Revalidate
     const externalCDN = [
         'fonts.googleapis.com',
         'fonts.gstatic.com',
-        'cdnjs.cloudflare.com',
-        'cdn.tailwindcss.com'
+        'cdnjs.cloudflare.com'
     ];
     if (externalCDN.some((h) => url.hostname.includes(h))) {
         event.respondWith(staleWhileRevalidate(CDN_CACHE, request));

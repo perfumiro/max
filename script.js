@@ -145,6 +145,8 @@ const initServerVisitorTracking = () => {
         }
     })();
 
+    if (!analyticsBase) return;
+
     const randomToken = (prefix) => `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 
     const visitorId = (() => {
@@ -212,24 +214,40 @@ const initServerVisitorTracking = () => {
 
 initServerVisitorTracking();
 
-tailwind.config = {
-    theme: {
-        extend: {
-            colors: {
-                brand: {
-                    dark: '#1a1a1a',
-                    red: '#e73c3c',
-                    redHover: '#c0392b',
-                    light: '#f9f9f9',
-                    gray: '#f3f4f6'
+const initDevicePerformanceClass = () => {
+    const nav = window.navigator || {};
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    const smallViewport = window.matchMedia('(max-width: 767px)').matches;
+    const lowMemory = typeof nav.deviceMemory === 'number' && nav.deviceMemory <= 4;
+    const lowCpu = typeof nav.hardwareConcurrency === 'number' && nav.hardwareConcurrency <= 4;
+    const lowMobile = coarsePointer && smallViewport && (lowMemory || lowCpu);
+
+    document.documentElement.classList.toggle('ipo-touch-device', coarsePointer);
+    document.documentElement.classList.toggle('ipo-low-mobile', lowMobile);
+};
+
+initDevicePerformanceClass();
+
+if (window.tailwind) {
+    window.tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    brand: {
+                        dark: '#1a1a1a',
+                        red: '#e73c3c',
+                        redHover: '#c0392b',
+                        light: '#f9f9f9',
+                        gray: '#f3f4f6'
+                    }
+                },
+                fontFamily: {
+                    sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    serif: ['Playfair Display', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
                 }
-            },
-            fontFamily: {
-                sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-                serif: ['Playfair Display', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
             }
         }
-    }
+    };
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -615,7 +633,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <a href="${pagePath('login')}" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
                                 </div>
                                 <div class="header-wishlist-wrap" style="position:relative;display:inline-flex;align-items:center;overflow:visible;">
-                                <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                                    <a href="#" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist"><i class="far fa-heart"></i></a>
+                                </div>
                                 <a href="${pagePath('cart')}" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart">
                                     <i class="fas fa-shopping-bag"></i>
                                 </a>
@@ -3611,6 +3630,13 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     const watchSizesJsonChanges = () => {
         if (sizesConfigWatcherStarted) return;
+        const host = window.location.hostname;
+        const localPreview = window.location.protocol === 'file:'
+            || host === ''
+            || host === 'localhost'
+            || host === '127.0.0.1'
+            || host === '0.0.0.0';
+        if (!localPreview) return;
         sizesConfigWatcherStarted = true;
         const poll = async () => {
             const next = await fetchSizesJsonSnapshot();
@@ -3844,6 +3870,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const watchPricesJsonChanges = () => {
         if (priceConfigWatcherStarted || !document.getElementById('productPrice')) return;
+        const host = window.location.hostname;
+        const localPreview = window.location.protocol === 'file:'
+            || host === ''
+            || host === 'localhost'
+            || host === '127.0.0.1'
+            || host === '0.0.0.0';
+        if (!localPreview) return;
 
         priceConfigWatcherStarted = true;
         void checkForPricesJsonUpdate();
@@ -4294,7 +4327,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 article.dataset.noFakeReviews  = 'true';
                 article.innerHTML = `
                     <div class="ipo-card__image-wrap"><span class="ipo-card-badge">${_badgeText}</span><button type="button" class="product-favorite-btn absolute top-2 right-2 w-[28px] h-[28px] bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-900 hover:border-gray-900 transition-colors z-10 shadow-sm" aria-label="Add to wishlist"><i class="far fa-heart text-[12px]"></i></button>
-                        <img src="${p.image || ''}" alt="${p.name || ''}" class="ipo-card-img" loading="lazy">
+                        <img src="${p.image || ''}" alt="${p.name || ''}" class="ipo-card-img" loading="lazy" decoding="async">
                     </div>
                     <div class="ipo-card__body">
                         <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-2 leading-none">${p.brand || ''}</p>
@@ -4344,7 +4377,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="relative bg-[#f8f6f3] flex items-center justify-center aspect-square p-5">
                             ${discoverBadgeHtml}
                             <button class="absolute top-2.5 right-3 w-7 h-7 flex items-center justify-center rounded-full bg-white shadow text-gray-400 hover:text-brand-red hover:shadow-md transition product-favorite-btn" type="button" aria-label="Add to wishlist"><i class="far fa-heart text-sm"></i></button>
-                            <img src="${p.image || ''}" alt="${p.name || ''}" class="max-h-full object-contain group-hover:scale-105 transition duration-500" loading="lazy">
+                            <img src="${p.image || ''}" alt="${p.name || ''}" class="max-h-full object-contain group-hover:scale-105 transition duration-500" loading="lazy" decoding="async">
                         </div>
                         <div class="flex flex-col flex-grow p-4">
                             <p class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1 line-clamp-1">${p.brand || ''}</p>
@@ -4706,7 +4739,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const buildFeaturedMarkup = (items) => items.map((item, index) => `
             <button type="button" class="search-discovery-card" data-featured-index="${index}">
                 <span class="search-discovery-card-media">
-                    <img src="${item.image || ''}" alt="" class="search-discovery-card-thumb" />
+                    <img src="${item.image || ''}" alt="" class="search-discovery-card-thumb" loading="lazy" decoding="async" />
                 </span>
                 <span class="search-discovery-card-copy">
                     <span class="search-discovery-card-brand">${item.brand}</span>
@@ -4718,7 +4751,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const buildResultMarkup = (items) => items.map((item, index) => `
             <button type="button" class="search-suggest-item search-result-row" data-index="${index}">
-                <img src="${item.image || ''}" alt="" class="search-suggest-thumb" />
+                <img src="${item.image || ''}" alt="" class="search-suggest-thumb" loading="lazy" decoding="async" />
                 <span class="search-suggest-text">
                     <span class="search-suggest-name">${item.name}</span>
                     <span class="search-suggest-brand">${item.brand}</span>
@@ -4905,6 +4938,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const navigateToProduct = () => {
+                const data = extractProductDataFromCard(card);
+
                 try {
                     sessionStorage.setItem('lastCatalogUrl', window.location.href);
                 } catch (error) {
@@ -4915,17 +4950,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     try {
                         const rawState = sessionStorage.getItem('ipordise-discover-state');
                         const prevState = rawState ? JSON.parse(rawState) : {};
+                        const activeFilterButton = document.querySelector('[data-discover-filter].is-active');
+                        const activePageButton = document.querySelector('.discover-page-btn.is-active');
+                        const activeSearchInput = document.querySelector('[data-discover-search]');
+                        const fallbackFilter = new URLSearchParams(window.location.search).get('filter') || 'all';
+                        const productId = data.id || card.dataset.id || '';
+                        const cardKey = `${canonicalProductName(data.name || card.dataset.productName || '')}|${canonicalProductName(data.brand || card.dataset.productBrand || '')}`;
+
                         sessionStorage.setItem('ipordise-discover-state', JSON.stringify({
                             ...prevState,
                             path: window.location.pathname,
-                            scrollY: window.scrollY
+                            search: window.location.search,
+                            href: `${window.location.pathname}${window.location.search}`,
+                            filter: (activeFilterButton?.dataset.discoverFilter || prevState.filter || fallbackFilter || 'all').toLowerCase(),
+                            query: activeSearchInput?.value || prevState.query || new URLSearchParams(window.location.search).get('q') || '',
+                            page: Number(activePageButton?.dataset.discoverPage || prevState.page || 1),
+                            scrollY: window.scrollY,
+                            productId,
+                            cardKey,
+                            restoreOnReturn: true,
+                            savedAt: Date.now()
                         }));
                     } catch (error) {
                         // Ignore storage errors (private mode or blocked storage).
                     }
                 }
 
-                const data = extractProductDataFromCard(card);
                 navigateToProductPage(data);
             };
 
@@ -5381,7 +5431,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             return `
                 <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${toProductDataId(product.name)}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${product.image}">
-                    <img src="${product.image}" alt="${product.name}" class="related-image">
+                    <img src="${product.image}" alt="${product.name}" class="related-image" loading="lazy" decoding="async">
                     <p class="related-brand">${product.brand}</p>
                     <h3 class="related-title">${product.name}</h3>
                     <div class="flex items-center gap-2 mt-2">
@@ -5642,7 +5692,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const imgId    = imgPool[(baseHash + index * 4) % imgPool.length];
                 const avatarWrap = avatarEl.closest('.rev-avatar-wrap') || avatarEl.parentElement;
                 if (avatarWrap) {
-                    avatarWrap.innerHTML = '<img src="https://i.pravatar.cc/96?img=' + imgId + '" alt="' + (nameEl.textContent || '') + '" class="rev-avatar" style="object-fit:cover;border-radius:50%;width:48px;height:48px;" loading="lazy">';
+                    avatarWrap.innerHTML = '<img src="https://i.pravatar.cc/96?img=' + imgId + '" alt="' + (nameEl.textContent || '') + '" class="rev-avatar" style="object-fit:cover;border-radius:50%;width:48px;height:48px;" loading="lazy" decoding="async">';
                 }
             }
             if (footerEl) {
@@ -6317,14 +6367,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (productThumbs && resolvedGalleryImages.length) {
             productThumbs.innerHTML = resolvedGalleryImages.map((src, index) => `
                 <button class="product-thumb-btn${index === 0 ? ' is-active' : ''}" type="button" data-image="${src}">
-                    <img src="${src}" alt="Thumb ${index + 1}" class="product-thumb-image" draggable="false" oncontextmenu="return false;" ondragstart="return false;">
+                    <img src="${src}" alt="Thumb ${index + 1}" class="product-thumb-image" loading="lazy" decoding="async" draggable="false" oncontextmenu="return false;" ondragstart="return false;">
                 </button>
             `).join('');
         } else if (productThumbs && productImage) {
             const normalizedImage = normalizeImagePathForCurrentPage(productImage);
             productThumbs.innerHTML = `
                 <button class="product-thumb-btn is-active" type="button" data-image="${normalizedImage}">
-                    <img src="${normalizedImage}" alt="Thumb 1" class="product-thumb-image" draggable="false" oncontextmenu="return false;" ondragstart="return false;">
+                    <img src="${normalizedImage}" alt="Thumb 1" class="product-thumb-image" loading="lazy" decoding="async" draggable="false" oncontextmenu="return false;" ondragstart="return false;">
                 </button>
             `;
         }
@@ -7187,52 +7237,33 @@ document.addEventListener('DOMContentLoaded', () => {
             .map((icon) => icon.closest('button'))
             .filter((button) => button && !button.closest('.header-icon-btn'));
 
-        const storageKey = 'ipordise-wishlist-items';
+        const legacyWishlistKeys = [
+            'ipordise-wishlist-items',
+            'ipordise-favs-auth-cache',
+            'ipordise-favs-cache',
+        ];
 
-        // Last-known cache key: updated on every ipordise:favs-changed so the next page
-        // load can show filled hearts instantly — even before Firebase resolves.
-        const cacheKey = 'ipordise-favs-cache';
+        const clearLegacyWishlistCache = () => {
+            legacyWishlistKeys.forEach((key) => {
+                try { localStorage.removeItem(key); } catch { /* ignore */ }
+            });
+        };
 
-        // Private key name must stay in sync with AUTH_CACHE_KEY in auth/favourites.js
-        const authCacheKey = 'ipordise-favs-auth-cache';
+        const isAuthenticatedUser = () => Boolean(
+            window.__ipordise_user || window.__ipordise_favs?.isAuthenticated?.()
+        );
 
         const readWishlist = () => {
-            // 1. Only trust FavStore when Firebase auth has fully resolved and _favourites
-            //    is populated. Before that, _ready === false and getFavourites() returns []
-            //    which would wipe all hearts. Fall through to localStorage instead so
-            //    the cached data from the previous page persists immediately on refresh.
-            if (window.__ipordise_favs?.isReady()) return window.__ipordise_favs.getFavourites();
-
-            // FavStore not yet resolved (module still loading / Firebase still connecting).
-            // Walk the cache hierarchy: guest key (for logged-out) → auth cache (for
-            // logged-in users who toggled before FavStore loaded) → display cache (stale).
-            try {
-                const guestRaw = localStorage.getItem(storageKey);
-                if (guestRaw) {
-                    const g = JSON.parse(guestRaw);
-                    if (Array.isArray(g) && g.length) return g;
-                }
-            } catch { /* ignore */ }
-
-            try {
-                const authRaw = localStorage.getItem(authCacheKey);
-                if (authRaw) {
-                    const a = JSON.parse(authRaw);
-                    if (Array.isArray(a) && a.length) return a;
-                }
-            } catch { /* ignore */ }
-
-            try {
-                const raw = localStorage.getItem(cacheKey);
-                const parsed = raw ? JSON.parse(raw) : [];
-                return Array.isArray(parsed) ? parsed : [];
-            } catch { return []; }
+            if (!isAuthenticatedUser() || !window.__ipordise_favs?.isReady()) return [];
+            return window.__ipordise_favs.getFavourites();
         };
 
         const writeWishlist = (items) => {
-            // Only used as a fallback when FavStore is not yet loaded
-            localStorage.setItem(storageKey, JSON.stringify(items));
+            clearLegacyWishlistCache();
+            return Array.isArray(items) ? items : [];
         };
+
+        clearLegacyWishlistCache();
 
         const wishlistCountLabel = (count) => {
             const singular = t('wishlist_item_single');
@@ -7339,7 +7370,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             listEl.innerHTML = wishlist.map((item) => `
                 <div class="wishlist-item" data-id="${item.id}">
-                    <img src="${item.image || ''}" alt="${item.name || t('product_fallback')}">
+                    <img src="${item.image || ''}" alt="${item.name || t('product_fallback')}" loading="lazy" decoding="async">
                     <div class="wishlist-item-copy">
                         <p class="wishlist-item-name">${item.name || t('product_fallback')}</p>
                         <p class="wishlist-item-price">${item.price || t('product_price_on_request')}</p>
@@ -7439,9 +7470,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (button.dataset.wishlistClickBound === 'true') return;
             button.dataset.wishlistClickBound = 'true';
 
-            button.addEventListener('click', () => {
-                // If not signed in → show sign-in modal
-                if (!window.__ipordise_user) {
+            button.addEventListener('click', async () => {
+                // If not signed in, show the existing auth prompt and do not mutate counts.
+                if (!isAuthenticatedUser()) {
                     const modal = document.getElementById('wishlistAuthModal');
                     if (modal) {
                         const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
@@ -7473,50 +7504,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     image: data.image,
                 };
 
+                if (!window.__ipordise_favs?.isReady()) {
+                    syncFavoriteButtonsUI();
+                    setHeaderWishlistCount();
+                    return;
+                }
+
                 // Determine if this item is currently in the wishlist (before toggle)
                 const wasActive = readWishlist().some((item) => item.id === favoriteId);
 
-                // Only use FavStore when it has fully resolved (isReady). If the module is
-                // loaded but Firebase hasn't resolved yet (_ready=false, _favourites=[]),
-                // getFavourites() returns [] which would corrupt the optimistic UI and let
-                // toggleFavourite() overwrite Firestore data with a single-item list.
-                if (window.__ipordise_favs?.isReady()) {
-                    // Optimistic immediate UI sync — derive the expected next state from
-                    // readWishlist() which already handles the isReady() fallback chain.
-                    const _currentList = readWishlist();
-                    const _optimisticList = wasActive
-                        ? _currentList.filter((i) => i.id !== favoriteId)
-                        : [favItem, ..._currentList];
-                    const _optimisticIds = new Set(_optimisticList.map((i) => i.id));
-                    document.querySelectorAll('.product-favorite-btn').forEach((btn) => {
-                        const _fid = btn.dataset.favoriteId;
-                        if (!_fid) return;
-                        const _active = _optimisticIds.has(_fid);
-                        btn.classList.toggle('is-active', _active);
-                        const _ic = btn.querySelector('i');
-                        if (_ic) { _ic.classList.toggle('far', !_active); _ic.classList.toggle('fas', _active); }
-                    });
-                    // FavStore updates _favourites synchronously before awaiting _persist(),
-                    // so calling setHeaderWishlistCount() AFTER toggleFavourite picks up the new count.
-                    window.__ipordise_favs.toggleFavourite(favItem);
-                    setHeaderWishlistCount();
-                } else {
-                    // Fallback: FavStore module not yet loaded — write directly to localStorage
-                    const wishlist = readWishlist();
-                    const exists   = wishlist.some((item) => item.id === favoriteId);
-                    const nextWishlist = exists
-                        ? wishlist.filter((item) => item.id !== favoriteId)
-                        : [favItem, ...wishlist];
-                    writeWishlist(nextWishlist);
-                    syncFavoriteButtonsUI();
-                    setHeaderWishlistCount();
-                    document.querySelectorAll('.wishlist-menu').forEach((menu) => {
-                        if (menu.classList.contains('is-open')) renderWishlistMenu(menu);
-                    });
-                }
+                button.disabled = true;
+                const nextList = await window.__ipordise_favs.toggleFavourite(favItem);
+                button.disabled = false;
 
-                // Show a toast notification
-                showFavouriteToast(!wasActive, data.name);
+                const isActive = nextList.some((item) => item.id === favoriteId);
+                if (isActive !== wasActive) {
+                    showFavouriteToast(isActive, data.name);
+                }
             });
         });
 
@@ -7569,7 +7573,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.addEventListener('click', (event) => {
                     event.preventDefault();
                     const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
-                    if (!window.__ipordise_user) {
+                    if (!isAuthenticatedUser()) {
                         // Not logged in → send to login page
                         navigateWithTransition(inPages ? 'login.html' : 'pages/login.html');
                     } else {
@@ -7625,7 +7629,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // visitor whose module cached) force an immediate re-sync using authoritative data.
         if (window.__ipordise_favs?.isReady()) {
             const readyList = window.__ipordise_favs.getFavourites();
-            try { localStorage.setItem(cacheKey, JSON.stringify(readyList)); } catch { /* ignore */ }
             const readyIds = new Set(readyList.map((i) => i.id));
             document.querySelectorAll('.product-favorite-btn').forEach((btn) => {
                 const fid = btn.dataset.favoriteId;
@@ -7643,10 +7646,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!window.__ipordise_favs_listener_set) {
             window.__ipordise_favs_listener_set = true;
         document.addEventListener('ipordise:favs-changed', (evt) => {
-            // Update the last-known cache so the next page load shows filled hearts instantly
             const freshList = evt.detail?.favourites ||
                 (window.__ipordise_favs ? window.__ipordise_favs.getFavourites() : []);
-            try { localStorage.setItem(cacheKey, JSON.stringify(freshList)); } catch { /* ignore */ }
 
             // Re-collect all heart buttons in case DOM changed since init
             const allFavBtns = Array.from(document.querySelectorAll('.product-favorite-btn'));
@@ -7673,6 +7674,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const paginationEl = document.querySelector('[data-discover-pagination]');
 
         if (!filterButtons.length || !productsGrid) return;
+
+        try {
+            if ('scrollRestoration' in window.history) {
+                window.history.scrollRestoration = 'manual';
+            }
+        } catch (error) {
+            // Ignore browsers that block or do not support manual restoration.
+        }
 
         const productCards = Array.from(productsGrid.querySelectorAll('.js-product-link'));
         const searchInputs = Array.from(document.querySelectorAll('[data-discover-search]'));
@@ -7736,7 +7745,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const writeDiscoverState = (state) => {
             try {
-                sessionStorage.setItem(discoverStateKey, JSON.stringify(state));
+                const prevState = readDiscoverState() || {};
+                sessionStorage.setItem(discoverStateKey, JSON.stringify({
+                    ...prevState,
+                    ...state,
+                    path: state.path || window.location.pathname,
+                    search: window.location.search,
+                    href: `${window.location.pathname}${window.location.search}`,
+                    savedAt: state.savedAt || Date.now()
+                }));
             } catch (error) {
                 // Ignore storage errors (private mode or blocked storage).
             }
@@ -7793,6 +7810,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.addEventListener('click', () => {
                     const nextPage = Number(button.dataset.discoverPage || 1);
                     if (Number.isFinite(nextPage) && nextPage >= 1 && nextPage <= totalPages) {
+                        clearDiscoverReturnTarget();
                         currentPage = nextPage;
                         applyFilter();
                         const gridTop = productsGrid.getBoundingClientRect().top + window.scrollY - 80;
@@ -7815,6 +7833,105 @@ document.addEventListener('DOMContentLoaded', () => {
             const nameKey = canonicalProductName(card.dataset.productName || '');
             const brandKey = canonicalProductName(card.dataset.productBrand || '');
             return `${nameKey}|${brandKey}`;
+        };
+
+        const findDiscoverRestoreCard = (state) => {
+            if (!state) return null;
+
+            if (state.productId) {
+                try {
+                    const byId = productsGrid.querySelector(`.js-product-link[data-id="${CSS.escape(String(state.productId))}"]`);
+                    if (byId) return byId;
+                } catch (error) {
+                    // Fall through to key matching if CSS.escape is unavailable or input is odd.
+                }
+            }
+
+            if (state.cardKey) {
+                const byKey = productCards.find((card) => getCardKey(card) === state.cardKey);
+                if (byKey) return byKey;
+            }
+
+            return null;
+        };
+
+        let pendingDiscoverRestoreState = null;
+        let discoverRestoreTimer = 0;
+
+        const isCardVisibleForRestore = (card) => (
+            card
+            && !card.classList.contains('hidden')
+            && card.offsetParent !== null
+        );
+
+        const markDiscoverRestoreComplete = () => {
+            window.setTimeout(() => {
+                writeDiscoverState({
+                    restoreOnReturn: false,
+                    scrollY: window.scrollY
+                });
+            }, 180);
+        };
+
+        const applyDiscoverRestore = (state, attempt = 0) => {
+            if (!state) return;
+            if (discoverRestoreTimer) {
+                window.clearTimeout(discoverRestoreTimer);
+                discoverRestoreTimer = 0;
+            }
+
+            const targetCard = findDiscoverRestoreCard(state);
+            const targetVisible = isCardVisibleForRestore(targetCard);
+            const savedScrollY = Number(state.scrollY);
+            const hasSavedScroll = Number.isFinite(savedScrollY);
+
+            if (hasSavedScroll) {
+                window.scrollTo({ top: Math.max(0, savedScrollY), behavior: 'auto' });
+            }
+
+            if (targetVisible) {
+                window.requestAnimationFrame(() => {
+                    const rect = targetCard.getBoundingClientRect();
+                    const headerOffset = window.matchMedia('(max-width: 767px)').matches ? 88 : 104;
+                    const outOfView = rect.top < headerOffset || rect.bottom > (window.innerHeight - 24);
+                    if (outOfView || !hasSavedScroll) {
+                        window.scrollTo({
+                            top: Math.max(0, rect.top + window.scrollY - headerOffset),
+                            behavior: 'auto'
+                        });
+                    }
+                });
+                pendingDiscoverRestoreState = null;
+                markDiscoverRestoreComplete();
+                return;
+            }
+
+            if (attempt < 8) {
+                discoverRestoreTimer = window.setTimeout(() => {
+                    applyDiscoverRestore(state, attempt + 1);
+                }, attempt < 2 ? 50 : 140);
+            } else {
+                pendingDiscoverRestoreState = null;
+                markDiscoverRestoreComplete();
+            }
+        };
+
+        const scheduleDiscoverRestore = (state) => {
+            if (!state) return;
+            pendingDiscoverRestoreState = state;
+            window.requestAnimationFrame(() => {
+                window.requestAnimationFrame(() => applyDiscoverRestore(state));
+            });
+        };
+
+        const clearDiscoverReturnTarget = () => {
+            pendingDiscoverRestoreState = null;
+            writeDiscoverState({
+                restoreOnReturn: false,
+                productId: '',
+                cardKey: '',
+                scrollY: window.scrollY
+            });
         };
 
         const getOrderKey = () => {
@@ -7921,6 +8038,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filterButtons.forEach((button) => {
             button.addEventListener('click', () => {
                 const filter = (button.dataset.discoverFilter || 'all').toLowerCase();
+                clearDiscoverReturnTarget();
                 setActiveButton(button);
                 activeFilter = filter;
                 currentPage = 1;
@@ -7931,6 +8049,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         searchInputs.forEach((input) => {
             input.addEventListener('input', (event) => {
+                clearDiscoverReturnTarget();
                 activeQuery = event.target.value || '';
                 currentPage = 1;
                 searchInputs.forEach((peer) => {
@@ -7953,10 +8072,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const canRestoreState = savedState && savedState.path === window.location.pathname;
         const savedFilter = canRestoreState && allowedFilters.has(savedState.filter) ? savedState.filter : null;
         const savedQuery = canRestoreState ? String(savedState.query || '') : '';
-        const savedPage = canRestoreState && Number.isFinite(savedState.page) ? Number(savedState.page) : 1;
+        const savedPageNumber = Number(savedState?.page);
+        const savedPage = canRestoreState && Number.isFinite(savedPageNumber) ? savedPageNumber : 1;
+        const sameSavedSearch = canRestoreState && (!savedState.search || savedState.search === window.location.search);
+        const canRestoreProductReturn = Boolean(
+            canRestoreState
+            && savedState.restoreOnReturn === true
+            && sameSavedSearch
+        );
 
         const hasUrlFilter = allowedFilters.has(urlFilter);
-        const preferredFilter = hasUrlFilter ? urlFilter : (savedFilter || initialFilter);
+        const preferredFilter = canRestoreProductReturn && savedFilter
+            ? savedFilter
+            : (hasUrlFilter ? urlFilter : (savedFilter || initialFilter));
         const defaultButton = filterButtons.find((button) => (button.dataset.discoverFilter || '').toLowerCase() === preferredFilter)
             || filterButtons.find((button) => button.classList.contains('bg-brand-dark'))
             || filterButtons[0];
@@ -7965,8 +8093,12 @@ document.addEventListener('DOMContentLoaded', () => {
         activeFilter = (defaultButton.dataset.discoverFilter || 'all').toLowerCase();
         /* When arriving via a direct URL filter link, ignore any saved search query/page
            so the user sees clean results for the chosen filter. */
-        activeQuery = hasUrlFilter ? (urlQueryRaw || '') : (savedQuery || urlQueryRaw || '');
-        currentPage = hasUrlFilter ? 1 : (savedPage || 1);
+        activeQuery = canRestoreProductReturn
+            ? savedQuery
+            : (hasUrlFilter ? (urlQueryRaw || '') : (savedQuery || urlQueryRaw || ''));
+        currentPage = canRestoreProductReturn
+            ? (savedPage || 1)
+            : (hasUrlFilter ? 1 : (savedPage || 1));
         if (activeQuery) {
             searchInputs.forEach((input) => {
                 input.value = activeQuery;
@@ -7989,14 +8121,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         applyFilter();
 
-        if (canRestoreState && Number.isFinite(savedState.scrollY)) {
-            window.requestAnimationFrame(() => {
-                window.scrollTo({ top: savedState.scrollY, behavior: 'auto' });
+        const savedScrollYNumber = Number(savedState?.scrollY);
+        const hasSavedScrollY = Number.isFinite(savedScrollYNumber);
+        const shouldRestoreSavedPosition = canRestoreProductReturn
+            || (!hasUrlFilter && canRestoreState && hasSavedScrollY);
+
+        if (shouldRestoreSavedPosition) {
+            scheduleDiscoverRestore({
+                ...savedState,
+                scrollY: hasSavedScrollY ? savedScrollYNumber : savedState?.scrollY
             });
         } else if (urlFilter && allowedFilters.has(urlFilter)) {
             // Arrived via a filter link (e.g. ?filter=2026) — scroll to the grid
             window.requestAnimationFrame(() => scrollToGrid());
         }
+
+        window.addEventListener('pageshow', (event) => {
+            if (!event.persisted) return;
+            const state = readDiscoverState();
+            const shouldRestore = state
+                && state.path === window.location.pathname
+                && state.restoreOnReturn === true
+                && (!state.search || state.search === window.location.search);
+
+            if (shouldRestore) {
+                scheduleDiscoverRestore(state);
+            }
+        });
 
         let scrollSaveTimer = null;
         window.addEventListener('scroll', () => {
@@ -8033,7 +8184,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             });
-            if (added) applyFilter();
+            if (added) {
+                applyFilter();
+                if (pendingDiscoverRestoreState) {
+                    scheduleDiscoverRestore(pendingDiscoverRestoreState);
+                }
+            }
         });
         dynamicCardObserver.observe(productsGrid, { childList: true });
     };
@@ -8043,7 +8199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return `
             <article class="cart-card bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm" data-cart-id="${item.id}">
                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-5">
-                    <img src="${item.image || ''}" alt="${item.name || 'Product'}" class="cart-item-image w-full sm:w-28 h-28 object-contain bg-brand-light rounded-xl">
+                    <img src="${item.image || ''}" alt="${item.name || 'Product'}" class="cart-item-image w-full sm:w-28 h-28 object-contain bg-brand-light rounded-xl" loading="lazy" decoding="async">
                     <div class="flex-1 min-w-0">
                         <div class="flex justify-between gap-3">
                             <div>
@@ -8176,16 +8332,36 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.max(0, Math.min(maxScrollLeft, targetLeft));
     };
 
+    const shouldStartAlignCarouselItem = (carousel) => (
+        carousel?.id === 'newArrivalsCarousel' || carousel?.id === 'productCarousel'
+    );
+
+    const getScrollLeftForCarouselItem = (carousel, item) => {
+        if (!carousel || !item) return 0;
+
+        if (shouldStartAlignCarouselItem(carousel)) {
+            const maxScrollLeft = Math.max(0, carousel.scrollWidth - carousel.clientWidth);
+            return Math.max(0, Math.min(maxScrollLeft, item.offsetLeft));
+        }
+
+        return getCenteredScrollLeftForItem(carousel, item);
+    };
+
     const getNearestCarouselItemIndex = (carousel, items, bias = 0) => {
         if (!carousel || !items.length) return -1;
 
-        const viewportCenter = carousel.scrollLeft + (carousel.clientWidth / 2) + bias;
+        const startAligned = shouldStartAlignCarouselItem(carousel);
+        const viewportAnchor = startAligned
+            ? carousel.scrollLeft + bias
+            : carousel.scrollLeft + (carousel.clientWidth / 2) + bias;
         let nearestIndex = 0;
         let nearestDistance = Number.POSITIVE_INFINITY;
 
         items.forEach((item, index) => {
-            const itemCenter = item.offsetLeft + (item.offsetWidth / 2);
-            const distance = Math.abs(itemCenter - viewportCenter);
+            const itemAnchor = startAligned
+                ? item.offsetLeft
+                : item.offsetLeft + (item.offsetWidth / 2);
+            const distance = Math.abs(itemAnchor - viewportAnchor);
             if (distance < nearestDistance) {
                 nearestDistance = distance;
                 nearestIndex = index;
@@ -8205,7 +8381,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetItem = items[nearestIndex];
         if (!targetItem) return;
 
-        const targetLeft = getCenteredScrollLeftForItem(carousel, targetItem);
+        const targetLeft = getScrollLeftForCarouselItem(carousel, targetItem);
         // Restore CSS snap type after JS has decided the target
         carousel.style.scrollSnapType = '';
         if (Math.abs(carousel.scrollLeft - targetLeft) < 1) return;
@@ -8232,7 +8408,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // When navigating to the last card, scroll to the very end so it's fully visible
         const isLast = nextIndex === items.length - 1;
         const maxScrollLeft = Math.max(0, carousel.scrollWidth - carousel.clientWidth);
-        const targetLeft = isLast ? maxScrollLeft : getCenteredScrollLeftForItem(carousel, targetItem);
+        const targetLeft = isLast ? maxScrollLeft : getScrollLeftForCarouselItem(carousel, targetItem);
 
         carousel.scrollTo({
             left: targetLeft,
@@ -8283,7 +8459,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetItem = items[clampedIndex];
             if (!targetItem) return;
 
-            const targetLeft = getCenteredScrollLeftForItem(carousel, targetItem);
+            const targetLeft = getScrollLeftForCarouselItem(carousel, targetItem);
             // Restore scrollSnapType before scrollTo so browser and JS agree
             carousel.style.scrollSnapType = '';
             if (Math.abs(carousel.scrollLeft - targetLeft) < 1) return;
@@ -8858,6 +9034,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const enableCarouselAutoplay = (carouselId, step = 160, delay = 2600) => {
         const carousel = document.getElementById(carouselId);
         if (!carousel) return;
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const coarsePointer = window.matchMedia('(hover: none)').matches;
+        if (reducedMotion || coarsePointer) return;
 
         let paused = false;
 
@@ -8897,7 +9076,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1200);
         });
 
-        window.setInterval(scrollNext, delay);
+        window.setInterval(() => {
+            if (!document.hidden) scrollNext();
+        }, delay);
     };
 
     const bindSectionCarouselNav = (sectionId, carouselId) => {
@@ -9026,7 +9207,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="card-2026-badge" data-i18n="index.class2026_badge">New 2026</span>
                     <button class="card-2026-wish js-wishlist-btn product-favorite-btn" aria-label="Add to wishlist" data-favorite-id="${favoriteId}"><i class="far fa-heart"></i></button>
                     <div class="card-2026-img-wrap">
-                        <img src="${p.image}" alt="${p.name}" loading="lazy" width="200" height="200">
+                        <img src="${p.image}" alt="${p.name}" loading="lazy" decoding="async" width="200" height="200">
                     </div>
                     <div class="card-2026-body">
                         <p class="card-2026-brand">${p.brand}</p>
@@ -9836,7 +10017,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         featured.map((item) =>
                             '<button type="button" class="ipo-search-prod-card" data-prod-name="' + (item.name || '').replace(/"/g, '&quot;') + '" data-prod-brand="' + (item.brand || '').replace(/"/g, '&quot;') + '">' +
                                 '<div class="ipo-search-prod-img-wrap">' +
-                                    '<img src="' + (item.image || '') + '" alt="" class="ipo-search-prod-img" loading="lazy" />' +
+                                    '<img src="' + (item.image || '') + '" alt="" class="ipo-search-prod-img" loading="lazy" decoding="async" />' +
                                 '</div>' +
                                 '<span class="ipo-search-prod-brand">' + (item.brand || '') + '</span>' +
                                 '<span class="ipo-search-prod-name">' + (item.name || '') + '</span>' +
@@ -9913,7 +10094,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ? '<div class="ipo-search-results-list">' +
                             results.map((item) =>
                                 '<button type="button" class="ipo-search-result-row" data-prod-name="' + (item.name || '').replace(/"/g, '&quot;') + '" data-prod-brand="' + (item.brand || '').replace(/"/g, '&quot;') + '">' +
-                                    '<img src="' + (item.image || '') + '" alt="" class="ipo-search-result-thumb" loading="lazy" />' +
+                                    '<img src="' + (item.image || '') + '" alt="" class="ipo-search-result-thumb" loading="lazy" decoding="async" />' +
                                     '<span class="ipo-search-result-text">' +
                                         '<span class="ipo-search-result-name">' + (item.name || '') + '</span>' +
                                         '<span class="ipo-search-result-brand">' + (item.brand || '') + '</span>' +
@@ -10015,24 +10196,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const disableInspectTools = () => {
-        document.addEventListener('contextmenu', (event) => {
-            event.preventDefault();
-        }, { capture: true });
-
-        document.addEventListener('keydown', (event) => {
-            const key = (event.key || '').toLowerCase();
-            const ctrlOrMeta = event.ctrlKey || event.metaKey;
-            const shift = event.shiftKey;
-
-            const blockDevToolsCombo = key === 'f12'
-                || (ctrlOrMeta && shift && (key === 'i' || key === 'j' || key === 'c'))
-                || (ctrlOrMeta && (key === 'u' || key === 's'));
-
-            if (!blockDevToolsCombo) return;
-
-            event.preventDefault();
-            event.stopImmediatePropagation();
-        }, { capture: true });
+        // Keep browser-native interactions available. Blocking context menus and
+        // keyboard shortcuts hurts accessibility and can make the site feel broken.
     };
 
     const initSocialVideoSwitcher = () => {
@@ -10760,7 +10925,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('.product-wishlist-btn');
         if (!btn) return;
-        if (!window.__ipordise_user) {
+        if (!(window.__ipordise_user || window.__ipordise_favs?.isAuthenticated?.())) {
+            e.preventDefault();
             e.stopImmediatePropagation();
             const modal = document.getElementById('wishlistAuthModal');
             if (modal) {
@@ -11024,8 +11190,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const dots = Array.from(dotsContainer.querySelectorAll('.carousel-dot'));
         if (!dots.length) return;
 
-        // newArrivalsCarousel uses scroll-snap-align:start → detect by left-edge proximity
-        const useStartDetection = carouselId === 'newArrivalsCarousel';
+        // Product card carousels use start alignment so edge cards stay clean.
+        const useStartDetection = shouldStartAlignCarouselItem(carousel);
 
         const getActiveCardIndex = (items) => {
             if (useStartDetection) {
@@ -11113,16 +11279,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const zoomContainer = document.getElementById('productZoomContainer');
     if (zoomContainer) {
         const zoomImg = zoomContainer.querySelector('.product-main-image');
-        if (zoomImg) {
-            zoomContainer.addEventListener('mousemove', (e) => {
-                const rect = zoomContainer.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
+        const canHoverZoom = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+            && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (zoomImg && canHoverZoom) {
+            let zoomFrame = null;
+            let lastZoomEvent = null;
+            let zoomRect = null;
+            const resetZoomRect = () => { zoomRect = null; };
+            const applyZoomOrigin = () => {
+                zoomFrame = null;
+                if (!lastZoomEvent) return;
+                zoomRect = zoomRect || zoomContainer.getBoundingClientRect();
+                const x = ((lastZoomEvent.clientX - zoomRect.left) / zoomRect.width) * 100;
+                const y = ((lastZoomEvent.clientY - zoomRect.top) / zoomRect.height) * 100;
                 zoomImg.style.transformOrigin = `${x}% ${y}%`;
+            };
+            zoomContainer.addEventListener('mousemove', (e) => {
+                lastZoomEvent = e;
+                if (!zoomFrame) zoomFrame = requestAnimationFrame(applyZoomOrigin);
             });
             zoomContainer.addEventListener('mouseleave', () => {
+                if (zoomFrame) cancelAnimationFrame(zoomFrame);
+                zoomFrame = null;
+                lastZoomEvent = null;
+                resetZoomRect();
                 zoomImg.style.transformOrigin = 'center center';
             });
+            window.addEventListener('resize', resetZoomRect, { passive: true });
         }
 
         /* Mobile swipe to change images */
@@ -11151,7 +11334,10 @@ document.addEventListener('DOMContentLoaded', () => {
             thumbs[nextIndex].click();
             const thumbsContainer = document.getElementById('productThumbs');
             if (thumbsContainer) {
-                thumbsContainer.scrollLeft = thumbs[nextIndex].offsetLeft - thumbsContainer.offsetLeft - (thumbsContainer.clientWidth / 2) + (thumbs[nextIndex].offsetWidth / 2);
+                thumbsContainer.scrollTo({
+                    left: thumbs[nextIndex].offsetLeft - thumbsContainer.offsetLeft - (thumbsContainer.clientWidth / 2) + (thumbs[nextIndex].offsetWidth / 2),
+                    behavior: 'smooth',
+                });
             }
         }, { passive: true });
     }
@@ -11173,7 +11359,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 nextIndex = activeIndex > 0 ? activeIndex - 1 : thumbs.length - 1;
             }
             thumbs[nextIndex].click();
-            thumbsRow.scrollLeft = thumbs[nextIndex].offsetLeft - thumbsRow.offsetLeft - (thumbsRow.clientWidth / 2) + (thumbs[nextIndex].offsetWidth / 2);
+            thumbsRow.scrollTo({
+                left: thumbs[nextIndex].offsetLeft - thumbsRow.offsetLeft - (thumbsRow.clientWidth / 2) + (thumbs[nextIndex].offsetWidth / 2),
+                behavior: 'smooth',
+            });
         };
 
         if (leftArrow) {
@@ -11306,6 +11495,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ════════════════════════════════════════════════════════ */
     const initLuxuryUI = () => {
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const reduceDecorativeMotion = prefersReducedMotion || window.matchMedia('(max-width: 767px)').matches;
 
         /* ── 1. Ripple effect on Add-to-Cart buttons ── */
         document.addEventListener('click', (e) => {
@@ -11342,7 +11532,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         /* ── 3. Scroll-reveal for product cards & key sections ── */
-        if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+        if (!reduceDecorativeMotion && 'IntersectionObserver' in window) {
             const revealSelectors = [
                 '#productCarousel > .group',
                 '#newArrivalsCarousel > article',
@@ -11366,9 +11556,12 @@ document.addEventListener('DOMContentLoaded', () => {
             revealTargets.forEach((el) => revealObserver.observe(el));
         }
 
-        /* ── 4. Lazy loading: apply to any image missing the attribute ── */
-        document.querySelectorAll('img:not([loading])').forEach((img) => {
-            img.setAttribute('loading', 'lazy');
+        /* ── 4. Image hints: keep critical media eager, lazily load the rest ── */
+        document.querySelectorAll('img').forEach((img) => {
+            if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+            if (img.hasAttribute('loading')) return;
+            const critical = img.closest('header, #heroSection, #ipo-preloader') || img.classList.contains('site-logo-img');
+            img.setAttribute('loading', critical ? 'eager' : 'lazy');
         });
 
         /* ── 5. Mobile touch-press feedback on cards ── */
@@ -11398,7 +11591,8 @@ document.addEventListener('DOMContentLoaded', () => {
        Page entrance · hero orbs · extended section reveals · counters
     ══════════════════════════════════════════════════════════════════════ */
     const initGratefulAnimations = () => {
-        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            || window.matchMedia('(max-width: 767px)').matches;
 
         // ── 1. Page entrance ──────────────────────────────────────────────
         document.body.classList.add('ip-loaded');
@@ -11616,6 +11810,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var frameId = null;
     var scrollingClassTimer = null;
     var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var smallViewport = window.matchMedia('(max-width: 767px)');
+    var shouldReduceProgressMotion = function () {
+        return prefersReducedMotion.matches || smallViewport.matches;
+    };
 
     function getScrollProgress() {
         var scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -11647,7 +11845,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function renderProgress() {
-        var easing = prefersReducedMotion.matches ? 1 : 0.14;
+        var easing = shouldReduceProgressMotion() ? 1 : 0.14;
         currentProgress += (targetProgress - currentProgress) * easing;
 
         if (Math.abs(targetProgress - currentProgress) < 0.001) {
@@ -11674,14 +11872,14 @@ document.addEventListener('DOMContentLoaded', function () {
         window.clearTimeout(scrollingClassTimer);
         scrollingClassTimer = window.setTimeout(function () {
             progressRoot.classList.remove('is-scrolling');
-        }, prefersReducedMotion.matches ? 80 : 180);
+        }, shouldReduceProgressMotion() ? 80 : 180);
     }
 
     function syncProgress() {
         targetProgress = getScrollProgress();
         markScrolling();
 
-        if (prefersReducedMotion.matches) {
+        if (shouldReduceProgressMotion()) {
             currentProgress = targetProgress;
             setProgress(currentProgress);
             return;
@@ -11701,6 +11899,11 @@ document.addEventListener('DOMContentLoaded', function () {
     } else if (typeof prefersReducedMotion.addListener === 'function') {
         prefersReducedMotion.addListener(syncProgress);
     }
+    if (typeof smallViewport.addEventListener === 'function') {
+        smallViewport.addEventListener('change', syncProgress);
+    } else if (typeof smallViewport.addListener === 'function') {
+        smallViewport.addListener(syncProgress);
+    }
 });
 
 /* ── IPORDISE Motion Layer ──────────────────────────────────
@@ -11710,7 +11913,8 @@ document.addEventListener('DOMContentLoaded', function () {
 (function () {
     'use strict';
 
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        || window.matchMedia('(max-width: 767px)').matches;
 
     /* ── 1. Scroll fade-in ── */
     var REVEAL_SELECTORS = [
@@ -11828,7 +12032,7 @@ document.addEventListener('DOMContentLoaded', function () {
         el.setAttribute('aria-label', 'Install IPORDISE app');
         el.innerHTML = `
             <div class="ipo-install-banner-inner">
-                <img src="/assets/logo.png" alt="IPORDISE" class="ipo-install-banner-logo">
+                <img src="/assets/logo.png" alt="IPORDISE" class="ipo-install-banner-logo" loading="lazy" decoding="async">
                 <div class="ipo-install-banner-text">
                     <strong>Add IPORDISE to your home screen</strong>
                     <span>Faster checkout &amp; exclusive member deals</span>
@@ -11904,8 +12108,8 @@ document.addEventListener('DOMContentLoaded', function () {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').then((reg) => {
-            // Check for updates every 60 seconds
-            setInterval(() => reg.update(), 60000);
+            // Check periodically without waking the page every minute on mobile.
+            setInterval(() => reg.update(), 60 * 60 * 1000);
 
             // When a new SW is waiting, activate it and reload
             const applyUpdate = (worker) => {
@@ -11980,7 +12184,7 @@ if ('serviceWorker' in navigator) {
     const buildCardHTML = (p) => {
         const esc = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
         return `<div class="rv-card" role="button" tabindex="0" onclick="location.href='${esc(p.url)}'" onkeydown="if(event.key==='Enter')location.href='${esc(p.url)}'">
-            <div class="rv-card-img"><img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none'"></div>
+            <div class="rv-card-img"><img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" decoding="async" onerror="this.style.display='none'"></div>
             <div class="rv-card-body">
                 <p class="rv-card-brand">${esc(p.brand)}</p>
                 <p class="rv-card-name">${esc(p.name)}</p>
@@ -12251,7 +12455,7 @@ if ('serviceWorker' in navigator) {
                     const params = new URLSearchParams({ id: p.id || p.name, name: p.name, brand: p.brand || '', image: p.image || '' });
                     const url = `${path}product.html?${params.toString()}`;
                     return `<div class="quiz-result-product" onclick="window.location.href='${url.replace(/'/g,"\\'")}'" role="button" tabindex="0">
-                        <img src="${(p.image||'').replace(/'/g,"\\'")||''}" alt="${(p.name||'').replace(/"/g,'&quot;')}" onerror="this.style.display='none'" loading="lazy">
+                        <img src="${(p.image||'').replace(/'/g,"\\'")||''}" alt="${(p.name||'').replace(/"/g,'&quot;')}" onerror="this.style.display='none'" loading="lazy" decoding="async">
                         <div>
                             <p class="quiz-result-product-brand">${(p.brand||'IPORDISE').replace(/</g,'&lt;')}</p>
                             <p class="quiz-result-product-name">${(p.name||'').replace(/</g,'&lt;')}</p>
