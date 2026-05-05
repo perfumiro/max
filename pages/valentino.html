@@ -28,10 +28,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/tailwind.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../script.js"></script>
-    <script src="../i18n.js"></script>
+    <script src="../script.js" defer></script>
+    <script src="../i18n.js" defer></script>
     <link rel="stylesheet" href="../style.css">
     <style>
         /* -- VALENTINO PAGE STYLES -- */
@@ -518,7 +518,7 @@
     </style>
 
     <script>
-        tailwind.config = {
+        if (window.tailwind) window.tailwind.config = {
             theme: {
                 extend: {
                     colors: {
@@ -536,7 +536,7 @@
                     }
                 }
             }
-        }
+        };
     </script>
     <!-- PWA -->
     <link rel="manifest" href="../manifest.json">
@@ -830,7 +830,7 @@ s0.parentNode.insertBefore(s1,s0);
                 <div class="val-story-grid">
                     <div class="val-story-img">
                         <img src="/assets/Herosectionphotos/for her valentino.png"
-                             alt="Valentino Women Fragrances">
+                             alt="Valentino Women Fragrances" loading="lazy" decoding="async">
                     </div>
                     <div>
                         <p class="val-story-label" data-i18n="valentino.women_story_label">For Her</p>
@@ -882,7 +882,7 @@ s0.parentNode.insertBefore(s1,s0);
                         <div class="val-card-img">
                             <span class="val-card-gender-badge women" data-i18n="valentino.badge_women">For Her</span>
                             <img src="/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp"
-                                 alt="Valentino Born in Roma Donna Intense EDP" loading="lazy">
+                                 alt="Valentino Born in Roma Donna Intense EDP" loading="lazy" decoding="async">
                         </div>
                         <div class="val-card-body">
                             <p class="val-card-brand">Valentino</p>
@@ -906,7 +906,7 @@ s0.parentNode.insertBefore(s1,s0);
                         <div class="val-card-img">
                             <span class="val-card-gender-badge women" data-i18n="valentino.badge_women">For Her</span>
                             <img src="/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/1.webp"
-                                 alt="Valentino Donna Born in Roma EDP" loading="lazy">
+                                 alt="Valentino Donna Born in Roma EDP" loading="lazy" decoding="async">
                         </div>
                         <div class="val-card-body">
                             <p class="val-card-brand">Valentino</p>
@@ -936,7 +936,7 @@ s0.parentNode.insertBefore(s1,s0);
                 <div class="val-story-grid">
                     <div class="val-story-img">
                         <img src="https://preview.redd.it/best-favorite-valentino-in-your-opinion-v0-mlr78mokckzc1.jpeg?width=1080&crop=smart&auto=webp&s=fa6a5fdbebe17766283429512632c1f033ebc32c"
-                             alt="Valentino Men Fragrances">
+                             alt="Valentino Men Fragrances" loading="lazy" decoding="async">
                     </div>
                     <div>
                         <p class="val-story-label" data-i18n="valentino.men_story_label">For Him</p>
@@ -988,7 +988,7 @@ s0.parentNode.insertBefore(s1,s0);
                         <div class="val-card-img">
                             <span class="val-card-gender-badge men" data-i18n="valentino.badge_men">For Him</span>
                             <img src="/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp"
-                                 alt="Valentino Born in Roma Uomo Intense EDP" loading="lazy">
+                                 alt="Valentino Born in Roma Uomo Intense EDP" loading="lazy" decoding="async">
                         </div>
                         <div class="val-card-body">
                             <p class="val-card-brand">Valentino</p>
@@ -1012,7 +1012,7 @@ s0.parentNode.insertBefore(s1,s0);
                         <div class="val-card-img">
                             <span class="val-card-gender-badge men" data-i18n="valentino.badge_men">For Him</span>
                             <img src="/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/1.webp"
-                                 alt="Valentino Uomo Born in Roma Coral Fantasy" loading="lazy">
+                                 alt="Valentino Uomo Born in Roma Coral Fantasy" loading="lazy" decoding="async">
                         </div>
                         <div class="val-card-body">
                             <p class="val-card-brand">Valentino</p>
@@ -1036,7 +1036,7 @@ s0.parentNode.insertBefore(s1,s0);
                         <div class="val-card-img">
                             <span class="val-card-gender-badge men" data-i18n="valentino.badge_men">For Him</span>
                             <img src="/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/1.jpg"
-                                 alt="Valentino Uomo Born in Roma EDT" loading="lazy">
+                                 alt="Valentino Uomo Born in Roma EDT" loading="lazy" decoding="async">
                         </div>
                         <div class="val-card-body">
                             <p class="val-card-brand">Valentino</p>
@@ -1060,7 +1060,7 @@ s0.parentNode.insertBefore(s1,s0);
                         <div class="val-card-img">
                             <span class="val-card-gender-badge men" data-i18n="valentino.badge_men">For Him</span>
                             <img src="/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/1.jpg"
-                                 alt="Valentino Uomo Born In Roma Purple Melancholia Eau de Toilette" loading="lazy">
+                                 alt="Valentino Uomo Born In Roma Purple Melancholia Eau de Toilette" loading="lazy" decoding="async">
                         </div>
                         <div class="val-card-body">
                             <p class="val-card-brand">Valentino</p>
@@ -1084,7 +1084,7 @@ s0.parentNode.insertBefore(s1,s0);
                         <div class="val-card-img">
                             <span class="val-card-gender-badge men" data-i18n="valentino.badge_men">For Him</span>
                             <img src="/assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg"
-                                 alt="Valentino Born in Roma Extradose EDT" loading="lazy">
+                                 alt="Valentino Born in Roma Extradose EDT" loading="lazy" decoding="async">
                         </div>
                         <div class="val-card-body">
                             <p class="val-card-brand">Valentino</p>
