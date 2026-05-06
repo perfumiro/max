@@ -11987,6 +11987,7 @@ a.new-arrivals-cta:hover {
     transition:
         opacity 0.7s ease,
         transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
 }
 
 .lux-reveal.lux-reveal--visible {
@@ -25138,6 +25139,7 @@ header.bg-brand-dark {
     border-radius: 50%;
     background: radial-gradient(circle at 40% 40%, rgba(184, 149, 92, 0.72) 0%, transparent 68%);
     filter: blur(2px);
+    will-change: transform, opacity;
 }
 .ip-hero-orb:nth-child(1) { width: 90px;  height: 90px;  top: 14%;    left: 5%;    animation: ipOrbA 7.0s ease-in-out infinite; }
 .ip-hero-orb:nth-child(2) { width: 52px;  height: 52px;  top: 62%;    left: 11%;   animation: ipOrbB 9.5s ease-in-out infinite 1.4s; }
@@ -28687,4 +28689,26 @@ body.ipo-is-transitioning * {
 .pf-card:focus-within img {
     transform: none !important;
     scale: 1 !important;
+}
+
+/* --- GLOBAL CPU & GPU PERFORMANCE OPTIMIZATIONS --- */
+.sect-reveal, .ipo-reveal, .sect-reveal--left, .sect-reveal--right, .sect-reveal--scale, .sect-reveal--down, .ip-hero-orb, .scroll-progress__bar, .lux-btn-ripple {
+    will-change: transform, opacity;
+    transform: translateZ(0); /* Force Hardware Acceleration Layer */
+}
+
+.ipo-card-img, .hero-banner-img, .product-main-image {
+    will-change: transform;
+    backface-visibility: hidden; /* Reduces Edge Bleeding & CPU repaints */
+}
+
+.trust-bar-marquee-wrap, .ip-gold-line, .testimonial-card {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Defer rendering of off-screen luxury elements natively! */
+#flashOffersSection, #newArrivalsCarousel, #newsletterSection, footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 350px;
 }

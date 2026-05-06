@@ -342,9 +342,9 @@ s0.parentNode.insertBefore(s1,s0);
     50%     { transform: scale(1.25); opacity: 0.85; }
 }
 @keyframes lvcGleam {
-    0%, 70%  { left: -90%; opacity: 0; }
+    0%, 70%  { transform: translateX(-190%); opacity: 0; }
     74%      { opacity: 1; }
-    100%     { left: 130%; opacity: 0; }
+    100%     { transform: translateX(130%); opacity: 0; }
 }
 @keyframes lvcNumOut {
     0%   { opacity:1; transform: translateY(0)    scale(1);    filter:blur(0px); }
@@ -394,11 +394,12 @@ s0.parentNode.insertBefore(s1,s0);
 .lvc-pill::after {
     content: '' !important;
     position: absolute !important;
-    top: 0 !important; left: -90% !important;
+    top: 0 !important; left: 0 !important;
     width: 50% !important; height: 100% !important;
     background: linear-gradient(105deg, transparent 15%, rgba(255,255,255,0.60) 50%, transparent 85%) !important;
     animation: lvcGleam 7s ease-in-out 2.5s infinite !important;
     pointer-events: none !important;
+    will-change: transform, opacity;
 }
 /* Live dot wrapper — green glow ring */
 .lvc-dot-wrap {
@@ -512,6 +513,7 @@ s0.parentNode.insertBefore(s1,s0);
     box-shadow: 0 2px 10px rgba(0,0,0,0.06);
     transition: box-shadow 0.28s ease, transform 0.28s ease;
     cursor: pointer;
+    will-change: transform, box-shadow;
 }
 .ipo-card:hover {
     box-shadow: 0 16px 44px rgba(0,0,0,0.14);
@@ -546,6 +548,7 @@ s0.parentNode.insertBefore(s1,s0);
     filter: none;
     mix-blend-mode: multiply;
     transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+    will-change: transform;
 }
 .ipo-card:hover .ipo-card-img { transform: scale(1.06); }
 
@@ -707,6 +710,7 @@ s0.parentNode.insertBefore(s1,s0);
 }
 #productCarousel .h-48 img {
     mix-blend-mode: multiply !important;
+    will-change: transform;
 }
 #productCarousel .flex-grow.flex.flex-col {
     padding: 10px 12px 12px !important;
@@ -1841,7 +1845,7 @@ s0.parentNode.insertBefore(s1,s0);
                     <i class="fas fa-chevron-right"></i>
                 </button>
                 
-                <div class="flex overflow-x-auto gap-6 pb-6 pt-2 hide-scrollbar snap-x snap-mandatory scroll-smooth" id="productCarousel">
+                <div class="flex overflow-x-auto gap-6 pb-6 pt-2 hide-scrollbar snap-x snap-mandatory scroll-smooth" id="productCarousel" style="content-visibility: auto; contain-intrinsic-size: 350px;">
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300 group js-product-link relative flex flex-col min-w-[230px] max-w-[230px] snap-start shrink-0 overflow-hidden"
                         data-product-name="Versace Dylan Blue Eau de Toilette"
                         data-id="versace-dylan-blue-eau-de-toilette"
@@ -2332,7 +2336,7 @@ s0.parentNode.insertBefore(s1,s0);
                     <i class="fas fa-chevron-right"></i>
                 </button>
 
-                <div id="newArrivalsCarousel" class="flex overflow-x-auto gap-5 pb-6 pt-1 hide-scrollbar snap-x snap-mandatory scroll-smooth">
+                <div id="newArrivalsCarousel" class="flex overflow-x-auto gap-5 pb-6 pt-1 hide-scrollbar snap-x snap-mandatory scroll-smooth" style="content-visibility: auto; contain-intrinsic-size: 350px;">
                     <article class="ipo-card snap-start shrink-0 js-product-link" data-added="2026-03-10"
                         data-product-name="Gentleman Private Reserve Eau de Parfum"
                         data-id="gentleman-private-reserve-eau-de-parfum"
@@ -3962,55 +3966,6 @@ s0.parentNode.insertBefore(s1,s0);
             </div>
         </div>
     </div>
-
-    <!-- -- Wishlist Sign-in Modal -- -->
-    <div id="wishlistAuthModal" style="display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;">
-        <div id="wishlistAuthBackdrop" style="position:absolute;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px);"></div>
-        <div style="position:relative;background:#fff;border-radius:20px;padding:2.5rem 2rem 2rem;max-width:360px;width:calc(100% - 32px);box-shadow:0 24px 64px rgba(0,0,0,0.18);text-align:center;animation:wishlistModalIn 0.32s cubic-bezier(0.22,1,0.36,1);">
-            <button id="wishlistAuthClose" type="button" aria-label="Close" style="position:absolute;top:14px;right:16px;background:#25D366;border:none;cursor:pointer;font-size:18px;color:#9ca3af;line-height:1;">&#x2715;</button>
-            <div style="width:56px;height:56px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;margin:0 auto 1.1rem;">
-                <i class="fas fa-heart" style="font-size:22px;color:#e74c4c;"></i>
-            </div>
-            <h3 style="font-size:1.2rem;font-weight:800;color:#111827;margin:0 0 0.45rem;font-family:'Playfair Display',serif;">Save to Wishlist</h3>
-            <p style="font-size:0.85rem;color:#6b7280;margin:0 0 1.6rem;line-height:1.5;">Sign in or create a free account to save your favourite perfumes and access them anywhere.</p>
-            <a id="wishlistAuthSignIn" href="pages/login.html" style="display:block;background:#111827;color:#fff;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:13px 0;border-radius:12px;text-decoration:none;margin-bottom:10px;transition:background 0.2s;">Sign In</a>
-            <a id="wishlistAuthRegister" href="pages/register.html" style="display:block;background:#fff;color:#111827;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-radius:12px;text-decoration:none;border:1.5px solid #e5e7eb;transition:background 0.2s;">Create Account</a>
-        </div>
-    </div>
-    <style>
-        @keyframes wishlistModalIn {
-            from { opacity:0; transform:translateY(24px) scale(0.96); }
-            to   { opacity:1; transform:translateY(0) scale(1); }
-        }
-    </style>
-    <script>
-    // -- Wishlist auth guard (inline — works regardless of script.js cache) --
-    (function () {
-        function showWishlistModal() {
-            var modal = document.getElementById('wishlistAuthModal');
-            if (!modal) return;
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            function closeModal() {
-                modal.style.display = 'none';
-                document.body.style.overflow = '';
-            }
-            var closeBtn = document.getElementById('wishlistAuthClose');
-            var backdrop = document.getElementById('wishlistAuthBackdrop');
-            if (closeBtn)  closeBtn.addEventListener('click',  closeModal, { once: true });
-            if (backdrop) backdrop.addEventListener('click', closeModal, { once: true });
-        }
-        document.addEventListener('click', function (e) {
-            var btn = e.target.closest('.product-wishlist-btn, .product-favorite-btn');
-            if (!btn) return;
-            if (!(window.__ipordise_user || window.__ipordise_favs?.isAuthenticated?.())) {
-                e.stopImmediatePropagation();
-                e.preventDefault();
-                showWishlistModal();
-            }
-        }, true);
-    }());
-    </script>
 
     <script src="assets/scroll-progress.js" defer></script>
 </body>
