@@ -4168,6 +4168,36 @@ document.addEventListener('DOMContentLoaded', () => {
             ? _firestoreProductImagesCache[lookupId].map((src) => normalizeImagePathForCurrentPage(src)).filter(Boolean)
             : [];
 
+        // Keep these Unique'e Luxury products synced with the gallery shown
+        // on the Unique House page so images are identical site-wide.
+        const fixedUniqueHouseGallery = {
+            'akdeniz-unique-e-luxury': [
+                '/assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
+                '/assets/images/products/unique-luxury/akdeniz-uniquee-luxury/2.webp'
+            ],
+            'izmir-unique-e-luxury': [
+                '/assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
+                '/assets/images/products/unique-luxury/izmir-uniquee-luxury/2.webp'
+            ],
+            'ocean-the-rive-unique-e-luxury': [
+                '/assets/images/products/unique-luxury/ocean-the-rive/1.avif',
+                '/assets/images/products/unique-luxury/ocean-the-rive/2.webp'
+            ],
+            'woud-and-mood-absolute-by-unique-e-luxury': [
+                '/assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
+                '/assets/images/products/unique-luxury/woud-and-mood-absolute/2.webp'
+            ],
+            'chocolate-makes-me-happy': [
+                'https://res.cloudinary.com/dp5eszu4p/image/upload/v1777287393/idqhoenngo6pgtzldy7n.jpg'
+            ]
+        };
+        const fixedGallery = fixedUniqueHouseGallery[String(lookupId || '').toLowerCase()];
+        if (Array.isArray(fixedGallery) && fixedGallery.length) {
+            return fixedGallery
+                .map((src) => normalizeImagePathForCurrentPage(src))
+                .filter(Boolean);
+        }
+
         const seenImages = new Set();
         // If Firestore has images for this product (admin product), they are fully
         // authoritative — do NOT include the URL-param image, which may be stale
@@ -5355,12 +5385,131 @@ document.addEventListener('DOMContentLoaded', () => {
         return leadHTML + bodyHTML + bottleHTML;
     }
 
-    const renderRelatedProducts = (currentProductName, currentProductBrand, currentGender) => {
+    const renderRelatedProducts = (currentProductName, currentProductBrand, currentGender, currentProductIdFromPage = '') => {
         const relatedTrack = document.querySelector('.related-track');
         if (!relatedTrack) return;
 
         const currentCanonicalName = canonicalProductName(currentProductName);
         const currentFamily = getProductFamilyKey(currentProductName);
+        const currentProductId = String(currentProductIdFromPage || toProductDataId(currentProductName) || '').trim().toLowerCase();
+        const currentUrlId = String(new URLSearchParams(window.location.search).get('id') || '').trim().toLowerCase();
+
+        const uniqueRelatedCatalog = [
+            {
+                id: 'akdeniz-unique-e-luxury',
+                name: 'AKDENIZ',
+                brand: "UNIQUE'E LUXURY",
+                price: '100ML 2 300 MAD',
+                image: '/assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
+                gender: 'unisex'
+            },
+            {
+                id: 'izmir-unique-e-luxury',
+                name: 'IZMIR',
+                brand: "UNIQUE'E LUXURY",
+                price: '100ML 2 300 MAD',
+                image: '/assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
+                gender: 'unisex'
+            },
+            {
+                id: 'ocean-the-rive-unique-e-luxury',
+                name: 'OCEAN THE RIVE',
+                brand: "UNIQUE'E LUXURY",
+                price: '100ML 5 000 MAD',
+                image: '/assets/images/products/unique-luxury/ocean-the-rive/1.avif',
+                gender: 'unisex'
+            },
+            {
+                id: 'woud-and-mood-absolute-by-unique-e-luxury',
+                name: 'WOUD AND MOOD ABSOLUTE',
+                brand: "UNIQUE'E LUXURY",
+                price: '100ML 3 600 MAD',
+                image: '/assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
+                gender: 'unisex'
+            },
+            {
+                id: 'aphrodisiac-touch',
+                name: 'APHRODISIAC TOUCH',
+                brand: "UNIQUE'E LUXURY",
+                price: '',
+                image: '/assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
+                gender: 'unisex'
+            },
+            {
+                id: 'kutay',
+                name: 'KUTAY',
+                brand: "UNIQUE'E LUXURY",
+                price: '',
+                image: '/assets/images/products/unique-luxury/kutay/1.webp',
+                gender: 'unisex'
+            },
+            {
+                id: 'chocolate-makes-me-happy',
+                name: 'CHOCOLATE MAKES ME HAPPY',
+                brand: "UNIQUE'E LUXURY",
+                price: '100ML 2 500 MAD',
+                image: 'https://res.cloudinary.com/dp5eszu4p/image/upload/v1777287393/idqhoenngo6pgtzldy7n.jpg',
+                gender: 'unisex'
+            }
+        ];
+
+        const currentUniqueIdCandidates = new Set([
+            currentProductId,
+            currentUrlId,
+            toProductDataId(currentProductName),
+            canonicalProductName(currentProductName)
+        ].filter(Boolean));
+
+        const isUniqueProductPage = String(currentProductBrand || '').toLowerCase().includes('unique')
+            || uniqueRelatedCatalog.some((product) => currentUniqueIdCandidates.has(String(product.id || '').trim().toLowerCase()));
+
+        if (isUniqueProductPage) {
+            const currentUniqueIndex = uniqueRelatedCatalog.findIndex((product) => (
+                currentUniqueIdCandidates.has(String(product.id || '').trim().toLowerCase())
+                || canonicalProductName(product.name) === currentCanonicalName
+            ));
+
+            const orderedUniquePool = currentUniqueIndex >= 0
+                ? uniqueRelatedCatalog.slice(currentUniqueIndex + 1).concat(uniqueRelatedCatalog.slice(0, currentUniqueIndex + 1))
+                : uniqueRelatedCatalog;
+
+            const uniqueRecommendations = orderedUniquePool
+                .filter((product) => {
+                    const productId = String(product.id || '').trim().toLowerCase();
+                    return !currentUniqueIdCandidates.has(productId)
+                        && canonicalProductName(product.name) !== currentCanonicalName;
+                })
+                .slice(0, 6);
+
+            const kicker = relatedTrack.closest('section')?.querySelector('.product-section-kicker');
+            const heading = relatedTrack.closest('section')?.querySelector('[data-i18n="product.related_title"]');
+            if (kicker) kicker.textContent = currentLanguage === 'fr' ? 'Collection Unique\'e Luxury' : "Unique'e Luxury Collection";
+            if (heading) heading.textContent = currentLanguage === 'fr' ? 'Plus de la Maison Unique\'e Luxury' : "More from Unique'e Luxury";
+
+            relatedTrack.innerHTML = uniqueRecommendations.map((product) => {
+                const sizeBadges = extractSizeBadges(product.name, product.price);
+                const sizeBadgesHtml = sizeBadges.map((size, index) => (
+                    `<span class="text-[10px] font-bold border ${index === 0 ? 'border-gray-800' : 'border-gray-300 text-gray-500'} px-2 py-1 rounded">${size}</span>`
+                )).join('');
+
+                return `
+                    <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${product.id}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${product.image}">
+                        <img src="${product.image}" alt="${product.name}" class="related-image" loading="lazy" decoding="async">
+                        <p class="related-brand">${product.brand}</p>
+                        <h3 class="related-title">${product.name}</h3>
+                        <div class="flex items-center gap-2 mt-2">
+                            ${sizeBadgesHtml}
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">${t('product_add_to_cart')}</button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            bindProductLinks();
+            return;
+        }
 
         const familyMatches = currentFamily
             ? relatedProductCatalog.filter((product) => (
@@ -5429,8 +5578,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 `<span class="text-[10px] font-bold border ${index === 0 ? 'border-gray-800' : 'border-gray-300 text-gray-500'} px-2 py-1 rounded">${size}</span>`
             )).join('');
 
+            const relatedProductId = product.id || toProductDataId(product.name);
             return `
-                <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${toProductDataId(product.name)}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${product.image}">
+                <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${relatedProductId}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${product.image}">
                     <img src="${product.image}" alt="${product.name}" class="related-image" loading="lazy" decoding="async">
                     <p class="related-brand">${product.brand}</p>
                     <h3 class="related-title">${product.name}</h3>
@@ -6169,7 +6319,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderMainAccords(productName, _fsAccordsOverride, subtitle?.textContent || '');
 
         const currentGender = getProductGenderKey(productName, productOverride, subtitle?.textContent || '');
-        renderRelatedProducts(productName, resolvedBrand, currentGender);
+        renderRelatedProducts(productName, resolvedBrand, currentGender, productId);
 
         const longDescription = document.getElementById('productLongDescription');
         if (longDescription) {
@@ -7018,7 +7168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Re-render related products cards so button text updates
-            renderRelatedProducts(productName, resolvedBrand, currentGender);
+            renderRelatedProducts(productName, resolvedBrand, currentGender, productId);
 
             // Re-apply data-i18n translations (tabs, labels, static elements)
             if (window.__i18n) window.__i18n.applyTranslations();

@@ -2119,7 +2119,23 @@ const loadProductsView = async () => {
 
     const overrides = {};
     overridesSnap.docs.forEach(d => { overrides[d.id] = normalizeOv(d.data()); });
-    const slugs = Object.keys(pricesRes);
+
+    // Canonical Unique'e Luxury IDs used on storefront/product pages.
+    const UNIQUE_ADMIN_SLUGS = [
+      'akdeniz-unique-e-luxury',
+      'izmir-unique-e-luxury',
+      'ocean-the-rive-unique-e-luxury',
+      'woud-and-mood-absolute-by-unique-e-luxury',
+      'aphrodisiac-touch',
+      'kutay',
+      'chocolate-makes-me-happy'
+    ];
+    const LEGACY_UNIQUE_SLUGS = new Set(['akdeniz', 'beril', 'beverly-hills-exclusive']);
+    const slugs = Array.from(new Set([
+      ...Object.keys(pricesRes).filter((slug) => !LEGACY_UNIQUE_SLUGS.has(slug)),
+      ...Object.keys(overrides).filter((slug) => !LEGACY_UNIQUE_SLUGS.has(slug)),
+      ...UNIQUE_ADMIN_SLUGS
+    ])).sort();
     // Track unsaved changes per slug
     const dirty = new Set();
     const pendingRemovals = {};
@@ -2215,11 +2231,13 @@ const loadProductsView = async () => {
       'rabanne-one-million-elixir-intense':              '/assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp',
       'rabanne-one-million-parfum':                      '/assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg',
       // ── Unique'e Luxury ─────────────────────────────────────────────────
-      'akdeniz':                                         '/assets/images/products/unique-luxury/akdeniz/1.webp',
+      'akdeniz-unique-e-luxury':                         '/assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
       'aphrodisiac-touch':                               '/assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
-      'beril':                                           '/assets/images/products/unique-luxury/beril/1.webp',
-      'beverly-hills-exclusive':                         '/assets/images/products/unique-luxury/beverly-hills-exclusive/1.webp',
+      'chocolate-makes-me-happy':                        'https://res.cloudinary.com/dp5eszu4p/image/upload/v1777287393/idqhoenngo6pgtzldy7n.jpg',
+      'izmir-unique-e-luxury':                           '/assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
       'kutay':                                           '/assets/images/products/unique-luxury/kutay/1.webp',
+      'ocean-the-rive-unique-e-luxury':                  '/assets/images/products/unique-luxury/ocean-the-rive/1.avif',
+      'woud-and-mood-absolute-by-unique-e-luxury':       '/assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
       // ── Valentino ───────────────────────────────────────────────────────
       'valentino-born-in-roma-donna-intense-eau-de-parfum':       '/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp',
       'valentino-born-in-roma-uomo-intense-eau-de-parfum':        '/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp',
@@ -2278,7 +2296,7 @@ const loadProductsView = async () => {
         if (status === 'disabled'  && !disabled) return false;
         if (status === 'overridden'&& (!hasOv || disabled)) return false;
         if (status === 'xerjoff'   && !['alexandria-ii','erba-pura','naxos'].includes(slug)) return false;
-        if (status === 'unique'    && !['akdeniz','aphrodisiac-touch','beril','beverly-hills-exclusive','kutay'].includes(slug)) return false;
+        if (status === 'unique'    && !UNIQUE_ADMIN_SLUGS.includes(slug)) return false;
         if (status === 'has-price') {
           const sizes = effectiveSizes(slug);
           if (!Object.values(sizes).some(p => p > 0)) return false;
@@ -2360,6 +2378,7 @@ const loadProductsView = async () => {
         }).join('');
 
         const accentColor = disabled ? 'var(--rose)' : isDirty ? 'var(--sky)' : hasOverride ? 'var(--gold)' : 'var(--border)';
+        const FIXED_SIZE_SLUGS = new Set(['alexandria-ii', 'erba-pura', 'naxos', ...UNIQUE_ADMIN_SLUGS]);
 
         const statusBadge = disabled
           ? `<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--rose);background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.25);padding:2px 8px;border-radius:99px"><span style="width:5px;height:5px;border-radius:99px;background:var(--rose);display:inline-block"></span>Disabled</span>`
@@ -2425,7 +2444,7 @@ const loadProductsView = async () => {
             </div>
 
             <!-- ── Add size form (hidden for fixed-size brands) ── -->
-            ${(['alexandria-ii','erba-pura','naxos','akdeniz','aphrodisiac-touch','beril','beverly-hills-exclusive','kutay'].includes(slug)) ? '' : `
+            ${(FIXED_SIZE_SLUGS.has(slug)) ? '' : `
             <div class="prod-add-size-form" data-slug="${esc(slug)}"
               style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 10px;background:var(--s3);border-radius:8px;border:1px dashed var(--border)">
               <span style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;flex-shrink:0">
@@ -2501,7 +2520,7 @@ const loadProductsView = async () => {
 
       // ── Group products by brand section ────────────────────────────────
       const _XERJ_SET = new Set(['alexandria-ii', 'erba-pura', 'naxos']);
-      const _UNIQ_SET = new Set(['akdeniz', 'aphrodisiac-touch', 'beril', 'beverly-hills-exclusive', 'kutay']);
+      const _UNIQ_SET = new Set(UNIQUE_ADMIN_SLUGS);
       const _xerjSlugs = filtered.filter(s => _XERJ_SET.has(s));
       const _uniqSlugs = filtered.filter(s => _UNIQ_SET.has(s));
       const _mainSlugs = filtered.filter(s => !_XERJ_SET.has(s) && !_UNIQ_SET.has(s));
@@ -4530,12 +4549,23 @@ const openEditProductModal = (slug, data) => {
 const loadFirestoreProductsSection = async () => {
   const section = document.getElementById('firestoreProductsSection');
   if (!section) return;
+  const UNIQUE_LOCAL_IMAGE_BY_SLUG = {
+    'akdeniz-unique-e-luxury': '/assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
+    'izmir-unique-e-luxury': '/assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
+    'ocean-the-rive-unique-e-luxury': '/assets/images/products/unique-luxury/ocean-the-rive/1.avif',
+    'woud-and-mood-absolute-by-unique-e-luxury': '/assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
+    'aphrodisiac-touch': '/assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
+    'kutay': '/assets/images/products/unique-luxury/kutay/1.webp',
+    'chocolate-makes-me-happy': 'https://res.cloudinary.com/dp5eszu4p/image/upload/v1777287393/idqhoenngo6pgtzldy7n.jpg'
+  };
   try {
     const snap = await getDocs(query(collection(db, 'products'), orderBy('addedAt', 'desc')));
     if (snap.empty) { section.innerHTML = ''; return; }
 
     const cards = snap.docs.map(d => {
       const p = d.data();
+      const slug = String(p.slug || d.id || '').trim().toLowerCase();
+      const displayImage = UNIQUE_LOCAL_IMAGE_BY_SLUG[slug] || p.image || '';
       const _visibleSizes = Object.entries(p.sizes || {}).filter(([, price]) => Number(price) > 0);
       const sizesHtml = _visibleSizes.map(([sz, price], i) =>
         `<span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:1px solid ${i===0?'#1f2937':'#d1d5db'};color:${i===0?'#111':'#6b7280'};background:transparent">${sz.toUpperCase()} — ${price} MAD</span>`
@@ -4545,7 +4575,7 @@ const loadFirestoreProductsSection = async () => {
         : '<span style="font-size:10px;font-weight:700;background:rgba(34,197,94,0.12);color:var(--emerald);padding:3px 8px;border-radius:20px;border:1px solid rgba(34,197,94,0.25)">Live</span>';
       return `
         <div style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:flex-start" data-fsprod-slug="${esc(p.slug||d.id)}">
-          <img src="${esc(p.image||'')}" alt="${esc(p.name||'')}" style="width:64px;height:64px;object-fit:contain;border-radius:8px;background:var(--s3);flex-shrink:0" onerror="this.style.display='none'">
+          <img src="${esc(displayImage)}" alt="${esc(p.name||'')}" style="width:64px;height:64px;object-fit:contain;border-radius:8px;background:var(--s3);flex-shrink:0" onerror="this.style.display='none'">
           <div style="flex:1;min-width:0">
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
               <span style="font-size:0.85rem;font-weight:700;color:var(--text)">${esc(p.name||'')}</span>
