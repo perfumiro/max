@@ -466,30 +466,22 @@
             checkFormValidity();
         });
 
-        // ── Silent email to perfumiro@gmail.com via Formspree ──
-        // Sign up free at formspree.io, create a form, paste your Form ID below.
-        const FORMSPREE_ID = 'meerdrqy';
-
-        const sendOrderEmail = () => {
+        // ── Send order notifications via backend API ──────────────────────
+        // Resolves to true on success or false on any error (never throws).
+        const sendOrderNotification = (orderData, orderId) => {
             return new Promise((resolve) => {
-                if (!FORMSPREE_ID || FORMSPREE_ID === 'YOUR_FORM_ID') { resolve(false); return; }
                 try {
-                    const body = buildConfirmationPayload();
-                    const firstName = (document.getElementById('billingFirstName')?.value || '').trim();
-                    const lastName  = (document.getElementById('billingLastName')?.value || '').trim();
-                    const phone     = (document.getElementById('billingPhone')?.value || '').trim();
-                    const email     = (document.getElementById('billingEmail')?.value || '').trim();
-                    const data = new FormData();
-                    data.append('_subject', `Nouvelle commande - ${firstName} ${lastName}`.trim());
-                    data.append('_replyto', email || 'no-reply@ipordise.com');
-                    data.append('Nom', `${firstName} ${lastName}`.trim());
-                    data.append('Telephone', phone);
-                    data.append('Email', email);
-                    data.append('Commande', body);
-                    fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+                    // Detect backend base from analytics config (same server) or fall back to same origin
+                    const backendBase = (window.IPORDISE_ANALYTICS_BASE
+                        || document.querySelector('meta[name="ipordise-analytics-base"]')?.content
+                        || '').trim();
+                    const endpoint = backendBase ? `${new URL(backendBase, location.href).origin}/api/orders/notify` : '/api/orders/notify';
+
+                    fetch(endpoint, {
                         method: 'POST',
-                        body: data,
-                        headers: { 'Accept': 'application/json' }
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: backendBase ? 'include' : 'same-origin',
+                        body: JSON.stringify({ orderData, orderId: orderId || null })
                     }).then(() => resolve(true)).catch(() => resolve(false));
                 } catch (e) { resolve(false); }
             });
@@ -505,20 +497,20 @@
 
             storePendingOrder('email');
 
-            // Save to global Firestore orders collection (works for guests too)
-            const _saveGlobalOrder = async () => {
+            // 1. Save to Firestore first so we get the readable order ID
+            // 2. Then send email notifications (admin alert + client confirmation)
+            (async () => {
+                let orderId = null;
                 try {
-                    // Prefer the module bridge exposed in checkout.html; fall back to dynamic import
                     let saveFn = window._ipoSaveOrder;
                     if (!saveFn) {
                         const { saveGlobalOrder } = await import('../auth/user-data.js');
                         saveFn = saveGlobalOrder;
-                        window._ipoSaveOrder = saveFn; // cache for future calls
+                        window._ipoSaveOrder = saveFn;
                     }
                     const orderData = buildStructuredOrder('email');
-                    const orderId = await saveFn(orderData);
+                    orderId = await saveFn(orderData);
                     if (orderId) {
-                        // Attach the readable order ID to the pending order in sessionStorage
                         try {
                             const raw = sessionStorage.getItem('ipordise-pending-order');
                             if (raw) {
@@ -529,18 +521,21 @@
                         } catch(e) {}
                     }
                 } catch(e) { console.error('[IPORDISE] Order save failed:', e); }
-            };
 
-            Promise.all([sendOrderEmail(), _saveGlobalOrder()]).then(() => {
+                // Send email notifications with the orderId (may be null if Firestore failed)
+                try {
+                    await sendOrderNotification(buildStructuredOrder('email'), orderId);
+                } catch(e) {}
+
                 markConfirmationPending('email');
                 sessionStorage.removeItem('ipordise_cart');
                 window.location.href = 'thank-you.html';
-            });
+            })();
         });
 
         confirmWhatsApp.addEventListener('click', () => {
             updateConfirmationLinks();
-            // Save to global Firestore orders collection on WhatsApp confirm too
+            // Save to Firestore + send email notification for WhatsApp orders too
             (async () => {
                 try {
                     let saveFn = window._ipoSaveOrder;
@@ -561,6 +556,7 @@
                             }
                         } catch(e) {}
                     }
+                    await sendOrderNotification(buildStructuredOrder('whatsapp'), orderId);
                 } catch(e) { console.error('[IPORDISE] WhatsApp order save failed:', e); }
             })();
             storePendingOrder('whatsapp');

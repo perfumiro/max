@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Database from 'better-sqlite3';
+import nodemailer from 'nodemailer';
 import { UAParser } from 'ua-parser-js';
 import geoip from 'geoip-lite';
 
@@ -31,6 +32,26 @@ const TRUST_PROXY = Number(process.env.TRUST_PROXY || 1);
 const ONLINE_WINDOW_MINUTES = Number(process.env.ONLINE_WINDOW_MINUTES || 5);
 const DEDUP_WINDOW_SECONDS = Number(process.env.DEDUP_WINDOW_SECONDS || 45);
 const CORS_ORIGIN = String(process.env.CORS_ORIGIN || '').trim();
+
+// ── Email config ─────────────────────────────────────────────────────────────
+const SMTP_HOST   = String(process.env.SMTP_HOST   || 'smtp.gmail.com');
+const SMTP_PORT   = Number(process.env.SMTP_PORT   || 465);
+const SMTP_SECURE = process.env.SMTP_SECURE !== 'false';
+const SMTP_USER   = String(process.env.SMTP_USER   || '');
+const SMTP_PASS   = String(process.env.SMTP_PASS   || '');
+const ADMIN_NOTIFY_EMAIL = String(process.env.ADMIN_NOTIFY_EMAIL || SMTP_USER);
+const EMAIL_FROM_NAME    = String(process.env.EMAIL_FROM_NAME    || 'IPORDISE');
+
+const emailEnabled = Boolean(SMTP_USER && SMTP_PASS && SMTP_PASS !== 'PASTE_YOUR_GMAIL_APP_PASSWORD_HERE');
+
+const mailer = emailEnabled
+  ? nodemailer.createTransport({
+      host: SMTP_HOST,
+      port: SMTP_PORT,
+      secure: SMTP_SECURE,
+      auth: { user: SMTP_USER, pass: SMTP_PASS },
+    })
+  : null;
 
 app.set('trust proxy', TRUST_PROXY);
 app.use(helmet({ contentSecurityPolicy: false }));
@@ -559,6 +580,269 @@ app.get('/api/admin/export', requireAdminAuth, (req, res) => {
   }
 
   return res.status(400).json({ ok: false, error: 'Unsupported export format' });
+});
+
+// ── Order email notifications ─────────────────────────────────────────────────
+const _esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const _fmtMAD = (n) => `${Number(n || 0).toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} DH`;
+
+const buildAdminEmail = (orderData, orderId) => {
+  const c = orderData.customer || {};
+  const s = orderData.summary  || {};
+  const items = Array.isArray(orderData.items) ? orderData.items : [];
+  const displayName = `${c.firstName || ''} ${c.lastName || ''}`.trim() || 'Guest';
+  const orderLabel = orderId || 'N/A';
+  const channelBadge = orderData.channel === 'whatsapp'
+    ? `<span style="background:#dcfce7;color:#15803d;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700">WhatsApp</span>`
+    : `<span style="background:#ede9fe;color:#4f46e5;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700">Email</span>`;
+
+  const itemsHtml = items.map((item) =>
+    `<tr>
+      <td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;color:#1a1a1a;font-size:13px">${_esc(item.name)}</td>
+      <td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;color:#555;font-size:13px;text-align:center">${_esc(item.size || '-')}</td>
+      <td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;color:#555;font-size:13px;text-align:center">${item.qty}</td>
+      <td style="padding:10px 14px;border-bottom:1px solid #f0f0f0;color:#1a1a1a;font-size:13px;text-align:right;font-weight:600">
+        ${item.pricePending ? '<span style="color:#d97706">TBD</span>' : _esc(_fmtMAD(item.price * item.qty))}
+      </td>
+    </tr>`
+  ).join('');
+
+  const discountRow = s.discount > 0
+    ? `<tr><td colspan="3" style="padding:6px 14px;color:#16a34a;font-size:13px;text-align:right">Discount (${_esc(orderData.discountCode || '')})</td>
+        <td style="padding:6px 14px;color:#16a34a;font-weight:700;text-align:right;font-size:13px">-${_esc(_fmtMAD(s.discount))}</td></tr>`
+    : '';
+
+  const now = new Date();
+  const dateStr = now.toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f8f8f8;font-family:'Segoe UI',Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f8f8;padding:32px 0">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,.10)">
+  <tr><td style="background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%);padding:28px 36px;text-align:center">
+    <div style="color:#d4af37;font-size:22px;font-weight:800;letter-spacing:0.12em">IPORDISE</div>
+    <div style="color:#ccc;font-size:12px;margin-top:4px;letter-spacing:0.05em">NEW ORDER RECEIVED</div>
+  </td></tr>
+  <tr><td style="background:#fef3c7;border-left:4px solid #d97706;padding:12px 24px">
+    <div style="color:#92400e;font-weight:700;font-size:14px">&#x1F6CD; New order from ${_esc(displayName)} &mdash; ${channelBadge}</div>
+    <div style="color:#b45309;font-size:12px;margin-top:2px">Order <strong>${_esc(orderLabel)}</strong> &middot; ${dateStr}</div>
+  </td></tr>
+  <tr><td style="padding:24px 36px 0">
+    <div style="font-size:13px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">Customer</div>
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="width:50%;padding-bottom:8px;font-size:13px;color:#1a1a1a"><strong>Name:</strong> ${_esc(displayName)}</td>
+        <td style="width:50%;padding-bottom:8px;font-size:13px;color:#1a1a1a"><strong>Phone:</strong> ${_esc(c.phone || '&mdash;')}</td>
+      </tr>
+      <tr>
+        <td style="padding-bottom:8px;font-size:13px;color:#1a1a1a"><strong>Email:</strong> ${_esc(c.email || '&mdash;')}</td>
+        <td style="padding-bottom:8px;font-size:13px;color:#1a1a1a"><strong>City:</strong> ${_esc(c.city || '&mdash;')}</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding-bottom:8px;font-size:13px;color:#1a1a1a"><strong>Address:</strong> ${_esc(c.address || '&mdash;')}, ${_esc(c.city || '')}, Maroc</td>
+      </tr>
+      ${c.notes ? `<tr><td colspan="2" style="font-size:13px;color:#555"><strong>Notes:</strong> ${_esc(c.notes)}</td></tr>` : ''}
+    </table>
+  </td></tr>
+  <tr><td style="padding:20px 36px 0">
+    <div style="font-size:13px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">Order Items</div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
+      <thead>
+        <tr style="background:#f9fafb">
+          <th style="padding:10px 14px;text-align:left;font-size:11px;color:#6b7280;text-transform:uppercase">Product</th>
+          <th style="padding:10px 14px;text-align:center;font-size:11px;color:#6b7280;text-transform:uppercase">Size</th>
+          <th style="padding:10px 14px;text-align:center;font-size:11px;color:#6b7280;text-transform:uppercase">Qty</th>
+          <th style="padding:10px 14px;text-align:right;font-size:11px;color:#6b7280;text-transform:uppercase">Amount</th>
+        </tr>
+      </thead>
+      <tbody>${itemsHtml}</tbody>
+      <tfoot style="background:#f9fafb">
+        <tr><td colspan="3" style="padding:8px 14px;text-align:right;font-size:13px;color:#6b7280">Subtotal</td>
+            <td style="padding:8px 14px;text-align:right;font-size:13px;color:#1a1a1a;font-weight:600">${_esc(_fmtMAD(s.subtotal))}</td></tr>
+        <tr><td colspan="3" style="padding:4px 14px;text-align:right;font-size:13px;color:#6b7280">Shipping</td>
+            <td style="padding:4px 14px;text-align:right;font-size:13px;color:#1a1a1a">${_esc(_fmtMAD(s.shipping))}</td></tr>
+        ${discountRow}
+        <tr style="border-top:2px solid #e5e7eb">
+          <td colspan="3" style="padding:12px 14px;text-align:right;font-size:15px;font-weight:800;color:#1a1a1a">TOTAL</td>
+          <td style="padding:12px 14px;text-align:right;font-size:15px;font-weight:800;color:#d4af37">${s.hasPendingPricing ? 'TBD' : _esc(_fmtMAD(s.total))}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </td></tr>
+  <tr><td style="padding:24px 36px;text-align:center">
+    <a href="https://ipordise.com/admin.html" style="display:inline-block;background:#1a1a1a;color:#d4af37;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;letter-spacing:.05em">VIEW IN ADMIN PANEL &#x2192;</a>
+  </td></tr>
+  <tr><td style="background:#f9fafb;border-top:1px solid #e5e7eb;padding:16px 36px;text-align:center">
+    <div style="font-size:11px;color:#9ca3af">IPORDISE &middot; Luxury Perfumes &middot; Morocco</div>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+</body></html>`;
+};
+
+const buildClientEmail = (orderData, orderId) => {
+  const c = orderData.customer || {};
+  const s = orderData.summary  || {};
+  const items = Array.isArray(orderData.items) ? orderData.items : [];
+  const displayName = (c.firstName || 'Valued Customer').trim();
+  const orderLabel = orderId || 'N/A';
+
+  const itemsHtml = items.map((item) =>
+    `<tr>
+      <td style="padding:10px 14px;border-bottom:1px solid #2d2d2d;color:#e5e7eb;font-size:13px">${_esc(item.name)}</td>
+      <td style="padding:10px 14px;border-bottom:1px solid #2d2d2d;color:#9ca3af;font-size:13px;text-align:center">${_esc(item.size || '-')}</td>
+      <td style="padding:10px 14px;border-bottom:1px solid #2d2d2d;color:#9ca3af;font-size:13px;text-align:center">${item.qty}</td>
+      <td style="padding:10px 14px;border-bottom:1px solid #2d2d2d;font-size:13px;text-align:right;font-weight:600;color:#d4af37">
+        ${item.pricePending ? '<span style="color:#fbbf24;font-size:12px">Will be confirmed</span>' : _esc(_fmtMAD(item.price * item.qty))}
+      </td>
+    </tr>`
+  ).join('');
+
+  const discountRow = s.discount > 0
+    ? `<tr><td colspan="3" style="padding:6px 14px;color:#4ade80;font-size:13px;text-align:right">Discount</td>
+        <td style="padding:6px 14px;color:#4ade80;font-weight:700;text-align:right;font-size:13px">-${_esc(_fmtMAD(s.discount))}</td></tr>`
+    : '';
+
+  const pendingNote = s.hasPendingPricing
+    ? `<tr><td style="padding:0 36px 20px">
+        <div style="background:#2d2200;border:1px solid #92400e;border-radius:10px;padding:14px 18px;color:#fbbf24;font-size:13px">
+          &#x23F3; <strong>Note:</strong> One or more items require price confirmation. Our team will contact you shortly.
+        </div>
+      </td></tr>`
+    : '';
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#0a0a0a;font-family:'Segoe UI',Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:32px 0">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#111;border-radius:16px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,.50)">
+  <tr><td style="background:linear-gradient(135deg,#1a1a1a 0%,#0d0d0d 100%);padding:36px;text-align:center;border-bottom:1px solid #2d2d2d">
+    <div style="color:#d4af37;font-size:28px;font-weight:800;letter-spacing:0.15em">IPORDISE</div>
+    <div style="color:#9ca3af;font-size:12px;margin-top:6px;letter-spacing:0.08em">LUXURY PERFUMES &middot; MOROCCO</div>
+  </td></tr>
+  <tr><td style="padding:32px 36px;text-align:center">
+    <div style="width:64px;height:64px;background:linear-gradient(135deg,#d4af37,#b8952e);border-radius:50%;display:inline-block;line-height:64px;margin-bottom:20px;font-size:28px">&#x2713;</div>
+    <div style="color:#f9fafb;font-size:22px;font-weight:700;margin-bottom:8px">Order Confirmed!</div>
+    <div style="color:#9ca3af;font-size:14px;line-height:1.6">Thank you ${_esc(displayName)}! We have received your order and will process it shortly.</div>
+    ${orderId ? `<div style="margin-top:14px;display:inline-block;background:#1f1f1f;border:1px solid #d4af37;border-radius:8px;padding:8px 20px;color:#d4af37;font-size:13px;font-weight:700;letter-spacing:.05em">Order #${_esc(orderLabel)}</div>` : ''}
+  </td></tr>
+  ${pendingNote}
+  <tr><td style="padding:0 36px 24px">
+    <div style="font-size:12px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px">Your Order</div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #2d2d2d;border-radius:10px;overflow:hidden">
+      <thead>
+        <tr style="background:#1a1a1a">
+          <th style="padding:10px 14px;text-align:left;font-size:11px;color:#6b7280;text-transform:uppercase">Product</th>
+          <th style="padding:10px 14px;text-align:center;font-size:11px;color:#6b7280;text-transform:uppercase">Size</th>
+          <th style="padding:10px 14px;text-align:center;font-size:11px;color:#6b7280;text-transform:uppercase">Qty</th>
+          <th style="padding:10px 14px;text-align:right;font-size:11px;color:#6b7280;text-transform:uppercase">Price</th>
+        </tr>
+      </thead>
+      <tbody>${itemsHtml}</tbody>
+      <tfoot style="background:#1a1a1a">
+        <tr><td colspan="3" style="padding:8px 14px;text-align:right;font-size:12px;color:#6b7280">Subtotal</td>
+            <td style="padding:8px 14px;text-align:right;font-size:13px;color:#d1d5db">${_esc(_fmtMAD(s.subtotal))}</td></tr>
+        <tr><td colspan="3" style="padding:4px 14px;text-align:right;font-size:12px;color:#6b7280">Shipping</td>
+            <td style="padding:4px 14px;text-align:right;font-size:13px;color:#d1d5db">${_esc(_fmtMAD(s.shipping))}</td></tr>
+        ${discountRow}
+        <tr style="border-top:1px solid #2d2d2d">
+          <td colspan="3" style="padding:12px 14px;text-align:right;font-size:15px;font-weight:800;color:#f9fafb">Total</td>
+          <td style="padding:12px 14px;text-align:right;font-size:15px;font-weight:800;color:#d4af37">${s.hasPendingPricing ? 'TBD' : _esc(_fmtMAD(s.total))}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </td></tr>
+  <tr><td style="padding:0 36px 24px">
+    <div style="background:#1a1a1a;border:1px solid #2d2d2d;border-radius:10px;padding:16px 20px">
+      <div style="font-size:12px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">Delivery Details</div>
+      <div style="color:#d1d5db;font-size:13px;line-height:1.8">
+        <div>&#x1F4E6; <strong style="color:#f9fafb">${_esc(displayName)}</strong></div>
+        <div>&#x1F4CD; ${_esc(c.address || '')}, ${_esc(c.city || '')}, Maroc</div>
+        <div>&#x1F4DE; ${_esc(c.phone || '')}</div>
+        <div style="margin-top:8px;color:#9ca3af;font-size:12px">&#x1F4B3; Payment: <strong style="color:#d4af37">Cash on Delivery (COD)</strong></div>
+        <div style="color:#9ca3af;font-size:12px">&#x1F69A; Delivery: <strong style="color:#f9fafb">35 MAD &mdash; 2&ndash;5 business days across Morocco</strong></div>
+      </div>
+    </div>
+  </td></tr>
+  <tr><td style="padding:0 36px 32px;text-align:center">
+    <div style="color:#6b7280;font-size:12px;margin-bottom:16px">Questions about your order?</div>
+    <a href="mailto:perfumiro@gmail.com" style="display:inline-block;background:linear-gradient(135deg,#d4af37,#b8952e);color:#1a1a1a;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;letter-spacing:.05em;margin-right:8px">EMAIL US</a>
+    <a href="https://wa.me/212600000000" style="display:inline-block;background:#25D366;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;letter-spacing:.05em">WHATSAPP</a>
+  </td></tr>
+  <tr><td style="background:#0d0d0d;border-top:1px solid #1f1f1f;padding:20px 36px;text-align:center">
+    <div style="color:#d4af37;font-size:14px;font-weight:700;letter-spacing:.1em;margin-bottom:4px">IPORDISE</div>
+    <div style="font-size:11px;color:#4b5563">Luxury Perfumes &middot; Morocco &middot; ipordise.com</div>
+    <div style="font-size:10px;color:#374151;margin-top:8px">You received this email because you placed an order on ipordise.com</div>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+</body></html>`;
+};
+
+// POST /api/orders/notify — send admin + client confirmation emails
+app.post('/api/orders/notify', async (req, res) => {
+  const { orderData, orderId } = req.body || {};
+
+  if (!orderData || typeof orderData !== 'object') {
+    return res.status(400).json({ ok: false, error: 'Invalid order data' });
+  }
+
+  const customer = orderData.customer || {};
+  const items    = Array.isArray(orderData.items) ? orderData.items : [];
+
+  if (!customer.phone && !customer.email) {
+    return res.status(400).json({ ok: false, error: 'Order must have customer phone or email' });
+  }
+  if (items.length === 0) {
+    return res.status(400).json({ ok: false, error: 'Order has no items' });
+  }
+
+  if (!emailEnabled) {
+    console.warn('[IPORDISE] Email not configured — skipping notification for order', orderId || '?');
+    return res.json({ ok: true, sent: false, reason: 'email_not_configured' });
+  }
+
+  const displayName = `${customer.firstName || ''} ${customer.lastName || ''}`.trim() || 'Guest';
+  const errors = [];
+
+  // Admin notification email
+  try {
+    await mailer.sendMail({
+      from: `"${EMAIL_FROM_NAME}" <${SMTP_USER}>`,
+      to: ADMIN_NOTIFY_EMAIL,
+      subject: `New Order${orderId ? ` #${orderId}` : ''} — ${displayName}`,
+      html: buildAdminEmail(orderData, orderId),
+    });
+  } catch (err) {
+    console.error('[IPORDISE] Admin email failed:', err.message);
+    errors.push('admin_email_failed');
+  }
+
+  // Client confirmation email
+  const clientEmail = String(customer.email || '').trim();
+  if (clientEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail)) {
+    try {
+      await mailer.sendMail({
+        from: `"${EMAIL_FROM_NAME}" <${SMTP_USER}>`,
+        to: clientEmail,
+        replyTo: ADMIN_NOTIFY_EMAIL,
+        subject: `Order Confirmed${orderId ? ` #${orderId}` : ''} — IPORDISE`,
+        html: buildClientEmail(orderData, orderId),
+      });
+    } catch (err) {
+      console.error('[IPORDISE] Client email failed:', err.message);
+      errors.push('client_email_failed');
+    }
+  }
+
+  return res.json({ ok: true, sent: true, errors: errors.length ? errors : undefined });
 });
 
 app.use((req, res) => {
