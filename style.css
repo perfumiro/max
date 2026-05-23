@@ -15069,14 +15069,15 @@ nav[aria-label="Breadcrumb"] ol {
 
 @media (max-width: 768px) {
     .hero-banner-product {
-        height: 62%;
-        max-width: 46%;
+        height: 55%;
+        max-width: 50%;
+        bottom: 20%;
     }
 
-    /* Slide 1 & 3 product raised slightly on mobile */
+    /* Consistent bottom for all slides on mobile */
     .hero-banner-slide:nth-child(1) .hero-banner-product,
     .hero-banner-slide:nth-child(3) .hero-banner-product {
-        bottom: 26%;
+        bottom: 20%;
     }
 }
 
@@ -15298,27 +15299,65 @@ nav[aria-label="Breadcrumb"] ol {
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
+    /* Hero: fixed viewport-relative height so landscape images don't collapse */
+    .hero-banner-section {
+        min-height: 72vw;
+    }
+
+    .hero-banner-track,
+    .hero-banner-slide:first-child {
+        min-height: 72vw;
+    }
+
+    /* Cover-fill the fixed height — crop from centre-top so the scene stays visible */
     .hero-banner-img {
-        max-height: 400px;
-        object-position: center center;
+        width: 100%;
+        height: 72vw;
+        max-height: 460px;
+        object-fit: cover;
+        object-position: center 25%;
     }
 
     .hero-banner-section::after {
-        height: 150px;
+        height: 130px;
     }
 
+    /* Restore headline on mobile — smaller text */
     .hero-banner-headline {
+        display: block;
+        bottom: 48px;
+        white-space: normal;
+        text-align: center;
+        width: 86%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .hero-banner-htitle {
+        font-size: clamp(1rem, 5.5vw, 1.4rem) !important;
+        letter-spacing: 0.09em !important;
+        margin-bottom: 10px !important;
+    }
+
+    .hero-banner-hlabel {
+        font-size: 0.48rem !important;
+        letter-spacing: 0.32em !important;
+        margin-bottom: 6px !important;
+    }
+
+    .hero-banner-hdivider {
+        width: 30px !important;
+    }
+
+    /* Dots moved up slightly to sit above headline */
+    .hero-banner-dots {
+        bottom: 20px;
+    }
+
+    /* Hide nav arrows — swipe handles navigation on mobile */
+    .hero-banner-nav {
         display: none;
     }
-
-    .hero-banner-nav {
-        width: 38px;
-        height: 38px;
-        font-size: 0.8rem;
-    }
-
-    .hero-banner-nav-prev { left: 10px; }
-    .hero-banner-nav-next { right: 10px; }
 }
 
 
