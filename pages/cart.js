@@ -66,6 +66,7 @@
         const normalized = {
             id: String(item?.id ?? item?.sku ?? ''),
             name: String(item?.name ?? item?.title ?? 'Product'),
+            brand: String(item?.brand ?? ''),
             price: resolvedPrice,
             image: String(item?.image ?? item?.imageUrl ?? ''),
             size: item?.size ? String(item.size) : '',

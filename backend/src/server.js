@@ -773,7 +773,7 @@ const buildClientEmail = (orderData, orderId) => {
   <tr><td style="padding:0 36px 32px;text-align:center">
     <div style="color:#6b7280;font-size:12px;margin-bottom:16px">Questions about your order?</div>
     <a href="mailto:perfumiro@gmail.com" style="display:inline-block;background:linear-gradient(135deg,#d4af37,#b8952e);color:#1a1a1a;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;letter-spacing:.05em;margin-right:8px">EMAIL US</a>
-    <a href="https://wa.me/212600000000" style="display:inline-block;background:#25D366;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;letter-spacing:.05em">WHATSAPP</a>
+    <a href="https://wa.me/212663750210" style="display:inline-block;background:#25D366;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;letter-spacing:.05em">WHATSAPP</a>
   </td></tr>
   <tr><td style="background:#0d0d0d;border-top:1px solid #1f1f1f;padding:20px 36px;text-align:center">
     <div style="color:#d4af37;font-size:14px;font-weight:700;letter-spacing:.1em;margin-bottom:4px">IPORDISE</div>

@@ -4491,35 +4491,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
         sizesDiv.innerHTML = sizePriceHtml;
 
-        sizesDiv.addEventListener('click', (ev) => {
-            const opt = ev.target.closest('.ipo-fs-size-opt');
-            if (!opt) return;
-            const sizeLabel = opt.dataset.size;
-            const unitPrice = parseFloat(opt.dataset.price) || 0;
-            const priceStr  = opt.dataset.priceStr || '';
+        // Bind directly to each button — avoids the stale-closure bug where
+        // cancelling the modal (via backdrop or Cancel) left the old { once:true }
+        // listener on sizesDiv, causing a previously-cancelled product to be
+        // re-added to the cart when the picker was opened for a different product.
+        sizesDiv.querySelectorAll('.ipo-fs-size-opt').forEach((opt) => {
+            opt.addEventListener('click', () => {
+                const sizeLabel = opt.dataset.size;
+                const unitPrice = parseFloat(opt.dataset.price) || 0;
+                const priceStr  = opt.dataset.priceStr || '';
 
-            const cartKey = 'cart';
-            let cart = [];
-            try { cart = JSON.parse(localStorage.getItem(cartKey)) || []; } catch (_) { cart = []; }
-            if (!Array.isArray(cart)) cart = [];
+                const cartKey = 'cart';
+                let cart = [];
+                try { cart = JSON.parse(localStorage.getItem(cartKey)) || []; } catch (_) { cart = []; }
+                if (!Array.isArray(cart)) cart = [];
 
-            const existingIdx = cart.findIndex(i => i.name === productName && i.size === sizeLabel);
-            if (existingIdx >= 0) {
-                cart[existingIdx].qty = Math.min(99, (parseInt(cart[existingIdx].qty) || 1) + 1);
-                cart[existingIdx].price = unitPrice;
-            } else {
-                cart.unshift({
-                    id: `fs-${slug}-${sizeLabel}-${Date.now()}`,
-                    name: productName, brand: productBrand, size: sizeLabel,
-                    qty: 1, price: unitPrice, priceText: priceStr,
-                    pricePending: unitPrice <= 0, image: productImage,
-                });
-            }
-            localStorage.setItem(cartKey, JSON.stringify(cart));
-            if (typeof window.setHeaderCartCount === 'function') window.setHeaderCartCount();
-            modal.style.display = 'none';
-            showAddedToCartToast(productName, sizeLabel.toUpperCase());
-        }, { once: true });
+                const existingIdx = cart.findIndex(i => i.name === productName && i.size === sizeLabel);
+                if (existingIdx >= 0) {
+                    cart[existingIdx].qty = Math.min(99, (Number(cart[existingIdx].qty ?? cart[existingIdx].quantity ?? 1)) + 1);
+                    cart[existingIdx].price = unitPrice;
+                } else {
+                    cart.unshift({
+                        id: `fs-${slug}-${sizeLabel}-${Date.now()}`,
+                        name: productName, brand: productBrand, size: sizeLabel,
+                        qty: 1, price: unitPrice, priceText: priceStr,
+                        pricePending: unitPrice <= 0, image: productImage,
+                    });
+                }
+                localStorage.setItem(cartKey, JSON.stringify(cart));
+                if (typeof window.setHeaderCartCount === 'function') window.setHeaderCartCount();
+                modal.style.display = 'none';
+                showAddedToCartToast(productName, sizeLabel.toUpperCase());
+            });
+        });
 
         modal.style.display = 'flex';
     });
@@ -6880,13 +6884,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const qty = qtyValue ? Number(qtyValue.textContent) || 1 : 1;
             const nextItems = readCart();
+            // Don't include brand in the match — cart.js normalisation drops the brand
+            // field, so checking it would fail to detect existing items and create duplicates.
             const existingIndex = nextItems.findIndex(
-                (item) => item.name === productName && item.brand === resolvedBrand && item.size === selectedSize.label
+                (item) => item.name === productName && item.size === selectedSize.label
             );
             if (existingIndex >= 0) {
-                nextItems[existingIndex].quantity = Math.min(99, Number(nextItems[existingIndex].quantity || 1) + qty);
-                nextItems[existingIndex].priceText = selectedSize.priceText || '';
-                nextItems[existingIndex].unitPrice = selectedSize.unitPrice;
+                // Support both 'qty' (normalised) and 'quantity' (legacy product-page format)
+                const currentQty = Number(nextItems[existingIndex].qty ?? nextItems[existingIndex].quantity ?? 1);
+                nextItems[existingIndex].qty      = Math.min(99, currentQty + qty);
+                nextItems[existingIndex].quantity = nextItems[existingIndex].qty;
+                nextItems[existingIndex].price      = selectedSize.unitPrice;
+                nextItems[existingIndex].unitPrice  = selectedSize.unitPrice;
+                nextItems[existingIndex].priceText  = selectedSize.priceText || '';
                 nextItems[existingIndex].pricePending = selectedSize.unitPrice <= 0;
             } else {
                 nextItems.unshift({
@@ -6894,7 +6904,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     name: productName,
                     brand: resolvedBrand,
                     size: selectedSize.label,
+                    qty: qty,
                     quantity: qty,
+                    price: selectedSize.unitPrice,
                     priceText: selectedSize.priceText || '',
                     unitPrice: selectedSize.unitPrice,
                     pricePending: selectedSize.unitPrice <= 0,
@@ -12465,7 +12477,7 @@ if ('serviceWorker' in navigator) {
     'use strict';
     const NUDGE_DELAY_MS = 20 * 60 * 1000; // 20 minutes
     const NUDGE_KEY = 'ipo_cart_nudge_dismissed';
-    const WHATSAPP_NUMBER = '212600000000'; // ← update with real number
+    const WHATSAPP_NUMBER = '212663750210';
     let nudgeTimer = null;
 
     const getCartItems = () => {

@@ -487,6 +487,103 @@
             });
         };
 
+        // ── EmailJS notification — works entirely in the browser, no server needed ──
+        // Set up at emailjs.com (free · 200 emails/month). Add the 4 meta tags in
+        // checkout.html once you have your Public Key, Service ID and Template IDs.
+        const sendEmailJSNotification = async (orderData, orderId) => {
+            try {
+                const publicKey = (document.querySelector('meta[name="emailjs-public-key"]')?.content  || '').trim();
+                const serviceId  = (document.querySelector('meta[name="emailjs-service-id"]')?.content  || '').trim();
+                const adminTpl   = (document.querySelector('meta[name="emailjs-admin-template"]')?.content  || '').trim();
+                const clientTpl  = (document.querySelector('meta[name="emailjs-client-template"]')?.content || '').trim();
+
+                if (!publicKey || !serviceId || !adminTpl) return false;
+
+                const c     = orderData.customer || {};
+                const items = Array.isArray(orderData.items) ? orderData.items : [];
+                const s     = orderData.summary || {};
+
+                const itemsList = items.map((i) =>
+                    `• ${i.name}${i.size ? ` (${i.size})` : ''} ×${i.qty}` +
+                    (i.pricePending ? ' — price to confirm' : ` — ${(i.price * i.qty).toFixed(2)} MAD`)
+                ).join('\n');
+
+                const params = {
+                    order_id:         String(orderId || 'N/A'),
+                    customer_name:    (`${c.firstName || ''} ${c.lastName || ''}`).trim() || 'Guest',
+                    customer_email:   c.email   || '',
+                    customer_phone:   c.phone   || '',
+                    customer_address: [c.address, c.city].filter(Boolean).join(', '),
+                    customer_notes:   c.notes   || '',
+                    order_items:      itemsList,
+                    order_subtotal:   `${(s.subtotal || 0).toFixed(2)} MAD`,
+                    order_shipping:   `${(s.shipping  || 0).toFixed(2)} MAD`,
+                    order_discount:   (s.discount || 0) > 0 ? `-${(s.discount).toFixed(2)} MAD` : '—',
+                    order_total:      s.hasPendingPricing ? 'To be confirmed' : `${(s.total || 0).toFixed(2)} MAD`,
+                    order_date:       new Date().toLocaleDateString('fr-MA', { year: 'numeric', month: 'long', day: 'numeric' }),
+                    order_channel:    orderData.channel || 'email',
+                };
+
+                const ejsSend = (templateId, extra) => fetch('https://api.emailjs.com/api/v1.0/email/send', {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({
+                        service_id:      serviceId,
+                        template_id:     templateId,
+                        user_id:         publicKey,
+                        template_params: { ...params, ...(extra || {}) },
+                    }),
+                });
+
+                await ejsSend(adminTpl);
+                if (c.email && clientTpl) {
+                    await ejsSend(clientTpl, { to_email: c.email, to_name: params.customer_name });
+                }
+                return true;
+            } catch (e) { return false; }
+        };
+
+        // ── Formspree admin notification — works right now, zero extra setup ──
+        // Uses the same Formspree form (meerdrqy) that was already working.
+        // Admin receives a full order summary email; _replyto is the customer's
+        // email so clicking Reply in your inbox automatically goes to the client.
+        const sendFormspreeNotification = async (orderData, orderId) => {
+            try {
+                const c     = orderData.customer || {};
+                const items = Array.isArray(orderData.items) ? orderData.items : [];
+                const s     = orderData.summary  || {};
+
+                const itemLines = items.map((i) =>
+                    `${i.name}${i.size ? ` (${i.size})` : ''} ×${i.qty || 1}` +
+                    (i.pricePending ? ' — prix à confirmer' : ` — ${((i.price || 0) * (i.qty || 1)).toFixed(2)} MAD`)
+                ).join('\n');
+
+                const payload = {
+                    _replyto:    c.email  || '',
+                    'Commande':  `#${String(orderId || 'N/A')}`,
+                    'Client':    (`${c.firstName || ''} ${c.lastName || ''}`).trim() || 'Invité',
+                    'Email':     c.email  || '—',
+                    'Téléphone': c.phone  || '—',
+                    'Adresse':   [c.address, c.city].filter(Boolean).join(', ') || '—',
+                    'Notes':     c.notes  || '—',
+                    'Articles':  itemLines || '—',
+                    'Sous-total': `${(s.subtotal || 0).toFixed(2)} MAD`,
+                    'Livraison':  `${(s.shipping  || 0).toFixed(2)} MAD`,
+                    'Remise':    (s.discount || 0) > 0 ? `-${(s.discount).toFixed(2)} MAD` : '—',
+                    'Total':     s.hasPendingPricing ? 'À confirmer' : `${(s.total || 0).toFixed(2)} MAD`,
+                    'Canal':     orderData.channel || 'email',
+                    'Date':      new Date().toLocaleDateString('fr-MA', { year: 'numeric', month: 'long', day: 'numeric' }),
+                };
+
+                const res = await fetch('https://formspree.io/f/meerdrqy', {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body:    JSON.stringify(payload),
+                });
+                return res.ok;
+            } catch (e) { return false; }
+        };
+
         placeOrderBtn.addEventListener('click', () => {
             if (placeOrderBtn.disabled) return;
             updateConfirmationLinks();
@@ -522,10 +619,22 @@
                     }
                 } catch(e) { console.error('[IPORDISE] Order save failed:', e); }
 
-                // Send email notifications with the orderId (may be null if Firestore failed)
+                // 1. Formspree — admin notification (always works, no setup needed)
                 try {
-                    await sendOrderNotification(buildStructuredOrder('email'), orderId);
-                } catch(e) {}
+                    await Promise.race([
+                        sendFormspreeNotification(buildStructuredOrder('email'), orderId),
+                        new Promise((r) => setTimeout(r, 8000)),
+                    ]);
+                } catch (e) {}
+                // 2. EmailJS — client confirmation (works once emailjs.com is configured)
+                try {
+                    await Promise.race([
+                        sendEmailJSNotification(buildStructuredOrder('email'), orderId),
+                        new Promise((r) => setTimeout(r, 6000)),
+                    ]);
+                } catch (e) {}
+                // 3. Backend notification (best-effort, non-blocking)
+                sendOrderNotification(buildStructuredOrder('email'), orderId);
 
                 markConfirmationPending('email');
                 sessionStorage.removeItem('ipordise_cart');
@@ -556,7 +665,9 @@
                             }
                         } catch(e) {}
                     }
-                    await sendOrderNotification(buildStructuredOrder('whatsapp'), orderId);
+                    sendFormspreeNotification(buildStructuredOrder('whatsapp'), orderId);
+                    sendEmailJSNotification(buildStructuredOrder('whatsapp'), orderId);
+                    sendOrderNotification(buildStructuredOrder('whatsapp'), orderId);
                 } catch(e) { console.error('[IPORDISE] WhatsApp order save failed:', e); }
             })();
             storePendingOrder('whatsapp');
