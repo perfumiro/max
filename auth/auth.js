@@ -93,7 +93,10 @@ export async function signUp(email, password, displayName = '') {
     await updateProfile(credential.user, { displayName: displayName.trim() });
   }
   // Send email verification — user must confirm before they can log in
-  await sendEmailVerification(credential.user);
+  await sendEmailVerification(credential.user, {
+    url: 'https://ipordise.com/auth/action.html',
+    handleCodeInApp: false,
+  });
   // Save user profile to Firestore so it appears in admin Users tab
   try {
     await setDoc(doc(db, 'users', credential.user.uid), {
