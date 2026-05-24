@@ -9945,7 +9945,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const key = (item.name || '').toLowerCase() + '|' + (item.brand || '').toLowerCase();
                     if (!item.name || seen.has(key)) return;
                     seen.add(key);
-                    catalog.push({ name: item.name, brand: item.brand, price: item.price, image: item.image, added: '' });
+                    catalog.push({ name: item.name, brand: item.brand, price: item.price, image: normalizeImagePathForCurrentPage(item.image || ''), added: '' });
                 });
             }
             return catalog;
