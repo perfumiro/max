@@ -6,7 +6,7 @@
  *   - External CDN resources → Stale-While-Revalidate
  */
 
-const CACHE_VERSION = 'v15';
+const CACHE_VERSION = 'v16';
 const STATIC_CACHE  = `ipordise-static-${CACHE_VERSION}`;
 const CDN_CACHE     = `ipordise-cdn-${CACHE_VERSION}`;
 
@@ -21,7 +21,8 @@ const PRECACHE_ASSETS = [
     '/assets/favicon.svg',
     '/manifest.json',
     '/offline.html',
-    '/404.html'
+    '/404.html',
+    '/assets/hero%20section%20web%20version%203d/Ysl%20y%20edp.png'
 ];
 
 /* ── Offline fallback page ── */

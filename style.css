@@ -28927,7 +28927,34 @@ body.ipo-is-transitioning * {
 }
 
 /* Defer rendering of off-screen luxury elements natively! */
-#flashOffersSection, #newArrivalsCarousel, #newsletterSection, footer {
+#flashOffersSection, #newArrivalsCarousel, #newsletterSection, footer,
+#class2026Section, #valentino-house-section, .xerjoff-section,
+.seo-editorial, .testimonials-section, #scentFamilySection {
     content-visibility: auto;
-    contain-intrinsic-size: 350px;
+    contain-intrinsic-size: auto 350px;
+}
+
+/* Layout containment for carousel tracks — prevents reflows from propagating */
+.section-2026-track,
+#productCarousel,
+.flash-carousel-track {
+    contain: layout style;
+}
+
+/* GPU-accelerate hero animations on low-end devices */
+.hero-banner-img {
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Reduce paint cost on mobile by disabling heavy effects */
+@media (max-width: 767px) {
+    .hero-banner-slide--active::before,
+    .hero-banner-slide--active::after {
+        animation: none !important;
+    }
+    .hero-banner-sweep {
+        display: none !important;
+    }
 }

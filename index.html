@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+
     <!-- SEO: Canonical redirect — normalises /index.html ? / and www ? apex -->
     <script>(function(){var u=window.location.href,h=window.location.hostname,p=window.location.pathname;if(h==='www.ipordise.com')u=u.replace('://www.ipordise.com','://ipordise.com');if(p==='/index.html')u=u.replace('/index.html','/');if(u!==window.location.href)window.location.replace(u);}());</script>
     <!-- Google tag (gtag.js) -->
@@ -62,7 +60,7 @@
     <link rel="apple-touch-icon" href="assets/logo.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-mark.svg">
     <!-- Preload hero image for LCP -->
-    <link rel="preload" as="image" href="assets/Herosectionphotos/SPECIAL HERO SECTION.png" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/hero section web version 3d/Ysl y edp.png" fetchpriority="high">
     <!-- Structured Data: Organization + WebSite + Store -->
     <script type="application/ld+json">
     [
@@ -129,19 +127,21 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="assets/tailwind.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="script.js?v=21" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <script src="script.js?v=22" defer></script>
     <script src="i18n.js" defer></script>
-    <link rel="stylesheet" href="style.css?v=2">
-<!--Start of Tawk.to Script-->
+    <link rel="stylesheet" href="style.css?v=3">
+<!--Start of Tawk.to Script — deferred until first user interaction for performance -->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{};
 var Tawk_LoadStart=new Date();
 Tawk_API.onLoad=function(){
   Tawk_API.hideWidget();
-  /* -- Custom floating chat button with IPORDISE logo -- */
+  /* -- Custom floating WhatsApp button -- */
   var style=document.createElement('style');
   style.textContent='\
     #ipo-tawk-wrap{\
@@ -250,13 +250,24 @@ Tawk_API.onLoad=function(){
   });
 
 };
+/* Defer Tawk.to loading — only load after first user interaction or 8s idle */
 (function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69c93f783157ae1c386572f6/default';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
+  var loaded=false;
+  function loadTawk(){
+    if(loaded)return;loaded=true;
+    var s1=document.createElement("script");
+    s1.async=true;
+    s1.src='https://embed.tawk.to/69c93f783157ae1c386572f6/default';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    document.head.appendChild(s1);
+  }
+  /* Load on first interaction */
+  ['scroll','click','touchstart','mousemove','keydown'].forEach(function(evt){
+    window.addEventListener(evt,loadTawk,{once:true,passive:true});
+  });
+  /* Safety: load after 8s even without interaction */
+  setTimeout(loadTawk,8000);
 })();
 </script>
 <!--End of Tawk.to Script-->
@@ -1428,7 +1439,7 @@ s0.parentNode.insertBefore(s1,s0);
                             src="assets/IPORDISE LOGO HEADER.png"
                             alt="IPORDISE Luxury Perfumes"
                             class="site-logo-img"
-                            fetchpriority="high"
+                            fetchpriority="low"
                             loading="eager"
                             decoding="async"
                         >
@@ -1803,7 +1814,7 @@ s0.parentNode.insertBefore(s1,s0);
                     <div role="link" tabindex="0" class="w-full md:hidden mobile-flash-banner-stack" data-mobile-flash-banners style="cursor:pointer;">
                         <div class="mobile-flash-banner-slide" role="img" aria-label="XERJOFF Italian Haute Parfumerie" data-href="pages/xerjoff.html">
                             <div class="mobile-flash-bg">
-                                <img src="assets/XERJOFFFALEXANDERIPHOTOSECTION/second one.png" alt="" class="mobile-flash-bg-img" loading="eager" decoding="async" fetchpriority="high">
+                                <img src="assets/XERJOFFFALEXANDERIPHOTOSECTION/second one.png" alt="" class="mobile-flash-bg-img" loading="lazy" decoding="async">
                             </div>
                             <div class="mobile-flash-overlay"></div>
                             <div class="mobile-flash-content">
@@ -1817,7 +1828,7 @@ s0.parentNode.insertBefore(s1,s0);
                         </div>
                         <div class="mobile-flash-banner-slide" role="img" aria-label="House of Unique Luxury" data-href="pages/unique-luxury.html">
                             <div class="mobile-flash-bg">
-                                <img src="https://uniqueeluxury.com/cdn/shop/files/uniquee_slider12_bos_6912a4fe-3a31-4b3b-a79c-ffa92a795e41_2000x.png?v=1613663603" alt="" class="mobile-flash-bg-img" loading="eager" decoding="async" style="object-position: 65% center;">
+                                <img src="https://uniqueeluxury.com/cdn/shop/files/uniquee_slider12_bos_6912a4fe-3a31-4b3b-a79c-ffa92a795e41_2000x.png?v=1613663603" alt="" class="mobile-flash-bg-img" loading="lazy" decoding="async" style="object-position: 65% center;">
                             </div>
                             <div class="mobile-flash-overlay" style="background:linear-gradient(90deg,rgba(13,10,6,0.82) 0%,rgba(13,10,6,0.45) 60%,rgba(13,10,6,0.18) 100%);"></div>
                             <div class="mobile-flash-content">
