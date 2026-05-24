@@ -2324,7 +2324,7 @@ body {
     border: 1px solid rgba(226, 232, 240, 0.28);
     color: #f8fafc;
     background: rgba(15, 23, 42, 0.55);
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease ;
 }
 
 .testimonial-control-btn:hover {
@@ -2738,7 +2738,7 @@ body {
     justify-content: center;
     background: #ffffff;
     font-size: 0.65rem;
-    transition: all 0.18s ease;
+    transition: transform 0.18s ease, opacity 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease ;
     flex-shrink: 0;
     align-self: flex-start;
     margin-top: 0.1rem;
@@ -3061,7 +3061,7 @@ button.product-favorite-btn.is-active {
     font-size: 0.84rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.16s;
+    transition: transform 0.16s, opacity 0.16s, background-color 0.16s, color 0.16s, border-color 0.16s, box-shadow 0.16s ;
     font-family: inherit;
 }
 .acm-signout-btn:hover {
@@ -5374,7 +5374,7 @@ button.product-favorite-btn.is-active {
     border-radius: 999px;
     border: none;
     cursor: pointer;
-    transition: all 0.22s ease;
+    transition: transform 0.22s ease, opacity 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease ;
     box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35);
     flex: 1;
 }
@@ -5593,7 +5593,7 @@ button.product-favorite-btn.is-active {
     text-transform: uppercase;
     padding: 0.95rem 0.35rem;
     border-bottom: 2px solid transparent;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease ;
 }
 
 .tab-btn:hover,
@@ -7175,7 +7175,7 @@ body.consent-visible {
     color: #374151;
     background: #fff;
     font-size: 1.1rem;
-    transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1) ;
 }
 
 .mobile-menu-close:hover {
@@ -7205,7 +7205,7 @@ body.consent-visible {
     font-size: 0.92rem;
     font-weight: 600;
     color: #1f2937;
-    transition: all 0.22s ease;
+    transition: transform 0.22s ease, opacity 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease ;
     border-left: 3px solid transparent;
 }
 
@@ -7247,7 +7247,7 @@ body.consent-visible {
     color: #374151;
     background: #ffffff;
     border: 1px solid #e5e7eb;
-    transition: all 0.28s ease;
+    transition: transform 0.28s ease, opacity 0.28s ease, background-color 0.28s ease, color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease ;
 }
 
 .mobile-menu-footer-btn:hover {
@@ -7287,7 +7287,7 @@ body.consent-visible {
     color: #374151;
     background: #f3f4f6;
     border: 1px solid #e5e7eb;
-    transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1) ;
     scroll-snap-align: start;
     flex-shrink: 0;
 }
@@ -7892,7 +7892,7 @@ body.consent-visible {
 .section-2026-dots .carousel-dot {
     background: rgba(231,60,60,0.18);
     border: none;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease ;
 }
 .section-2026-dots .carousel-dot.is-active {
     background: linear-gradient(90deg, #e73c3c, #ff6060);
@@ -7969,7 +7969,7 @@ body.consent-visible {
     opacity: 0;
     visibility: hidden;
     transform: translateY(12px);
-    transition: all 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.32s cubic-bezier(0.22, 1, 0.36, 1), color 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.32s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1) ;
     cursor: pointer;
 }
 
@@ -8358,7 +8358,7 @@ body.consent-visible {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.12);
     color: #9ca3af;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease ;
 }
 
 .payment-icon:hover {
@@ -8405,7 +8405,7 @@ section {
 .js-card-add-btn {
     position: relative;
     overflow: hidden;
-    transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1) ;
 }
 
 .js-card-add-btn::after {
@@ -8424,7 +8424,7 @@ section {
 /* Enhanced brand logo tiles */
 .brand-logo-tile {
     border-radius: 0.65rem;
-    transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1) ;
 }
 
 .brand-logo-tile:hover {
@@ -8502,7 +8502,7 @@ section {
     cursor: pointer;
     flex-shrink: 0;
     font-size: 0.7rem;
-    transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1) ;
     z-index: 2;
 }
 
@@ -8536,7 +8536,7 @@ section {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1) ;
     z-index: 3;
     font-size: 0.85rem;
 }
@@ -8716,7 +8716,7 @@ section {
     border-radius: 0.7rem;
     background: linear-gradient(135deg, #fafbfc, #f1f5f9);
     border: 1px solid rgba(148, 163, 184, 0.2);
-    transition: all 0.25s ease;
+    transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease ;
 }
 
 .product-premium-trust-item:hover {
@@ -8737,7 +8737,7 @@ section {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease ;
     cursor: pointer;
 }
 
@@ -8777,7 +8777,7 @@ section {
     border-radius: 1rem;
     position: relative;
     z-index: 1;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease ;
 }
 
 .pyramid-level:hover {
@@ -8917,7 +8917,7 @@ section {
     width: 0;
     height: 2px;
     background: #e73c3c;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease ;
     transform: translateX(-50%);
 }
 
@@ -8963,7 +8963,7 @@ section {
 .product-wishlist-btn,
 .product-favorite-btn {
     position: relative;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease ;
 }
 
 .product-wishlist-btn:hover,
@@ -9322,7 +9322,7 @@ section {
 
 /* Enhanced Quantity Box */
 .qty-box {
-    transition: all 0.25s ease;
+    transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease ;
 }
 
 .qty-box:focus-within {
@@ -10883,7 +10883,7 @@ footer .flex.space-x-3 a:hover {
     border-radius: 999px !important;
     border: none;
     cursor: pointer;
-    transition: all 0.28s cubic-bezier(0.22,1,0.36,1);
+    transition: transform 0.28s cubic-bezier(0.22,1,0.36,1), opacity 0.28s cubic-bezier(0.22,1,0.36,1), background-color 0.28s cubic-bezier(0.22,1,0.36,1), color 0.28s cubic-bezier(0.22,1,0.36,1), border-color 0.28s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s cubic-bezier(0.22,1,0.36,1) ;
     box-shadow: 0 6px 22px rgba(212,175,55,0.44), 0 1px 0 rgba(255,255,255,0.18) inset;
     position: relative;
     overflow: hidden;
@@ -11299,7 +11299,7 @@ footer .flex.space-x-3 a:hover {
 .section-2026-dots .carousel-dot {
     background: rgba(212,175,55,0.22);
     border: none;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease ;
 }
 .section-2026-dots .carousel-dot.is-active {
     background: linear-gradient(90deg, #D4AF37, #F5C842);
@@ -13865,7 +13865,7 @@ html {
     overflow: hidden !important;
     background: #f8f9fc !important;
     box-shadow: 0 2px 8px rgba(15,23,42,0.07) !important;
-    transition: all 0.22s ease !important;
+    transition: transform 0.22s ease, opacity 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease !important;
     flex-shrink: 0 !important;
 }
 
@@ -14127,7 +14127,7 @@ html {
     border-radius: 999px !important;
     border: none !important;
     cursor: pointer !important;
-    transition: all 0.25s ease !important;
+    transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
     box-shadow: 0 10px 28px rgba(15,23,42,0.22) !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -14153,7 +14153,7 @@ html {
     border: 1.5px solid rgba(226,232,240,0.9) !important;
     background: #ffffff !important;
     box-shadow: 0 2px 8px rgba(15,23,42,0.06) !important;
-    transition: all 0.22s ease !important;
+    transition: transform 0.22s ease, opacity 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease !important;
 }
 
 .product-wishlist-btn:hover {
@@ -14171,7 +14171,7 @@ html {
     padding: 0.7rem 0.85rem !important;
     font-size: 0.72rem !important;
     font-weight: 700 !important;
-    transition: all 0.22s ease !important;
+    transition: transform 0.22s ease, opacity 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease !important;
 }
 
 .detail-chip:hover {
@@ -14201,7 +14201,7 @@ html {
     background: linear-gradient(135deg, #fafbfd, #f4f7fb) !important;
     border: 1px solid rgba(201,162,39,0.12) !important;
     border-radius: 0.85rem !important;
-    transition: all 0.25s ease !important;
+    transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 
 .product-premium-trust-item:hover {
@@ -14283,7 +14283,7 @@ html {
     border: 1px solid rgba(226,232,240,0.9);
     border-radius: 999px;
     padding: 0.28rem 0.65rem;
-    transition: all 0.18s ease;
+    transition: transform 0.18s ease, opacity 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease ;
 }
 
 .product-quick-fact i {
@@ -14359,7 +14359,7 @@ html {
     border: 1px solid rgba(226,232,240,0.8) !important;
     border-radius: 1.1rem !important;
     padding: 1.2rem 1.3rem !important;
-    transition: all 0.25s ease !important;
+    transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 
 .review-card:hover {
@@ -14462,7 +14462,7 @@ nav[aria-label="Breadcrumb"] ol {
     height: 2.2rem !important;
     border: 1px solid rgba(226,232,240,0.9) !important;
     background: #fafbfc !important;
-    transition: all 0.2s ease !important;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .product-share-btn:hover {
@@ -14578,7 +14578,7 @@ nav[aria-label="Breadcrumb"] ol {
     justify-content: center;
     font-size: 0.75rem;
     backdrop-filter: blur(6px);
-    transition: all 0.22s ease;
+    transition: transform 0.22s ease, opacity 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease ;
     cursor: pointer;
     z-index: 5;
     box-shadow: 0 4px 14px rgba(15,23,42,0.08) !important;
@@ -14616,7 +14616,7 @@ nav[aria-label="Breadcrumb"] ol {
     justify-content: center;
     font-size: 0.65rem;
     flex-shrink: 0;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease ;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(15,23,42,0.07);
 }
@@ -14736,7 +14736,7 @@ nav[aria-label="Breadcrumb"] ol {
     background: #f8fafc;
     border: 1px solid rgba(226,232,240,0.92);
     color: #374151;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease ;
     cursor: default;
     white-space: nowrap;
 }
@@ -15612,7 +15612,7 @@ nav[aria-label="Breadcrumb"] ol {
     border-radius: 1rem;
     background: #fafbfd;
     border: 1px solid rgba(226,232,240,0.8);
-    transition: all 0.22s ease;
+    transition: transform 0.22s ease, opacity 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease ;
 }
 .product-premium-trust-item:hover {
     border-color: rgba(231,60,60,0.18);
@@ -15646,7 +15646,7 @@ nav[aria-label="Breadcrumb"] ol {
     align-items: center !important;
     justify-content: center !important;
     font-size: 0.74rem !important;
-    transition: all 0.22s ease !important;
+    transition: transform 0.22s ease, opacity 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease !important;
     cursor: pointer;
 }
 .product-share-btn:hover {
@@ -15700,7 +15700,7 @@ nav[aria-label="Breadcrumb"] ol {
     padding: 0.72rem 0.95rem !important;
     background: #fafbfd !important;
     border: 1px solid rgba(226,232,240,0.88) !important;
-    transition: all 0.2s ease !important;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
     font-size: 0.68rem !important;
     font-weight: 600 !important;
     display: flex;
@@ -15770,7 +15770,7 @@ nav[aria-label="Breadcrumb"] ol {
     border-radius: 1.2rem !important;
     border: 1px solid rgba(226,232,240,0.78) !important;
     box-shadow: 0 8px 26px rgba(15,23,42,0.06) !important;
-    transition: all 0.28s cubic-bezier(0.22,1,0.36,1) !important;
+    transition: transform 0.28s cubic-bezier(0.22,1,0.36,1), opacity 0.28s cubic-bezier(0.22,1,0.36,1), background-color 0.28s cubic-bezier(0.22,1,0.36,1), color 0.28s cubic-bezier(0.22,1,0.36,1), border-color 0.28s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s cubic-bezier(0.22,1,0.36,1) !important;
     overflow: hidden;
     position: relative;
 }
@@ -15839,7 +15839,7 @@ nav[aria-label="Breadcrumb"] ol {
     border-radius: 1.15rem !important;
     border: 1px solid rgba(226,232,240,0.8) !important;
     box-shadow: 0 6px 22px rgba(15,23,42,0.05) !important;
-    transition: all 0.22s ease !important;
+    transition: transform 0.22s ease, opacity 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease !important;
     overflow: hidden;
     padding: 1.25rem !important;
 }
@@ -15860,7 +15860,7 @@ nav[aria-label="Breadcrumb"] ol {
     padding: 1rem 2rem !important;
     justify-content: center !important;
     border: none !important;
-    transition: all 0.25s ease !important;
+    transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 #addToCartBtn:hover {
     transform: translateY(-2px) scale(1.01) !important;
@@ -15883,7 +15883,7 @@ nav[aria-label="Breadcrumb"] ol {
     background: #ffffff !important;
     color: #6b7280 !important;
     flex-shrink: 0;
-    transition: all 0.25s cubic-bezier(0.22,1,0.36,1) !important;
+    transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), opacity 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.25s cubic-bezier(0.22,1,0.36,1), color 0.25s cubic-bezier(0.22,1,0.36,1), border-color 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s cubic-bezier(0.22,1,0.36,1) !important;
     box-shadow: 0 4px 14px rgba(15,23,42,0.06) !important;
 }
 .product-wishlist-btn:hover {
@@ -15975,7 +15975,7 @@ nav[aria-label="Breadcrumb"] ol {
     padding: 0.9rem 2.5rem !important;
     font-size: 0.8rem !important;
     letter-spacing: 0.12em !important;
-    transition: all 0.25s ease !important;
+    transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 .ipordise-news-submit:hover {
     transform: translateY(-2px) !important;
@@ -15998,7 +15998,7 @@ nav[aria-label="Breadcrumb"] ol {
     justify-content: center;
     font-size: 0.78rem;
     box-shadow: 0 8px 22px rgba(15,23,42,0.22);
-    transition: all 0.25s ease;
+    transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease ;
     z-index: 50;
     cursor: pointer;
 }
@@ -16401,7 +16401,7 @@ nav[aria-label="Breadcrumb"] ol {
     justify-content: center !important;
     font-size: 0.6rem !important;
     flex-shrink: 0 !important;
-    transition: all 0.22s ease !important;
+    transition: transform 0.22s ease, opacity 0.22s ease, background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease !important;
     cursor: pointer !important;
     box-shadow: 0 2px 10px rgba(0,0,0,0.32) !important;
     backdrop-filter: blur(6px) !important;
@@ -16487,7 +16487,7 @@ nav[aria-label="Breadcrumb"] ol {
     justify-content: center !important;
     font-size: 0.72rem !important;
     cursor: pointer !important;
-    transition: all 0.2s ease !important;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
     z-index: 10 !important;
 }
@@ -16608,7 +16608,7 @@ nav[aria-label="Breadcrumb"] ol {
     justify-content: center !important;
     font-size: 0.58rem !important;
     flex-shrink: 0 !important;
-    transition: all 0.18s ease !important;
+    transition: transform 0.18s ease, opacity 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease !important;
     cursor: pointer !important;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important;
     backdrop-filter: none !important;
@@ -17303,7 +17303,7 @@ button[class*="bg-brand-red"]:not(header *):not(.mobile-flash-cta) {
     text-transform: uppercase !important;
     font-size: 0.62rem !important;
     padding: 0.6rem 1rem !important;
-    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
     border: none !important;
     box-shadow: 0 4px 14px rgba(212,44,44,0.15) !important;
 }
@@ -17323,7 +17323,7 @@ button[class*="bg-brand-red"]:not(header *):not(.mobile-flash-cta):hover {
     border-radius: 1.1rem !important;
     background: #fff !important;
     overflow: hidden !important;
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02) !important;
 }
 #productCarousel > div.group:hover,
@@ -17374,7 +17374,7 @@ button[class*="bg-brand-red"]:not(header *):not(.mobile-flash-cta):hover {
     border-radius: 50% !important;
     background: rgba(255,255,255,0.9) !important;
     backdrop-filter: blur(4px) !important;
-    transition: all 0.25s ease !important;
+    transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
     z-index: 5 !important;
 }
 .product-favorite-btn:hover {
@@ -17426,7 +17426,7 @@ button[class*="bg-brand-red"]:not(header *):not(.mobile-flash-cta):hover {
     background: #fff !important;
     color: #1a1a1a !important;
     box-shadow: 0 4px 14px rgba(0,0,0,0.05) !important;
-    transition: all 0.3s ease !important;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
 }
 .carousel-nav-btn:hover {
     border-color: rgba(212,44,44,0.2) !important;
@@ -17910,7 +17910,7 @@ textarea::placeholder {
 .category-card,
 .promo-banner-card,
 .brand-marquee-item {
-    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 
 /* ── 33. Carousel Dots ── */
@@ -18137,7 +18137,7 @@ textarea::placeholder {
     justify-content: center !important;
     font-size: 0.82rem !important;
     color: #9ca3af !important;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
 #productCarousel > .group .product-favorite-btn:hover,
@@ -19057,7 +19057,7 @@ header.bg-brand-dark .flex.items-center.gap-2.md\:gap-3.text-lg {
     border: 1px solid rgba(15, 23, 42, 0.08);
     background: #ffffff;
     color: #475569;
-    transition: all 0.25s ease;
+    transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease ;
 }
 
 .discover-filter-btn:hover,
@@ -19514,7 +19514,7 @@ header.bg-brand-dark .flex.items-center.gap-2.md\:gap-3.text-lg {
     align-items: center !important;
     justify-content: center !important;
     font-size: 0.78rem !important;
-    transition: all 0.25s ease !important;
+    transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 
 #productCarousel > .luxury-product-card .product-favorite-btn:hover,
@@ -19584,7 +19584,7 @@ header.bg-brand-dark .flex.items-center.gap-2.md\:gap-3.text-lg {
     font-weight: 700 !important;
     letter-spacing: 0.06em !important;
     line-height: 1 !important;
-    transition: all 0.2s ease !important;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 #productCarousel > .luxury-product-card .card-size-badge:first-child,
@@ -22412,7 +22412,7 @@ main {
     justify-content: center !important;
     font-size: 0.58rem !important;
     flex-shrink: 0 !important;
-    transition: all 0.18s ease !important;
+    transition: transform 0.18s ease, opacity 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease !important;
     cursor: pointer !important;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important;
 }
@@ -22481,7 +22481,7 @@ main {
     cursor: pointer !important;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
     z-index: 10 !important;
-    transition: all 0.2s ease !important;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 .gallery-share-btn:hover {
     border-color: #c9a227 !important;
@@ -25200,7 +25200,7 @@ main {
     font-size: 0.74rem !important;
     font-weight: 700 !important;
     cursor: pointer !important;
-    transition: all 0.15s !important;
+    transition: transform 0.15s, opacity 0.15s, background-color 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s !important;
 }
 .discover-page-btn:hover { border-color: #d42c2c !important; color: #d42c2c !important; }
 .discover-page-btn.is-active { background: #111 !important; border-color: #111 !important; color: #fff !important; }
@@ -27476,7 +27476,7 @@ body.ipo-is-transitioning * {
 .product-quick-fact {
     background: linear-gradient(135deg, #fefcf3 0%, #f8fafc 100%) !important;
     border: 1px solid rgba(201,162,39,0.22) !important;
-    transition: all 0.18s ease !important;
+    transition: transform 0.18s ease, opacity 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease !important;
 }
 .product-quick-fact i {
     color: #c9a227 !important;
@@ -28957,4 +28957,47 @@ body.ipo-is-transitioning * {
     .hero-banner-sweep {
         display: none !important;
     }
+}
+
+/* ═══════════════════════════════════════════
+   PERFORMANCE — GPU compositing & render skipping
+   ═══════════════════════════════════════════ */
+
+/* Skip rendering of below-fold sections until they scroll into view */
+#flashOffersSection,
+#newArrivalsSection,
+#class2026Section,
+.client-proof-section,
+.home-edit-wrap,
+#socialVideoSection,
+.ipordise-adv-news,
+.seo-editorial,
+#recentlyViewedSection,
+footer.bg-brand-dark {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
+}
+
+/* Promote frequently animated elements to GPU layers */
+.hero-slide,
+.hero-slide img,
+.carousel-2026-card,
+.card-2026-img,
+.mobile-menu-overlay,
+.ipo-search-overlay-panel,
+.ipo-search-overlay-backdrop {
+    will-change: transform, opacity;
+}
+
+/* Use hardware-accelerated transforms for card hovers */
+.js-product-link,
+.carousel-2026-card,
+.card-2026-body {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Contain layout recalc to each product card */
+.js-product-link {
+    contain: layout style;
 }

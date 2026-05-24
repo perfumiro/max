@@ -498,8 +498,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const positionMenu = (btn) => {
             const rect = btn.getBoundingClientRect();
+            const menuWidth = sharedMenu.offsetWidth;
             sharedMenu.style.top  = (rect.bottom + 8) + 'px';
-            sharedMenu.style.left = Math.max(4, rect.right - sharedMenu.offsetWidth) + 'px';
+            sharedMenu.style.left = Math.max(4, rect.right - menuWidth) + 'px';
         };
 
         const syncLangMenuUI = () => {
@@ -557,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         window.addEventListener('scroll', () => {
-            if (activeButton) positionMenu(activeButton);
+            if (activeButton) requestAnimationFrame(() => positionMenu(activeButton));
         }, { passive: true });
 
         window.addEventListener('resize', () => {
@@ -1033,11 +1034,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 renderBadge(activeIndex, false);
 
-                const timerId = window.setInterval(() => {
-                    renderBadge(activeIndex + 1, true);
-                }, 2900 + (index * 260));
-                badge.dataset.badgeTimerId = String(timerId);
+                badge._badgeRender = renderBadge;
+                badge._badgeIndex = () => activeIndex;
+                badge._badgeAdvance = () => { renderBadge(activeIndex + 1, true); };
             });
+
+            /* Single shared timer for all badges instead of N individual setIntervals */
+            if (window._badgeSharedTimer) clearInterval(window._badgeSharedTimer);
+            window._badgeSharedTimer = window.setInterval(() => {
+                selected.forEach(({ badge }) => {
+                    if (badge._badgeAdvance) badge._badgeAdvance();
+                });
+            }, 3200);
         };
 
         applyDailyBadgeSelection();
