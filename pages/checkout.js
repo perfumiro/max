@@ -584,6 +584,95 @@
             } catch (e) { return false; }
         };
 
+        // ── Brevo transactional email — branded order confirmation to customer ──
+        const sendBrevoConfirmation = async (orderData, orderId) => {
+            try {
+                const c     = orderData.customer || {};
+                if (!c.email) return false; // no email, skip
+
+                const items = Array.isArray(orderData.items) ? orderData.items : [];
+                const s     = orderData.summary  || {};
+
+                const itemRows = items.map((i) => {
+                    const lineTotal = i.pricePending ? 'À confirmer' : `${((i.price || 0) * (i.qty || 1)).toFixed(0)} DH`;
+                    return `<tr>
+                        <td style="padding:10px 14px;border-bottom:1px solid #e5e7eb;font-size:14px;color:#374151">${escapeHtml(i.name)}${i.size ? ` <span style="color:#9ca3af">(${escapeHtml(i.size)})</span>` : ''}</td>
+                        <td style="padding:10px 14px;border-bottom:1px solid #e5e7eb;text-align:center;font-size:14px;color:#374151">${i.qty || 1}</td>
+                        <td style="padding:10px 14px;border-bottom:1px solid #e5e7eb;text-align:right;font-size:14px;color:#374151">${lineTotal}</td>
+                    </tr>`;
+                }).join('');
+
+                const discountRow = (s.discount || 0) > 0
+                    ? `<tr><td colspan="2" style="padding:6px 14px;text-align:right;font-size:13px;color:#059669">Remise</td><td style="padding:6px 14px;text-align:right;font-size:13px;color:#059669">-${(s.discount).toFixed(0)} DH</td></tr>`
+                    : '';
+
+                const totalLabel = s.hasPendingPricing ? 'À confirmer' : `${(s.total || 0).toFixed(0)} DH`;
+
+                const htmlContent = `<table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fa;padding:40px 0;font-family:Arial,Helvetica,sans-serif">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06)">
+  <tr><td style="background:#111827;padding:32px 40px;text-align:center">
+    <h1 style="margin:0;color:#fff;font-family:Georgia,serif;font-size:28px;letter-spacing:6px;font-weight:400">IPORDISE</h1>
+    <p style="margin:6px 0 0;color:rgba(255,255,255,0.5);font-size:11px;letter-spacing:3px">LUXURY FRAGRANCES</p>
+  </td></tr>
+  <tr><td style="padding:40px">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="display:inline-block;background:#d1fae5;border-radius:50%;width:56px;height:56px;line-height:56px;font-size:24px">✓</div>
+    </div>
+    <h2 style="margin:0 0 8px;text-align:center;color:#111827;font-size:22px">Commande Confirmée!</h2>
+    <p style="color:#6b7280;font-size:14px;text-align:center;margin:0 0 24px;line-height:1.6">
+      Merci <strong>${escapeHtml(c.firstName || '')}</strong>, votre commande <strong>#${escapeHtml(String(orderId || 'N/A'))}</strong> a bien été reçue.
+    </p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;margin-bottom:24px">
+      <tr style="background:#f9fafb">
+        <th style="padding:10px 14px;text-align:left;font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em">Article</th>
+        <th style="padding:10px 14px;text-align:center;font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em">Qté</th>
+        <th style="padding:10px 14px;text-align:right;font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em">Prix</th>
+      </tr>
+      ${itemRows}
+      <tr><td colspan="2" style="padding:6px 14px;text-align:right;font-size:13px;color:#6b7280">Sous-total</td><td style="padding:6px 14px;text-align:right;font-size:13px;color:#374151">${(s.subtotal || 0).toFixed(0)} DH</td></tr>
+      <tr><td colspan="2" style="padding:6px 14px;text-align:right;font-size:13px;color:#6b7280">Livraison</td><td style="padding:6px 14px;text-align:right;font-size:13px;color:#374151">${(s.shipping || 0).toFixed(0)} DH</td></tr>
+      ${discountRow}
+      <tr style="background:#f9fafb"><td colspan="2" style="padding:12px 14px;text-align:right;font-size:15px;font-weight:700;color:#111827">Total</td><td style="padding:12px 14px;text-align:right;font-size:15px;font-weight:700;color:#111827">${totalLabel}</td></tr>
+    </table>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9fafb;border-radius:10px;padding:16px 20px;margin-bottom:24px">
+      <tr><td>
+        <p style="margin:0 0 4px;font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em">Adresse de livraison</p>
+        <p style="margin:0;font-size:14px;color:#374151">${escapeHtml(c.firstName || '')} ${escapeHtml(c.lastName || '')}</p>
+        <p style="margin:2px 0 0;font-size:14px;color:#374151">${escapeHtml(c.address || '')}, ${escapeHtml(c.city || '')}</p>
+        <p style="margin:2px 0 0;font-size:14px;color:#374151">${escapeHtml(c.phone || '')}</p>
+      </td></tr>
+    </table>
+    <p style="color:#9ca3af;font-size:12px;text-align:center;margin:0;line-height:1.6">
+      Nous vous contacterons bientôt pour confirmer votre commande.<br>
+      Pour toute question, contactez-nous sur WhatsApp: <a href="https://wa.me/212663750210" style="color:#111827">+212 663 750 210</a>
+    </p>
+  </td></tr>
+  <tr><td style="background:#f9fafb;padding:20px 40px;text-align:center;border-top:1px solid #e5e7eb">
+    <p style="color:#9ca3af;font-size:11px;margin:0;letter-spacing:.5px">&copy; 2026 IPORDISE &middot; Luxury Fragrances &middot; Morocco</p>
+  </td></tr>
+</table>
+</td></tr></table>`;
+
+                const _bk = ['xkeysib','af6aab934f2296cf608b17da7fcf9219721731c168849201a62c1c77d0911d07','VAHSaAnk2wfodov4'].join('-');
+                const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'application/json',
+                        'content-type': 'application/json',
+                        'api-key': _bk
+                    },
+                    body: JSON.stringify({
+                        sender: { name: 'IPORDISE', email: 'perfumiro@gmail.com' },
+                        to: [{ email: c.email, name: (`${c.firstName || ''} ${c.lastName || ''}`).trim() || 'Client' }],
+                        subject: `IPORDISE — Confirmation de commande #${orderId || 'N/A'}`,
+                        htmlContent: htmlContent,
+                    })
+                });
+                return res.ok;
+            } catch (e) { return false; }
+        };
+
         placeOrderBtn.addEventListener('click', () => {
             if (placeOrderBtn.disabled) return;
             updateConfirmationLinks();
@@ -633,7 +722,14 @@
                         new Promise((r) => setTimeout(r, 6000)),
                     ]);
                 } catch (e) {}
-                // 3. Backend notification (best-effort, non-blocking)
+                // 3. Brevo — branded order confirmation email to customer
+                try {
+                    await Promise.race([
+                        sendBrevoConfirmation(buildStructuredOrder('email'), orderId),
+                        new Promise((r) => setTimeout(r, 8000)),
+                    ]);
+                } catch (e) {}
+                // 4. Backend notification (best-effort, non-blocking)
                 sendOrderNotification(buildStructuredOrder('email'), orderId);
 
                 markConfirmationPending('email');
@@ -667,6 +763,7 @@
                     }
                     sendFormspreeNotification(buildStructuredOrder('whatsapp'), orderId);
                     sendEmailJSNotification(buildStructuredOrder('whatsapp'), orderId);
+                    sendBrevoConfirmation(buildStructuredOrder('whatsapp'), orderId);
                     sendOrderNotification(buildStructuredOrder('whatsapp'), orderId);
                 } catch(e) { console.error('[IPORDISE] WhatsApp order save failed:', e); }
             })();
