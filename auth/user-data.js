@@ -294,7 +294,8 @@ const _activateCartSync = () => {
 
 // ── Auth state observer ──────────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
-  if (user) {
+  // Ignore anonymous users created by analytics — they are not real accounts
+  if (user && !user.isAnonymous) {
     // Merge Firestore cart with any local cart
     const [serverCart, localCart] = await Promise.all([
       _loadUserCart(user.uid),

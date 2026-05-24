@@ -113,10 +113,13 @@ const updateMenus = (user) => {
 // ── Subscribe to Firebase auth state ─────────────────────────
 let _lastAuthUser = null;
 onAuthChange((user) => {
-    // Expose globally so non-module scripts (script.js) can read auth state
-    window.__ipordise_user = user;
-    _lastAuthUser = user;
-    updateMenus(user);
+    // Expose globally so non-module scripts (script.js) can read auth state.
+    // IMPORTANT: Do NOT expose anonymous users created by analytics.js —
+    // they are not real accounts and must not unlock wishlist / favourites.
+    const realUser = (user && !user.isAnonymous) ? user : null;
+    window.__ipordise_user = realUser;
+    _lastAuthUser = realUser;
+    updateMenus(realUser);
 });
 
 // Re-render account menus whenever the favourites count changes (e.g. after Firestore sync)

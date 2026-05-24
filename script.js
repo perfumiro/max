@@ -7411,9 +7411,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        const isAuthenticatedUser = () => Boolean(
-            window.__ipordise_user || window.__ipordise_favs?.isAuthenticated?.()
-        );
+        const isAuthenticatedUser = () => {
+            const u = window.__ipordise_user;
+            // Reject anonymous Firebase users created by analytics tracking
+            if (u && u.isAnonymous) return false;
+            return Boolean(u || window.__ipordise_favs?.isAuthenticated?.());
+        };
 
         const readWishlist = () => {
             if (!isAuthenticatedUser() || !window.__ipordise_favs?.isReady()) return [];
@@ -11114,7 +11117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('.product-wishlist-btn, .product-favorite-btn');
         if (!btn) return;
-        if (!(window.__ipordise_user || window.__ipordise_favs?.isAuthenticated?.())) {
+        if (!((window.__ipordise_user && !window.__ipordise_user.isAnonymous) || window.__ipordise_favs?.isAuthenticated?.())) {
             e.preventDefault();
             e.stopImmediatePropagation();
             

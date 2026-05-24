@@ -132,7 +132,7 @@
     <link rel="stylesheet" href="assets/tailwind.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    <script src="script.js?v=22" defer></script>
+    <script src="script.js?v=23" defer></script>
     <script src="i18n.js" defer></script>
     <link rel="stylesheet" href="style.css?v=3">
 <!--Start of Tawk.to Script — deferred until first user interaction for performance -->
@@ -1473,7 +1473,7 @@ Tawk_API.onLoad=function(){
                             <a href="pages/login.html" class="header-icon-btn hover:text-brand-red transition" aria-label="Account"><i class="far fa-user"></i></a>
                         </div>
                         <div class="header-wishlist-wrap relative" style="overflow:visible">
-                            <a href="pages/dashboard.html#section-wishlist" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist" onclick="if(!(window.__ipordise_user||window.__ipordise_favs?.isAuthenticated?.())){event.preventDefault();var m=document.getElementById('wishlistAuthModal');if(m){m.style.display='flex';document.body.style.overflow='hidden';function _cwm(){m.style.display='none';document.body.style.overflow='';}document.getElementById('wishlistAuthClose')?.addEventListener('click',_cwm,{once:true});document.getElementById('wishlistAuthBackdrop')?.addEventListener('click',_cwm,{once:true});}}"><i class="far fa-heart"></i></a>
+                            <a href="pages/dashboard.html#section-wishlist" class="header-icon-btn hover:text-brand-red transition" aria-label="Wishlist" onclick="if(!((window.__ipordise_user&amp;&amp;!window.__ipordise_user.isAnonymous)||window.__ipordise_favs?.isAuthenticated?.())){event.preventDefault();var m=document.getElementById('wishlistAuthModal');if(m){m.style.display='flex';document.body.style.overflow='hidden';function _cwm(){m.style.display='none';document.body.style.overflow='';}document.getElementById('wishlistAuthClose')?.addEventListener('click',_cwm,{once:true});document.getElementById('wishlistAuthBackdrop')?.addEventListener('click',_cwm,{once:true});}}"><i class="far fa-heart"></i></a>
                         </div>
                         <a href="pages/cart.html" class="header-icon-btn hover:text-brand-red transition relative" aria-label="Cart" id="cartIconLink">
                             <i class="fas fa-shopping-bag"></i>

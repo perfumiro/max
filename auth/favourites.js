@@ -225,7 +225,8 @@ const _clearAuthCache = _clearCaches;
 
 const _persist = async () => {
   const user = auth.currentUser;
-  if (user) {
+  // Treat anonymous users (created by analytics) as guests — do NOT write to Firestore
+  if (user && !user.isAnonymous) {
     // 1. Write BOTH caches synchronously (instant, no network).
     //    → AUTH_CACHE_KEY   : merged back on the next page if Firestore write was still in-flight.
     //    → DISPLAY_CACHE_KEY: read by readWishlist() fallback before FavStore resolves on each new page.
@@ -243,7 +244,8 @@ const _persist = async () => {
 // ── Auth state listener — core synchronisation logic ─────────
 
 onAuthStateChanged(auth, async (user) => {
-  if (user) {
+  // Treat anonymous users (created by analytics) the same as logged-out
+  if (user && !user.isAnonymous) {
     // Logged in: fetch all local sources + Firestore then merge.
     // The auth-cache captures any items toggled on a previous page BEFORE
     // the Firestore write could complete (e.g. user navigated instantly).
