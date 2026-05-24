@@ -392,17 +392,19 @@ s0.parentNode.insertBefore(s1,s0);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1.4rem 2rem 1.2rem;
-            background: transparent;
+            padding: 1.6rem 2rem;
+            background: #111827;
             overflow: visible;
+            border-radius: 12px;
+            margin: 0 0 0.5rem;
         }
         .auth-brand-mark::before { display: none; }
         .auth-brand-logo {
-            height: 32px;
+            height: 44px;
             width: auto;
             object-fit: contain;
             display: block;
-            filter: none;
+            filter: brightness(0) invert(1);
         }
         @media (min-width: 768px) {
             .auth-brand-mark { display: none; }
