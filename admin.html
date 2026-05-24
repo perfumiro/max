@@ -568,6 +568,26 @@
                 <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Message</label>
                 <textarea id="nlBody" rows="5" placeholder="Write your newsletter message here..." style="width:100%;border:1px solid var(--border);border-radius:8px;background:var(--s3);color:var(--ink);font-size:13px;padding:10px 12px;outline:none;resize:vertical;font-family:inherit;transition:border-color .15s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'"></textarea>
               </div>
+              <!-- Photo attachment -->
+              <div>
+                <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Attach Photo <span style="font-weight:400;text-transform:none">(optional)</span></label>
+                <div id="nlPhotoDropZone" style="border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:var(--s3)" ondragover="event.preventDefault();this.style.borderColor='var(--gold)';this.style.background='var(--s2)'" ondragleave="this.style.borderColor='var(--border)';this.style.background='var(--s3)'" ondrop="event.preventDefault();this.style.borderColor='var(--border)';this.style.background='var(--s3)'">
+                  <input type="file" id="nlPhotoInput" accept="image/*" style="display:none">
+                  <div id="nlPhotoPlaceholder">
+                    <i class="fas fa-cloud-arrow-up" style="font-size:24px;color:var(--muted);margin-bottom:6px;display:block"></i>
+                    <span style="font-size:12px;color:var(--muted)">Click or drag & drop an image here</span>
+                  </div>
+                  <div id="nlPhotoPreview" style="display:none;position:relative">
+                    <img id="nlPhotoImg" style="max-width:100%;max-height:200px;border-radius:8px;object-fit:contain" alt="Preview">
+                    <button type="button" id="nlPhotoRemove" class="btn btn-xs" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.65);color:#fff;border-radius:50%;width:28px;height:28px;padding:0;display:flex;align-items:center;justify-content:center;font-size:12px"><i class="fas fa-xmark"></i></button>
+                  </div>
+                  <div id="nlPhotoUploading" style="display:none">
+                    <i class="fas fa-spinner fa-spin" style="color:var(--gold);font-size:20px;margin-bottom:4px;display:block"></i>
+                    <span style="font-size:12px;color:var(--muted)">Uploading… <span id="nlPhotoProgress">0</span>%</span>
+                  </div>
+                </div>
+                <input type="hidden" id="nlPhotoUrl" value="">
+              </div>
               <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
                 <button class="btn btn-xs btn-gold" id="nlOpenMailBtn" style="gap:6px">
                   <i class="fas fa-envelope-open-text"></i> Open in Mail Client

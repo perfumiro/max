@@ -2043,6 +2043,73 @@ const loadNewsletterView = async () => {
 
     if(audienceEl){ audienceEl.addEventListener('change', updateAudienceCount); updateAudienceCount(); }
 
+    // -- Photo upload --------------------------------------------------------
+    let nlPhotoUrl = '';
+    const photoDropZone   = document.getElementById('nlPhotoDropZone');
+    const photoInput      = document.getElementById('nlPhotoInput');
+    const photoPlaceholder= document.getElementById('nlPhotoPlaceholder');
+    const photoPreview    = document.getElementById('nlPhotoPreview');
+    const photoImg        = document.getElementById('nlPhotoImg');
+    const photoRemoveBtn  = document.getElementById('nlPhotoRemove');
+    const photoUploading  = document.getElementById('nlPhotoUploading');
+    const photoProgress   = document.getElementById('nlPhotoProgress');
+    const photoUrlInput   = document.getElementById('nlPhotoUrl');
+
+    const nlShowPhotoState = (state) => {
+      if(photoPlaceholder) photoPlaceholder.style.display = state === 'empty'    ? '' : 'none';
+      if(photoPreview)     photoPreview.style.display     = state === 'preview'  ? '' : 'none';
+      if(photoUploading)   photoUploading.style.display   = state === 'uploading'? '' : 'none';
+    };
+
+    const nlUploadPhoto = (file) => {
+      if(!file || !file.type.startsWith('image/')) { toast('Please select an image file','error'); return; }
+      if(file.size > 10 * 1024 * 1024) { toast('Image must be under 10 MB','error'); return; }
+      nlShowPhotoState('uploading');
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_PRESET);
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`);
+      xhr.upload.addEventListener('progress', e => {
+        if(e.lengthComputable && photoProgress) photoProgress.textContent = Math.round(e.loaded/e.total*100);
+      });
+      xhr.addEventListener('load', () => {
+        if(xhr.status >= 200 && xhr.status < 300){
+          const res = JSON.parse(xhr.responseText);
+          nlPhotoUrl = res.secure_url;
+          if(photoUrlInput) photoUrlInput.value = nlPhotoUrl;
+          if(photoImg) photoImg.src = nlPhotoUrl;
+          nlShowPhotoState('preview');
+          toast('Photo uploaded','success');
+        } else {
+          nlShowPhotoState('empty');
+          toast('Upload failed — try again','error');
+        }
+      });
+      xhr.addEventListener('error', () => { nlShowPhotoState('empty'); toast('Upload failed','error'); });
+      xhr.send(formData);
+    };
+
+    if(photoDropZone){
+      photoDropZone.addEventListener('click', () => photoInput?.click());
+      photoDropZone.addEventListener('drop', e => {
+        const file = e.dataTransfer?.files?.[0];
+        if(file) nlUploadPhoto(file);
+      });
+    }
+    if(photoInput){
+      photoInput.addEventListener('change', () => { if(photoInput.files[0]) nlUploadPhoto(photoInput.files[0]); });
+    }
+    if(photoRemoveBtn){
+      photoRemoveBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        nlPhotoUrl = '';
+        if(photoUrlInput) photoUrlInput.value = '';
+        if(photoInput) photoInput.value = '';
+        nlShowPhotoState('empty');
+      });
+    }
+
     // Open in mail client
     const openMailBtn = document.getElementById('nlOpenMailBtn');
     if(openMailBtn){ const b=openMailBtn.cloneNode(true); openMailBtn.replaceWith(b);
@@ -2050,7 +2117,8 @@ const loadNewsletterView = async () => {
         const audience = getAudience();
         if(!audience.length){ toast('No recipients in this audience','error'); return; }
         const subject = document.getElementById('nlSubject')?.value.trim() || '';
-        const body    = document.getElementById('nlBody')?.value.trim() || '';
+        let body      = document.getElementById('nlBody')?.value.trim() || '';
+        if(nlPhotoUrl) body += '\n\n📷 Image: ' + nlPhotoUrl;
         const bcc     = audience.map(s=>s.email).filter(Boolean).join(',');
         const mailto  = `mailto:?bcc=${encodeURIComponent(bcc)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         window.location.href = mailto;
