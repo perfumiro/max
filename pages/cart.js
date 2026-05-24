@@ -116,7 +116,7 @@
 
         if (!currentCart.length) {
             writeCart(legacyItems);
-            // Clear legacy key so a future empty-cart state doesn't re-import.
+            // Clear legacy key so a future empty-cart state doesn’t re-import.
             localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
             return;
         }

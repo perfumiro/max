@@ -377,10 +377,10 @@ document.addEventListener('DOMContentLoaded', () => {
             account_subtitle: 'Connectez-vous pour un paiement rapide, vos favoris et des offres beauté exclusives.',
             account_signin: 'Se connecter',
             account_create: 'Créer un compte',
-            account_offer: 'Profitez de <strong>sélections parfum chaque semaine</strong> et d'avantages exclusifs.',
+            account_offer: 'Profitez de <strong>sélections parfum chaque semaine</strong> et d’avantages exclusifs.',
             account_shipping: '<strong>LIVRAISON RAPIDE</strong><br>Frais fixes : 35 MAD (TVA incluse).',
             wishlist_title: 'VOS FAVORIS',
-            wishlist_empty: 'Aucun favori pour le moment. Touchez le cœur sur un produit pour l'ajouter.',
+            wishlist_empty: 'Aucun favori pour le moment. Touchez le cœur sur un produit pour l’ajouter.',
             wishlist_remove: 'Retirer des favoris',
             wishlist_item_single: 'article',
             wishlist_item_plural: 'articles',
@@ -1247,7 +1247,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'CHANEL',
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 75, sillageLabel: 'Strong', season: 90, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Aromatic Woody — A timeless and magnetic signature with a subtly pronounced aroma.",
+            subtitle: "Men’s fragrance — Aromatic Woody — A timeless and magnetic signature with a subtly pronounced aroma.",
             longDescription: 'A tribute to freedom, expressed in an aromatic woody scent with a captivating trail. A timeless fragrance in a bottle of deep, mysterious blue. The Eau de Parfum of BLEU DE CHANEL, with its subtly pronounced aroma, reveals a determined spirit.',
             sizes: [
                 'Decante 10ML',
@@ -1272,8 +1272,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme — Boisé Aromatique — Une signature intemporelle et magnétique — l'arôme subtilement prononcé.",
-                longDescription: "Un hymne — la liberté, exprimé dans un sillage bois— aromatique envoûtant. Un parfum intemporel dans un flacon d'un bleu profond et mystérieux. L'Eau de Parfum BLEU DE CHANEL, — l'arôme subtilement prononcé, révîle un esprit déterminé.",
+                subtitle: "Parfum homme — Boisé Aromatique — Une signature intemporelle et magnétique — l’arôme subtilement prononcé.",
+                longDescription: "Un hymne — la liberté, exprimé dans un sillage bois— aromatique envoûtant. Un parfum intemporel dans un flacon d’un bleu profond et mystérieux. L’Eau de Parfum BLEU DE CHANEL, — l’arôme subtilement prononcé, révîle un esprit déterminé.",
                 notes: [
                     { title: 'OUVERTURE AROMATIQUE', text: 'Une ouverture fraîche et vibrante qui exprime énergie et liberté.' },
                     { title: 'CŒUR BOISÉ', text: 'Un noyau bois— structuré qui dégage élégance, modernité et assurance.' },
@@ -1290,7 +1290,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'HUGO BOSS',
             gender: 'men',
             fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 80, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Amber Woody Leather — A highly concentrated elixir with spicy chili pepper, lavandin absolute, and warm sandalwood.",
+            subtitle: "Men’s fragrance — Amber Woody Leather — A highly concentrated elixir with spicy chili pepper, lavandin absolute, and warm sandalwood.",
             longDescription: 'Awaken your senses with BOSS The Scent Elixir for Men, a captivating and highly concentrated intense fragrance that symbolizes the powerful alchemy between two unique partners. Taking the intensity of BOSS The Scent to new heights, this amber, woody, and leathery fragrance combines vibrant contrasts to deliver irresistible allure. The composition opens with a burst of spicy chili pepper, providing a complex and stimulating touch, while lavandin absolute adds freshness and vitality. At the base, Caledonian sandalwood infuses a warm, woody depth, leaving a deeply enveloping and unforgettable trail. BOSS The Scent Elixir for Men redefines sensuality in a sophisticated bottle lacquered in an intense red, adorned with the BOSS logo and an elegant gold cap with the Double B monogram. Its multifaceted design and vibrant hue reflect the magnetic and seductive essence of this fragrance, highlighting the many facets of an irresistible connection.',
             sizes: [
                 'Decante 10ML',
@@ -1315,7 +1315,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé Ambré Cuir — Un Élixir hautement concentré aux notes de poivre de chili, lavandin absolu et santal chaud.",
-                longDescription: "Éveillez vos sens avec BOSS The Scent Elixir pour Homme, un parfum intense et hautement concentré symbolisant la puissante alchimie entre deux partenaires uniques. Poussant l'intensité de BOSS The Scent vers de nouveaux sommets, ce parfum ambré, bois— et cuiré combine des contrastes vibrants pour une séduction irrésistible. La composition s'ouvre sur un éclat de poivre de chili épicé, tandis que le lavandin absolu apporte fraîcheur et vitalité. En fond, le santal calédonien infuse une profondeur boisée chaude, laissant un sillage enveloppant et inoubliable.",
+                longDescription: "Éveillez vos sens avec BOSS The Scent Elixir pour Homme, un parfum intense et hautement concentré symbolisant la puissante alchimie entre deux partenaires uniques. Poussant l’intensité de BOSS The Scent vers de nouveaux sommets, ce parfum ambré, bois— et cuiré combine des contrastes vibrants pour une séduction irrésistible. La composition s’ouvre sur un éclat de poivre de chili épicé, tandis que le lavandin absolu apporte fraîcheur et vitalité. En fond, le santal calédonien infuse une profondeur boisée chaude, laissant un sillage enveloppant et inoubliable.",
                 notes: [
                     { title: 'EXPLOSION DE POIVRE DE CHILI', text: 'Une ouverture épicée et vive, chaude, stimulante et immédiatement magnétique.' },
                     { title: 'LAVANDIN ABSOLU', text: 'Le lavandin aromatique apporte fraîcheur et équilibre au cœur avec une clarté masculine raffinée.' },
@@ -1333,7 +1333,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'HUGO BOSS',
             gender: 'men',
             fragranceProfile: { longevity: 92, longevityLabel: '10-12h', sillage: 82, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Woody Leather — A bold intense signature with toasted leather, frankincense, patchouli, myrrh, cedarwood, and davana.",
+            subtitle: "Men’s fragrance — Woody Leather — A bold intense signature with toasted leather, frankincense, patchouli, myrrh, cedarwood, and davana.",
             longDescription: 'Express ultimate sophistication with BOSS Bottled Absolu, a bold and intense fragrance with irresistible toasted notes. Modern and memorable, this distinctive scent embodies the power of the BOSS man, who brings his unique touch to every decision, every challenge, and every success. This woody fragrance with leathery notes, the third installment in the BOSS BOTTLED trilogy of intensity, instantly captivates the senses. A captivating scent from BOSS, formulated with the highest concentration in the fragrance family to date, crafted from its quintessential woody signature with absolute depth: the very essence of BOSS. BOSS Bottled Absolu, created by Annick Menardo in collaboration with Suzy Le Helley, opens smoothly with a textured leather accord with toasty facets, in harmony with the invigorating essence of frankincense. At the heart of this BOSS fragrance for men, the enveloping essence of patchouli and myrrh absolute exalt the strength and splendor of a sophisticated aroma. The warm cedarwood and fruity davana base notes leave a lasting and exquisite trail. The unique bottle of BOSS Bottled is imbued with richness, featuring a warm, luminous amber base that evokes the nobility of the tempting and exquisite fragrance within. A double lacquer finish and a gleaming gold cap complete the exquisite presentation of this woody men\'s fragrance, the perfect accessory for the positive BOSS attitude.',
             sizes: [
                 'Decante 10ML',
@@ -1358,9 +1358,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé Cuir — Une signature intense et audacieuse aux notes de cuir grillé, encens, patchouli, myrrhe, cèdre et davana.",
-                longDescription: "Exprimez la sophistication ultime avec BOSS Bottled Absolu, un parfum audacieux et intense aux irrésistibles notes grillées. Moderne et mémorable, ce parfum distinctif incarne la puissance de l'homme BOSS. Ce troisième volet de la trilogie BOSS BOTTLED Intensit— s'ouvre en douceur sur un accord de cuir texturé aux facettes grillées, en harmonie avec l'essence revigorante de l'encens. Au cœur, le patchouli et la myrrhe absolue exaltent la force et la splendeur d'un arôme sophistiqué. Les notes de fond de cèdre chaud et de davana fruitée laissent un sillage durable et exquis.",
+                longDescription: "Exprimez la sophistication ultime avec BOSS Bottled Absolu, un parfum audacieux et intense aux irrésistibles notes grillées. Moderne et mémorable, ce parfum distinctif incarne la puissance de l’homme BOSS. Ce troisième volet de la trilogie BOSS BOTTLED Intensit— s’ouvre en douceur sur un accord de cuir texturé aux facettes grillées, en harmonie avec l’essence revigorante de l’encens. Au cœur, le patchouli et la myrrhe absolue exaltent la force et la splendeur d’un arôme sophistiqué. Les notes de fond de cèdre chaud et de davana fruitée laissent un sillage durable et exquis.",
                 notes: [
-                    { title: 'CUIR GRILL— & ENCENS', text: "Une ouverture texturée où le cuir lisse rencontre l'encens lumineux pour un début intense et sophistiqué." },
+                    { title: 'CUIR GRILL— & ENCENS', text: "Une ouverture texturée où le cuir lisse rencontre l’encens lumineux pour un début intense et sophistiqué." },
                     { title: 'PATCHOULI & MYRRHE ABSOLUE', text: 'Un cœur riche de patchouli et myrrhe absolue construit profondeur, force et chaleur aromatique élégante.' },
                     { title: 'CÈDRE & DAVANA', text: 'Le cèdre chaud et la davana fruitée créent un fond raffiné avec une richesse durable et un sillage mémorable.' }
                 ]
@@ -1377,7 +1377,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'HUGO BOSS',
             gender: 'men',
             fragranceProfile: { longevity: 92, longevityLabel: '10-12h', sillage: 84, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Woody Amber — A highly concentrated elixir with incense, cardamom, vetiver, patchouli, cedar, and cistus absolute.",
+            subtitle: "Men’s fragrance — Woody Amber — A highly concentrated elixir with incense, cardamom, vetiver, patchouli, cedar, and cistus absolute.",
             longDescription: 'Experience intensity at its peak. A sophisticated and highly concentrated formula, BOSS Bottled Elixir inspires you to find your inner light and become your own BOSS. This exquisite men\'s fragrance, capturing a high-impact woody and amber scent of BOSS Bottled, features warm top notes of incense and cardamom, a tempting heart of vetiver and patchouli, and a base of cedar essence. Launched 25 years after the original BOSS Bottled, BOSS Bottled Elixir reinterprets a fragrance icon with a vigorous statement, promising unparalleled depth and an enveloping experience. Created by the iconic master perfumer Annick Menardo, creator of the signature BOSS Bottled fragrance, in close collaboration with perfumer Suzy le Helley, this irresistible fragrance celebrates the reinvention of a contemporary classic. The Elixir exudes an incredibly captivating fragrance, rich in highly concentrated ingredients. The essences of frankincense and cardamom radiate warmth and vitality, while the heart of vetiver and patchouli leaves an earthy and unforgettable imprint. With a base of cedar essence and cistus absolute, BOSS Bottled Elixir gives the wearer a strong charisma with woody notes and an explosion of fearless virility. The exclusive BOSS Bottled glass bottle features an intense black lacquered finish that gives way to a golden glow at the center, like a guide for the spirit of the modern BOSS man in the search for his inner light. Its glossy ceramic finish and gold-colored brushed cap further enhance the elegance of this new creation in the BOSS Bottled universe.',
             sizes: [
                 'Decante 10ML',
@@ -1401,12 +1401,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme — Boisé Ambré — Un Élixir hautement concentré — l'encens, — la cardamome, au vétiver, au patchouli, au cèdre et au ciste absolu.",
-                longDescription: "Vivez l'intensité — son apogée. Une formule sophistiquée et hautement concentrée, BOSS Bottled Elixir vous inspire — trouver votre lumière intérieure. Ce parfum masculin exquis, au sillage bois— ambr— puissant, sublime les notes d'encens et de cardamome, un cœur séduisant de vétiver et patchouli, et un fond d'essence de cèdre. Lanc— 25 ans après le BOSS Bottled original, BOSS Bottled Elixir réinterpréte une icône olfactive avec une affirmation vigoureuse, promettant une profondeur inégalée et une expérience enveloppante.",
+                subtitle: "Parfum homme — Boisé Ambré — Un Élixir hautement concentré — l’encens, — la cardamome, au vétiver, au patchouli, au cèdre et au ciste absolu.",
+                longDescription: "Vivez l’intensité — son apogée. Une formule sophistiquée et hautement concentrée, BOSS Bottled Elixir vous inspire — trouver votre lumière intérieure. Ce parfum masculin exquis, au sillage bois— ambr— puissant, sublime les notes d’encens et de cardamome, un cœur séduisant de vétiver et patchouli, et un fond d’essence de cèdre. Lanc— 25 ans après le BOSS Bottled original, BOSS Bottled Elixir réinterpréte une icône olfactive avec une affirmation vigoureuse, promettant une profondeur inégalée et une expérience enveloppante.",
                 notes: [
-                    { title: 'ENCENS & CARDAMOME', text: "L'encens chaud et la cardamome ouvrent le parfum avec une épice rayonnante, de la vitalité et une présence immédiate." },
+                    { title: 'ENCENS & CARDAMOME', text: "L’encens chaud et la cardamome ouvrent le parfum avec une épice rayonnante, de la vitalité et une présence immédiate." },
                     { title: 'VÉTIVER & PATCHOULI', text: 'Un cœur terreux de vétiver et patchouli construit profondeur, structure et une empreinte masculine inoubliable.' },
-                    { title: 'CÈDRE & CISTE ABSOLU', text: "L'essence de cèdre et le ciste absolu créent un fond bois— puissant avec un fort charisme et une intensité durable." }
+                    { title: 'CÈDRE & CISTE ABSOLU', text: "L’essence de cèdre et le ciste absolu créent un fond bois— puissant avec un fort charisme et une intensité durable." }
                 ]
             },
             images: [
@@ -1421,8 +1421,8 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'GUERLAIN',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 78, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Oriental Woody — A spicy and vigorously elegant signature with dark oriental warmth.",
-            longDescription: "The ideal man is a myth. But thanks to Guerlain, his fragrance is a reality with L'Homme Idçal L'Intense. An oriental woody fragrance, spicy and vigorously elegant. Masculine, luxurious, a unique fragrance in a square, faceted bottle entirely lacquered in black. Intensity is the high point of this new interpretation of the Ideal Man.",
+            subtitle: "Men’s fragrance — Oriental Woody — A spicy and vigorously elegant signature with dark oriental warmth.",
+            longDescription: "The ideal man is a myth. But thanks to Guerlain, his fragrance is a reality with L’Homme Idçal L’Intense. An oriental woody fragrance, spicy and vigorously elegant. Masculine, luxurious, a unique fragrance in a square, faceted bottle entirely lacquered in black. Intensity is the high point of this new interpretation of the Ideal Man.",
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -1446,7 +1446,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé Oriental — Une signature épicée et vigoureusement élégante avec une chaleur orientale profonde.",
-                longDescription: "L'homme idéal est un mythe. Mais grâce — Guerlain, son parfum est une réalit— avec L'Homme Idçal L'Intense. Un parfum bois— oriental, épic— et vigoureusement élégant. Masculin, luxueux, un parfum unique dans un flacon carré et facetté entièrement laqu— noir. L'intensité est le point culminant de cette nouvelle interprétation de l'Homme Idçal.",
+                longDescription: "L’homme idéal est un mythe. Mais grâce — Guerlain, son parfum est une réalit— avec L’Homme Idçal L’Intense. Un parfum bois— oriental, épic— et vigoureusement élégant. Masculin, luxueux, un parfum unique dans un flacon carré et facetté entièrement laqu— noir. L’intensité est le point culminant de cette nouvelle interprétation de l’Homme Idçal.",
                 notes: [
                     { title: 'SIGNATURE BOISÉE ORIENTALE', text: 'Un profil bois— oriental profond qui se dégage chaud, raffiné et confiablement masculin.' },
                     { title: 'ÉLÉGANCE ÉPICÉE', text: 'Les facettes épicées apportent énergie et structure — la composition avec une sophistication vigoureuse.' },
@@ -1461,8 +1461,8 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'GUERLAIN',
             gender: 'men',
             fragranceProfile: { longevity: 86, longevityLabel: '8-10h', sillage: 76, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Oriental Woody — A rich and elegant composition with almond, bergamot, spices, plum, woods, tobacco, and leather.",
-            longDescription: "L'homme Idçal Extrême Eau de Parfum by Guerlain. The ideal man is a myth. His cologne, a reality. It's an oriental woody perfume that will keep you looking like an extremely talented man. Your L'Homme Idçal Extrême fragrance in the iconic White Bees Bottle. In 1853, the glassmaker Pochet & du Courval made the bottle, on which is written 'aux abeilles' (for the bees), for the fragrance Eau de Cologne Impériale intended for Empress Eugénie. Its 'tiles', inspired by the dome of the Vendôme column, are adorned with 69 golden bees, symbols of the Empire. The bottle celebrates 160 years and can hold the fragrance of your choice and be personalized with the initials you wish. The color of the perfume and the label seal vary depending on the fragrance. For this new interpretation of L'Homme Idçal, Thierry Wasser, perfumer at Maison Guerlain, has chosen to explore new facets of the almond. The top notes of almond are accompanied by the effervescence of bergamot blended with pink pepper. In the heart notes, cinnamon and plum notes join heliotrope, a floral note with elegant almond accents. Finally, the charm of a woody base note of patchouli and cedar is dressed in tobacco and an intense leather note.",
+            subtitle: "Men’s fragrance — Oriental Woody — A rich and elegant composition with almond, bergamot, spices, plum, woods, tobacco, and leather.",
+            longDescription: "L’homme Idçal Extrême Eau de Parfum by Guerlain. The ideal man is a myth. His cologne, a reality. It's an oriental woody perfume that will keep you looking like an extremely talented man. Your L’Homme Idçal Extrême fragrance in the iconic White Bees Bottle. In 1853, the glassmaker Pochet & du Courval made the bottle, on which is written 'aux abeilles' (for the bees), for the fragrance Eau de Cologne Impériale intended for Empress Eugénie. Its 'tiles', inspired by the dome of the Vendôme column, are adorned with 69 golden bees, symbols of the Empire. The bottle celebrates 160 years and can hold the fragrance of your choice and be personalized with the initials you wish. The color of the perfume and the label seal vary depending on the fragrance. For this new interpretation of L’Homme Idçal, Thierry Wasser, perfumer at Maison Guerlain, has chosen to explore new facets of the almond. The top notes of almond are accompanied by the effervescence of bergamot blended with pink pepper. In the heart notes, cinnamon and plum notes join heliotrope, a floral note with elegant almond accents. Finally, the charm of a woody base note of patchouli and cedar is dressed in tobacco and an intense leather note.",
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -1485,11 +1485,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme — Boisé Oriental — Une composition riche et élégante de l'amande, bergamote, épices, prune, bois, tabac et cuir.",
-                longDescription: "L'homme Idçal Extrême Eau de Parfum de Guerlain. L'homme idéal est un mythe. Son eau de cologne, une réalité. C'est un parfum bois— oriental logiquement contenu dans l'iconique flacon aux Abeilles Blanches. En 1853, le verrier Pochet & du Courval créa ce flacon orné de 69 abeilles dorées, symboles de l'Empire. Pour cette interprétation de L'Homme Idçal, Thierry Wasser a choisi d'explorer de nouvelles facettes de l'amande. Les notes de tête d'amande sont accompagnées de l'effervescence du bergamote mélang— au poivre rose. Au cœur, la cannelle et la prune rejoignent l'héliotrope. Enfin, le charme d'un fond bois— de patchouli et cèdre est enveloppé de tabac et d'une note de cuir intense.",
+                subtitle: "Parfum homme — Boisé Oriental — Une composition riche et élégante de l’amande, bergamote, épices, prune, bois, tabac et cuir.",
+                longDescription: "L’homme Idçal Extrême Eau de Parfum de Guerlain. L’homme idéal est un mythe. Son eau de cologne, une réalité. C'est un parfum bois— oriental logiquement contenu dans l’iconique flacon aux Abeilles Blanches. En 1853, le verrier Pochet & du Courval créa ce flacon orné de 69 abeilles dorées, symboles de l’Empire. Pour cette interprétation de L’Homme Idçal, Thierry Wasser a choisi d’explorer de nouvelles facettes de l’amande. Les notes de tête d’amande sont accompagnées de l’effervescence du bergamote mélang— au poivre rose. Au cœur, la cannelle et la prune rejoignent l’héliotrope. Enfin, le charme d’un fond bois— de patchouli et cèdre est enveloppé de tabac et d’une note de cuir intense.",
                 notes: [
-                    { title: 'AMANDE, BERGAMOTE & POIVRE ROSE', text: 'Une ouverture élégante où l'amande rencontre le bergamote étincelant et le poivre rose vif pour un lift raffiné.' },
-                    { title: 'CANNELLE, PRUNE & HÉLIOTROPE', text: 'Un cœur texturé déépice, fruit et nuances florales d'amande construit chaleur et sophistication.' },
+                    { title: 'AMANDE, BERGAMOTE & POIVRE ROSE', text: 'Une ouverture élégante où l’amande rencontre le bergamote étincelant et le poivre rose vif pour un lift raffiné.' },
+                    { title: 'CANNELLE, PRUNE & HÉLIOTROPE', text: 'Un cœur texturé déépice, fruit et nuances florales d’amande construit chaleur et sophistication.' },
                     { title: 'PATCHOULI, CÈDRE, TABAC & CUIR', text: 'Un fond bois— puissant enveloppé de tabac et de cuir intense laisse un sillage masculin riche.' }
                 ]
             },
@@ -1501,7 +1501,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VERSACE',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 82, sillageLabel: 'Strong', season: 70, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Aromatic Amber — A bold and sensual signature with mint, lemon, green apple, tonka bean, ambroxan, vanilla, and cedar.",
+            subtitle: "Men’s fragrance — Aromatic Amber — A bold and sensual signature with mint, lemon, green apple, tonka bean, ambroxan, vanilla, and cedar.",
             longDescription: 'Versace Eros Eau de Parfum is a bold statement inspired by Greek mythology and the god of love. More than a fragrance, it is the ultimate expression of strength, passion, and irresistible sensuality for the modern, charismatic man. Its fresh and vibrant opening combines mint leaves, the liveliness of Italian lemon and the fruity sweetness of green apple, instantly awakening the senses. At its heart, warm and enveloping notes of tonka bean, geranium and the modern accord of ambroxan create a subtle balance between elegance and modernity. The deep and seductive base combines Madagascar vanilla, earthy vetiver, aromatic oakmoss, and the nobility of Virginia cedar and Atlas cedar, giving this fragrance exceptional intensity and longevity. Let Versace Eros Eau de Parfum accompany you in every conquest with power and sensuality. Dare to be unforgettable.',
             sizes: [
                 'Decante 10ML',
@@ -1526,7 +1526,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Ambré Aromatique — Un statement audacieux et sensuel avec menthe, citron, pomme verte, fève tonka, ambroxan, vanille et cèdre.",
-                longDescription: "Versace Eros Eau de Parfum est une déclaration audacieuse inspirée de la mythologie grecque et du dieu de l'amour. Plus qu'un parfum, c'est l'expression ultime de la force, de la passion et de la sensualité irrésistible pour l'homme moderne et charismatique. Son ouverture fraîche et vibrante combine feuilles de menthe, citron d'Italie et pomme verte, éveillant instantanément les sens. Au cœur, la fève tonka chaude, le géranium et l'accord moderne d'ambroxan créent un subtil équilibre. Le fond profond et séducteur combine la vanille de Madagascar, le vétiver, la mousse de chêne et les cèdres, offrant une intensité et une longue durabilité exceptionnelles.",
+                longDescription: "Versace Eros Eau de Parfum est une déclaration audacieuse inspirée de la mythologie grecque et du dieu de l’amour. Plus qu'un parfum, c'est l’expression ultime de la force, de la passion et de la sensualité irrésistible pour l’homme moderne et charismatique. Son ouverture fraîche et vibrante combine feuilles de menthe, citron d’Italie et pomme verte, éveillant instantanément les sens. Au cœur, la fève tonka chaude, le géranium et l’accord moderne d’ambroxan créent un subtil équilibre. Le fond profond et séducteur combine la vanille de Madagascar, le vétiver, la mousse de chêne et les cèdres, offrant une intensité et une longue durabilité exceptionnelles.",
                 notes: [
                     { title: 'MENTHE, CITRON & POMME VERTE', text: 'Une ouverture lumineuse et énergétique où la menthe fraîche rencontre les agrumes étincelants et la fraîcheur fruitée.' },
                     { title: 'FÈVE TONKA, GÉRANIUM & AMBROXAN', text: 'Un cœur moderne et chaud qui équilibre élégance aromatique et profondeur sensuelle avec une diffusion douce.' },
@@ -1541,7 +1541,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VERSACE',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 82, sillageLabel: 'Strong', season: 65, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Woody Spicy — A fiery and refined signature with citrus, black pepper, rosemary, rose, woods, tonka bean, and vanilla.",
+            subtitle: "Men’s fragrance — Woody Spicy — A fiery and refined signature with citrus, black pepper, rosemary, rose, woods, tonka bean, and vanilla.",
             longDescription: 'Versace Eros Flame is an intense and emotional olfactory statement. Designed for the strong, passionate, and self-assured man, this fragrance plays with the most powerful contrasts: warmth and coolness, sweetness and spice, light and shadow. From the opening, a vibrant citrus burst of Italian lemon, mandarin and bitter orange blends with black pepper from Madagascar and wild rosemary, creating a fiery yet refreshing start. The heart reveals a masculine floral elegance with geranium, rose and a subtle spicy note of pepperwood. Finally, the base notes envelop with warmth and depth: Texas cedar, Haitian vetiver, patchouli coeur, sandalwood, tonka bean, vanilla and oakmoss, leaving a sensual, refined and long-lasting trail. Love intensely. Live with fire. Dare to feel with Eros Flame.',
             sizes: [
                 'Decante 10ML',
@@ -1566,9 +1566,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé épic— — Une signature ardente et raffinée avec agrumes, poivre noir, romarin, rose, bois, fève tonka et vanille.",
-                longDescription: "Versace Eros Flame est une déclaration olfactive intense et émotionnelle. Conçu pour l'homme fort, passionné et assuré, ce parfum joue avec les contrastes les plus puissants. Dés l'ouverture, un éclat d'agrumes d'un citron, mandarine et orange amère se mélange au poivre noir et au romarin sauvage, créant un début ardent et rafraîchissant. Le cœur révîle une élégance florale masculine avec géranium, rose et poivrette. Enfin, les notes de fond enveloppent de chaleur et de profondeur : cèdre du Texas, vétiver d'Haïti, patchouli, santal, fève tonka, vanille et mousse de chêne.",
+                longDescription: "Versace Eros Flame est une déclaration olfactive intense et émotionnelle. Conçu pour l’homme fort, passionné et assuré, ce parfum joue avec les contrastes les plus puissants. Dés l’ouverture, un éclat d’agrumes d’un citron, mandarine et orange amère se mélange au poivre noir et au romarin sauvage, créant un début ardent et rafraîchissant. Le cœur révîle une élégance florale masculine avec géranium, rose et poivrette. Enfin, les notes de fond enveloppent de chaleur et de profondeur : cèdre du Texas, vétiver d’Haïti, patchouli, santal, fève tonka, vanille et mousse de chêne.",
                 notes: [
-                    { title: 'AGRUMES, POIVRE & ROMARIN', text: 'Une ouverture vive d'agrumes, poivre noir et romarin crée une première impression ardente et rafraîchissante.' },
+                    { title: 'AGRUMES, POIVRE & ROMARIN', text: 'Une ouverture vive d’agrumes, poivre noir et romarin crée une première impression ardente et rafraîchissante.' },
                     { title: 'GÉRANIUM, ROSE & POIVRETTE', text: 'Le cœur équilibre élégance florale masculine avec une touche épicée subtile et une sophistication moderne.' },
                     { title: 'CÈDRE, VÉTIVER, TONKA & VANILLE', text: 'Les bois chauds, la fève tonka, la vanille et la mousse de chêne construisent un sillage sensuel, profond et durable.' }
                 ]
@@ -1581,7 +1581,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VERSACE',
             gender: 'men',
             fragranceProfile: { longevity: 84, longevityLabel: '8-10h', sillage: 76, sillageLabel: 'Strong', season: 90, seasonLabel: 'Spring/Summer' },
-            subtitle: "Men's fragrance — Citrus Aromatic — A vibrant fresh signature with bergamot, blood orange, lime, grapefruit, pink pepper, blackcurrant, amber, patchouli, and musk.",
+            subtitle: "Men’s fragrance — Citrus Aromatic — A vibrant fresh signature with bergamot, blood orange, lime, grapefruit, pink pepper, blackcurrant, amber, patchouli, and musk.",
             longDescription: "VERSACE presents Eros Energy Eau de Parfum, a masculine fragrance that conveys vitality from its first application. VERSACE Eros Energy Eau de Parfum stands out for its citrus composition, with top notes of Italian bergamot, blood orange, Peruvian lime, green mandarin, grapefruit, and Italian lemon. The heart of VERSACE Eros Energy Eau de Parfum incorporates Orpur CO2 pink pepper and blackcurrant, contrasted with Ambrofix white amber. This aromatic combination in Eros Energy Eau de Parfum reflects the dynamic character of VERSACE. At the base, Orpur Indonesian patchouli, musk, and oakmoss add depth. The Eros Energy Eau de Parfum bottle maintains VERSACE's distinctive style, with translucent yellow glass and details like the engraved Medusa. Eros Energy Eau de Parfum is designed for those seeking a fragrance that combines freshness, contrast, and longevity, in keeping with VERSACE's identity.",
             sizes: [
                 'Decante 10ML',
@@ -1606,10 +1606,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Aromatique Citrus — Une signature fraîche et vibrante avec bergamote, orange sanguine, citron vert, pamplemousse, poivre rose, cassis, ambre et patchouli.",
-                longDescription: "VERSACE présente Eros Energy Eau de Parfum, un parfum masculin qui transmet la vitalité dès la première application. Il se distingue par sa composition citruse, avec en tête le bergamote d'Italie, l'orange sanguine, la lime péruvienne, la mandarine verte, le pamplemousse et le citron d'Italie. Le cœur incorpore le poivre rose Orpur CO2 et le cassis, contrastant avec l'ambre blanc Ambrofix. En fond, le patchouli d'Indonésie Orpur, le musc et la mousse de chêne ajoutent de la profondeur.",
+                longDescription: "VERSACE présente Eros Energy Eau de Parfum, un parfum masculin qui transmet la vitalité dès la première application. Il se distingue par sa composition citruse, avec en tête le bergamote d’Italie, l’orange sanguine, la lime péruvienne, la mandarine verte, le pamplemousse et le citron d’Italie. Le cœur incorpore le poivre rose Orpur CO2 et le cassis, contrastant avec l’ambre blanc Ambrofix. En fond, le patchouli d’Indonésie Orpur, le musc et la mousse de chêne ajoutent de la profondeur.",
                 notes: [
                     { title: 'BERGAMOTE, ORANGE SANGUINE & CITRON VERT', text: 'Une ouverture agrumée et vive apporte luminosité, fraîcheur et une énergie énergétique immédiate.' },
-                    { title: 'POIVRE ROSE, CASSIS & AMBRE BLANC', text: 'Le cœur mélange éclat épicé, contraste fruit— et douceur d'ambre moderne.' },
+                    { title: 'POIVRE ROSE, CASSIS & AMBRE BLANC', text: 'Le cœur mélange éclat épicé, contraste fruit— et douceur d’ambre moderne.' },
                     { title: 'PATCHOULI, MUSC & MOUSSE DE CHÊNE', text: 'Un fond propre mais profond de patchouli, musc et mousse de chêne ajoute structure et caractère durable.' }
                 ]
             },
@@ -1622,7 +1622,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VERSACE',
             gender: 'men',
             fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 74, sillageLabel: 'Moderate', season: 85, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Fresh Woody — A Mediterranean signature with bergamot, grapefruit, saffron, musk, and elegant woody depth.",
+            subtitle: "Men’s fragrance — Fresh Woody — A Mediterranean signature with bergamot, grapefruit, saffron, musk, and elegant woody depth.",
             longDescription: 'Dylan Blue Pour Homme Eau de Toilette is a fresh, woody fragrance that captures the sensual and powerful essence of the Mediterranean. Designed for the strong, decisive, and modern man who seeks to highlight his unique personality, this olfactory composition combines fresh and spicy notes with exceptional longevity. The opening is refreshed with vibrant citrus notes of bergamot and grapefruit, enriched with unusual spicy nuances of saffron and an intense base of musk. The result is a masculine and elegant scent, ideal for any occasion. The rectangular glass bottle, in a deep blue with golden details, reflects the sophistication and strength of this fragrance. Experience the freshness and power of the Mediterranean with Dylan Blue Pour Homme. A fragrance that defines your style and character.',
             sizes: [
                 'Decante 10ML',
@@ -1647,7 +1647,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé Frais — Une signature méditerranéenne avec bergamote, pamplemousse, safran, musc et une profondeur boisée élégante.",
-                longDescription: "Dylan Blue Pour Homme Eau de Toilette est un parfum frais et bois— qui capture l'essence sensuelle et puissante de la Méditerranée. Conçu pour l'homme fort, décis— et moderne qui souhaite mettre en valeur sa personalité unique, cette composition combine des notes fraîches et épicées avec une longue durabilité exceptionnelle. L'ouverture se rafraîchit avec des notes d'agrumes vibrantes de bergamote et pamplemousse, enrichies de nuances épicées inhabituelles de safran et d'un fond intense de musc.",
+                longDescription: "Dylan Blue Pour Homme Eau de Toilette est un parfum frais et bois— qui capture l’essence sensuelle et puissante de la Méditerranée. Conçu pour l’homme fort, décis— et moderne qui souhaite mettre en valeur sa personalité unique, cette composition combine des notes fraîches et épicées avec une longue durabilité exceptionnelle. L’ouverture se rafraîchit avec des notes d’agrumes vibrantes de bergamote et pamplemousse, enrichies de nuances épicées inhabituelles de safran et d’un fond intense de musc.",
                 notes: [
                     { title: 'BERGAMOTE & PAMPLEMOUSSE', text: 'Une ouverture agrumée et nette apporte fraîcheur méditerranéenne, luminosité et énergie immédiate.' },
                     { title: 'SAFRAN ÉPICÉ', text: 'Une nuance épicée inhabituelle ajoute texture et caractère masculin élégant au cœur.' },
@@ -1662,8 +1662,8 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'RABANNE',
             gender: 'men',
             fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 80, sillageLabel: 'Strong', season: 70, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Salty Woody — An iconic signature blending leather audacity with floral and spicy touches.",
-            longDescription: "One Million Eau de Parfum is Paco Rabanne's star men's fragrance that has been a sensation since its launch. It's a recognized scent that leaves its mark wherever it goes. The sensuality and freshness it conveys are part of its unique identity, which possesses the audacity of the most authentic leather and the duality between a salty and woody impulse with floral and spicy touches. The One Million EDP gift set will allow you to offer the gift with the intense aroma that everyone desires.",
+            subtitle: "Men’s fragrance — Salty Woody — An iconic signature blending leather audacity with floral and spicy touches.",
+            longDescription: "One Million Eau de Parfum is Paco Rabanne's star men’s fragrance that has been a sensation since its launch. It's a recognized scent that leaves its mark wherever it goes. The sensuality and freshness it conveys are part of its unique identity, which possesses the audacity of the most authentic leather and the duality between a salty and woody impulse with floral and spicy touches. The One Million EDP gift set will allow you to offer the gift with the intense aroma that everyone desires.",
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -1686,8 +1686,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme — Salé Boisé — Une signature iconique mêlant l'audace du cuir avec des touches florales et épicées.",
-                longDescription: "One Million Eau de Parfum est le parfum phare pour homme de Paco Rabanne, une sensation depuis son lancement. Un parfum reconnu qui marque partout où il passe. La sensualité et la fraîcheur qu'il dégage font partie de son identité unique, qui possède l'audace du cuir le plus authentique et la dualité entre une impulsion salée et boisée avec des touches florales et épicées.",
+                subtitle: "Parfum homme — Salé Boisé — Une signature iconique mêlant l’audace du cuir avec des touches florales et épicées.",
+                longDescription: "One Million Eau de Parfum est le parfum phare pour homme de Paco Rabanne, une sensation depuis son lancement. Un parfum reconnu qui marque partout où il passe. La sensualité et la fraîcheur qu'il dégage font partie de son identité unique, qui possède l’audace du cuir le plus authentique et la dualité entre une impulsion salée et boisée avec des touches florales et épicées.",
                 notes: [
                     { title: 'CUIR AUTHENTIQUE', text: 'Un caractère affirmé de cuir donne au parfum son identité audacieuse et irremplaçable.' },
                     { title: 'IMPULSION SALÉE BOISÉE', text: 'Un contraste sensuel salé-bois— crée fraîcheur, profondeur et intensité moderne.' },
@@ -1704,7 +1704,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'RABANNE',
             gender: 'men',
             fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 85, sillageLabel: 'Very Strong', season: 65, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Aromatic Amber — The pinnacle of One Million intensity with rose, tonka bean, woods, and black vanilla.",
+            subtitle: "Men’s fragrance — Aromatic Amber — The pinnacle of One Million intensity with rose, tonka bean, woods, and black vanilla.",
             longDescription: "Discover One Million Elixir , the pinnacle of Million 's intensity , a new fragrance guided by the desire for supreme quality. A blend of carefully selected ingredients from around the world, celebrating the craftsmanship of our perfumers and the fusion of the finest raw materials. A new dimension, incredibly intense, undoubtedly One Million. The iconic One Million gold ingot , bolder and more sophisticated than ever. A handcrafted jewel that reflects the different facets of the fragrance. A symbol of a new strength: elegant, intense, and enigmatic. The exquisitely crafted bottle encapsulates the soul and essence of One Million , the infinite depth of this new olfactory creation. The pinnacle of absolute intensity. One Million Elixir , more intense than ever, to captivate you. Hand-selected ingredients—Turkish rose, osmanthus, and wild-harvested tonka beanémake this masterpiece stand out for its exceptional quality. The deeply sensual Davana liqueur vibrates with the touch of soft woods and black vanilla seeds; supreme sensuality meets absolute, long-lasting power.",
             sizes: [
                 'Decante 10ML',
@@ -1728,8 +1728,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme — Ambré Aromatique — L'apogée de l'intensité One Million avec rose, fève tonka, bois et vanille noire.",
-                longDescription: "Découvrez One Million Elixir, l'apogée de l'intensité Million, un nouveau parfum guidé par le désir de qualité suprême. Un mélange d'ingrédients soigneusement sélectionnés du monde entier, célébrant le savoir-faire de nos parfumeurs. Le lingot d'or iconique One Million, plus audacieux et sophistiqué que jamais. Des ingrédients sélectionnés — la main, rose turque, osmanthus et fève tonka récoltée sauvagement, font de ce chef-d'œuvre une pièce de qualité exceptionnelle. La liqueur de davana profondément sensuelle vibre au contact des bois doux et des graines de vanille noire.",
+                subtitle: "Parfum homme — Ambré Aromatique — L’apogée de l’intensité One Million avec rose, fève tonka, bois et vanille noire.",
+                longDescription: "Découvrez One Million Elixir, l’apogée de l’intensité Million, un nouveau parfum guidé par le désir de qualité suprême. Un mélange d’ingrédients soigneusement sélectionnés du monde entier, célébrant le savoir-faire de nos parfumeurs. Le lingot d’or iconique One Million, plus audacieux et sophistiqué que jamais. Des ingrédients sélectionnés — la main, rose turque, osmanthus et fève tonka récoltée sauvagement, font de ce chef-d'œuvre une pièce de qualité exceptionnelle. La liqueur de davana profondément sensuelle vibre au contact des bois doux et des graines de vanille noire.",
                 notes: [
                     { title: 'ROSE TURQUE & OSMANTHUS', text: 'Un duo floral raffiné qui apporte richesse, élégance et profondeur exceptionnelle.' },
                     { title: 'LIQUEUR DE DAVANA', text: 'Un cœur profondément sensuel avec une texture chaude — la liqueur de davana et un caractère magnétique.' },
@@ -1747,7 +1747,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'GIVENCHY',
             gender: 'men',
             fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 70, sillageLabel: 'Moderate', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Amber Woody — Narcissus and vetiver enhanced by leather, tobacco, warm spices, and Tasuki vanilla.",
+            subtitle: "Men’s fragrance — Amber Woody — Narcissus and vetiver enhanced by leather, tobacco, warm spices, and Tasuki vanilla.",
             longDescription: "Givenchy presents Gentleman Society Eau de Parfum Ambree , a captivating blend of vibrant narcissus flower and a quartet of vetivers, enhanced by rich notes of leather and tobacco. A COMPOSITION MADE WITH EXCEPTIONAL RAW MATERIALS Gentleman Society Ambree reinvents the iconic woody signature of Gentleman Society with a new amber facet, enriched with the balsamic notes of Tasuki vanilla. Expressing Givenchy's unique savoir-faire, Gentleman Society Eau de Parfum Ambree unveils a sophisticated accord of narcissus blossom and a quartet of vetiver, intensified by the boldness of leather and tobacco. Warm spices blend harmoniously with the richness of Tasuki vanilla from Madagascar, combined with a balsam essence, creating an elegant and deeply captivating trail. AN ICONIC BOTTLE WITH GOLDEN REFLECTIONS The iconic Gentleman Society bottle, entirely lacquered in black, is adorned with a refined gold crest, a symbol of elegance and prestige. Combining opulence and timelessness, it invites the expression of sensuality and individuality. GENTLEMAN SOCIETY. MORE THAN A PLACE, A STATE OF MIND For this new chapter, Gentleman Society expands around the English composer Benjamin Clementine. His elegance and undeniable charisma resonate as an invitation to join a community that is bolder and more inclusive than ever.",
             sizes: [
                 'Decante 10ML',
@@ -1772,9 +1772,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Ambré Boisé — Narcisse et vétiver élevés par le cuir, le tabac, les épices chaudes et la vanille Tasuki.",
-                longDescription: "Givenchy présente Gentleman Society Eau de Parfum Ambrée, un mélange captivant de narcisse éclatant et d'un quatuor de vétivers, enrichi de riches notes de cuir et tabac. Gentleman Society Ambrée réinvente la signature boisée iconique de Gentleman Society avec une nouvelle facette ambrée, enrichie des notes balsamiques de la vanille Tasuki. Les épices chaudes se mélangent harmonieusement — la richesse de la vanille Tasuki de Madagascar, créant un sillage élégant et profondément captivant.",
+                longDescription: "Givenchy présente Gentleman Society Eau de Parfum Ambrée, un mélange captivant de narcisse éclatant et d’un quatuor de vétivers, enrichi de riches notes de cuir et tabac. Gentleman Society Ambrée réinvente la signature boisée iconique de Gentleman Society avec une nouvelle facette ambrée, enrichie des notes balsamiques de la vanille Tasuki. Les épices chaudes se mélangent harmonieusement — la richesse de la vanille Tasuki de Madagascar, créant un sillage élégant et profondément captivant.",
                 notes: [
-                    { title: 'NARCISSE & VÉTIVER', text: 'Un cœur sophistiqué floral-bois— construit autour du narcisse et d'un quatuor de vétivers.' },
+                    { title: 'NARCISSE & VÉTIVER', text: 'Un cœur sophistiqué floral-bois— construit autour du narcisse et d’un quatuor de vétivers.' },
                     { title: 'CUIR & TABAC', text: 'Le cuir riche et le tabac ajoutent une texture audacieuse et un caractère masculin profond.' },
                     { title: 'VANILLE TASUKI', text: 'Les épices chaudes et la vanille balsamique de Madagascar créent un sillage ambr— élégant.' }
                 ]
@@ -1790,8 +1790,8 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'GIVENCHY',
             gender: 'men',
             fragranceProfile: { longevity: 75, longevityLabel: '6-8h', sillage: 70, sillageLabel: 'Moderate', season: 85, seasonLabel: 'Spring/Summer' },
-            subtitle: "Men's fragrance — Floral Woody — Sage, narcissus, vetiver quartet, woods, and vanilla in a bold Givenchy signature.",
-            longDescription: "Givenchy redefines the figure of the gentleman with Gentleman Society Eau de Parfum, a bold statement for men who reinvent their own rules and always act for a better world. Wild narcissus blossom blends with a mysterious woody accord to create a fragrance of rare sophistication. An expression of Givenchy's unique savoir-faire, Gentleman Society is composed of exceptional raw materials. From the very first spritz, the fresh, aromatic notes of sage blend with wild narcissus absolute harvested in the heart of France. This unique floral facet is contrasted by the dark intensity of a quartet of vetiver from Uruguay and Madagascar. Essences of cedarwood and sandalwood melt into an addictive and sensual vanilla, leaving a truly memorable trail. A deep and multifaceted men's Eau de Parfum. The couture design reimagines the iconic Gentleman bottle with pure elegance. Like a coat of arms, a reinterpreted 4G monogram in gleaming silver metal adorns the intense black lacquer. The bottle contains 15% recycled glass.",
+            subtitle: "Men’s fragrance — Floral Woody — Sage, narcissus, vetiver quartet, woods, and vanilla in a bold Givenchy signature.",
+            longDescription: "Givenchy redefines the figure of the gentleman with Gentleman Society Eau de Parfum, a bold statement for men who reinvent their own rules and always act for a better world. Wild narcissus blossom blends with a mysterious woody accord to create a fragrance of rare sophistication. An expression of Givenchy's unique savoir-faire, Gentleman Society is composed of exceptional raw materials. From the very first spritz, the fresh, aromatic notes of sage blend with wild narcissus absolute harvested in the heart of France. This unique floral facet is contrasted by the dark intensity of a quartet of vetiver from Uruguay and Madagascar. Essences of cedarwood and sandalwood melt into an addictive and sensual vanilla, leaving a truly memorable trail. A deep and multifaceted men’s Eau de Parfum. The couture design reimagines the iconic Gentleman bottle with pure elegance. Like a coat of arms, a reinterpreted 4G monogram in gleaming silver metal adorns the intense black lacquer. The bottle contains 15% recycled glass.",
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -1815,10 +1815,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Floral Boisé — Sauge, narcisse, quatuor de vétiver, bois et vanille dans une signature audacieuse Givenchy.",
-                longDescription: "Givenchy redéfinit la figure du gentleman avec Gentleman Society Eau de Parfum, une déclaration audacieuse pour les hommes qui réinventent leurs propres règles. Le narcisse sauvage absolu récolt— au cœur de la France se mélange — un accord bois— mystérieux pour créer un parfum d'une sophistication rare. Dés le premier jet, les notes fraîches et aromatiques de sauge se mélangent au narcisse absolu sauvage. Cette facette florale unique est contrastée par l'intensité sombre d'un quatuor de vétiver d'Uruguay et de Madagascar. Les essences de cèdre et de santal fondent dans une vanille addictive et sensuelle.",
+                longDescription: "Givenchy redéfinit la figure du gentleman avec Gentleman Society Eau de Parfum, une déclaration audacieuse pour les hommes qui réinventent leurs propres règles. Le narcisse sauvage absolu récolt— au cœur de la France se mélange — un accord bois— mystérieux pour créer un parfum d’une sophistication rare. Dés le premier jet, les notes fraîches et aromatiques de sauge se mélangent au narcisse absolu sauvage. Cette facette florale unique est contrastée par l’intensité sombre d’un quatuor de vétiver d’Uruguay et de Madagascar. Les essences de cèdre et de santal fondent dans une vanille addictive et sensuelle.",
                 notes: [
                     { title: 'SAUGE & NARCISSE', text: 'Une ouverture aromatique au narcisse sauvage qui apporte fraîcheur et sophistication florale.' },
-                    { title: 'QUATUOR DE VÉTIVER', text: 'Le vétiver d'Uruguay et de Madagascar ajoute un cœur bois— sombre, texturé et moderne.' },
+                    { title: 'QUATUOR DE VÉTIVER', text: 'Le vétiver d’Uruguay et de Madagascar ajoute un cœur bois— sombre, texturé et moderne.' },
                     { title: 'CÈDRE, SANTAL & VANILLE', text: 'Les bois et la vanille sensuelle laissent un sillage profond, mémorable et multifacettes.' }
                 ]
             },
@@ -1833,7 +1833,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'GIVENCHY',
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 80, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Woody Aromatic — A daring blend of clary sage, iced mint, coffee, vetiver, woods, patchouli, and vanilla.",
+            subtitle: "Men’s fragrance — Woody Aromatic — A daring blend of clary sage, iced mint, coffee, vetiver, woods, patchouli, and vanilla.",
             longDescription: "GIVENCHY Gentleman Society Extreme EDP With its magnetic masculine signature, Gentleman Society Eau de Parfum Extreme embodies a new attitude within the Gentleman Society. Tailor-made for the most daring, this addictive fragrance is designed for the man who pushes his limits in an eternal quest for excellence, breaking barriers and fearlessly leaping into the unknown. Crafted with Givenchy's expertise, Gentleman Society Eau de Parfum Extreme is composed of exceptional raw materials, carefully selected for their outstanding olfactory qualities. The top notes of Clary Sage are enhanced by Iced Mint and Nutmeg, creating an immediate aromatic and spicy touch. The mysterious heart reveals the original Gentleman Society accord, a blend of Narcissus Absolute and Iris Concrete, contrasted by the characteristic quartet of Vetiver. From this accord emerges a powerful and unexpected Coffee Absolute Extract. Combined with Mint Essence, this Coffee note becomes icy, revealing a new and intensely textured facet. At the base, the woody notes of Cedar and Sandalwood are deepened with Patchouli Essence and Vanilla Absolute, perfecting this profound signature. Inspired by haute couture, the iconic design of the Gentleman bottle is reinterpreted with a striking new look. The deep black lacquered finish is enhanced with Givenchy's symbol: the 4G logo, engraved like a crest, in a new metallic bronze finish. The Gentleman Society Eau de Parfum Extreme bottle is made with 15% recycled glass. Gentleman Society. It's not a place, it's a state of mind. Join us.",
             sizes: [
                 'Decante 10ML',
@@ -1858,10 +1858,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé Aromatique — Un mélange audacieux de sauge sclarée, menthe glacée, café, vétiver, bois, patchouli et vanille.",
-                longDescription: "Gentleman Society Extreme EDP de GIVENCHY incarne une nouvelle attitude avec sa signature masculine magnétique. Sur mesure pour les plus audacieux, ce parfum addictif est conéu pour l'homme qui repousse ses limites. Les notes de tête de sauge sclarée sont rehussées par la menthe glacée et la muscade. Le cœur mystérieux révîle l'accord Gentleman Society original, un mélange de narcisse absolu et d'iris concrète, contrasté par le quatuor de vétiver. émerge alors un puissant extrait de café absolu combiné — l'essence de menthe, créant une facette glacée et intensement texturée. En fond, cèdre, santal, patchouli et vanille absolue.",
+                longDescription: "Gentleman Society Extreme EDP de GIVENCHY incarne une nouvelle attitude avec sa signature masculine magnétique. Sur mesure pour les plus audacieux, ce parfum addictif est conéu pour l’homme qui repousse ses limites. Les notes de tête de sauge sclarée sont rehussées par la menthe glacée et la muscade. Le cœur mystérieux révîle l’accord Gentleman Society original, un mélange de narcisse absolu et d’iris concrète, contrasté par le quatuor de vétiver. émerge alors un puissant extrait de café absolu combiné — l’essence de menthe, créant une facette glacée et intensement texturée. En fond, cèdre, santal, patchouli et vanille absolue.",
                 notes: [
                     { title: 'SAUGE SCLARÉE, MENTHE & MUSCADE', text: 'Une ouverture aromatique-épicée avec une fraîcheur glacée et une intensité immédiate.' },
-                    { title: 'NARCISSE, IRIS & VÉTIVER', text: 'Le cœur signature de Gentleman Society gagne en profondeur grâce — l'élégance florale et — la puissance fumée du vétiver.' },
+                    { title: 'NARCISSE, IRIS & VÉTIVER', text: 'Le cœur signature de Gentleman Society gagne en profondeur grâce — l’élégance florale et — la puissance fumée du vétiver.' },
                     { title: 'CAFÉ, BOIS & VANILLE', text: 'Le café glacé rencontre cèdre, santal, patchouli et vanille pour une finition audacieuse et durable.' }
                 ]
             },
@@ -1876,7 +1876,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'GIVENCHY',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 75, sillageLabel: 'Strong', season: 50, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Amber Woody — Airy iris and amber woods elevated by natural whisky absolute.",
+            subtitle: "Men’s fragrance — Amber Woody — Airy iris and amber woods elevated by natural whisky absolute.",
             longDescription: "Timeless elegance is reinvented with Givenchy Gentleman Reserve Privee , a fragrance that celebrates the sensuality of amber wood and the sophistication of airy iris . This olfactory duo creates an addictive and enveloping composition , a symbol of contemporary masculine refinement. At the heart of this creation beats the absolute of natural whisky , made in Grasse from aromatic barley from a Scottish distillery , for a warm, intense and unique character. Its bottle with clean lines and amber finish , inspired by the silhouette of an elegant flask, reflects the perfect fusion between tradition and modernity. Gentleman Reserve Privee Eau de Parfum is an ode to the sophisticated, self-assured, and profoundly authentic man. A fragrance that embodies the art of French savoir-faire combined with the essence of Scotch whisky: intense, refined, and eternally elegant .",
             sizes: [
                 'Decante 10ML',
@@ -1901,10 +1901,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Ambré Boisé — Un iris aérien et des bois ambrés sublimés par le whisky absolu naturel.",
-                longDescription: "L'élégance intemporelle est réinventée avec Givenchy Gentleman Réserve Privée, un parfum qui célèbre la sensualité du bois ambr— et la sophistication de l'iris aérien. Au cœur de cette création bat l'absolu de whisky naturel, fabriqué en Grasse — partir d'orge aromatique d'une distillerie écossaise, pour un caractère chaud, intense et unique. Son flacon aux lignes épurées et — la finition ambrée, inspiré de la silhouette d'une élégante flasque, reflète la fusion parfaite entre tradition et modernité.",
+                longDescription: "L’élégance intemporelle est réinventée avec Givenchy Gentleman Réserve Privée, un parfum qui célèbre la sensualité du bois ambr— et la sophistication de l’iris aérien. Au cœur de cette création bat l’absolu de whisky naturel, fabriqué en Grasse — partir d’orge aromatique d’une distillerie écossaise, pour un caractère chaud, intense et unique. Son flacon aux lignes épurées et — la finition ambrée, inspiré de la silhouette d’une élégante flasque, reflète la fusion parfaite entre tradition et modernité.",
                 notes: [
-                    { title: 'IRIS AÉRIEN', text: 'Un accord d'iris raffiné apporte élégance et sophistication masculine contemporaine.' },
-                    { title: 'WHISKY ABSOLU', text: "Le whisky absolu naturel d'orge aromatique ajoute chaleur, intensité et unicité." },
+                    { title: 'IRIS AÉRIEN', text: 'Un accord d’iris raffiné apporte élégance et sophistication masculine contemporaine.' },
+                    { title: 'WHISKY ABSOLU', text: "Le whisky absolu naturel d’orge aromatique ajoute chaleur, intensité et unicité." },
                     { title: 'BOIS AMBRÉS', text: 'Des bois ambrés sensuels créent un sillage enveloppant et élégant durable.' }
                 ]
             },
@@ -1919,8 +1919,8 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'JEAN PAUL GAULTIER',
             gender: 'men',
             fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 78, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Amber Fruity Woody — Black cherry, patchouli, and tonka bean in a rich, provocative elixir.",
-            longDescription: "In first class on the Gaultier train, Scandal Pour Homme Elixir reigns supreme, with its amber, fruity, and woody fragrance. Its provocative black cherry and audacious patchouli assert themselves with elegance, while its tonka bean reveals a scandalous sweetness. Who wouldn't dream of encountering it? Behind the red velvet and the closed door of its exclusive case, only the most audacious can enter and succumb to the silver gradient of its amber-hued bottle. Crowned with intensity and excess, everything about it is temptation. Excess dominates, pleasures multiply. The passengers are outraged? So much the better! That's exactly what it's after.",
+            subtitle: "Men’s fragrance — Amber Fruity Woody — Black cherry, patchouli, and tonka bean in a rich, provocative elixir.",
+            longDescription: "In first class on the Gaultier train, Scandal Pour Homme Elixir reigns supreme, with its amber, fruity, and woody fragrance. Its provocative black cherry and audacious patchouli assert themselves with elegance, while its tonka bean reveals a scandalous sweetness. Who wouldn’t dream of encountering it? Behind the red velvet and the closed door of its exclusive case, only the most audacious can enter and succumb to the silver gradient of its amber-hued bottle. Crowned with intensity and excess, everything about it is temptation. Excess dominates, pleasures multiply. The passengers are outraged? So much the better! That's exactly what it's after.",
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -1944,9 +1944,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Ambré Fruité Boisé — Cerise noire, patchouli et fève tonka dans un Élixir riche et provocateur.",
-                longDescription: "En première classe dans le train Gaultier, Scandal Pour Homme Elixir règne en maître, avec son parfum ambré, fruit— et boisé. Sa cerise noire provocatrice et son patchouli audacieux s'affirment avec élégance, tandis que sa fève tonka révîle une douceur scandaleuse. Derrière le velours rouge et la porte fermée de son étui exclusif, seuls les plus audacieux peuvent entrer et succomber au dégradé argenté de son flacon aux reflets ambrés.",
+                longDescription: "En première classe dans le train Gaultier, Scandal Pour Homme Elixir règne en maître, avec son parfum ambré, fruit— et boisé. Sa cerise noire provocatrice et son patchouli audacieux s’affirment avec élégance, tandis que sa fève tonka révîle une douceur scandaleuse. Derrière le velours rouge et la porte fermée de son étui exclusif, seuls les plus audacieux peuvent entrer et succomber au dégradé argenté de son flacon aux reflets ambrés.",
                 notes: [
-                    { title: 'CERISE NOIRE', text: 'Une ouverture fruitée provocatrice qui commande immédiatement l'attention.' },
+                    { title: 'CERISE NOIRE', text: 'Une ouverture fruitée provocatrice qui commande immédiatement l’attention.' },
                     { title: 'PATCHOULI', text: 'Un patchouli audacieux ajoute profondeur, élégance et caractère affirmé.' },
                     { title: 'FÈVE TONKA', text: 'Une douceur lisse et scandaleuse qui persiste avec une intensité addictive.' }
                 ]
@@ -1994,7 +1994,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'AZZARO',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 85, sillageLabel: 'Very Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Spicy Amber — A bold signature with red ginger, woods, and bourbon vanilla.",
+            subtitle: "Men’s fragrance — Spicy Amber — A bold signature with red ginger, woods, and bourbon vanilla.",
             longDescription: 'Azzaro The Most Wanted Parfum is an intense, magnetic scent built for confident evenings. It opens with a burst of red ginger, settles into warm woods, and finishes with a rich bourbon vanilla trail that feels smooth and addictive. Crafted for modern allure, it leaves a strong, long-lasting impression without overpowering the room.',
             sizes: [
                 'Decante 10ML',
@@ -2019,7 +2019,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — épic— Ambré — Une signature audacieuse avec gingembre rouge, bois et vanille bourbon.",
-                longDescription: "Azzaro The Most Wanted Parfum est un parfum intense et magnétique conéu pour les soirées intenses. Il s'ouvre sur un éclat de gingembre rouge, se pose sur des bois chauds, et se termine par un sillage riche de vanille bourbon qui se sent lisse et addictif. Conçu pour un charme moderne, il laisse une impression forte et durable sans être envahissant.",
+                longDescription: "Azzaro The Most Wanted Parfum est un parfum intense et magnétique conéu pour les soirées intenses. Il s’ouvre sur un éclat de gingembre rouge, se pose sur des bois chauds, et se termine par un sillage riche de vanille bourbon qui se sent lisse et addictif. Conçu pour un charme moderne, il laisse une impression forte et durable sans être envahissant.",
                 notes: [
                     { title: 'GINGEMBRE ROUGE', text: 'Une ouverture vibrante qui ajoute énergie et une touche épicée invitante.' },
                     { title: 'CŒUR BOISÉ', text: 'Les bois chauds créent de la profondeur et une signature masculine et confiante.' },
@@ -2036,7 +2036,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'AZZARO',
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 82, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Spicy Woody — A powerful signature with cardamom, caramel, and amber woods.",
+            subtitle: "Men’s fragrance — Spicy Woody — A powerful signature with cardamom, caramel, and amber woods.",
             longDescription: 'Azzaro The Most Wanted Eau de Parfum Intense is an irresistibly bold fragrance that pushes the boundaries of seduction. The composition opens with a fiery burst of cardamom and toffee apple, instantly commanding attention with its sweet-spicy magnetism. At the heart, an addictive caramel accord intertwines with rich amber, creating a warm and enveloping aura that feels both luxurious and provocative. The base reveals deep woody notes of vetiver and cedarwood, grounded by creamy vanilla and tonka bean for a smooth, skin-hugging finish that lingers for hours. Housed in a bold black-and-gold bottle, this intense interpretation is designed for the man who leaves a lasting impression wherever he goes.',
             sizes: [
                 'Decante 10ML',
@@ -2061,7 +2061,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — épic— Boisé — Une signature puissante avec cardamome, caramel et bois ambrés.",
-                longDescription: "Azzaro The Most Wanted Eau de Parfum Intense est un parfum irrésistiblement audacieux qui repousse les limites de la séduction. La composition s'ouvre sur un éclat ardent de cardamome et de pomme caramélisée, captant immédiatement l'attention par son magnétisme sucré-épicé. Au cœur, un accord de caramel addictif s'entrelace avec un ambre riche, créant une aura chaleureuse et enveloppante — la fois luxueuse et provocante. Le fond révîle des notes boisées profondes de vétiver et de cèdre, ancrées par de la vanille crémeuse et de la fève tonka pour une finition lisse et durable.",
+                longDescription: "Azzaro The Most Wanted Eau de Parfum Intense est un parfum irrésistiblement audacieux qui repousse les limites de la séduction. La composition s’ouvre sur un éclat ardent de cardamome et de pomme caramélisée, captant immédiatement l’attention par son magnétisme sucré-épicé. Au cœur, un accord de caramel addictif s’entrelace avec un ambre riche, créant une aura chaleureuse et enveloppante — la fois luxueuse et provocante. Le fond révîle des notes boisées profondes de vétiver et de cèdre, ancrées par de la vanille crémeuse et de la fève tonka pour une finition lisse et durable.",
                 notes: [
                     { title: 'CARDAMOME', text: 'Une ouverture chaude et épicée qui se sent vibrante et confiante.' },
                     { title: 'ACCORD CARAMEL', text: 'Un cœur doux et addictif qui ajoute de la profondeur et de la richesse.' },
@@ -2078,7 +2078,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'AZZARO',
             gender: 'men',
             fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 80, sillageLabel: 'Strong', season: 50, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Amber Gourmand — A rich, smooth elixir with warm woods and vanilla.",
+            subtitle: "Men’s fragrance — Amber Gourmand — A rich, smooth elixir with warm woods and vanilla.",
             longDescription: 'Azzaro Forever Wanted Elixir Eau de Parfum is a dark and opulent elixir crafted for the man who commands the night. The fragrance opens with an intoxicating blend of ginger and lavender, setting the stage with spicy aromatic energy. At its heart, a rich fusion of Tonka bean and praline creates an irresistible gourmand warmth, complemented by the smoky allure of incense. The base is a masterclass in seduction, where dark woods, amber resin, and a velvety vanilla accord merge into a deeply sensual and long-lasting trail. This is a fragrance for unforgettable evenings, encased in a sleek bottle that reflects its magnetic, sophisticated character.',
             sizes: [
                 'Decante 10ML',
@@ -2103,7 +2103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Ambré Gourmand — Un Élixir riche et lisse avec des bois chauds et de la vanille.",
-                longDescription: "Azzaro Forever Wanted Elixir Eau de Parfum est un Élixir sombre et opulent conéu pour l'homme qui domine la nuit. Le parfum s'ouvre sur un mélange enivrant de gingembre et de lavande, créant une énergie aromatique épicée. Au cœur, une fusion riche de fève tonka et de praliné crée une chaleur gourmande irrésistible, rehaussée par l'allure fumée de l'encens. Le fond est un chef-d'œuvre de séduction, où bois sombres, résine d'ambre et un accord vanill— velouté fusionnent en un sillage profond et durable.",
+                longDescription: "Azzaro Forever Wanted Elixir Eau de Parfum est un Élixir sombre et opulent conéu pour l’homme qui domine la nuit. Le parfum s’ouvre sur un mélange enivrant de gingembre et de lavande, créant une énergie aromatique épicée. Au cœur, une fusion riche de fève tonka et de praliné crée une chaleur gourmande irrésistible, rehaussée par l’allure fumée de l’encens. Le fond est un chef-d'œuvre de séduction, où bois sombres, résine d’ambre et un accord vanill— velouté fusionnent en un sillage profond et durable.",
                 notes: [
                     { title: 'OUVERTURE FRAÎCHE', text: 'Un début lumineux qui se feel propre et invitant.' },
                     { title: 'CŒUR AMBRÉ', text: 'Un noyau chaud et résineux qui ajoute de la richesse.' },
@@ -2120,7 +2120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VALENTINO',
             gender: 'women',
             fragranceProfile: { longevity: 78, longevityLabel: '7-9h', sillage: 72, sillageLabel: 'Moderate', season: 75, seasonLabel: 'All Year' },
-            subtitle: "Women's fragrance — Floral Woody — A luminous blend of jasmine, blackcurrant, and warm woods.",
+            subtitle: "Women’s fragrance — Floral Woody — A luminous blend of jasmine, blackcurrant, and warm woods.",
             longDescription: 'Valentino Donna Born in Roma Eau de Parfum is a contemporary floral masterpiece inspired by the spirit of Roman couture. The fragrance opens with a burst of juicy blackcurrant buds and pink peppercorn, creating an immediate sense of vibrant femininity. At its heart, a lavish bouquet of jasmine grandiflorum blossoms alongside a velvety Bulgarian rose accord, evoking the elegance of an Italian garden at dusk. The base unfolds with creamy Bourbon vanilla, cashmeran, and warm guaiac wood, wrapping the skin in a sensual and sophisticated trail. Housed in the iconic Valentino Rockstud bottle, this fragrance celebrates the bold, modern woman who embraces her individuality with grace and confidence.',
             sizes: [
                 'Decante 10ML',
@@ -2145,7 +2145,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum femme — Floral Boisé — Un mélange lumineux de jasmin, cassis et bois chauds.",
-                longDescription: "Valentino Donna Born in Roma Eau de Parfum est un chef-d'œuvre floral contemporain inspiré par l'esprit de la couture romaine. Le parfum s'ouvre sur un éclat de bourgeons de cassis juteux et de poivre rose, créant une féminit— vibrante. Au cœur, un bouquet somptueux de jasmin grandiflorum s'épanouit aux côtés d'un accord de rose bulgare velouté, évoquant l'élégance d'un jardin italien au crépuscule. Le fond se déploie avec de la vanille Bourbon crémeuse, du cashmeran et du bois de gaïac chaud, enveloppant la peau d'un sillage sensuel et sophistiqué.",
+                longDescription: "Valentino Donna Born in Roma Eau de Parfum est un chef-d'œuvre floral contemporain inspiré par l’esprit de la couture romaine. Le parfum s’ouvre sur un éclat de bourgeons de cassis juteux et de poivre rose, créant une féminit— vibrante. Au cœur, un bouquet somptueux de jasmin grandiflorum s’épanouit aux côtés d’un accord de rose bulgare velouté, évoquant l’élégance d’un jardin italien au crépuscule. Le fond se déploie avec de la vanille Bourbon crémeuse, du cashmeran et du bois de gaïac chaud, enveloppant la peau d’un sillage sensuel et sophistiqué.",
                 notes: [
                     { title: 'CASSIS', text: 'Une ouverture juteuse et vibrante avec une touche moderne.' },
                     { title: 'JASMIN', text: 'Un cœur floral riche qui se felt élégant et rayonnant.' },
@@ -2162,7 +2162,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VALENTINO',
             gender: 'men',
             fragranceProfile: { longevity: 65, longevityLabel: '5-7h', sillage: 60, sillageLabel: 'Moderate', season: 90, seasonLabel: 'Spring/Summer' },
-            subtitle: "Men's fragrance — Fruity Woody — A fresh and vibrant blend with apple, sage, and tobacco.",
+            subtitle: "Men’s fragrance — Fruity Woody — A fresh and vibrant blend with apple, sage, and tobacco.",
             longDescription: 'Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette is a sun-drenched, spirited fragrance that captures the vibrant energy of a Mediterranean summer. The composition opens with a crisp burst of red apple and zesty bergamot, instantly lifting the mood with fresh, fruity brightness. At the heart, aromatic clary sage and warm ginger flower create an intriguing contrast between herbal coolness and spicy warmth. The fragrance settles into a refined base of smooth Virginia tobacco, sandalwood, and a hint of vanilla, providing a comfortable yet distinctive trail. Presented in the iconic Rockstud bottle with a coral accent, this scent is made for the modern man who lives life with color and confidence.',
             sizes: [
                 { label: 'Decante 10ML', priceText: '110 DH' },
@@ -2187,7 +2187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Fruité Boisé — Un mélange frais et vibrant avec pomme, sauge et tabac.",
-                longDescription: "Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette est un parfum ensoleillé et spiriteux qui capture l'énergie vibrante d'un ét— méditerranéen. La composition s'ouvre sur un éclat croquant de pomme rouge et de bergamote pétillante. Au cœur, la sauge sclarée aromatique et la fleur de gingembre chaude créent un contraste intrigant entre fraîcheur herbale et chaleur épicée. Le fond s'installe sur du tabac Virginia lisse, du bois de santal et une touche de vanille pour un sillage confortable et distinctif.",
+                longDescription: "Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette est un parfum ensoleillé et spiriteux qui capture l’énergie vibrante d’un ét— méditerranéen. La composition s’ouvre sur un éclat croquant de pomme rouge et de bergamote pétillante. Au cœur, la sauge sclarée aromatique et la fleur de gingembre chaude créent un contraste intrigant entre fraîcheur herbale et chaleur épicée. Le fond s’installe sur du tabac Virginia lisse, du bois de santal et une touche de vanille pour un sillage confortable et distinctif.",
                 notes: [
                     { title: 'POMME ROUGE', text: 'Une ouverture croquante et juteusse qui se felt vibrante et fraîche.' },
                     { title: 'SAUGE', text: 'Un cœur aromatique qui ajoute une texture propre et herbace.' },
@@ -2204,7 +2204,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VALENTINO',
             gender: 'men',
             fragranceProfile: { longevity: 70, longevityLabel: '6-8h', sillage: 68, sillageLabel: 'Moderate', season: 80, seasonLabel: 'Spring/Summer' },
-            subtitle: "Men's fragrance — Woody Aromatic — A bold, modern scent with fresh spice and woods.",
+            subtitle: "Men’s fragrance — Woody Aromatic — A bold, modern scent with fresh spice and woods.",
             longDescription: 'Valentino Born in Roma Extradose Eau de Toilette is a vibrant and energizing interpretation of the Born in Roma line, crafted for the bold, modern man. The fragrance opens with an invigorating burst of mandarin and green apple, delivering fresh, sparkling energy from the first spray. At its heart, an aromatic blend of lavender and juniper berry creates a crisp, herbal sophistication that feels both clean and magnetic. The base brings together creamy cashmeran, warm amber, and a subtle smoky accord that gives the scent lasting depth and an addictive, skin-close trail. This extra dose of intensity makes it the perfect signature for the man who brings energy and confidence to every moment.',
             sizes: [
                 'Decante 10ML',
@@ -2229,7 +2229,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé Aromatique — Un parfum moderne et audacieux avec épice fraîche et bois.",
-                longDescription: "Valentino Born in Roma Extradose Eau de Toilette est une interprétation vibrante et énergisante de la ligne Born in Roma. Le parfum s'ouvre sur un éclat revigorant de mandarine et de pomme verte, délivrant une énergie fraîche et pétillante. Au cœur, un mélange aromatique de lavande et de baie de genévrier crée une sophistication herbale — la fois propre et magnétique. Le fond rassemble du cashmeran crémeux, de l'ambre chaud et un subtil accord fumé pour une profondeur durable et un sillage addictif proche de la peau.",
+                longDescription: "Valentino Born in Roma Extradose Eau de Toilette est une interprétation vibrante et énergisante de la ligne Born in Roma. Le parfum s’ouvre sur un éclat revigorant de mandarine et de pomme verte, délivrant une énergie fraîche et pétillante. Au cœur, un mélange aromatique de lavande et de baie de genévrier crée une sophistication herbale — la fois propre et magnétique. Le fond rassemble du cashmeran crémeux, de l’ambre chaud et un subtil accord fumé pour une profondeur durable et un sillage addictif proche de la peau.",
                 notes: [
                     { title: 'ÉPICE FRAÎCHE', text: 'Une ouverture vivante avec une touche propre et moderne.' },
                     { title: 'CŒUR AROMATIQUE', text: 'Un noyau aromatique raffiné qui se felt crisp et masculin.' },
@@ -2246,8 +2246,8 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'DIOR',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-12h', sillage: 85, sillageLabel: 'Very Strong', season: 90, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Woody Amber — A desert-inspired trail with vanilla and ambery woods.",
-            longDescription: "Sauvage Eau de Parfum by Dior embodies the wildest, most elegant, and most audacious masculine spirit. A fragrance inspired by desert sunsets, it spreads its exoticism and sensuality through an unforgettable olfactory trail that leaves its mark wherever it goes. The warmth of the desert blends with the coolness of the night, highlighting exceptional notes such as vanilla from Papua New Guinea and a woody, ambery base. The result is a long-lasting, unique, and unforgettable men's fragrance. The 100ml format of Dior's Sauvage Eau de Parfum is refillable and is part of the House of Dior's sustainable plan to reuse bottles.",
+            subtitle: "Men’s fragrance — Woody Amber — A desert-inspired trail with vanilla and ambery woods.",
+            longDescription: "Sauvage Eau de Parfum by Dior embodies the wildest, most elegant, and most audacious masculine spirit. A fragrance inspired by desert sunsets, it spreads its exoticism and sensuality through an unforgettable olfactory trail that leaves its mark wherever it goes. The warmth of the desert blends with the coolness of the night, highlighting exceptional notes such as vanilla from Papua New Guinea and a woody, ambery base. The result is a long-lasting, unique, and unforgettable men’s fragrance. The 100ml format of Dior's Sauvage Eau de Parfum is refillable and is part of the House of Dior's sustainable plan to reuse bottles.",
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2271,7 +2271,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé Ambré — Un sillage inspiré du désert avec de la vanille et des bois ambrés.",
-                longDescription: "Sauvage Eau de Parfum de Dior incarne l'esprit masculin le plus sauvage, le plus élégant et le plus audacieux. Un parfum inspiré des couchers de soleil du désert, qui répand son exotisme et sa sensualité — travers un sillage olfactif inoubliable qui laisse sa marque partout où il passe. La chaleur du désert se mélange — la fraîcheur de la nuit, mettant en valeur des notes exceptionnelles comme la vanille de Papouasie-Nouvelle-Guinée et un fond bois— ambré. Le résultat est un parfum masculin durable, unique et inoubliable.",
+                longDescription: "Sauvage Eau de Parfum de Dior incarne l’esprit masculin le plus sauvage, le plus élégant et le plus audacieux. Un parfum inspiré des couchers de soleil du désert, qui répand son exotisme et sa sensualité — travers un sillage olfactif inoubliable qui laisse sa marque partout où il passe. La chaleur du désert se mélange — la fraîcheur de la nuit, mettant en valeur des notes exceptionnelles comme la vanille de Papouasie-Nouvelle-Guinée et un fond bois— ambré. Le résultat est un parfum masculin durable, unique et inoubliable.",
                 notes: [
                     { title: 'ACCORD COUCHER DE SOLEIL DÉSERT', text: 'Une ouverture chaude et rayonnante inspirée de la chaleur du désert au crépuscule.' },
                     { title: 'VANILLE DE PAPOUASIE', text: 'La vanille crémeuse de Papouasie-Nouvelle-Guinée ajoute profondeur et sensualité.' },
@@ -2287,7 +2287,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'DIOR',
             gender: 'men',
             fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 70, sillageLabel: 'Moderate', season: 65, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Iris Woody — A refined, elegant scent with iris, amber, and cedar.",
+            subtitle: "Men’s fragrance — Iris Woody — A refined, elegant scent with iris, amber, and cedar.",
             longDescription: 'Dior Homme Intense Eau de Parfum is a masterfully refined fragrance that elevates the art of masculine elegance. The composition opens with a delicate interplay of lavender and pear blossom, offering a fresh yet sophisticated first impression. At its heart lies the noble iris absolute, the most precious ingredient in perfumery, which unfolds with a rich, powdery softness that feels both luxurious and intimate. The depth of Haitian vetiver and Virginia cedar in the base adds a warm, woody masculinity, while a sensual veil of amber and musk creates an enveloping trail of quiet confidence. Designed by François Demachy, this is a fragrance for the man who appreciates understated luxury and refined sensuality.',
             sizes: [
                 'Decante 10ML',
@@ -2312,7 +2312,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Iris Boisé — Un parfum raffiné et élégant avec iris, ambre et cèdre.",
-                longDescription: "Dior Homme Intense Eau de Parfum est un parfum magistralement raffiné qui élève l'art de l'élégance masculine. La composition s'ouvre sur un jeu délicat de lavande et de fleur de poirier, offrant une première impression fraîche et sophistiquée. En son cœur se trouve l'absolu d'iris noble, l'ingrédient le plus précieux de la parfumerie, qui se déploie avec une douceur poudrée riche et intime. La profondeur du vétiver haïtien et du cèdre de Virginie en fond ajoute une masculinité boisée chaleureuse, tandis qu'un voile sensuel d'ambre et de musc crée un sillage enveloppant de confiance discrète.",
+                longDescription: "Dior Homme Intense Eau de Parfum est un parfum magistralement raffiné qui élève l’art de l’élégance masculine. La composition s’ouvre sur un jeu délicat de lavande et de fleur de poirier, offrant une première impression fraîche et sophistiquée. En son cœur se trouve l’absolu d’iris noble, l’ingrédient le plus précieux de la parfumerie, qui se déploie avec une douceur poudrée riche et intime. La profondeur du vétiver haïtien et du cèdre de Virginie en fond ajoute une masculinité boisée chaleureuse, tandis qu'un voile sensuel d’ambre et de musc crée un sillage enveloppant de confiance discrète.",
                 notes: [
                     { title: 'IRIS', text: 'Une signature douce et poudrée qui se felt luxueuse.' },
                     { title: 'AMBRE', text: 'Un noyau chaud qui ajoute profondeur et richesse.' },
@@ -2329,7 +2329,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VALENTINO',
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 78, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Amber Woody — A deep, intense blend with vanilla and smoky woods.",
+            subtitle: "Men’s fragrance — Amber Woody — A deep, intense blend with vanilla and smoky woods.",
             longDescription: 'Valentino Born in Roma Uomo Intense Eau de Parfum is a deeper, more seductive evolution of the original, designed for the man who lives with passion and intensity. The fragrance opens with a luminous burst of green mandarin and saffron, creating an immediately captivating and warm impression. At its heart, the richness of Virginia tobacco leaf intertwines with aromatic lavender, building a complex and masculine core that feels both refined and powerful. The base is a sumptuous blend of Bourbon vanilla, dark vetiver, and benzoin resin, creating an addictive, long-lasting trail that wraps the skin in warmth and sensuality. Housed in the signature Rockstud bottle with a deep, dark finish, this fragrance embodies the ultimate expression of Italian confidence.',
             sizes: [
                 'Decante 10ML',
@@ -2354,10 +2354,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Ambré Boisé — Un mélange profond et intense avec vanille et bois fumés.",
-                longDescription: "Valentino Born in Roma Uomo Intense Eau de Parfum est une évolution plus profonde et séduisante de l'original, conçue pour l'homme qui vit avec passion et intensité. Le parfum s'ouvre sur un éclat lumineux de mandarine verte et de safran. Au cœur, la richesse de la feuille de tabac Virginia s'entrelace avec de la lavande aromatique, construisant un noyau complexe et masculin. Le fond est un mélange somptueux de vanille Bourbon, de vétiver sombre et de résine de benjoin, créant un sillage addictif et durable qui enveloppe la peau de chaleur et de sensualité.",
+                longDescription: "Valentino Born in Roma Uomo Intense Eau de Parfum est une évolution plus profonde et séduisante de l’original, conçue pour l’homme qui vit avec passion et intensité. Le parfum s’ouvre sur un éclat lumineux de mandarine verte et de safran. Au cœur, la richesse de la feuille de tabac Virginia s’entrelace avec de la lavande aromatique, construisant un noyau complexe et masculin. Le fond est un mélange somptueux de vanille Bourbon, de vétiver sombre et de résine de benjoin, créant un sillage addictif et durable qui enveloppe la peau de chaleur et de sensualité.",
                 notes: [
                     { title: 'VANILLE', text: 'Une ouverture riche qui se felt lisse et addictive.' },
-                    { title: 'LAVANDE', text: 'Un cœur aromatique raffiné pour l'équilibre.' },
+                    { title: 'LAVANDE', text: 'Un cœur aromatique raffiné pour l’équilibre.' },
                     { title: 'BOIS FUMÉS', text: 'Un fond profond qui laisse un sillage durable.' }
                 ]
             },
@@ -2371,7 +2371,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VALENTINO',
             gender: 'women',
             fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 75, sillageLabel: 'Strong', season: 70, seasonLabel: 'All Year' },
-            subtitle: "Women's fragrance — Amber Floral — A sensual blend of jasmine and vanilla with warm woods.",
+            subtitle: "Women’s fragrance — Amber Floral — A sensual blend of jasmine and vanilla with warm woods.",
             longDescription: 'Valentino Born in Roma Donna Intense Eau de Parfum is a captivating intensification of the original, crafted for the woman who radiates confidence and sensuality. The fragrance opens with a luminous blend of yellow tangerine and pink peppercorn, creating a sparkling yet mysterious first impression. At its heart, a sumptuous bouquet of jasmine sambac and Turkish rose absolute reveals layers of opulent femininity, enriched by a heady tuberose accord. The base is a masterful composition of dark vanilla, Benzoin Siam resin, and warm guaiac wood, creating a rich, enveloping trail that stays close to the skin for hours. This deeper interpretation of the Born in Roma line celebrates the woman who embraces her power with elegance and allure.',
             sizes: [
                 'Decante 10ML',
@@ -2396,7 +2396,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum femme — Floral Ambré — Un mélange sensuel de jasmin et vanille avec des bois chauds.",
-                longDescription: "Valentino Born in Roma Donna Intense Eau de Parfum est une intensification captivante de l'original, créée pour la femme qui rayonne de confiance et de sensualité. Le parfum s'ouvre sur un mélange lumineux de mandarine jaune et de poivre rose, créant une première impression pétillante et mystérieuse. Au cœur, un bouquet somptueux de jasmin sambac et d'absolu de rose turque révîle des couches de féminit— opulente, enrichies par un accord de tubéreuse enivrant. Le fond est une composition magistrale de vanille sombre, de résine de benjoin du Siam et de bois de gaïac chaud, créant un sillage riche et enveloppant.",
+                longDescription: "Valentino Born in Roma Donna Intense Eau de Parfum est une intensification captivante de l’original, créée pour la femme qui rayonne de confiance et de sensualité. Le parfum s’ouvre sur un mélange lumineux de mandarine jaune et de poivre rose, créant une première impression pétillante et mystérieuse. Au cœur, un bouquet somptueux de jasmin sambac et d’absolu de rose turque révîle des couches de féminit— opulente, enrichies par un accord de tubéreuse enivrant. Le fond est une composition magistrale de vanille sombre, de résine de benjoin du Siam et de bois de gaïac chaud, créant un sillage riche et enveloppant.",
                 notes: [
                     { title: 'JASMIN', text: 'Un cœur floral rayonnant avec une élégance raffinée.' },
                     { title: 'VANILLE', text: 'Une signature chaude et lisse qui se felt sensuelle.' },
@@ -2413,7 +2413,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VALENTINO',
             gender: 'men',
             fragranceProfile: { longevity: 72, longevityLabel: '6-8h', sillage: 65, sillageLabel: 'Moderate', season: 75, seasonLabel: 'Spring/Summer' },
-            subtitle: "Men's fragrance — Woody Aromatic — A clean and vibrant blend of citrus, sage, and woods.",
+            subtitle: "Men’s fragrance — Woody Aromatic — A clean and vibrant blend of citrus, sage, and woods.",
             longDescription: 'Valentino Uomo Born in Roma Eau de Toilette is a vibrant and contemporary masculine fragrance that captures the spirit of modern Rome. The composition opens with a bright cascade of ginger and bergamot, delivering an energizing freshness that awakens the senses. At its heart, clary sage and mineral accord bring a refined aromatic complexity that feels both clean and characterful. The base reveals a smooth foundation of Virginia cedar, vetiver, and a warm skin musk accord, creating a comfortable yet distinctive trail that lasts through the day. Presented in the iconic Valentino Rockstud bottle, this versatile scent is the perfect daily companion for the man who blends tradition with effortless modern style.',
             sizes: [
                 'Decante 10ML',
@@ -2438,7 +2438,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé Aromatique — Un mélange propre et vibrant de citrus, sauge et bois.",
-                longDescription: "Valentino Uomo Born in Roma Eau de Toilette est un parfum masculin vibrant et contemporain qui capture l'esprit de la Rome moderne. La composition s'ouvre sur une cascade lumineuse de gingembre et de bergamote, délivrant une fraîcheur énergisante. Au cœur, la sauge sclarée et un accord minéral apportent une complexité aromatique raffinée, — la fois propre et caractérielle. Le fond révîle une base lisse de cèdre de Virginie, de vétiver et d'un accord musqué chaud, créant un sillage confortable et distinctif qui dure toute la journée.",
+                longDescription: "Valentino Uomo Born in Roma Eau de Toilette est un parfum masculin vibrant et contemporain qui capture l’esprit de la Rome moderne. La composition s’ouvre sur une cascade lumineuse de gingembre et de bergamote, délivrant une fraîcheur énergisante. Au cœur, la sauge sclarée et un accord minéral apportent une complexité aromatique raffinée, — la fois propre et caractérielle. Le fond révîle une base lisse de cèdre de Virginie, de vétiver et d’un accord musqué chaud, créant un sillage confortable et distinctif qui dure toute la journée.",
                 notes: [
                     { title: 'AGRUMES', text: 'Une ouverture lumineuse qui se felt fraîche et moderne.' },
                     { title: 'SAUGE', text: 'Un cœur aromatique qui ajoute une texture propre.' },
@@ -2455,8 +2455,8 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VALENTINO',
             gender: 'men',
             fragranceProfile: { longevity: 78, longevityLabel: '7-9h', sillage: 70, sillageLabel: 'Moderate', season: 85, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Spicy Aromatic — A balanced daily signature with cardamom, lavandin, amber woods, and coconut accord.",
-            longDescription: "Uomo Born In Roma Purple Melancholia Eau de Toilette is a men's fragrance created by VALENTINO for those looking for a scent with a defined identity and everyday use. From the first application, it presents a striking cardamom opening, delivering a spicy yet controlled sensation. In its evolution, it incorporates lavandin at its heart, creating a balance between aromatic notes and a consistent structure. The base combines amber woods with a coconut accord that provides continuity and longevity on the skin. Presented in the signature Rockstud bottle, this Born In Roma fragrance is designed for the man who seeks to express his personal style through a balanced and contemporary scent.",
+            subtitle: "Men’s fragrance — Spicy Aromatic — A balanced daily signature with cardamom, lavandin, amber woods, and coconut accord.",
+            longDescription: "Uomo Born In Roma Purple Melancholia Eau de Toilette is a men’s fragrance created by VALENTINO for those looking for a scent with a defined identity and everyday use. From the first application, it presents a striking cardamom opening, delivering a spicy yet controlled sensation. In its evolution, it incorporates lavandin at its heart, creating a balance between aromatic notes and a consistent structure. The base combines amber woods with a coconut accord that provides continuity and longevity on the skin. Presented in the signature Rockstud bottle, this Born In Roma fragrance is designed for the man who seeks to express his personal style through a balanced and contemporary scent.",
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2480,11 +2480,11 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Aromatique épic— — Une signature quotidienne équilibrée avec cardamome, lavandin, bois ambrés et accord coco.",
-                longDescription: "Uomo Born In Roma Purple Melancholia Eau de Toilette est un parfum pour homme cré— par VALENTINO pour ceux qui recherchent une senteur — l'identité affirmée et adaptée au quotidien. Dés la première vaporisation, il dévoile une ouverture marquée par la cardamome, offrant une sensation épicée mais maîtrisée. En son cœur, le lavandin apporte un équilibre entre les notes aromatiques et une structure constante. Le fond associe des bois ambrés — un accord coco qui prolonge la continuité et la tenue sur la peau. Présent— dans le flacon Rockstud emblématique, ce parfum Born In Roma est pensé pour l'homme qui souhaite exprimer son style personnel — travers une senteur équilibrée et contemporaine.",
+                longDescription: "Uomo Born In Roma Purple Melancholia Eau de Toilette est un parfum pour homme cré— par VALENTINO pour ceux qui recherchent une senteur — l’identité affirmée et adaptée au quotidien. Dés la première vaporisation, il dévoile une ouverture marquée par la cardamome, offrant une sensation épicée mais maîtrisée. En son cœur, le lavandin apporte un équilibre entre les notes aromatiques et une structure constante. Le fond associe des bois ambrés — un accord coco qui prolonge la continuité et la tenue sur la peau. Présent— dans le flacon Rockstud emblématique, ce parfum Born In Roma est pensé pour l’homme qui souhaite exprimer son style personnel — travers une senteur équilibrée et contemporaine.",
                 notes: [
                     { title: 'OUVERTURE CARDAMOME', text: 'Une ouverture épicée au caractère affirmé mais maîtrisé, moderne dès la première vaporisation.' },
                     { title: 'CŒUR DE LAVANDIN', text: 'Le lavandin apporte un équilibre aromatique et maintient une structure nette pour un usage quotidien.' },
-                    { title: 'BOIS AMBRÉS & ACCORD COCO', text: 'Les bois ambrés et l'accord coco créent une continuité douce et une bonne tenue sur la peau.' }
+                    { title: 'BOIS AMBRÉS & ACCORD COCO', text: 'Les bois ambrés et l’accord coco créent une continuité douce et une bonne tenue sur la peau.' }
                 ]
             },
             images: [
@@ -2520,10 +2520,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Fougère Oriental — Une signature audacieuse et addictive avec poivre rose, vanille et bois ambrés.",
-                longDescription: "Ce parfum fougère addictif dévoile des notes de poivre rose, vanille et accord bois— ambré. Il reflète la personalité de l'homme moderne — la recherche d'un parfum puissant pour illuminer son histoire d'amour intense. Ce parfum masculin intense révîle des notes de cœur de vanille chaudes et des accords boisés ambrés vibrants, contrastant par des touches épicées de poivre rose. Parce qu'ensemble, nous sommes plus forts.",
+                longDescription: "Ce parfum fougère addictif dévoile des notes de poivre rose, vanille et accord bois— ambré. Il reflète la personalité de l’homme moderne — la recherche d’un parfum puissant pour illuminer son histoire d’amour intense. Ce parfum masculin intense révîle des notes de cœur de vanille chaudes et des accords boisés ambrés vibrants, contrastant par des touches épicées de poivre rose. Parce qu'ensemble, nous sommes plus forts.",
                 notes: [
-                    { title: 'ESSENCE DE POIVRE ROSE', text: "L'essence épicée du poivre rose se mélange — un accord addictif de marron caramilisé pour une touche d'originalité." },
-                    { title: 'ESSENCE DE VANILLE', text: "L'intensité de la vanille, combinée — un accord suède légèrement tané, crée une signature olfactive sensuelle et unique." },
+                    { title: 'ESSENCE DE POIVRE ROSE', text: "L’essence épicée du poivre rose se mélange — un accord addictif de marron caramilisé pour une touche d’originalité." },
+                    { title: 'ESSENCE DE VANILLE', text: "L’intensité de la vanille, combinée — un accord suède légèrement tané, crée une signature olfactive sensuelle et unique." },
                     { title: 'ACCORDS BOISÉS AMBRÉS', text: 'Les accords boisés ambrés, renforcés par des notes de vétiver Bourbon, amplifient la facette vibrante du sillage.' }
                 ]
             },
@@ -2563,7 +2563,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Ambré Fum— — Une signature plus intense et puissante avec cerise, mandarine, lavande, vanille et bois ambrés.",
-                longDescription: "Stronger With You Powerfully réinvente la signature iconique de la collection avec une dimension plus intense, fumée et puissante. Cette Eau de Parfum s'ouvre sur un éclat vibrant de cerise et mandarine juteuse. Au cœur, la lavande Diva se mélange — un accord d'épice aromatique. En fond, le parfum dévoile une base sensuelle de vanille crémeuse, de bois ambrés fumés et l'accord iconique de marron caramilisé, la signature de la ligne Stronger With You. Le résultat : un sillage enveloppant et addictif qui dure jusqu'— 24 heures.",
+                longDescription: "Stronger With You Powerfully réinvente la signature iconique de la collection avec une dimension plus intense, fumée et puissante. Cette Eau de Parfum s’ouvre sur un éclat vibrant de cerise et mandarine juteuse. Au cœur, la lavande Diva se mélange — un accord d’épice aromatique. En fond, le parfum dévoile une base sensuelle de vanille crémeuse, de bois ambrés fumés et l’accord iconique de marron caramilisé, la signature de la ligne Stronger With You. Le résultat : un sillage enveloppant et addictif qui dure jusqu'— 24 heures.",
                 notes: [
                     { title: 'CERISE & MANDARINE', text: 'Une ouverture vibrante et juteçase où la cerise rencontre la mandarine lumineuse pour une énergie instantanée et une chaleur lumineuse.' },
                     { title: 'LAVANDE DIVA & ÉPICE', text: 'Un cœur aromatique mêlant lavande Diva et accord déépice raffiné pour équilibrer fraîcheur et intensité.' },
@@ -2604,12 +2604,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme — Fougère Oriental — Une signature irrésistible et addictive inspirée par la puissance de l'amour absolu.",
-                longDescription: "Stronger With You Absolutely de Giorgio Armani est un parfum Fougère Oriental pour homme. Ce parfum est inspiré par la puissance de l'amour absolu. Un parfum masculin raffiné propulsé par le nouvel accord de rhum addictif. Le flacon — la laque intensité fumée enveloppe le parfum iconique Emporio Armani You, apportant la force absolue du parfum au flacon. Stronger With You Absolutely Parfum est un parfum masculin irrésistible.",
+                subtitle: "Parfum homme — Fougère Oriental — Une signature irrésistible et addictive inspirée par la puissance de l’amour absolu.",
+                longDescription: "Stronger With You Absolutely de Giorgio Armani est un parfum Fougère Oriental pour homme. Ce parfum est inspiré par la puissance de l’amour absolu. Un parfum masculin raffiné propulsé par le nouvel accord de rhum addictif. Le flacon — la laque intensité fumée enveloppe le parfum iconique Emporio Armani You, apportant la force absolue du parfum au flacon. Stronger With You Absolutely Parfum est un parfum masculin irrésistible.",
                 notes: [
                     { title: 'PROFIL FOUGÈRE ORIENTAL', text: 'Une composition Fougère Oriental élégante construite pour une signature masculine moderne.' },
                     { title: 'ACCORD DE RHUM ADDICTIF', text: 'Un accord de rhum raffiné et addictif apporte chaleur, profondeur et caractère sensuel.' },
-                    { title: 'FLACON LAQUÉ FUMÉ', text: "Le flacon iconique Emporio Armani est habillé d'une laque fumée intense pour exprimer la force absolue." }
+                    { title: 'FLACON LAQUÉ FUMÉ', text: "Le flacon iconique Emporio Armani est habillé d’une laque fumée intense pour exprimer la force absolue." }
                 ]
             },
             images: [
@@ -2648,10 +2648,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé Propre — Une signature YSL durable et puissante de lavande, cèdre, géranium et encens.",
-                longDescription: "Yves Saint Laurent Y Eau de Parfum pour Homme. Plongez dans l'essence de l'homme créatif et accompli avec Y Le Parfum, le parfum qui capture l'esprit de YSL incarné par le légendaire ambassadeur Lenny Kravitz. Ce parfum incarne la philosophie \'Pourquoi pas ?\'  qui définit l'homme YSL. Y Le Parfum, la nouvelle interprétation de la franchise iconique Y, est un parfum bois— propre et durable qui célèbre la réalisation de soi. Cette version, plus intense et puissante que jamais, fusionne la lavande française vibrante avec la force du cèdre américain.",
+                longDescription: "Yves Saint Laurent Y Eau de Parfum pour Homme. Plongez dans l’essence de l’homme créatif et accompli avec Y Le Parfum, le parfum qui capture l’esprit de YSL incarné par le légendaire ambassadeur Lenny Kravitz. Ce parfum incarne la philosophie \'Pourquoi pas ?\'  qui définit l’homme YSL. Y Le Parfum, la nouvelle interprétation de la franchise iconique Y, est un parfum bois— propre et durable qui célèbre la réalisation de soi. Cette version, plus intense et puissante que jamais, fusionne la lavande française vibrante avec la force du cèdre américain.",
                 notes: [
                     { title: 'LAVANDE FRANÇAISE', text: 'Une ouverture aromatique vibrante conduite par la lavande française raffinée pour un début propre et énergétique.' },
-                    { title: 'GÉRANIUM & ENCENS', text: 'La touche mentholée du géranium rencontre l'encens profond pour créer un cœur puissant et addictif.' },
+                    { title: 'GÉRANIUM & ENCENS', text: 'La touche mentholée du géranium rencontre l’encens profond pour créer un cœur puissant et addictif.' },
                     { title: 'CÈDRE AMÉRICAIN', text: 'Le fort cèdre américain ancre le fond avec une profondeur boisée durable et une élégance masculine.' }
                 ]
             },
@@ -2688,8 +2688,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme — Floral Boisé — Une signature masculine moderne avec bergamote, fleur d'oranger, patchouli et Ambrofixé.",
-                longDescription: "Yves Saint Laurent\'s nouveau parfum homme rechargeable est Myslf. Une expression de l'homme que vous étes, avec toutes vos nuances. Une déclaration de masculinité moderne, embrassant toutes ses facettes et émotions. Le premier parfum floral bois— de YSL BEAUTY pour un sillage de modernité. Le parfum YSL Myslf s'ouvre sur un accord frais et vibrant de bergamote calabraise et bergamote verte. En cœur, un absolu de fleur d'oranger pur et intense de Tunisie, cré— exclusivement pour YSL beauty. Le parfum se termine sur un accord bois— sensuel et texturé de patchouli indonésien et d'Ambrofixé.",
+                subtitle: "Parfum homme — Floral Boisé — Une signature masculine moderne avec bergamote, fleur d’oranger, patchouli et Ambrofixé.",
+                longDescription: "Yves Saint Laurent\'s nouveau parfum homme rechargeable est Myslf. Une expression de l’homme que vous étes, avec toutes vos nuances. Une déclaration de masculinité moderne, embrassant toutes ses facettes et émotions. Le premier parfum floral bois— de YSL BEAUTY pour un sillage de modernité. Le parfum YSL Myslf s’ouvre sur un accord frais et vibrant de bergamote calabraise et bergamote verte. En cœur, un absolu de fleur d’oranger pur et intense de Tunisie, cré— exclusivement pour YSL beauty. Le parfum se termine sur un accord bois— sensuel et texturé de patchouli indonésien et d’Ambrofixé.",
                 notes: [
                     { title: 'BERGAMOTE DE CALABRE', text: 'Une ouverture fraîche et vibrante avec bergamote de Calabre et bergamote verte pour une luminosité instantanée.' },
                     { title: 'FLEUR D\'ORANGER DE TUNISIE', text: 'Un absolu de fleur d\'oranger intense de Tunisie, cré— exclusivement pour YSL Beauty.' },
@@ -2730,8 +2730,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme — Floral Boisé — Une nouvelle signature MYSLF intense et sensuelle avec poivre noir, fleur d'oranger, bois et vanille.",
-                longDescription: "MYSLF Le Parfum, le nouveau et intense parfum floral bois— pour homme conéu pour laisser un sillage sensuel et durable. Une nouvelle affirmation de la masculinité moderne. Le parfum s\'ouvre sur un accord étincelant et exotique de poivre noir, qui laisse place — un cœur radieux et riche de fleur d'oranger. En fond, la sensualité des bois enveloppe une infusion veloutée de vanille, créant un sillage irrésistible qui persiste sur la peau.",
+                subtitle: "Parfum homme — Floral Boisé — Une nouvelle signature MYSLF intense et sensuelle avec poivre noir, fleur d’oranger, bois et vanille.",
+                longDescription: "MYSLF Le Parfum, le nouveau et intense parfum floral bois— pour homme conéu pour laisser un sillage sensuel et durable. Une nouvelle affirmation de la masculinité moderne. Le parfum s\'ouvre sur un accord étincelant et exotique de poivre noir, qui laisse place — un cœur radieux et riche de fleur d’oranger. En fond, la sensualité des bois enveloppe une infusion veloutée de vanille, créant un sillage irrésistible qui persiste sur la peau.",
                 notes: [
                     { title: 'ACCORD POIVRE NOIR', text: 'Une ouverture étincelante et exotique de poivre noir crée une première impression énergétique.' },
                     { title: 'CŒUR FLEUR D\'ORANGER', text: 'Un cœur de fleur d\'oranger radieux et riche donne au parfum une intensité florale élégante.' },
@@ -2772,7 +2772,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Ambré Aromatique — Intense, sexy et addictif avec lavande, fève tonka, menthe et benzoïn.",
-                longDescription: "Le Male Elixir Eau de Parfum, le nouveau parfum de Jean Paul Gaultier inspiré du marin, est arrivé. Plus intense et plus sexy que jamais. Quand il monte — bord, Le Male Elixir libère une vague de chaleur. Ce parfum masculin est si intense que l'or fond, créant des traînées dorées. La fève tonka tropicale et ensoleillée se mélange — la lavande légendaire et, avec le magnétisme animal du benzoïn, crée une explosion de menthe fraîche et de bergamote.",
+                longDescription: "Le Male Elixir Eau de Parfum, le nouveau parfum de Jean Paul Gaultier inspiré du marin, est arrivé. Plus intense et plus sexy que jamais. Quand il monte — bord, Le Male Elixir libère une vague de chaleur. Ce parfum masculin est si intense que l’or fond, créant des traînées dorées. La fève tonka tropicale et ensoleillée se mélange — la lavande légendaire et, avec le magnétisme animal du benzoïn, crée une explosion de menthe fraîche et de bergamote.",
                 notes: [
                     { title: 'LAVANDE & MENTHE', text: 'Une ouverture aromatique fraîche où la lavande iconique rencontre la menthe étincelante et la bergamote lumineuse.' },
                     { title: 'FÈVE TONKA', text: 'La fève tonka tropicale et ensoleillée ajoute chaleur et douceur addictive au cœur du parfum.' },
@@ -2812,12 +2812,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme — Aromatique épic— — Une Édition limitée bleue audacieuse avec lavande, benzoïn et un sillage chargé d'océan.",
-                longDescription: "Avec Le Male In Blue, une vague de liberté aromatique et épicée se profile sur la mer. Plus vaste que l'horizon, plus forte qu'une marée, son eau de parfum intense vous plonge dans un bleu captivant et global. Le marin le plus audacieux tatouage son étui d'une vague excentrique inspirée des archives de la Maison, avec la lavande — la poupe et un courage trempé de benzoïn.",
+                subtitle: "Parfum homme — Aromatique épic— — Une Édition limitée bleue audacieuse avec lavande, benzoïn et un sillage chargé d’océan.",
+                longDescription: "Avec Le Male In Blue, une vague de liberté aromatique et épicée se profile sur la mer. Plus vaste que l’horizon, plus forte qu'une marée, son eau de parfum intense vous plonge dans un bleu captivant et global. Le marin le plus audacieux tatouage son étui d’une vague excentrique inspirée des archives de la Maison, avec la lavande — la poupe et un courage trempé de benzoïn.",
                 notes: [
-                    { title: 'VAGUE BLEUE AROMATIQUE', text: 'Une ouverture aromatique et épicée se projette en avant avec l'énergie de l'air marin ouvert et une fraîcheur bleue audacieuse.' },
+                    { title: 'VAGUE BLEUE AROMATIQUE', text: 'Une ouverture aromatique et épicée se projette en avant avec l’énergie de l’air marin ouvert et une fraîcheur bleue audacieuse.' },
                     { title: 'LAVANDE POUPE', text: 'La signature iconique de lavande de Jean Paul Gaultier donne au parfum son identité de marin sensuel et une tonalité raffinée.' },
-                    { title: 'SILLAGE DE BENZOÏN', text: 'Le benzoïn trempe le fond d'un courage chaud, laissant une signature profonde et durable déÉdition limitée.' }
+                    { title: 'SILLAGE DE BENZOÏN', text: 'Le benzoïn trempe le fond d’un courage chaud, laissant une signature profonde et durable déÉdition limitée.' }
                 ]
             },
             images: [
@@ -2853,7 +2853,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Ambré Frais — La signature iconique du marin alliant menthe, lavande, vanille et santal.",
-                longDescription: "Jean Paul Gaultier Le Male EDT, un parfum masculin qui associe fraîcheur et chaleur, inspiré du marin iconique. Idçal pour les hommes au style audacieux. Ce parfum est une expression de la masculinité moderne, capturant l'essence de l'homme contemporain qui brave les normes traditionnelles. Ses notes de tête incluent la menthe et la lavande. Au cœur, la cannelle et la fleur d'oranger ajoutent une touche épicée et florale. Les notes de fond de vanille et santal procurent leur douceur sensuelle.",
+                longDescription: "Jean Paul Gaultier Le Male EDT, un parfum masculin qui associe fraîcheur et chaleur, inspiré du marin iconique. Idçal pour les hommes au style audacieux. Ce parfum est une expression de la masculinité moderne, capturant l’essence de l’homme contemporain qui brave les normes traditionnelles. Ses notes de tête incluent la menthe et la lavande. Au cœur, la cannelle et la fleur d’oranger ajoutent une touche épicée et florale. Les notes de fond de vanille et santal procurent leur douceur sensuelle.",
                 notes: [
                     { title: 'MENTHE & LAVANDE', text: 'Une ouverture aromatique fraîche de menthe et lavande donne au Le Male EDT sa signature de marin immmédiatement reconnaissable.' },
                     { title: 'FLEUR DE CANNELLE', text: 'La cannelle et la fleur d\'oranger créent un cœur épicé-floral chaud qui se felt audacieux, moderne et réconfortant.' },
@@ -2894,7 +2894,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé Oriental — élégance intense dans un flacon signature noir et or.",
-                longDescription: "Direction Le Male Le Parfum, le nouveau parfum masculin de Jean Paul Gaultier ! Avec son emballage officiel noir et or, cette eau de parfum intense revisite la ligne olfactive Le Male avec style et force. Un sillage oriental bois— élégant, empreint du charisme et de la puissance d'un leader.",
+                longDescription: "Direction Le Male Le Parfum, le nouveau parfum masculin de Jean Paul Gaultier ! Avec son emballage officiel noir et or, cette eau de parfum intense revisite la ligne olfactive Le Male avec style et force. Un sillage oriental bois— élégant, empreint du charisme et de la puissance d’un leader.",
                 notes: [
                     { title: 'OUVERTURE ÉPICÉE', text: 'Un début épic— et audacieux donne le ton et annonce le parfum avec confiance.' },
                     { title: 'CŒUR BOISÉ', text: 'Un noyau bois— riche façonne le caractère masculin élégant de cette composition intense.' },
@@ -2937,9 +2937,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Boisé Ambré — Intense et sensuel avec fève tonka, santal, gingembre, ananas et ambre gris.",
-                longDescription: "Le Beau Le Parfum, parfum masculin intense de Jean Paul Gaultier. La nouvelle eau de parfum intense est une tentation encore plus sensuelle, avec son parfum bois— ambr— excitant. Le Beau est un parfum masculin construit autour d'une fève tonka addictive, du santal, du gingembre, de l'ananas et de l'ambre gris. Une base légère mais puissante pour un homme séducteur et ultra-sexy.",
+                longDescription: "Le Beau Le Parfum, parfum masculin intense de Jean Paul Gaultier. La nouvelle eau de parfum intense est une tentation encore plus sensuelle, avec son parfum bois— ambr— excitant. Le Beau est un parfum masculin construit autour d’une fève tonka addictive, du santal, du gingembre, de l’ananas et de l’ambre gris. Une base légère mais puissante pour un homme séducteur et ultra-sexy.",
                 notes: [
-                    { title: 'GINGEMBRE & ANANAS', text: 'Une ouverture fruitée-épicée et vibrante où le gingembre frais rencontre l'ananas juteux pour une attraction instantanée.' },
+                    { title: 'GINGEMBRE & ANANAS', text: 'Une ouverture fruitée-épicée et vibrante où le gingembre frais rencontre l’ananas juteux pour une attraction instantanée.' },
                     { title: 'FÈVE TONKA', text: 'La fève tonka addictive construit chaleur et profondeur sensuelle au cœur du parfum.' },
                     { title: 'SANTAL & AMBRE GRIS', text: 'Un fond bois— ambr— de santal et ambre gris crée un sillage masculin lisse et puissant.' }
                 ]
@@ -2955,7 +2955,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'CAROLINA HERRERA',
             gender: 'men',
             fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 74, sillageLabel: 'Moderate-Strong', season: 68, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Oriental — A modern masculine signature balancing sparkling bergamot, pepper, cedarwood, sage, tonka bean, and cacao.",
+            subtitle: "Men’s fragrance — Oriental — A modern masculine signature balancing sparkling bergamot, pepper, cedarwood, sage, tonka bean, and cacao.",
             longDescription: 'CAROLINA HERRERA Bad Boy Refillable Eau de Toilette embodies the duality between playful freshness and the warmth of nature. This Carolina Herrera perfume for men, with its oriental scent, is a manifestation of modern masculinity, intended for men who forge their own paths without fear of showing their sensitivity alongside their great strength. Bad Boy Eau de Toilette opens with a citrus burst featuring top notes of green Italian bergamot. As you explore its nuances, cedarwood and sage add warmth that settles on a base of tonka bean and cacao. It is a true statement of intent. Olfactory Family: Oriental. Top notes: Black Pepper, White Pepper and Italian Green Bergamot. Heart notes: Cedarwood and Sage. Base notes: Tonka bean and cocoa.',
             sizes: [
                 'Decante 10ML',
@@ -2980,7 +2980,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum homme — Oriental — Une signature masculine moderne avec bergamote, poivre, cèdre, sauge, fève tonka et cacao.",
-                longDescription: "CAROLINA HERRERA Bad Boy Refillable Eau de Toilette incarne la dualité entre fraîcheur ludique et chaleur naturelle. Ce parfum Carolina Herrera pour homme, au parfum oriental, est une manifestation de la masculinité moderne, destiné aux hommes qui tracent leur propre chemin. Bad Boy EDT s'ouvre sur un éclat citrus avec des notes de tête de bergamote verte d'Italie. Le cèdre et la sauge ajoutent de la chaleur qui repose sur un fond de fève tonka et cacao.",
+                longDescription: "CAROLINA HERRERA Bad Boy Refillable Eau de Toilette incarne la dualité entre fraîcheur ludique et chaleur naturelle. Ce parfum Carolina Herrera pour homme, au parfum oriental, est une manifestation de la masculinité moderne, destiné aux hommes qui tracent leur propre chemin. Bad Boy EDT s’ouvre sur un éclat citrus avec des notes de tête de bergamote verte d’Italie. Le cèdre et la sauge ajoutent de la chaleur qui repose sur un fond de fève tonka et cacao.",
                 notes: [
                     { title: 'OUVERTURE POIVRE & BERGAMOTE', text: 'Le poivre noir, poivre blanc et bergamote verte d\'Italie créent une ouverture agrumes-épicée avec une énergie instantanée.' },
                     { title: 'CÈDRE & SAUGE AU CŒUR', text: 'Le cèdre et la sauge apportent chaleur aromatique au cœur, donnant au parfum sa structure moderne et confiante.' },
@@ -2998,7 +2998,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'GUCCI',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 77, sillageLabel: 'Strong', season: 58, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Woody Ambery — An intimate refined composition with rum accord, orange blossom absolute, and red chili pepper.",
+            subtitle: "Men’s fragrance — Woody Ambery — An intimate refined composition with rum accord, orange blossom absolute, and red chili pepper.",
             longDescription: 'The new Gucci Guilty fragrances celebrate the art of refinement, inviting the wearer on a sensory journey into an intimate and sophisticated world. Gucci Guilty Absolu de Parfum for Men is an intense, woody, and ambery composition. At its heart, a rich rum accord brings warmth and depth, enhanced by the radiance of orange blossom absolute. A touch of red chili pepper adds dynamism, creating a striking contrast that enriches the fragrance\'s complexity.',
             sizes: [
                 'Decante 10ML',
@@ -3022,8 +3022,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme — Boisé Ambré — Une composition intime et raffinée avec accord rhum, fleur d'oranger absolue et poivre de piment rouge.",
-                longDescription: "Les nouveaux parfums Gucci Guilty célèbrent l'art du raffinement, invitant le porteur dans un voyage sensoriel intime et sophistiqué. Gucci Guilty Absolu de Parfum pour Homme est une composition intense, boisée et ambrée. Au cœur, un riche accord de rhum apporte chaleur et profondeur, rehussé par le rayonnement du fleur d'oranger absolu. Une touche de piment rouge ajoute du dynamisme, créant un contraste saisissant.",
+                subtitle: "Parfum homme — Boisé Ambré — Une composition intime et raffinée avec accord rhum, fleur d’oranger absolue et poivre de piment rouge.",
+                longDescription: "Les nouveaux parfums Gucci Guilty célèbrent l’art du raffinement, invitant le porteur dans un voyage sensoriel intime et sophistiqué. Gucci Guilty Absolu de Parfum pour Homme est une composition intense, boisée et ambrée. Au cœur, un riche accord de rhum apporte chaleur et profondeur, rehussé par le rayonnement du fleur d’oranger absolu. Une touche de piment rouge ajoute du dynamisme, créant un contraste saisissant.",
                 notes: [
                     { title: 'CHALEUR DE L\'ACCORD RHUM', text: 'Un riche accord de rhum façonne le cœur avec chaleur, profondeur et une intensité raffinée et lisse.' },
                     { title: 'RAYONNEMENT FLEUR D\'ORANGER', text: 'La fleur d\'oranger absolue éclaire la composition avec une lueur florale sophistiquée.' },
@@ -3039,7 +3039,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'GUCCI',
             gender: 'men',
             fragranceProfile: { longevity: 92, longevityLabel: '10-12h', sillage: 84, sillageLabel: 'Strong', season: 54, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Amber Leather — A powerful Gucci Guilty elixir with iris butter, Ambrofix, benzoin, vanillin, and smoky nutmeg.",
+            subtitle: "Men’s fragrance — Amber Leather — A powerful Gucci Guilty elixir with iris butter, Ambrofix, benzoin, vanillin, and smoky nutmeg.",
             longDescription: 'Gucci Guilty Elixir de Parfum for Men is an invitation to self-love and self-acceptance. It exudes an amber and tanned fragrance with notes of patchouli, the signature ingredient of the Gucci Guilty line, whose high concentration produces an intensely powerful effect. The fragrance is presented in a vibrant bottle, designed to elegantly mirror its feminine counterpart. Eau de parfum. Olfactory family: amber and tanned notes. Key ingredients: iris butter, Ambrofix, benzoin. The original essence is amplified by the addition of vanillin extract, while iris butter, noble by nature, gives it a warm and enveloping aroma. The exhilarating Ambrofix, complemented by smoky nutmeg notes, enhances the uniqueness of the fragrance and allows it to fully express its character. Benzoin in the base note lends depth and magnetism to this fragrance. Packaging: the bottle comes in a refined green color; it is embellished with the House\'s intertwined GG detail and topped with a brushed silver cap.',
             sizes: [
                 'Decante 10ML',
@@ -3063,8 +3063,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme — Cuir Ambré — Un Élixir Gucci Guilty puissant avec beurre d'iris, Ambrofix, benzoïn, vanilline et muscade fumée.",
-                longDescription: "Gucci Guilty Elixir de Parfum pour Homme est une invitation — l'amour de soi et — l'acceptation de soi. Il dégage un parfum ambr— et tauné avec des notes de patchouli, l'ingrédient signature de la ligne Gucci Guilty. Le beurre d'iris, noble par nature, lui confère un arôme chaud et enveloppant. L'Ambrofix exhilarant, complèt— par des notes de muscade fumée, renforce l'unicité du parfum. Le benzoïn en fond confère profondeur et magnétisme.",
+                subtitle: "Parfum homme — Cuir Ambré — Un Élixir Gucci Guilty puissant avec beurre d’iris, Ambrofix, benzoïn, vanilline et muscade fumée.",
+                longDescription: "Gucci Guilty Elixir de Parfum pour Homme est une invitation — l’amour de soi et — l’acceptation de soi. Il dégage un parfum ambr— et tauné avec des notes de patchouli, l’ingrédient signature de la ligne Gucci Guilty. Le beurre d’iris, noble par nature, lui confère un arôme chaud et enveloppant. L’Ambrofix exhilarant, complèt— par des notes de muscade fumée, renforce l’unicité du parfum. Le benzoïn en fond confère profondeur et magnétisme.",
                 notes: [
                     { title: 'BEURRE D\'IRIS & VANILLINE', text: 'Le beurre d\'iris chaud et la vanilline construisent un cœur ambr— enveloppant avec une texture sensuelle riche.' },
                     { title: 'AMBROFIX & MUSCADE FUMÉE', text: 'L\'Ambrofix et la muscade fumée affinent la signature avec un rayonnement moderne et un caractère audacieux.' },
@@ -3106,7 +3106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: "Parfum unisexe — Gourmand Oriental — Un bestseller iconique alliant fève tonka, rose, bergamote, oud et cuir.",
-                longDescription: "Montale Arabians Tonka est un bestseller iconique qui a gagné son statut culte dans le monde de la parfumerie niche. Cet opulent Gourmand Oriental s'ouvre sur l'éclat rayonnant de la bergamote italienne et une touche de safran, diffusant une chaleur lumineuse dès la première vaporisation. Au cœur, une captivante rose de Damas s'entrelace avec la douce fève tonka veloutée, créant une richesse sucrée — la fois raffinée et profondément addictive. Le fond est un tour de force d'oud arabe, de cuir souple et de résine d'ambre, ancrant la composition dans une profondeur sombre et mystérieuse qui projette puissamment et dure bien plus de 12 heures sur la peau.",
+                longDescription: "Montale Arabians Tonka est un bestseller iconique qui a gagné son statut culte dans le monde de la parfumerie niche. Cet opulent Gourmand Oriental s’ouvre sur l’éclat rayonnant de la bergamote italienne et une touche de safran, diffusant une chaleur lumineuse dès la première vaporisation. Au cœur, une captivante rose de Damas s’entrelace avec la douce fève tonka veloutée, créant une richesse sucrée — la fois raffinée et profondément addictive. Le fond est un tour de force d’oud arabe, de cuir souple et de résine d’ambre, ancrant la composition dans une profondeur sombre et mystérieuse qui projette puissamment et dure bien plus de 12 heures sur la peau.",
                 notes: [
                     { title: 'BERGAMOTE & TONKA', text: 'La bergamote rayonnante et la douce fève tonka ouvrent le parfum avec douceur et légéret— raffinée.' },
                     { title: 'ROSE CAPTIVANTE', text: 'La rose ajoute une richesse florale raffinée qui adoucit la puissance de la composition.' },
@@ -3122,7 +3122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 89, longevityLabel: '9-11h', sillage: 79, sillageLabel: 'Strong', season: 82, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Amber Woody — A sophisticated and sensual signature blending grapefruit essence, incense, vanilla, and the amplified power of AmberXtreme.",
+            subtitle: "Men’s fragrance — Amber Woody — A sophisticated and sensual signature blending grapefruit essence, incense, vanilla, and the amplified power of AmberXtreme.",
             longDescription: 'PRADA Luna Rossa Ocean Eau de Parfum combines intense sophistication and sensuality through a contrast of innovative technology and nature\'s finest ingredients. The fragrance opens with an invigorating burst of grapefruit essence, moves into the woody vibrancy of incense, and settles into a rich vanilla accord, creating a fresh yet deeply sensual trail that lasts with confident intensity.',
             mainAccords: ['Fresh', 'Citrus', 'Incense', 'Woody', 'Vanilla', 'Amber'],
             sizes: [
@@ -3165,7 +3165,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 84, longevityLabel: '8-10h', sillage: 72, sillageLabel: 'Strong', season: 85, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Aromatic Fougère — A mineral, modern Prada signature with metallic lavender, Italian bergamot, patchouli, and amber-dry Ambroxan.",
+            subtitle: "Men’s fragrance — Aromatic Fougère — A mineral, modern Prada signature with metallic lavender, Italian bergamot, patchouli, and amber-dry Ambroxan.",
             longDescription: 'PRADA Luna Rossa Carbon EDT, launched in 2017, offers a unique olfactory experience by fusing steam-distilled botanical notes with synthetic elements in a captivating mineral blend. Classified as an aromatic fougère, it achieves the intensity of the darkest rock alongside the freshness of air. The composition reveals metallic touches of lavender, the citrus lift of Vert di Bergamote from Italy, the radiant wood of patchouli, and the amber dryness of Ambroxan. Luna Rossa Carbon is a manifestation of elegance and modernity in every drop.',
             mainAccords: ['Aromatic', 'Mineral', 'Lavender', 'Citrus', 'Patchouli', 'Amber'],
             sizes: [
@@ -3190,12 +3190,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: 'Parfum homme — Fougère Aromatique — Une signature Prada minérale et moderne avec lavande métallique, bergamote d'Italie, patchouli et Ambroxan ambr— sec.',
-                longDescription: 'PRADA Luna Rossa Carbon EDT, lancé en 2017, propose une expérience olfactive unique en fusionnant des notes botaniques distillées — la vapeur avec des éléments synthétiques dans un accord minéral captivant. Classé comme une fougère aromatique, il associe l'intensité de la roche la plus sombre — la fraîcheur de l'air. La composition révîle les touches métalliques de la lavande, la fraîcheur zestée du Vert di Bergamote d'Italie, le bois rayonnant du patchouli et la sécheresse ambrée de l'Ambroxan. Luna Rossa Carbon est une manifestation d'élégance et de modernité — chaque goutte.',
+                subtitle: 'Parfum homme — Fougère Aromatique — Une signature Prada minérale et moderne avec lavande métallique, bergamote d’Italie, patchouli et Ambroxan ambr— sec.',
+                longDescription: 'PRADA Luna Rossa Carbon EDT, lancé en 2017, propose une expérience olfactive unique en fusionnant des notes botaniques distillées — la vapeur avec des éléments synthétiques dans un accord minéral captivant. Classé comme une fougère aromatique, il associe l’intensité de la roche la plus sombre — la fraîcheur de l’air. La composition révîle les touches métalliques de la lavande, la fraîcheur zestée du Vert di Bergamote d’Italie, le bois rayonnant du patchouli et la sécheresse ambrée de l’Ambroxan. Luna Rossa Carbon est une manifestation d’élégance et de modernité — chaque goutte.',
                 notes: [
                     { title: 'FRAÎCHEUR MINÉRALE', text: 'Des notes botaniques distillées — la vapeur et des facettes synthétiques modernes créent un profil minéral, aérien, propre et résolument contemporain.' },
-                    { title: 'LAVANDE & BERGAMOTE', text: 'La lavande métallique et le Vert di Bergamote d'Italie apportent clarté aromatique et fraîcheur citronnée — l'ouverture et au cœur.' },
-                    { title: 'PATCHOULI & AMBROXAN', text: 'Le patchouli bois— rayonnant et l'effet ambr— sec de l'Ambroxan donnent — la fragrance sa structure, son élégance et sa tenue masculine moderne.' }
+                    { title: 'LAVANDE & BERGAMOTE', text: 'La lavande métallique et le Vert di Bergamote d’Italie apportent clarté aromatique et fraîcheur citronnée — l’ouverture et au cœur.' },
+                    { title: 'PATCHOULI & AMBROXAN', text: 'Le patchouli bois— rayonnant et l’effet ambr— sec de l’Ambroxan donnent — la fragrance sa structure, son élégance et sa tenue masculine moderne.' }
                 ]
             },
             images: [
@@ -3210,7 +3210,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 80, sillageLabel: 'Strong', season: 68, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance — Amber Woody — A bold and sophisticated Prada signature with bergamot, angelica, woody amber, patchouli, coumarin, musk, and ambergris.",
+            subtitle: "Men’s fragrance — Amber Woody — A bold and sophisticated Prada signature with bergamot, angelica, woody amber, patchouli, coumarin, musk, and ambergris.",
             longDescription: 'PRADA Luna Rossa Black Eau de Parfum for men is a bold and sophisticated expression of urban exploration, capturing the thrill of discovering new facets of the everyday landscape. Inspired by the transition between work and play, this fragrance embodies the vibrant spirit of the city as it ignites with possibilities and risks. It opens with an energetic fusion of bergamot and angelica, evolving into a captivating sweetness of woody amber, enhanced by the intensity of patchouli and coumarin. Patchouli, musk, ambergris, and the long-lasting power of coumarin intertwine to create an enveloping, magnetic, and enduring fragrance suited to any occasion.',
             mainAccords: ['Amber', 'Patchouli', 'Musky', 'Woody', 'Sweet', 'Coumarin'],
             sizes: [
@@ -3236,11 +3236,11 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: 'Parfum homme — Boisé Ambré — Une signature Prada audacieuse et sophistiquée avec bergamote, angélique, ambre boisé, patchouli, coumarine, musc et ambre gris.',
-                longDescription: 'PRADA Luna Rossa Black Eau de Parfum pour homme est une expression audacieuse et sophistiquée de l'exploration urbaine, capturant le frisson de découvrir de nouvelles facettes du paysage quotidien. Inspir— par la transition entre le travail et le jeu, ce parfum incarne l'esprit vibrant de la ville lorsqu'elle s'embrase de possibilités et de risques. Il s'ouvre sur une fusion énergique de bergamote et d'angélique, puis évolue vers une douceur captivante d'ambre boisé, renforcée par l'intensité du patchouli et de la coumarine. Patchouli, musc, ambre gris et la tenue longue durée de la coumarine s'entrelacent pour créer une fragrance enveloppante, magnétique et durable, adaptée — toutes les occasions.',
+                longDescription: 'PRADA Luna Rossa Black Eau de Parfum pour homme est une expression audacieuse et sophistiquée de l’exploration urbaine, capturant le frisson de découvrir de nouvelles facettes du paysage quotidien. Inspir— par la transition entre le travail et le jeu, ce parfum incarne l’esprit vibrant de la ville lorsqu’elle s’embrase de possibilités et de risques. Il s’ouvre sur une fusion énergique de bergamote et d’angélique, puis évolue vers une douceur captivante d’ambre boisé, renforcée par l’intensité du patchouli et de la coumarine. Patchouli, musc, ambre gris et la tenue longue durée de la coumarine s’entrelacent pour créer une fragrance enveloppante, magnétique et durable, adaptée — toutes les occasions.',
                 notes: [
-                    { title: 'BERGAMOTE & ANGÉLIQUE', text: 'Une ouverture vibrante de bergamote et d'angélique crée une première impression énergique avec fraîcheur et envolée aromatique.' },
+                    { title: 'BERGAMOTE & ANGÉLIQUE', text: 'Une ouverture vibrante de bergamote et d’angélique crée une première impression énergique avec fraîcheur et envolée aromatique.' },
                     { title: 'AMBRE BOISÉ, PATCHOULI & COUMARINE', text: 'Le cœur évolue vers un accord ambr— bois— doux et texturé, approfondi par le patchouli et la chaleur durable de la coumarine.' },
-                    { title: 'MUSC, AMBRE GRIS & ÉLÉGANCE URBAINE', text: 'Le musc sensuel et l'ambre gris apportent une profondeur magnétique, donnant au parfum un caractère sophistiqué de nuit urbaine qui reste enveloppant pendant des heures.' }
+                    { title: 'MUSC, AMBRE GRIS & ÉLÉGANCE URBAINE', text: 'Le musc sensuel et l’ambre gris apportent une profondeur magnétique, donnant au parfum un caractère sophistiqué de nuit urbaine qui reste enveloppant pendant des heures.' }
                 ]
             },
             images: [
@@ -3254,8 +3254,8 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 86, longevityLabel: '8-10h', sillage: 74, sillageLabel: 'Strong', season: 84, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Woody Chypre — A contrasted Prada signature with neroli, pepper, amber, patchouli, and cedar that redefines modern masculinity.",
-            longDescription: "PRADA L'Homme Prada EDT for men belongs to the Woody Chypre fragrance family and is built on contrast, representing the duality of masculine identity through Prada's lens. Created in 2016 by perfumer Daniela Andrier, it blends sweet, almost feminine facets with pure masculine ingredients to create a layered and multifaceted composition. The fragrance opens with neroli and pepper, pairing a soft floral brightness with a spicy and vibrant intensity. Its heart unfolds into a warm, sensual floral-amber fusion with a creamy and comforting texture before settling into a virile base of patchouli and cedar. With its sober and edgy tone, this fragrance moves away from trends to establish a more assertive Prada masculinity, echoed by its steel-like silver bottle that reflects classic elegance and strength.",
+            subtitle: "Men’s fragrance — Woody Chypre — A contrasted Prada signature with neroli, pepper, amber, patchouli, and cedar that redefines modern masculinity.",
+            longDescription: "PRADA L’Homme Prada EDT for men belongs to the Woody Chypre fragrance family and is built on contrast, representing the duality of masculine identity through Prada's lens. Created in 2016 by perfumer Daniela Andrier, it blends sweet, almost feminine facets with pure masculine ingredients to create a layered and multifaceted composition. The fragrance opens with neroli and pepper, pairing a soft floral brightness with a spicy and vibrant intensity. Its heart unfolds into a warm, sensual floral-amber fusion with a creamy and comforting texture before settling into a virile base of patchouli and cedar. With its sober and edgy tone, this fragrance moves away from trends to establish a more assertive Prada masculinity, echoed by its steel-like silver bottle that reflects classic elegance and strength.",
             mainAccords: ['Neroli', 'Pepper', 'Amber', 'Patchouli', 'Cedar', 'Powdery'],
             sizes: [
                 'Decante 10ML',
@@ -3280,9 +3280,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: 'Parfum homme — Chypre Boisé — Une signature Prada contrastée avec néroli, poivre, ambre, patchouli et cèdre qui redéfinit la masculinité moderne.',
-                longDescription: "PRADA L'Homme Prada EDT pour homme appartient — la famille Chypre Boisé et se construit sur les contrastes, représentant la dualité de l'identité masculine — travers le regard de Prada. Créé en 2016 par la parfumeuse Daniela Andrier, il associe des facettes douces, presque féminines, — des ingrédients masculins purs pour former une composition en couches et multifacette. Le parfum s'ouvre sur le néroli et le poivre, alliant une luminosité florale délicate — une intensité épicée et vibrante. Son cœur dévoile une fusion florale et ambrée, chaude et sensuelle, avec une texture crémeuse et réconfortante avant de se poser sur un fond viril de patchouli et de cèdre. Avec son ton sobre et tranchant, ce parfum s'éloigne des tendances pour affirmer une masculinité Prada plus assumée, reflétée par son flacon argenté rappelant l'acier, symbole d'élégance classique et de force.",
+                longDescription: "PRADA L’Homme Prada EDT pour homme appartient — la famille Chypre Boisé et se construit sur les contrastes, représentant la dualité de l’identité masculine — travers le regard de Prada. Créé en 2016 par la parfumeuse Daniela Andrier, il associe des facettes douces, presque féminines, — des ingrédients masculins purs pour former une composition en couches et multifacette. Le parfum s’ouvre sur le néroli et le poivre, alliant une luminosité florale délicate — une intensité épicée et vibrante. Son cœur dévoile une fusion florale et ambrée, chaude et sensuelle, avec une texture crémeuse et réconfortante avant de se poser sur un fond viril de patchouli et de cèdre. Avec son ton sobre et tranchant, ce parfum s’éloigne des tendances pour affirmer une masculinité Prada plus assumée, reflétée par son flacon argenté rappelant l’acier, symbole d’élégance classique et de force.",
                 notes: [
-                    { title: 'NÉROLI & POIVRE', text: 'L'ouverture équilibre le néroli délicat et le poivre épic— pour une première impression lumineuse mais intense, pleine de contraste.' },
+                    { title: 'NÉROLI & POIVRE', text: 'L’ouverture équilibre le néroli délicat et le poivre épic— pour une première impression lumineuse mais intense, pleine de contraste.' },
                     { title: 'CŒUR FLORAL AMBRÉ', text: 'Un cœur floral-ambr— chaleureux apporte un confort crémeux et une profondeur sensuelle, mêlant douceur et puissance masculine.' },
                     { title: 'FOND PATCHOULI & CÈDRE', text: 'Le patchouli et le cèdre ancrent le parfum dans une base boisée séduisante, sérieuse, raffinée et durable.' }
                 ]
@@ -3297,7 +3297,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 87, longevityLabel: '8-10h', sillage: 76, sillageLabel: 'Strong', season: 83, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Woody Citrus — An innovative Prada scent balancing Calabrian bergamot, airy musks, green bourbon geranium, Peru balsam, benzoin, and guaiac wood.",
+            subtitle: "Men’s fragrance — Woody Citrus — An innovative Prada scent balancing Calabrian bergamot, airy musks, green bourbon geranium, Peru balsam, benzoin, and guaiac wood.",
             longDescription: "PRADA Paradigme Eau de Parfum offers a distinctive olfactory experience built around an inverted architecture inspired by Prada's iconic triangle. Its composition sets it apart with a balanced interplay between woody warmth and citrus freshness. The olfactory pyramid opens with Calabrian bergamot and airy musks, develops into a heart of green bourbon geranium with pink floral nuances, and settles into a base of Peru balsam resin, benzoin, and guaiac wood. The refillable bottle pairs architectural design with a black-to-green gradient lacquer finish and Prada's tilted signature triangle, reflecting the care, innovation, and modern sustainability behind the fragrance.",
             mainAccords: ['Citrus', 'Musky', 'Geranium', 'Balsamic', 'Woody', 'Fresh'],
             sizes: [
@@ -3323,7 +3323,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: 'Parfum homme — Boisé Citronné — Une création Prada innovante équilibrant bergamote de Calabre, muscs aériens, géranium bourbon vert, baume du Pérou, benjoin et bois de gaïac.',
-                longDescription: "PRADA Paradigme Eau de Parfum offre une expérience olfactive singulière construite autour d'une architecture inversée inspirée du triangle iconique de Prada. Sa composition se distingue par un équilibre entre la chaleur des bois et la fraîcheur des agrumes. La pyramide olfactive s'ouvre sur la bergamote de Calabre et des muscs aériens, évolue vers un cœur de géranium bourbon vert aux nuances florales rosées, puis se pose sur un fond de résine de baume du Pérou, de benjoin et de bois de gaïac. Son flacon rechargeable associe un design architectural — une laque dégradée noir-vert et au triangle incliné signature de Prada, reflétant le soin, l'innovation et la durabilité moderne de la fragrance.",
+                longDescription: "PRADA Paradigme Eau de Parfum offre une expérience olfactive singulière construite autour d’une architecture inversée inspirée du triangle iconique de Prada. Sa composition se distingue par un équilibre entre la chaleur des bois et la fraîcheur des agrumes. La pyramide olfactive s’ouvre sur la bergamote de Calabre et des muscs aériens, évolue vers un cœur de géranium bourbon vert aux nuances florales rosées, puis se pose sur un fond de résine de baume du Pérou, de benjoin et de bois de gaïac. Son flacon rechargeable associe un design architectural — une laque dégradée noir-vert et au triangle incliné signature de Prada, reflétant le soin, l’innovation et la durabilité moderne de la fragrance.",
                 notes: [
                     { title: 'BERGAMOTE & MUSCS AÉRIENS', text: 'La bergamote de Calabre et les muscs aériens créent une ouverture lumineuse, propre et fraîchement contemporaine.' },
                     { title: 'GÉRANIUM BOURBON VERT', text: 'Le cœur dévoile un géranium bourbon vert aux nuances florales rosées, apportant élégance, équilibre et un noyau aromatique raffiné.' },
@@ -3340,7 +3340,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 73, sillageLabel: 'Strong', season: 86, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance — Aromatic Fresh — A sophisticated Prada interpretation of lavender with bitter orange, clary sage, spearmint, Ambroxan, and amber woods.",
+            subtitle: "Men’s fragrance — Aromatic Fresh — A sophisticated Prada interpretation of lavender with bitter orange, clary sage, spearmint, Ambroxan, and amber woods.",
             longDescription: 'PRADA Luna Rossa Men EDT is a sophisticated fragrance by Daniela Andrier that reinterprets classic ingredients with an innovative approach. At the center is a fresh and masculine vision of lavender, blending traditional elegance with modern aromatic energy. The fragrance opens with the vibrant freshness of bitter orange essence, sharpening the primary fresh facet of lavender with a bitter and stimulating edge. The heart unfolds with aromatic lavender essence, clary sage oil, and nanah spearmint, evoking open spaces and rich natural nuances. In the base, the sensual warmth of Ambroxan and the woody touch of hibiscus amber combine synthetic and natural elements to create a refined, dignified, and timeless sophistication.',
             mainAccords: ['Lavender', 'Citrus', 'Aromatic', 'Mint', 'Ambroxan', 'Woody'],
             sizes: [
@@ -3366,11 +3366,11 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             fr: {
                 subtitle: 'Parfum homme — Frais Aromatique — Une interprétation Prada sophistiquée de la lavande avec orange amère, sauge sclarée, menthe nanah, Ambroxan et bois ambrés.',
-                longDescription: 'PRADA Luna Rossa Men EDT est une fragrance sophistiquée signée Daniela Andrier qui réinterpréte des ingrédients classiques avec une approche innovante. Au centre se trouve une vision fraîche et masculine de la lavande, mêlant élégance traditionnelle et énergie aromatique moderne. Le parfum s'ouvre sur la fraîcheur vibrante de l'essence d'orange amère, qui souligne la facette fraîche principale de la lavande avec une intensité stimulante et amère. Le cœur se déploie autour de l'essence aromatique de lavande, de l'huile de sauge sclarée et des essences de menthe nanah, évoquant les grands espaces et la richesse des éléments naturels. En fond, la chaleur sensuelle de l'Ambroxan et la touche boisée de l'ambre d'hibiscus associent ingrédients synthétiques et naturels pour créer une sophistication raffinée, digne et intemporelle.',
+                longDescription: 'PRADA Luna Rossa Men EDT est une fragrance sophistiquée signée Daniela Andrier qui réinterpréte des ingrédients classiques avec une approche innovante. Au centre se trouve une vision fraîche et masculine de la lavande, mêlant élégance traditionnelle et énergie aromatique moderne. Le parfum s’ouvre sur la fraîcheur vibrante de l’essence d’orange amère, qui souligne la facette fraîche principale de la lavande avec une intensité stimulante et amère. Le cœur se déploie autour de l’essence aromatique de lavande, de l’huile de sauge sclarée et des essences de menthe nanah, évoquant les grands espaces et la richesse des éléments naturels. En fond, la chaleur sensuelle de l’Ambroxan et la touche boisée de l’ambre d’hibiscus associent ingrédients synthétiques et naturels pour créer une sophistication raffinée, digne et intemporelle.',
                 notes: [
-                    { title: 'ORANGE AMÈRE & LAVANDE', text: 'Léessence d'orange amère dynamise l'ouverture et met en lumière une facette propre et contemporaine de la lavande avec une fraîcheur masculine éclatante.' },
+                    { title: 'ORANGE AMÈRE & LAVANDE', text: 'Léessence d’orange amère dynamise l’ouverture et met en lumière une facette propre et contemporaine de la lavande avec une fraîcheur masculine éclatante.' },
                     { title: 'LAVANDE, SAUGE SCLARÉE & MENTHE NANAH', text: 'Le cœur aromatique superpose lavande, huile de sauge sclarée et menthe nanah pour une fraîcheur verte ample aux nuances naturelles riches.' },
-                    { title: 'AMBROXAN & AMBRE D'HIBISCUS', text: 'L'Ambroxan et l'ambre bois— d'hibiscus créent un fond chaleureux et sensuel, mêlant précision synthétique et profondeur raffinée intemporelle.' }
+                    { title: 'AMBROXAN & AMBRE D’HIBISCUS', text: 'L’Ambroxan et l’ambre bois— d’hibiscus créent un fond chaleureux et sensuel, mêlant précision synthétique et profondeur raffinée intemporelle.' }
                 ]
             },
             images: [
@@ -3655,7 +3655,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.reload();
             }
         };
-        // Delay the first poll a few seconds so it doesn't compete with page load
+        // Delay the first poll a few seconds so it doesn’t compete with page load
         setTimeout(() => { poll(); setInterval(poll, 5000); }, 4000);
     };
 
@@ -3776,7 +3776,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     const numPrice = Number(price);
                                     if (numPrice > 0) _normAdminSizes[normSz] = numPrice;
                                 });
-                                // All sizes have price 0 — treat as out of stock, don't inject
+                                // All sizes have price 0 — treat as out of stock, don’t inject
                                 if (Object.keys(_normAdminSizes).length === 0) return;
                                 pricesById[slug] = { ..._normAdminSizes };
                                 // Always overwrite _firestoreProductOverridesCache so that
@@ -4964,7 +4964,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.setAttribute('tabindex', '0');
             }
 
-            // Inject a heart/favourite button on cards that don't have one yet
+            // Inject a heart/favourite button on cards that don’t have one yet
             // (e.g. New Arrivals cards that lack a product-favorite-btn in the HTML).
             // Skip if any heart icon already exists inside a button (covers discover.html
             // cards which have heart icons but without the product-favorite-btn class).
@@ -5289,8 +5289,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const getGenderFromText = (text) => {
         const normalized = String(text || '').toLowerCase();
         if (!normalized) return '';
-        if (normalized.includes("men's") || normalized.includes('mens') || normalized.includes('homme')) return 'men';
-        if (normalized.includes("women's") || normalized.includes('womens') || normalized.includes('femme')) return 'women';
+        if (normalized.includes("men’s") || normalized.includes('mens') || normalized.includes('homme')) return 'men';
+        if (normalized.includes("women’s") || normalized.includes('womens') || normalized.includes('femme')) return 'women';
         if (normalized.includes('unisex')) return 'unisex';
         return '';
     };
@@ -6283,7 +6283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const fp = (_fsOvForPid?.fragranceProfile) || productOverride?.fragranceProfile;
         if (fp) {
             const sillageFr = { 'Strong': 'Fort', 'Very Strong': 'Trés fort', 'Moderate': 'Modéré', 'Moderate-Strong': 'Modéré-Fort', 'Powerful': 'Puissant' };
-            const seasonFr = { 'All Year': "Toute l'année", 'Fall/Winter': 'Automne/Hiver', 'Spring/Summer': 'Printemps/été' };
+            const seasonFr = { 'All Year': "Toute l’année", 'Fall/Winter': 'Automne/Hiver', 'Spring/Summer': 'Printemps/été' };
             const dnaRows = document.querySelectorAll('#fragranceProfile .product-dna-row');
             const profiles = [
                 { fill: fp.longevity, label: fp.longevityLabel },
@@ -6892,7 +6892,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const qty = qtyValue ? Number(qtyValue.textContent) || 1 : 1;
             const nextItems = readCart();
-            // Don't include brand in the match — cart.js normalisation drops the brand
+            // Don’t include brand in the match — cart.js normalisation drops the brand
             // field, so checking it would fail to detect existing items and create duplicates.
             const existingIndex = nextItems.findIndex(
                 (item) => item.name === productName && item.size === selectedSize.label
@@ -7129,7 +7129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // DNA fragrance profile sillage / season labels
             if (fp) {
                 const sillageFrMap = { 'Strong': 'Fort', 'Very Strong': 'Trés fort', 'Moderate': 'Modéré', 'Moderate-Strong': 'Modéré-Fort', 'Powerful': 'Puissant' };
-                const seasonFrMap = { 'All Year': "Toute l'année", 'Fall/Winter': 'Automne/Hiver', 'Spring/Summer': 'Printemps/été' };
+                const seasonFrMap = { 'All Year': "Toute l’année", 'Fall/Winter': 'Automne/Hiver', 'Spring/Summer': 'Printemps/été' };
                 const dnaRows = document.querySelectorAll('#fragranceProfile .product-dna-row');
                 const relabels = [
                     { label: fp.longevityLabel },
@@ -7214,7 +7214,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const positionMenu = (menu, triggerEl) => {
             if (!triggerEl) return;
             const tRect = triggerEl.getBoundingClientRect();
-            // Top: 10px gap below the icon's bottom edge
+            // Top: 10px gap below the icon’s bottom edge
             menu.style.setProperty('--acm-top', `${tRect.bottom + 10}px`);
             // Right: align the menu's right edge with the trigger's right edge,
             // clamped so it never clips off-screen on the left.
@@ -8753,7 +8753,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pendingTouchTargetIndex = -1;
             clearSnapTimer();
             clearScrollEndTimer();
-            // Disable any CSS snap during the drag so it can't fight the JS snap
+            // Disable any CSS snap during the drag so it can’t fight the JS snap
             carousel.style.scrollSnapType = 'none';
             onInteract?.();
         }, { passive: true });
@@ -8956,11 +8956,11 @@ document.addEventListener('DOMContentLoaded', () => {
               image: 'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png',
               badge: 'RARE', badgeRotate: 'RARE|LUXURY|LIMITED', reviews: 7 },
             { id: 'guerlain-l-homme-ideal-l-intense-eau-de-parfum',
-              name: "Guerlain L'Homme Id\u00e9al L'Intense Eau de Parfum", brand: 'GUERLAIN',
+              name: "Guerlain L’Homme Id\u00e9al L’Intense Eau de Parfum", brand: 'GUERLAIN',
               image: "/assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp",
               badge: 'NEW', badgeRotate: 'NEW|INTENSE|LUXURY', reviews: 13 },
             { id: 'guerlain-l-homme-ideal-extreme',
-              name: "GUERLAIN L'homme Id\u00e9al Extr\u00eame", brand: 'GUERLAIN',
+              name: "GUERLAIN L’homme Id\u00e9al Extr\u00eame", brand: 'GUERLAIN',
               image: "/assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg",
               badge: 'NEW', badgeRotate: 'NEW|EXTREME|LUXURY', reviews: 14 },
             { id: 'hugo-boss-the-scent-for-him-elixir',
@@ -9614,7 +9614,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             logo.dataset.brandDotReady = 'true';
 
-            // Lock opacity to 1 after entry animation so hover/click can't revert to base opacity:0
+            // Lock opacity to 1 after entry animation so hover/click can’t revert to base opacity:0
             letters.forEach((letter) => {
                 letter.addEventListener('animationend', () => {
                     letter.style.opacity = '1';
@@ -11944,7 +11944,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 indicator.style.transition = 'none';
                 indicator.style.left  = left + 'px';
                 indicator.style.width = width + 'px';
-                /* Re-enable transition after two frames so the snap isn't animated */
+                /* Re-enable transition after two frames so the snap isn’t animated */
                 requestAnimationFrame(function () {
                     requestAnimationFrame(function () {
                         indicator.style.transition = '';
@@ -12156,7 +12156,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
         targets.forEach(function (el) {
-            // Don't re-animate already-visible above-the-fold elements
+            // Don’t re-animate already-visible above-the-fold elements
             var rect = el.getBoundingClientRect();
             if (rect.top < window.innerHeight * 0.92) {
                 el.classList.add('ipo-visible');
@@ -12297,13 +12297,13 @@ document.addEventListener('DOMContentLoaded', function () {
             /iphone|ipad|ipod/i.test(navigator.userAgent) &&
             !window.navigator.standalone
         ) {
-            // iOS — show a tooltip since iOS doesn't support beforeinstallprompt
+            // iOS — show a tooltip since iOS doesn’t support beforeinstallprompt
             const ios = document.getElementById('ipo-ios-install-tip');
             if (ios) {
                 ios.classList.toggle('is-visible');
             }
         } else {
-            // Already installed or browser doesn't support PWA install
+            // Already installed or browser doesn’t support PWA install
             const msg = document.getElementById('ipo-already-installed-msg');
             if (msg) {
                 msg.classList.add('is-visible');
@@ -12461,7 +12461,7 @@ if ('serviceWorker' in navigator) {
 /* =============================================================================
    IPORDISE — WhatsApp Abandoned Cart Nudge
    Shows a WhatsApp nudge 20 minutes after items are added to cart,
-   if the user hasn't visited the checkout page.
+   if the user hasn’t visited the checkout page.
    Dismissed permanently for that cart session when closed.
    ============================================================================= */
 (function () {
@@ -12539,7 +12539,7 @@ if ('serviceWorker' in navigator) {
 
     // Also schedule on page load if cart already has items
     document.addEventListener('DOMContentLoaded', () => {
-        // Don't show on checkout or cart pages
+        // Don’t show on checkout or cart pages
         const path = window.location.pathname;
         if (path.includes('checkout') || path.includes('cart')) return;
         scheduleNudge();
