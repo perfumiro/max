@@ -1896,7 +1896,7 @@ s0.parentNode.insertBefore(s1,s0);
             const fmtPrice = (sizes) => Object.entries(sizes || {})
                 .filter(([, v]) => v > 0)
                 .map(([sz, v]) => `${sz.toUpperCase()} ${Number(v).toLocaleString('fr-FR')} MAD`)
-                .join(' � ');
+                .join(' — ');
 
             const today = new Date().toISOString().slice(0, 10);
             let injected = 0;

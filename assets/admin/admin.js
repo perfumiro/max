@@ -1,4 +1,4 @@
-// --- IPORDISE Admin — Firebase Analytics Dashboard ----------------------------
+// --- IPORDISE Admin â€” Firebase Analytics Dashboard ----------------------------
 // Auth: Firebase Email/Password   Data: Firestore   No server required.
 
 import { initializeApp }
@@ -11,7 +11,7 @@ import {
   query, orderBy, limit, where, onSnapshot,
   serverTimestamp, updateDoc,
 } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
-// Image uploads use Cloudinary (unsigned preset — no Firebase Storage needed)
+// Image uploads use Cloudinary (unsigned preset â€” no Firebase Storage needed)
 
 // --- FIREBASE -----------------------------------------------------------------
 const firebaseConfig = {
@@ -239,7 +239,7 @@ const renderVisitorsTable = (rows) => {
 const renderPagination = () => {
   const { page, totalPages, total } = state.pagination;
   const info = qs('#paginationInfo');
-  if (info) info.textContent = `Page ${page} of ${totalPages} — ${fmtNum(total)} records`;
+  if (info) info.textContent = `Page ${page} of ${totalPages} â€” ${fmtNum(total)} records`;
   const lbl = qs('#visitorCountLabel');
   if (lbl) lbl.textContent = `${fmtNum(total)} records`;
   const controls = qs('#paginationControls');
@@ -290,9 +290,9 @@ const renderActivity = (rows) => {
       <div class="activity-page">${esc(r.currentPage || r.entryPage || '/')}</div>
       <div class="activity-meta">
         <span>${deviceIcon(r.device)}</span>
-        <span class="activity-meta-sep">·</span><span>${esc(r.referrer || 'direct')}</span>
-        ${r.converted ? '<span class="activity-meta-sep">·</span><span class="badge badge-green">converted</span>' : ''}
-        ${r.checkoutStarted ? '<span class="activity-meta-sep">·</span><span class="badge badge-gold">checkout</span>' : ''}
+        <span class="activity-meta-sep">Â·</span><span>${esc(r.referrer || 'direct')}</span>
+        ${r.converted ? '<span class="activity-meta-sep">Â·</span><span class="badge badge-green">converted</span>' : ''}
+        ${r.checkoutStarted ? '<span class="activity-meta-sep">Â·</span><span class="badge badge-gold">checkout</span>' : ''}
       </div>
     </div>
     <div class="activity-time">${relTime(r.lastSeen)}</div>
@@ -446,7 +446,7 @@ const loadOverview = async () => {
   renderLatestVisitors(latestVisitors);
   renderCharts(visitsByDay, agg.deviceBreakdown);
   renderRankList('#topPagesList',         agg.topPages);
-  renderRankList('#topCountriesList',     agg.topCountries.length ? agg.topCountries : [{ name: '?? Collecting — visit site to generate data', value: 0 }]);
+  renderRankList('#topCountriesList',     agg.topCountries.length ? agg.topCountries : [{ name: '?? Collecting â€” visit site to generate data', value: 0 }]);
   renderRankList('#browserBreakdownList', agg.topReferrers);
   const el = qs('#lastUpdated');
   if (el) el.textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -485,8 +485,8 @@ const loadAnalyticsView = async () => {
     aggregateSessions(state.analyticsRange),
   ]);
   renderAnalyticsChart(visitsByDay);
-  renderRankList('#analyticsCountriesList', agg.topCountries.length ? agg.topCountries : [{ name: '?? Collecting — visit site to generate data', value: 0 }]);
-  renderRankList('#analyticsCitiesList',    agg.topCities.length    ? agg.topCities    : [{ name: '??? Collecting — visit site to generate data', value: 0 }]);
+  renderRankList('#analyticsCountriesList', agg.topCountries.length ? agg.topCountries : [{ name: '?? Collecting â€” visit site to generate data', value: 0 }]);
+  renderRankList('#analyticsCitiesList',    agg.topCities.length    ? agg.topCities    : [{ name: '??? Collecting â€” visit site to generate data', value: 0 }]);
   renderRankList('#analyticsDevicesList',   agg.deviceBreakdown);
 };
 
@@ -555,7 +555,7 @@ const initToolbar = () => {
 // --- EXPORTS -----------------------------------------------------------------
 const initExports = () => {
   const doExport = async (fmt) => {
-    toast('Preparing export…', 'info');
+    toast('Preparing exportÃ©', 'info');
     try {
       const snap = await getDocs(
         query(collection(db, 'analytics_sessions'), orderBy('startTime', 'desc'), limit(5000))
@@ -632,7 +632,7 @@ const initAuth = () => {
       const cred  = await signInWithEmailAndPassword(auth, email, pwdInput.value);
       if (cred.user.email?.toLowerCase() !== ADMIN_EMAIL) {
         await signOut(auth);
-        throw new Error('Access denied — this account is not authorised as admin.');
+        throw new Error('Access denied â€” this account is not authorised as admin.');
       }
       if (remember?.checked) localStorage.setItem(REMEMBER_KEY, email);
       else localStorage.removeItem(REMEMBER_KEY);
@@ -649,13 +649,13 @@ const initAuth = () => {
     if (!confirm('This will revoke ALL admin sessions on every device. Continue?')) return;
     try {
       await setDoc(doc(db, 'admin_config', 'security'), { revokedBefore: Date.now() }, { merge: true });
-      toast('All sessions revoked — everyone must sign in again.', 'success');
+      toast('All sessions revoked â€” everyone must sign in again.', 'success');
     } catch (err) { toast('Error: ' + err.message, 'error'); }
     await doLogout();
   });
 
   const apiHint = qs('#apiHint');
-  if (apiHint) apiHint.textContent = 'Firebase · ' + firebaseConfig.projectId;
+  if (apiHint) apiHint.textContent = 'Firebase â€” ' + firebaseConfig.projectId;
 };
 
 // --- BOOTSTRAP ---------------------------------------------------------------
@@ -816,7 +816,7 @@ const renderOrdersTable = (orders) => {
       </td>
       <td style="padding:12px 14px">
         <div style="font-weight:600;color:var(--ink);font-size:13px">${channelDot}${name}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:1px">${phone}${city ? ' · ' + city : ''}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px">${phone}${city ? ' â€” ' + city : ''}</div>
       </td>
       <td style="padding:12px 14px">
         <div style="font-size:12px;color:var(--ink);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${itemNames}${moreItems}">${itemNames}${moreItems ? `<span style="color:var(--muted)">${esc(moreItems)}</span>` : ''}</div>
@@ -893,9 +893,9 @@ const loadOrdersView = async () => {
         if (badge) { badge.textContent = _allOrders.length; badge.style.display = _allOrders.length ? '' : 'none'; }
         applyOrderFilters();
       },
-      () => { /* real-time failed — stay on getDocs snapshot, no error shown */ }
+      () => { /* real-time failed â€” stay on getDocs snapshot, no error shown */ }
     );
-  } catch (_) { /* index not ready — initial getDocs data is already showing */ }
+  } catch (_) { /* index not ready â€” initial getDocs data is already showing */ }
 };
 
 // View order detail modal
@@ -966,7 +966,7 @@ window._adminViewOrder = (orderId) => {
         </div>
       </div>`;
 
-  const waMsg = `Bonjour ${displayName},\n\nVotre commande IPORDISE *${order.orderId || order.id}* est maintenant : *${cfg.label}*.\n${order.trackingNumber ? `\n?? Numéro de suivi : ${order.trackingNumber}` : ''}\n\nMerci de votre confiance ! ??`;
+  const waMsg = `Bonjour ${displayName},\n\nVotre commande IPORDISE *${order.orderId || order.id}* est maintenant : *${cfg.label}*.\n${order.trackingNumber ? `\n?? NumÃ©ro de suivi : ${order.trackingNumber}` : ''}\n\nMerci de votre confiance ! ??`;
 
   if (title) title.textContent = order.orderId || order.id;
 
@@ -1004,7 +1004,7 @@ window._adminViewOrder = (orderId) => {
           </span>
           <span style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700">Delivery</span>
         </div>
-        <div style="font-weight:600;color:var(--ink);font-size:13px;margin-bottom:6px;line-height:1.3">${esc(c.address || '—')}</div>
+        <div style="font-weight:600;color:var(--ink);font-size:13px;margin-bottom:6px;line-height:1.3">${esc(c.address || 'â€”')}</div>
         <div style="display:flex;align-items:center;gap:5px;color:var(--muted);font-size:12px">
           <i class="fas fa-location-dot" style="font-size:10px;color:var(--dim)"></i>
           ${esc(c.city || '')}${c.city ? ', Morocco' : 'Morocco'}
@@ -1067,7 +1067,7 @@ window._adminViewOrder = (orderId) => {
 
   modal.style.display = 'flex';
 
-  // Close handlers — remove old listeners by cloning
+  // Close handlers â€” remove old listeners by cloning
   const closeBtn = qs('#closeOrderModal');
   if (closeBtn) {
     const newClose = closeBtn.cloneNode(true);
@@ -1122,7 +1122,7 @@ document.addEventListener('change', async (e) => {
   } catch(e) { toast('Error: ' + e.message, 'error'); }
 });
 
-// Wire up orders filters — runs directly (module is already deferred, DOM is ready)
+// Wire up orders filters â€” runs directly (module is already deferred, DOM is ready)
 const _initOrdersFilters = () => {
   qs('#ordersStatusFilter')?.addEventListener('change', applyOrderFilters);
   qs('#ordersSearch')?.addEventListener('input', applyOrderFilters);
@@ -1151,7 +1151,7 @@ const renderCustomersTable = (customers) => {
     return `<tr style="border-bottom:1px solid var(--border)">
       <td style="padding:10px 12px;color:var(--text)">
         <div style="font-weight:600">${name}</div>
-        <div style="font-size:11px;color:var(--muted);font-family:monospace">${esc(c.uid.slice(0,12))}…</div>
+        <div style="font-size:11px;color:var(--muted);font-family:monospace">${esc(c.uid.slice(0,12))}â€¦</div>
       </td>
       <td style="padding:10px 12px;color:var(--muted)">${phone}</td>
       <td style="padding:10px 12px;color:var(--muted)">${city}, Morocco</td>
@@ -1391,8 +1391,8 @@ document.addEventListener('click', (e) => {
 // --- REVENUE VIEW ------------------------------------------------------------
 const loadRevenueView = async () => {
   const setEl = (id, v) => { const el = qs('#' + id); if (el) el.textContent = v; };
-  setEl('revTotalRevenue', '…'); setEl('revDeliveredCount', '…');
-  setEl('revAvgOrder', '…'); setEl('revThisMonth', '…'); setEl('revPendingCount', '…');
+  setEl('revTotalRevenue', 'â€”'); setEl('revDeliveredCount', 'â€”');
+  setEl('revAvgOrder', 'â€”'); setEl('revThisMonth', 'â€”'); setEl('revPendingCount', 'â€”');
   const monthlyBody = qs('#revenueMonthlyBody');
   const topProducts = qs('#revenueTopProducts');
   if (monthlyBody) monthlyBody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>`;
@@ -1606,7 +1606,7 @@ const handleCreateDiscount = async () => {
   };
 
   if (!codeVal) return showMsg('Code is required.', false);
-  if (!/^[A-Z0-9]{2,20}$/.test(codeVal)) return showMsg('Code must be 2–20 letters/numbers only.', false);
+  if (!/^[A-Z0-9]{2,20}$/.test(codeVal)) return showMsg('Code must be 2â€“20 letters/numbers only.', false);
   if (!valNum || valNum <= 0) return showMsg('Value must be greater than 0.', false);
   if (typeVal === 'percentage' && valNum > 100) return showMsg('Percentage cannot exceed 100%.', false);
 
@@ -1828,14 +1828,14 @@ const initNotifications = () => {
     badge.style.display = 'flex';
     badge.textContent = items.length;
     if (list) list.innerHTML = items.map(o => {
-      const name = esc(o.customerName || o.name || '—');
+      const name = esc(o.customerName || o.name || 'â€”');
       const total = fmtMAD(o.total || 0);
-      const when = o.createdAt?.toDate ? new Date(o.createdAt.toDate()).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
+      const when = o.createdAt?.toDate ? new Date(o.createdAt.toDate()).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : 'â€”';
       return `<div style="padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s"
                   onmouseover="this.style.background='var(--s3)'" onmouseout="this.style.background=''"
                   onclick="document.querySelector('[data-view=orders]').click()">
-        <div style="font-size:12px;font-weight:600;color:var(--ink)">${name} · ${total}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">${when} · <span style="color:var(--amber);font-weight:600">Pending</span></div>
+        <div style="font-size:12px;font-weight:600;color:var(--ink)">${name} â€” ${total}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${when} â€” <span style="color:var(--amber);font-weight:600">Pending</span></div>
       </div>`;
     }).join('');
   }, () => {});
@@ -1870,13 +1870,13 @@ const loadMessagesView = async () => {
         return;
       }
       container.innerHTML = filtered.map(m => {
-        const name    = esc(m.name || '—');
+        const name    = esc(m.name || 'â€”');
         const email   = esc(m.email || '');
         const subject = esc(m.subject || 'No subject');
         const body    = esc(m.message || '');
         const phone   = esc(m.phone || '');
         const orderNo = esc(m.orderNumber || '');
-        const when    = m.createdAt?.toDate ? new Date(m.createdAt.toDate()).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+        const when    = m.createdAt?.toDate ? new Date(m.createdAt.toDate()).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : 'â€”';
         const unread  = !m.read;
         return `<div class="card" style="${unread ? 'border-left:3px solid var(--gold)' : ''}">
           <div class="card-body">
@@ -1886,8 +1886,8 @@ const loadMessagesView = async () => {
                 ${unread ? '<span style="background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:8px">NEW</span>' : ''}
                 <div style="font-size:12px;color:var(--muted);margin-top:2px">
                   ${email ? `<a href="mailto:${email}" style="color:var(--sky)">${email}</a>` : ''}
-                  ${phone ? ` · ${phone}` : ''}
-                  ${orderNo ? ` · Order #${orderNo}` : ''}
+                  ${phone ? ` â€” ${phone}` : ''}
+                  ${orderNo ? ` â€” Order #${orderNo}` : ''}
                 </div>
               </div>
               <div style="text-align:right">
@@ -1972,10 +1972,10 @@ const loadNewsletterView = async () => {
       ) : subs;
       if(list.length===0){ tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted)">No subscribers found</td></tr>`; return; }
       tbody.innerHTML = list.map(s => {
-        const email = esc(s.email||'—');
-        const name  = esc(s.name ||'—');
-        const gender= esc(s.gender||'—');
-        const when  = s.createdAt?.toDate ? new Date(s.createdAt.toDate()).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+        const email = esc(s.email||'â€”');
+        const name  = esc(s.name ||'â€”');
+        const gender= esc(s.gender||'â€”');
+        const when  = s.createdAt?.toDate ? new Date(s.createdAt.toDate()).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : 'â€”';
         return `<tr style="border-bottom:1px solid var(--border)">
           <td style="padding:10px 14px;font-size:13px;color:var(--ink)">${email}</td>
           <td style="padding:10px 14px;font-size:13px;color:var(--ink)">${name}</td>
@@ -2065,9 +2065,9 @@ const loadNewsletterView = async () => {
         const emails = audience.map(s=>s.email).filter(Boolean).join(', ');
         try {
           await navigator.clipboard.writeText(emails);
-          toast(`${audience.length} email${audience.length!==1?'s':''} copied to clipboard — paste into BCC`, 'success');
+          toast(`${audience.length} email${audience.length!==1?'s':''} copied to clipboard â€” paste into BCC`, 'success');
         } catch(_) {
-          toast('Copy failed — your browser blocked clipboard access','error');
+          toast('Copy failed â€” your browser blocked clipboard access','error');
         }
       });
     }
@@ -2145,7 +2145,7 @@ const loadProductsView = async () => {
       const ov         = overrides[slug] || {};
       const pendingSet = pendingRemovals[slug] || new Set();
 
-      // Sizes to hide: explicitly removed (× button or rename-away) + pending UI removals
+      // Sizes to hide: explicitly removed (â€” button or rename-away) + pending UI removals
       const removed = new Set([
         ...(ov.removedSizes || []).map(normSizeKey),
         ...[...pendingSet].map(normSizeKey),
@@ -2314,7 +2314,7 @@ const loadProductsView = async () => {
         const ov = overrides[s]||{};
         return !ov.disabled && (Object.keys(ov.prices||{}).length || (ov.removedSizes||[]).length);
       }).length;
-      if (countEl) countEl.textContent = `${total} products · ${nActive} active · ${nOv} overridden`;
+      if (countEl) countEl.textContent = `${total} products â€” ${nActive} active â€” ${nOv} overridden`;
 
       if (filtered.length === 0) {
         grid.innerHTML = `<div style="text-align:center;padding:48px;color:var(--muted)">No products match this filter</div>`;
@@ -2373,7 +2373,7 @@ const loadProductsView = async () => {
               style="width:24px;align-self:stretch;background:none;border:none;border-left:1px solid ${accentClr === 'var(--border)' ? 'var(--border)' : accentClr};opacity:${accentClr === 'var(--border)' ? '1' : '.5'};cursor:pointer;color:var(--dim);font-size:14px;display:flex;align-items:center;justify-content:center;border-radius:0 5px 5px 0;transition:all .15s;flex-shrink:0"
               onmouseover="this.style.background='rgba(244,63,94,.12)';this.style.color='var(--rose)';this.style.borderColor='var(--rose)';this.style.opacity='1'"
               onmouseout="this.style.background='none';this.style.color='var(--dim)';this.style.borderColor='${accentClr === 'var(--border)' ? 'var(--border)' : accentClr}';this.style.opacity='${accentClr === 'var(--border)' ? '1' : '.5'}'"
-              title="Remove ${esc(sz)}">×</button>
+              title="Remove ${esc(sz)}">Ã—</button>
           </div>`;
         }).join('');
 
@@ -2403,7 +2403,7 @@ const loadProductsView = async () => {
                 <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
                   ${statusBadge}
                   ${hasOverride && !disabled ? `<span style="font-size:10px;font-weight:700;color:var(--amber);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);padding:2px 8px;border-radius:99px"><i class="fas fa-pen-to-square" style="font-size:9px;margin-right:3px"></i>Overridden</span>` : ''}
-                  ${hasPromo ? `<span style="font-size:10px;font-weight:700;color:var(--emerald);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);padding:2px 8px;border-radius:99px"><i class="fas fa-tag" style="font-size:9px;margin-right:3px"></i>Promo${bestDiscount > 0 ? ' ·&nbsp;-' + bestDiscount + '%' : ''}</span>` : ''}
+                  ${hasPromo ? `<span style="font-size:10px;font-weight:700;color:var(--emerald);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);padding:2px 8px;border-radius:99px"><i class="fas fa-tag" style="font-size:9px;margin-right:3px"></i>Promo${bestDiscount > 0 ? ' â€”&nbsp;-' + bestDiscount + '%' : ''}</span>` : ''}
                   ${isDirty ? `<span class="prod-dirty-badge" style="font-size:10px;font-weight:700;color:var(--sky);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:2px 8px;border-radius:99px"><i class="fas fa-circle-dot" style="font-size:9px;margin-right:3px"></i>Unsaved</span>` : ''}
                 </div>
               </div>
@@ -2440,7 +2440,7 @@ const loadProductsView = async () => {
 
             <!-- -- Sizes row -- -->
             <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0;min-height:32px">
-              ${sizeChips || `<span style="font-size:11px;color:var(--dim);font-style:italic;padding:4px 2px">No sizes — add one below</span>`}
+              ${sizeChips || `<span style="font-size:11px;color:var(--dim);font-style:italic;padding:4px 2px">No sizes â€” add one below</span>`}
             </div>
 
             <!-- -- Add size form (hidden for fixed-size brands) -- -->
@@ -2472,17 +2472,17 @@ const loadProductsView = async () => {
                 style="width:100%;display:flex;align-items:center;gap:8px;padding:7px 10px;background:${hasValidPromo ? 'rgba(200,169,106,.08)' : hasInvalidPromoEntry ? 'rgba(244,63,94,.06)' : 'var(--s3)'};border:1px dashed ${hasValidPromo ? 'var(--gold)' : hasInvalidPromoEntry ? 'var(--rose)' : 'var(--border)'};border-radius:${hasPromo ? '8px 8px 0 0' : '8px'};cursor:pointer;transition:all .15s;outline:none;text-align:left">
                 <i class="fas fa-${hasValidPromo ? 'tag' : hasInvalidPromoEntry ? 'triangle-exclamation' : 'tag'}" style="font-size:10px;color:${hasValidPromo ? 'var(--gold)' : hasInvalidPromoEntry ? 'var(--rose)' : 'var(--gold)'};flex-shrink:0"></i>
                 <span style="font-size:10px;font-weight:700;color:${hasValidPromo ? 'var(--gold)' : hasInvalidPromoEntry ? 'var(--rose)' : 'var(--gold)'};letter-spacing:.4px;text-transform:uppercase;flex:1">
-                  ${hasValidPromo ? `Promotion Active · Up to -${bestDiscount}%` : hasInvalidPromoEntry ? '? Promotion Invalid — Must Fix & Save' : 'Add Promotion'}
+                  ${hasValidPromo ? `Promotion Active â€” Up to -${bestDiscount}%` : hasInvalidPromoEntry ? '? Promotion Invalid â€” Must Fix & Save' : 'Add Promotion'}
                 </span>
                 <i class="fas fa-chevron-${hasPromo ? 'up' : 'down'} prod-promo-chevron" style="font-size:9px;color:var(--muted)"></i>
               </button>
               <div class="prod-promo-content" style="display:${hasPromo ? 'block' : 'none'};padding:10px 10px 10px;background:${hasInvalidPromoEntry && !hasValidPromo ? 'rgba(244,63,94,.04)' : 'rgba(200,169,106,.04)'};border:1px dashed ${hasInvalidPromoEntry && !hasValidPromo ? 'var(--rose)' : 'var(--gold)'};border-top:none;border-radius:0 0 8px 8px">
                 ${hasInvalidPromoEntry ? `<div style="background:rgba(244,63,94,.12);border:1px solid var(--rose);border-radius:6px;padding:7px 10px;margin-bottom:8px;display:flex;align-items:flex-start;gap:7px">
                   <i class="fas fa-triangle-exclamation" style="color:var(--rose);font-size:12px;flex-shrink:0;margin-top:1px"></i>
-                  <span style="font-size:10px;font-weight:700;color:var(--rose);line-height:1.5">The stored "Was" price is <strong>lower than or equal to the current sale price</strong> — it won't show on the product page. Enter a value <strong>HIGHER</strong> than the current price (shown as "? Sale: X") and click <strong>Save</strong>.</span>
+                  <span style="font-size:10px;font-weight:700;color:var(--rose);line-height:1.5">The stored "Was" price is <strong>lower than or equal to the current sale price</strong> â€” it won't show on the product page. Enter a value <strong>HIGHER</strong> than the current price (shown as "? Sale: X") and click <strong>Save</strong>.</span>
                 </div>` : ''}
                 <p style="font-size:10px;color:var(--muted);margin-bottom:8px;font-weight:600;line-height:1.4">
-                  <i class="fas fa-circle-info" style="margin-right:4px"></i>Enter the <strong style="color:var(--ink)">original (before-sale) price</strong> per size — it <strong style="color:var(--rose)">must be higher</strong> than the current price. The current price will appear as the discounted sale price with a strikethrough on the product page.
+                  <i class="fas fa-circle-info" style="margin-right:4px"></i>Enter the <strong style="color:var(--ink)">original (before-sale) price</strong> per size â€” it <strong style="color:var(--rose)">must be higher</strong> than the current price. The current price will appear as the discounted sale price with a strikethrough on the product page.
                 </p>
                 <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
                   ${Object.keys(sizes).sort((a,b)=>{ const n=s=>parseInt(s.replace(/\D/g,''),10)||0; return n(a)-n(b); }).map(sz => {
@@ -2500,7 +2500,7 @@ const loadProductsView = async () => {
                       <input type="number" min="0" class="prod-orig-price-input" data-slug="${esc(slug)}" data-size="${esc(sz)}" value="${esc(String(promoP))}" placeholder="e.g. ${suggestedPromo}"
                         style="width:64px;border:1px solid ${isInvalid ? 'var(--rose)' : 'var(--border)'};border-radius:5px;background:var(--s3);padding:3px 6px;font-size:12px;color:var(--ink);font-weight:600;outline:none;text-align:right;transition:border-color .15s"
                         onfocus="this.style.borderColor='var(--gold)'" onblur="const v=parseFloat(this.value)||0,s=parseFloat(this.closest('.prod-promo-size-row').dataset.sale||0);this.style.borderColor=v>0&&v>=s?'var(--rose)':v>0&&v<s?'var(--gold)':'var(--border)'"
-                        title="Sale (promo) price for ${esc(sz)} — must be LOWER than ${fullP} MAD">
+                        title="Sale (promo) price for ${esc(sz)} â€” must be LOWER than ${fullP} MAD">
                       <span style="font-size:10px;color:var(--dim);font-weight:500">MAD</span>
                       <span style="font-size:9px;color:var(--dim);white-space:nowrap;margin-left:2px">Full: <strong style="color:var(--muted)">${fullP}</strong></span>
                       <span class="prod-promo-pct-badge" style="font-size:10px;font-weight:800;color:#fff;background:${badgeBg};border-radius:99px;padding:2px 7px;min-width:36px;text-align:center;transition:background .2s">${badgeTxt}</span>
@@ -2546,7 +2546,7 @@ const loadProductsView = async () => {
           '<i class="fas fa-bottle-droplet" style="color:var(--sky);font-size:18px;flex-shrink:0"></i>' +
           '<div style="flex:1;min-width:0">' +
           '<div style="font-size:13px;font-weight:800;color:var(--ink);letter-spacing:.5px;text-transform:uppercase">Main Collection</div>' +
-          '<div style="font-size:10px;color:var(--muted);margin-top:2px">Standard products — prices.json</div>' +
+          '<div style="font-size:10px;color:var(--muted);margin-top:2px">Standard products â€” prices.json</div>' +
           '</div>' +
           '<span style="font-size:11px;font-weight:700;color:var(--sky);padding:3px 12px;border-radius:99px;border:1.5px solid var(--sky);background:var(--s4);white-space:nowrap">' + _mainSlugs.length + ' products</span>' +
           '</div>' +
@@ -2730,7 +2730,7 @@ const loadProductsView = async () => {
           if (!overrides[slug].prices[k]) overrides[slug].prices[k] = v;
         });
         // Also restore any base sizes (from prices.json) that ended up in
-        // removedSizes due to the previous bug — unless the user explicitly
+        // removedSizes due to the previous bug â€” unless the user explicitly
         // removed them in this session via pendingRemovals.
         const baseForSlug = pricesRes[slug] || {};
         Object.entries(baseForSlug).forEach(([k, v]) => {
@@ -2782,7 +2782,7 @@ const loadProductsView = async () => {
           prices[sz] = price;
           if (isRename) renamedAway.add(originalSz);
         });
-        if (hasError) { toast('Fix invalid prices before saving — duplicate or invalid size names', 'error'); return; }
+        if (hasError) { toast('Fix invalid prices before saving â€” duplicate or invalid size names', 'error'); return; }
 
         // -- Collect original prices from promotion panel -----------------
         const originalPrices = {};
@@ -2810,8 +2810,8 @@ const loadProductsView = async () => {
         }
 
         const pendingSet   = pendingRemovals[slug] || new Set();
-        // removedSizes = previously saved removals + × clicks + renamed-away originals
-        // Do NOT include base keys missing from prices — zero-base products (Xerjoff/UL)
+        // removedSizes = previously saved removals + â€” clicks + renamed-away originals
+        // Do NOT include base keys missing from prices â€” zero-base products (Xerjoff/UL)
         // leave unpriced sizes as 0 which get skipped, but those sizes must stay visible.
         const prevRemoved  = (ov.removedSizes || []).map(normSizeKey);
         const removedSizes = [
@@ -2827,12 +2827,12 @@ const loadProductsView = async () => {
         // Xerjoff/Unique Luxury products whose base prices.json values are all 0.
         if (Object.keys(prices).length === 0) {
           const btn2 = card.querySelector('.prod-save');
-          if (btn2) { btn2.disabled=true; btn2.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
+          if (btn2) { btn2.disabled=true; btn2.innerHTML='<i class="fas fa-spinner fa-spin"></i> Savingâ€¦'; }
           try {
             await deleteDoc(doc(db,'productOverrides',slug));
             delete overrides[slug];
             dirty.delete(slug);
-            toast(`? ${productName(slug)} saved (no prices set — override cleared)`, 'success');
+            toast(`? ${productName(slug)} saved (no prices set â€” override cleared)`, 'success');
             render();
           } catch(err) {
             toast('Save failed: ' + err.message, 'error');
@@ -2845,9 +2845,9 @@ const loadProductsView = async () => {
         if (Object.keys(originalPrices).length > 0) savePayload.promoPrices = originalPrices;
         overrides[slug] = savePayload;
 
-        // Optimistic UI — show saving state
+        // Optimistic UI â€” show saving state
         const btn = card.querySelector('.prod-save');
-        if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
+        if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Savingâ€¦'; }
         try {
           await setDoc(doc(db,'productOverrides',slug), overrides[slug]);
           dirty.delete(slug);
@@ -2923,7 +2923,7 @@ const loadProductsView = async () => {
             subRow.appendChild(badge);
           }
         }
-        toast('Promotion cleared — click Save to apply', 'success');
+        toast('Promotion cleared â€” click Save to apply', 'success');
       }
     }, { signal: prodSig });
   } catch(e) {
@@ -3084,7 +3084,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
         const meta  = _resolveColor(entry);
         const pill = document.createElement('span');
         pill.style.cssText = `display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;background:${meta.color};color:${meta.textColor};cursor:pointer;user-select:none`;
-        pill.innerHTML = `${label} <span style="font-size:13px;line-height:1;opacity:0.7">×</span>`;
+        pill.innerHTML = `${label} <span style="font-size:13px;line-height:1;opacity:0.7">Ã—</span>`;
         pill.title = 'Click to remove';
         pill.addEventListener('click', () => {
           _selected = _selected.filter(e => _getLabel(e) !== label);
@@ -3095,7 +3095,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
     } else {
       const hint = document.createElement('span');
       hint.style.cssText = 'font-size:0.75rem;color:var(--dim);padding:4px;align-self:center';
-      hint.textContent = 'No accords selected — click below to add';
+      hint.textContent = 'No accords selected â€” click below to add';
       selectedWrap.appendChild(hint);
     }
     containerEl.appendChild(selectedWrap);
@@ -3109,7 +3109,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
     // -- Palette grid --------------------------------------------------------
     const paletteLabel = document.createElement('div');
     paletteLabel.style.cssText = 'font-size:0.7rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em';
-    paletteLabel.textContent = 'All Accords — click to select';
+    paletteLabel.textContent = 'All Accords â€” click to select';
     containerEl.appendChild(paletteLabel);
 
     const grid = document.createElement('div');
@@ -3144,7 +3144,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
 
     const customLabel = document.createElement('div');
     customLabel.style.cssText = 'font-size:0.7rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em';
-    customLabel.textContent = 'Custom Accord — not in the list above?';
+    customLabel.textContent = 'Custom Accord â€” not in the list above?';
     containerEl.appendChild(customLabel);
 
     const customRow = document.createElement('div');
@@ -3152,7 +3152,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
 
     const customInput = document.createElement('input');
     customInput.type = 'text';
-    customInput.placeholder = 'e.g. oud, iris, saffron…';
+    customInput.placeholder = 'e.g. oud, iris, saffronÃ©';
     customInput.maxLength = 32;
     customInput.style.cssText = 'flex:1;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:7px 11px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box;font-family:inherit';
 
@@ -3276,7 +3276,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
         _render();
         return;
       }
-      // Custom accord — ask for color
+      // Custom accord â€” ask for color
       showColorPicker(val);
     };
 
@@ -3342,7 +3342,7 @@ const _fpSeasonLabel = v => {
   return 'All Year';
 };
 
-// Upload a single File to Cloudinary; calls progressCb(0–100)
+// Upload a single File to Cloudinary; calls progressCb(0â€“100)
 const _apUploadToCloudinary = (file, progressCb) => new Promise((resolve, reject) => {
   const formData = new FormData();
   formData.append('file', file);
@@ -3363,7 +3363,7 @@ const _apUploadToCloudinary = (file, progressCb) => new Promise((resolve, reject
   xhr.send(formData);
 });
 
-// Thumbnail image gallery widget — items: { type:'url'|'file', src, file? }
+// Thumbnail image gallery widget â€” items: { type:'url'|'file', src, file? }
 // First item = MAIN (gold border). Returns controller object.
 const _apCreateImageGallery = (wrapEl) => {
   let items = [];
@@ -3381,7 +3381,7 @@ const _apCreateImageGallery = (wrapEl) => {
         <img src="${imgSrc}" alt="" style="width:${size}px;height:${size}px;object-fit:contain;border-radius:${radius}px;border:${isMain ? '2px solid var(--gold)' : '1px solid var(--border)'};background:var(--s3);display:block">
         ${isMain ? '<span style="position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:8px;font-weight:800;color:#fff;background:var(--gold);border-radius:0 0 10px 10px;padding:3px 0;letter-spacing:0.06em">MAIN</span>' : ''}
         ${item.type === 'file' ? '<span style="position:absolute;top:4px;left:4px;font-size:7px;font-weight:800;color:#fff;background:rgba(0,0,0,0.55);padding:1px 4px;border-radius:3px;line-height:1.4">NEW</span>' : ''}
-        <button type="button" title="Remove" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1">×</button>`;
+        <button type="button" title="Remove" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1">Ã—</button>`;
       thumb.querySelector('button').addEventListener('click', () => {
         if (item.type === 'file') URL.revokeObjectURL(item.src);
         items.splice(i, 1);
@@ -3469,7 +3469,7 @@ const _apAddSizeRow = (container, sizeVal = '', priceVal = '', origPriceVal = ''
         </label>
         <div style="position:relative">
           <input type="number" placeholder="Optional" class="prod-size-orig-price" min="0" value="${esc(origPriceVal)}"
-            title="Fill this if the product is on sale — enter the original (higher) price"
+            title="Fill this if the product is on sale â€” enter the original (higher) price"
             style="width:100%;background:var(--s2);border:1px dashed rgba(200,169,106,0.45);border-radius:8px;padding:9px 38px 9px 11px;font-size:0.9rem;font-weight:600;color:var(--text);outline:none;box-sizing:border-box;transition:border-color 0.15s">
           <span style="position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:0.65rem;font-weight:800;color:var(--gold)">MAD</span>
         </div>
@@ -3494,7 +3494,7 @@ const _apAddSizeRow = (container, sizeVal = '', priceVal = '', origPriceVal = ''
     const o = parseFloat(origInput.value);
     if (p > 0 && o > p) {
       const pct = Math.round((1 - p / o) * 100);
-      saleText.textContent = `Sale active — ${pct}% off · Customers will see ${o} MAD crossed out, paying ${p} MAD`;
+      saleText.textContent = `Sale active â€” ${pct}% off â€” Customers will see ${o} MAD crossed out, paying ${p} MAD`;
       salePreview.style.display = 'flex';
       row.style.borderColor = 'rgba(21,128,61,0.35)';
       origInput.style.borderColor = 'rgba(21,128,61,0.5)';
@@ -3533,7 +3533,7 @@ const initAddProductModal = () => {
         <div>
           <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:8px">
             Product Images <span style="color:var(--rose)">*</span>
-            <span style="font-weight:400;font-size:0.7rem"> — first image is the main photo</span>
+            <span style="font-weight:400;font-size:0.7rem"> â€” first image is the main photo</span>
           </label>
           <div id="addProductImagesGallery" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;padding:2px 0"></div>
         </div>
@@ -3548,7 +3548,7 @@ const initAddProductModal = () => {
             style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
         </div>
         <div>
-          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Description <span style="font-weight:400;font-size:0.7rem;color:var(--muted)">— shown on product page</span></label>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Description <span style="font-weight:400;font-size:0.7rem;color:var(--muted)">â€” shown on product page</span></label>
           <textarea id="addProductDescription" rows="4" placeholder="e.g. A bold and seductive fragrance that opens with bergamot and cloves..."
             style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit;line-height:1.6"></textarea>
         </div>
@@ -3573,7 +3573,7 @@ const initAddProductModal = () => {
         <div>
           <div style="margin-bottom:8px">
             <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:3px">Sizes &amp; Prices <span style="color:var(--rose)">*</span></div>
-            <div style="font-size:0.7rem;color:var(--muted);line-height:1.5">Set a price per size. Want to run a <strong style="color:var(--gold)">sale</strong>? Fill in the &ldquo;Before Sale&rdquo; field too — the site shows the old price crossed out automatically.</div>
+            <div style="font-size:0.7rem;color:var(--muted);line-height:1.5">Set a price per size. Want to run a <strong style="color:var(--gold)">sale</strong>? Fill in the &ldquo;Before Sale&rdquo; field too â€” the site shows the old price crossed out automatically.</div>
           </div>
           <div id="addProductSizesContainer" style="display:flex;flex-direction:column;gap:8px"></div>
           <button type="button" id="addProductAddSizeBtn"
@@ -3586,7 +3586,7 @@ const initAddProductModal = () => {
         <div>
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
             <div style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;flex-shrink:0"><i class="fas fa-chart-simple" style="font-size:0.65rem"></i></div>
-            <div style="font-size:0.88rem;font-weight:700;color:var(--text)">Fragrance Profile <span style="font-weight:400;color:var(--muted);font-size:0.78rem">— optional</span></div>
+            <div style="font-size:0.88rem;font-weight:700;color:var(--text)">Fragrance Profile <span style="font-weight:400;color:var(--muted);font-size:0.78rem">â€” optional</span></div>
           </div>
           <div style="display:flex;flex-direction:column;gap:14px">
             <div>
@@ -3617,14 +3617,14 @@ const initAddProductModal = () => {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div>
             <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
-              Stock Left <span style="font-weight:400;font-size:0.7rem">— shows "Only X left!" when low</span>
+              Stock Left <span style="font-weight:400;font-size:0.7rem">â€” shows "Only X left!" when low</span>
             </label>
             <input type="number" id="addProductStockLeft" min="0" max="9999" placeholder="e.g. 12 (empty = unlimited)"
               style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
           </div>
           <div>
             <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
-              Product Badge <span style="font-weight:400;font-size:0.7rem">— shown on card &amp; product page</span>
+              Product Badge <span style="font-weight:400;font-size:0.7rem">â€” shown on card &amp; product page</span>
             </label>
             <div id="addBadgePresets" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
               <button type="button" data-badge-preset="NEW" style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #111;background:#111;color:#fff">NEW</button>
@@ -3643,11 +3643,11 @@ const initAddProductModal = () => {
         <!-- Optional Details -->
         <details style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
           <summary style="padding:10px 14px;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--muted);list-style:none;display:flex;align-items:center;gap:8px;background:var(--s3)">
-            <i class="fas fa-leaf" style="color:var(--gold)"></i> Optional Details — Accords, Notes &amp; Ingredients
+            <i class="fas fa-leaf" style="color:var(--gold)"></i> Optional Details â€” Accords, Notes &amp; Ingredients
           </summary>
           <div style="padding:12px 14px;display:flex;flex-direction:column;gap:10px;background:var(--s3)">
             <div>
-              <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Main Accords <span style="font-weight:400">— click to select (up to 8)</span></label>
+              <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Main Accords <span style="font-weight:400">â€” click to select (up to 8)</span></label>
               <div id="addProductAccordsPicker" style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;box-sizing:border-box"></div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
@@ -3668,7 +3668,7 @@ const initAddProductModal = () => {
               </div>
             </div>
             <div>
-              <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Ingredients (INCI) <span style="font-weight:400">— comma-separated</span></label>
+              <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Ingredients (INCI) <span style="font-weight:400">â€” comma-separated</span></label>
               <textarea id="addProductIngredients" rows="3" placeholder="e.g. Alcohol Denat., Parfum, Aqua, Limonene, Linalool"
                 style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit"></textarea>
             </div>
@@ -3781,12 +3781,12 @@ const initAddProductModal = () => {
       const priceRaw  = (row.querySelector('.prod-size-price').value || '').trim();
       const sizePrice = priceRaw === '' ? 0 : parseFloat(priceRaw);
       const origRaw   = parseFloat(row.querySelector('.prod-size-orig-price')?.value);
-      if (!sizeKey && priceRaw === '') return; // completely blank row — skip silently
+      if (!sizeKey && priceRaw === '') return; // completely blank row â€” skip silently
       if (sizeKey && sizePrice > 0) {
         sizes[sizeKey] = sizePrice;
         if (Number.isFinite(origRaw) && origRaw > sizePrice) originalPrices[sizeKey] = origRaw;
       } else if (sizeKey && sizePrice === 0) {
-        sizes[sizeKey] = 0; // price 0 — size saved but hidden on site; all-zero = product out of stock
+        sizes[sizeKey] = 0; // price 0 â€” size saved but hidden on site; all-zero = product out of stock
       } else {
         sizeError = true; // price filled but no size name
       }
@@ -3925,7 +3925,7 @@ const initEditProductModal = () => {
                 <div style="font-size:0.75rem;color:var(--muted);margin-top:8px">No main image selected</div>
               </div>
               <button type="button" id="editMainImgRemoveBtn" title="Remove image"
-                style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,0.25)">×</button>
+                style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,0.25)">Ã—</button>
             </div>
             <label id="editMainImgDrop" style="border:2px dashed var(--border);border-radius:12px;padding:24px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:8px;min-height:200px;background:var(--s3);text-align:center;box-sizing:border-box;transition:border-color 0.2s">
               <input type="file" id="editMainImgInput" accept="image/jpeg,image/png,image/webp,image/jpg" style="display:none">
@@ -3981,7 +3981,7 @@ const initEditProductModal = () => {
                 style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
             </div>
             <div style="grid-column:1/-1">
-              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Description <span style="font-weight:400;font-size:0.7rem">— shown on product page</span></label>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Description <span style="font-weight:400;font-size:0.7rem">â€” shown on product page</span></label>
               <textarea id="editProductDescription" rows="4" placeholder="e.g. A bold and seductive fragrance that opens with bergamot and cloves..."
                 style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit;line-height:1.6"></textarea>
             </div>
@@ -4002,7 +4002,7 @@ const initEditProductModal = () => {
             <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0;margin-top:2px">4</div>
             <div style="flex:1">
               <div style="font-size:0.95rem;font-weight:700;color:var(--text)">Sizes &amp; Prices <span style="color:var(--rose)">*</span></div>
-              <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;line-height:1.5">Set the price for each size. To run a <strong style="color:var(--gold)">sale</strong>, also fill in the &ldquo;Before Sale&rdquo; field — the site will automatically show the old price crossed out with a discount %.</div>
+              <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;line-height:1.5">Set the price for each size. To run a <strong style="color:var(--gold)">sale</strong>, also fill in the &ldquo;Before Sale&rdquo; field â€” the site will automatically show the old price crossed out with a discount %.</div>
             </div>
           </div>
           <div id="editProductSizesContainer" style="display:flex;flex-direction:column;gap:8px;margin-top:14px"></div>
@@ -4017,7 +4017,7 @@ const initEditProductModal = () => {
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
             <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">5</div>
             <div style="font-size:0.95rem;font-weight:700;color:var(--text)">
-              Fragrance Profile <span style="font-weight:400;color:var(--muted);font-size:0.82rem">— optional, shown on product page</span>
+              Fragrance Profile <span style="font-weight:400;color:var(--muted);font-size:0.82rem">â€” optional, shown on product page</span>
             </div>
           </div>
           <div style="display:flex;flex-direction:column;gap:16px">
@@ -4050,12 +4050,12 @@ const initEditProductModal = () => {
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
             <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">6</div>
             <div style="font-size:0.95rem;font-weight:700;color:var(--text)">
-              Optional Details <span style="font-weight:400;color:var(--muted);font-size:0.82rem">— Accords, Notes &amp; Ingredients</span>
+              Optional Details <span style="font-weight:400;color:var(--muted);font-size:0.82rem">â€” Accords, Notes &amp; Ingredients</span>
             </div>
           </div>
           <div style="display:flex;flex-direction:column;gap:14px">
             <div>
-              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Main Accords <span style="font-weight:400;font-size:0.7rem">— click to select (up to 8)</span></label>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Main Accords <span style="font-weight:400;font-size:0.7rem">â€” click to select (up to 8)</span></label>
               <div id="editProductAccordsPicker" style="background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;box-sizing:border-box"></div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
@@ -4076,7 +4076,7 @@ const initEditProductModal = () => {
               </div>
             </div>
             <div>
-              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Ingredients (INCI) <span style="font-weight:400;font-size:0.7rem">— comma-separated</span></label>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Ingredients (INCI) <span style="font-weight:400;font-size:0.7rem">â€” comma-separated</span></label>
               <textarea id="editProductIngredients" rows="3" placeholder="e.g. Alcohol Denat., Parfum, Aqua, Limonene, Linalool"
                 style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit;line-height:1.6"></textarea>
             </div>
@@ -4088,20 +4088,20 @@ const initEditProductModal = () => {
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
             <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">7</div>
             <div style="font-size:0.95rem;font-weight:700;color:var(--text)">
-              Stock &amp; Badge <span style="font-weight:400;color:var(--muted);font-size:0.82rem">— optional display info for site</span>
+              Stock &amp; Badge <span style="font-weight:400;color:var(--muted);font-size:0.82rem">â€” optional display info for site</span>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
             <div>
               <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
-                Stock Left <span style="font-weight:400;font-size:0.7rem">— shows "Only X left!" when low (leave empty = unlimited)</span>
+                Stock Left <span style="font-weight:400;font-size:0.7rem">â€” shows "Only X left!" when low (leave empty = unlimited)</span>
               </label>
               <input type="number" id="editProductStockLeft" min="0" max="9999" placeholder="e.g. 12"
                 style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
             </div>
             <div>
               <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
-                Product Badge <span style="font-weight:400;font-size:0.7rem">— shown on card &amp; product page</span>
+                Product Badge <span style="font-weight:400;font-size:0.7rem">â€” shown on card &amp; product page</span>
               </label>
               <div id="editBadgePresets" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
                 <button type="button" data-badge-preset="NEW" style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #111;background:#111;color:#fff;letter-spacing:0.05em">NEW</button>
@@ -4253,7 +4253,7 @@ const initEditProductModal = () => {
       const src = item.type === 'url' ? esc(item.src) : item.src;
       div.innerHTML = `
         <img src="${src}" alt="" style="width:112px;height:112px;object-fit:cover;border-radius:12px;border:1px solid var(--border);background:var(--s3);display:block">
-        <button type="button" title="Remove" style="position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,0.2)">×</button>`;
+        <button type="button" title="Remove" style="position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,0.2)">Ã—</button>`;
       div.querySelector('button').addEventListener('click', () => {
         if (item.type === 'file') URL.revokeObjectURL(item.src);
         _galleryItems.splice(i, 1);
@@ -4339,12 +4339,12 @@ const initEditProductModal = () => {
       const priceRaw  = (row.querySelector('.prod-size-price').value || '').trim();
       const sizePrice = priceRaw === '' ? 0 : parseFloat(priceRaw);
       const origRaw   = parseFloat(row.querySelector('.prod-size-orig-price')?.value);
-      if (!sizeKey && priceRaw === '') return; // completely blank row — skip silently
+      if (!sizeKey && priceRaw === '') return; // completely blank row â€” skip silently
       if (sizeKey && sizePrice > 0) {
         sizes[sizeKey] = sizePrice;
         if (Number.isFinite(origRaw) && origRaw > sizePrice) originalPrices[sizeKey] = origRaw;
       } else if (sizeKey && sizePrice === 0) {
-        sizes[sizeKey] = 0; // price 0 — size saved but hidden on site; all-zero = product out of stock
+        sizes[sizeKey] = 0; // price 0 â€” size saved but hidden on site; all-zero = product out of stock
       } else {
         sizeError = true; // price filled but no size name
       }
@@ -4380,7 +4380,7 @@ const initEditProductModal = () => {
         if (item.type === 'url') {
           galleryUrls.push(item.src);
         } else {
-          progressLabel.textContent = `Uploading gallery image ${++done} of ${galleryFiles.length}…`;
+          progressLabel.textContent = `Uploading gallery image ${++done} of ${galleryFiles.length}â€¦`;
           progressBar.style.width = Math.round(35 + (done / Math.max(galleryFiles.length, 1)) * 50) + '%';
           galleryUrls.push(await _apUploadToCloudinary(item.file));
         }
@@ -4418,7 +4418,7 @@ const initEditProductModal = () => {
         }
         await setDoc(doc(db, 'products', newSlug), payload);
         await deleteDoc(doc(db, 'products', originalSlug));
-        // Remove any stale productOverrides entries — admin products are managed
+        // Remove any stale productOverrides entries â€” admin products are managed
         // exclusively via products.sizes, never via productOverrides.
         try { await deleteDoc(doc(db, 'productOverrides', newSlug)); } catch (_) {}
         try { await deleteDoc(doc(db, 'productOverrides', originalSlug)); } catch (_) {}
@@ -4568,7 +4568,7 @@ const loadFirestoreProductsSection = async () => {
       const displayImage = UNIQUE_LOCAL_IMAGE_BY_SLUG[slug] || p.image || '';
       const _visibleSizes = Object.entries(p.sizes || {}).filter(([, price]) => Number(price) > 0);
       const sizesHtml = _visibleSizes.map(([sz, price], i) =>
-        `<span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:1px solid ${i===0?'#1f2937':'#d1d5db'};color:${i===0?'#111':'#6b7280'};background:transparent">${sz.toUpperCase()} — ${price} MAD</span>`
+        `<span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:1px solid ${i===0?'#1f2937':'#d1d5db'};color:${i===0?'#111':'#6b7280'};background:transparent">${sz.toUpperCase()} â€” ${price} MAD</span>`
       ).join('');
       const statusBadge = p.active === false
         ? '<span style="font-size:10px;font-weight:700;background:rgba(239,68,68,0.12);color:var(--rose);padding:3px 8px;border-radius:20px;border:1px solid rgba(239,68,68,0.25)">Disabled</span>'
@@ -4581,7 +4581,7 @@ const loadFirestoreProductsSection = async () => {
               <span style="font-size:0.85rem;font-weight:700;color:var(--text)">${esc(p.name||'')}</span>
               ${statusBadge}
             </div>
-            <div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px">${esc(p.brand||'')} · Added via Admin</div>
+            <div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px">${esc(p.brand||'')} â€” Added via Admin</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap">${sizesHtml}</div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">

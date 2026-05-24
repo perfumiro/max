@@ -1905,8 +1905,8 @@
       const itemLines = items.slice(0, 3).map((it) =>
         `<div class="d-order-item">
           <span class="d-order-item-name">${it.name || 'Product'}</span>
-          ${it.size ? ` · ${it.size}` : ''} · â€”${it.qty || 1}
-          ${it.pricePending ? ' · <em style="color:var(--muted)">Pending</em>' : ` · ${formatMAD(it.price * it.qty)}`}
+          ${it.size ? ` â€” ${it.size}` : ''} â€” â€”${it.qty || 1}
+          ${it.pricePending ? ' â€” <em style="color:var(--muted)">Pending</em>' : ` â€” ${formatMAD(it.price * it.qty)}`}
         </div>`
       ).join('');
       const moreCount = items.length > 3 ? `<div class="d-order-item" style="color:var(--subtle)">+ ${items.length - 3} more item${items.length - 3 !== 1 ? 's' : ''}â€”</div>` : '';

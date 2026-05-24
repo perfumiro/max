@@ -15196,22 +15196,22 @@ nav[aria-label="Breadcrumb"] ol {
     animation: hb-dot-fill 5.5s linear forwards;
 }
 
-/* Dot 1 — Yellow */
+/* Dot 1 — Blue */
 .hero-banner-dot:nth-child(1).hero-banner-dot--active::after {
-    background: #f5c518;
-    box-shadow: 0 0 8px rgba(245, 197, 24, 0.6);
+    background: #3b82f6;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
 }
 
-/* Dot 2 — Green */
+/* Dot 2 — Pink */
 .hero-banner-dot:nth-child(2).hero-banner-dot--active::after {
-    background: #22c55e;
-    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
-}
-
-/* Dot 3 — Pink */
-.hero-banner-dot:nth-child(3).hero-banner-dot--active::after {
     background: #ec4899;
     box-shadow: 0 0 8px rgba(236, 72, 153, 0.6);
+}
+
+/* Dot 3 — Orange */
+.hero-banner-dot:nth-child(3).hero-banner-dot--active::after {
+    background: #f97316;
+    box-shadow: 0 0 8px rgba(249, 115, 22, 0.6);
 }
 
 .hero-banner-dot:hover:not(.hero-banner-dot--active) {
