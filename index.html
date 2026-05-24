@@ -2844,7 +2844,7 @@ Tawk_API.onLoad=function(){
                             <button type="button" class="js-card-add-btn w-full bg-[#111827] text-white text-[11px] font-extrabold py-3.5 rounded-xl hover:bg-black transition-colors uppercase tracking-[0.1em]" data-i18n="index.add_to_cart">ADD TO CART</button>
                         </div></div></article>
                 </div>
-                <script>(function(){var c=document.getElementById('newArrivalsCarousel');if(!c)return;var a=Array.from(c.querySelectorAll('article[data-added]'));a.sort(function(x,y){return(y.dataset.added||'').localeCompare(x.dataset.added||'');});a.forEach(function(el){c.appendChild(el);});})();</script>
+                <script>(function(){var c=document.getElementById('newArrivalsCarousel');if(!c)return;var a=Array.from(c.querySelectorAll('article[data-added]'));a.sort(function(x,y){return(y.dataset.added||'').localeCompare(x.dataset.added||'');});a.forEach(function(el){c.appendChild(el);});c.scrollLeft=0;})();</script>
 
                 <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none hidden md:block"></div>
 
