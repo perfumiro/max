@@ -909,13 +909,15 @@ body {
 }
 
 @keyframes heroPanA {
-    0%   { transform: scale(1.07) translate(0%, 0%); }
-    100% { transform: scale(1.07) translate(-2.5%, -1.5%); }
+    0%   { transform: scale(1.07) perspective(1200px) rotateX(-1deg) rotateY(-1.5deg) translate(0%, 0%); }
+    50%  { transform: scale(1.10) perspective(1200px) rotateX(0.5deg) rotateY(1deg) translate(-1.5%, -1%); }
+    100% { transform: scale(1.07) perspective(1200px) rotateX(-1deg) rotateY(-1.5deg) translate(0%, 0%); }
 }
 
 @keyframes heroPanB {
-    0%   { transform: scale(1.07) translate(2%, 0%); }
-    100% { transform: scale(1.07) translate(0%, 1.5%); }
+    0%   { transform: scale(1.07) perspective(1200px) rotateX(0.5deg) rotateY(1deg) translate(2%, 0%); }
+    50%  { transform: scale(1.10) perspective(1200px) rotateX(-0.5deg) rotateY(-1.5deg) translate(0%, 1.5%); }
+    100% { transform: scale(1.07) perspective(1200px) rotateX(0.5deg) rotateY(1deg) translate(2%, 0%); }
 }
 
 .hero-prime {
@@ -14998,6 +15000,8 @@ nav[aria-label="Breadcrumb"] ol {
     display: block;
     width: 100%;
     line-height: 0;
+    position: relative;
+    overflow: hidden;
 }
 
 .hero-banner-img {
@@ -15365,35 +15369,50 @@ nav[aria-label="Breadcrumb"] ol {
    HERO BANNER — Magical 3D Living Background
    ══════════════════════════════════════════════════════════════ */
 
-/* ── Slide 1: drifts FROM THE TOP — image tilts down toward viewer ── */
+/* ── Slide 1: CINEMATIC ORBIT — slowly orbits around the product like a camera ── */
 @keyframes heroBgFromTop {
-    0%   { transform: scale(1.03) perspective(1400px) rotateX(-3.5deg) rotateY(0deg)    translateY(-18px); }
-    35%  { transform: scale(1.06) perspective(1400px) rotateX(-1.2deg) rotateY(0.6deg)  translateY(-6px);  }
-    65%  { transform: scale(1.08) perspective(1400px) rotateX(0.4deg)  rotateY(-0.5deg) translateY(2px);   }
-    100% { transform: scale(1.03) perspective(1400px) rotateX(-3.5deg) rotateY(0deg)    translateY(-18px); }
+    0%   { transform: scale(1.06) perspective(1000px) rotateX(-2deg) rotateY(-2.5deg) translateY(-10px) translateX(8px); }
+    20%  { transform: scale(1.09) perspective(1000px) rotateX(1.5deg) rotateY(-0.5deg) translateY(4px) translateX(3px); }
+    40%  { transform: scale(1.11) perspective(1000px) rotateX(2.5deg) rotateY(2deg) translateY(10px) translateX(-5px); }
+    60%  { transform: scale(1.09) perspective(1000px) rotateX(0.5deg) rotateY(3deg) translateY(5px) translateX(-10px); }
+    80%  { transform: scale(1.07) perspective(1000px) rotateX(-1.5deg) rotateY(0.8deg) translateY(-5px) translateX(0px); }
+    100% { transform: scale(1.06) perspective(1000px) rotateX(-2deg) rotateY(-2.5deg) translateY(-10px) translateX(8px); }
 }
 
-/* ── Slide 2: drifts FROM THE BOTTOM — image rises up toward viewer ── */
+/* ── Slide 2: DEEP FLOAT — rises from depth with gentle barrel rotation ── */
 @keyframes heroBgFromBottom {
-    0%   { transform: scale(1.03) perspective(1400px) rotateX(3.5deg)  rotateY(0deg)    translateY(18px);  }
-    35%  { transform: scale(1.06) perspective(1400px) rotateX(1.2deg)  rotateY(-0.6deg) translateY(6px);   }
-    65%  { transform: scale(1.08) perspective(1400px) rotateX(-0.4deg) rotateY(0.5deg)  translateY(-2px);  }
-    100% { transform: scale(1.03) perspective(1400px) rotateX(3.5deg)  rotateY(0deg)    translateY(18px);  }
+    0%   { transform: scale(1.05) perspective(900px) rotateX(3deg) rotateY(0deg) translateY(14px) translateZ(-20px); }
+    16%  { transform: scale(1.08) perspective(900px) rotateX(1.5deg) rotateY(1.8deg) translateY(6px) translateZ(-8px); }
+    33%  { transform: scale(1.11) perspective(900px) rotateX(-0.5deg) rotateY(2.5deg) translateY(-2px) translateZ(0px); }
+    50%  { transform: scale(1.12) perspective(900px) rotateX(-1.5deg) rotateY(0.5deg) translateY(-6px) translateZ(5px); }
+    66%  { transform: scale(1.10) perspective(900px) rotateX(0deg) rotateY(-1.8deg) translateY(0px) translateZ(0px); }
+    83%  { transform: scale(1.07) perspective(900px) rotateX(1.8deg) rotateY(-1deg) translateY(8px) translateZ(-12px); }
+    100% { transform: scale(1.05) perspective(900px) rotateX(3deg) rotateY(0deg) translateY(14px) translateZ(-20px); }
 }
 
-/* ── Slide 3: drifts FROM THE SIDE — image sweeps left to right ── */
+/* ── Slide 3: CINEMATIC SWEEP — dramatic side-to-side with depth push ── */
 @keyframes heroBgFromSide {
-    0%   { transform: scale(1.03) perspective(1400px) rotateY(-4.5deg) rotateX(0deg)    translateX(-20px); }
-    35%  { transform: scale(1.06) perspective(1400px) rotateY(-1.5deg) rotateX(0.5deg)  translateX(-7px);  }
-    65%  { transform: scale(1.08) perspective(1400px) rotateY(0.8deg)  rotateX(-0.4deg) translateX(4px);   }
-    100% { transform: scale(1.03) perspective(1400px) rotateY(-4.5deg) rotateX(0deg)    translateX(-20px); }
+    0%   { transform: scale(1.06) perspective(1000px) rotateY(-4deg) rotateX(1deg) translateX(-16px) translateZ(-15px); }
+    20%  { transform: scale(1.09) perspective(1000px) rotateY(-1.5deg) rotateX(2deg) translateX(-5px) translateZ(0px); }
+    40%  { transform: scale(1.12) perspective(1000px) rotateY(1.5deg) rotateX(0.5deg) translateX(6px) translateZ(8px); }
+    60%  { transform: scale(1.11) perspective(1000px) rotateY(3deg) rotateX(-1deg) translateX(12px) translateZ(3px); }
+    80%  { transform: scale(1.08) perspective(1000px) rotateY(0.5deg) rotateX(0deg) translateX(2px) translateZ(-8px); }
+    100% { transform: scale(1.06) perspective(1000px) rotateY(-4deg) rotateX(1deg) translateX(-16px) translateZ(-15px); }
 }
 
 /* Golden atmospheric bloom — pulsing depth light */
 @keyframes heroAtmosphere {
-    0%, 100% { opacity: 0;    transform: scale(1);    }
-    40%       { opacity: 1;    transform: scale(1.04); }
-    70%       { opacity: 0.65; transform: scale(1.02); }
+    0%, 100% { opacity: 0;    transform: scale(1) rotate(0deg);    }
+    25%       { opacity: 0.85; transform: scale(1.03) rotate(0.3deg); }
+    50%       { opacity: 1;    transform: scale(1.05) rotate(0deg);  }
+    75%       { opacity: 0.7;  transform: scale(1.02) rotate(-0.3deg); }
+}
+
+/* Shimmer light sweep across the hero */
+@keyframes heroShimmerSweep {
+    0%   { transform: translateX(-120%) skewX(-15deg); opacity: 0; }
+    40%  { opacity: 1; }
+    100% { transform: translateX(250%) skewX(-15deg); opacity: 0; }
 }
 
 /* Depth vignette ring — breathes in / out */
@@ -15402,28 +15421,28 @@ nav[aria-label="Breadcrumb"] ol {
     50%       { opacity: 0.82; }
 }
 
-/* Slide 1 — FROM TOP */
+/* Slide 1 — CINEMATIC ORBIT */
 .hero-banner-slide:nth-child(1).hero-banner-slide--active .hero-banner-img,
 .hero-banner-slide:nth-child(1).hero-banner-slide--entering-next .hero-banner-img,
 .hero-banner-slide:nth-child(1).hero-banner-slide--entering-prev .hero-banner-img {
-    animation: heroBgFromTop 18s ease-in-out infinite;
-    transform-origin: center top;
+    animation: heroBgFromTop 22s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+    transform-origin: center center;
 }
 
-/* Slide 2 — FROM BOTTOM */
+/* Slide 2 — DEEP FLOAT */
 .hero-banner-slide:nth-child(2).hero-banner-slide--active .hero-banner-img,
 .hero-banner-slide:nth-child(2).hero-banner-slide--entering-next .hero-banner-img,
 .hero-banner-slide:nth-child(2).hero-banner-slide--entering-prev .hero-banner-img {
-    animation: heroBgFromBottom 18s ease-in-out infinite;
-    transform-origin: center bottom;
+    animation: heroBgFromBottom 24s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+    transform-origin: center center;
 }
 
-/* Slide 3 — FROM SIDE */
+/* Slide 3 — CINEMATIC SWEEP */
 .hero-banner-slide:nth-child(3).hero-banner-slide--active .hero-banner-img,
 .hero-banner-slide:nth-child(3).hero-banner-slide--entering-next .hero-banner-img,
 .hero-banner-slide:nth-child(3).hero-banner-slide--entering-prev .hero-banner-img {
-    animation: heroBgFromSide 18s ease-in-out infinite;
-    transform-origin: left center;
+    animation: heroBgFromSide 20s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+    transform-origin: center center;
 }
 
 /* Atmospheric golden radial bloom — layered depth glow */
@@ -15432,12 +15451,13 @@ nav[aria-label="Breadcrumb"] ol {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse 55% 45% at 50% 22%, rgba(212,175,55,0.14) 0%, transparent 65%),
-        radial-gradient(ellipse 42% 36% at 28% 72%, rgba(90,40,130,0.09) 0%, transparent 55%),
-        radial-gradient(ellipse 36% 32% at 76% 58%, rgba(212,175,55,0.07) 0%, transparent 50%);
+        radial-gradient(ellipse 60% 50% at 50% 20%, rgba(212,175,55,0.16) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 40% at 25% 70%, rgba(120,50,160,0.10) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 35% at 78% 55%, rgba(212,175,55,0.09) 0%, transparent 45%),
+        radial-gradient(ellipse 30% 25% at 55% 40%, rgba(255,255,255,0.04) 0%, transparent 40%);
     z-index: 4;
     pointer-events: none;
-    animation: heroAtmosphere 10s ease-in-out infinite;
+    animation: heroAtmosphere 8s ease-in-out infinite;
 }
 
 /* Radial vignette depth ring — focuses the eye on centre */
@@ -15445,10 +15465,31 @@ nav[aria-label="Breadcrumb"] ol {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 78% 78% at 50% 50%, transparent 38%, rgba(0,0,0,0.38) 100%);
+    background: radial-gradient(ellipse 72% 72% at 50% 45%, transparent 30%, rgba(0,0,0,0.45) 100%);
     z-index: 3;
     pointer-events: none;
-    animation: heroDepthVignette 12s ease-in-out infinite;
+    animation: heroDepthVignette 10s ease-in-out infinite;
+}
+
+/* Light shimmer sweep — cinematic lens flare */
+.hero-banner-slide--active .hero-banner-img-link::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(
+        105deg,
+        transparent 20%,
+        rgba(255,255,255,0.06) 40%,
+        rgba(212,175,55,0.08) 50%,
+        rgba(255,255,255,0.04) 60%,
+        transparent 80%
+    );
+    z-index: 5;
+    pointer-events: none;
+    animation: heroShimmerSweep 12s ease-in-out 3s infinite;
 }
 
 /* -- SEO Editorial Section -- */
