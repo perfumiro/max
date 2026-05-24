@@ -7393,6 +7393,61 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     })();
 
+    // ── Shared wishlist auth modal ───────────────────────────────
+    const showWishlistAuthModal = (base = 'pages/') => {
+        let modal = document.getElementById('wishlistAuthModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'wishlistAuthModal';
+            modal.style.cssText = 'display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;';
+            modal.innerHTML = `
+                <div id="wishlistAuthBackdrop" style="position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:opacity 0.3s;"></div>
+                <div class="wl-modal-card" style="position:relative;background:#fff;border-radius:24px;padding:2.8rem 2.2rem 2.2rem;max-width:380px;width:calc(100% - 32px);box-shadow:0 32px 80px rgba(0,0,0,0.22),0 0 0 1px rgba(255,255,255,0.06) inset;text-align:center;animation:wishlistModalIn 0.38s cubic-bezier(0.22,1,0.36,1);overflow:hidden;">
+                    <button id="wishlistAuthClose" type="button" aria-label="Close" style="position:absolute;top:16px;right:18px;background:none;border:none;cursor:pointer;font-size:13px;color:#9ca3af;line-height:1;transition:color 0.2s;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:all 0.2s;">&#x2715;</button>
+                    <div class="wl-heart-icon" style="width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,#fff0f0,#ffe0e6);display:flex;align-items:center;justify-content:center;margin:0 auto 1.3rem;box-shadow:0 8px 24px rgba(231,76,76,0.15);animation:wishlistHeartPulse 1.8s ease-in-out infinite;">
+                        <i class="fas fa-heart" style="font-size:26px;color:#e74c4c;"></i>
+                    </div>
+                    <h3 style="font-size:1.35rem;font-weight:800;color:#111827;margin:0 0 0.5rem;font-family:'Playfair Display',serif;letter-spacing:-0.01em;">Save to Wishlist</h3>
+                    <p style="font-size:0.88rem;color:#6b7280;margin:0 0 1.8rem;line-height:1.6;">Sign in to save your favourite fragrances and access your wishlist from any device.</p>
+                    <a id="wishlistAuthSignIn" href="${base}login.html" class="wl-btn-primary" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:14px 0;border-radius:14px;text-decoration:none;margin-bottom:10px;transition:all 0.25s;box-shadow:0 4px 16px rgba(0,0,0,0.18);"><i class="fas fa-right-to-bracket" style="font-size:14px;"></i> Sign In</a>
+                    <a id="wishlistAuthRegister" href="${base}register.html" class="wl-btn-secondary" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#111827;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:13px 0;border-radius:14px;text-decoration:none;border:1.5px solid #e5e7eb;transition:all 0.25s;"><i class="fas fa-user-plus" style="font-size:13px;color:#6b7280;"></i> Create Account</a>
+                    <p style="font-size:0.72rem;color:#9ca3af;margin:1.4rem 0 0;line-height:1.4;"><i class="fas fa-lock" style="font-size:9px;margin-right:3px;"></i> Your data is secure and never shared</p>
+                </div>
+            `;
+            let style = document.getElementById('wishlistAuthModalStyle');
+            if (!style) {
+                style = document.createElement('style');
+                style.id = 'wishlistAuthModalStyle';
+                style.textContent = [
+                    '@keyframes wishlistModalIn{from{opacity:0;transform:translateY(20px) scale(0.95);}to{opacity:1;transform:translateY(0) scale(1);}}',
+                    '@keyframes wishlistHeartPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}',
+                    '#wishlistAuthClose:hover{background:rgba(0,0,0,0.06);color:#374151;}',
+                    '.wl-btn-primary:hover{box-shadow:0 6px 24px rgba(0,0,0,0.28);transform:translateY(-1px);}',
+                    '.wl-btn-secondary:hover{background:#f9fafb;border-color:#d1d5db;transform:translateY(-1px);}',
+                ].join('');
+                document.head.appendChild(style);
+            }
+            document.body.appendChild(modal);
+        } else {
+            const signInLink = document.getElementById('wishlistAuthSignIn');
+            const registerLink = document.getElementById('wishlistAuthRegister');
+            if (signInLink)   signInLink.href   = base + 'login.html';
+            if (registerLink) registerLink.href = base + 'register.html';
+        }
+        // Re-run the entrance animation
+        const card = modal.querySelector('.wl-modal-card');
+        if (card) { card.style.animation = 'none'; void card.offsetWidth; card.style.animation = ''; }
+
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        const close = () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        };
+        document.getElementById('wishlistAuthClose')?.addEventListener('click', close, { once: true });
+        document.getElementById('wishlistAuthBackdrop')?.addEventListener('click', close, { once: true });
+    };
+
     const initWishlistButtons = () => {
         const headerWishlistButtons = document.querySelectorAll('.header-icon-btn[aria-label="Wishlist"]');
         const productFavoriteButtons = Array.from(document.querySelectorAll('button i.fa-heart, button i.far.fa-heart, button i.fas.fa-heart'))
@@ -7640,46 +7695,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!isAuthenticatedUser()) {
                     const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
                     const base = inPages ? '' : 'pages/';
-                    let modal = document.getElementById('wishlistAuthModal');
-                    if (!modal) {
-                        modal = document.createElement('div');
-                        modal.id = 'wishlistAuthModal';
-                        modal.style.cssText = 'display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;';
-                        modal.innerHTML = `
-                            <div id="wishlistAuthBackdrop" style="position:absolute;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px);"></div>
-                            <div style="position:relative;background:#fff;border-radius:20px;padding:2.5rem 2rem 2rem;max-width:360px;width:calc(100% - 32px);box-shadow:0 24px 64px rgba(0,0,0,0.18);text-align:center;animation:wishlistModalIn 0.32s cubic-bezier(0.22,1,0.36,1);">
-                                <button id="wishlistAuthClose" type="button" aria-label="Close" style="position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;font-size:18px;color:#9ca3af;line-height:1;transition:color 0.2s;">&#x2715;</button>
-                                <div style="width:56px;height:56px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;margin:0 auto 1.1rem;">
-                                    <i class="fas fa-heart" style="font-size:22px;color:#e74c4c;"></i>
-                                </div>
-                                <h3 style="font-size:1.2rem;font-weight:800;color:#111827;margin:0 0 0.45rem;font-family:'Playfair Display',serif;">Save to Wishlist</h3>
-                                <p style="font-size:0.85rem;color:#6b7280;margin:0 0 1.6rem;line-height:1.5;">Sign in or create a free account to save your favourite perfumes and access them anywhere.</p>
-                                <a id="wishlistAuthSignIn" href="${base}login.html" style="display:block;background:#111827;color:#fff;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:13px 0;border-radius:12px;text-decoration:none;margin-bottom:10px;transition:background 0.2s;">Sign In</a>
-                                <a id="wishlistAuthRegister" href="${base}register.html" style="display:block;background:#fff;color:#111827;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-radius:12px;text-decoration:none;border:1.5px solid #e5e7eb;transition:background 0.2s;">Create Account</a>
-                            </div>
-                        `;
-                        let style = document.getElementById('wishlistAuthModalStyle');
-                        if (!style) {
-                            style = document.createElement('style');
-                            style.id = 'wishlistAuthModalStyle';
-                            style.textContent = '@keyframes wishlistModalIn { from { opacity:0; transform:translateY(24px) scale(0.96); } to { opacity:1; transform:translateY(0) scale(1); } }';
-                            document.head.appendChild(style);
-                        }
-                        document.body.appendChild(modal);
-                    } else {
-                        const signInLink = document.getElementById('wishlistAuthSignIn');
-                        const registerLink = document.getElementById('wishlistAuthRegister');
-                        if (signInLink)   signInLink.href   = base + 'login.html';
-                        if (registerLink) registerLink.href = base + 'register.html';
-                    }
-                    modal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
-                    const close = () => {
-                        modal.style.display = 'none';
-                        document.body.style.overflow = '';
-                    };
-                    document.getElementById('wishlistAuthClose')?.addEventListener('click', close, { once: true });
-                    document.getElementById('wishlistAuthBackdrop')?.addEventListener('click', close, { once: true });
+                    showWishlistAuthModal(base);
                     return;
                 }
 
@@ -11123,48 +11139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
             const base = inPages ? '' : 'pages/';
-            let modal = document.getElementById('wishlistAuthModal');
-            
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = 'wishlistAuthModal';
-                modal.style.cssText = 'display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;';
-                modal.innerHTML = `
-                    <div id="wishlistAuthBackdrop" style="position:absolute;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px);"></div>
-                    <div style="position:relative;background:#fff;border-radius:20px;padding:2.5rem 2rem 2rem;max-width:360px;width:calc(100% - 32px);box-shadow:0 24px 64px rgba(0,0,0,0.18);text-align:center;animation:wishlistModalIn 0.32s cubic-bezier(0.22,1,0.36,1);">
-                        <button id="wishlistAuthClose" type="button" aria-label="Close" style="position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;font-size:18px;color:#9ca3af;line-height:1;transition:color 0.2s;">&#x2715;</button>
-                        <div style="width:56px;height:56px;border-radius:50%;background:#fef2f2;display:flex;align-items:center;justify-content:center;margin:0 auto 1.1rem;">
-                            <i class="fas fa-heart" style="font-size:22px;color:#e74c4c;"></i>
-                        </div>
-                        <h3 style="font-size:1.2rem;font-weight:800;color:#111827;margin:0 0 0.45rem;font-family:'Playfair Display',serif;">Save to Wishlist</h3>
-                        <p style="font-size:0.85rem;color:#6b7280;margin:0 0 1.6rem;line-height:1.5;">Sign in or create a free account to save your favourite perfumes and access them anywhere.</p>
-                        <a id="wishlistAuthSignIn" href="${base}login.html" style="display:block;background:#111827;color:#fff;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:13px 0;border-radius:12px;text-decoration:none;margin-bottom:10px;transition:background 0.2s;">Sign In</a>
-                        <a id="wishlistAuthRegister" href="${base}register.html" style="display:block;background:#fff;color:#111827;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:12px 0;border-radius:12px;text-decoration:none;border:1.5px solid #e5e7eb;transition:background 0.2s;">Create Account</a>
-                    </div>
-                `;
-                let style = document.getElementById('wishlistAuthModalStyle');
-                if (!style) {
-                    style = document.createElement('style');
-                    style.id = 'wishlistAuthModalStyle';
-                    style.textContent = '@keyframes wishlistModalIn { from { opacity:0; transform:translateY(24px) scale(0.96); } to { opacity:1; transform:translateY(0) scale(1); } }';
-                    document.head.appendChild(style);
-                }
-                document.body.appendChild(modal);
-            } else {
-                const signInLink = document.getElementById('wishlistAuthSignIn');
-                const registerLink = document.getElementById('wishlistAuthRegister');
-                if (signInLink)   signInLink.href   = base + 'login.html';
-                if (registerLink) registerLink.href = base + 'register.html';
-            }
-
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            const closeModal = () => {
-                modal.style.display = 'none';
-                document.body.style.overflow = '';
-            };
-            document.getElementById('wishlistAuthClose')?.addEventListener('click', closeModal, { once: true });
-            document.getElementById('wishlistAuthBackdrop')?.addEventListener('click', closeModal, { once: true });
+            showWishlistAuthModal(base);
         }
     }, true); // capture phase so it runs before any other listener
     setHeaderCartCount();
