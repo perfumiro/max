@@ -2155,23 +2155,22 @@ const loadNewsletterView = async () => {
 
         const _bk = ['xkeysib','af6aab934f2296cf608b17da7fcf9219721731c168849201a62c1c77d0911d07','VAHSaAnk2wfodov4'].join('-');
 
-        // Send in batches of 50 (Brevo limit per call)
-        const BATCH = 50;
+        // Send one email per recipient (privacy + reliability)
         let sent = 0, failed = 0;
-        for(let i = 0; i < audience.length; i += BATCH){
-          const batch = audience.slice(i, i + BATCH);
-          const to = batch.map(s => ({ email: s.email, name: s.name || s.email.split('@')[0] }));
+        for(let i = 0; i < audience.length; i++){
+          const s = audience[i];
+          if(!s.email) { failed++; continue; }
           try {
             const res = await fetch('https://api.brevo.com/v3/smtp/email', {
               method: 'POST',
               headers: { 'accept':'application/json', 'content-type':'application/json', 'api-key': _bk },
-              body: JSON.stringify({ sender:{ name:'IPORDISE', email:'perfumiro@gmail.com' }, to, subject, htmlContent })
+              body: JSON.stringify({ sender:{ name:'IPORDISE', email:'perfumiro@gmail.com' }, to:[{ email: s.email, name: s.name || s.email.split('@')[0] }], subject, htmlContent })
             });
-            if(res.ok) sent += batch.length; else failed += batch.length;
-          } catch(e){ failed += batch.length; }
-          const pct = Math.round(((i + batch.length) / audience.length) * 100);
+            if(res.ok){ sent++; } else { failed++; console.warn('[NL] Brevo error for', s.email, res.status, await res.text()); }
+          } catch(e){ failed++; console.error('[NL] Brevo error for', s.email, e); }
+          const pct = Math.round(((i + 1) / audience.length) * 100);
           if(barEl) barEl.style.width = pct + '%';
-          if(statusEl) statusEl.textContent = `Sending… ${i + batch.length}/${audience.length}`;
+          if(statusEl) statusEl.textContent = `Sending… ${i + 1}/${audience.length}`;
         }
 
         b2.disabled = false;
