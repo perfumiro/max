@@ -1,4 +1,4 @@
-﻿// ─── IPORDISE Admin — Firebase Analytics Dashboard ────────────────────────────
+// --- IPORDISE Admin � Firebase Analytics Dashboard ----------------------------
 // Auth: Firebase Email/Password   Data: Firestore   No server required.
 
 import { initializeApp }
@@ -11,9 +11,9 @@ import {
   query, orderBy, limit, where, onSnapshot,
   serverTimestamp, updateDoc,
 } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
-// Image uploads use Cloudinary (unsigned preset — no Firebase Storage needed)
+// Image uploads use Cloudinary (unsigned preset � no Firebase Storage needed)
 
-// ─── FIREBASE ─────────────────────────────────────────────────────────────────
+// --- FIREBASE -----------------------------------------------------------------
 const firebaseConfig = {
   apiKey:            'AIzaSyAt-fnGB3Y69qEmg4pjOWneKrutbnQLMM4',
   authDomain:        'ipordise-aef54.firebaseapp.com',
@@ -26,14 +26,14 @@ const fbApp = initializeApp(firebaseConfig);
 const auth  = getAuth(fbApp);
 const db    = getFirestore(fbApp);
 
-// ─── CLOUDINARY CONFIG ────────────────────────────────────────────────────────
+// --- CLOUDINARY CONFIG --------------------------------------------------------
 const CLOUDINARY_CLOUD = 'dp5eszu4p';
 const CLOUDINARY_PRESET = 'IPORIDSE_PRODUCTS';
 
 // Change this to match the admin account email in your Firebase Auth console
 const ADMIN_EMAIL = 'admin@ipordise.com';
 
-// ─── UTILITIES ────────────────────────────────────────────────────────────────
+// --- UTILITIES ----------------------------------------------------------------
 const qs  = (sel, ctx = document) => ctx.querySelector(sel);
 const qsa = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 const esc = (s) => { const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; };
@@ -51,7 +51,7 @@ const relTime = (ts) => {
 const deviceIcon = (t) => ({ mobile: '<i class="fas fa-mobile-screen"></i>', tablet: '<i class="fas fa-tablet-screen-button"></i>', desktop: '<i class="fas fa-desktop"></i>' }[t] || '<i class="fas fa-desktop"></i>');
 const today = () => new Date().toISOString().slice(0, 10);
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
+// --- STATE --------------------------------------------------------------------
 const state = {
   currentView:    'overview',
   trafficRange:   30,
@@ -62,7 +62,7 @@ const state = {
   pollers: [],
 };
 
-// ─── TOAST ────────────────────────────────────────────────────────────────────
+// --- TOAST --------------------------------------------------------------------
 const toast = (msg, type = 'info', duration = 3500) => {
   const el = document.createElement('div');
   el.className = `toast toast-${type}`;
@@ -74,7 +74,7 @@ const toast = (msg, type = 'info', duration = 3500) => {
   }, duration);
 };
 
-// ─── THEME ────────────────────────────────────────────────────────────────────
+// --- THEME --------------------------------------------------------------------
 const setTheme = (theme) => {
   document.body.setAttribute('data-theme', theme);
   localStorage.setItem('ipordise-admin-theme', theme);
@@ -86,7 +86,7 @@ const initTheme = () => {
   setTheme(s === 'dark' || s === 'light' ? s : (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'));
 };
 
-// ─── SIDEBAR + VIEW NAV ───────────────────────────────────────────────────────
+// --- SIDEBAR + VIEW NAV -------------------------------------------------------
 const openMobileSidebar  = () => { qs('#sidebar')?.classList.add('open'); qs('#sidebarOverlay')?.classList.add('open'); };
 const closeMobileSidebar = () => { qs('#sidebar')?.classList.remove('open'); qs('#sidebarOverlay')?.classList.remove('open'); };
 const switchView = (name) => {
@@ -118,11 +118,11 @@ const initSidebar = () => {
   });
 };
 
-// ─── SCREENS ─────────────────────────────────────────────────────────────────
+// --- SCREENS -----------------------------------------------------------------
 const showAuth      = () => { qs('#authScreen').classList.remove('hidden'); qs('#dashboardScreen').classList.add('hidden'); };
 const showDashboard = () => { qs('#authScreen').classList.add('hidden'); qs('#dashboardScreen').classList.remove('hidden'); };
 
-// ─── ANIMATED COUNTER ─────────────────────────────────────────────────────────
+// --- ANIMATED COUNTER ---------------------------------------------------------
 const animateCount = (el, target, dur = 700) => {
   if (!el) return;
   const start = parseInt(el.textContent.replace(/,/g, ''), 10) || 0;
@@ -137,7 +137,7 @@ const animateCount = (el, target, dur = 700) => {
   requestAnimationFrame(step);
 };
 
-// ─── STATS GRID ───────────────────────────────────────────────────────────────
+// --- STATS GRID ---------------------------------------------------------------
 const setLoadingSkeleton = () => {
   qs('#statsGrid').innerHTML = Array.from({ length: 5 }, () =>
     '<div class="stat-card"><div class="skeleton" style="height:80px;border-radius:var(--radius-md)"></div></div>'
@@ -171,7 +171,7 @@ const updateStats = (stats) => {
   if (badge) badge.textContent = fmtNum(stats.todayVisits || 0);
 };
 
-// ─── LATEST VISITORS ─────────────────────────────────────────────────────────
+// --- LATEST VISITORS ---------------------------------------------------------
 const renderLatestVisitors = (rows) => {
   const tbody  = qs('#latestVisitorsBody');
   const mobile = qs('#latestVisitorsMobile');
@@ -203,7 +203,7 @@ const renderLatestVisitors = (rows) => {
   </div>`).join('');
 };
 
-// ─── VISITORS TABLE ───────────────────────────────────────────────────────────
+// --- VISITORS TABLE -----------------------------------------------------------
 const renderVisitorsTable = (rows) => {
   const tbody  = qs('#visitorsBody');
   const mobile = qs('#visitorsMobile');
@@ -235,11 +235,11 @@ const renderVisitorsTable = (rows) => {
   </div>`).join('');
 };
 
-// ─── PAGINATION ───────────────────────────────────────────────────────────────
+// --- PAGINATION ---------------------------------------------------------------
 const renderPagination = () => {
   const { page, totalPages, total } = state.pagination;
   const info = qs('#paginationInfo');
-  if (info) info.textContent = `Page ${page} of ${totalPages} — ${fmtNum(total)} records`;
+  if (info) info.textContent = `Page ${page} of ${totalPages} � ${fmtNum(total)} records`;
   const lbl = qs('#visitorCountLabel');
   if (lbl) lbl.textContent = `${fmtNum(total)} records`;
   const controls = qs('#paginationControls');
@@ -253,7 +253,7 @@ const renderPagination = () => {
   qs('#pageNext')?.addEventListener('click', () => { if (state.pagination.page < state.pagination.totalPages) { state.pagination.page++; loadVisitors().catch(e => toast(e.message, 'error')); } });
 };
 
-// ─── RANK LIST ────────────────────────────────────────────────────────────────
+// --- RANK LIST ----------------------------------------------------------------
 const renderRankList = (selector, rows) => {
   const el = qs(selector);
   if (!el) return;
@@ -267,7 +267,7 @@ const renderRankList = (selector, rows) => {
   </div>`).join('');
 };
 
-// ─── ACTIVITY FEED ────────────────────────────────────────────────────────────
+// --- ACTIVITY FEED ------------------------------------------------------------
 const actCls = (page) => {
   const p = (page || '').toLowerCase();
   if (p.includes('product') || p.includes('perfume')) return 'activity-icon-product';
@@ -290,16 +290,16 @@ const renderActivity = (rows) => {
       <div class="activity-page">${esc(r.currentPage || r.entryPage || '/')}</div>
       <div class="activity-meta">
         <span>${deviceIcon(r.device)}</span>
-        <span class="activity-meta-sep">·</span><span>${esc(r.referrer || 'direct')}</span>
-        ${r.converted ? '<span class="activity-meta-sep">·</span><span class="badge badge-green">converted</span>' : ''}
-        ${r.checkoutStarted ? '<span class="activity-meta-sep">·</span><span class="badge badge-gold">checkout</span>' : ''}
+        <span class="activity-meta-sep">�</span><span>${esc(r.referrer || 'direct')}</span>
+        ${r.converted ? '<span class="activity-meta-sep">�</span><span class="badge badge-green">converted</span>' : ''}
+        ${r.checkoutStarted ? '<span class="activity-meta-sep">�</span><span class="badge badge-gold">checkout</span>' : ''}
       </div>
     </div>
     <div class="activity-time">${relTime(r.lastSeen)}</div>
   </div>`).join('');
 };
 
-// ─── CHARTS ───────────────────────────────────────────────────────────────────
+// --- CHARTS -------------------------------------------------------------------
 const chartCfg = () => document.body.getAttribute('data-theme') === 'dark'
   ? { gold: '#c8a96a', goldFill: 'rgba(200,169,106,.12)', sky: '#38bdf8', emerald: '#22c55e', rose: '#f43f5e', amber: '#f59e0b', grid: 'rgba(255,255,255,.06)', ticks: 'rgba(255,255,255,.35)', tooltip: '#1c1c2a' }
   : { gold: '#b8922a', goldFill: 'rgba(184,146,42,.1)',   sky: '#0369a1', emerald: '#16a34a', rose: '#dc2626', amber: '#d97706', grid: 'rgba(0,0,0,.06)', ticks: 'rgba(0,0,0,.4)', tooltip: '#ffffff' };
@@ -342,7 +342,7 @@ const renderAnalyticsChart = (visitsByDay) => {
   });
 };
 
-// ─── FIRESTORE DATA ───────────────────────────────────────────────────────────
+// --- FIRESTORE DATA -----------------------------------------------------------
 const getVisitsByDay = async (days) => {
   // days=0 means today only (since midnight)
   const sinceKey = days === 0
@@ -434,7 +434,7 @@ const aggregateSessions = async (days) => {
   };
 };
 
-// ─── DATA LOADERS ─────────────────────────────────────────────────────────────
+// --- DATA LOADERS -------------------------------------------------------------
 const loadOverview = async () => {
   const [stats, latestVisitors, visitsByDay, agg] = await Promise.all([
     getOverviewStats(),
@@ -446,7 +446,7 @@ const loadOverview = async () => {
   renderLatestVisitors(latestVisitors);
   renderCharts(visitsByDay, agg.deviceBreakdown);
   renderRankList('#topPagesList',         agg.topPages);
-  renderRankList('#topCountriesList',     agg.topCountries.length ? agg.topCountries : [{ name: '🌍 Collecting — visit site to generate data', value: 0 }]);
+  renderRankList('#topCountriesList',     agg.topCountries.length ? agg.topCountries : [{ name: '?? Collecting � visit site to generate data', value: 0 }]);
   renderRankList('#browserBreakdownList', agg.topReferrers);
   const el = qs('#lastUpdated');
   if (el) el.textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -485,8 +485,8 @@ const loadAnalyticsView = async () => {
     aggregateSessions(state.analyticsRange),
   ]);
   renderAnalyticsChart(visitsByDay);
-  renderRankList('#analyticsCountriesList', agg.topCountries.length ? agg.topCountries : [{ name: '🌍 Collecting — visit site to generate data', value: 0 }]);
-  renderRankList('#analyticsCitiesList',    agg.topCities.length    ? agg.topCities    : [{ name: '🏙️ Collecting — visit site to generate data', value: 0 }]);
+  renderRankList('#analyticsCountriesList', agg.topCountries.length ? agg.topCountries : [{ name: '?? Collecting � visit site to generate data', value: 0 }]);
+  renderRankList('#analyticsCitiesList',    agg.topCities.length    ? agg.topCities    : [{ name: '??? Collecting � visit site to generate data', value: 0 }]);
   renderRankList('#analyticsDevicesList',   agg.deviceBreakdown);
 };
 
@@ -504,7 +504,7 @@ const refreshAll = async () => {
   await loadOverview();
 };
 
-// ─── FILTERS ─────────────────────────────────────────────────────────────────
+// --- FILTERS -----------------------------------------------------------------
 const initFilters = () => {
   const applyFilters = () => {
     state.filters.search = qs('#filterSearch')?.value?.trim()  || '';
@@ -526,7 +526,7 @@ const initFilters = () => {
   );
 };
 
-// ─── TOOLBAR ─────────────────────────────────────────────────────────────────
+// --- TOOLBAR -----------------------------------------------------------------
 const initToolbar = () => {
   qs('#refreshBtn')?.addEventListener('click', () =>
     refreshAll().then(() => toast('Dashboard refreshed', 'success')).catch(() => {})
@@ -552,10 +552,10 @@ const initToolbar = () => {
   if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 };
 
-// ─── EXPORTS ─────────────────────────────────────────────────────────────────
+// --- EXPORTS -----------------------------------------------------------------
 const initExports = () => {
   const doExport = async (fmt) => {
-    toast('Preparing export…', 'info');
+    toast('Preparing export�', 'info');
     try {
       const snap = await getDocs(
         query(collection(db, 'analytics_sessions'), orderBy('startTime', 'desc'), limit(5000))
@@ -587,7 +587,7 @@ const initExports = () => {
   qs('#exportJsonBtn2')?.addEventListener('click',() => doExport('json'));
 };
 
-// ─── AUTH ─────────────────────────────────────────────────────────────────────
+// --- AUTH ---------------------------------------------------------------------
 const REMEMBER_KEY = 'ipordise-admin-remember-email';
 
 const doLogout = async () => {
@@ -632,7 +632,7 @@ const initAuth = () => {
       const cred  = await signInWithEmailAndPassword(auth, email, pwdInput.value);
       if (cred.user.email?.toLowerCase() !== ADMIN_EMAIL) {
         await signOut(auth);
-        throw new Error('Access denied — this account is not authorised as admin.');
+        throw new Error('Access denied � this account is not authorised as admin.');
       }
       if (remember?.checked) localStorage.setItem(REMEMBER_KEY, email);
       else localStorage.removeItem(REMEMBER_KEY);
@@ -649,16 +649,16 @@ const initAuth = () => {
     if (!confirm('This will revoke ALL admin sessions on every device. Continue?')) return;
     try {
       await setDoc(doc(db, 'admin_config', 'security'), { revokedBefore: Date.now() }, { merge: true });
-      toast('All sessions revoked — everyone must sign in again.', 'success');
+      toast('All sessions revoked � everyone must sign in again.', 'success');
     } catch (err) { toast('Error: ' + err.message, 'error'); }
     await doLogout();
   });
 
   const apiHint = qs('#apiHint');
-  if (apiHint) apiHint.textContent = 'Firebase · ' + firebaseConfig.projectId;
+  if (apiHint) apiHint.textContent = 'Firebase � ' + firebaseConfig.projectId;
 };
 
-// ─── BOOTSTRAP ───────────────────────────────────────────────────────────────
+// --- BOOTSTRAP ---------------------------------------------------------------
 const bootstrapDashboard = async (user) => {
   try {
     const tokenResult   = await user.getIdTokenResult(true);
@@ -690,7 +690,7 @@ const bootstrapDashboard = async (user) => {
   ];
 };
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
+// --- INIT ---------------------------------------------------------------------
 const init = () => {
   initTheme();
   initAuth();
@@ -708,7 +708,7 @@ const init = () => {
   });
 };
 
-// ─── ORDERS VIEW ──────────────────────────────────────────────────────────────
+// --- ORDERS VIEW --------------------------------------------------------------
 let _allOrders = [];
 let _ordersUnsubscribe = null;  // holds the onSnapshot unsubscribe fn
 
@@ -727,7 +727,7 @@ const _renderOrdersError = (msg) => {
   if (!tbody) return;
   tbody.innerHTML = `<tr><td colspan="6" style="padding:32px;text-align:center">
     <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:12px;padding:20px;max-width:520px;margin:0 auto">
-      <div style="font-size:1.5rem;margin-bottom:8px">⚠️</div>
+      <div style="font-size:1.5rem;margin-bottom:8px">??</div>
       <div style="font-weight:700;color:#dc2626;margin-bottom:6px">Could not load orders</div>
       <div style="font-size:12px;color:#7f1d1d;background:#fff;border-radius:8px;padding:8px 12px;font-family:monospace;margin-bottom:12px;text-align:left;word-break:break-all">${esc(msg)}</div>
       <div style="font-size:12px;color:#6b7280;margin-bottom:12px">This usually means Firestore rules have not been deployed yet.<br>Run: <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px">firebase deploy --only firestore:rules</code></div>
@@ -742,7 +742,7 @@ const _renderOrdersEmpty = () => {
   if (!tbody) return;
   tbody.innerHTML = `<tr><td colspan="7" style="padding:32px;text-align:center">
     <div style="background:var(--surface-2,#f9fafb);border:1.5px dashed var(--border);border-radius:12px;padding:28px;max-width:440px;margin:0 auto">
-      <div style="font-size:2rem;margin-bottom:8px">📦</div>
+      <div style="font-size:2rem;margin-bottom:8px">??</div>
       <div style="font-weight:700;color:var(--text);margin-bottom:6px">No orders yet</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:14px">When customers complete checkout, their orders will appear here automatically in real time.</div>
       <button class="btn btn-xs btn-gold" id="ordersTestBtn"><i class="fas fa-flask"></i> Test Firestore Connection</button>
@@ -772,10 +772,10 @@ const _testOrdersConnection = async () => {
     const count = snap.size;
     // Clean up test doc
     await deleteDoc(doc(db, 'orders', testId)).catch(() => {});
-    toast(`✅ Firestore works! Found ${count - 1} real orders in database.`, 'success', 5000);
+    toast(`? Firestore works! Found ${count - 1} real orders in database.`, 'success', 5000);
     await loadOrdersView();
   } catch (e) {
-    toast('❌ Firestore error: ' + e.message, 'error', 8000);
+    toast('? Firestore error: ' + e.message, 'error', 8000);
     if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-flask"></i> Test Firestore Connection'; }
   }
 };
@@ -797,7 +797,7 @@ const renderOrdersTable = (orders) => {
     const itemNames = (o.items || []).slice(0, 2).map(i => esc(i.name || '')).join(', ');
     const moreItems = (o.items || []).length > 2 ? ` +${(o.items||[]).length - 2} more` : '';
     const total = o.summary?.hasPendingPricing
-      ? `<span style="color:var(--amber);font-size:11px">⏳ Pending</span>`
+      ? `<span style="color:var(--amber);font-size:11px">? Pending</span>`
       : `<span style="font-weight:700;color:var(--ink)">${fmtMAD(o.summary?.total)}</span>`;
     const date = o.createdAt
       ? new Intl.DateTimeFormat('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }).format(o.createdAt)
@@ -816,7 +816,7 @@ const renderOrdersTable = (orders) => {
       </td>
       <td style="padding:12px 14px">
         <div style="font-weight:600;color:var(--ink);font-size:13px">${channelDot}${name}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:1px">${phone}${city ? ' · ' + city : ''}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px">${phone}${city ? ' � ' + city : ''}</div>
       </td>
       <td style="padding:12px 14px">
         <div style="font-size:12px;color:var(--ink);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${itemNames}${moreItems}">${itemNames}${moreItems ? `<span style="color:var(--muted)">${esc(moreItems)}</span>` : ''}</div>
@@ -863,7 +863,7 @@ const loadOrdersView = async () => {
   // Tear down any previous real-time listener
   if (_ordersUnsubscribe) { _ordersUnsubscribe(); _ordersUnsubscribe = null; }
 
-  // ── Step 1: initial load via getDocs (no index required, works immediately) ──
+  // -- Step 1: initial load via getDocs (no index required, works immediately) --
   try {
     const snap = await getDocs(collection(db, 'orders'));
     const rows = snap.docs.map((d) => {
@@ -880,7 +880,7 @@ const loadOrdersView = async () => {
     return;
   }
 
-  // ── Step 2: upgrade to real-time listener (best effort, non-blocking) ──
+  // -- Step 2: upgrade to real-time listener (best effort, non-blocking) --
   try {
     _ordersUnsubscribe = onSnapshot(
       query(collection(db, 'orders'), orderBy('createdAt', 'desc')),
@@ -893,9 +893,9 @@ const loadOrdersView = async () => {
         if (badge) { badge.textContent = _allOrders.length; badge.style.display = _allOrders.length ? '' : 'none'; }
         applyOrderFilters();
       },
-      () => { /* real-time failed — stay on getDocs snapshot, no error shown */ }
+      () => { /* real-time failed � stay on getDocs snapshot, no error shown */ }
     );
-  } catch (_) { /* index not ready — initial getDocs data is already showing */ }
+  } catch (_) { /* index not ready � initial getDocs data is already showing */ }
 };
 
 // View order detail modal
@@ -966,13 +966,13 @@ window._adminViewOrder = (orderId) => {
         </div>
       </div>`;
 
-  const waMsg = `Bonjour ${displayName},\n\nVotre commande IPORDISE *${order.orderId || order.id}* est maintenant : *${cfg.label}*.\n${order.trackingNumber ? `\n🚚 Numéro de suivi : ${order.trackingNumber}` : ''}\n\nMerci de votre confiance ! 🙏`;
+  const waMsg = `Bonjour ${displayName},\n\nVotre commande IPORDISE *${order.orderId || order.id}* est maintenant : *${cfg.label}*.\n${order.trackingNumber ? `\n?? Num�ro de suivi : ${order.trackingNumber}` : ''}\n\nMerci de votre confiance ! ??`;
 
   if (title) title.textContent = order.orderId || order.id;
 
   body.innerHTML = `
 
-    <!-- ── SECTION 1: Status + channel + date ── -->
+    <!-- -- SECTION 1: Status + channel + date -- -->
     <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:14px 16px;background:var(--s3);border-radius:12px;border:1px solid var(--border);margin-bottom:14px">
       <span style="display:inline-flex;align-items:center;gap:6px;background:${cfg.color}18;color:${cfg.color};padding:5px 14px;border-radius:99px;font-size:12px;font-weight:700;letter-spacing:.03em;border:1px solid ${cfg.color}30">
         <span style="width:6px;height:6px;border-radius:50%;background:${cfg.color};display:inline-block"></span>
@@ -982,7 +982,7 @@ window._adminViewOrder = (orderId) => {
       ${dateStr ? `<span style="margin-left:auto;display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)"><i class="far fa-calendar" style="color:var(--dim)"></i> ${dateStr}</span>` : ''}
     </div>
 
-    <!-- ── SECTION 2: Customer & Delivery info ── -->
+    <!-- -- SECTION 2: Customer & Delivery info -- -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
       <!-- Customer -->
       <div style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px">
@@ -1004,7 +1004,7 @@ window._adminViewOrder = (orderId) => {
           </span>
           <span style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700">Delivery</span>
         </div>
-        <div style="font-weight:600;color:var(--ink);font-size:13px;margin-bottom:6px;line-height:1.3">${esc(c.address || '—')}</div>
+        <div style="font-weight:600;color:var(--ink);font-size:13px;margin-bottom:6px;line-height:1.3">${esc(c.address || '�')}</div>
         <div style="display:flex;align-items:center;gap:5px;color:var(--muted);font-size:12px">
           <i class="fas fa-location-dot" style="font-size:10px;color:var(--dim)"></i>
           ${esc(c.city || '')}${c.city ? ', Morocco' : 'Morocco'}
@@ -1020,7 +1020,7 @@ window._adminViewOrder = (orderId) => {
       <div style="font-size:12px;color:#78350f;line-height:1.5"><span style="font-weight:700">Customer note: </span>${esc(c.notes)}</div>
     </div>` : ''}
 
-    <!-- ── SECTION 3: Order items ── -->
+    <!-- -- SECTION 3: Order items -- -->
     <div style="margin-bottom:14px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <span style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700">
@@ -1033,12 +1033,12 @@ window._adminViewOrder = (orderId) => {
       </div>
     </div>
 
-    <!-- ── SECTION 4: Financial summary ── -->
+    <!-- -- SECTION 4: Financial summary -- -->
     <div style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
       ${summaryHtml}
     </div>
 
-    <!-- ── SECTION 5: Update order status ── -->
+    <!-- -- SECTION 5: Update order status -- -->
     <div style="background:var(--s3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
       <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;margin-bottom:10px">
         <i class="fas fa-sliders" style="margin-right:5px;color:var(--dim)"></i>Update Order
@@ -1058,7 +1058,7 @@ window._adminViewOrder = (orderId) => {
       <div id="modalSaveMsg" style="display:none;font-size:12px;margin-top:8px;padding:7px 11px;border-radius:8px"></div>
     </div>
 
-    <!-- ── SECTION 6: Actions ── -->
+    <!-- -- SECTION 6: Actions -- -->
     <a href="https://wa.me/${esc(waPhone)}?text=${encodeURIComponent(waMsg)}"
        target="_blank" rel="noopener noreferrer"
        style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:#25d366;color:#fff;border-radius:12px;font-size:13px;font-weight:700;text-decoration:none;letter-spacing:.02em;box-shadow:0 2px 12px rgba(37,211,102,.3)">
@@ -1067,7 +1067,7 @@ window._adminViewOrder = (orderId) => {
 
   modal.style.display = 'flex';
 
-  // Close handlers — remove old listeners by cloning
+  // Close handlers � remove old listeners by cloning
   const closeBtn = qs('#closeOrderModal');
   if (closeBtn) {
     const newClose = closeBtn.cloneNode(true);
@@ -1091,14 +1091,14 @@ window._adminViewOrder = (orderId) => {
       const ord = _allOrders.find((o) => o.id === orderId);
       if (ord) { ord.status = newStatus; if (tracking) ord.trackingNumber = tracking; }
       if (msgEl) {
-        msgEl.textContent = '✓ Status updated!';
+        msgEl.textContent = '? Status updated!';
         msgEl.style.cssText = 'display:block;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;font-size:12px;margin-top:8px;padding:6px 10px;border-radius:8px';
       }
       applyOrderFilters();
       setTimeout(() => { modal.style.display = 'none'; }, 900);
     } catch (e) {
       if (msgEl) {
-        msgEl.textContent = '✗ Error: ' + e.message;
+        msgEl.textContent = '? Error: ' + e.message;
         msgEl.style.cssText = 'display:block;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;font-size:12px;margin-top:8px;padding:6px 10px;border-radius:8px';
       }
     }
@@ -1122,7 +1122,7 @@ document.addEventListener('change', async (e) => {
   } catch(e) { toast('Error: ' + e.message, 'error'); }
 });
 
-// Wire up orders filters — runs directly (module is already deferred, DOM is ready)
+// Wire up orders filters � runs directly (module is already deferred, DOM is ready)
 const _initOrdersFilters = () => {
   qs('#ordersStatusFilter')?.addEventListener('change', applyOrderFilters);
   qs('#ordersSearch')?.addEventListener('input', applyOrderFilters);
@@ -1131,7 +1131,7 @@ const _initOrdersFilters = () => {
   qs('#customersSearch')?.addEventListener('input', applyCustomerFilters);
 };
 
-// ─── CUSTOMERS VIEW ───────────────────────────────────────────────────────────
+// --- CUSTOMERS VIEW -----------------------------------------------------------
 let _allCustomers = [];
 
 const renderCustomersTable = (customers) => {
@@ -1151,7 +1151,7 @@ const renderCustomersTable = (customers) => {
     return `<tr style="border-bottom:1px solid var(--border)">
       <td style="padding:10px 12px;color:var(--text)">
         <div style="font-weight:600">${name}</div>
-        <div style="font-size:11px;color:var(--muted);font-family:monospace">${esc(c.uid.slice(0,12))}…</div>
+        <div style="font-size:11px;color:var(--muted);font-family:monospace">${esc(c.uid.slice(0,12))}�</div>
       </td>
       <td style="padding:10px 12px;color:var(--muted)">${phone}</td>
       <td style="padding:10px 12px;color:var(--muted)">${city}, Morocco</td>
@@ -1215,7 +1215,7 @@ const loadCustomersView = async () => {
 init();
 _initOrdersFilters();
 
-// ─── REVIEWS VIEW ──────────────────────────────────────────────────────────────
+// --- REVIEWS VIEW --------------------------------------------------------------
 let _allReviews = [];
 let _pendingReplyId = null;
 
@@ -1388,11 +1388,11 @@ document.addEventListener('click', (e) => {
 });
 
 
-// ─── REVENUE VIEW ────────────────────────────────────────────────────────────
+// --- REVENUE VIEW ------------------------------------------------------------
 const loadRevenueView = async () => {
   const setEl = (id, v) => { const el = qs('#' + id); if (el) el.textContent = v; };
-  setEl('revTotalRevenue', '…'); setEl('revDeliveredCount', '…');
-  setEl('revAvgOrder', '…'); setEl('revThisMonth', '…'); setEl('revPendingCount', '…');
+  setEl('revTotalRevenue', '�'); setEl('revDeliveredCount', '�');
+  setEl('revAvgOrder', '�'); setEl('revThisMonth', '�'); setEl('revPendingCount', '�');
   const monthlyBody = qs('#revenueMonthlyBody');
   const topProducts = qs('#revenueTopProducts');
   if (monthlyBody) monthlyBody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>`;
@@ -1459,7 +1459,7 @@ const loadRevenueView = async () => {
           const isCurrentMonth = key === thisMonthKey;
           return `<tr style="border-bottom:1px solid var(--border);${isCurrentMonth ? 'background:rgba(200,169,106,.06)' : ''}">
             <td style="padding:11px 14px;font-weight:${isCurrentMonth ? '700' : '500'};color:var(--ink)">
-              ${isCurrentMonth ? '<span style="color:var(--gold)">★ </span>' : ''}${label}
+              ${isCurrentMonth ? '<span style="color:var(--gold)">? </span>' : ''}${label}
             </td>
             <td style="padding:11px 14px;color:var(--muted)">${count}</td>
             <td style="padding:11px 14px;font-weight:700;color:var(--gold)">${revenue.toLocaleString('fr-MA')} MAD</td>
@@ -1499,7 +1499,7 @@ const loadRevenueView = async () => {
   }
 };
 
-// ─── DISCOUNTS VIEW ─────────────────────────────────────────────────────────────────
+// --- DISCOUNTS VIEW -----------------------------------------------------------------
 const loadDiscountsView = async () => {
   const tbody = qs('#discountsTableBody');
   const countEl = qs('#discountsCount');
@@ -1543,7 +1543,7 @@ const renderDiscountsTable = (codes) => {
     const minStr = c.minOrder > 0 ? `${c.minOrder} MAD` : `<span style="color:var(--muted)">None</span>`;
     const usageStr = c.usageLimit > 0
       ? `${c.usedCount || 0} / ${c.usageLimit}`
-      : `${c.usedCount || 0} / <span style="color:var(--muted)">∞</span>`;
+      : `${c.usedCount || 0} / <span style="color:var(--muted)">8</span>`;
     const now = Date.now();
     const expiresMs = c.expiresAt?.toMillis?.() || null;
     const isExpired = expiresMs && expiresMs < now;
@@ -1606,7 +1606,7 @@ const handleCreateDiscount = async () => {
   };
 
   if (!codeVal) return showMsg('Code is required.', false);
-  if (!/^[A-Z0-9]{2,20}$/.test(codeVal)) return showMsg('Code must be 2–20 letters/numbers only.', false);
+  if (!/^[A-Z0-9]{2,20}$/.test(codeVal)) return showMsg('Code must be 2�20 letters/numbers only.', false);
   if (!valNum || valNum <= 0) return showMsg('Value must be greater than 0.', false);
   if (typeVal === 'percentage' && valNum > 100) return showMsg('Percentage cannot exceed 100%.', false);
 
@@ -1648,7 +1648,7 @@ const handleCreateDiscount = async () => {
 
 // Discount toggle + delete via event delegation
 document.addEventListener('click', async (e) => {
-  // ── Edit ─────────────────────────────────────────────────────────────
+  // -- Edit -------------------------------------------------------------
   const editBtn = e.target.closest('[data-dc-edit]');
   if (editBtn) {
     const id = editBtn.dataset.dcEdit;
@@ -1750,7 +1750,7 @@ document.addEventListener('click', async (e) => {
             usageLimit: limitNum, active: activeVal,
             expiresAt: expiryVal ? new Date(expiryVal + 'T23:59:59Z') : null,
           }, { merge: true });
-          toast('Code updated ✓', 'success');
+          toast('Code updated ?', 'success');
           closeModal();
           loadDiscountsView();
         } catch (err) {
@@ -1785,7 +1785,7 @@ document.addEventListener('click', async (e) => {
   }
 });
 
-// ─── NOTIFICATIONS BELL ─────────────────────────────────────────────────────
+// --- NOTIFICATIONS BELL -----------------------------------------------------
 let _notifUnsubscribe = null;
 
 const initNotifications = () => {
@@ -1828,20 +1828,20 @@ const initNotifications = () => {
     badge.style.display = 'flex';
     badge.textContent = items.length;
     if (list) list.innerHTML = items.map(o => {
-      const name = esc(o.customerName || o.name || '—');
+      const name = esc(o.customerName || o.name || '�');
       const total = fmtMAD(o.total || 0);
-      const when = o.createdAt?.toDate ? new Date(o.createdAt.toDate()).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
+      const when = o.createdAt?.toDate ? new Date(o.createdAt.toDate()).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '�';
       return `<div style="padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s"
                   onmouseover="this.style.background='var(--s3)'" onmouseout="this.style.background=''"
                   onclick="document.querySelector('[data-view=orders]').click()">
-        <div style="font-size:12px;font-weight:600;color:var(--ink)">${name} · ${total}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">${when} · <span style="color:var(--amber);font-weight:600">Pending</span></div>
+        <div style="font-size:12px;font-weight:600;color:var(--ink)">${name} � ${total}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${when} � <span style="color:var(--amber);font-weight:600">Pending</span></div>
       </div>`;
     }).join('');
   }, () => {});
 };
 
-// ─── MESSAGES VIEW ─────────────────────────────────────────────────────────
+// --- MESSAGES VIEW ---------------------------------------------------------
 const loadMessagesView = async () => {
   const container = document.getElementById('messagesList');
   const countEl   = document.getElementById('messagesCount');
@@ -1870,13 +1870,13 @@ const loadMessagesView = async () => {
         return;
       }
       container.innerHTML = filtered.map(m => {
-        const name    = esc(m.name || '—');
+        const name    = esc(m.name || '�');
         const email   = esc(m.email || '');
         const subject = esc(m.subject || 'No subject');
         const body    = esc(m.message || '');
         const phone   = esc(m.phone || '');
         const orderNo = esc(m.orderNumber || '');
-        const when    = m.createdAt?.toDate ? new Date(m.createdAt.toDate()).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+        const when    = m.createdAt?.toDate ? new Date(m.createdAt.toDate()).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '�';
         const unread  = !m.read;
         return `<div class="card" style="${unread ? 'border-left:3px solid var(--gold)' : ''}">
           <div class="card-body">
@@ -1886,8 +1886,8 @@ const loadMessagesView = async () => {
                 ${unread ? '<span style="background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:8px">NEW</span>' : ''}
                 <div style="font-size:12px;color:var(--muted);margin-top:2px">
                   ${email ? `<a href="mailto:${email}" style="color:var(--sky)">${email}</a>` : ''}
-                  ${phone ? ` · ${phone}` : ''}
-                  ${orderNo ? ` · Order #${orderNo}` : ''}
+                  ${phone ? ` � ${phone}` : ''}
+                  ${orderNo ? ` � Order #${orderNo}` : ''}
                 </div>
               </div>
               <div style="text-align:right">
@@ -1948,7 +1948,7 @@ const loadMessagesView = async () => {
   }
 };
 
-// ─── NEWSLETTER VIEW ────────────────────────────────────────────────────────
+// --- NEWSLETTER VIEW --------------------------------------------------------
 const loadNewsletterView = async () => {
   const tbody   = document.getElementById('newsletterTableBody');
   const countEl = document.getElementById('newsletterCount');
@@ -1972,10 +1972,10 @@ const loadNewsletterView = async () => {
       ) : subs;
       if(list.length===0){ tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted)">No subscribers found</td></tr>`; return; }
       tbody.innerHTML = list.map(s => {
-        const email = esc(s.email||'—');
-        const name  = esc(s.name ||'—');
-        const gender= esc(s.gender||'—');
-        const when  = s.createdAt?.toDate ? new Date(s.createdAt.toDate()).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+        const email = esc(s.email||'�');
+        const name  = esc(s.name ||'�');
+        const gender= esc(s.gender||'�');
+        const when  = s.createdAt?.toDate ? new Date(s.createdAt.toDate()).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '�';
         return `<tr style="border-bottom:1px solid var(--border)">
           <td style="padding:10px 14px;font-size:13px;color:var(--ink)">${email}</td>
           <td style="padding:10px 14px;font-size:13px;color:var(--ink)">${name}</td>
@@ -2010,7 +2010,7 @@ const loadNewsletterView = async () => {
     const refreshBtn = document.getElementById('refreshNewsletterBtn');
     if(refreshBtn){ const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadNewsletterView()); }
 
-    // ── Compose panel ──────────────────────────────────────────────────────
+    // -- Compose panel ------------------------------------------------------
     const composeToggle = document.getElementById('nlComposeToggle');
     const composeBody   = document.getElementById('nlComposeBody');
     const composeChevron= document.getElementById('nlComposeChevron');
@@ -2065,9 +2065,9 @@ const loadNewsletterView = async () => {
         const emails = audience.map(s=>s.email).filter(Boolean).join(', ');
         try {
           await navigator.clipboard.writeText(emails);
-          toast(`${audience.length} email${audience.length!==1?'s':''} copied to clipboard — paste into BCC`, 'success');
+          toast(`${audience.length} email${audience.length!==1?'s':''} copied to clipboard � paste into BCC`, 'success');
         } catch(_) {
-          toast('Copy failed — your browser blocked clipboard access','error');
+          toast('Copy failed � your browser blocked clipboard access','error');
         }
       });
     }
@@ -2090,7 +2090,7 @@ const loadNewsletterView = async () => {
   }
 };
 
-// ─── PRODUCTS MANAGER VIEW ──────────────────────────────────────────────────
+// --- PRODUCTS MANAGER VIEW --------------------------------------------------
 const loadProductsView = async () => {
   const grid     = document.getElementById('productsGrid');
   const countEl  = document.getElementById('productsCount');
@@ -2104,7 +2104,7 @@ const loadProductsView = async () => {
       getDocs(collection(db,'productOverrides'))
     ]);
 
-    // ── Helpers ────────────────────────────────────────────────────────────
+    // -- Helpers ------------------------------------------------------------
     const normSizeKey = (sz) => {
       const s = (sz || '').trim().toLowerCase().replace(/\s+/g, '');
       return /^\d+$/.test(s) ? s + 'ml' : s;
@@ -2145,7 +2145,7 @@ const loadProductsView = async () => {
       const ov         = overrides[slug] || {};
       const pendingSet = pendingRemovals[slug] || new Set();
 
-      // Sizes to hide: explicitly removed (× button or rename-away) + pending UI removals
+      // Sizes to hide: explicitly removed (� button or rename-away) + pending UI removals
       const removed = new Set([
         ...(ov.removedSizes || []).map(normSizeKey),
         ...[...pendingSet].map(normSizeKey),
@@ -2171,106 +2171,106 @@ const loadProductsView = async () => {
 
     const productName = (slug) => slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 
-    // ── Product image lookup ────────────────────────────────────────────────
+    // -- Product image lookup ------------------------------------------------
     const PRODUCT_IMG = {
-      // ── Armani ──────────────────────────────────────────────────────────
-      'armani-stronger-with-you-absolutely-perfume':     '/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp',
-      'armani-stronger-with-you-powerfully-eau-de-parfum': '/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
-      'emporio-armani-stronger-with-you-intensely-edp':  '/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp',
-      // ── Azzaro ──────────────────────────────────────────────────────────
-      'azzaro-forever-wanted-elixir-eau-de-parfum':      '/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
-      'azzaro-the-most-wanted-eau-de-parfum-intense':    '/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp',
-      'azzaro-the-most-wanted-parfum':                   '/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp',
-      // ── Carolina Herrera ────────────────────────────────────────────────
-      'carolina-herrera-bad-boy-eau-de-toilette':        '/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg',
-      // ── Chanel ──────────────────────────────────────────────────────────
-      'bleu-de-chanel-eau-de-parfum-spray':              '/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg',
-      // ── Dior ────────────────────────────────────────────────────────────
-      'dior-homme-intense-eau-de-parfum':                '/assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg',
-      'dior-sauvage-eau-de-parfum':                      '/assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg',
-      // ── Givenchy ────────────────────────────────────────────────────────
-      'gentleman-private-reserve-eau-de-parfum':         '/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png',
-      'givenchy-gentleman-society-amber-eau-de-parfum':  '/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg',
-      'givenchy-gentleman-society-extreme-eau-de-parfum':'/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp',
-      'givenchy-gentleman-society-nomade-eau-de-parfum': '/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/1.webp',
-      // ── Gucci ───────────────────────────────────────────────────────────
-      'gucci-guilty-absolu-de-parfum-pour-homme':        '/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp',
-      'gucci-guilty-elixir-pour-homme':                  '/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp',
-      // ── Guerlain ────────────────────────────────────────────────────────
-      'guerlain-l-homme-ideal-extreme':                  '/assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg',
-      'guerlain-l-homme-ideal-l-intense-eau-de-parfum':  '/assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp',
+      // -- Armani ----------------------------------------------------------
+      'armani-stronger-with-you-absolutely-perfume':     'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp',
+      'armani-stronger-with-you-powerfully-eau-de-parfum': 'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
+      'emporio-armani-stronger-with-you-intensely-edp':  'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp',
+      // -- Azzaro ----------------------------------------------------------
+      'azzaro-forever-wanted-elixir-eau-de-parfum':      'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
+      'azzaro-the-most-wanted-eau-de-parfum-intense':    'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp',
+      'azzaro-the-most-wanted-parfum':                   'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp',
+      // -- Carolina Herrera ------------------------------------------------
+      'carolina-herrera-bad-boy-eau-de-toilette':        'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg',
+      // -- Chanel ----------------------------------------------------------
+      'bleu-de-chanel-eau-de-parfum-spray':              'assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg',
+      // -- Dior ------------------------------------------------------------
+      'dior-homme-intense-eau-de-parfum':                'assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg',
+      'dior-sauvage-eau-de-parfum':                      'assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg',
+      // -- Givenchy --------------------------------------------------------
+      'gentleman-private-reserve-eau-de-parfum':         'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png',
+      'givenchy-gentleman-society-amber-eau-de-parfum':  'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg',
+      'givenchy-gentleman-society-extreme-eau-de-parfum':'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp',
+      'givenchy-gentleman-society-nomade-eau-de-parfum': 'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/1.webp',
+      // -- Gucci -----------------------------------------------------------
+      'gucci-guilty-absolu-de-parfum-pour-homme':        'assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp',
+      'gucci-guilty-elixir-pour-homme':                  'assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp',
+      // -- Guerlain --------------------------------------------------------
+      'guerlain-l-homme-ideal-extreme':                  'assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg',
+      'guerlain-l-homme-ideal-l-intense-eau-de-parfum':  'assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp',
       // legacy keys (keep for any existing Firestore overrides)
-      'lhomme-ideal-extreme':                            '/assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg',
-      'lhomme-ideal-lintense-eau-de-parfum':             '/assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp',
-      // ── Hugo Boss ───────────────────────────────────────────────────────
-      'boss-bottled-absolu-intense':                     '/assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg',
-      'hugo-boss-boss-bottled-elixir-intense':           '/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg',
-      'hugo-boss-the-scent-for-him-elixir':              '/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png',
-      // ── Jean Paul Gaultier ──────────────────────────────────────────────
-      'jean-paul-gaultier-le-beau-eau-de-parfum':        '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp',
-      'jean-paul-gaultier-le-male-elixir':               '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp',
-      'jean-paul-gaultier-le-male-elixir-eau-de-parfum': '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp',
-      'jean-paul-gaultier-le-male-in-blue-eau-de-parfum':'/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg',
-      'jean-paul-gaultier-le-male-le-parfum-eau-de-parfum':'/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp',
-      'jean-paul-gaultier-le-male-eau-de-toilette':      '/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png',
-      'jean-paul-gaultier-scandal-elixir':               '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg',
-      'jean-paul-gaultier-scandal-intense-eau-de-parfum':'/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg',
-      'le-male-eau-de-toilette':                         '/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png',
-      // ── Montale ─────────────────────────────────────────────────────────
-      'montale-arabians-tonka':                          '/assets/images/products/montale/montale-arabians-tonka/1.webp',
-      // ── Prada ───────────────────────────────────────────────────────────
-      'prada-l-homme-edt':                               '/assets/images/products/prada/prada-lhomme-edt/1.jpg',
-      'prada-lhomme-edt':                                '/assets/images/products/prada/prada-lhomme-edt/1.jpg',
-      'prada-luna-rossa-black-eau-de-parfum':            '/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg',
-      'prada-luna-rossa-carbon-edt':                     '/assets/images/products/prada/prada-luna-rossa-carbon-edt/1.jpg',
-      'prada-luna-rossa-men-edt':                        '/assets/images/products/prada/prada-luna-rossa-men-edt/1.jfif',
-      'prada-luna-rossa-ocean-eau-de-parfum':            '/assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg',
-      'prada-luna-rossa-ocean-le-parfum':                '/assets/images/products/prada/prada-luna-rossa-ocean-le-parfum/1.jpg',
-      'prada-paradigme-eau-de-parfum':                   '/assets/images/products/prada/prada-paradigme-eau-de-parfum/1.png',
-      // ── Rabanne ─────────────────────────────────────────────────────────
-      'rabanne-one-million-elixir-intense':              '/assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp',
-      'rabanne-one-million-parfum':                      '/assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg',
-      // ── Unique'e Luxury ─────────────────────────────────────────────────
-      'akdeniz-unique-e-luxury':                         '/assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
-      'aphrodisiac-touch':                               '/assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
+      'lhomme-ideal-extreme':                            'assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg',
+      'lhomme-ideal-lintense-eau-de-parfum':             'assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp',
+      // -- Hugo Boss -------------------------------------------------------
+      'boss-bottled-absolu-intense':                     'assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg',
+      'hugo-boss-boss-bottled-elixir-intense':           'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg',
+      'hugo-boss-the-scent-for-him-elixir':              'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png',
+      // -- Jean Paul Gaultier ----------------------------------------------
+      'jean-paul-gaultier-le-beau-eau-de-parfum':        'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp',
+      'jean-paul-gaultier-le-male-elixir':               'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp',
+      'jean-paul-gaultier-le-male-elixir-eau-de-parfum': 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp',
+      'jean-paul-gaultier-le-male-in-blue-eau-de-parfum':'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg',
+      'jean-paul-gaultier-le-male-le-parfum-eau-de-parfum':'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp',
+      'jean-paul-gaultier-le-male-eau-de-toilette':      'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png',
+      'jean-paul-gaultier-scandal-elixir':               'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg',
+      'jean-paul-gaultier-scandal-intense-eau-de-parfum':'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg',
+      'le-male-eau-de-toilette':                         'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png',
+      // -- Montale ---------------------------------------------------------
+      'montale-arabians-tonka':                          'assets/images/products/montale/montale-arabians-tonka/1.webp',
+      // -- Prada -----------------------------------------------------------
+      'prada-l-homme-edt':                               'assets/images/products/prada/prada-lhomme-edt/1.jpg',
+      'prada-lhomme-edt':                                'assets/images/products/prada/prada-lhomme-edt/1.jpg',
+      'prada-luna-rossa-black-eau-de-parfum':            'assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg',
+      'prada-luna-rossa-carbon-edt':                     'assets/images/products/prada/prada-luna-rossa-carbon-edt/1.jpg',
+      'prada-luna-rossa-men-edt':                        'assets/images/products/prada/prada-luna-rossa-men-edt/1.jfif',
+      'prada-luna-rossa-ocean-eau-de-parfum':            'assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg',
+      'prada-luna-rossa-ocean-le-parfum':                'assets/images/products/prada/prada-luna-rossa-ocean-le-parfum/1.jpg',
+      'prada-paradigme-eau-de-parfum':                   'assets/images/products/prada/prada-paradigme-eau-de-parfum/1.png',
+      // -- Rabanne ---------------------------------------------------------
+      'rabanne-one-million-elixir-intense':              'assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp',
+      'rabanne-one-million-parfum':                      'assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg',
+      // -- Unique'e Luxury -------------------------------------------------
+      'akdeniz-unique-e-luxury':                         'assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
+      'aphrodisiac-touch':                               'assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
       'chocolate-makes-me-happy':                        'https://res.cloudinary.com/dp5eszu4p/image/upload/v1777287393/idqhoenngo6pgtzldy7n.jpg',
-      'izmir-unique-e-luxury':                           '/assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
-      'kutay':                                           '/assets/images/products/unique-luxury/kutay/1.webp',
-      'ocean-the-rive-unique-e-luxury':                  '/assets/images/products/unique-luxury/ocean-the-rive/1.avif',
-      'woud-and-mood-absolute-by-unique-e-luxury':       '/assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
-      // ── Valentino ───────────────────────────────────────────────────────
-      'valentino-born-in-roma-donna-intense-eau-de-parfum':       '/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp',
-      'valentino-born-in-roma-uomo-intense-eau-de-parfum':        '/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp',
-      'valentino-born-in-roma-extradose-eau-de-toilette':         '/assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg',
-      'valentino-born-in-rome-extradose':                         '/assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg',
-      'valentino-donna-born-in-roma-eau-de-parfum':               '/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/1.webp',
-      'valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette':'/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/1.webp',
-      'valentino-uomo-born-in-roma-eau-de-toilette':              '/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/1.jpg',
-      'valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette':'/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/1.jpg',
-      // ── Versace ─────────────────────────────────────────────────────────
-      'versace-dylan-blue-eau-de-toilette':              '/assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg',
-      'versace-eros-eau-de-parfum':                      '/assets/images/products/versace/versace-eros-eau-de-parfum/1.webp',
-      'versace-eros-energy-eau-de-parfum':               '/assets/images/products/versace/versace-eros-energy-eau-de-parfum/1.jpg',
-      'versace-eros-flame-eau-de-parfum':                '/assets/images/products/versace/versace-eros-flame-eau-de-parfum/1.jpg',
-      // ── XERJOFF ─────────────────────────────────────────────────────────
-      'alexandria-ii':                                   '/assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp',
-      'erba-pura':                                       '/assets/images/products/xerjoff/xerjoff-erba-pura/1.webp',
-      'naxos':                                           '/assets/images/products/xerjoff/xerjoff-naxos/1.webp',
-      'xerjoff-alexandria-ll-eau-de-parfum':             '/assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp',
-      'xerjoff-erba-pura':                               '/assets/images/products/xerjoff/xerjoff-erba-pura/1.webp',
-      'xerjoff-naxos':                                   '/assets/images/products/xerjoff/xerjoff-naxos/1.webp',
-      // ── YSL ─────────────────────────────────────────────────────────────
-      'yves-saint-laurent-myslf-eau-de-parfum':          '/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/1.jpg',
-      'yves-saint-laurent-myslf-le-parfum':              '/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/1.webp',
-      'yves-saint-laurent-y-eau-de-parfum':              '/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp',
+      'izmir-unique-e-luxury':                           'assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
+      'kutay':                                           'assets/images/products/unique-luxury/kutay/1.webp',
+      'ocean-the-rive-unique-e-luxury':                  'assets/images/products/unique-luxury/ocean-the-rive/1.avif',
+      'woud-and-mood-absolute-by-unique-e-luxury':       'assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
+      // -- Valentino -------------------------------------------------------
+      'valentino-born-in-roma-donna-intense-eau-de-parfum':       'assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp',
+      'valentino-born-in-roma-uomo-intense-eau-de-parfum':        'assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp',
+      'valentino-born-in-roma-extradose-eau-de-toilette':         'assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg',
+      'valentino-born-in-rome-extradose':                         'assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg',
+      'valentino-donna-born-in-roma-eau-de-parfum':               'assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/1.webp',
+      'valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette':'assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/1.webp',
+      'valentino-uomo-born-in-roma-eau-de-toilette':              'assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/1.jpg',
+      'valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette':'assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/1.jpg',
+      // -- Versace ---------------------------------------------------------
+      'versace-dylan-blue-eau-de-toilette':              'assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg',
+      'versace-eros-eau-de-parfum':                      'assets/images/products/versace/versace-eros-eau-de-parfum/1.webp',
+      'versace-eros-energy-eau-de-parfum':               'assets/images/products/versace/versace-eros-energy-eau-de-parfum/1.jpg',
+      'versace-eros-flame-eau-de-parfum':                'assets/images/products/versace/versace-eros-flame-eau-de-parfum/1.jpg',
+      // -- XERJOFF ---------------------------------------------------------
+      'alexandria-ii':                                   'assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp',
+      'erba-pura':                                       'assets/images/products/xerjoff/xerjoff-erba-pura/1.webp',
+      'naxos':                                           'assets/images/products/xerjoff/xerjoff-naxos/1.webp',
+      'xerjoff-alexandria-ll-eau-de-parfum':             'assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp',
+      'xerjoff-erba-pura':                               'assets/images/products/xerjoff/xerjoff-erba-pura/1.webp',
+      'xerjoff-naxos':                                   'assets/images/products/xerjoff/xerjoff-naxos/1.webp',
+      // -- YSL -------------------------------------------------------------
+      'yves-saint-laurent-myslf-eau-de-parfum':          'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/1.jpg',
+      'yves-saint-laurent-myslf-le-parfum':              'assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/1.webp',
+      'yves-saint-laurent-y-eau-de-parfum':              'assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp',
     };
 
-    // ── Render ─────────────────────────────────────────────────────────────
+    // -- Render -------------------------------------------------------------
     const render = () => {
       const q      = (searchEl?.value || '').toLowerCase();
       const status = filterEl?.value || '';
 
-      // ── Admin Added: scroll to Firestore section, clear grid ──────────
+      // -- Admin Added: scroll to Firestore section, clear grid ----------
       if (status === 'admin-added') {
         grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:36px 24px;color:var(--muted);border:2px dashed var(--border);border-radius:12px">
           <i class="fas fa-arrow-up" style="font-size:22px;color:var(--gold);display:block;margin-bottom:10px;animation:bounce .8s ease-in-out infinite alternate"></i>
@@ -2314,7 +2314,7 @@ const loadProductsView = async () => {
         const ov = overrides[s]||{};
         return !ov.disabled && (Object.keys(ov.prices||{}).length || (ov.removedSizes||[]).length);
       }).length;
-      if (countEl) countEl.textContent = `${total} products · ${nActive} active · ${nOv} overridden`;
+      if (countEl) countEl.textContent = `${total} products � ${nActive} active � ${nOv} overridden`;
 
       if (filtered.length === 0) {
         grid.innerHTML = `<div style="text-align:center;padding:48px;color:var(--muted)">No products match this filter</div>`;
@@ -2330,7 +2330,7 @@ const loadProductsView = async () => {
         const sizes      = effectiveSizes(slug);
         const baseKeys   = Object.keys(pricesRes[slug] || {});
 
-        // ── Promotion helpers ───────────────────────────────────────────
+        // -- Promotion helpers -------------------------------------------
         const origPricesMap = ov.promoPrices && typeof ov.promoPrices === 'object' ? ov.promoPrices : {};
         const hasPromo = Object.keys(origPricesMap).some(sz => origPricesMap[sz] > 0);
         let bestDiscount = 0;
@@ -2373,7 +2373,7 @@ const loadProductsView = async () => {
               style="width:24px;align-self:stretch;background:none;border:none;border-left:1px solid ${accentClr === 'var(--border)' ? 'var(--border)' : accentClr};opacity:${accentClr === 'var(--border)' ? '1' : '.5'};cursor:pointer;color:var(--dim);font-size:14px;display:flex;align-items:center;justify-content:center;border-radius:0 5px 5px 0;transition:all .15s;flex-shrink:0"
               onmouseover="this.style.background='rgba(244,63,94,.12)';this.style.color='var(--rose)';this.style.borderColor='var(--rose)';this.style.opacity='1'"
               onmouseout="this.style.background='none';this.style.color='var(--dim)';this.style.borderColor='${accentClr === 'var(--border)' ? 'var(--border)' : accentClr}';this.style.opacity='${accentClr === 'var(--border)' ? '1' : '.5'}'"
-              title="Remove ${esc(sz)}">×</button>
+              title="Remove ${esc(sz)}">�</button>
           </div>`;
         }).join('');
 
@@ -2395,7 +2395,7 @@ const loadProductsView = async () => {
           style="transition:box-shadow .2s,border-color .2s;border-left:3px solid ${accentColor};${disabled?'opacity:.7':''}">
           <div style="padding:14px 16px 12px 14px">
 
-            <!-- ── Top row: image + meta + actions ── -->
+            <!-- -- Top row: image + meta + actions -- -->
             <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px">
               ${imgHtml}
               <div style="flex:1;min-width:0">
@@ -2403,7 +2403,7 @@ const loadProductsView = async () => {
                 <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
                   ${statusBadge}
                   ${hasOverride && !disabled ? `<span style="font-size:10px;font-weight:700;color:var(--amber);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);padding:2px 8px;border-radius:99px"><i class="fas fa-pen-to-square" style="font-size:9px;margin-right:3px"></i>Overridden</span>` : ''}
-                  ${hasPromo ? `<span style="font-size:10px;font-weight:700;color:var(--emerald);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);padding:2px 8px;border-radius:99px"><i class="fas fa-tag" style="font-size:9px;margin-right:3px"></i>Promo${bestDiscount > 0 ? ' ·&nbsp;-' + bestDiscount + '%' : ''}</span>` : ''}
+                  ${hasPromo ? `<span style="font-size:10px;font-weight:700;color:var(--emerald);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);padding:2px 8px;border-radius:99px"><i class="fas fa-tag" style="font-size:9px;margin-right:3px"></i>Promo${bestDiscount > 0 ? ' �&nbsp;-' + bestDiscount + '%' : ''}</span>` : ''}
                   ${isDirty ? `<span class="prod-dirty-badge" style="font-size:10px;font-weight:700;color:var(--sky);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:2px 8px;border-radius:99px"><i class="fas fa-circle-dot" style="font-size:9px;margin-right:3px"></i>Unsaved</span>` : ''}
                 </div>
               </div>
@@ -2435,15 +2435,15 @@ const loadProductsView = async () => {
               </div>
             </div>
 
-            <!-- ── Divider ── -->
+            <!-- -- Divider -- -->
             <div style="height:1px;background:var(--border);margin:0 -2px 10px -2px"></div>
 
-            <!-- ── Sizes row ── -->
+            <!-- -- Sizes row -- -->
             <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0;min-height:32px">
-              ${sizeChips || `<span style="font-size:11px;color:var(--dim);font-style:italic;padding:4px 2px">No sizes — add one below</span>`}
+              ${sizeChips || `<span style="font-size:11px;color:var(--dim);font-style:italic;padding:4px 2px">No sizes � add one below</span>`}
             </div>
 
-            <!-- ── Add size form (hidden for fixed-size brands) ── -->
+            <!-- -- Add size form (hidden for fixed-size brands) -- -->
             ${(FIXED_SIZE_SLUGS.has(slug)) ? '' : `
             <div class="prod-add-size-form" data-slug="${esc(slug)}"
               style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 10px;background:var(--s3);border-radius:8px;border:1px dashed var(--border)">
@@ -2466,23 +2466,23 @@ const loadProductsView = async () => {
               </button>
             </div>`}
 
-            <!-- ── Promotion panel ── -->
+            <!-- -- Promotion panel -- -->
             <div class="prod-promo-panel" data-slug="${esc(slug)}" style="margin-top:6px">
               <button class="prod-promo-toggle-btn" data-slug="${esc(slug)}" type="button"
                 style="width:100%;display:flex;align-items:center;gap:8px;padding:7px 10px;background:${hasValidPromo ? 'rgba(200,169,106,.08)' : hasInvalidPromoEntry ? 'rgba(244,63,94,.06)' : 'var(--s3)'};border:1px dashed ${hasValidPromo ? 'var(--gold)' : hasInvalidPromoEntry ? 'var(--rose)' : 'var(--border)'};border-radius:${hasPromo ? '8px 8px 0 0' : '8px'};cursor:pointer;transition:all .15s;outline:none;text-align:left">
                 <i class="fas fa-${hasValidPromo ? 'tag' : hasInvalidPromoEntry ? 'triangle-exclamation' : 'tag'}" style="font-size:10px;color:${hasValidPromo ? 'var(--gold)' : hasInvalidPromoEntry ? 'var(--rose)' : 'var(--gold)'};flex-shrink:0"></i>
                 <span style="font-size:10px;font-weight:700;color:${hasValidPromo ? 'var(--gold)' : hasInvalidPromoEntry ? 'var(--rose)' : 'var(--gold)'};letter-spacing:.4px;text-transform:uppercase;flex:1">
-                  ${hasValidPromo ? `Promotion Active · Up to -${bestDiscount}%` : hasInvalidPromoEntry ? '⚠ Promotion Invalid — Must Fix & Save' : 'Add Promotion'}
+                  ${hasValidPromo ? `Promotion Active � Up to -${bestDiscount}%` : hasInvalidPromoEntry ? '? Promotion Invalid � Must Fix & Save' : 'Add Promotion'}
                 </span>
                 <i class="fas fa-chevron-${hasPromo ? 'up' : 'down'} prod-promo-chevron" style="font-size:9px;color:var(--muted)"></i>
               </button>
               <div class="prod-promo-content" style="display:${hasPromo ? 'block' : 'none'};padding:10px 10px 10px;background:${hasInvalidPromoEntry && !hasValidPromo ? 'rgba(244,63,94,.04)' : 'rgba(200,169,106,.04)'};border:1px dashed ${hasInvalidPromoEntry && !hasValidPromo ? 'var(--rose)' : 'var(--gold)'};border-top:none;border-radius:0 0 8px 8px">
                 ${hasInvalidPromoEntry ? `<div style="background:rgba(244,63,94,.12);border:1px solid var(--rose);border-radius:6px;padding:7px 10px;margin-bottom:8px;display:flex;align-items:flex-start;gap:7px">
                   <i class="fas fa-triangle-exclamation" style="color:var(--rose);font-size:12px;flex-shrink:0;margin-top:1px"></i>
-                  <span style="font-size:10px;font-weight:700;color:var(--rose);line-height:1.5">The stored "Was" price is <strong>lower than or equal to the current sale price</strong> — it won't show on the product page. Enter a value <strong>HIGHER</strong> than the current price (shown as "→ Sale: X") and click <strong>Save</strong>.</span>
+                  <span style="font-size:10px;font-weight:700;color:var(--rose);line-height:1.5">The stored "Was" price is <strong>lower than or equal to the current sale price</strong> � it won't show on the product page. Enter a value <strong>HIGHER</strong> than the current price (shown as "? Sale: X") and click <strong>Save</strong>.</span>
                 </div>` : ''}
                 <p style="font-size:10px;color:var(--muted);margin-bottom:8px;font-weight:600;line-height:1.4">
-                  <i class="fas fa-circle-info" style="margin-right:4px"></i>Enter the <strong style="color:var(--ink)">original (before-sale) price</strong> per size — it <strong style="color:var(--rose)">must be higher</strong> than the current price. The current price will appear as the discounted sale price with a strikethrough on the product page.
+                  <i class="fas fa-circle-info" style="margin-right:4px"></i>Enter the <strong style="color:var(--ink)">original (before-sale) price</strong> per size � it <strong style="color:var(--rose)">must be higher</strong> than the current price. The current price will appear as the discounted sale price with a strikethrough on the product page.
                 </p>
                 <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
                   ${Object.keys(sizes).sort((a,b)=>{ const n=s=>parseInt(s.replace(/\D/g,''),10)||0; return n(a)-n(b); }).map(sz => {
@@ -2492,7 +2492,7 @@ const loadProductsView = async () => {
                     const isInvalid = promoP && promoP >= fullP;
                     const rowBorder = promoP ? (isInvalid ? 'var(--rose)' : 'var(--gold)') : 'var(--border)';
                     const badgeBg   = pct > 0 ? 'var(--emerald)' : (isInvalid ? 'var(--rose)' : 'var(--s4)');
-                    const badgeTxt  = pct > 0 ? '-' + pct + '%' : (isInvalid ? '⚠' : '');
+                    const badgeTxt  = pct > 0 ? '-' + pct + '%' : (isInvalid ? '?' : '');
                     const suggestedPromo = Math.max(1, Math.floor(fullP * 0.85));
                     return `<div class="prod-promo-size-row" data-slug="${esc(slug)}" data-size="${esc(sz)}" data-sale="${fullP}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 8px;background:var(--s2);border:1px solid ${rowBorder};border-radius:7px;transition:border-color .15s">
                       <span style="font-size:11px;font-weight:700;color:var(--ink);min-width:32px">${esc(sz)}</span>
@@ -2500,7 +2500,7 @@ const loadProductsView = async () => {
                       <input type="number" min="0" class="prod-orig-price-input" data-slug="${esc(slug)}" data-size="${esc(sz)}" value="${esc(String(promoP))}" placeholder="e.g. ${suggestedPromo}"
                         style="width:64px;border:1px solid ${isInvalid ? 'var(--rose)' : 'var(--border)'};border-radius:5px;background:var(--s3);padding:3px 6px;font-size:12px;color:var(--ink);font-weight:600;outline:none;text-align:right;transition:border-color .15s"
                         onfocus="this.style.borderColor='var(--gold)'" onblur="const v=parseFloat(this.value)||0,s=parseFloat(this.closest('.prod-promo-size-row').dataset.sale||0);this.style.borderColor=v>0&&v>=s?'var(--rose)':v>0&&v<s?'var(--gold)':'var(--border)'"
-                        title="Sale (promo) price for ${esc(sz)} — must be LOWER than ${fullP} MAD">
+                        title="Sale (promo) price for ${esc(sz)} � must be LOWER than ${fullP} MAD">
                       <span style="font-size:10px;color:var(--dim);font-weight:500">MAD</span>
                       <span style="font-size:9px;color:var(--dim);white-space:nowrap;margin-left:2px">Full: <strong style="color:var(--muted)">${fullP}</strong></span>
                       <span class="prod-promo-pct-badge" style="font-size:10px;font-weight:800;color:#fff;background:${badgeBg};border-radius:99px;padding:2px 7px;min-width:36px;text-align:center;transition:background .2s">${badgeTxt}</span>
@@ -2518,7 +2518,7 @@ const loadProductsView = async () => {
         </div>`;
       };
 
-      // ── Group products by brand section ────────────────────────────────
+      // -- Group products by brand section --------------------------------
       const _XERJ_SET = new Set(['alexandria-ii', 'erba-pura', 'naxos']);
       const _UNIQ_SET = new Set(UNIQUE_ADMIN_SLUGS);
       const _xerjSlugs = filtered.filter(s => _XERJ_SET.has(s));
@@ -2546,7 +2546,7 @@ const loadProductsView = async () => {
           '<i class="fas fa-bottle-droplet" style="color:var(--sky);font-size:18px;flex-shrink:0"></i>' +
           '<div style="flex:1;min-width:0">' +
           '<div style="font-size:13px;font-weight:800;color:var(--ink);letter-spacing:.5px;text-transform:uppercase">Main Collection</div>' +
-          '<div style="font-size:10px;color:var(--muted);margin-top:2px">Standard products — prices.json</div>' +
+          '<div style="font-size:10px;color:var(--muted);margin-top:2px">Standard products � prices.json</div>' +
           '</div>' +
           '<span style="font-size:11px;font-weight:700;color:var(--sky);padding:3px 12px;border-radius:99px;border:1.5px solid var(--sky);background:var(--s4);white-space:nowrap">' + _mainSlugs.length + ' products</span>' +
           '</div>' +
@@ -2559,7 +2559,7 @@ const loadProductsView = async () => {
         _brandSection('Unique\u2019e Luxury', 'House of Unique\u2019e Luxury \u00b7 Extrait de Parfum', 'fas fa-crown', '#c9a227', _uniqSlugs) +
         _mainSection;
 
-      // Wire price + name input changes → mark dirty and show badge instantly
+      // Wire price + name input changes ? mark dirty and show badge instantly
       grid.querySelectorAll('.prod-price-input, .prod-size-name-input').forEach(inp => {
         inp.addEventListener('input', () => {
           const chip = inp.closest('.prod-size-chip');
@@ -2584,7 +2584,7 @@ const loadProductsView = async () => {
         });
       });
 
-      // Wire original price inputs → update discount % badge + mark dirty
+      // Wire original price inputs ? update discount % badge + mark dirty
       grid.querySelectorAll('.prod-orig-price-input').forEach(inp => {
         inp.addEventListener('input', () => {
           const slug  = inp.dataset.slug;
@@ -2600,7 +2600,7 @@ const loadProductsView = async () => {
             const isInvalid = promoP > 0 && promoP >= fullP;
             const pct      = (promoP > 0 && promoP < fullP && fullP > 0) ? Math.round((1 - promoP / fullP) * 100) : 0;
             if (badge) {
-              badge.textContent = pct > 0 ? '-' + pct + '%' : (isInvalid ? '⚠' : '');
+              badge.textContent = pct > 0 ? '-' + pct + '%' : (isInvalid ? '?' : '');
               badge.style.background = pct > 0 ? 'var(--emerald)' : (isInvalid ? 'var(--rose)' : 'var(--s4)');
             }
             inp.style.borderColor = isInvalid ? 'var(--rose)' : (promoP > 0 ? 'var(--gold)' : 'var(--border)');
@@ -2627,7 +2627,7 @@ const loadProductsView = async () => {
         });
       });
 
-      // Wire promo toggle buttons → expand/collapse panel
+      // Wire promo toggle buttons ? expand/collapse panel
       grid.querySelectorAll('.prod-promo-toggle-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const panel   = btn.closest('.prod-promo-panel');
@@ -2674,7 +2674,7 @@ const loadProductsView = async () => {
     const refreshBtn = document.getElementById('refreshProductsBtn');
     if (refreshBtn) { const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadProductsView()); }
 
-    // ── Add New Product button ────────────────────────────────────────────
+    // -- Add New Product button --------------------------------------------
     const addNewProductBtn = document.getElementById('addNewProductBtn');
     if (addNewProductBtn) {
       const fresh = addNewProductBtn.cloneNode(true);
@@ -2682,10 +2682,10 @@ const loadProductsView = async () => {
       fresh.addEventListener('click', () => openAddProductModal());
     }
 
-    // ── Load Firestore products section ──────────────────────────────────
+    // -- Load Firestore products section ----------------------------------
     loadFirestoreProductsSection();
 
-    // ── Event delegation ───────────────────────────────────────────────────
+    // -- Event delegation ---------------------------------------------------
     grid.addEventListener('click', async (e) => {
       const saveBtn   = e.target.closest('.prod-save');
       const toggleBtn = e.target.closest('.prod-toggle');
@@ -2699,7 +2699,7 @@ const loadProductsView = async () => {
       const ov   = overrides[slug] || {};
       const base = pricesRes[slug] || {};
 
-      // ── Remove size ─────────────────────────────────────────────────────
+      // -- Remove size -----------------------------------------------------
       if (removeBtn) {
         const sz = removeBtn.dataset.size;
         if (!pendingRemovals[slug]) pendingRemovals[slug] = new Set();
@@ -2710,7 +2710,7 @@ const loadProductsView = async () => {
         render();
       }
 
-      // ── Add size ────────────────────────────────────────────────────────
+      // -- Add size --------------------------------------------------------
       if (addBtn) {
         const form       = addBtn.closest('.prod-add-size-form');
         const nameInput  = form?.querySelector('.prod-new-size-name');
@@ -2730,7 +2730,7 @@ const loadProductsView = async () => {
           if (!overrides[slug].prices[k]) overrides[slug].prices[k] = v;
         });
         // Also restore any base sizes (from prices.json) that ended up in
-        // removedSizes due to the previous bug — unless the user explicitly
+        // removedSizes due to the previous bug � unless the user explicitly
         // removed them in this session via pendingRemovals.
         const baseForSlug = pricesRes[slug] || {};
         Object.entries(baseForSlug).forEach(([k, v]) => {
@@ -2752,7 +2752,7 @@ const loadProductsView = async () => {
         render();
       }
 
-      // ── Save ────────────────────────────────────────────────────────────
+      // -- Save ------------------------------------------------------------
       if (saveBtn) {
         const card = grid.querySelector(`.prod-card[data-slug="${slug}"]`);
         if (!card) { toast('Could not find product card', 'error'); return; }
@@ -2782,9 +2782,9 @@ const loadProductsView = async () => {
           prices[sz] = price;
           if (isRename) renamedAway.add(originalSz);
         });
-        if (hasError) { toast('Fix invalid prices before saving — duplicate or invalid size names', 'error'); return; }
+        if (hasError) { toast('Fix invalid prices before saving � duplicate or invalid size names', 'error'); return; }
 
-        // ── Collect original prices from promotion panel ─────────────────
+        // -- Collect original prices from promotion panel -----------------
         const originalPrices = {};
         let promoError = false;
         card.querySelectorAll('.prod-orig-price-input').forEach(inp => {
@@ -2810,8 +2810,8 @@ const loadProductsView = async () => {
         }
 
         const pendingSet   = pendingRemovals[slug] || new Set();
-        // removedSizes = previously saved removals + × clicks + renamed-away originals
-        // Do NOT include base keys missing from prices — zero-base products (Xerjoff/UL)
+        // removedSizes = previously saved removals + � clicks + renamed-away originals
+        // Do NOT include base keys missing from prices � zero-base products (Xerjoff/UL)
         // leave unpriced sizes as 0 which get skipped, but those sizes must stay visible.
         const prevRemoved  = (ov.removedSizes || []).map(normSizeKey);
         const removedSizes = [
@@ -2827,12 +2827,12 @@ const loadProductsView = async () => {
         // Xerjoff/Unique Luxury products whose base prices.json values are all 0.
         if (Object.keys(prices).length === 0) {
           const btn2 = card.querySelector('.prod-save');
-          if (btn2) { btn2.disabled=true; btn2.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
+          if (btn2) { btn2.disabled=true; btn2.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving�'; }
           try {
             await deleteDoc(doc(db,'productOverrides',slug));
             delete overrides[slug];
             dirty.delete(slug);
-            toast(`✓ ${productName(slug)} saved (no prices set — override cleared)`, 'success');
+            toast(`? ${productName(slug)} saved (no prices set � override cleared)`, 'success');
             render();
           } catch(err) {
             toast('Save failed: ' + err.message, 'error');
@@ -2845,13 +2845,13 @@ const loadProductsView = async () => {
         if (Object.keys(originalPrices).length > 0) savePayload.promoPrices = originalPrices;
         overrides[slug] = savePayload;
 
-        // Optimistic UI — show saving state
+        // Optimistic UI � show saving state
         const btn = card.querySelector('.prod-save');
-        if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
+        if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving�'; }
         try {
           await setDoc(doc(db,'productOverrides',slug), overrides[slug]);
           dirty.delete(slug);
-          toast(`✓ ${productName(slug)} saved`, 'success');
+          toast(`? ${productName(slug)} saved`, 'success');
           render();
         } catch(err) {
           toast('Save failed: ' + err.message, 'error');
@@ -2859,7 +2859,7 @@ const loadProductsView = async () => {
         }
       }
 
-      // ── Toggle enable/disable ───────────────────────────────────────────
+      // -- Toggle enable/disable -------------------------------------------
       if (toggleBtn) {
         const newDisabled = !ov.disabled;
         overrides[slug] = { ...ov, disabled: newDisabled };
@@ -2876,7 +2876,7 @@ const loadProductsView = async () => {
         }
       }
 
-      // ── Reset ───────────────────────────────────────────────────────────
+      // -- Reset -----------------------------------------------------------
       if (resetBtn) {
         if (!confirm(`Reset "${productName(slug)}" to defaults?\n\nAll price, size overrides and promotions will be deleted.`)) return;
         const btn = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-reset`);
@@ -2891,7 +2891,7 @@ const loadProductsView = async () => {
         } catch(err) { toast('Reset failed: '+err.message,'error'); if(btn){btn.disabled=false;btn.innerHTML='<i class="fas fa-arrow-rotate-left"></i> Reset';} }
       }
 
-      // ── Clear promotion ──────────────────────────────────────────────────
+      // -- Clear promotion --------------------------------------------------
       if (promoClearBtn) {
         const card = grid.querySelector(`.prod-card[data-slug="${slug}"]`);
         if (!card) return;
@@ -2923,7 +2923,7 @@ const loadProductsView = async () => {
             subRow.appendChild(badge);
           }
         }
-        toast('Promotion cleared — click Save to apply', 'success');
+        toast('Promotion cleared � click Save to apply', 'success');
       }
     }, { signal: prodSig });
   } catch(e) {
@@ -2932,7 +2932,7 @@ const loadProductsView = async () => {
   }
 };
 
-// ─── SETTINGS VIEW ──────────────────────────────────────────────────────────
+// --- SETTINGS VIEW ----------------------------------------------------------
 const loadSettingsView = async () => {
   const docRef = doc(db,'admin_config','settings');
   const setMsg = document.getElementById('settingsSavedMsg');
@@ -2984,7 +2984,7 @@ const loadSettingsView = async () => {
   });
 };
 
-// ─── ADD NEW PRODUCT FEATURE ─────────────────────────────────────────────────
+// --- ADD NEW PRODUCT FEATURE -------------------------------------------------
 
 // All known accords with their display colors (mirrors script.js accordDefinitions)
 const _ACCORD_PALETTE = [
@@ -3018,13 +3018,13 @@ const _ACCORD_PALETTE = [
 /**
  * Build a visual accord picker inside `containerEl`.
  * Returns two helpers on the container:
- *   containerEl._getAccords()  → string[] of selected accord labels
- *   containerEl._setAccords(arr) → replace selection
+ *   containerEl._getAccords()  ? string[] of selected accord labels
+ *   containerEl._setAccords(arr) ? replace selection
  */
 const _apInitAccordPicker = (containerEl, initial = []) => {
   const _MAX = 8;
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
+  // -- Helpers ---------------------------------------------------------------
   // Entry is either a plain string (predefined) or {label, color, textColor} (custom)
   const _getLabel  = e => typeof e === 'string' ? e : (e?.label || '');
   const _resolveColor = e => {
@@ -3037,11 +3037,11 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
   };
   const _autoText = hex => _luma(hex) > 140 ? '#111827' : '#ffffff';
 
-  // ── Normalise initial selection ───────────────────────────────────────────
+  // -- Normalise initial selection -------------------------------------------
   let _selected = (initial || []).map(e => {
     if (typeof e === 'object' && e?.label) {
       const label = String(e.label).trim().toLowerCase();
-      if (_ACCORD_PALETTE.some(a => a.label === label)) return label; // predefined → string
+      if (_ACCORD_PALETTE.some(a => a.label === label)) return label; // predefined ? string
       return { label, color: e.color || '#b59374', textColor: e.textColor || '#fff' };
     }
     return String(e).trim().toLowerCase();
@@ -3050,7 +3050,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
   const _render = () => {
     containerEl.innerHTML = '';
 
-    // ── Live preview bar chart ──────────────────────────────────────────────
+    // -- Live preview bar chart ----------------------------------------------
     const previewWrap = document.createElement('div');
     previewWrap.style.cssText = 'margin-bottom:12px';
     if (_selected.length) {
@@ -3075,7 +3075,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
     }
     containerEl.appendChild(previewWrap);
 
-    // ── Selected pills strip ────────────────────────────────────────────────
+    // -- Selected pills strip ------------------------------------------------
     const selectedWrap = document.createElement('div');
     selectedWrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;min-height:32px;margin-bottom:10px;padding:6px;background:var(--s4);border-radius:8px;border:1px dashed var(--border)';
     if (_selected.length) {
@@ -3084,7 +3084,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
         const meta  = _resolveColor(entry);
         const pill = document.createElement('span');
         pill.style.cssText = `display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;background:${meta.color};color:${meta.textColor};cursor:pointer;user-select:none`;
-        pill.innerHTML = `${label} <span style="font-size:13px;line-height:1;opacity:0.7">×</span>`;
+        pill.innerHTML = `${label} <span style="font-size:13px;line-height:1;opacity:0.7">�</span>`;
         pill.title = 'Click to remove';
         pill.addEventListener('click', () => {
           _selected = _selected.filter(e => _getLabel(e) !== label);
@@ -3095,21 +3095,21 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
     } else {
       const hint = document.createElement('span');
       hint.style.cssText = 'font-size:0.75rem;color:var(--dim);padding:4px;align-self:center';
-      hint.textContent = 'No accords selected — click below to add';
+      hint.textContent = 'No accords selected � click below to add';
       selectedWrap.appendChild(hint);
     }
     containerEl.appendChild(selectedWrap);
 
-    // ── Counter ─────────────────────────────────────────────────────────────
+    // -- Counter -------------------------------------------------------------
     const counter = document.createElement('div');
     counter.style.cssText = 'font-size:0.7rem;color:var(--muted);margin-bottom:8px;text-align:right';
     counter.textContent = `${_selected.length} / ${_MAX} accords selected`;
     containerEl.appendChild(counter);
 
-    // ── Palette grid ────────────────────────────────────────────────────────
+    // -- Palette grid --------------------------------------------------------
     const paletteLabel = document.createElement('div');
     paletteLabel.style.cssText = 'font-size:0.7rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em';
-    paletteLabel.textContent = 'All Accords — click to select';
+    paletteLabel.textContent = 'All Accords � click to select';
     containerEl.appendChild(paletteLabel);
 
     const grid = document.createElement('div');
@@ -3137,14 +3137,14 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
     });
     containerEl.appendChild(grid);
 
-    // ── Custom accord input ─────────────────────────────────────────────────
+    // -- Custom accord input -------------------------------------------------
     const customSep = document.createElement('div');
     customSep.style.cssText = 'height:1px;background:var(--border);margin:12px 0';
     containerEl.appendChild(customSep);
 
     const customLabel = document.createElement('div');
     customLabel.style.cssText = 'font-size:0.7rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em';
-    customLabel.textContent = 'Custom Accord — not in the list above?';
+    customLabel.textContent = 'Custom Accord � not in the list above?';
     containerEl.appendChild(customLabel);
 
     const customRow = document.createElement('div');
@@ -3152,7 +3152,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
 
     const customInput = document.createElement('input');
     customInput.type = 'text';
-    customInput.placeholder = 'e.g. oud, iris, saffron…';
+    customInput.placeholder = 'e.g. oud, iris, saffron�';
     customInput.maxLength = 32;
     customInput.style.cssText = 'flex:1;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:7px 11px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box;font-family:inherit';
 
@@ -3161,7 +3161,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
     customAddBtn.style.cssText = 'padding:7px 16px;border-radius:8px;background:rgba(200,169,106,0.15);color:var(--gold);border:1px solid rgba(200,169,106,0.4);font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0';
     customAddBtn.innerHTML = '<i class="fas fa-plus" style="margin-right:5px"></i>Add';
 
-    // ── Color picker preset swatches ─────────────────────────────────────────
+    // -- Color picker preset swatches -----------------------------------------
     const PRESET_SWATCHES = [
       '#b8addf','#d4a373','#61c3b1','#9b7a5f','#e88c8b','#b6cf84',
       '#c2885d','#dfa7b8','#7c5a46','#5b9fc2','#e7d67a','#c9813a',
@@ -3276,7 +3276,7 @@ const _apInitAccordPicker = (containerEl, initial = []) => {
         _render();
         return;
       }
-      // Custom accord — ask for color
+      // Custom accord � ask for color
       showColorPicker(val);
     };
 
@@ -3312,7 +3312,7 @@ const _apToSlug = (name) => String(name).trim().toLowerCase()
   .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
-// ─── Fragrance profile label helpers ─────────────────────────────────────────
+// --- Fragrance profile label helpers -----------------------------------------
 const _fpLongevityLabel = v => {
   v = +v;
   if (v <= 20) return '1-2h';
@@ -3342,7 +3342,7 @@ const _fpSeasonLabel = v => {
   return 'All Year';
 };
 
-// Upload a single File to Cloudinary; calls progressCb(0–100)
+// Upload a single File to Cloudinary; calls progressCb(0�100)
 const _apUploadToCloudinary = (file, progressCb) => new Promise((resolve, reject) => {
   const formData = new FormData();
   formData.append('file', file);
@@ -3363,7 +3363,7 @@ const _apUploadToCloudinary = (file, progressCb) => new Promise((resolve, reject
   xhr.send(formData);
 });
 
-// Thumbnail image gallery widget — items: { type:'url'|'file', src, file? }
+// Thumbnail image gallery widget � items: { type:'url'|'file', src, file? }
 // First item = MAIN (gold border). Returns controller object.
 const _apCreateImageGallery = (wrapEl) => {
   let items = [];
@@ -3381,7 +3381,7 @@ const _apCreateImageGallery = (wrapEl) => {
         <img src="${imgSrc}" alt="" style="width:${size}px;height:${size}px;object-fit:contain;border-radius:${radius}px;border:${isMain ? '2px solid var(--gold)' : '1px solid var(--border)'};background:var(--s3);display:block">
         ${isMain ? '<span style="position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:8px;font-weight:800;color:#fff;background:var(--gold);border-radius:0 0 10px 10px;padding:3px 0;letter-spacing:0.06em">MAIN</span>' : ''}
         ${item.type === 'file' ? '<span style="position:absolute;top:4px;left:4px;font-size:7px;font-weight:800;color:#fff;background:rgba(0,0,0,0.55);padding:1px 4px;border-radius:3px;line-height:1.4">NEW</span>' : ''}
-        <button type="button" title="Remove" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1">×</button>`;
+        <button type="button" title="Remove" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1">�</button>`;
       thumb.querySelector('button').addEventListener('click', () => {
         if (item.type === 'file') URL.revokeObjectURL(item.src);
         items.splice(i, 1);
@@ -3469,7 +3469,7 @@ const _apAddSizeRow = (container, sizeVal = '', priceVal = '', origPriceVal = ''
         </label>
         <div style="position:relative">
           <input type="number" placeholder="Optional" class="prod-size-orig-price" min="0" value="${esc(origPriceVal)}"
-            title="Fill this if the product is on sale — enter the original (higher) price"
+            title="Fill this if the product is on sale � enter the original (higher) price"
             style="width:100%;background:var(--s2);border:1px dashed rgba(200,169,106,0.45);border-radius:8px;padding:9px 38px 9px 11px;font-size:0.9rem;font-weight:600;color:var(--text);outline:none;box-sizing:border-box;transition:border-color 0.15s">
           <span style="position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:0.65rem;font-weight:800;color:var(--gold)">MAD</span>
         </div>
@@ -3494,7 +3494,7 @@ const _apAddSizeRow = (container, sizeVal = '', priceVal = '', origPriceVal = ''
     const o = parseFloat(origInput.value);
     if (p > 0 && o > p) {
       const pct = Math.round((1 - p / o) * 100);
-      saleText.textContent = `Sale active — ${pct}% off · Customers will see ${o} MAD crossed out, paying ${p} MAD`;
+      saleText.textContent = `Sale active � ${pct}% off � Customers will see ${o} MAD crossed out, paying ${p} MAD`;
       salePreview.style.display = 'flex';
       row.style.borderColor = 'rgba(21,128,61,0.35)';
       origInput.style.borderColor = 'rgba(21,128,61,0.5)';
@@ -3533,7 +3533,7 @@ const initAddProductModal = () => {
         <div>
           <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:8px">
             Product Images <span style="color:var(--rose)">*</span>
-            <span style="font-weight:400;font-size:0.7rem"> — first image is the main photo</span>
+            <span style="font-weight:400;font-size:0.7rem"> � first image is the main photo</span>
           </label>
           <div id="addProductImagesGallery" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;padding:2px 0"></div>
         </div>
@@ -3548,7 +3548,7 @@ const initAddProductModal = () => {
             style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
         </div>
         <div>
-          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Description <span style="font-weight:400;font-size:0.7rem;color:var(--muted)">— shown on product page</span></label>
+          <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Description <span style="font-weight:400;font-size:0.7rem;color:var(--muted)">� shown on product page</span></label>
           <textarea id="addProductDescription" rows="4" placeholder="e.g. A bold and seductive fragrance that opens with bergamot and cloves..."
             style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit;line-height:1.6"></textarea>
         </div>
@@ -3573,7 +3573,7 @@ const initAddProductModal = () => {
         <div>
           <div style="margin-bottom:8px">
             <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:3px">Sizes &amp; Prices <span style="color:var(--rose)">*</span></div>
-            <div style="font-size:0.7rem;color:var(--muted);line-height:1.5">Set a price per size. Want to run a <strong style="color:var(--gold)">sale</strong>? Fill in the &ldquo;Before Sale&rdquo; field too — the site shows the old price crossed out automatically.</div>
+            <div style="font-size:0.7rem;color:var(--muted);line-height:1.5">Set a price per size. Want to run a <strong style="color:var(--gold)">sale</strong>? Fill in the &ldquo;Before Sale&rdquo; field too � the site shows the old price crossed out automatically.</div>
           </div>
           <div id="addProductSizesContainer" style="display:flex;flex-direction:column;gap:8px"></div>
           <button type="button" id="addProductAddSizeBtn"
@@ -3586,7 +3586,7 @@ const initAddProductModal = () => {
         <div>
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
             <div style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;flex-shrink:0"><i class="fas fa-chart-simple" style="font-size:0.65rem"></i></div>
-            <div style="font-size:0.88rem;font-weight:700;color:var(--text)">Fragrance Profile <span style="font-weight:400;color:var(--muted);font-size:0.78rem">— optional</span></div>
+            <div style="font-size:0.88rem;font-weight:700;color:var(--text)">Fragrance Profile <span style="font-weight:400;color:var(--muted);font-size:0.78rem">� optional</span></div>
           </div>
           <div style="display:flex;flex-direction:column;gap:14px">
             <div>
@@ -3617,14 +3617,14 @@ const initAddProductModal = () => {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div>
             <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
-              Stock Left <span style="font-weight:400;font-size:0.7rem">— shows "Only X left!" when low</span>
+              Stock Left <span style="font-weight:400;font-size:0.7rem">� shows "Only X left!" when low</span>
             </label>
             <input type="number" id="addProductStockLeft" min="0" max="9999" placeholder="e.g. 12 (empty = unlimited)"
               style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
           </div>
           <div>
             <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
-              Product Badge <span style="font-weight:400;font-size:0.7rem">— shown on card &amp; product page</span>
+              Product Badge <span style="font-weight:400;font-size:0.7rem">� shown on card &amp; product page</span>
             </label>
             <div id="addBadgePresets" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
               <button type="button" data-badge-preset="NEW" style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #111;background:#111;color:#fff">NEW</button>
@@ -3643,11 +3643,11 @@ const initAddProductModal = () => {
         <!-- Optional Details -->
         <details style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
           <summary style="padding:10px 14px;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--muted);list-style:none;display:flex;align-items:center;gap:8px;background:var(--s3)">
-            <i class="fas fa-leaf" style="color:var(--gold)"></i> Optional Details — Accords, Notes &amp; Ingredients
+            <i class="fas fa-leaf" style="color:var(--gold)"></i> Optional Details � Accords, Notes &amp; Ingredients
           </summary>
           <div style="padding:12px 14px;display:flex;flex-direction:column;gap:10px;background:var(--s3)">
             <div>
-              <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Main Accords <span style="font-weight:400">— click to select (up to 8)</span></label>
+              <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Main Accords <span style="font-weight:400">� click to select (up to 8)</span></label>
               <div id="addProductAccordsPicker" style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;box-sizing:border-box"></div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
@@ -3668,7 +3668,7 @@ const initAddProductModal = () => {
               </div>
             </div>
             <div>
-              <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Ingredients (INCI) <span style="font-weight:400">— comma-separated</span></label>
+              <label style="font-size:0.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Ingredients (INCI) <span style="font-weight:400">� comma-separated</span></label>
               <textarea id="addProductIngredients" rows="3" placeholder="e.g. Alcohol Denat., Parfum, Aqua, Limonene, Linalool"
                 style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.82rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit"></textarea>
             </div>
@@ -3781,12 +3781,12 @@ const initAddProductModal = () => {
       const priceRaw  = (row.querySelector('.prod-size-price').value || '').trim();
       const sizePrice = priceRaw === '' ? 0 : parseFloat(priceRaw);
       const origRaw   = parseFloat(row.querySelector('.prod-size-orig-price')?.value);
-      if (!sizeKey && priceRaw === '') return; // completely blank row — skip silently
+      if (!sizeKey && priceRaw === '') return; // completely blank row � skip silently
       if (sizeKey && sizePrice > 0) {
         sizes[sizeKey] = sizePrice;
         if (Number.isFinite(origRaw) && origRaw > sizePrice) originalPrices[sizeKey] = origRaw;
       } else if (sizeKey && sizePrice === 0) {
-        sizes[sizeKey] = 0; // price 0 — size saved but hidden on site; all-zero = product out of stock
+        sizes[sizeKey] = 0; // price 0 � size saved but hidden on site; all-zero = product out of stock
       } else {
         sizeError = true; // price filled but no size name
       }
@@ -3925,7 +3925,7 @@ const initEditProductModal = () => {
                 <div style="font-size:0.75rem;color:var(--muted);margin-top:8px">No main image selected</div>
               </div>
               <button type="button" id="editMainImgRemoveBtn" title="Remove image"
-                style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,0.25)">×</button>
+                style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,0.25)">�</button>
             </div>
             <label id="editMainImgDrop" style="border:2px dashed var(--border);border-radius:12px;padding:24px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:8px;min-height:200px;background:var(--s3);text-align:center;box-sizing:border-box;transition:border-color 0.2s">
               <input type="file" id="editMainImgInput" accept="image/jpeg,image/png,image/webp,image/jpg" style="display:none">
@@ -3981,7 +3981,7 @@ const initEditProductModal = () => {
                 style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
             </div>
             <div style="grid-column:1/-1">
-              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Description <span style="font-weight:400;font-size:0.7rem">— shown on product page</span></label>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Description <span style="font-weight:400;font-size:0.7rem">� shown on product page</span></label>
               <textarea id="editProductDescription" rows="4" placeholder="e.g. A bold and seductive fragrance that opens with bergamot and cloves..."
                 style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit;line-height:1.6"></textarea>
             </div>
@@ -4002,7 +4002,7 @@ const initEditProductModal = () => {
             <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0;margin-top:2px">4</div>
             <div style="flex:1">
               <div style="font-size:0.95rem;font-weight:700;color:var(--text)">Sizes &amp; Prices <span style="color:var(--rose)">*</span></div>
-              <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;line-height:1.5">Set the price for each size. To run a <strong style="color:var(--gold)">sale</strong>, also fill in the &ldquo;Before Sale&rdquo; field — the site will automatically show the old price crossed out with a discount %.</div>
+              <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;line-height:1.5">Set the price for each size. To run a <strong style="color:var(--gold)">sale</strong>, also fill in the &ldquo;Before Sale&rdquo; field � the site will automatically show the old price crossed out with a discount %.</div>
             </div>
           </div>
           <div id="editProductSizesContainer" style="display:flex;flex-direction:column;gap:8px;margin-top:14px"></div>
@@ -4017,7 +4017,7 @@ const initEditProductModal = () => {
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
             <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">5</div>
             <div style="font-size:0.95rem;font-weight:700;color:var(--text)">
-              Fragrance Profile <span style="font-weight:400;color:var(--muted);font-size:0.82rem">— optional, shown on product page</span>
+              Fragrance Profile <span style="font-weight:400;color:var(--muted);font-size:0.82rem">� optional, shown on product page</span>
             </div>
           </div>
           <div style="display:flex;flex-direction:column;gap:16px">
@@ -4050,12 +4050,12 @@ const initEditProductModal = () => {
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
             <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">6</div>
             <div style="font-size:0.95rem;font-weight:700;color:var(--text)">
-              Optional Details <span style="font-weight:400;color:var(--muted);font-size:0.82rem">— Accords, Notes &amp; Ingredients</span>
+              Optional Details <span style="font-weight:400;color:var(--muted);font-size:0.82rem">� Accords, Notes &amp; Ingredients</span>
             </div>
           </div>
           <div style="display:flex;flex-direction:column;gap:14px">
             <div>
-              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Main Accords <span style="font-weight:400;font-size:0.7rem">— click to select (up to 8)</span></label>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Main Accords <span style="font-weight:400;font-size:0.7rem">� click to select (up to 8)</span></label>
               <div id="editProductAccordsPicker" style="background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;box-sizing:border-box"></div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
@@ -4076,7 +4076,7 @@ const initEditProductModal = () => {
               </div>
             </div>
             <div>
-              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Ingredients (INCI) <span style="font-weight:400;font-size:0.7rem">— comma-separated</span></label>
+              <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">Ingredients (INCI) <span style="font-weight:400;font-size:0.7rem">� comma-separated</span></label>
               <textarea id="editProductIngredients" rows="3" placeholder="e.g. Alcohol Denat., Parfum, Aqua, Limonene, Linalool"
                 style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box;resize:vertical;font-family:inherit;line-height:1.6"></textarea>
             </div>
@@ -4088,20 +4088,20 @@ const initEditProductModal = () => {
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
             <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">7</div>
             <div style="font-size:0.95rem;font-weight:700;color:var(--text)">
-              Stock &amp; Badge <span style="font-weight:400;color:var(--muted);font-size:0.82rem">— optional display info for site</span>
+              Stock &amp; Badge <span style="font-weight:400;color:var(--muted);font-size:0.82rem">� optional display info for site</span>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
             <div>
               <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
-                Stock Left <span style="font-weight:400;font-size:0.7rem">— shows "Only X left!" when low (leave empty = unlimited)</span>
+                Stock Left <span style="font-weight:400;font-size:0.7rem">� shows "Only X left!" when low (leave empty = unlimited)</span>
               </label>
               <input type="number" id="editProductStockLeft" min="0" max="9999" placeholder="e.g. 12"
                 style="width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:0.85rem;color:var(--text);outline:none;box-sizing:border-box">
             </div>
             <div>
               <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
-                Product Badge <span style="font-weight:400;font-size:0.7rem">— shown on card &amp; product page</span>
+                Product Badge <span style="font-weight:400;font-size:0.7rem">� shown on card &amp; product page</span>
               </label>
               <div id="editBadgePresets" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
                 <button type="button" data-badge-preset="NEW" style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:1px solid #111;background:#111;color:#fff;letter-spacing:0.05em">NEW</button>
@@ -4145,7 +4145,7 @@ const initEditProductModal = () => {
   document.getElementById('cancelEditProductBtn').addEventListener('click', closeModal);
   document.getElementById('cancelEditProductBtnBottom').addEventListener('click', closeModal);
 
-  // ── Badge preset picker ───────────────────────────────────────────────────
+  // -- Badge preset picker ---------------------------------------------------
   const _badgeInput    = document.getElementById('editProductBadge');
   const _badgePresets  = document.getElementById('editBadgePresets');
   const _syncBadgeBtns = () => {
@@ -4164,7 +4164,7 @@ const initEditProductModal = () => {
   });
   _badgeInput.addEventListener('input', _syncBadgeBtns);
 
-  // ── Fragrance profile sliders ─────────────────────────────────────────────
+  // -- Fragrance profile sliders ---------------------------------------------
   const _fpSliders = [
     { id: 'editFpLongevity', labelId: 'editFpLongevityLabel', fn: _fpLongevityLabel },
     { id: 'editFpSillage',   labelId: 'editFpSillageLabel',   fn: _fpSillageLabel   },
@@ -4184,7 +4184,7 @@ const initEditProductModal = () => {
       : document.getElementById('editProductForm').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
   });
 
-  // ── Main image state ──────────────────────────────────────────────────────
+  // -- Main image state ------------------------------------------------------
   let _mainState = null; // { type:'url'|'file', src, file? }
 
   const _renderMain = () => {
@@ -4220,7 +4220,7 @@ const initEditProductModal = () => {
     e.target.value = '';
   });
 
-  // ── Gallery state ─────────────────────────────────────────────────────────
+  // -- Gallery state ---------------------------------------------------------
   let _galleryItems = [];
 
   const _renderGallery = () => {
@@ -4253,7 +4253,7 @@ const initEditProductModal = () => {
       const src = item.type === 'url' ? esc(item.src) : item.src;
       div.innerHTML = `
         <img src="${src}" alt="" style="width:112px;height:112px;object-fit:cover;border-radius:12px;border:1px solid var(--border);background:var(--s3);display:block">
-        <button type="button" title="Remove" style="position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,0.2)">×</button>`;
+        <button type="button" title="Remove" style="position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--rose);color:#fff;border:none;cursor:pointer;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,0.2)">�</button>`;
       div.querySelector('button').addEventListener('click', () => {
         if (item.type === 'file') URL.revokeObjectURL(item.src);
         _galleryItems.splice(i, 1);
@@ -4339,12 +4339,12 @@ const initEditProductModal = () => {
       const priceRaw  = (row.querySelector('.prod-size-price').value || '').trim();
       const sizePrice = priceRaw === '' ? 0 : parseFloat(priceRaw);
       const origRaw   = parseFloat(row.querySelector('.prod-size-orig-price')?.value);
-      if (!sizeKey && priceRaw === '') return; // completely blank row — skip silently
+      if (!sizeKey && priceRaw === '') return; // completely blank row � skip silently
       if (sizeKey && sizePrice > 0) {
         sizes[sizeKey] = sizePrice;
         if (Number.isFinite(origRaw) && origRaw > sizePrice) originalPrices[sizeKey] = origRaw;
       } else if (sizeKey && sizePrice === 0) {
-        sizes[sizeKey] = 0; // price 0 — size saved but hidden on site; all-zero = product out of stock
+        sizes[sizeKey] = 0; // price 0 � size saved but hidden on site; all-zero = product out of stock
       } else {
         sizeError = true; // price filled but no size name
       }
@@ -4380,7 +4380,7 @@ const initEditProductModal = () => {
         if (item.type === 'url') {
           galleryUrls.push(item.src);
         } else {
-          progressLabel.textContent = `Uploading gallery image ${++done} of ${galleryFiles.length}…`;
+          progressLabel.textContent = `Uploading gallery image ${++done} of ${galleryFiles.length}�`;
           progressBar.style.width = Math.round(35 + (done / Math.max(galleryFiles.length, 1)) * 50) + '%';
           galleryUrls.push(await _apUploadToCloudinary(item.file));
         }
@@ -4418,7 +4418,7 @@ const initEditProductModal = () => {
         }
         await setDoc(doc(db, 'products', newSlug), payload);
         await deleteDoc(doc(db, 'products', originalSlug));
-        // Remove any stale productOverrides entries — admin products are managed
+        // Remove any stale productOverrides entries � admin products are managed
         // exclusively via products.sizes, never via productOverrides.
         try { await deleteDoc(doc(db, 'productOverrides', newSlug)); } catch (_) {}
         try { await deleteDoc(doc(db, 'productOverrides', originalSlug)); } catch (_) {}
@@ -4550,12 +4550,12 @@ const loadFirestoreProductsSection = async () => {
   const section = document.getElementById('firestoreProductsSection');
   if (!section) return;
   const UNIQUE_LOCAL_IMAGE_BY_SLUG = {
-    'akdeniz-unique-e-luxury': '/assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
-    'izmir-unique-e-luxury': '/assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
-    'ocean-the-rive-unique-e-luxury': '/assets/images/products/unique-luxury/ocean-the-rive/1.avif',
-    'woud-and-mood-absolute-by-unique-e-luxury': '/assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
-    'aphrodisiac-touch': '/assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
-    'kutay': '/assets/images/products/unique-luxury/kutay/1.webp',
+    'akdeniz-unique-e-luxury': 'assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
+    'izmir-unique-e-luxury': 'assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
+    'ocean-the-rive-unique-e-luxury': 'assets/images/products/unique-luxury/ocean-the-rive/1.avif',
+    'woud-and-mood-absolute-by-unique-e-luxury': 'assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
+    'aphrodisiac-touch': 'assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
+    'kutay': 'assets/images/products/unique-luxury/kutay/1.webp',
     'chocolate-makes-me-happy': 'https://res.cloudinary.com/dp5eszu4p/image/upload/v1777287393/idqhoenngo6pgtzldy7n.jpg'
   };
   try {
@@ -4568,7 +4568,7 @@ const loadFirestoreProductsSection = async () => {
       const displayImage = UNIQUE_LOCAL_IMAGE_BY_SLUG[slug] || p.image || '';
       const _visibleSizes = Object.entries(p.sizes || {}).filter(([, price]) => Number(price) > 0);
       const sizesHtml = _visibleSizes.map(([sz, price], i) =>
-        `<span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:1px solid ${i===0?'#1f2937':'#d1d5db'};color:${i===0?'#111':'#6b7280'};background:transparent">${sz.toUpperCase()} — ${price} MAD</span>`
+        `<span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:1px solid ${i===0?'#1f2937':'#d1d5db'};color:${i===0?'#111':'#6b7280'};background:transparent">${sz.toUpperCase()} � ${price} MAD</span>`
       ).join('');
       const statusBadge = p.active === false
         ? '<span style="font-size:10px;font-weight:700;background:rgba(239,68,68,0.12);color:var(--rose);padding:3px 8px;border-radius:20px;border:1px solid rgba(239,68,68,0.25)">Disabled</span>'
@@ -4581,7 +4581,7 @@ const loadFirestoreProductsSection = async () => {
               <span style="font-size:0.85rem;font-weight:700;color:var(--text)">${esc(p.name||'')}</span>
               ${statusBadge}
             </div>
-            <div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px">${esc(p.brand||'')} · Added via Admin</div>
+            <div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px">${esc(p.brand||'')} � Added via Admin</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap">${sizesHtml}</div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
@@ -4652,7 +4652,7 @@ const loadFirestoreProductsSection = async () => {
   }
 };
 
-// ─── WIRE NOTIFICATIONS ON LOAD ──────────────────────────────────────────────
+// --- WIRE NOTIFICATIONS ON LOAD ----------------------------------------------
 // initNotifications is called once auth is confirmed (already wired into onAuthStateChanged below)
 // Patch: hook into existing auth listener
 const _origOnAuth = window.__adminOnAuthHook;

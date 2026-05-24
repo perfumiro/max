@@ -1,4 +1,4 @@
-﻿
+
 const startPreviewAutoRefresh = () => {
     if (window.__ipordisePreviewAutoRefreshStarted) return;
     window.__ipordisePreviewAutoRefreshStarted = true;
@@ -372,15 +372,15 @@ document.addEventListener('DOMContentLoaded', () => {
             search_placeholder: 'Rechercher un parfum, une marque...',
             promo_btn: 'NOUVELLE COLLECTION',
             promo_note: '',
-            nav_labels: ['MARQUES', 'PARFUMS', 'MAQUILLAGE', 'SOIN VISAGE', 'CHEVEUX', 'PARAPHARMACIE', 'HYGIÈNE', 'HOMME', 'COFFRETS', 'SOLAIRE', 'CORPS', 'VOIR PLUS'],
+            nav_labels: ['MARQUES', 'PARFUMS', 'MAQUILLAGE', 'SOIN VISAGE', 'CHEVEUX', 'PARAPHARMACIE', 'HYGI�NE', 'HOMME', 'COFFRETS', 'SOLAIRE', 'CORPS', 'VOIR PLUS'],
             account_title_prefix: 'Mon compte',
-            account_subtitle: 'Connectez-vous pour un paiement rapide, vos favoris et des offres beauté exclusives.',
+            account_subtitle: 'Connectez-vous pour un paiement rapide, vos favoris et des offres beaut� exclusives.',
             account_signin: 'Se connecter',
-            account_create: 'Créer un compte',
-            account_offer: 'Profitez de <strong>sélections parfum chaque semaine</strong> et d’avantages exclusifs.',
+            account_create: 'Cr�er un compte',
+            account_offer: 'Profitez de <strong>s�lections parfum chaque semaine</strong> et d�avantages exclusifs.',
             account_shipping: '<strong>LIVRAISON RAPIDE</strong><br>Frais fixes : 35 MAD (TVA incluse).',
             wishlist_title: 'VOS FAVORIS',
-            wishlist_empty: 'Aucun favori pour le moment. Touchez le cœur sur un produit pour l’ajouter.',
+            wishlist_empty: 'Aucun favori pour le moment. Touchez le c�ur sur un produit pour l�ajouter.',
             wishlist_remove: 'Retirer des favoris',
             wishlist_item_single: 'article',
             wishlist_item_plural: 'articles',
@@ -481,7 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const languageButtons = document.querySelectorAll('.header-lang-btn');
         if (!languageButtons.length) return;
 
-        // Create ONE shared fixed menu appended to <body> — escapes all stacking contexts
+        // Create ONE shared fixed menu appended to <body> � escapes all stacking contexts
         let sharedMenu = document.getElementById('ipo-lang-menu-fixed');
         if (!sharedMenu) {
             sharedMenu = document.createElement('div');
@@ -489,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sharedMenu.className = 'header-lang-menu';
             sharedMenu.innerHTML = `
                 <button type="button" class="header-lang-option" data-lang="en">English (EN)</button>
-                <button type="button" class="header-lang-option" data-lang="fr">Français (FR)</button>
+                <button type="button" class="header-lang-option" data-lang="fr">Fran�ais (FR)</button>
             `;
             document.body.appendChild(sharedMenu);
         }
@@ -760,41 +760,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const normalizeLegacyFrenchContent = () => {
         const phraseReplacements = [
             ['Accueil', 'Home'],
-            ['Découvrir la collection', 'Discover Collection'],
-            ['Découvrez notre collection', 'Discover Our Collection'],
+            ['D�couvrir la collection', 'Discover Collection'],
+            ['D�couvrez notre collection', 'Discover Our Collection'],
             ['Ajouter au panier', 'Add to Cart'],
-            ['Livraison & Expédition', 'Shipping & Delivery'],
+            ['Livraison & Exp�dition', 'Shipping & Delivery'],
             ['Livraison & Retours', 'Shipping & Returns'],
             ['Retours & Remboursements', 'Returns & Refunds'],
-            ['Paiement sécurisé', 'Secure Checkout'],
+            ['Paiement s�curis�', 'Secure Checkout'],
             ['Parfums Homme', 'Men\'s Fragrances'],
             ['Parfums Femme', 'Women\'s Fragrances'],
-            ['Nouveautés', 'New Arrivals'],
-            ['Voir toutes les nouveautés', 'View all new arrivals'],
-            ['Nos catégories', 'Our Categories'],
-            ['Découvrez nos collections par genre', 'Discover our collections by gender'],
+            ['Nouveaut�s', 'New Arrivals'],
+            ['Voir toutes les nouveaut�s', 'View all new arrivals'],
+            ['Nos cat�gories', 'Our Categories'],
+            ['D�couvrez nos collections par genre', 'Discover our collections by gender'],
             ['Votre e-mail', 'Your email'],
             ['Votre adresse e-mail', 'Your email address'],
             ['S\'abonner', 'Subscribe'],
             ['S\'ABONNER', 'SUBSCRIBE'],
-            ['Tous droits réservés.', 'All rights reserved.'],
+            ['Tous droits r�serv�s.', 'All rights reserved.'],
             ['Service Client', 'Customer Care'],
             ['Contactez-nous', 'Contact Us'],
             ['Suivre la commande', 'Track Order'],
-            ['À Propos', 'About'],
+            ['� Propos', 'About'],
             ['Notre Histoire', 'Our Story'],
-            ['Carrières', 'Careers'],
+            ['Carri�res', 'Careers'],
             ['Trouver un magasin', 'Find a Store'],
-            ['Conditions Générales', 'Terms & Conditions'],
-            ['Politique de confidentialité', 'Privacy Policy'],
+            ['Conditions G�n�rales', 'Terms & Conditions'],
+            ['Politique de confidentialit�', 'Privacy Policy'],
             ['HOMME', 'MEN'],
             ['WOHOMME', 'WOMEN'],
             ['Femme', 'Female'],
             ['Homme', 'Male'],
             ['Autre', 'Other'],
-            ['Vérifier', 'Checkout'],
-            ['Récapitulatif de commande', 'Order Summary'],
-            ['Taxe estimée', 'Estimated Tax']
+            ['V�rifier', 'Checkout'],
+            ['R�capitulatif de commande', 'Order Summary'],
+            ['Taxe estim�e', 'Estimated Tax']
         ];
 
         const replacePhrase = (value) => {
@@ -1080,7 +1080,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const splitSizeAndPrice = (value, fallbackPriceText = '') => {
         const normalized = String(value || '').trim();
-        const separator = normalized.includes('—') ? '—' : '-';
+        const separator = normalized.includes('�') ? '�' : '-';
         const parts = normalized.split(separator).map((part) => part.trim()).filter(Boolean);
 
         if (parts.length >= 2) {
@@ -1128,7 +1128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .replace(/decante\s*/i, '')
         .replace(/\s+/g, '');
 
-    // ── INCI ingredient declarations (EU cosmetic labelling) ───────────────
+    // -- INCI ingredient declarations (EU cosmetic labelling) ---------------
     const PRODUCT_INCI = {
         'bleu de chanel eau de parfum spray':
             'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Linalool, Limonene, Citronellol, Geraniol, Coumarin, Citral, Alpha-Isomethyl Ionone, Benzyl Benzoate, Farnesol, Eugenol, Benzyl Salicylate.',
@@ -1239,7 +1239,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'CHANEL',
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 75, sillageLabel: 'Strong', season: 90, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Aromatic Woody · A timeless and magnetic signature with a subtly pronounced aroma.",
+            subtitle: "Men's fragrance � Aromatic Woody � A timeless and magnetic signature with a subtly pronounced aroma.",
             longDescription: 'A tribute to freedom, expressed in an aromatic woody scent with a captivating trail. A timeless fragrance in a bottle of deep, mysterious blue. The Eau de Parfum of BLEU DE CHANEL, with its subtly pronounced aroma, reveals a determined spirit.',
             sizes: [
                 'Decante 10ML',
@@ -1264,25 +1264,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Aromatique · Une signature intemporelle et magnétique à l'arôme subtilement prononcé.",
-                longDescription: "Un hymne à la liberté, exprimé dans un sillage boisé aromatique envoûtant. Un parfum intemporel dans un flacon d'un bleu profond et mystérieux. L'Eau de Parfum BLEU DE CHANEL, à l'arôme subtilement prononcé, révèle un esprit déterminé.",
+                subtitle: "Parfum homme � Bois� Aromatique � Une signature intemporelle et magn�tique � l'ar�me subtilement prononc�.",
+                longDescription: "Un hymne � la libert�, exprim� dans un sillage bois� aromatique envo�tant. Un parfum intemporel dans un flacon d'un bleu profond et myst�rieux. L'Eau de Parfum BLEU DE CHANEL, � l'ar�me subtilement prononc�, r�v�le un esprit d�termin�.",
                 notes: [
-                    { title: 'OUVERTURE AROMATIQUE', text: 'Une ouverture fraîche et vibrante qui exprime énergie et liberté.' },
-                    { title: 'CŒUR BOISÉ', text: 'Un noyau boisé structuré qui dégage élégance, modernité et assurance.' },
-                    { title: 'SILLAGE CAPTIVANT', text: 'Une signature subtilement prononcée qui persiste avec une profondeur intemporelle.' }
+                    { title: 'OUVERTURE AROMATIQUE', text: 'Une ouverture fra�che et vibrante qui exprime �nergie et libert�.' },
+                    { title: 'C�UR BOIS�', text: 'Un noyau bois� structur� qui d�gage �l�gance, modernit� et assurance.' },
+                    { title: 'SILLAGE CAPTIVANT', text: 'Une signature subtilement prononc�e qui persiste avec une profondeur intemporelle.' }
                 ]
             },
             images: [
-                '/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/2.jpg',
-                '/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/3.jpg',
-                '/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/4.jpg'
+                'assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/2.jpg',
+                'assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/3.jpg',
+                'assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/4.jpg'
             ]
         },
         'hugo boss the scent for him elixir': {
             brand: 'HUGO BOSS',
             gender: 'men',
             fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 80, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Amber Woody Leather · A highly concentrated elixir with spicy chili pepper, lavandin absolute, and warm sandalwood.",
+            subtitle: "Men's fragrance � Amber Woody Leather � A highly concentrated elixir with spicy chili pepper, lavandin absolute, and warm sandalwood.",
             longDescription: 'Awaken your senses with BOSS The Scent Elixir for Men, a captivating and highly concentrated intense fragrance that symbolizes the powerful alchemy between two unique partners. Taking the intensity of BOSS The Scent to new heights, this amber, woody, and leathery fragrance combines vibrant contrasts to deliver irresistible allure. The composition opens with a burst of spicy chili pepper, providing a complex and stimulating touch, while lavandin absolute adds freshness and vitality. At the base, Caledonian sandalwood infuses a warm, woody depth, leaving a deeply enveloping and unforgettable trail. BOSS The Scent Elixir for Men redefines sensuality in a sophisticated bottle lacquered in an intense red, adorned with the BOSS logo and an elegant gold cap with the Double B monogram. Its multifaceted design and vibrant hue reflect the magnetic and seductive essence of this fragrance, highlighting the many facets of an irresistible connection.',
             sizes: [
                 'Decante 10ML',
@@ -1306,26 +1306,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Ambré Cuir · Un élixir hautement concentré aux notes de poivre de chili, lavandin absolu et santal chaud.",
-                longDescription: "Éveillez vos sens avec BOSS The Scent Elixir pour Homme, un parfum intense et hautement concentré symbolisant la puissante alchimie entre deux partenaires uniques. Poussant l'intensité de BOSS The Scent vers de nouveaux sommets, ce parfum ambré, boisé et cuiré combine des contrastes vibrants pour une séduction irrésistible. La composition s'ouvre sur un éclat de poivre de chili épicé, tandis que le lavandin absolu apporte fraîcheur et vitalité. En fond, le santal calédonien infuse une profondeur boisée chaude, laissant un sillage enveloppant et inoubliable.",
+                subtitle: "Parfum homme � Bois� Ambr� Cuir � Un �lixir hautement concentr� aux notes de poivre de chili, lavandin absolu et santal chaud.",
+                longDescription: "�veillez vos sens avec BOSS The Scent Elixir pour Homme, un parfum intense et hautement concentr� symbolisant la puissante alchimie entre deux partenaires uniques. Poussant l'intensit� de BOSS The Scent vers de nouveaux sommets, ce parfum ambr�, bois� et cuir� combine des contrastes vibrants pour une s�duction irr�sistible. La composition s'ouvre sur un �clat de poivre de chili �pic�, tandis que le lavandin absolu apporte fra�cheur et vitalit�. En fond, le santal cal�donien infuse une profondeur bois�e chaude, laissant un sillage enveloppant et inoubliable.",
                 notes: [
-                    { title: 'EXPLOSION DE POIVRE DE CHILI', text: 'Une ouverture épicée et vive, chaude, stimulante et immédiatement magnétique.' },
-                    { title: 'LAVANDIN ABSOLU', text: 'Le lavandin aromatique apporte fraîcheur et équilibre au cœur avec une clarté masculine raffinée.' },
-                    { title: 'SANTAL CALÉDONIEN', text: 'Le santal chaud ancre le fond avec une profondeur boisée crémeuse et un sillage sensuellement profond.' }
+                    { title: 'EXPLOSION DE POIVRE DE CHILI', text: 'Une ouverture �pic�e et vive, chaude, stimulante et imm�diatement magn�tique.' },
+                    { title: 'LAVANDIN ABSOLU', text: 'Le lavandin aromatique apporte fra�cheur et �quilibre au c�ur avec une clart� masculine raffin�e.' },
+                    { title: 'SANTAL CAL�DONIEN', text: 'Le santal chaud ancre le fond avec une profondeur bois�e cr�meuse et un sillage sensuellement profond.' }
                 ]
             },
             images: [
-                '/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/2.png',
-                '/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/3.png',
-                '/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/4.png',
-                '/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/5.png'
+                'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/2.png',
+                'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/3.png',
+                'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/4.png',
+                'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/5.png'
             ]
         },
         'boss bottled absolu intense': {
             brand: 'HUGO BOSS',
             gender: 'men',
             fragranceProfile: { longevity: 92, longevityLabel: '10-12h', sillage: 82, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Woody Leather · A bold intense signature with toasted leather, frankincense, patchouli, myrrh, cedarwood, and davana.",
+            subtitle: "Men's fragrance � Woody Leather � A bold intense signature with toasted leather, frankincense, patchouli, myrrh, cedarwood, and davana.",
             longDescription: 'Express ultimate sophistication with BOSS Bottled Absolu, a bold and intense fragrance with irresistible toasted notes. Modern and memorable, this distinctive scent embodies the power of the BOSS man, who brings his unique touch to every decision, every challenge, and every success. This woody fragrance with leathery notes, the third installment in the BOSS BOTTLED trilogy of intensity, instantly captivates the senses. A captivating scent from BOSS, formulated with the highest concentration in the fragrance family to date, crafted from its quintessential woody signature with absolute depth: the very essence of BOSS. BOSS Bottled Absolu, created by Annick Menardo in collaboration with Suzy Le Helley, opens smoothly with a textured leather accord with toasty facets, in harmony with the invigorating essence of frankincense. At the heart of this BOSS fragrance for men, the enveloping essence of patchouli and myrrh absolute exalt the strength and splendor of a sophisticated aroma. The warm cedarwood and fruity davana base notes leave a lasting and exquisite trail. The unique bottle of BOSS Bottled is imbued with richness, featuring a warm, luminous amber base that evokes the nobility of the tempting and exquisite fragrance within. A double lacquer finish and a gleaming gold cap complete the exquisite presentation of this woody men\'s fragrance, the perfect accessory for the positive BOSS attitude.',
             sizes: [
                 'Decante 10ML',
@@ -1349,27 +1349,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Cuir · Une signature intense et audacieuse aux notes de cuir grillé, encens, patchouli, myrrhe, cèdre et davana.",
-                longDescription: "Exprimez la sophistication ultime avec BOSS Bottled Absolu, un parfum audacieux et intense aux irrésistibles notes grillées. Moderne et mémorable, ce parfum distinctif incarne la puissance de l'homme BOSS. Ce troisième volet de la trilogie BOSS BOTTLED Intensité s'ouvre en douceur sur un accord de cuir texturé aux facettes grillées, en harmonie avec l'essence revigorante de l'encens. Au cœur, le patchouli et la myrrhe absolue exaltent la force et la splendeur d'un arôme sophistiqué. Les notes de fond de cèdre chaud et de davana fruitée laissent un sillage durable et exquis.",
+                subtitle: "Parfum homme � Bois� Cuir � Une signature intense et audacieuse aux notes de cuir grill�, encens, patchouli, myrrhe, c�dre et davana.",
+                longDescription: "Exprimez la sophistication ultime avec BOSS Bottled Absolu, un parfum audacieux et intense aux irr�sistibles notes grill�es. Moderne et m�morable, ce parfum distinctif incarne la puissance de l'homme BOSS. Ce troisi�me volet de la trilogie BOSS BOTTLED Intensit� s'ouvre en douceur sur un accord de cuir textur� aux facettes grill�es, en harmonie avec l'essence revigorante de l'encens. Au c�ur, le patchouli et la myrrhe absolue exaltent la force et la splendeur d'un ar�me sophistiqu�. Les notes de fond de c�dre chaud et de davana fruit�e laissent un sillage durable et exquis.",
                 notes: [
-                    { title: 'CUIR GRILLÉ & ENCENS', text: "Une ouverture texturée où le cuir lisse rencontre l'encens lumineux pour un début intense et sophistiqué." },
-                    { title: 'PATCHOULI & MYRRHE ABSOLUE', text: 'Un cœur riche de patchouli et myrrhe absolue construit profondeur, force et chaleur aromatique élégante.' },
-                    { title: 'CÈDRE & DAVANA', text: 'Le cèdre chaud et la davana fruitée créent un fond raffiné avec une richesse durable et un sillage mémorable.' }
+                    { title: 'CUIR GRILL� & ENCENS', text: "Une ouverture textur�e o� le cuir lisse rencontre l'encens lumineux pour un d�but intense et sophistiqu�." },
+                    { title: 'PATCHOULI & MYRRHE ABSOLUE', text: 'Un c�ur riche de patchouli et myrrhe absolue construit profondeur, force et chaleur aromatique �l�gante.' },
+                    { title: 'C�DRE & DAVANA', text: 'Le c�dre chaud et la davana fruit�e cr�ent un fond raffin� avec une richesse durable et un sillage m�morable.' }
                 ]
             },
             images: [
-                '/assets/images/products/hugo-boss/boss-bottled-absolu-intense/2.jpeg',
-                '/assets/images/products/hugo-boss/boss-bottled-absolu-intense/3.jpeg',
-                '/assets/images/products/hugo-boss/boss-bottled-absolu-intense/4.jpeg',
-                '/assets/images/products/hugo-boss/boss-bottled-absolu-intense/5.jpeg',
-                '/assets/images/products/hugo-boss/boss-bottled-absolu-intense/6.jpeg'
+                'assets/images/products/hugo-boss/boss-bottled-absolu-intense/2.jpeg',
+                'assets/images/products/hugo-boss/boss-bottled-absolu-intense/3.jpeg',
+                'assets/images/products/hugo-boss/boss-bottled-absolu-intense/4.jpeg',
+                'assets/images/products/hugo-boss/boss-bottled-absolu-intense/5.jpeg',
+                'assets/images/products/hugo-boss/boss-bottled-absolu-intense/6.jpeg'
             ]
         },
         'hugo boss boss bottled elixir intense': {
             brand: 'HUGO BOSS',
             gender: 'men',
             fragranceProfile: { longevity: 92, longevityLabel: '10-12h', sillage: 84, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Woody Amber · A highly concentrated elixir with incense, cardamom, vetiver, patchouli, cedar, and cistus absolute.",
+            subtitle: "Men's fragrance � Woody Amber � A highly concentrated elixir with incense, cardamom, vetiver, patchouli, cedar, and cistus absolute.",
             longDescription: 'Experience intensity at its peak. A sophisticated and highly concentrated formula, BOSS Bottled Elixir inspires you to find your inner light and become your own BOSS. This exquisite men\'s fragrance, capturing a high-impact woody and amber scent of BOSS Bottled, features warm top notes of incense and cardamom, a tempting heart of vetiver and patchouli, and a base of cedar essence. Launched 25 years after the original BOSS Bottled, BOSS Bottled Elixir reinterprets a fragrance icon with a vigorous statement, promising unparalleled depth and an enveloping experience. Created by the iconic master perfumer Annick Menardo, creator of the signature BOSS Bottled fragrance, in close collaboration with perfumer Suzy le Helley, this irresistible fragrance celebrates the reinvention of a contemporary classic. The Elixir exudes an incredibly captivating fragrance, rich in highly concentrated ingredients. The essences of frankincense and cardamom radiate warmth and vitality, while the heart of vetiver and patchouli leaves an earthy and unforgettable imprint. With a base of cedar essence and cistus absolute, BOSS Bottled Elixir gives the wearer a strong charisma with woody notes and an explosion of fearless virility. The exclusive BOSS Bottled glass bottle features an intense black lacquered finish that gives way to a golden glow at the center, like a guide for the spirit of the modern BOSS man in the search for his inner light. Its glossy ceramic finish and gold-colored brushed cap further enhance the elegance of this new creation in the BOSS Bottled universe.',
             sizes: [
                 'Decante 10ML',
@@ -1393,28 +1393,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Ambré · Un élixir hautement concentré à l'encens, à la cardamome, au vétiver, au patchouli, au cèdre et au ciste absolu.",
-                longDescription: "Vivez l'intensité à son apogée. Une formule sophistiquée et hautement concentrée, BOSS Bottled Elixir vous inspire à trouver votre lumière intérieure. Ce parfum masculin exquis, au sillage boisé ambré puissant, sublime les notes d'encens et de cardamome, un cœur séduisant de vétiver et patchouli, et un fond d'essence de cèdre. Lancé 25 ans après le BOSS Bottled original, BOSS Bottled Elixir réinterprète une icône olfactive avec une affirmation vigoureuse, promettant une profondeur inégalée et une expérience enveloppante.",
+                subtitle: "Parfum homme � Bois� Ambr� � Un �lixir hautement concentr� � l'encens, � la cardamome, au v�tiver, au patchouli, au c�dre et au ciste absolu.",
+                longDescription: "Vivez l'intensit� � son apog�e. Une formule sophistiqu�e et hautement concentr�e, BOSS Bottled Elixir vous inspire � trouver votre lumi�re int�rieure. Ce parfum masculin exquis, au sillage bois� ambr� puissant, sublime les notes d'encens et de cardamome, un c�ur s�duisant de v�tiver et patchouli, et un fond d'essence de c�dre. Lanc� 25 ans apr�s le BOSS Bottled original, BOSS Bottled Elixir r�interpr�te une ic�ne olfactive avec une affirmation vigoureuse, promettant une profondeur in�gal�e et une exp�rience enveloppante.",
                 notes: [
-                    { title: 'ENCENS & CARDAMOME', text: "L'encens chaud et la cardamome ouvrent le parfum avec une épice rayonnante, de la vitalité et une présence immédiate." },
-                    { title: 'VÉTIVER & PATCHOULI', text: 'Un cœur terreux de vétiver et patchouli construit profondeur, structure et une empreinte masculine inoubliable.' },
-                    { title: 'CÈDRE & CISTE ABSOLU', text: "L'essence de cèdre et le ciste absolu créent un fond boisé puissant avec un fort charisme et une intensité durable." }
+                    { title: 'ENCENS & CARDAMOME', text: "L'encens chaud et la cardamome ouvrent le parfum avec une �pice rayonnante, de la vitalit� et une pr�sence imm�diate." },
+                    { title: 'V�TIVER & PATCHOULI', text: 'Un c�ur terreux de v�tiver et patchouli construit profondeur, structure et une empreinte masculine inoubliable.' },
+                    { title: 'C�DRE & CISTE ABSOLU', text: "L'essence de c�dre et le ciste absolu cr�ent un fond bois� puissant avec un fort charisme et une intensit� durable." }
                 ]
             },
             images: [
-                '/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/2.jpeg',
-                '/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/3.jpg',
-                '/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/4.jpg',
-                '/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/5.jpg',
-                '/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/6.jpg'
+                'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/2.jpeg',
+                'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/3.jpg',
+                'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/4.jpg',
+                'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/5.jpg',
+                'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/6.jpg'
             ]
         },
         'guerlain l homme id al l intense eau de parfum': {
             brand: 'GUERLAIN',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 78, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Oriental Woody · A spicy and vigorously elegant signature with dark oriental warmth.",
-            longDescription: "The ideal man is a myth. But thanks to Guerlain, his fragrance is a reality with L'Homme Idéal L'Intense. An oriental woody fragrance, spicy and vigorously elegant. Masculine, luxurious, a unique fragrance in a square, faceted bottle entirely lacquered in black. Intensity is the high point of this new interpretation of the Ideal Man.",
+            subtitle: "Men's fragrance � Oriental Woody � A spicy and vigorously elegant signature with dark oriental warmth.",
+            longDescription: "The ideal man is a myth. But thanks to Guerlain, his fragrance is a reality with L'Homme Id�al L'Intense. An oriental woody fragrance, spicy and vigorously elegant. Masculine, luxurious, a unique fragrance in a square, faceted bottle entirely lacquered in black. Intensity is the high point of this new interpretation of the Ideal Man.",
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -1437,12 +1437,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Oriental · Une signature épicée et vigoureusement élégante avec une chaleur orientale profonde.",
-                longDescription: "L'homme idéal est un mythe. Mais grâce à Guerlain, son parfum est une réalité avec L'Homme Idéal L'Intense. Un parfum boisé oriental, épicé et vigoureusement élégant. Masculin, luxueux, un parfum unique dans un flacon carré et facetté entièrement laqué noir. L'intensité est le point culminant de cette nouvelle interprétation de l'Homme Idéal.",
+                subtitle: "Parfum homme � Bois� Oriental � Une signature �pic�e et vigoureusement �l�gante avec une chaleur orientale profonde.",
+                longDescription: "L'homme id�al est un mythe. Mais gr�ce � Guerlain, son parfum est une r�alit� avec L'Homme Id�al L'Intense. Un parfum bois� oriental, �pic� et vigoureusement �l�gant. Masculin, luxueux, un parfum unique dans un flacon carr� et facett� enti�rement laqu� noir. L'intensit� est le point culminant de cette nouvelle interpr�tation de l'Homme Id�al.",
                 notes: [
-                    { title: 'SIGNATURE BOISÉE ORIENTALE', text: 'Un profil boisé oriental profond qui se dégage chaud, raffiné et confiablement masculin.' },
-                    { title: 'ÉLÉGANCE ÉPICÉE', text: 'Les facettes épicées apportent énergie et structure à la composition avec une sophistication vigoureuse.' },
-                    { title: 'INTENSITÉ LAQUÉE NOIRE', text: 'Un sillage luxueux et intensément stylé, reflété par le design de flacon noir facetté.' }
+                    { title: 'SIGNATURE BOIS�E ORIENTALE', text: 'Un profil bois� oriental profond qui se d�gage chaud, raffin� et confiablement masculin.' },
+                    { title: '�L�GANCE �PIC�E', text: 'Les facettes �pic�es apportent �nergie et structure � la composition avec une sophistication vigoureuse.' },
+                    { title: 'INTENSIT� LAQU�E NOIRE', text: 'Un sillage luxueux et intens�ment styl�, refl�t� par le design de flacon noir facett�.' }
                 ]
             },
             images: [
@@ -1453,8 +1453,8 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'GUERLAIN',
             gender: 'men',
             fragranceProfile: { longevity: 86, longevityLabel: '8-10h', sillage: 76, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Oriental Woody · A rich and elegant composition with almond, bergamot, spices, plum, woods, tobacco, and leather.",
-            longDescription: "L'homme Idéal Extrême Eau de Parfum by Guerlain. The ideal man is a myth. His cologne, a reality. It's an oriental woody perfume that will keep you looking like an extremely talented man. Your L'Homme Idéal Extrême fragrance in the iconic White Bees Bottle. In 1853, the glassmaker Pochet & du Courval made the bottle, on which is written 'aux abeilles' (for the bees), for the fragrance Eau de Cologne Impériale intended for Empress Eugénie. Its 'tiles', inspired by the dome of the Vendôme column, are adorned with 69 golden bees, symbols of the Empire. The bottle celebrates 160 years and can hold the fragrance of your choice and be personalized with the initials you wish. The color of the perfume and the label seal vary depending on the fragrance. For this new interpretation of L'Homme Idéal, Thierry Wasser, perfumer at Maison Guerlain, has chosen to explore new facets of the almond. The top notes of almond are accompanied by the effervescence of bergamot blended with pink pepper. In the heart notes, cinnamon and plum notes join heliotrope, a floral note with elegant almond accents. Finally, the charm of a woody base note of patchouli and cedar is dressed in tobacco and an intense leather note.",
+            subtitle: "Men's fragrance � Oriental Woody � A rich and elegant composition with almond, bergamot, spices, plum, woods, tobacco, and leather.",
+            longDescription: "L'homme Id�al Extr�me Eau de Parfum by Guerlain. The ideal man is a myth. His cologne, a reality. It's an oriental woody perfume that will keep you looking like an extremely talented man. Your L'Homme Id�al Extr�me fragrance in the iconic White Bees Bottle. In 1853, the glassmaker Pochet & du Courval made the bottle, on which is written 'aux abeilles' (for the bees), for the fragrance Eau de Cologne Imp�riale intended for Empress Eug�nie. Its 'tiles', inspired by the dome of the Vend�me column, are adorned with 69 golden bees, symbols of the Empire. The bottle celebrates 160 years and can hold the fragrance of your choice and be personalized with the initials you wish. The color of the perfume and the label seal vary depending on the fragrance. For this new interpretation of L'Homme Id�al, Thierry Wasser, perfumer at Maison Guerlain, has chosen to explore new facets of the almond. The top notes of almond are accompanied by the effervescence of bergamot blended with pink pepper. In the heart notes, cinnamon and plum notes join heliotrope, a floral note with elegant almond accents. Finally, the charm of a woody base note of patchouli and cedar is dressed in tobacco and an intense leather note.",
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -1477,12 +1477,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Oriental · Une composition riche et élégante de l'amande, bergamote, épices, prune, bois, tabac et cuir.",
-                longDescription: "L'homme Idéal Extrême Eau de Parfum de Guerlain. L'homme idéal est un mythe. Son eau de cologne, une réalité. C'est un parfum boisé oriental logiquement contenu dans l'iconique flacon aux Abeilles Blanches. En 1853, le verrier Pochet & du Courval créa ce flacon orné de 69 abeilles dorées, symboles de l'Empire. Pour cette interprétation de L'Homme Idéal, Thierry Wasser a choisi d'explorer de nouvelles facettes de l'amande. Les notes de tête d'amande sont accompagnées de l'effervescence du bergamote mélangé au poivre rose. Au cœur, la cannelle et la prune rejoignent l'héliotrope. Enfin, le charme d'un fond boisé de patchouli et cèdre est enveloppé de tabac et d'une note de cuir intense.",
+                subtitle: "Parfum homme � Bois� Oriental � Une composition riche et �l�gante de l'amande, bergamote, �pices, prune, bois, tabac et cuir.",
+                longDescription: "L'homme Id�al Extr�me Eau de Parfum de Guerlain. L'homme id�al est un mythe. Son eau de cologne, une r�alit�. C'est un parfum bois� oriental logiquement contenu dans l'iconique flacon aux Abeilles Blanches. En 1853, le verrier Pochet & du Courval cr�a ce flacon orn� de 69 abeilles dor�es, symboles de l'Empire. Pour cette interpr�tation de L'Homme Id�al, Thierry Wasser a choisi d'explorer de nouvelles facettes de l'amande. Les notes de t�te d'amande sont accompagn�es de l'effervescence du bergamote m�lang� au poivre rose. Au c�ur, la cannelle et la prune rejoignent l'h�liotrope. Enfin, le charme d'un fond bois� de patchouli et c�dre est envelopp� de tabac et d'une note de cuir intense.",
                 notes: [
-                    { title: 'AMANDE, BERGAMOTE & POIVRE ROSE', text: 'Une ouverture élégante où l’amande rencontre le bergamote étincelant et le poivre rose vif pour un lift raffiné.' },
-                    { title: 'CANNELLE, PRUNE & HÉLIOTROPE', text: 'Un cœur texturé d’épice, fruit et nuances florales d’amande construit chaleur et sophistication.' },
-                    { title: 'PATCHOULI, CÈDRE, TABAC & CUIR', text: 'Un fond boisé puissant enveloppé de tabac et de cuir intense laisse un sillage masculin riche.' }
+                    { title: 'AMANDE, BERGAMOTE & POIVRE ROSE', text: 'Une ouverture �l�gante o� l�amande rencontre le bergamote �tincelant et le poivre rose vif pour un lift raffin�.' },
+                    { title: 'CANNELLE, PRUNE & H�LIOTROPE', text: 'Un c�ur textur� d��pice, fruit et nuances florales d�amande construit chaleur et sophistication.' },
+                    { title: 'PATCHOULI, C�DRE, TABAC & CUIR', text: 'Un fond bois� puissant envelopp� de tabac et de cuir intense laisse un sillage masculin riche.' }
                 ]
             },
             images: [
@@ -1493,7 +1493,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'VERSACE',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 82, sillageLabel: 'Strong', season: 70, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Aromatic Amber · A bold and sensual signature with mint, lemon, green apple, tonka bean, ambroxan, vanilla, and cedar.",
+            subtitle: "Men's fragrance � Aromatic Amber � A bold and sensual signature with mint, lemon, green apple, tonka bean, ambroxan, vanilla, and cedar.",
             longDescription: 'Versace Eros Eau de Parfum is a bold statement inspired by Greek mythology and the god of love. More than a fragrance, it is the ultimate expression of strength, passion, and irresistible sensuality for the modern, charismatic man. Its fresh and vibrant opening combines mint leaves, the liveliness of Italian lemon and the fruity sweetness of green apple, instantly awakening the senses. At its heart, warm and enveloping notes of tonka bean, geranium and the modern accord of ambroxan create a subtle balance between elegance and modernity. The deep and seductive base combines Madagascar vanilla, earthy vetiver, aromatic oakmoss, and the nobility of Virginia cedar and Atlas cedar, giving this fragrance exceptional intensity and longevity. Let Versace Eros Eau de Parfum accompany you in every conquest with power and sensuality. Dare to be unforgettable.',
             sizes: [
                 'Decante 10ML',
@@ -1517,23 +1517,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Ambré Aromatique · Un statement audacieux et sensuel avec menthe, citron, pomme verte, fève tonka, ambroxan, vanille et cèdre.",
-                longDescription: "Versace Eros Eau de Parfum est une déclaration audacieuse inspirée de la mythologie grecque et du dieu de l'amour. Plus qu'un parfum, c'est l'expression ultime de la force, de la passion et de la sensualité irrésistible pour l'homme moderne et charismatique. Son ouverture fraîche et vibrante combine feuilles de menthe, citron d'Italie et pomme verte, éveillant instantanément les sens. Au cœur, la fève tonka chaude, le géranium et l'accord moderne d'ambroxan créent un subtil équilibre. Le fond profond et séducteur combine la vanille de Madagascar, le vétiver, la mousse de chêne et les cèdres, offrant une intensité et une longue durabilité exceptionnelles.",
+                subtitle: "Parfum homme � Ambr� Aromatique � Un statement audacieux et sensuel avec menthe, citron, pomme verte, f�ve tonka, ambroxan, vanille et c�dre.",
+                longDescription: "Versace Eros Eau de Parfum est une d�claration audacieuse inspir�e de la mythologie grecque et du dieu de l'amour. Plus qu'un parfum, c'est l'expression ultime de la force, de la passion et de la sensualit� irr�sistible pour l'homme moderne et charismatique. Son ouverture fra�che et vibrante combine feuilles de menthe, citron d'Italie et pomme verte, �veillant instantan�ment les sens. Au c�ur, la f�ve tonka chaude, le g�ranium et l'accord moderne d'ambroxan cr�ent un subtil �quilibre. Le fond profond et s�ducteur combine la vanille de Madagascar, le v�tiver, la mousse de ch�ne et les c�dres, offrant une intensit� et une longue durabilit� exceptionnelles.",
                 notes: [
-                    { title: 'MENTHE, CITRON & POMME VERTE', text: 'Une ouverture lumineuse et énergétique où la menthe fraîche rencontre les agrumes étincelants et la fraîcheur fruitée.' },
-                    { title: 'FÈVE TONKA, GÉRANIUM & AMBROXAN', text: 'Un cœur moderne et chaud qui équilibre élégance aromatique et profondeur sensuelle avec une diffusion douce.' },
-                    { title: 'VANILLE, VÉTIVER & CÈDRES', text: 'La vanille, les bois terreux, la mousse de chêne et le cèdre créent un fond intense avec un charme masculin durable.' }
+                    { title: 'MENTHE, CITRON & POMME VERTE', text: 'Une ouverture lumineuse et �nerg�tique o� la menthe fra�che rencontre les agrumes �tincelants et la fra�cheur fruit�e.' },
+                    { title: 'F�VE TONKA, G�RANIUM & AMBROXAN', text: 'Un c�ur moderne et chaud qui �quilibre �l�gance aromatique et profondeur sensuelle avec une diffusion douce.' },
+                    { title: 'VANILLE, V�TIVER & C�DRES', text: 'La vanille, les bois terreux, la mousse de ch�ne et le c�dre cr�ent un fond intense avec un charme masculin durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/versace/versace-eros-eau-de-parfum/2.jpg'
+                'assets/images/products/versace/versace-eros-eau-de-parfum/2.jpg'
             ]
         },
         'versace eros flame eau de parfum': {
             brand: 'VERSACE',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 82, sillageLabel: 'Strong', season: 65, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Woody Spicy · A fiery and refined signature with citrus, black pepper, rosemary, rose, woods, tonka bean, and vanilla.",
+            subtitle: "Men's fragrance � Woody Spicy � A fiery and refined signature with citrus, black pepper, rosemary, rose, woods, tonka bean, and vanilla.",
             longDescription: 'Versace Eros Flame is an intense and emotional olfactory statement. Designed for the strong, passionate, and self-assured man, this fragrance plays with the most powerful contrasts: warmth and coolness, sweetness and spice, light and shadow. From the opening, a vibrant citrus burst of Italian lemon, mandarin and bitter orange blends with black pepper from Madagascar and wild rosemary, creating a fiery yet refreshing start. The heart reveals a masculine floral elegance with geranium, rose and a subtle spicy note of pepperwood. Finally, the base notes envelop with warmth and depth: Texas cedar, Haitian vetiver, patchouli coeur, sandalwood, tonka bean, vanilla and oakmoss, leaving a sensual, refined and long-lasting trail. Love intensely. Live with fire. Dare to feel with Eros Flame.',
             sizes: [
                 'Decante 10ML',
@@ -1557,23 +1557,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Épicé · Une signature ardente et raffinée avec agrumes, poivre noir, romarin, rose, bois, fève tonka et vanille.",
-                longDescription: "Versace Eros Flame est une déclaration olfactive intense et émotionnelle. Conçu pour l'homme fort, passionné et assuré, ce parfum joue avec les contrastes les plus puissants. Dès l'ouverture, un éclat d'agrumes d'un citron, mandarine et orange amère se mélange au poivre noir et au romarin sauvage, créant un début ardent et rafraîchissant. Le cœur révèle une élégance florale masculine avec géranium, rose et poivrette. Enfin, les notes de fond enveloppent de chaleur et de profondeur : cèdre du Texas, vétiver d'Haïti, patchouli, santal, fève tonka, vanille et mousse de chêne.",
+                subtitle: "Parfum homme � Bois� �pic� � Une signature ardente et raffin�e avec agrumes, poivre noir, romarin, rose, bois, f�ve tonka et vanille.",
+                longDescription: "Versace Eros Flame est une d�claration olfactive intense et �motionnelle. Con�u pour l'homme fort, passionn� et assur�, ce parfum joue avec les contrastes les plus puissants. D�s l'ouverture, un �clat d'agrumes d'un citron, mandarine et orange am�re se m�lange au poivre noir et au romarin sauvage, cr�ant un d�but ardent et rafra�chissant. Le c�ur r�v�le une �l�gance florale masculine avec g�ranium, rose et poivrette. Enfin, les notes de fond enveloppent de chaleur et de profondeur : c�dre du Texas, v�tiver d'Ha�ti, patchouli, santal, f�ve tonka, vanille et mousse de ch�ne.",
                 notes: [
-                    { title: 'AGRUMES, POIVRE & ROMARIN', text: 'Une ouverture vive d’agrumes, poivre noir et romarin crée une première impression ardente et rafraîchissante.' },
-                    { title: 'GÉRANIUM, ROSE & POIVRETTE', text: 'Le cœur équilibre élégance florale masculine avec une touche épicée subtile et une sophistication moderne.' },
-                    { title: 'CÈDRE, VÉTIVER, TONKA & VANILLE', text: 'Les bois chauds, la fève tonka, la vanille et la mousse de chêne construisent un sillage sensuel, profond et durable.' }
+                    { title: 'AGRUMES, POIVRE & ROMARIN', text: 'Une ouverture vive d�agrumes, poivre noir et romarin cr�e une premi�re impression ardente et rafra�chissante.' },
+                    { title: 'G�RANIUM, ROSE & POIVRETTE', text: 'Le c�ur �quilibre �l�gance florale masculine avec une touche �pic�e subtile et une sophistication moderne.' },
+                    { title: 'C�DRE, V�TIVER, TONKA & VANILLE', text: 'Les bois chauds, la f�ve tonka, la vanille et la mousse de ch�ne construisent un sillage sensuel, profond et durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/versace/versace-eros-flame-eau-de-parfum/2.jpg'
+                'assets/images/products/versace/versace-eros-flame-eau-de-parfum/2.jpg'
             ]
         },
         'versace eros energy eau de parfum': {
             brand: 'VERSACE',
             gender: 'men',
             fragranceProfile: { longevity: 84, longevityLabel: '8-10h', sillage: 76, sillageLabel: 'Strong', season: 90, seasonLabel: 'Spring/Summer' },
-            subtitle: "Men's fragrance · Citrus Aromatic · A vibrant fresh signature with bergamot, blood orange, lime, grapefruit, pink pepper, blackcurrant, amber, patchouli, and musk.",
+            subtitle: "Men's fragrance � Citrus Aromatic � A vibrant fresh signature with bergamot, blood orange, lime, grapefruit, pink pepper, blackcurrant, amber, patchouli, and musk.",
             longDescription: "VERSACE presents Eros Energy Eau de Parfum, a masculine fragrance that conveys vitality from its first application. VERSACE Eros Energy Eau de Parfum stands out for its citrus composition, with top notes of Italian bergamot, blood orange, Peruvian lime, green mandarin, grapefruit, and Italian lemon. The heart of VERSACE Eros Energy Eau de Parfum incorporates Orpur CO2 pink pepper and blackcurrant, contrasted with Ambrofix white amber. This aromatic combination in Eros Energy Eau de Parfum reflects the dynamic character of VERSACE. At the base, Orpur Indonesian patchouli, musk, and oakmoss add depth. The Eros Energy Eau de Parfum bottle maintains VERSACE's distinctive style, with translucent yellow glass and details like the engraved Medusa. Eros Energy Eau de Parfum is designed for those seeking a fragrance that combines freshness, contrast, and longevity, in keeping with VERSACE's identity.",
             sizes: [
                 'Decante 10ML',
@@ -1597,24 +1597,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Aromatique Citrus · Une signature fraîche et vibrante avec bergamote, orange sanguine, citron vert, pamplemousse, poivre rose, cassis, ambre et patchouli.",
-                longDescription: "VERSACE présente Eros Energy Eau de Parfum, un parfum masculin qui transmet la vitalité dès la première application. Il se distingue par sa composition citruse, avec en tête le bergamote d'Italie, l'orange sanguine, la lime péruvienne, la mandarine verte, le pamplemousse et le citron d'Italie. Le cœur incorpore le poivre rose Orpur CO2 et le cassis, contrastant avec l'ambre blanc Ambrofix. En fond, le patchouli d'Indonésie Orpur, le musc et la mousse de chêne ajoutent de la profondeur.",
+                subtitle: "Parfum homme � Aromatique Citrus � Une signature fra�che et vibrante avec bergamote, orange sanguine, citron vert, pamplemousse, poivre rose, cassis, ambre et patchouli.",
+                longDescription: "VERSACE pr�sente Eros Energy Eau de Parfum, un parfum masculin qui transmet la vitalit� d�s la premi�re application. Il se distingue par sa composition citruse, avec en t�te le bergamote d'Italie, l'orange sanguine, la lime p�ruvienne, la mandarine verte, le pamplemousse et le citron d'Italie. Le c�ur incorpore le poivre rose Orpur CO2 et le cassis, contrastant avec l'ambre blanc Ambrofix. En fond, le patchouli d'Indon�sie Orpur, le musc et la mousse de ch�ne ajoutent de la profondeur.",
                 notes: [
-                    { title: 'BERGAMOTE, ORANGE SANGUINE & CITRON VERT', text: 'Une ouverture agrumeée et vive apporte luminosité, fraîcheur et une énergie énergétique immédiate.' },
-                    { title: 'POIVRE ROSE, CASSIS & AMBRE BLANC', text: 'Le cœur mélange éclat épicé, contraste fruité et douceur d’ambre moderne.' },
-                    { title: 'PATCHOULI, MUSC & MOUSSE DE CHÊNE', text: 'Un fond propre mais profond de patchouli, musc et mousse de chêne ajoute structure et caractère durable.' }
+                    { title: 'BERGAMOTE, ORANGE SANGUINE & CITRON VERT', text: 'Une ouverture agrume�e et vive apporte luminosit�, fra�cheur et une �nergie �nerg�tique imm�diate.' },
+                    { title: 'POIVRE ROSE, CASSIS & AMBRE BLANC', text: 'Le c�ur m�lange �clat �pic�, contraste fruit� et douceur d�ambre moderne.' },
+                    { title: 'PATCHOULI, MUSC & MOUSSE DE CH�NE', text: 'Un fond propre mais profond de patchouli, musc et mousse de ch�ne ajoute structure et caract�re durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/versace/versace-eros-energy-eau-de-parfum/2.jpg',
-                '/assets/images/products/versace/versace-eros-energy-eau-de-parfum/3.jpg'
+                'assets/images/products/versace/versace-eros-energy-eau-de-parfum/2.jpg',
+                'assets/images/products/versace/versace-eros-energy-eau-de-parfum/3.jpg'
             ]
         },
         'versace dylan blue eau de toilette': {
             brand: 'VERSACE',
             gender: 'men',
             fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 74, sillageLabel: 'Moderate', season: 85, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Fresh Woody · A Mediterranean signature with bergamot, grapefruit, saffron, musk, and elegant woody depth.",
+            subtitle: "Men's fragrance � Fresh Woody � A Mediterranean signature with bergamot, grapefruit, saffron, musk, and elegant woody depth.",
             longDescription: 'Dylan Blue Pour Homme Eau de Toilette is a fresh, woody fragrance that captures the sensual and powerful essence of the Mediterranean. Designed for the strong, decisive, and modern man who seeks to highlight his unique personality, this olfactory composition combines fresh and spicy notes with exceptional longevity. The opening is refreshed with vibrant citrus notes of bergamot and grapefruit, enriched with unusual spicy nuances of saffron and an intense base of musk. The result is a masculine and elegant scent, ideal for any occasion. The rectangular glass bottle, in a deep blue with golden details, reflects the sophistication and strength of this fragrance. Experience the freshness and power of the Mediterranean with Dylan Blue Pour Homme. A fragrance that defines your style and character.',
             sizes: [
                 'Decante 10ML',
@@ -1638,23 +1638,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Frais · Une signature méditerranéenne avec bergamote, pamplemousse, safran, musc et une profondeur boisée élégante.",
-                longDescription: "Dylan Blue Pour Homme Eau de Toilette est un parfum frais et boisé qui capture l’essence sensuelle et puissante de la Méditerranée. Conçu pour l'homme fort, décisé et moderne qui souhaite mettre en valeur sa personnalité unique, cette composition combine des notes fraîches et épicées avec une longue durabilité exceptionnelle. L'ouverture se rafraîchit avec des notes d'agrumes vibrantes de bergamote et pamplemousse, enrichies de nuances épicées inhabituelles de safran et d'un fond intense de musc.",
+                subtitle: "Parfum homme � Bois� Frais � Une signature m�diterran�enne avec bergamote, pamplemousse, safran, musc et une profondeur bois�e �l�gante.",
+                longDescription: "Dylan Blue Pour Homme Eau de Toilette est un parfum frais et bois� qui capture l�essence sensuelle et puissante de la M�diterran�e. Con�u pour l'homme fort, d�cis� et moderne qui souhaite mettre en valeur sa personnalit� unique, cette composition combine des notes fra�ches et �pic�es avec une longue durabilit� exceptionnelle. L'ouverture se rafra�chit avec des notes d'agrumes vibrantes de bergamote et pamplemousse, enrichies de nuances �pic�es inhabituelles de safran et d'un fond intense de musc.",
                 notes: [
-                    { title: 'BERGAMOTE & PAMPLEMOUSSE', text: 'Une ouverture agrumeée et nette apporte fraîcheur méditerranéenne, luminosité et énergie immédiate.' },
-                    { title: 'SAFRAN ÉPICÉ', text: 'Une nuance épicée inhabituelle ajoute texture et caractère masculin élégant au cœur.' },
-                    { title: 'MUSC & PROFONDEUR BOISÉE', text: 'Le musc et les bois créent un fond lisse et puissant avec une présence durable raffinée.' }
+                    { title: 'BERGAMOTE & PAMPLEMOUSSE', text: 'Une ouverture agrume�e et nette apporte fra�cheur m�diterran�enne, luminosit� et �nergie imm�diate.' },
+                    { title: 'SAFRAN �PIC�', text: 'Une nuance �pic�e inhabituelle ajoute texture et caract�re masculin �l�gant au c�ur.' },
+                    { title: 'MUSC & PROFONDEUR BOIS�E', text: 'Le musc et les bois cr�ent un fond lisse et puissant avec une pr�sence durable raffin�e.' }
                 ]
             },
             images: [
-                '/assets/images/products/versace/versace-dylan-blue-eau-de-toilette/2.jpg'
+                'assets/images/products/versace/versace-dylan-blue-eau-de-toilette/2.jpg'
             ]
         },
         'rabanne one million parfum': {
             brand: 'RABANNE',
             gender: 'men',
             fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 80, sillageLabel: 'Strong', season: 70, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Salty Woody · An iconic signature blending leather audacity with floral and spicy touches.",
+            subtitle: "Men's fragrance � Salty Woody � An iconic signature blending leather audacity with floral and spicy touches.",
             longDescription: "One Million Eau de Parfum is Paco Rabanne's star men's fragrance that has been a sensation since its launch. It's a recognized scent that leaves its mark wherever it goes. The sensuality and freshness it conveys are part of its unique identity, which possesses the audacity of the most authentic leather and the duality between a salty and woody impulse with floral and spicy touches. The One Million EDP gift set will allow you to offer the gift with the intense aroma that everyone desires.",
             sizes: [
                 'Decante 10ML',
@@ -1678,26 +1678,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Salé Boisé · Une signature iconique mélant l'audace du cuir avec des touches florales et épicées.",
-                longDescription: "One Million Eau de Parfum est le parfum phare pour homme de Paco Rabanne, une sensation depuis son lancement. Un parfum reconnu qui marque partout où il passe. La sensualité et la fraîcheur qu'il dégage font partie de son identité unique, qui possède l'audace du cuir le plus authentique et la dualité entre une impulsion salée et boisée avec des touches florales et épicées.",
+                subtitle: "Parfum homme � Sal� Bois� � Une signature iconique m�lant l'audace du cuir avec des touches florales et �pic�es.",
+                longDescription: "One Million Eau de Parfum est le parfum phare pour homme de Paco Rabanne, une sensation depuis son lancement. Un parfum reconnu qui marque partout o� il passe. La sensualit� et la fra�cheur qu'il d�gage font partie de son identit� unique, qui poss�de l'audace du cuir le plus authentique et la dualit� entre une impulsion sal�e et bois�e avec des touches florales et �pic�es.",
                 notes: [
-                    { title: 'CUIR AUTHENTIQUE', text: 'Un caractère affirmé de cuir donne au parfum son identité audacieuse et irremplaçable.' },
-                    { title: 'IMPULSION SALÉE BOISÉE', text: 'Un contraste sensuel salé-boisé crée fraîcheur, profondeur et intensité moderne.' },
-                    { title: 'TOUCHES FLORALES & ÉPICÉES', text: 'Les nuances florales et les accents épicés complètent le sillage avec une sophistication durable.' }
+                    { title: 'CUIR AUTHENTIQUE', text: 'Un caract�re affirm� de cuir donne au parfum son identit� audacieuse et irrempla�able.' },
+                    { title: 'IMPULSION SAL�E BOIS�E', text: 'Un contraste sensuel sal�-bois� cr�e fra�cheur, profondeur et intensit� moderne.' },
+                    { title: 'TOUCHES FLORALES & �PIC�ES', text: 'Les nuances florales et les accents �pic�s compl�tent le sillage avec une sophistication durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/rabanne/rabanne-one-million-parfum/2.jpg',
-                '/assets/images/products/rabanne/rabanne-one-million-parfum/3.jpg',
-                '/assets/images/products/rabanne/rabanne-one-million-parfum/4.jpg'
+                'assets/images/products/rabanne/rabanne-one-million-parfum/2.jpg',
+                'assets/images/products/rabanne/rabanne-one-million-parfum/3.jpg',
+                'assets/images/products/rabanne/rabanne-one-million-parfum/4.jpg'
             ]
         },
         'rabanne one million elixir intense': {
             brand: 'RABANNE',
             gender: 'men',
             fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 85, sillageLabel: 'Very Strong', season: 65, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Aromatic Amber · The pinnacle of One Million intensity with rose, tonka bean, woods, and black vanilla.",
-            longDescription: "Discover One Million Elixir , the pinnacle of Million 's intensity , a new fragrance guided by the desire for supreme quality. A blend of carefully selected ingredients from around the world, celebrating the craftsmanship of our perfumers and the fusion of the finest raw materials. A new dimension, incredibly intense, undoubtedly One Million. The iconic One Million gold ingot , bolder and more sophisticated than ever. A handcrafted jewel that reflects the different facets of the fragrance. A symbol of a new strength: elegant, intense, and enigmatic. The exquisitely crafted bottle encapsulates the soul and essence of One Million , the infinite depth of this new olfactory creation. The pinnacle of absolute intensity. One Million Elixir , more intense than ever, to captivate you. Hand-selected ingredients—Turkish rose, osmanthus, and wild-harvested tonka bean—make this masterpiece stand out for its exceptional quality. The deeply sensual Davana liqueur vibrates with the touch of soft woods and black vanilla seeds; supreme sensuality meets absolute, long-lasting power.",
+            subtitle: "Men's fragrance � Aromatic Amber � The pinnacle of One Million intensity with rose, tonka bean, woods, and black vanilla.",
+            longDescription: "Discover One Million Elixir , the pinnacle of Million 's intensity , a new fragrance guided by the desire for supreme quality. A blend of carefully selected ingredients from around the world, celebrating the craftsmanship of our perfumers and the fusion of the finest raw materials. A new dimension, incredibly intense, undoubtedly One Million. The iconic One Million gold ingot , bolder and more sophisticated than ever. A handcrafted jewel that reflects the different facets of the fragrance. A symbol of a new strength: elegant, intense, and enigmatic. The exquisitely crafted bottle encapsulates the soul and essence of One Million , the infinite depth of this new olfactory creation. The pinnacle of absolute intensity. One Million Elixir , more intense than ever, to captivate you. Hand-selected ingredients�Turkish rose, osmanthus, and wild-harvested tonka bean�make this masterpiece stand out for its exceptional quality. The deeply sensual Davana liqueur vibrates with the touch of soft woods and black vanilla seeds; supreme sensuality meets absolute, long-lasting power.",
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -1720,26 +1720,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Ambré Aromatique · L'apogée de l'intensité One Million avec rose, fève tonka, bois et vanille noire.",
-                longDescription: "Découvrez One Million Elixir, l'apogée de l'intensité Million, un nouveau parfum guidé par le désir de qualité suprême. Un mélange d'ingrédients soigneusement sélectionnés du monde entier, célébrant le savoir-faire de nos parfumeurs. Le lingot d'or iconique One Million, plus audacieux et sophistiqué que jamais. Des ingrédients sélectionnés à la main, rose turque, osmanthus et fève tonka récoltée sauvagement, font de ce chef-d'œuvre une pièce de qualité exceptionnelle. La liqueur de davana profondément sensuelle vibre au contact des bois doux et des graines de vanille noire.",
+                subtitle: "Parfum homme � Ambr� Aromatique � L'apog�e de l'intensit� One Million avec rose, f�ve tonka, bois et vanille noire.",
+                longDescription: "D�couvrez One Million Elixir, l'apog�e de l'intensit� Million, un nouveau parfum guid� par le d�sir de qualit� supr�me. Un m�lange d'ingr�dients soigneusement s�lectionn�s du monde entier, c�l�brant le savoir-faire de nos parfumeurs. Le lingot d'or iconique One Million, plus audacieux et sophistiqu� que jamais. Des ingr�dients s�lectionn�s � la main, rose turque, osmanthus et f�ve tonka r�colt�e sauvagement, font de ce chef-d'�uvre une pi�ce de qualit� exceptionnelle. La liqueur de davana profond�ment sensuelle vibre au contact des bois doux et des graines de vanille noire.",
                 notes: [
-                    { title: 'ROSE TURQUE & OSMANTHUS', text: 'Un duo floral raffiné qui apporte richesse, élégance et profondeur exceptionnelle.' },
-                    { title: 'LIQUEUR DE DAVANA', text: 'Un cœur profondément sensuel avec une texture chaude à la liqueur de davana et un caractère magnétique.' },
-                    { title: 'TONKA, BOIS & VANILLE NOIRE', text: 'La fève tonka sauvage, les bois doux et la vanille noire créent un sillage intense et durable.' }
+                    { title: 'ROSE TURQUE & OSMANTHUS', text: 'Un duo floral raffin� qui apporte richesse, �l�gance et profondeur exceptionnelle.' },
+                    { title: 'LIQUEUR DE DAVANA', text: 'Un c�ur profond�ment sensuel avec une texture chaude � la liqueur de davana et un caract�re magn�tique.' },
+                    { title: 'TONKA, BOIS & VANILLE NOIRE', text: 'La f�ve tonka sauvage, les bois doux et la vanille noire cr�ent un sillage intense et durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/rabanne/rabanne-one-million-elixir-intense/2.webp',
-                '/assets/images/products/rabanne/rabanne-one-million-elixir-intense/3.jpg',
-                '/assets/images/products/rabanne/rabanne-one-million-elixir-intense/4.jpg',
-                '/assets/images/products/rabanne/rabanne-one-million-elixir-intense/5.jpg'
+                'assets/images/products/rabanne/rabanne-one-million-elixir-intense/2.webp',
+                'assets/images/products/rabanne/rabanne-one-million-elixir-intense/3.jpg',
+                'assets/images/products/rabanne/rabanne-one-million-elixir-intense/4.jpg',
+                'assets/images/products/rabanne/rabanne-one-million-elixir-intense/5.jpg'
             ]
         },
         'givenchy gentleman society amber eau de parfum': {
             brand: 'GIVENCHY',
             gender: 'men',
             fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 70, sillageLabel: 'Moderate', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Amber Woody · Narcissus and vetiver enhanced by leather, tobacco, warm spices, and Tasuki vanilla.",
+            subtitle: "Men's fragrance � Amber Woody � Narcissus and vetiver enhanced by leather, tobacco, warm spices, and Tasuki vanilla.",
             longDescription: "Givenchy presents Gentleman Society Eau de Parfum Ambree , a captivating blend of vibrant narcissus flower and a quartet of vetivers, enhanced by rich notes of leather and tobacco. A COMPOSITION MADE WITH EXCEPTIONAL RAW MATERIALS Gentleman Society Ambree reinvents the iconic woody signature of Gentleman Society with a new amber facet, enriched with the balsamic notes of Tasuki vanilla. Expressing Givenchy's unique savoir-faire, Gentleman Society Eau de Parfum Ambree unveils a sophisticated accord of narcissus blossom and a quartet of vetiver, intensified by the boldness of leather and tobacco. Warm spices blend harmoniously with the richness of Tasuki vanilla from Madagascar, combined with a balsam essence, creating an elegant and deeply captivating trail. AN ICONIC BOTTLE WITH GOLDEN REFLECTIONS The iconic Gentleman Society bottle, entirely lacquered in black, is adorned with a refined gold crest, a symbol of elegance and prestige. Combining opulence and timelessness, it invites the expression of sensuality and individuality. GENTLEMAN SOCIETY. MORE THAN A PLACE, A STATE OF MIND For this new chapter, Gentleman Society expands around the English composer Benjamin Clementine. His elegance and undeniable charisma resonate as an invitation to join a community that is bolder and more inclusive than ever.",
             sizes: [
                 'Decante 10ML',
@@ -1763,26 +1763,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Ambré Boisé · Narcisse et vétiver élevés par le cuir, le tabac, les épices chaudes et la vanille Tasuki.",
-                longDescription: "Givenchy présente Gentleman Society Eau de Parfum Ambrée, un mélange captivant de narcisse éclatant et d'un quatuor de vétivers, enrichi de riches notes de cuir et tabac. Gentleman Society Ambrée réinvente la signature boisée iconique de Gentleman Society avec une nouvelle facette ambrée, enrichie des notes balsamiques de la vanille Tasuki. Les épices chaudes se mélangent harmonieusement à la richesse de la vanille Tasuki de Madagascar, créant un sillage élégant et profondément captivant.",
+                subtitle: "Parfum homme � Ambr� Bois� � Narcisse et v�tiver �lev�s par le cuir, le tabac, les �pices chaudes et la vanille Tasuki.",
+                longDescription: "Givenchy pr�sente Gentleman Society Eau de Parfum Ambr�e, un m�lange captivant de narcisse �clatant et d'un quatuor de v�tivers, enrichi de riches notes de cuir et tabac. Gentleman Society Ambr�e r�invente la signature bois�e iconique de Gentleman Society avec une nouvelle facette ambr�e, enrichie des notes balsamiques de la vanille Tasuki. Les �pices chaudes se m�langent harmonieusement � la richesse de la vanille Tasuki de Madagascar, cr�ant un sillage �l�gant et profond�ment captivant.",
                 notes: [
-                    { title: 'NARCISSE & VÉTIVER', text: 'Un cœur sophistiqué floral-boisé construit autour du narcisse et d’un quatuor de vétivers.' },
-                    { title: 'CUIR & TABAC', text: 'Le cuir riche et le tabac ajoutent une texture audacieuse et un caractère masculin profond.' },
-                    { title: 'VANILLE TASUKI', text: 'Les épices chaudes et la vanille balsamique de Madagascar créent un sillage ambré élégant.' }
+                    { title: 'NARCISSE & V�TIVER', text: 'Un c�ur sophistiqu� floral-bois� construit autour du narcisse et d�un quatuor de v�tivers.' },
+                    { title: 'CUIR & TABAC', text: 'Le cuir riche et le tabac ajoutent une texture audacieuse et un caract�re masculin profond.' },
+                    { title: 'VANILLE TASUKI', text: 'Les �pices chaudes et la vanille balsamique de Madagascar cr�ent un sillage ambr� �l�gant.' }
                 ]
             },
             images: [
-                '/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/2.jpg',
-                '/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/3.jpg',
-                '/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/4.jpg',
-                '/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/5.jpg'
+                'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/2.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/3.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/4.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/5.jpg'
             ]
         },
         'givenchy gentleman society nomade eau de parfum': {
             brand: 'GIVENCHY',
             gender: 'men',
             fragranceProfile: { longevity: 75, longevityLabel: '6-8h', sillage: 70, sillageLabel: 'Moderate', season: 85, seasonLabel: 'Spring/Summer' },
-            subtitle: "Men's fragrance · Floral Woody · Sage, narcissus, vetiver quartet, woods, and vanilla in a bold Givenchy signature.",
+            subtitle: "Men's fragrance � Floral Woody � Sage, narcissus, vetiver quartet, woods, and vanilla in a bold Givenchy signature.",
             longDescription: "Givenchy redefines the figure of the gentleman with Gentleman Society Eau de Parfum, a bold statement for men who reinvent their own rules and always act for a better world. Wild narcissus blossom blends with a mysterious woody accord to create a fragrance of rare sophistication. An expression of Givenchy's unique savoir-faire, Gentleman Society is composed of exceptional raw materials. From the very first spritz, the fresh, aromatic notes of sage blend with wild narcissus absolute harvested in the heart of France. This unique floral facet is contrasted by the dark intensity of a quartet of vetiver from Uruguay and Madagascar. Essences of cedarwood and sandalwood melt into an addictive and sensual vanilla, leaving a truly memorable trail. A deep and multifaceted men's Eau de Parfum. The couture design reimagines the iconic Gentleman bottle with pure elegance. Like a coat of arms, a reinterpreted 4G monogram in gleaming silver metal adorns the intense black lacquer. The bottle contains 15% recycled glass.",
             sizes: [
                 'Decante 10ML',
@@ -1806,26 +1806,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Floral Boisé · Sauge, narcisse, quatuor de vétiver, bois et vanille dans une signature audacieuse Givenchy.",
-                longDescription: "Givenchy redéfinit la figure du gentleman avec Gentleman Society Eau de Parfum, une déclaration audacieuse pour les hommes qui réinventent leurs propres règles. Le narcisse sauvage absolu récolté au cœur de la France se mélange à un accord boisé mystérieux pour créer un parfum d'une sophistication rare. Dès le premier jet, les notes fraîches et aromatiques de sauge se mélangent au narcisse absolu sauvage. Cette facette florale unique est contrastée par l'intensité sombre d'un quatuor de vétiver d'Uruguay et de Madagascar. Les essences de cèdre et de santal fondent dans une vanille addictive et sensuelle.",
+                subtitle: "Parfum homme � Floral Bois� � Sauge, narcisse, quatuor de v�tiver, bois et vanille dans une signature audacieuse Givenchy.",
+                longDescription: "Givenchy red�finit la figure du gentleman avec Gentleman Society Eau de Parfum, une d�claration audacieuse pour les hommes qui r�inventent leurs propres r�gles. Le narcisse sauvage absolu r�colt� au c�ur de la France se m�lange � un accord bois� myst�rieux pour cr�er un parfum d'une sophistication rare. D�s le premier jet, les notes fra�ches et aromatiques de sauge se m�langent au narcisse absolu sauvage. Cette facette florale unique est contrast�e par l'intensit� sombre d'un quatuor de v�tiver d'Uruguay et de Madagascar. Les essences de c�dre et de santal fondent dans une vanille addictive et sensuelle.",
                 notes: [
-                    { title: 'SAUGE & NARCISSE', text: 'Une ouverture aromatique au narcisse sauvage qui apporte fraîcheur et sophistication florale.' },
-                    { title: 'QUATUOR DE VÉTIVER', text: 'Le vétiver d’Uruguay et de Madagascar ajoute un cœur boisé sombre, texturé et moderne.' },
-                    { title: 'CÈDRE, SANTAL & VANILLE', text: 'Les bois et la vanille sensuelle laissent un sillage profond, mémorable et multifacèttes.' }
+                    { title: 'SAUGE & NARCISSE', text: 'Une ouverture aromatique au narcisse sauvage qui apporte fra�cheur et sophistication florale.' },
+                    { title: 'QUATUOR DE V�TIVER', text: 'Le v�tiver d�Uruguay et de Madagascar ajoute un c�ur bois� sombre, textur� et moderne.' },
+                    { title: 'C�DRE, SANTAL & VANILLE', text: 'Les bois et la vanille sensuelle laissent un sillage profond, m�morable et multifac�ttes.' }
                 ]
             },
             images: [
-                '/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/2.jpg',
-                '/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/3.jpg',
-                '/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/4.jpg',
-                '/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/5.jpg'
+                'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/2.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/3.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/4.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/5.jpg'
             ]
         },
         'givenchy gentleman society extreme eau de parfum': {
             brand: 'GIVENCHY',
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 80, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Woody Aromatic · A daring blend of clary sage, iced mint, coffee, vetiver, woods, patchouli, and vanilla.",
+            subtitle: "Men's fragrance � Woody Aromatic � A daring blend of clary sage, iced mint, coffee, vetiver, woods, patchouli, and vanilla.",
             longDescription: "GIVENCHY Gentleman Society Extreme EDP With its magnetic masculine signature, Gentleman Society Eau de Parfum Extreme embodies a new attitude within the Gentleman Society. Tailor-made for the most daring, this addictive fragrance is designed for the man who pushes his limits in an eternal quest for excellence, breaking barriers and fearlessly leaping into the unknown. Crafted with Givenchy's expertise, Gentleman Society Eau de Parfum Extreme is composed of exceptional raw materials, carefully selected for their outstanding olfactory qualities. The top notes of Clary Sage are enhanced by Iced Mint and Nutmeg, creating an immediate aromatic and spicy touch. The mysterious heart reveals the original Gentleman Society accord, a blend of Narcissus Absolute and Iris Concrete, contrasted by the characteristic quartet of Vetiver. From this accord emerges a powerful and unexpected Coffee Absolute Extract. Combined with Mint Essence, this Coffee note becomes icy, revealing a new and intensely textured facet. At the base, the woody notes of Cedar and Sandalwood are deepened with Patchouli Essence and Vanilla Absolute, perfecting this profound signature. Inspired by haute couture, the iconic design of the Gentleman bottle is reinterpreted with a striking new look. The deep black lacquered finish is enhanced with Givenchy's symbol: the 4G logo, engraved like a crest, in a new metallic bronze finish. The Gentleman Society Eau de Parfum Extreme bottle is made with 15% recycled glass. Gentleman Society. It's not a place, it's a state of mind. Join us.",
             sizes: [
                 'Decante 10ML',
@@ -1849,26 +1849,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Aromatique · Un mélange audacieux de sauge sclarée, menthe glacée, café, vétiver, bois, patchouli et vanille.",
-                longDescription: "Gentleman Society Extreme EDP de GIVENCHY incarne une nouvelle attitude avec sa signature masculine magnétique. Sur mesure pour les plus audacieux, ce parfum addictif est conçu pour l'homme qui repousse ses limites. Les notes de tête de sauge sclarée sont rehussées par la menthe glacée et la muscade. Le cœur mystérieux révèle l'accord Gentleman Society original, un mélange de narcisse absolu et d'iris concrète, contrasté par le quatuor de vétiver. Émerge alors un puissant extrait de café absolu combiné à l'essence de menthe, créant une facette glacée et intensement texturée. En fond, cèdre, santal, patchouli et vanille absolue.",
+                subtitle: "Parfum homme � Bois� Aromatique � Un m�lange audacieux de sauge sclar�e, menthe glac�e, caf�, v�tiver, bois, patchouli et vanille.",
+                longDescription: "Gentleman Society Extreme EDP de GIVENCHY incarne une nouvelle attitude avec sa signature masculine magn�tique. Sur mesure pour les plus audacieux, ce parfum addictif est con�u pour l'homme qui repousse ses limites. Les notes de t�te de sauge sclar�e sont rehuss�es par la menthe glac�e et la muscade. Le c�ur myst�rieux r�v�le l'accord Gentleman Society original, un m�lange de narcisse absolu et d'iris concr�te, contrast� par le quatuor de v�tiver. �merge alors un puissant extrait de caf� absolu combin� � l'essence de menthe, cr�ant une facette glac�e et intensement textur�e. En fond, c�dre, santal, patchouli et vanille absolue.",
                 notes: [
-                    { title: 'SAUGE SCLARÉE, MENTHE & MUSCADE', text: 'Une ouverture aromatique-épicée avec une fraîcheur glacée et une intensité immédiate.' },
-                    { title: 'NARCISSE, IRIS & VÉTIVER', text: 'Le cœur signature de Gentleman Society gagne en profondeur grâce à l’élégance florale et à la puissance fumée du vétiver.' },
-                    { title: 'CAFÉ, BOIS & VANILLE', text: 'Le café glacé rencontre cèdre, santal, patchouli et vanille pour une finition audacieuse et durable.' }
+                    { title: 'SAUGE SCLAR�E, MENTHE & MUSCADE', text: 'Une ouverture aromatique-�pic�e avec une fra�cheur glac�e et une intensit� imm�diate.' },
+                    { title: 'NARCISSE, IRIS & V�TIVER', text: 'Le c�ur signature de Gentleman Society gagne en profondeur gr�ce � l��l�gance florale et � la puissance fum�e du v�tiver.' },
+                    { title: 'CAF�, BOIS & VANILLE', text: 'Le caf� glac� rencontre c�dre, santal, patchouli et vanille pour une finition audacieuse et durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/2.webp',
-                '/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/3.jpg',
-                '/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/4.jpg',
-                '/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/5.jpg'
+                'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/2.webp',
+                'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/3.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/4.jpg',
+                'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/5.jpg'
             ]
         },
         'gentleman private reserve eau de parfum': {
             brand: 'GIVENCHY',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 75, sillageLabel: 'Strong', season: 50, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Amber Woody · Airy iris and amber woods elevated by natural whisky absolute.",
+            subtitle: "Men's fragrance � Amber Woody � Airy iris and amber woods elevated by natural whisky absolute.",
             longDescription: "Timeless elegance is reinvented with Givenchy Gentleman Reserve Privee , a fragrance that celebrates the sensuality of amber wood and the sophistication of airy iris . This olfactory duo creates an addictive and enveloping composition , a symbol of contemporary masculine refinement. At the heart of this creation beats the absolute of natural whisky , made in Grasse from aromatic barley from a Scottish distillery , for a warm, intense and unique character. Its bottle with clean lines and amber finish , inspired by the silhouette of an elegant flask, reflects the perfect fusion between tradition and modernity. Gentleman Reserve Privee Eau de Parfum is an ode to the sophisticated, self-assured, and profoundly authentic man. A fragrance that embodies the art of French savoir-faire combined with the essence of Scotch whisky: intense, refined, and eternally elegant .",
             sizes: [
                 'Decante 10ML',
@@ -1892,26 +1892,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Ambré Boisé · Un iris aérien et des bois ambrés sublimés par le whisky absolu naturel.",
-                longDescription: "L'élégance intemporelle est réinventée avec Givenchy Gentleman Réserve Privée, un parfum qui célèbre la sensualité du bois ambré et la sophistication de l'iris aérien. Au cœur de cette création bat l'absolu de whisky naturel, fabriqué en Grasse à partir d'orge aromatique d'une distillerie écossaise, pour un caractère chaud, intense et unique. Son flacon aux lignes épurées et à la finition ambrée, inspiré de la silhouette d'une élégante flasque, reflète la fusion parfaite entre tradition et modernité.",
+                subtitle: "Parfum homme � Ambr� Bois� � Un iris a�rien et des bois ambr�s sublim�s par le whisky absolu naturel.",
+                longDescription: "L'�l�gance intemporelle est r�invent�e avec Givenchy Gentleman R�serve Priv�e, un parfum qui c�l�bre la sensualit� du bois ambr� et la sophistication de l'iris a�rien. Au c�ur de cette cr�ation bat l'absolu de whisky naturel, fabriqu� en Grasse � partir d'orge aromatique d'une distillerie �cossaise, pour un caract�re chaud, intense et unique. Son flacon aux lignes �pur�es et � la finition ambr�e, inspir� de la silhouette d'une �l�gante flasque, refl�te la fusion parfaite entre tradition et modernit�.",
                 notes: [
-                    { title: 'IRIS AÉRIEN', text: 'Un accord d’iris raffiné apporte élégance et sophistication masculine contemporaine.' },
-                    { title: 'WHISKY ABSOLU', text: "Le whisky absolu naturel d'orge aromatique ajoute chaleur, intensité et unicité." },
-                    { title: 'BOIS AMBRÉS', text: 'Des bois ambrés sensuels créent un sillage enveloppant et élégant durable.' }
+                    { title: 'IRIS A�RIEN', text: 'Un accord d�iris raffin� apporte �l�gance et sophistication masculine contemporaine.' },
+                    { title: 'WHISKY ABSOLU', text: "Le whisky absolu naturel d'orge aromatique ajoute chaleur, intensit� et unicit�." },
+                    { title: 'BOIS AMBR�S', text: 'Des bois ambr�s sensuels cr�ent un sillage enveloppant et �l�gant durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/2.webp',
-                '/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/3.jpg',
-                '/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/4.jpg',
-                '/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/5.jpg'
+                'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/2.webp',
+                'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/3.jpg',
+                'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/4.jpg',
+                'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/5.jpg'
             ]
         },
         'jean paul gaultier scandal elixir': {
             brand: 'JEAN PAUL GAULTIER',
             gender: 'men',
             fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 78, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Amber Fruity Woody · Black cherry, patchouli, and tonka bean in a rich, provocative elixir.",
+            subtitle: "Men's fragrance � Amber Fruity Woody � Black cherry, patchouli, and tonka bean in a rich, provocative elixir.",
             longDescription: "In first class on the Gaultier train, Scandal Pour Homme Elixir reigns supreme, with its amber, fruity, and woody fragrance. Its provocative black cherry and audacious patchouli assert themselves with elegance, while its tonka bean reveals a scandalous sweetness. Who wouldn't dream of encountering it? Behind the red velvet and the closed door of its exclusive case, only the most audacious can enter and succumb to the silver gradient of its amber-hued bottle. Crowned with intensity and excess, everything about it is temptation. Excess dominates, pleasures multiply. The passengers are outraged? So much the better! That's exactly what it's after.",
             sizes: [
                 'Decante 10ML',
@@ -1935,27 +1935,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Ambré Fruité Boisé · Cerise noire, patchouli et fève tonka dans un élixir riche et provocateur.",
-                longDescription: "En première classe dans le train Gaultier, Scandal Pour Homme Elixir règne en maître, avec son parfum ambré, fruité et boisé. Sa cerise noire provocatrice et son patchouli audacieux s'affirment avec élégance, tandis que sa fève tonka révèle une douceur scandaleuse. Derrière le velours rouge et la porte fermée de son étui exclusif, seuls les plus audacieux peuvent entrer et succomber au dégradé argenté de son flacon aux reflets ambrés.",
+                subtitle: "Parfum homme � Ambr� Fruit� Bois� � Cerise noire, patchouli et f�ve tonka dans un �lixir riche et provocateur.",
+                longDescription: "En premi�re classe dans le train Gaultier, Scandal Pour Homme Elixir r�gne en ma�tre, avec son parfum ambr�, fruit� et bois�. Sa cerise noire provocatrice et son patchouli audacieux s'affirment avec �l�gance, tandis que sa f�ve tonka r�v�le une douceur scandaleuse. Derri�re le velours rouge et la porte ferm�e de son �tui exclusif, seuls les plus audacieux peuvent entrer et succomber au d�grad� argent� de son flacon aux reflets ambr�s.",
                 notes: [
-                    { title: 'CERISE NOIRE', text: 'Une ouverture fruitée provocatrice qui commande immédiatement l’attention.' },
-                    { title: 'PATCHOULI', text: 'Un patchouli audacieux ajoute profondeur, élégance et caractère affirmé.' },
-                    { title: 'FÈVE TONKA', text: 'Une douceur lisse et scandaleuse qui persiste avec une intensité addictive.' }
+                    { title: 'CERISE NOIRE', text: 'Une ouverture fruit�e provocatrice qui commande imm�diatement l�attention.' },
+                    { title: 'PATCHOULI', text: 'Un patchouli audacieux ajoute profondeur, �l�gance et caract�re affirm�.' },
+                    { title: 'F�VE TONKA', text: 'Une douceur lisse et scandaleuse qui persiste avec une intensit� addictive.' }
                 ]
             },
             images: [
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/2.jpg',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/3.jpg',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/4.jpg',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/5.jpg'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/2.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/3.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/4.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/5.jpg'
             ]
         },
         'jean paul gaultier scandal intense eau de parfum': {
             brand: 'JEAN PAUL GAULTIER',
             gender: 'men',
             fragranceProfile: { longevity: 86, longevityLabel: '8-10h', sillage: 80, sillageLabel: 'Strong', season: 62, seasonLabel: 'Fall/Winter' },
-            subtitle: 'Perfume for men · Leather Woody · An intense signature with firm presence and unapologetic character.',
-            longDescription: 'JEAN PAUL GAULTIER presenta Scandal Intense Eau de Parfum For Him, una propuesta olfativa que refuerza la identidad del perfume hombre en su versión más intensa.\n\nScandal Intense Eau de Parfum For Him de JEAN PAUL GAULTIER combina notas de cuero y madera, creando un perfil aromático que acompaña a quienes buscan un perfume hombre con presencia firme.\n\nScandal Intense Eau de Parfum For Him, refleja la visión de JEAN PAUL GAULTIER sobre la masculinidad sin concesiones. Cada aplicación de Scandal Intense Eau de Parfum For Him de JEAN PAUL GAULTIER representa una declaración personal, diseñada para quienes no se ajustan a lo establecido.\n\nLa estructura del Scandal Intense Eau de Parfum For Him está pensada para mantenerse en la piel con intensidad. Con este perfume de hombre, JEAN PAUL GAULTIER confirma su apuesta por fragancias que proponen un estilo propio sin necesidad de artificios.',
+            subtitle: 'Perfume for men � Leather Woody � An intense signature with firm presence and unapologetic character.',
+            longDescription: 'JEAN PAUL GAULTIER presenta Scandal Intense Eau de Parfum For Him, una propuesta olfativa que refuerza la identidad del perfume hombre en su versi�n m�s intensa.\n\nScandal Intense Eau de Parfum For Him de JEAN PAUL GAULTIER combina notas de cuero y madera, creando un perfil arom�tico que acompa�a a quienes buscan un perfume hombre con presencia firme.\n\nScandal Intense Eau de Parfum For Him, refleja la visi�n de JEAN PAUL GAULTIER sobre la masculinidad sin concesiones. Cada aplicaci�n de Scandal Intense Eau de Parfum For Him de JEAN PAUL GAULTIER representa una declaraci�n personal, dise�ada para quienes no se ajustan a lo establecido.\n\nLa estructura del Scandal Intense Eau de Parfum For Him est� pensada para mantenerse en la piel con intensidad. Con este perfume de hombre, JEAN PAUL GAULTIER confirma su apuesta por fragancias que proponen un estilo propio sin necesidad de artificios.',
             sizes: [
                 '50ML',
                 '100ML'
@@ -1975,18 +1975,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             images: [
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/2.jpg',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/3.jpg',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/4.jpg',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/5.jpg'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/2.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/3.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/4.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/5.jpg'
             ]
         },
         'azzaro the most wanted parfum': {
             brand: 'AZZARO',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 85, sillageLabel: 'Very Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Spicy Amber · A bold signature with red ginger, woods, and bourbon vanilla.",
+            subtitle: "Men's fragrance � Spicy Amber � A bold signature with red ginger, woods, and bourbon vanilla.",
             longDescription: 'Azzaro The Most Wanted Parfum is an intense, magnetic scent built for confident evenings. It opens with a burst of red ginger, settles into warm woods, and finishes with a rich bourbon vanilla trail that feels smooth and addictive. Crafted for modern allure, it leaves a strong, long-lasting impression without overpowering the room.',
             sizes: [
                 'Decante 10ML',
@@ -2010,25 +2010,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Épicé Ambré · Une signature audacieuse avec gingembre rouge, bois et vanille bourbon.",
-                longDescription: "Azzaro The Most Wanted Parfum est un parfum intense et magnétique conçu pour les soirées intenses. Il s'ouvre sur un éclat de gingembre rouge, se pose sur des bois chauds, et se termine par un sillage riche de vanille bourbon qui se sent lisse et addictif. Conçu pour un charme moderne, il laisse une impression forte et durable sans être envahissant.",
+                subtitle: "Parfum homme � �pic� Ambr� � Une signature audacieuse avec gingembre rouge, bois et vanille bourbon.",
+                longDescription: "Azzaro The Most Wanted Parfum est un parfum intense et magn�tique con�u pour les soir�es intenses. Il s'ouvre sur un �clat de gingembre rouge, se pose sur des bois chauds, et se termine par un sillage riche de vanille bourbon qui se sent lisse et addictif. Con�u pour un charme moderne, il laisse une impression forte et durable sans �tre envahissant.",
                 notes: [
-                    { title: 'GINGEMBRE ROUGE', text: 'Une ouverture vibrante qui ajoute énergie et une touche épicée invitante.' },
-                    { title: 'CŒUR BOISÉ', text: 'Les bois chauds créent de la profondeur et une signature masculine et confiante.' },
-                    { title: 'VANILLE BOURBON', text: 'Un fond lisse et addictif qui persiste avec une douceur raffinée.' }
+                    { title: 'GINGEMBRE ROUGE', text: 'Une ouverture vibrante qui ajoute �nergie et une touche �pic�e invitante.' },
+                    { title: 'C�UR BOIS�', text: 'Les bois chauds cr�ent de la profondeur et une signature masculine et confiante.' },
+                    { title: 'VANILLE BOURBON', text: 'Un fond lisse et addictif qui persiste avec une douceur raffin�e.' }
                 ]
             },
             images: [
-                '/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/2.webp',
-                '/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/3.webp',
-                '/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/4.webp'
+                'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/2.webp',
+                'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/3.webp',
+                'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/4.webp'
             ]
         },
         'azzaro the most wanted eau de parfum intense': {
             brand: 'AZZARO',
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 82, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Spicy Woody · A powerful signature with cardamom, caramel, and amber woods.",
+            subtitle: "Men's fragrance � Spicy Woody � A powerful signature with cardamom, caramel, and amber woods.",
             longDescription: 'Azzaro The Most Wanted Eau de Parfum Intense is an irresistibly bold fragrance that pushes the boundaries of seduction. The composition opens with a fiery burst of cardamom and toffee apple, instantly commanding attention with its sweet-spicy magnetism. At the heart, an addictive caramel accord intertwines with rich amber, creating a warm and enveloping aura that feels both luxurious and provocative. The base reveals deep woody notes of vetiver and cedarwood, grounded by creamy vanilla and tonka bean for a smooth, skin-hugging finish that lingers for hours. Housed in a bold black-and-gold bottle, this intense interpretation is designed for the man who leaves a lasting impression wherever he goes.',
             sizes: [
                 'Decante 10ML',
@@ -2052,25 +2052,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Épicé Boisé · Une signature puissante avec cardamome, caramel et bois ambrés.",
-                longDescription: "Azzaro The Most Wanted Eau de Parfum Intense est un parfum irrésistiblement audacieux qui repousse les limites de la séduction. La composition s'ouvre sur un éclat ardent de cardamome et de pomme caramélisée, captant immédiatement l'attention par son magnétisme sucré-épicé. Au cœur, un accord de caramel addictif s'entrelace avec un ambre riche, créant une aura chaleureuse et enveloppante à la fois luxueuse et provocante. Le fond révèle des notes boisées profondes de vétiver et de cèdre, ancrées par de la vanille crémeuse et de la fève tonka pour une finition lisse et durable.",
+                subtitle: "Parfum homme � �pic� Bois� � Une signature puissante avec cardamome, caramel et bois ambr�s.",
+                longDescription: "Azzaro The Most Wanted Eau de Parfum Intense est un parfum irr�sistiblement audacieux qui repousse les limites de la s�duction. La composition s'ouvre sur un �clat ardent de cardamome et de pomme caram�lis�e, captant imm�diatement l'attention par son magn�tisme sucr�-�pic�. Au c�ur, un accord de caramel addictif s'entrelace avec un ambre riche, cr�ant une aura chaleureuse et enveloppante � la fois luxueuse et provocante. Le fond r�v�le des notes bois�es profondes de v�tiver et de c�dre, ancr�es par de la vanille cr�meuse et de la f�ve tonka pour une finition lisse et durable.",
                 notes: [
-                    { title: 'CARDAMOME', text: 'Une ouverture chaude et épicée qui se sent vibrante et confiante.' },
-                    { title: 'ACCORD CARAMEL', text: 'Un cœur doux et addictif qui ajoute de la profondeur et de la richesse.' },
-                    { title: 'BOIS AMBRÉS', text: 'Un fond boisé lisse qui donne une présence durable.' }
+                    { title: 'CARDAMOME', text: 'Une ouverture chaude et �pic�e qui se sent vibrante et confiante.' },
+                    { title: 'ACCORD CARAMEL', text: 'Un c�ur doux et addictif qui ajoute de la profondeur et de la richesse.' },
+                    { title: 'BOIS AMBR�S', text: 'Un fond bois� lisse qui donne une pr�sence durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/2.webp',
-                '/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/3.webp',
-                '/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/4.webp'
+                'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/2.webp',
+                'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/3.webp',
+                'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/4.webp'
             ]
         },
         'azzaro forever wanted elixir eau de parfum': {
             brand: 'AZZARO',
             gender: 'men',
             fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 80, sillageLabel: 'Strong', season: 50, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Amber Gourmand · A rich, smooth elixir with warm woods and vanilla.",
+            subtitle: "Men's fragrance � Amber Gourmand � A rich, smooth elixir with warm woods and vanilla.",
             longDescription: 'Azzaro Forever Wanted Elixir Eau de Parfum is a dark and opulent elixir crafted for the man who commands the night. The fragrance opens with an intoxicating blend of ginger and lavender, setting the stage with spicy aromatic energy. At its heart, a rich fusion of Tonka bean and praline creates an irresistible gourmand warmth, complemented by the smoky allure of incense. The base is a masterclass in seduction, where dark woods, amber resin, and a velvety vanilla accord merge into a deeply sensual and long-lasting trail. This is a fragrance for unforgettable evenings, encased in a sleek bottle that reflects its magnetic, sophisticated character.',
             sizes: [
                 'Decante 10ML',
@@ -2094,25 +2094,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Ambré Gourmand · Un élixir riche et lisse avec des bois chauds et de la vanille.",
-                longDescription: "Azzaro Forever Wanted Elixir Eau de Parfum est un élixir sombre et opulent conçu pour l'homme qui domine la nuit. Le parfum s'ouvre sur un mélange enivrant de gingembre et de lavande, créant une énergie aromatique épicée. Au cœur, une fusion riche de fève tonka et de praliné crée une chaleur gourmande irrésistible, rehaussée par l'allure fumée de l'encens. Le fond est un chef-d'œuvre de séduction, où bois sombres, résine d'ambre et un accord vanillé velouté fusionnent en un sillage profond et durable.",
+                subtitle: "Parfum homme � Ambr� Gourmand � Un �lixir riche et lisse avec des bois chauds et de la vanille.",
+                longDescription: "Azzaro Forever Wanted Elixir Eau de Parfum est un �lixir sombre et opulent con�u pour l'homme qui domine la nuit. Le parfum s'ouvre sur un m�lange enivrant de gingembre et de lavande, cr�ant une �nergie aromatique �pic�e. Au c�ur, une fusion riche de f�ve tonka et de pralin� cr�e une chaleur gourmande irr�sistible, rehauss�e par l'allure fum�e de l'encens. Le fond est un chef-d'�uvre de s�duction, o� bois sombres, r�sine d'ambre et un accord vanill� velout� fusionnent en un sillage profond et durable.",
                 notes: [
-                    { title: 'OUVERTURE FRAÎCHE', text: 'Un début lumineux qui se feel propre et invitant.' },
-                    { title: 'CŒUR AMBRÉ', text: 'Un noyau chaud et résineux qui ajoute de la richesse.' },
-                    { title: 'BOIS VANILLÉ', text: 'Un fond lisse et addictif pour un sillage durable.' }
+                    { title: 'OUVERTURE FRA�CHE', text: 'Un d�but lumineux qui se feel propre et invitant.' },
+                    { title: 'C�UR AMBR�', text: 'Un noyau chaud et r�sineux qui ajoute de la richesse.' },
+                    { title: 'BOIS VANILL�', text: 'Un fond lisse et addictif pour un sillage durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/2.jpg',
-                '/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/3.jpg',
-                '/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/4.jpg'
+                'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/2.jpg',
+                'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/3.jpg',
+                'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/4.jpg'
             ]
         },
         'valentino donna born in roma eau de parfum': {
             brand: 'VALENTINO',
             gender: 'women',
             fragranceProfile: { longevity: 78, longevityLabel: '7-9h', sillage: 72, sillageLabel: 'Moderate', season: 75, seasonLabel: 'All Year' },
-            subtitle: "Women's fragrance · Floral Woody · A luminous blend of jasmine, blackcurrant, and warm woods.",
+            subtitle: "Women's fragrance � Floral Woody � A luminous blend of jasmine, blackcurrant, and warm woods.",
             longDescription: 'Valentino Donna Born in Roma Eau de Parfum is a contemporary floral masterpiece inspired by the spirit of Roman couture. The fragrance opens with a burst of juicy blackcurrant buds and pink peppercorn, creating an immediate sense of vibrant femininity. At its heart, a lavish bouquet of jasmine grandiflorum blossoms alongside a velvety Bulgarian rose accord, evoking the elegance of an Italian garden at dusk. The base unfolds with creamy Bourbon vanilla, cashmeran, and warm guaiac wood, wrapping the skin in a sensual and sophisticated trail. Housed in the iconic Valentino Rockstud bottle, this fragrance celebrates the bold, modern woman who embraces her individuality with grace and confidence.',
             sizes: [
                 'Decante 10ML',
@@ -2136,25 +2136,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum femme · Floral Boisé · Un mélange lumineux de jasmin, cassis et bois chauds.",
-                longDescription: "Valentino Donna Born in Roma Eau de Parfum est un chef-d'œuvre floral contemporain inspiré par l'esprit de la couture romaine. Le parfum s'ouvre sur un éclat de bourgeons de cassis juteux et de poivre rose, créant une féminité vibrante. Au cœur, un bouquet somptueux de jasmin grandiflorum s'épanouit aux côtés d'un accord de rose bulgare velouté, évoquant l'élégance d'un jardin italien au crépuscule. Le fond se déploie avec de la vanille Bourbon crémeuse, du cashmeran et du bois de gaïac chaud, enveloppant la peau d'un sillage sensuel et sophistiqué.",
+                subtitle: "Parfum femme � Floral Bois� � Un m�lange lumineux de jasmin, cassis et bois chauds.",
+                longDescription: "Valentino Donna Born in Roma Eau de Parfum est un chef-d'�uvre floral contemporain inspir� par l'esprit de la couture romaine. Le parfum s'ouvre sur un �clat de bourgeons de cassis juteux et de poivre rose, cr�ant une f�minit� vibrante. Au c�ur, un bouquet somptueux de jasmin grandiflorum s'�panouit aux c�t�s d'un accord de rose bulgare velout�, �voquant l'�l�gance d'un jardin italien au cr�puscule. Le fond se d�ploie avec de la vanille Bourbon cr�meuse, du cashmeran et du bois de ga�ac chaud, enveloppant la peau d'un sillage sensuel et sophistiqu�.",
                 notes: [
                     { title: 'CASSIS', text: 'Une ouverture juteuse et vibrante avec une touche moderne.' },
-                    { title: 'JASMIN', text: 'Un cœur floral riche qui se felt élégant et rayonnant.' },
-                    { title: 'BOIS VANILLÉ', text: 'Un fond chaud et lisse qui persiste doucement sur la peau.' }
+                    { title: 'JASMIN', text: 'Un c�ur floral riche qui se felt �l�gant et rayonnant.' },
+                    { title: 'BOIS VANILL�', text: 'Un fond chaud et lisse qui persiste doucement sur la peau.' }
                 ]
             },
             images: [
-                '/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/2.webp',
-                '/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/3.webp',
-                '/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/4.webp'
+                'assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/2.webp',
+                'assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/3.webp',
+                'assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/4.webp'
             ]
         },
         'valentino uomo born in roma coral fantasy eau de toilette': {
             brand: 'VALENTINO',
             gender: 'men',
             fragranceProfile: { longevity: 65, longevityLabel: '5-7h', sillage: 60, sillageLabel: 'Moderate', season: 90, seasonLabel: 'Spring/Summer' },
-            subtitle: "Men's fragrance · Fruity Woody · A fresh and vibrant blend with apple, sage, and tobacco.",
+            subtitle: "Men's fragrance � Fruity Woody � A fresh and vibrant blend with apple, sage, and tobacco.",
             longDescription: 'Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette is a sun-drenched, spirited fragrance that captures the vibrant energy of a Mediterranean summer. The composition opens with a crisp burst of red apple and zesty bergamot, instantly lifting the mood with fresh, fruity brightness. At the heart, aromatic clary sage and warm ginger flower create an intriguing contrast between herbal coolness and spicy warmth. The fragrance settles into a refined base of smooth Virginia tobacco, sandalwood, and a hint of vanilla, providing a comfortable yet distinctive trail. Presented in the iconic Rockstud bottle with a coral accent, this scent is made for the modern man who lives life with color and confidence.',
             sizes: [
                 { label: 'Decante 10ML', priceText: '110 DH' },
@@ -2178,25 +2178,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Fruité Boisé · Un mélange frais et vibrant avec pomme, sauge et tabac.",
-                longDescription: "Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette est un parfum ensoleillé et spiriteux qui capture l'énergie vibrante d'un été méditerranéen. La composition s'ouvre sur un éclat croquant de pomme rouge et de bergamote pétillante. Au cœur, la sauge sclarée aromatique et la fleur de gingembre chaude créent un contraste intrigant entre fraîcheur herbale et chaleur épicée. Le fond s'installe sur du tabac Virginia lisse, du bois de santal et une touche de vanille pour un sillage confortable et distinctif.",
+                subtitle: "Parfum homme � Fruit� Bois� � Un m�lange frais et vibrant avec pomme, sauge et tabac.",
+                longDescription: "Valentino Uomo Born in Roma Coral Fantasy Eau de Toilette est un parfum ensoleill� et spiriteux qui capture l'�nergie vibrante d'un �t� m�diterran�en. La composition s'ouvre sur un �clat croquant de pomme rouge et de bergamote p�tillante. Au c�ur, la sauge sclar�e aromatique et la fleur de gingembre chaude cr�ent un contraste intrigant entre fra�cheur herbale et chaleur �pic�e. Le fond s'installe sur du tabac Virginia lisse, du bois de santal et une touche de vanille pour un sillage confortable et distinctif.",
                 notes: [
-                    { title: 'POMME ROUGE', text: 'Une ouverture croquante et juteusse qui se felt vibrante et fraîche.' },
-                    { title: 'SAUGE', text: 'Un cœur aromatique qui ajoute une texture propre et herbace.' },
-                    { title: 'TABAC', text: 'Un fond lisse et chaud qui ajoute profondeur et caractère.' }
+                    { title: 'POMME ROUGE', text: 'Une ouverture croquante et juteusse qui se felt vibrante et fra�che.' },
+                    { title: 'SAUGE', text: 'Un c�ur aromatique qui ajoute une texture propre et herbace.' },
+                    { title: 'TABAC', text: 'Un fond lisse et chaud qui ajoute profondeur et caract�re.' }
                 ]
             },
             images: [
-                '/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/2.webp',
-                '/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/3.webp',
-                '/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/4.webp'
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/2.webp',
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/3.webp',
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/4.webp'
             ]
         },
         'valentino born in roma extradose eau de toilette': {
             brand: 'VALENTINO',
             gender: 'men',
             fragranceProfile: { longevity: 70, longevityLabel: '6-8h', sillage: 68, sillageLabel: 'Moderate', season: 80, seasonLabel: 'Spring/Summer' },
-            subtitle: "Men's fragrance · Woody Aromatic · A bold, modern scent with fresh spice and woods.",
+            subtitle: "Men's fragrance � Woody Aromatic � A bold, modern scent with fresh spice and woods.",
             longDescription: 'Valentino Born in Roma Extradose Eau de Toilette is a vibrant and energizing interpretation of the Born in Roma line, crafted for the bold, modern man. The fragrance opens with an invigorating burst of mandarin and green apple, delivering fresh, sparkling energy from the first spray. At its heart, an aromatic blend of lavender and juniper berry creates a crisp, herbal sophistication that feels both clean and magnetic. The base brings together creamy cashmeran, warm amber, and a subtle smoky accord that gives the scent lasting depth and an addictive, skin-close trail. This extra dose of intensity makes it the perfect signature for the man who brings energy and confidence to every moment.',
             sizes: [
                 'Decante 10ML',
@@ -2220,25 +2220,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Aromatique · Un parfum moderne et audacieux avec épice fraîche et bois.",
-                longDescription: "Valentino Born in Roma Extradose Eau de Toilette est une interprétation vibrante et énergisante de la ligne Born in Roma. Le parfum s'ouvre sur un éclat revigorant de mandarine et de pomme verte, délivrant une énergie fraîche et pétillante. Au cœur, un mélange aromatique de lavande et de baie de genévrier crée une sophistication herbale à la fois propre et magnétique. Le fond rassemble du cashmeran crémeux, de l'ambre chaud et un subtil accord fumé pour une profondeur durable et un sillage addictif proche de la peau.",
+                subtitle: "Parfum homme � Bois� Aromatique � Un parfum moderne et audacieux avec �pice fra�che et bois.",
+                longDescription: "Valentino Born in Roma Extradose Eau de Toilette est une interpr�tation vibrante et �nergisante de la ligne Born in Roma. Le parfum s'ouvre sur un �clat revigorant de mandarine et de pomme verte, d�livrant une �nergie fra�che et p�tillante. Au c�ur, un m�lange aromatique de lavande et de baie de gen�vrier cr�e une sophistication herbale � la fois propre et magn�tique. Le fond rassemble du cashmeran cr�meux, de l'ambre chaud et un subtil accord fum� pour une profondeur durable et un sillage addictif proche de la peau.",
                 notes: [
-                    { title: 'ÉPICE FRAÎCHE', text: 'Une ouverture vivante avec une touche propre et moderne.' },
-                    { title: 'CŒUR AROMATIQUE', text: 'Un noyau aromatique raffiné qui se felt crisp et masculin.' },
-                    { title: 'FOND BOISÉ', text: 'Une finition boisée lisse et durable.' }
+                    { title: '�PICE FRA�CHE', text: 'Une ouverture vivante avec une touche propre et moderne.' },
+                    { title: 'C�UR AROMATIQUE', text: 'Un noyau aromatique raffin� qui se felt crisp et masculin.' },
+                    { title: 'FOND BOIS�', text: 'Une finition bois�e lisse et durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/valentino/valentino-born-in-rome-extradose/2.jpg',
-                '/assets/images/products/valentino/valentino-born-in-rome-extradose/3.jpg',
-                '/assets/images/products/valentino/valentino-born-in-rome-extradose/4.jpg'
+                'assets/images/products/valentino/valentino-born-in-rome-extradose/2.jpg',
+                'assets/images/products/valentino/valentino-born-in-rome-extradose/3.jpg',
+                'assets/images/products/valentino/valentino-born-in-rome-extradose/4.jpg'
             ]
         },
         'dior sauvage eau de parfum': {
             brand: 'DIOR',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-12h', sillage: 85, sillageLabel: 'Very Strong', season: 90, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Woody Amber · A desert-inspired trail with vanilla and ambery woods.",
+            subtitle: "Men's fragrance � Woody Amber � A desert-inspired trail with vanilla and ambery woods.",
             longDescription: "Sauvage Eau de Parfum by Dior embodies the wildest, most elegant, and most audacious masculine spirit. A fragrance inspired by desert sunsets, it spreads its exoticism and sensuality through an unforgettable olfactory trail that leaves its mark wherever it goes. The warmth of the desert blends with the coolness of the night, highlighting exceptional notes such as vanilla from Papua New Guinea and a woody, ambery base. The result is a long-lasting, unique, and unforgettable men's fragrance. The 100ml format of Dior's Sauvage Eau de Parfum is refillable and is part of the House of Dior's sustainable plan to reuse bottles.",
             sizes: [
                 'Decante 10ML',
@@ -2262,25 +2262,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Ambré · Un sillage inspiré du désert avec de la vanille et des bois ambrés.",
-                longDescription: "Sauvage Eau de Parfum de Dior incarne l'esprit masculin le plus sauvage, le plus élégant et le plus audacieux. Un parfum inspiré des couchers de soleil du désert, qui répand son exotisme et sa sensualité à travers un sillage olfactif inoubliable qui laisse sa marque partout où il passe. La chaleur du désert se mélange à la fraîcheur de la nuit, mettant en valeur des notes exceptionnelles comme la vanille de Papouasie-Nouvelle-Guinée et un fond boisé ambré. Le résultat est un parfum masculin durable, unique et inoubliable.",
+                subtitle: "Parfum homme � Bois� Ambr� � Un sillage inspir� du d�sert avec de la vanille et des bois ambr�s.",
+                longDescription: "Sauvage Eau de Parfum de Dior incarne l'esprit masculin le plus sauvage, le plus �l�gant et le plus audacieux. Un parfum inspir� des couchers de soleil du d�sert, qui r�pand son exotisme et sa sensualit� � travers un sillage olfactif inoubliable qui laisse sa marque partout o� il passe. La chaleur du d�sert se m�lange � la fra�cheur de la nuit, mettant en valeur des notes exceptionnelles comme la vanille de Papouasie-Nouvelle-Guin�e et un fond bois� ambr�. Le r�sultat est un parfum masculin durable, unique et inoubliable.",
                 notes: [
-                    { title: 'ACCORD COUCHER DE SOLEIL DÉSERT', text: 'Une ouverture chaude et rayonnante inspirée de la chaleur du désert au crépuscule.' },
-                    { title: 'VANILLE DE PAPOUASIE', text: 'La vanille crémeuse de Papouasie-Nouvelle-Guinée ajoute profondeur et sensualité.' },
-                    { title: 'BOIS AMBRÉS', text: 'Un fond boisé et ambré qui laisse un sillage durable et mémorable.' }
+                    { title: 'ACCORD COUCHER DE SOLEIL D�SERT', text: 'Une ouverture chaude et rayonnante inspir�e de la chaleur du d�sert au cr�puscule.' },
+                    { title: 'VANILLE DE PAPOUASIE', text: 'La vanille cr�meuse de Papouasie-Nouvelle-Guin�e ajoute profondeur et sensualit�.' },
+                    { title: 'BOIS AMBR�S', text: 'Un fond bois� et ambr� qui laisse un sillage durable et m�morable.' }
                 ]
             },
             images: [
-                '/assets/images/products/dior/dior-sauvage-eau-de-parfum/2.jpg',
-                '/assets/images/products/dior/dior-sauvage-eau-de-parfum/3.webp'
+                'assets/images/products/dior/dior-sauvage-eau-de-parfum/2.jpg',
+                'assets/images/products/dior/dior-sauvage-eau-de-parfum/3.webp'
             ]
         },
         'dior homme intense eau de parfum': {
             brand: 'DIOR',
             gender: 'men',
             fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 70, sillageLabel: 'Moderate', season: 65, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Iris Woody · A refined, elegant scent with iris, amber, and cedar.",
-            longDescription: 'Dior Homme Intense Eau de Parfum is a masterfully refined fragrance that elevates the art of masculine elegance. The composition opens with a delicate interplay of lavender and pear blossom, offering a fresh yet sophisticated first impression. At its heart lies the noble iris absolute, the most precious ingredient in perfumery, which unfolds with a rich, powdery softness that feels both luxurious and intimate. The depth of Haitian vetiver and Virginia cedar in the base adds a warm, woody masculinity, while a sensual veil of amber and musk creates an enveloping trail of quiet confidence. Designed by François Demachy, this is a fragrance for the man who appreciates understated luxury and refined sensuality.',
+            subtitle: "Men's fragrance � Iris Woody � A refined, elegant scent with iris, amber, and cedar.",
+            longDescription: 'Dior Homme Intense Eau de Parfum is a masterfully refined fragrance that elevates the art of masculine elegance. The composition opens with a delicate interplay of lavender and pear blossom, offering a fresh yet sophisticated first impression. At its heart lies the noble iris absolute, the most precious ingredient in perfumery, which unfolds with a rich, powdery softness that feels both luxurious and intimate. The depth of Haitian vetiver and Virginia cedar in the base adds a warm, woody masculinity, while a sensual veil of amber and musk creates an enveloping trail of quiet confidence. Designed by Fran�ois Demachy, this is a fragrance for the man who appreciates understated luxury and refined sensuality.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2303,25 +2303,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Iris Boisé · Un parfum raffiné et élégant avec iris, ambre et cèdre.",
-                longDescription: "Dior Homme Intense Eau de Parfum est un parfum magistralement raffiné qui élève l'art de l'élégance masculine. La composition s'ouvre sur un jeu délicat de lavande et de fleur de poirier, offrant une première impression fraîche et sophistiquée. En son cœur se trouve l'absolu d'iris noble, l'ingrédient le plus précieux de la parfumerie, qui se déploie avec une douceur poudrée riche et intime. La profondeur du vétiver haïtien et du cèdre de Virginie en fond ajoute une masculinité boisée chaleureuse, tandis qu'un voile sensuel d'ambre et de musc crée un sillage enveloppant de confiance discrète.",
+                subtitle: "Parfum homme � Iris Bois� � Un parfum raffin� et �l�gant avec iris, ambre et c�dre.",
+                longDescription: "Dior Homme Intense Eau de Parfum est un parfum magistralement raffin� qui �l�ve l'art de l'�l�gance masculine. La composition s'ouvre sur un jeu d�licat de lavande et de fleur de poirier, offrant une premi�re impression fra�che et sophistiqu�e. En son c�ur se trouve l'absolu d'iris noble, l'ingr�dient le plus pr�cieux de la parfumerie, qui se d�ploie avec une douceur poudr�e riche et intime. La profondeur du v�tiver ha�tien et du c�dre de Virginie en fond ajoute une masculinit� bois�e chaleureuse, tandis qu'un voile sensuel d'ambre et de musc cr�e un sillage enveloppant de confiance discr�te.",
                 notes: [
-                    { title: 'IRIS', text: 'Une signature douce et poudrée qui se felt luxueuse.' },
+                    { title: 'IRIS', text: 'Une signature douce et poudr�e qui se felt luxueuse.' },
                     { title: 'AMBRE', text: 'Un noyau chaud qui ajoute profondeur et richesse.' },
-                    { title: 'CÈDRE', text: 'Un fond boisé propre qui donne structure et longue durabilité.' }
+                    { title: 'C�DRE', text: 'Un fond bois� propre qui donne structure et longue durabilit�.' }
                 ]
             },
             images: [
-                '/assets/images/products/dior/dior-homme-intense-eau-de-parfum/2.webp',
-                '/assets/images/products/dior/dior-homme-intense-eau-de-parfum/3.avif',
-                '/assets/images/products/dior/dior-homme-intense-eau-de-parfum/4.avif'
+                'assets/images/products/dior/dior-homme-intense-eau-de-parfum/2.webp',
+                'assets/images/products/dior/dior-homme-intense-eau-de-parfum/3.avif',
+                'assets/images/products/dior/dior-homme-intense-eau-de-parfum/4.avif'
             ]
         },
         'valentino born in roma uomo intense eau de parfum': {
             brand: 'VALENTINO',
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 78, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Amber Woody · A deep, intense blend with vanilla and smoky woods.",
+            subtitle: "Men's fragrance � Amber Woody � A deep, intense blend with vanilla and smoky woods.",
             longDescription: 'Valentino Born in Roma Uomo Intense Eau de Parfum is a deeper, more seductive evolution of the original, designed for the man who lives with passion and intensity. The fragrance opens with a luminous burst of green mandarin and saffron, creating an immediately captivating and warm impression. At its heart, the richness of Virginia tobacco leaf intertwines with aromatic lavender, building a complex and masculine core that feels both refined and powerful. The base is a sumptuous blend of Bourbon vanilla, dark vetiver, and benzoin resin, creating an addictive, long-lasting trail that wraps the skin in warmth and sensuality. Housed in the signature Rockstud bottle with a deep, dark finish, this fragrance embodies the ultimate expression of Italian confidence.',
             sizes: [
                 'Decante 10ML',
@@ -2345,25 +2345,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Ambré Boisé · Un mélange profond et intense avec vanille et bois fumés.",
-                longDescription: "Valentino Born in Roma Uomo Intense Eau de Parfum est une évolution plus profonde et séduisante de l'original, conçue pour l'homme qui vit avec passion et intensité. Le parfum s'ouvre sur un éclat lumineux de mandarine verte et de safran. Au cœur, la richesse de la feuille de tabac Virginia s'entrelace avec de la lavande aromatique, construisant un noyau complexe et masculin. Le fond est un mélange somptueux de vanille Bourbon, de vétiver sombre et de résine de benjoin, créant un sillage addictif et durable qui enveloppe la peau de chaleur et de sensualité.",
+                subtitle: "Parfum homme � Ambr� Bois� � Un m�lange profond et intense avec vanille et bois fum�s.",
+                longDescription: "Valentino Born in Roma Uomo Intense Eau de Parfum est une �volution plus profonde et s�duisante de l'original, con�ue pour l'homme qui vit avec passion et intensit�. Le parfum s'ouvre sur un �clat lumineux de mandarine verte et de safran. Au c�ur, la richesse de la feuille de tabac Virginia s'entrelace avec de la lavande aromatique, construisant un noyau complexe et masculin. Le fond est un m�lange somptueux de vanille Bourbon, de v�tiver sombre et de r�sine de benjoin, cr�ant un sillage addictif et durable qui enveloppe la peau de chaleur et de sensualit�.",
                 notes: [
                     { title: 'VANILLE', text: 'Une ouverture riche qui se felt lisse et addictive.' },
-                    { title: 'LAVANDE', text: 'Un cœur aromatique raffiné pour l’équilibre.' },
-                    { title: 'BOIS FUMÉS', text: 'Un fond profond qui laisse un sillage durable.' }
+                    { title: 'LAVANDE', text: 'Un c�ur aromatique raffin� pour l��quilibre.' },
+                    { title: 'BOIS FUM�S', text: 'Un fond profond qui laisse un sillage durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/2.webp',
-                '/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/3.webp',
-                '/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/4.webp'
+                'assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/2.webp',
+                'assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/3.webp',
+                'assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/4.webp'
             ]
         },
         'valentino born in roma donna intense eau de parfum': {
             brand: 'VALENTINO',
             gender: 'women',
             fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 75, sillageLabel: 'Strong', season: 70, seasonLabel: 'All Year' },
-            subtitle: "Women's fragrance · Amber Floral · A sensual blend of jasmine and vanilla with warm woods.",
+            subtitle: "Women's fragrance � Amber Floral � A sensual blend of jasmine and vanilla with warm woods.",
             longDescription: 'Valentino Born in Roma Donna Intense Eau de Parfum is a captivating intensification of the original, crafted for the woman who radiates confidence and sensuality. The fragrance opens with a luminous blend of yellow tangerine and pink peppercorn, creating a sparkling yet mysterious first impression. At its heart, a sumptuous bouquet of jasmine sambac and Turkish rose absolute reveals layers of opulent femininity, enriched by a heady tuberose accord. The base is a masterful composition of dark vanilla, Benzoin Siam resin, and warm guaiac wood, creating a rich, enveloping trail that stays close to the skin for hours. This deeper interpretation of the Born in Roma line celebrates the woman who embraces her power with elegance and allure.',
             sizes: [
                 'Decante 10ML',
@@ -2387,25 +2387,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum femme · Floral Ambré · Un mélange sensuel de jasmin et vanille avec des bois chauds.",
-                longDescription: "Valentino Born in Roma Donna Intense Eau de Parfum est une intensification captivante de l'original, créée pour la femme qui rayonne de confiance et de sensualité. Le parfum s'ouvre sur un mélange lumineux de mandarine jaune et de poivre rose, créant une première impression pétillante et mystérieuse. Au cœur, un bouquet somptueux de jasmin sambac et d'absolu de rose turque révèle des couches de féminité opulente, enrichies par un accord de tubéreuse enivrant. Le fond est une composition magistrale de vanille sombre, de résine de benjoin du Siam et de bois de gaïac chaud, créant un sillage riche et enveloppant.",
+                subtitle: "Parfum femme � Floral Ambr� � Un m�lange sensuel de jasmin et vanille avec des bois chauds.",
+                longDescription: "Valentino Born in Roma Donna Intense Eau de Parfum est une intensification captivante de l'original, cr��e pour la femme qui rayonne de confiance et de sensualit�. Le parfum s'ouvre sur un m�lange lumineux de mandarine jaune et de poivre rose, cr�ant une premi�re impression p�tillante et myst�rieuse. Au c�ur, un bouquet somptueux de jasmin sambac et d'absolu de rose turque r�v�le des couches de f�minit� opulente, enrichies par un accord de tub�reuse enivrant. Le fond est une composition magistrale de vanille sombre, de r�sine de benjoin du Siam et de bois de ga�ac chaud, cr�ant un sillage riche et enveloppant.",
                 notes: [
-                    { title: 'JASMIN', text: 'Un cœur floral rayonnant avec une élégance raffinée.' },
+                    { title: 'JASMIN', text: 'Un c�ur floral rayonnant avec une �l�gance raffin�e.' },
                     { title: 'VANILLE', text: 'Une signature chaude et lisse qui se felt sensuelle.' },
-                    { title: 'FOND BOISÉ', text: 'Des bois doux qui ajoutent profondeur et longue durabilité.' }
+                    { title: 'FOND BOIS�', text: 'Des bois doux qui ajoutent profondeur et longue durabilit�.' }
                 ]
             },
             images: [
-                '/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/2.webp',
-                '/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/3.webp',
-                '/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/4.webp'
+                'assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/2.webp',
+                'assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/3.webp',
+                'assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/4.webp'
             ]
         },
         'valentino uomo born in roma eau de toilette': {
             brand: 'VALENTINO',
             gender: 'men',
             fragranceProfile: { longevity: 72, longevityLabel: '6-8h', sillage: 65, sillageLabel: 'Moderate', season: 75, seasonLabel: 'Spring/Summer' },
-            subtitle: "Men's fragrance · Woody Aromatic · A clean and vibrant blend of citrus, sage, and woods.",
+            subtitle: "Men's fragrance � Woody Aromatic � A clean and vibrant blend of citrus, sage, and woods.",
             longDescription: 'Valentino Uomo Born in Roma Eau de Toilette is a vibrant and contemporary masculine fragrance that captures the spirit of modern Rome. The composition opens with a bright cascade of ginger and bergamot, delivering an energizing freshness that awakens the senses. At its heart, clary sage and mineral accord bring a refined aromatic complexity that feels both clean and characterful. The base reveals a smooth foundation of Virginia cedar, vetiver, and a warm skin musk accord, creating a comfortable yet distinctive trail that lasts through the day. Presented in the iconic Valentino Rockstud bottle, this versatile scent is the perfect daily companion for the man who blends tradition with effortless modern style.',
             sizes: [
                 'Decante 10ML',
@@ -2429,25 +2429,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Aromatique · Un mélange propre et vibrant de citrus, sauge et bois.",
-                longDescription: "Valentino Uomo Born in Roma Eau de Toilette est un parfum masculin vibrant et contemporain qui capture l'esprit de la Rome moderne. La composition s'ouvre sur une cascade lumineuse de gingembre et de bergamote, délivrant une fraîcheur énergisante. Au cœur, la sauge sclarée et un accord minéral apportent une complexité aromatique raffinée, à la fois propre et caractérielle. Le fond révèle une base lisse de cèdre de Virginie, de vétiver et d'un accord musqué chaud, créant un sillage confortable et distinctif qui dure toute la journée.",
+                subtitle: "Parfum homme � Bois� Aromatique � Un m�lange propre et vibrant de citrus, sauge et bois.",
+                longDescription: "Valentino Uomo Born in Roma Eau de Toilette est un parfum masculin vibrant et contemporain qui capture l'esprit de la Rome moderne. La composition s'ouvre sur une cascade lumineuse de gingembre et de bergamote, d�livrant une fra�cheur �nergisante. Au c�ur, la sauge sclar�e et un accord min�ral apportent une complexit� aromatique raffin�e, � la fois propre et caract�rielle. Le fond r�v�le une base lisse de c�dre de Virginie, de v�tiver et d'un accord musqu� chaud, cr�ant un sillage confortable et distinctif qui dure toute la journ�e.",
                 notes: [
-                    { title: 'AGRUMES', text: 'Une ouverture lumineuse qui se felt fraîche et moderne.' },
-                    { title: 'SAUGE', text: 'Un cœur aromatique qui ajoute une texture propre.' },
+                    { title: 'AGRUMES', text: 'Une ouverture lumineuse qui se felt fra�che et moderne.' },
+                    { title: 'SAUGE', text: 'Un c�ur aromatique qui ajoute une texture propre.' },
                     { title: 'BOIS', text: 'Un fond lisse qui dure confortablement sur la peau.' }
                 ]
             },
             images: [
-                '/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/2.jpg',
-                '/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/3.jpg',
-                '/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/4.jpg'
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/2.jpg',
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/3.jpg',
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/4.jpg'
             ]
         },
         'valentino uomo born in roma purple melancholia eau de toilette': {
             brand: 'VALENTINO',
             gender: 'men',
             fragranceProfile: { longevity: 78, longevityLabel: '7-9h', sillage: 70, sillageLabel: 'Moderate', season: 85, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Spicy Aromatic · A balanced daily signature with cardamom, lavandin, amber woods, and coconut accord.",
+            subtitle: "Men's fragrance � Spicy Aromatic � A balanced daily signature with cardamom, lavandin, amber woods, and coconut accord.",
             longDescription: "Uomo Born In Roma Purple Melancholia Eau de Toilette is a men's fragrance created by VALENTINO for those looking for a scent with a defined identity and everyday use. From the first application, it presents a striking cardamom opening, delivering a spicy yet controlled sensation. In its evolution, it incorporates lavandin at its heart, creating a balance between aromatic notes and a consistent structure. The base combines amber woods with a coconut accord that provides continuity and longevity on the skin. Presented in the signature Rockstud bottle, this Born In Roma fragrance is designed for the man who seeks to express his personal style through a balanced and contemporary scent.",
             sizes: [
                 'Decante 10ML',
@@ -2471,24 +2471,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Aromatique Épicé · Une signature quotidienne équilibrée avec cardamome, lavandin, bois ambrés et accord coco.",
-                longDescription: "Uomo Born In Roma Purple Melancholia Eau de Toilette est un parfum pour homme créé par VALENTINO pour ceux qui recherchent une senteur à l'identité affirmée et adaptée au quotidien. Dès la première vaporisation, il dévoile une ouverture marquée par la cardamome, offrant une sensation épicée mais maîtrisée. En son cœur, le lavandin apporte un équilibre entre les notes aromatiques et une structure constante. Le fond associe des bois ambrés à un accord coco qui prolonge la continuité et la tenue sur la peau. Présenté dans le flacon Rockstud emblématique, ce parfum Born In Roma est pensé pour l'homme qui souhaite exprimer son style personnel à travers une senteur équilibrée et contemporaine.",
+                subtitle: "Parfum homme � Aromatique �pic� � Une signature quotidienne �quilibr�e avec cardamome, lavandin, bois ambr�s et accord coco.",
+                longDescription: "Uomo Born In Roma Purple Melancholia Eau de Toilette est un parfum pour homme cr�� par VALENTINO pour ceux qui recherchent une senteur � l'identit� affirm�e et adapt�e au quotidien. D�s la premi�re vaporisation, il d�voile une ouverture marqu�e par la cardamome, offrant une sensation �pic�e mais ma�tris�e. En son c�ur, le lavandin apporte un �quilibre entre les notes aromatiques et une structure constante. Le fond associe des bois ambr�s � un accord coco qui prolonge la continuit� et la tenue sur la peau. Pr�sent� dans le flacon Rockstud embl�matique, ce parfum Born In Roma est pens� pour l'homme qui souhaite exprimer son style personnel � travers une senteur �quilibr�e et contemporaine.",
                 notes: [
-                    { title: 'OUVERTURE CARDAMOME', text: 'Une ouverture épicée au caractère affirmé mais maîtrisé, moderne dès la première vaporisation.' },
-                    { title: 'CŒUR DE LAVANDIN', text: 'Le lavandin apporte un équilibre aromatique et maintient une structure nette pour un usage quotidien.' },
-                    { title: 'BOIS AMBRÉS & ACCORD COCO', text: 'Les bois ambrés et l’accord coco créent une continuité douce et une bonne tenue sur la peau.' }
+                    { title: 'OUVERTURE CARDAMOME', text: 'Une ouverture �pic�e au caract�re affirm� mais ma�tris�, moderne d�s la premi�re vaporisation.' },
+                    { title: 'C�UR DE LAVANDIN', text: 'Le lavandin apporte un �quilibre aromatique et maintient une structure nette pour un usage quotidien.' },
+                    { title: 'BOIS AMBR�S & ACCORD COCO', text: 'Les bois ambr�s et l�accord coco cr�ent une continuit� douce et une bonne tenue sur la peau.' }
                 ]
             },
             images: [
-                '/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/2.jpg',
-                '/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/3.jpg'
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/2.jpg',
+                'assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/3.jpg'
             ]
         },
         'emporio armani stronger with you intensely edp': {
             brand: 'GIORGIO ARMANI',
             fragranceProfile: { longevity: 88, longevityLabel: '9-12h', sillage: 82, sillageLabel: 'Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: 'Men\'s fragrance · Oriental Fougère · A bold, addictive signature with pink pepper, vanilla, and ambery woods.',
-            longDescription: 'This addictive fougère fragrance unveils notes of pink pepper, vanilla, and an ambery woody accord. It reflects the personality of the modern man seeking a powerful scent to illuminate his intense love story. This intense masculine fragrance reveals warm heart notes of vanilla and vibrant ambery woody accords, contrasted by spicy touches of pink pepper. Its aged cognac hue perfectly embodies the intensity of this fragrance. BOTTLE: The clean lines and essential shapes characteristic of Giorgio Armani are reflected in the Emporio Armani bottle. Its simplicity conveys a profound sensuality, with curves reminiscent of masculine shoulders, and a round metallic cap that underscores understated elegance. Beneath this cap, intertwined rings symbolize a strong connection and unconditional love. Emporio Armani Stronger With You is a men\'s fragrance for bold men, belonging to the Oriental Fougere olfactory family. Because together, we are stronger.',
+            subtitle: 'Men\'s fragrance � Oriental Foug�re � A bold, addictive signature with pink pepper, vanilla, and ambery woods.',
+            longDescription: 'This addictive foug�re fragrance unveils notes of pink pepper, vanilla, and an ambery woody accord. It reflects the personality of the modern man seeking a powerful scent to illuminate his intense love story. This intense masculine fragrance reveals warm heart notes of vanilla and vibrant ambery woody accords, contrasted by spicy touches of pink pepper. Its aged cognac hue perfectly embodies the intensity of this fragrance. BOTTLE: The clean lines and essential shapes characteristic of Giorgio Armani are reflected in the Emporio Armani bottle. Its simplicity conveys a profound sensuality, with curves reminiscent of masculine shoulders, and a round metallic cap that underscores understated elegance. Beneath this cap, intertwined rings symbolize a strong connection and unconditional love. Emporio Armani Stronger With You is a men\'s fragrance for bold men, belonging to the Oriental Fougere olfactory family. Because together, we are stronger.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2511,26 +2511,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Fougère Oriental · Une signature audacieuse et addictive avec poivre rose, vanille et bois ambrés.",
-                longDescription: "Ce parfum fougère addictif dévoile des notes de poivre rose, vanille et accord boisé ambré. Il reflète la personnalité de l'homme moderne à la recherche d'un parfum puissant pour illuminer son histoire d'amour intense. Ce parfum masculin intense révèle des notes de cœur de vanille chaudes et des accords boisés ambrés vibrants, contrastant par des touches épicées de poivre rose. Parce qu'ensemble, nous sommes plus forts.",
+                subtitle: "Parfum homme � Foug�re Oriental � Une signature audacieuse et addictive avec poivre rose, vanille et bois ambr�s.",
+                longDescription: "Ce parfum foug�re addictif d�voile des notes de poivre rose, vanille et accord bois� ambr�. Il refl�te la personnalit� de l'homme moderne � la recherche d'un parfum puissant pour illuminer son histoire d'amour intense. Ce parfum masculin intense r�v�le des notes de c�ur de vanille chaudes et des accords bois�s ambr�s vibrants, contrastant par des touches �pic�es de poivre rose. Parce qu'ensemble, nous sommes plus forts.",
                 notes: [
-                    { title: 'ESSENCE DE POIVRE ROSE', text: "L'essence épicée du poivre rose se mélange à un accord addictif de marron caramilisé pour une touche d'originalité." },
-                    { title: 'ESSENCE DE VANILLE', text: "L'intensité de la vanille, combinée à un accord suède légèrement tané, crée une signature olfactive sensuelle et unique." },
-                    { title: 'ACCORDS BOISÉS AMBRÉS', text: 'Les accords boisés ambrés, renforcés par des notes de vétiver Bourbon, amplifient la facette vibrante du sillage.' }
+                    { title: 'ESSENCE DE POIVRE ROSE', text: "L'essence �pic�e du poivre rose se m�lange � un accord addictif de marron caramilis� pour une touche d'originalit�." },
+                    { title: 'ESSENCE DE VANILLE', text: "L'intensit� de la vanille, combin�e � un accord su�de l�g�rement tan�, cr�e une signature olfactive sensuelle et unique." },
+                    { title: 'ACCORDS BOIS�S AMBR�S', text: 'Les accords bois�s ambr�s, renforc�s par des notes de v�tiver Bourbon, amplifient la facette vibrante du sillage.' }
                 ]
             },
             images: [
-                '/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp',
-                '/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/3.webp',
-                '/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/4.webp',
-                '/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/5.webp',
-                '/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/6.webp'
+                'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp',
+                'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/3.webp',
+                'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/4.webp',
+                'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/5.webp',
+                'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/6.webp'
             ]
         },
         'armani stronger with you powerfully eau de parfum': {
             brand: 'GIORGIO ARMANI',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 80, sillageLabel: 'Strong', season: 50, seasonLabel: 'Fall/Winter' },
-            subtitle: 'Men\'s fragrance · Smoky Amber · A more intense and powerful signature with cherry, mandarin, lavender, vanilla, and amber woods.',
+            subtitle: 'Men\'s fragrance � Smoky Amber � A more intense and powerful signature with cherry, mandarin, lavender, vanilla, and amber woods.',
             longDescription: 'Stronger With You Powerfully reinvents the collection\'s iconic signature with a more intense, smoky, and powerful dimension. This Eau de Parfum opens with a vibrant burst of cherry and juicy mandarin, delivering immediate energy and luminous warmth. At its heart, Diva lavender blends with an aromatic spice accord, balancing freshness and intensity to express modern sophistication. At its base, the fragrance unveils a sensual foundation of creamy vanilla, smoky amber woods, and the iconic caramelized chestnut accord, the signature of the Stronger With You line. The result: an enveloping, addictive trail that lasts up to 24 hours. The perfume comes in an imposing red bottle with bold lines, topped with a blackened silver cap and adorned with the iconic motif of intertwined rings, a symbol of connection and strength.',
             sizes: [
                 'Decante 10ML',
@@ -2554,26 +2554,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Ambré Fumé · Une signature plus intense et puissante avec cerise, mandarine, lavande, vanille et bois ambrés.",
-                longDescription: "Stronger With You Powerfully réinvente la signature iconique de la collection avec une dimension plus intense, fumée et puissante. Cette Eau de Parfum s'ouvre sur un éclat vibrant de cerise et mandarine juteuse. Au cœur, la lavande Diva se mélange à un accord d'épice aromatique. En fond, le parfum dévoile une base sensuelle de vanille crémeuse, de bois ambrés fumés et l'accord iconique de marron caramilisé, la signature de la ligne Stronger With You. Le résultat : un sillage enveloppant et addictif qui dure jusqu'à 24 heures.",
+                subtitle: "Parfum homme � Ambr� Fum� � Une signature plus intense et puissante avec cerise, mandarine, lavande, vanille et bois ambr�s.",
+                longDescription: "Stronger With You Powerfully r�invente la signature iconique de la collection avec une dimension plus intense, fum�e et puissante. Cette Eau de Parfum s'ouvre sur un �clat vibrant de cerise et mandarine juteuse. Au c�ur, la lavande Diva se m�lange � un accord d'�pice aromatique. En fond, le parfum d�voile une base sensuelle de vanille cr�meuse, de bois ambr�s fum�s et l'accord iconique de marron caramilis�, la signature de la ligne Stronger With You. Le r�sultat : un sillage enveloppant et addictif qui dure jusqu'� 24 heures.",
                 notes: [
-                    { title: 'CERISE & MANDARINE', text: 'Une ouverture vibrante et juteüase où la cerise rencontre la mandarine lumineuse pour une énergie instantanée et une chaleur lumineuse.' },
-                    { title: 'LAVANDE DIVA & ÉPICE', text: 'Un cœur aromatique mélant lavande Diva et accord d’épice raffiné pour équilibrer fraîcheur et intensité.' },
-                    { title: 'VANILLE, BOIS AMBRÉS & MARRON', text: 'Une base sensuelle de vanille crémeuse, de bois ambrés fumés et de marron caramilisé crée un sillage addictif de 24 heures.' }
+                    { title: 'CERISE & MANDARINE', text: 'Une ouverture vibrante et jute�ase o� la cerise rencontre la mandarine lumineuse pour une �nergie instantan�e et une chaleur lumineuse.' },
+                    { title: 'LAVANDE DIVA & �PICE', text: 'Un c�ur aromatique m�lant lavande Diva et accord d��pice raffin� pour �quilibrer fra�cheur et intensit�.' },
+                    { title: 'VANILLE, BOIS AMBR�S & MARRON', text: 'Une base sensuelle de vanille cr�meuse, de bois ambr�s fum�s et de marron caramilis� cr�e un sillage addictif de 24 heures.' }
                 ]
             },
             images: [
-                '/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/2.webp',
-                '/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/3.webp',
-                '/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/4.webp',
-                '/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/5.webp'
+                'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/2.webp',
+                'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/3.webp',
+                'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/4.webp',
+                'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/5.webp'
             ]
         },
         'armani stronger with you absolutely perfume': {
             brand: 'GIORGIO ARMANI',
             fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 85, sillageLabel: 'Very Strong', season: 45, seasonLabel: 'Fall/Winter' },
-            subtitle: 'Men\'s fragrance · Oriental Fougère · An irresistible and addictive signature inspired by the power of absolute love.',
-            longDescription: 'GIORGIO ARMANI Stronger With You Absolutely Perfume. Stronger with You Absolutely by Giorgio Armani is an Oriental Fougère fragrance for men. This fragrance was launched in 2021. Olfactory pyramid of Stronger With You Absolutely Parfum: Stronger With You Absolutely Parfum by Giorgio Armani is inspired by the power of absolute love. A refined men\'s fragrance fueled by the addictive new rum accord. The bottle with an intense smoky lacquer envelops the iconic Emporio Armani You fragrance, bringing the absolute strength of the perfume to the bottle. Stronger With You Absolutely Parfum is an irresistible men\'s fragrance.',
+            subtitle: 'Men\'s fragrance � Oriental Foug�re � An irresistible and addictive signature inspired by the power of absolute love.',
+            longDescription: 'GIORGIO ARMANI Stronger With You Absolutely Perfume. Stronger with You Absolutely by Giorgio Armani is an Oriental Foug�re fragrance for men. This fragrance was launched in 2021. Olfactory pyramid of Stronger With You Absolutely Parfum: Stronger With You Absolutely Parfum by Giorgio Armani is inspired by the power of absolute love. A refined men\'s fragrance fueled by the addictive new rum accord. The bottle with an intense smoky lacquer envelops the iconic Emporio Armani You fragrance, bringing the absolute strength of the perfume to the bottle. Stronger With You Absolutely Parfum is an irresistible men\'s fragrance.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2583,8 +2583,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             notes: [
                 {
-                    title: 'ORIENTAL FOUGÈRE PROFILE',
-                    text: 'An elegant Oriental Fougère composition built for a modern masculine signature.'
+                    title: 'ORIENTAL FOUG�RE PROFILE',
+                    text: 'An elegant Oriental Foug�re composition built for a modern masculine signature.'
                 },
                 {
                     title: 'ADDICTIVE RUM ACCORD',
@@ -2596,26 +2596,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Fougère Oriental · Une signature irrésistible et addictive inspirée par la puissance de l'amour absolu.",
-                longDescription: "Stronger With You Absolutely de Giorgio Armani est un parfum Fougère Oriental pour homme. Ce parfum est inspiré par la puissance de l'amour absolu. Un parfum masculin raffiné propulsé par le nouvel accord de rhum addictif. Le flacon à la laque intensité fumée enveloppe le parfum iconique Emporio Armani You, apportant la force absolue du parfum au flacon. Stronger With You Absolutely Parfum est un parfum masculin irrésistible.",
+                subtitle: "Parfum homme � Foug�re Oriental � Une signature irr�sistible et addictive inspir�e par la puissance de l'amour absolu.",
+                longDescription: "Stronger With You Absolutely de Giorgio Armani est un parfum Foug�re Oriental pour homme. Ce parfum est inspir� par la puissance de l'amour absolu. Un parfum masculin raffin� propuls� par le nouvel accord de rhum addictif. Le flacon � la laque intensit� fum�e enveloppe le parfum iconique Emporio Armani You, apportant la force absolue du parfum au flacon. Stronger With You Absolutely Parfum est un parfum masculin irr�sistible.",
                 notes: [
-                    { title: 'PROFIL FOUGÈRE ORIENTAL', text: 'Une composition Fougère Oriental élégante construite pour une signature masculine moderne.' },
-                    { title: 'ACCORD DE RHUM ADDICTIF', text: 'Un accord de rhum raffiné et addictif apporte chaleur, profondeur et caractère sensuel.' },
-                    { title: 'FLACON LAQUÉ FUMÉ', text: "Le flacon iconique Emporio Armani est habillé d'une laque fumée intense pour exprimer la force absolue." }
+                    { title: 'PROFIL FOUG�RE ORIENTAL', text: 'Une composition Foug�re Oriental �l�gante construite pour une signature masculine moderne.' },
+                    { title: 'ACCORD DE RHUM ADDICTIF', text: 'Un accord de rhum raffin� et addictif apporte chaleur, profondeur et caract�re sensuel.' },
+                    { title: 'FLACON LAQU� FUM�', text: "Le flacon iconique Emporio Armani est habill� d'une laque fum�e intense pour exprimer la force absolue." }
                 ]
             },
             images: [
-                '/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/2.webp',
-                '/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/3.webp',
-                '/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/4.webp',
-                '/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/5.webp',
-                '/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/6.webp'
+                'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/2.webp',
+                'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/3.webp',
+                'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/4.webp',
+                'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/5.webp',
+                'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/6.webp'
             ]
         },
         'yves saint laurent y eau de parfum': {
             brand: 'YVES SAINT LAURENT',
             fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 75, sillageLabel: 'Strong', season: 85, seasonLabel: 'All Year' },
-            subtitle: 'Men\'s fragrance · Clean Woody · A long-lasting and powerful YSL signature of lavender, cedar, geranium, and incense.',
+            subtitle: 'Men\'s fragrance � Clean Woody � A long-lasting and powerful YSL signature of lavender, cedar, geranium, and incense.',
             longDescription: 'YVES SAINT LAURENT Y Eau de Parfum for Men. Immerse yourself in the essence of the creative and successful man with Y Le Parfum, the fragrance that captures the spirit of YSL personified by legendary ambassador Lenny Kravitz. This fragrance embodies the "Why not?" philosophy that defines the YSL man. Y Le Parfum, the new interpretation of the iconic Y franchise, is a long-lasting, clean, woody fragrance that celebrates self-realization. This version, more intense and powerful than ever, fuses vibrant French lavender with the strength of American cedar, two exclusive ingredients of YSL Beauty. The fragrance is distinguished by the mentholated touch of iconic geranium and the deep sensuality of incense, creating a powerful and addictive olfactory statement. An aroma that reflects the strength and determination of the YSL man in every drop.',
             sizes: [
                 'Decante 10ML',
@@ -2639,25 +2639,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Propre · Une signature YSL durable et puissante de lavande, cèdre, géranium et encens.",
-                longDescription: "Yves Saint Laurent Y Eau de Parfum pour Homme. Plongez dans l'essence de l'homme créatif et accompli avec Y Le Parfum, le parfum qui capture l'esprit de YSL incarné par le légendaire ambassadeur Lenny Kravitz. Ce parfum incarne la philosophie \'Pourquoi pas ?\'  qui définit l'homme YSL. Y Le Parfum, la nouvelle interprétation de la franchise iconique Y, est un parfum boisé propre et durable qui célèbre la réalisation de soi. Cette version, plus intense et puissante que jamais, fusionne la lavande française vibrante avec la force du cèdre américain.",
+                subtitle: "Parfum homme � Bois� Propre � Une signature YSL durable et puissante de lavande, c�dre, g�ranium et encens.",
+                longDescription: "Yves Saint Laurent Y Eau de Parfum pour Homme. Plongez dans l'essence de l'homme cr�atif et accompli avec Y Le Parfum, le parfum qui capture l'esprit de YSL incarn� par le l�gendaire ambassadeur Lenny Kravitz. Ce parfum incarne la philosophie \'Pourquoi pas ?\'  qui d�finit l'homme YSL. Y Le Parfum, la nouvelle interpr�tation de la franchise iconique Y, est un parfum bois� propre et durable qui c�l�bre la r�alisation de soi. Cette version, plus intense et puissante que jamais, fusionne la lavande fran�aise vibrante avec la force du c�dre am�ricain.",
                 notes: [
-                    { title: 'LAVANDE FRANÇAISE', text: 'Une ouverture aromatique vibrante conduite par la lavande française raffinée pour un début propre et énergétique.' },
-                    { title: 'GÉRANIUM & ENCENS', text: 'La touche mentholée du géranium rencontre l’encens profond pour créer un cœur puissant et addictif.' },
-                    { title: 'CÈDRE AMÉRICAIN', text: 'Le fort cèdre américain ancre le fond avec une profondeur boisée durable et une élégance masculine.' }
+                    { title: 'LAVANDE FRAN�AISE', text: 'Une ouverture aromatique vibrante conduite par la lavande fran�aise raffin�e pour un d�but propre et �nerg�tique.' },
+                    { title: 'G�RANIUM & ENCENS', text: 'La touche menthol�e du g�ranium rencontre l�encens profond pour cr�er un c�ur puissant et addictif.' },
+                    { title: 'C�DRE AM�RICAIN', text: 'Le fort c�dre am�ricain ancre le fond avec une profondeur bois�e durable et une �l�gance masculine.' }
                 ]
             },
             images: [
-                '/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/2.webp',
-                '/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/3.webp',
-                '/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/4.webp'
+                'assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/2.webp',
+                'assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/3.webp',
+                'assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/4.webp'
             ]
         },
         'yves saint laurent myslf eau de parfum': {
             brand: 'YVES SAINT LAURENT',
             fragranceProfile: { longevity: 78, longevityLabel: '7-9h', sillage: 72, sillageLabel: 'Moderate', season: 80, seasonLabel: 'Spring/Summer' },
-            subtitle: 'Men\'s fragrance · Floral Woody · A modern masculine signature with bergamot, orange blossom, patchouli, and Ambrofix™.',
-            longDescription: 'YVES SAINT LAURENT Myslf Refillable Eau de Parfum. Yves Saint Laurent\'s new refillable men\'s fragrance is Myslf. An expression of the man you are, with all your nuances. A declaration of modern masculinity, embracing all its facets and emotions. YSL BEAUTY\'s first floral woody fragrance for a trail of modernity with contrasts. YSL Myslf men\'s fragrance opens with a fresh and vibrant accord of Calabrian bergamot and green bergamot. At its heart lies a pure and intense orange blossom absolute from Tunisia, created exclusively for YSL beauty. The fragrance finishes with a sensual and textured woody accord of Indonesian patchouli and Ambrofix™. A YSL icon in a bottle. Elegant. Fluid. The YSL Myslf men\'s fragrance comes in a black lacquered bottle with shades that reflect your own image. At its center, embedded in the glass, is the iconic YSL Cassandre logo.',
+            subtitle: 'Men\'s fragrance � Floral Woody � A modern masculine signature with bergamot, orange blossom, patchouli, and Ambrofix�.',
+            longDescription: 'YVES SAINT LAURENT Myslf Refillable Eau de Parfum. Yves Saint Laurent\'s new refillable men\'s fragrance is Myslf. An expression of the man you are, with all your nuances. A declaration of modern masculinity, embracing all its facets and emotions. YSL BEAUTY\'s first floral woody fragrance for a trail of modernity with contrasts. YSL Myslf men\'s fragrance opens with a fresh and vibrant accord of Calabrian bergamot and green bergamot. At its heart lies a pure and intense orange blossom absolute from Tunisia, created exclusively for YSL beauty. The fragrance finishes with a sensual and textured woody accord of Indonesian patchouli and Ambrofix�. A YSL icon in a bottle. Elegant. Fluid. The YSL Myslf men\'s fragrance comes in a black lacquered bottle with shades that reflect your own image. At its center, embedded in the glass, is the iconic YSL Cassandre logo.',
             sizes: [
                 'Decante 10ML',
                 'Decante 20ML',
@@ -2675,30 +2675,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     text: 'An intense orange blossom absolute from Tunisia, crafted exclusively for YSL Beauty.'
                 },
                 {
-                    title: 'PATCHOULI & AMBROFIX™',
-                    text: 'A sensual woody base of Indonesian patchouli and Ambrofix™ creates texture and modern depth.'
+                    title: 'PATCHOULI & AMBROFIX�',
+                    text: 'A sensual woody base of Indonesian patchouli and Ambrofix� creates texture and modern depth.'
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Floral Boisé · Une signature masculine moderne avec bergamote, fleur d'oranger, patchouli et Ambrofix™.",
-                longDescription: "Yves Saint Laurent\'s nouveau parfum homme rechargeable est Myslf. Une expression de l'homme que vous êtes, avec toutes vos nuances. Une déclaration de masculinité moderne, embrassant toutes ses facettes et émotions. Le premier parfum floral boisé de YSL BEAUTY pour un sillage de modernité. Le parfum YSL Myslf s'ouvre sur un accord frais et vibrant de bergamote calabraise et bergamote verte. En cœur, un absolu de fleur d'oranger pur et intense de Tunisie, créé exclusivement pour YSL beauty. Le parfum se termine sur un accord boisé sensuel et texturé de patchouli indonésien et d'Ambrofix™.",
+                subtitle: "Parfum homme � Floral Bois� � Une signature masculine moderne avec bergamote, fleur d'oranger, patchouli et Ambrofix�.",
+                longDescription: "Yves Saint Laurent\'s nouveau parfum homme rechargeable est Myslf. Une expression de l'homme que vous �tes, avec toutes vos nuances. Une d�claration de masculinit� moderne, embrassant toutes ses facettes et �motions. Le premier parfum floral bois� de YSL BEAUTY pour un sillage de modernit�. Le parfum YSL Myslf s'ouvre sur un accord frais et vibrant de bergamote calabraise et bergamote verte. En c�ur, un absolu de fleur d'oranger pur et intense de Tunisie, cr�� exclusivement pour YSL beauty. Le parfum se termine sur un accord bois� sensuel et textur� de patchouli indon�sien et d'Ambrofix�.",
                 notes: [
-                    { title: 'BERGAMOTE DE CALABRE', text: 'Une ouverture fraîche et vibrante avec bergamote de Calabre et bergamote verte pour une luminosité instantanée.' },
-                    { title: 'FLEUR D\'ORANGER DE TUNISIE', text: 'Un absolu de fleur d\'oranger intense de Tunisie, créé exclusivement pour YSL Beauty.' },
-                    { title: 'PATCHOULI & AMBROFIX™', text: 'Une base boisée sensuelle de patchouli indonésien et d\'Ambrofix™ crée texture et profondeur moderne.' }
+                    { title: 'BERGAMOTE DE CALABRE', text: 'Une ouverture fra�che et vibrante avec bergamote de Calabre et bergamote verte pour une luminosit� instantan�e.' },
+                    { title: 'FLEUR D\'ORANGER DE TUNISIE', text: 'Un absolu de fleur d\'oranger intense de Tunisie, cr�� exclusivement pour YSL Beauty.' },
+                    { title: 'PATCHOULI & AMBROFIX�', text: 'Une base bois�e sensuelle de patchouli indon�sien et d\'Ambrofix� cr�e texture et profondeur moderne.' }
                 ]
             },
             images: [
-                '/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/2.webp',
-                '/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/3.webp',
-                '/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/4.webp',
-                '/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/5.webp'
+                'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/2.webp',
+                'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/3.webp',
+                'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/4.webp',
+                'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/5.webp'
             ]
         },
         'yves saint laurent myslf le parfum': {
             brand: 'YVES SAINT LAURENT',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 78, sillageLabel: 'Strong', season: 75, seasonLabel: 'All Year' },
-            subtitle: 'Men\'s fragrance · Floral Woody · A new intense and sensual MYSLF signature with black pepper, orange blossom, woods, and vanilla.',
+            subtitle: 'Men\'s fragrance � Floral Woody � A new intense and sensual MYSLF signature with black pepper, orange blossom, woods, and vanilla.',
             longDescription: 'YVES SAINT LAURENT MYSLF Le Parfum Floral Woody Men\'s Fragrance. MYSLF Le Parfum, the new and intense floral woody men\'s fragrance designed to leave a sensual and lasting trail. A new affirmation of modern masculinity. The expression of the man you are, with all your facets and emotions. The fragrance opens with a sparkling and exotic accord of black pepper, which gives way to a radiant and rich heart of orange blossom. In the base notes, the sensuality of woods envelops a velvety infusion of vanilla, creating an irresistible trail that lingers on the skin. Matte black and the bold shine of YSL\'s Casandra. The bottle is a perfect play of contrasts that reflects the duality of the YSL man: bold and self-assured, sophisticated and sentimental. A style statement as complex as the man who wears it.',
             sizes: [
                 'Decante 10ML',
@@ -2722,24 +2722,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Floral Boisé · Une nouvelle signature MYSLF intense et sensuelle avec poivre noir, fleur d'oranger, bois et vanille.",
-                longDescription: "MYSLF Le Parfum, le nouveau et intense parfum floral boisé pour homme conçu pour laisser un sillage sensuel et durable. Une nouvelle affirmation de la masculinité moderne. Le parfum s\'ouvre sur un accord étincelant et exotique de poivre noir, qui laisse place à un cœur radieux et riche de fleur d'oranger. En fond, la sensualité des bois enveloppe une infusion veloutée de vanille, créant un sillage irrésistible qui persiste sur la peau.",
+                subtitle: "Parfum homme � Floral Bois� � Une nouvelle signature MYSLF intense et sensuelle avec poivre noir, fleur d'oranger, bois et vanille.",
+                longDescription: "MYSLF Le Parfum, le nouveau et intense parfum floral bois� pour homme con�u pour laisser un sillage sensuel et durable. Une nouvelle affirmation de la masculinit� moderne. Le parfum s\'ouvre sur un accord �tincelant et exotique de poivre noir, qui laisse place � un c�ur radieux et riche de fleur d'oranger. En fond, la sensualit� des bois enveloppe une infusion velout�e de vanille, cr�ant un sillage irr�sistible qui persiste sur la peau.",
                 notes: [
-                    { title: 'ACCORD POIVRE NOIR', text: 'Une ouverture étincelante et exotique de poivre noir crée une première impression énergétique.' },
-                    { title: 'CŒUR FLEUR D\'ORANGER', text: 'Un cœur de fleur d\'oranger radieux et riche donne au parfum une intensité florale élégante.' },
-                    { title: 'BOIS & VANILLE', text: 'Les bois sensuels enveloppés dans la vanille veloutée créent un sillage durable et irrésistible.' }
+                    { title: 'ACCORD POIVRE NOIR', text: 'Une ouverture �tincelante et exotique de poivre noir cr�e une premi�re impression �nerg�tique.' },
+                    { title: 'C�UR FLEUR D\'ORANGER', text: 'Un c�ur de fleur d\'oranger radieux et riche donne au parfum une intensit� florale �l�gante.' },
+                    { title: 'BOIS & VANILLE', text: 'Les bois sensuels envelopp�s dans la vanille velout�e cr�ent un sillage durable et irr�sistible.' }
                 ]
             },
             images: [
-                '/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/2.webp',
-                '/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/3.webp',
-                '/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/4.jpg'
+                'assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/2.webp',
+                'assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/3.webp',
+                'assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/4.jpg'
             ]
         },
         'jean paul gaultier le male elixir eau de parfum': {
             brand: 'JEAN PAUL GAULTIER',
             fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 88, sillageLabel: 'Very Strong', season: 55, seasonLabel: 'Fall/Winter' },
-            subtitle: 'Men\'s fragrance · Aromatic Amber · Intense, sexy and addictive with lavender, tonka bean, mint and benzoin.',
+            subtitle: 'Men\'s fragrance � Aromatic Amber � Intense, sexy and addictive with lavender, tonka bean, mint and benzoin.',
             longDescription: 'Le Male Elixir Eau de Parfum, Jean Paul Gaultier\'s new sailor-inspired fragrance, has arrived. More intense and sexier than ever. When he steps aboard, Le Male Elixir unleashes a wave of heat. This men\'s fragrance is so intense that the gold melts, creating golden trails along its sleek torso and metallic case. Male Elixir takes the reins of sensuality, exuding the ultimate expression of sex appeal. Be careful not to touch its skin, you\'ll get burned! Male Elixir ignites all the senses, creating maximum addiction. Sunny tropical tonka bean blends with already legendary lavender and, with the animal magnetism of benzoin, creates an explosion of fresh mint and bergamot. Impossible not to melt with desire. With Jean Paul Gaultier\'s Le Male Elixir, the senses are awakened, desire burns, and gold flows freely. Dazzling and sexy.',
             sizes: [
                 'Decante 10ML',
@@ -2763,24 +2763,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Ambré Aromatique · Intense, sexy et addictif avec lavande, fève tonka, menthe et benzoïn.",
-                longDescription: "Le Male Elixir Eau de Parfum, le nouveau parfum de Jean Paul Gaultier inspiré du marin, est arrivé. Plus intense et plus sexy que jamais. Quand il monte à bord, Le Male Elixir libère une vague de chaleur. Ce parfum masculin est si intense que l'or fond, créant des traînees dorées. La fève tonka tropicale et ensoleillée se mélange à la lavande légendaire et, avec le magnétisme animal du benzoïn, crée une explosion de menthe fraîche et de bergamote.",
+                subtitle: "Parfum homme � Ambr� Aromatique � Intense, sexy et addictif avec lavande, f�ve tonka, menthe et benzo�n.",
+                longDescription: "Le Male Elixir Eau de Parfum, le nouveau parfum de Jean Paul Gaultier inspir� du marin, est arriv�. Plus intense et plus sexy que jamais. Quand il monte � bord, Le Male Elixir lib�re une vague de chaleur. Ce parfum masculin est si intense que l'or fond, cr�ant des tra�nees dor�es. La f�ve tonka tropicale et ensoleill�e se m�lange � la lavande l�gendaire et, avec le magn�tisme animal du benzo�n, cr�e une explosion de menthe fra�che et de bergamote.",
                 notes: [
-                    { title: 'LAVANDE & MENTHE', text: 'Une ouverture aromatique fraîche où la lavande iconique rencontre la menthe étincelante et la bergamote lumineuse.' },
-                    { title: 'FÈVE TONKA', text: 'La fève tonka tropicale et ensoleillée ajoute chaleur et douceur addictive au cœur du parfum.' },
-                    { title: 'MAGNÉTISME DU BENZOÏN', text: 'Le benzoïn sensuel approfondit le sillage avec une touche ambrée animale pour une signature audacieuse et brûlante.' }
+                    { title: 'LAVANDE & MENTHE', text: 'Une ouverture aromatique fra�che o� la lavande iconique rencontre la menthe �tincelante et la bergamote lumineuse.' },
+                    { title: 'F�VE TONKA', text: 'La f�ve tonka tropicale et ensoleill�e ajoute chaleur et douceur addictive au c�ur du parfum.' },
+                    { title: 'MAGN�TISME DU BENZO�N', text: 'Le benzo�n sensuel approfondit le sillage avec une touche ambr�e animale pour une signature audacieuse et br�lante.' }
                 ]
             },
             images: [
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/2.webp',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/3.webp',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/4.webp'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/2.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/3.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/4.webp'
             ]
         },
         'jean paul gaultier le male in blue eau de parfum': {
             brand: 'JEAN PAUL GAULTIER',
             fragranceProfile: { longevity: 86, longevityLabel: '8-10h', sillage: 84, sillageLabel: 'Strong', season: 68, seasonLabel: 'Spring/Summer' },
-            subtitle: 'Men\'s fragrance · Aromatic Spicy · A bold blue limited edition with lavender, benzoin, and an ocean-charged trail.',
+            subtitle: 'Men\'s fragrance � Aromatic Spicy � A bold blue limited edition with lavender, benzoin, and an ocean-charged trail.',
             longDescription: 'With Le Male In Blue, a wave of aromatic and spicy freedom looms over the sea. Vaster than the horizon, stronger than a tidal wave, its intense eau de parfum immerses you in a captivating, all-encompassing blue. Gone are the gentle waves. Wearing a black sailor shirt over his deep blue torso, the boldest of sailors tattoos his case with an eccentric wave inspired by the Maison\'s archives. He provokes with his wingspan, bare torso, and lavender on his stern, and with a benzoin-drenched courage. A limited edition with a lasting trail, transforming this new wave into legend.',
             sizes: [
                 'Decante 10ML',
@@ -2804,23 +2804,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Aromatique Épicé · Une édition limitée bleue audacieuse avec lavande, benzoïn et un sillage chargé d'océan.",
-                longDescription: "Avec Le Male In Blue, une vague de liberté aromatique et épicée se profile sur la mer. Plus vaste que l’horizon, plus forte qu’une marée, son eau de parfum intense vous plonge dans un bleu captivant et global. Le marin le plus audacieux tatouage son étui d'une vague excentrique inspirée des archives de la Maison, avec la lavande à la poupe et un courage trempé de benzoïn.",
+                subtitle: "Parfum homme � Aromatique �pic� � Une �dition limit�e bleue audacieuse avec lavande, benzo�n et un sillage charg� d'oc�an.",
+                longDescription: "Avec Le Male In Blue, une vague de libert� aromatique et �pic�e se profile sur la mer. Plus vaste que l�horizon, plus forte qu�une mar�e, son eau de parfum intense vous plonge dans un bleu captivant et global. Le marin le plus audacieux tatouage son �tui d'une vague excentrique inspir�e des archives de la Maison, avec la lavande � la poupe et un courage tremp� de benzo�n.",
                 notes: [
-                    { title: 'VAGUE BLEUE AROMATIQUE', text: 'Une ouverture aromatique et épicée se projette en avant avec l’énergie de l’air marin ouvert et une fraîcheur bleue audacieuse.' },
-                    { title: 'LAVANDE POUPE', text: 'La signature iconique de lavande de Jean Paul Gaultier donne au parfum son identité de marin sensuel et une tonalité raffinée.' },
-                    { title: 'SILLAGE DE BENZOÏN', text: 'Le benzoïn trempe le fond d’un courage chaud, laissant une signature profonde et durable d’édition limitée.' }
+                    { title: 'VAGUE BLEUE AROMATIQUE', text: 'Une ouverture aromatique et �pic�e se projette en avant avec l��nergie de l�air marin ouvert et une fra�cheur bleue audacieuse.' },
+                    { title: 'LAVANDE POUPE', text: 'La signature iconique de lavande de Jean Paul Gaultier donne au parfum son identit� de marin sensuel et une tonalit� raffin�e.' },
+                    { title: 'SILLAGE DE BENZO�N', text: 'Le benzo�n trempe le fond d�un courage chaud, laissant une signature profonde et durable d��dition limit�e.' }
                 ]
             },
             images: [
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/2.jpg',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/3.jpg'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/2.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/3.jpg'
             ]
         },
         'jean paul gaultier le male eau de toilette': {
             brand: 'JEAN PAUL GAULTIER',
             fragranceProfile: { longevity: 78, longevityLabel: '6-8h', sillage: 76, sillageLabel: 'Strong', season: 72, seasonLabel: 'All Year' },
-            subtitle: 'Men\'s fragrance · Fresh Amber · The iconic sailor signature balancing mint, lavender, vanilla, and sandalwood.',
+            subtitle: 'Men\'s fragrance � Fresh Amber � The iconic sailor signature balancing mint, lavender, vanilla, and sandalwood.',
             longDescription: 'Jean Paul Gaultier Le Male EDT, a men\'s fragrance that combines freshness and warmth, inspired by the iconic sailor. Ideal for men with bold style. This perfume is an expression of modern masculinity, capturing the essence of the contemporary man who defies traditional norms. With a blend of fresh and warm notes, Le Male EDT offers an olfactory experience that is both stimulating and comforting, leaving a lasting impression. What sets Le Male EDT apart from other fragrances is its ability to balance freshness with enveloping warmth. Its top notes include mint and lavender, which provide an immediate sense of freshness. As it evolves, the fragrance reveals a heart of cinnamon and orange blossom, adding a spicy and floral touch. Finally, the base notes of vanilla and sandalwood provide a soft, sensual warmth that lingers on the skin. This perfume is designed for men seeking a distinctive fragrance that reflects their bold and confident personality. It is ideal for those who want to stand out with a scent that is both classic and modern. Perfect for everyday wear or special occasions, Le Male EDT is a versatile choice for any man looking to leave a lasting impression. Le Male EDT comes in a bottle designed in the iconic male torso shape that characterizes the Jean Paul Gaultier brand. To apply, spray a small amount on pulse points, such as the neck and wrists, for optimal fragrance diffusion. In addition to its captivating fragrance, Le Male EDT stands out for its commitment to sustainability. The brand strives to use recyclable materials in its packaging and promotes responsible production practices. This makes Le Male EDT not only an exceptional olfactory choice but also a conscious option for the modern consumer.',
             sizes: [
                 'Decante 10ML',
@@ -2844,24 +2844,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Ambré Frais · La signature iconique du marin alliant menthe, lavande, vanille et santal.",
-                longDescription: "Jean Paul Gaultier Le Male EDT, un parfum masculin qui associe fraîcheur et chaleur, inspiré du marin iconique. Idéal pour les hommes au style audacieux. Ce parfum est une expression de la masculinité moderne, capturant l'essence de l'homme contemporain qui brave les normes traditionnelles. Ses notes de tête incluent la menthe et la lavande. Au cœur, la cannelle et la fleur d'oranger ajoutent une touche épicée et florale. Les notes de fond de vanille et santal procurent leur douceur sensuelle.",
+                subtitle: "Parfum homme � Ambr� Frais � La signature iconique du marin alliant menthe, lavande, vanille et santal.",
+                longDescription: "Jean Paul Gaultier Le Male EDT, un parfum masculin qui associe fra�cheur et chaleur, inspir� du marin iconique. Id�al pour les hommes au style audacieux. Ce parfum est une expression de la masculinit� moderne, capturant l'essence de l'homme contemporain qui brave les normes traditionnelles. Ses notes de t�te incluent la menthe et la lavande. Au c�ur, la cannelle et la fleur d'oranger ajoutent une touche �pic�e et florale. Les notes de fond de vanille et santal procurent leur douceur sensuelle.",
                 notes: [
-                    { title: 'MENTHE & LAVANDE', text: 'Une ouverture aromatique fraîche de menthe et lavande donne au Le Male EDT sa signature de marin immmédiatement reconnaissable.' },
-                    { title: 'FLEUR DE CANNELLE', text: 'La cannelle et la fleur d\'oranger créent un cœur épicé-floral chaud qui se felt audacieux, moderne et réconfortant.' },
-                    { title: 'BOIS VANILLÉ', text: 'La vanille et le santal s\'installent dans un fond sensuel lisse avec une chaleur durable et une polyvalence quotidienne.' }
+                    { title: 'MENTHE & LAVANDE', text: 'Une ouverture aromatique fra�che de menthe et lavande donne au Le Male EDT sa signature de marin immm�diatement reconnaissable.' },
+                    { title: 'FLEUR DE CANNELLE', text: 'La cannelle et la fleur d\'oranger cr�ent un c�ur �pic�-floral chaud qui se felt audacieux, moderne et r�confortant.' },
+                    { title: 'BOIS VANILL�', text: 'La vanille et le santal s\'installent dans un fond sensuel lisse avec une chaleur durable et une polyvalence quotidienne.' }
                 ]
             },
             images: [
-                '/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/2.png',
-                '/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/3.jpg',
-                '/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/4.jpg'
+                'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/2.png',
+                'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/3.jpg',
+                'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/4.jpg'
             ]
         },
         'jean paul gaultier le male le parfum eau de parfum': {
             brand: 'JEAN PAUL GAULTIER',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 80, sillageLabel: 'Strong', season: 60, seasonLabel: 'Fall/Winter' },
-            subtitle: 'Men\'s fragrance · Woody Oriental · Intense elegance in a black and gold signature bottle.',
+            subtitle: 'Men\'s fragrance � Woody Oriental � Intense elegance in a black and gold signature bottle.',
             longDescription: 'On the way to Le Male Le Parfum, the new men\'s fragrance from Jean Paul Gaultier! With its official black and gold packaging, this intense eau de parfum revisits the Le Male olfactory line with style and strength. An elegant, woody oriental trail, imbued with the charisma and power of a leader. Sailors to your stations! The captain is here, for an almost imminent departure.',
             sizes: [
                 'Decante 10ML',
@@ -2885,26 +2885,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Oriental · Élégance intense dans un flacon signature noir et or.",
-                longDescription: "Direction Le Male Le Parfum, le nouveau parfum masculin de Jean Paul Gaultier ! Avec son emballage officiel noir et or, cette eau de parfum intense revisite la ligne olfactive Le Male avec style et force. Un sillage oriental boisé élégant, empreint du charisme et de la puissance d'un leader.",
+                subtitle: "Parfum homme � Bois� Oriental � �l�gance intense dans un flacon signature noir et or.",
+                longDescription: "Direction Le Male Le Parfum, le nouveau parfum masculin de Jean Paul Gaultier ! Avec son emballage officiel noir et or, cette eau de parfum intense revisite la ligne olfactive Le Male avec style et force. Un sillage oriental bois� �l�gant, empreint du charisme et de la puissance d'un leader.",
                 notes: [
-                    { title: 'OUVERTURE ÉPICÉE', text: 'Un début épicé et audacieux donne le ton et annonce le parfum avec confiance.' },
-                    { title: 'CŒUR BOISÉ', text: 'Un noyau boisé riche façonne le caractère masculin élégant de cette composition intense.' },
+                    { title: 'OUVERTURE �PIC�E', text: 'Un d�but �pic� et audacieux donne le ton et annonce le parfum avec confiance.' },
+                    { title: 'C�UR BOIS�', text: 'Un noyau bois� riche fa�onne le caract�re masculin �l�gant de cette composition intense.' },
                     { title: 'SILLAGE ORIENTAL', text: 'Un fond oriental chaud laisse un sillage charismatique et puissant avec une profondeur durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/2.webp',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/3.webp',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/4.webp',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/5.webp'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/2.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/3.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/4.webp',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/5.webp'
             ]
         },
         'jean paul gaultier le beau eau de parfum': {
             brand: 'JEAN PAUL GAULTIER',
             fragranceProfile: { longevity: 80, longevityLabel: '7-9h', sillage: 75, sillageLabel: 'Strong', season: 70, seasonLabel: 'Spring/Summer' },
-            subtitle: 'Men\'s fragrance · Woody Amber · Intense and sensual with tonka bean, sandalwood, ginger, pineapple, and ambergris.',
+            subtitle: 'Men\'s fragrance � Woody Amber � Intense and sensual with tonka bean, sandalwood, ginger, pineapple, and ambergris.',
             longDescription: 'Le Beau Le Parfum, Men\'s Perfume, Intense Eau de Parfum. Le Beau Le Parfum, the new original and intense men\'s fragrance by Jean Paul Gaultier. While Jean Paul Gaultier created this fragrance in its purest form, it wasn\'t designed to be dressed up! The bottle, lacquered in black and green, boasts a sleek and muscular silhouette, adorned with a golden fabric leaf as if it were a single garment. The new Eau de Parfum Intense is an even more sensual temptation, with its exciting woody amber scent. Le Beau is a men\'s fragrance built around an addictive tonka bean, sandalwood, ginger, pineapple, and ambergris. A light yet powerful base for a seductive and ultra-sexy man.',
             sizes: [
                 'Decante 10ML',
@@ -2928,26 +2928,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Ambré · Intense et sensuel avec fève tonka, santal, gingembre, ananas et ambre gris.",
-                longDescription: "Le Beau Le Parfum, parfum masculin intense de Jean Paul Gaultier. La nouvelle eau de parfum intense est une tentation encore plus sensuelle, avec son parfum boisé ambré excitant. Le Beau est un parfum masculin construit autour d'une fève tonka addictive, du santal, du gingembre, de l'ananas et de l'ambre gris. Une base légère mais puissante pour un homme séducteur et ultra-sexy.",
+                subtitle: "Parfum homme � Bois� Ambr� � Intense et sensuel avec f�ve tonka, santal, gingembre, ananas et ambre gris.",
+                longDescription: "Le Beau Le Parfum, parfum masculin intense de Jean Paul Gaultier. La nouvelle eau de parfum intense est une tentation encore plus sensuelle, avec son parfum bois� ambr� excitant. Le Beau est un parfum masculin construit autour d'une f�ve tonka addictive, du santal, du gingembre, de l'ananas et de l'ambre gris. Une base l�g�re mais puissante pour un homme s�ducteur et ultra-sexy.",
                 notes: [
-                    { title: 'GINGEMBRE & ANANAS', text: 'Une ouverture fruitée-épicée et vibrante où le gingembre frais rencontre l’ananas juteux pour une attraction instantanée.' },
-                    { title: 'FÈVE TONKA', text: 'La fève tonka addictive construit chaleur et profondeur sensuelle au cœur du parfum.' },
-                    { title: 'SANTAL & AMBRE GRIS', text: 'Un fond boisé ambré de santal et ambre gris crée un sillage masculin lisse et puissant.' }
+                    { title: 'GINGEMBRE & ANANAS', text: 'Une ouverture fruit�e-�pic�e et vibrante o� le gingembre frais rencontre l�ananas juteux pour une attraction instantan�e.' },
+                    { title: 'F�VE TONKA', text: 'La f�ve tonka addictive construit chaleur et profondeur sensuelle au c�ur du parfum.' },
+                    { title: 'SANTAL & AMBRE GRIS', text: 'Un fond bois� ambr� de santal et ambre gris cr�e un sillage masculin lisse et puissant.' }
                 ]
             },
             images: [
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/2.jpg',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/3.jpg',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/4.jpg',
-                '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/5.jpg'
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/2.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/3.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/4.jpg',
+                'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/5.jpg'
             ]
         },
         'carolina herrera bad boy eau de toilette': {
             brand: 'CAROLINA HERRERA',
             gender: 'men',
             fragranceProfile: { longevity: 82, longevityLabel: '8-10h', sillage: 74, sillageLabel: 'Moderate-Strong', season: 68, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Oriental · A modern masculine signature balancing sparkling bergamot, pepper, cedarwood, sage, tonka bean, and cacao.",
+            subtitle: "Men's fragrance � Oriental � A modern masculine signature balancing sparkling bergamot, pepper, cedarwood, sage, tonka bean, and cacao.",
             longDescription: 'CAROLINA HERRERA Bad Boy Refillable Eau de Toilette embodies the duality between playful freshness and the warmth of nature. This Carolina Herrera perfume for men, with its oriental scent, is a manifestation of modern masculinity, intended for men who forge their own paths without fear of showing their sensitivity alongside their great strength. Bad Boy Eau de Toilette opens with a citrus burst featuring top notes of green Italian bergamot. As you explore its nuances, cedarwood and sage add warmth that settles on a base of tonka bean and cacao. It is a true statement of intent. Olfactory Family: Oriental. Top notes: Black Pepper, White Pepper and Italian Green Bergamot. Heart notes: Cedarwood and Sage. Base notes: Tonka bean and cocoa.',
             sizes: [
                 'Decante 10ML',
@@ -2971,26 +2971,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Oriental · Une signature masculine moderne avec bergamote, poivre, cèdre, sauge, fève tonka et cacao.",
-                longDescription: "CAROLINA HERRERA Bad Boy Refillable Eau de Toilette incarne la dualité entre fraîcheur ludique et chaleur naturelle. Ce parfum Carolina Herrera pour homme, au parfum oriental, est une manifestation de la masculinité moderne, destiné aux hommes qui tracent leur propre chemin. Bad Boy EDT s'ouvre sur un éclat citrus avec des notes de tête de bergamote verte d'Italie. Le cèdre et la sauge ajoutent de la chaleur qui repose sur un fond de fève tonka et cacao.",
+                subtitle: "Parfum homme � Oriental � Une signature masculine moderne avec bergamote, poivre, c�dre, sauge, f�ve tonka et cacao.",
+                longDescription: "CAROLINA HERRERA Bad Boy Refillable Eau de Toilette incarne la dualit� entre fra�cheur ludique et chaleur naturelle. Ce parfum Carolina Herrera pour homme, au parfum oriental, est une manifestation de la masculinit� moderne, destin� aux hommes qui tracent leur propre chemin. Bad Boy EDT s'ouvre sur un �clat citrus avec des notes de t�te de bergamote verte d'Italie. Le c�dre et la sauge ajoutent de la chaleur qui repose sur un fond de f�ve tonka et cacao.",
                 notes: [
-                    { title: 'OUVERTURE POIVRE & BERGAMOTE', text: 'Le poivre noir, poivre blanc et bergamote verte d\'Italie créent une ouverture agrumes-épicée avec une énergie instantanée.' },
-                    { title: 'CÈDRE & SAUGE AU CŒUR', text: 'Le cèdre et la sauge apportent chaleur aromatique au cœur, donnant au parfum sa structure moderne et confiante.' },
-                    { title: 'FÈVE TONKA & CACAO EN FOND', text: 'La fève tonka et le cacao s\'installent dans un sillage oriental chaud qui se felt sensuel, lisse et incontestablement masculin.' }
+                    { title: 'OUVERTURE POIVRE & BERGAMOTE', text: 'Le poivre noir, poivre blanc et bergamote verte d\'Italie cr�ent une ouverture agrumes-�pic�e avec une �nergie instantan�e.' },
+                    { title: 'C�DRE & SAUGE AU C�UR', text: 'Le c�dre et la sauge apportent chaleur aromatique au c�ur, donnant au parfum sa structure moderne et confiante.' },
+                    { title: 'F�VE TONKA & CACAO EN FOND', text: 'La f�ve tonka et le cacao s\'installent dans un sillage oriental chaud qui se felt sensuel, lisse et incontestablement masculin.' }
                 ]
             },
             images: [
-                '/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/2.jpg',
-                '/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/3.jpg',
-                '/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/4.jpg',
-                '/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/5.jpg'
+                'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/2.jpg',
+                'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/3.jpg',
+                'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/4.jpg',
+                'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/5.jpg'
             ]
         },
         'gucci guilty absolu de parfum pour homme': {
             brand: 'GUCCI',
             gender: 'men',
             fragranceProfile: { longevity: 88, longevityLabel: '9-11h', sillage: 77, sillageLabel: 'Strong', season: 58, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Woody Ambery · An intimate refined composition with rum accord, orange blossom absolute, and red chili pepper.",
+            subtitle: "Men's fragrance � Woody Ambery � An intimate refined composition with rum accord, orange blossom absolute, and red chili pepper.",
             longDescription: 'The new Gucci Guilty fragrances celebrate the art of refinement, inviting the wearer on a sensory journey into an intimate and sophisticated world. Gucci Guilty Absolu de Parfum for Men is an intense, woody, and ambery composition. At its heart, a rich rum accord brings warmth and depth, enhanced by the radiance of orange blossom absolute. A touch of red chili pepper adds dynamism, creating a striking contrast that enriches the fragrance\'s complexity.',
             sizes: [
                 'Decante 10ML',
@@ -3014,24 +3014,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Boisé Ambré · Une composition intime et raffinée avec accord rhum, fleur d'oranger absolue et poivre de piment rouge.",
-                longDescription: "Les nouveaux parfums Gucci Guilty célèbrent l'art du raffinement, invitant le porteur dans un voyage sensoriel intime et sophistiqué. Gucci Guilty Absolu de Parfum pour Homme est une composition intense, boisée et ambrée. Au cœur, un riche accord de rhum apporte chaleur et profondeur, rehussé par le rayonnement du fleur d'oranger absolu. Une touche de piment rouge ajoute du dynamisme, créant un contraste saisissant.",
+                subtitle: "Parfum homme � Bois� Ambr� � Une composition intime et raffin�e avec accord rhum, fleur d'oranger absolue et poivre de piment rouge.",
+                longDescription: "Les nouveaux parfums Gucci Guilty c�l�brent l'art du raffinement, invitant le porteur dans un voyage sensoriel intime et sophistiqu�. Gucci Guilty Absolu de Parfum pour Homme est une composition intense, bois�e et ambr�e. Au c�ur, un riche accord de rhum apporte chaleur et profondeur, rehuss� par le rayonnement du fleur d'oranger absolu. Une touche de piment rouge ajoute du dynamisme, cr�ant un contraste saisissant.",
                 notes: [
-                    { title: 'CHALEUR DE L\'ACCORD RHUM', text: 'Un riche accord de rhum façonne le cœur avec chaleur, profondeur et une intensité raffinée et lisse.' },
-                    { title: 'RAYONNEMENT FLEUR D\'ORANGER', text: 'La fleur d\'oranger absolue éclaire la composition avec une lueur florale sophistiquée.' },
-                    { title: 'CONTRASTE PIMENT ROUGE', text: 'Le piment rouge ajoute un contraste épicé vif qui aiguise le parfum et approfondit son caractère.' }
+                    { title: 'CHALEUR DE L\'ACCORD RHUM', text: 'Un riche accord de rhum fa�onne le c�ur avec chaleur, profondeur et une intensit� raffin�e et lisse.' },
+                    { title: 'RAYONNEMENT FLEUR D\'ORANGER', text: 'La fleur d\'oranger absolue �claire la composition avec une lueur florale sophistiqu�e.' },
+                    { title: 'CONTRASTE PIMENT ROUGE', text: 'Le piment rouge ajoute un contraste �pic� vif qui aiguise le parfum et approfondit son caract�re.' }
                 ]
             },
             images: [
-                '/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/2.webp',
-                '/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/3.jpg'
+                'assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/2.webp',
+                'assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/3.jpg'
             ]
         },
         'gucci guilty elixir pour homme': {
             brand: 'GUCCI',
             gender: 'men',
             fragranceProfile: { longevity: 92, longevityLabel: '10-12h', sillage: 84, sillageLabel: 'Strong', season: 54, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Amber Leather · A powerful Gucci Guilty elixir with iris butter, Ambrofix, benzoin, vanillin, and smoky nutmeg.",
+            subtitle: "Men's fragrance � Amber Leather � A powerful Gucci Guilty elixir with iris butter, Ambrofix, benzoin, vanillin, and smoky nutmeg.",
             longDescription: 'Gucci Guilty Elixir de Parfum for Men is an invitation to self-love and self-acceptance. It exudes an amber and tanned fragrance with notes of patchouli, the signature ingredient of the Gucci Guilty line, whose high concentration produces an intensely powerful effect. The fragrance is presented in a vibrant bottle, designed to elegantly mirror its feminine counterpart. Eau de parfum. Olfactory family: amber and tanned notes. Key ingredients: iris butter, Ambrofix, benzoin. The original essence is amplified by the addition of vanillin extract, while iris butter, noble by nature, gives it a warm and enveloping aroma. The exhilarating Ambrofix, complemented by smoky nutmeg notes, enhances the uniqueness of the fragrance and allows it to fully express its character. Benzoin in the base note lends depth and magnetism to this fragrance. Packaging: the bottle comes in a refined green color; it is embellished with the House\'s intertwined GG detail and topped with a brushed silver cap.',
             sizes: [
                 'Decante 10ML',
@@ -3055,25 +3055,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum homme · Cuir Ambré · Un élixir Gucci Guilty puissant avec beurre d'iris, Ambrofix, benzoïn, vanilline et muscade fumée.",
-                longDescription: "Gucci Guilty Elixir de Parfum pour Homme est une invitation à l'amour de soi et à l'acceptation de soi. Il dégage un parfum ambré et tauné avec des notes de patchouli, l'ingrédient signature de la ligne Gucci Guilty. Le beurre d'iris, noble par nature, lui confère un arôme chaud et enveloppant. L'Ambrofix exhilarant, complété par des notes de muscade fumée, renforce l'unicité du parfum. Le benzoïn en fond confère profondeur et magnétisme.",
+                subtitle: "Parfum homme � Cuir Ambr� � Un �lixir Gucci Guilty puissant avec beurre d'iris, Ambrofix, benzo�n, vanilline et muscade fum�e.",
+                longDescription: "Gucci Guilty Elixir de Parfum pour Homme est une invitation � l'amour de soi et � l'acceptation de soi. Il d�gage un parfum ambr� et taun� avec des notes de patchouli, l'ingr�dient signature de la ligne Gucci Guilty. Le beurre d'iris, noble par nature, lui conf�re un ar�me chaud et enveloppant. L'Ambrofix exhilarant, compl�t� par des notes de muscade fum�e, renforce l'unicit� du parfum. Le benzo�n en fond conf�re profondeur et magn�tisme.",
                 notes: [
-                    { title: 'BEURRE D\'IRIS & VANILLINE', text: 'Le beurre d\'iris chaud et la vanilline construisent un cœur ambré enveloppant avec une texture sensuelle riche.' },
-                    { title: 'AMBROFIX & MUSCADE FUMÉE', text: 'L\'Ambrofix et la muscade fumée affinent la signature avec un rayonnement moderne et un caractère audacieux.' },
-                    { title: 'PROFONDEUR DU BENZOÏN', text: 'Le benzoïn ancre le fond avec une profondeur résineuse et un magnétisme durable.' }
+                    { title: 'BEURRE D\'IRIS & VANILLINE', text: 'Le beurre d\'iris chaud et la vanilline construisent un c�ur ambr� enveloppant avec une texture sensuelle riche.' },
+                    { title: 'AMBROFIX & MUSCADE FUM�E', text: 'L\'Ambrofix et la muscade fum�e affinent la signature avec un rayonnement moderne et un caract�re audacieux.' },
+                    { title: 'PROFONDEUR DU BENZO�N', text: 'Le benzo�n ancre le fond avec une profondeur r�sineuse et un magn�tisme durable.' }
                 ]
             },
             images: [
-                '/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/2.webp',
-                '/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/3.webp',
-                '/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/4.webp'
+                'assets/images/products/gucci/gucci-guilty-elixir-pour-homme/2.webp',
+                'assets/images/products/gucci/gucci-guilty-elixir-pour-homme/3.webp',
+                'assets/images/products/gucci/gucci-guilty-elixir-pour-homme/4.webp'
             ]
         },
         'montale arabians tonka': {
             brand: 'MONTALE',
             gender: 'unisex',
             fragranceProfile: { longevity: 94, longevityLabel: '12h+', sillage: 88, sillageLabel: 'Powerful', season: 48, seasonLabel: 'Fall/Winter' },
-            subtitle: 'Unisex fragrance · Oriental Gourmand · An iconic bestseller blending tonka bean, rose, bergamot, oud, and leather.',
+            subtitle: 'Unisex fragrance � Oriental Gourmand � An iconic bestseller blending tonka bean, rose, bergamot, oud, and leather.',
             longDescription: 'Montale Arabians Tonka is an iconic bestseller that has earned its cult status in the niche fragrance world. This opulent Oriental Gourmand opens with the radiant glow of Italian bergamot and a hint of saffron, casting a luminous warmth from the very first spray. At its heart, a captivating Damascena rose intertwines with velvety smooth tonka bean, creating a rich, intoxicating sweetness that feels both refined and deeply addictive. The base is a tour de force of Arabian oud, supple leather, and amber resin, grounding the composition with a dark, mysterious depth that projects powerfully and lasts well over 12 hours on skin. This is a fragrance for those who appreciate uncompromising quality and a trail that commands attention in any room.',
             sizes: [
                 'Decante 10ML',
@@ -3097,24 +3097,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: "Parfum unisexe · Gourmand Oriental · Un bestseller iconique alliant fève tonka, rose, bergamote, oud et cuir.",
-                longDescription: "Montale Arabians Tonka est un bestseller iconique qui a gagné son statut culte dans le monde de la parfumerie niche. Cet opulent Gourmand Oriental s'ouvre sur l'éclat rayonnant de la bergamote italienne et une touche de safran, diffusant une chaleur lumineuse dès la première vaporisation. Au cœur, une captivante rose de Damas s'entrelace avec la douce fève tonka veloutée, créant une richesse sucrée à la fois raffinée et profondément addictive. Le fond est un tour de force d'oud arabe, de cuir souple et de résine d'ambre, ancrant la composition dans une profondeur sombre et mystérieuse qui projette puissamment et dure bien plus de 12 heures sur la peau.",
+                subtitle: "Parfum unisexe � Gourmand Oriental � Un bestseller iconique alliant f�ve tonka, rose, bergamote, oud et cuir.",
+                longDescription: "Montale Arabians Tonka est un bestseller iconique qui a gagn� son statut culte dans le monde de la parfumerie niche. Cet opulent Gourmand Oriental s'ouvre sur l'�clat rayonnant de la bergamote italienne et une touche de safran, diffusant une chaleur lumineuse d�s la premi�re vaporisation. Au c�ur, une captivante rose de Damas s'entrelace avec la douce f�ve tonka velout�e, cr�ant une richesse sucr�e � la fois raffin�e et profond�ment addictive. Le fond est un tour de force d'oud arabe, de cuir souple et de r�sine d'ambre, ancrant la composition dans une profondeur sombre et myst�rieuse qui projette puissamment et dure bien plus de 12 heures sur la peau.",
                 notes: [
-                    { title: 'BERGAMOTE & TONKA', text: 'La bergamote rayonnante et la douce fève tonka ouvrent le parfum avec douceur et légèreté raffinée.' },
-                    { title: 'ROSE CAPTIVANTE', text: 'La rose ajoute une richesse florale raffinée qui adoucit la puissance de la composition.' },
-                    { title: 'SILLAGE OUD & CUIR', text: 'L\'oud et le cuir forment un fond sombre et inoubliable avec une présence niche audacieuse.' }
+                    { title: 'BERGAMOTE & TONKA', text: 'La bergamote rayonnante et la douce f�ve tonka ouvrent le parfum avec douceur et l�g�ret� raffin�e.' },
+                    { title: 'ROSE CAPTIVANTE', text: 'La rose ajoute une richesse florale raffin�e qui adoucit la puissance de la composition.' },
+                    { title: 'SILLAGE OUD & CUIR', text: 'L\'oud et le cuir forment un fond sombre et inoubliable avec une pr�sence niche audacieuse.' }
                 ]
             },
             images: [
-                '/assets/images/products/montale/montale-arabians-tonka/2.webp',
-                '/assets/images/products/montale/montale-arabians-tonka/3.webp'
+                'assets/images/products/montale/montale-arabians-tonka/2.webp',
+                'assets/images/products/montale/montale-arabians-tonka/3.webp'
             ]
         },
         'prada luna rossa ocean eau de parfum': {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 89, longevityLabel: '9-11h', sillage: 79, sillageLabel: 'Strong', season: 82, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Amber Woody · A sophisticated and sensual signature blending grapefruit essence, incense, vanilla, and the amplified power of AmberXtreme.",
+            subtitle: "Men's fragrance � Amber Woody � A sophisticated and sensual signature blending grapefruit essence, incense, vanilla, and the amplified power of AmberXtreme.",
             longDescription: 'PRADA Luna Rossa Ocean Eau de Parfum combines intense sophistication and sensuality through a contrast of innovative technology and nature\'s finest ingredients. The fragrance opens with an invigorating burst of grapefruit essence, moves into the woody vibrancy of incense, and settles into a rich vanilla accord, creating a fresh yet deeply sensual trail that lasts with confident intensity.',
             mainAccords: ['Fresh', 'Citrus', 'Incense', 'Woody', 'Vanilla', 'Amber'],
             sizes: [
@@ -3139,26 +3139,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: 'Parfum homme · Boisé Ambré · Une signature sophistiquée et sensuelle mêlant essence de pamplemousse, encens, vanille et la puissance amplifiée de AmberXtreme.',
-                longDescription: 'PRADA Luna Rossa Ocean Eau de Parfum associe sophistication intense et sensualité grâce au contraste entre technologie innovante et ingrédients naturels d\'exception. Le parfum s\'ouvre sur un éclat vivifiant d\'essence de pamplemousse, évolue vers la vibration boisée de l\'encens, puis se pose sur un accord de vanille riche, créant un sillage à la fois frais, profond et durable.',
+                subtitle: 'Parfum homme � Bois� Ambr� � Une signature sophistiqu�e et sensuelle m�lant essence de pamplemousse, encens, vanille et la puissance amplifi�e de AmberXtreme.',
+                longDescription: 'PRADA Luna Rossa Ocean Eau de Parfum associe sophistication intense et sensualit� gr�ce au contraste entre technologie innovante et ingr�dients naturels d\'exception. Le parfum s\'ouvre sur un �clat vivifiant d\'essence de pamplemousse, �volue vers la vibration bois�e de l\'encens, puis se pose sur un accord de vanille riche, cr�ant un sillage � la fois frais, profond et durable.',
                 notes: [
-                    { title: 'PAMPLEMOUSSE, ENCENS & VANILLE', text: 'Une ouverture citrique vive rencontre un encens fumé et un accord de vanille riche pour un contraste raffiné entre fraîcheur et sensualité profonde.' },
-                    { title: 'TECHNOLOGIE AMBERXTREME', text: 'Enrichie par la molécule avancée AmberXtreme, la composition gagne en intensité, en rayonnement et en tenue longue durée.' },
-                    { title: 'ÉQUILIBRE MODERNE COMPLEXE', text: 'Les facettes fraîches, boisées et douces s\'équilibrent avec précision pour une fragrance designer élégante, adaptée au quotidien comme au soir.' }
+                    { title: 'PAMPLEMOUSSE, ENCENS & VANILLE', text: 'Une ouverture citrique vive rencontre un encens fum� et un accord de vanille riche pour un contraste raffin� entre fra�cheur et sensualit� profonde.' },
+                    { title: 'TECHNOLOGIE AMBERXTREME', text: 'Enrichie par la mol�cule avanc�e AmberXtreme, la composition gagne en intensit�, en rayonnement et en tenue longue dur�e.' },
+                    { title: '�QUILIBRE MODERNE COMPLEXE', text: 'Les facettes fra�ches, bois�es et douces s\'�quilibrent avec pr�cision pour une fragrance designer �l�gante, adapt�e au quotidien comme au soir.' }
                 ]
             },
             images: [
-                '/assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg',
-                '/assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/2.jpg',
-                '/assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/3.jpg'
+                'assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg',
+                'assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/2.jpg',
+                'assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/3.jpg'
             ]
         },
         'prada luna rossa carbon edt': {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 84, longevityLabel: '8-10h', sillage: 72, sillageLabel: 'Strong', season: 85, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Aromatic Fougère · A mineral, modern Prada signature with metallic lavender, Italian bergamot, patchouli, and amber-dry Ambroxan.",
-            longDescription: 'PRADA Luna Rossa Carbon EDT, launched in 2017, offers a unique olfactory experience by fusing steam-distilled botanical notes with synthetic elements in a captivating mineral blend. Classified as an aromatic fougère, it achieves the intensity of the darkest rock alongside the freshness of air. The composition reveals metallic touches of lavender, the citrus lift of Vert di Bergamote from Italy, the radiant wood of patchouli, and the amber dryness of Ambroxan. Luna Rossa Carbon is a manifestation of elegance and modernity in every drop.',
+            subtitle: "Men's fragrance � Aromatic Foug�re � A mineral, modern Prada signature with metallic lavender, Italian bergamot, patchouli, and amber-dry Ambroxan.",
+            longDescription: 'PRADA Luna Rossa Carbon EDT, launched in 2017, offers a unique olfactory experience by fusing steam-distilled botanical notes with synthetic elements in a captivating mineral blend. Classified as an aromatic foug�re, it achieves the intensity of the darkest rock alongside the freshness of air. The composition reveals metallic touches of lavender, the citrus lift of Vert di Bergamote from Italy, the radiant wood of patchouli, and the amber dryness of Ambroxan. Luna Rossa Carbon is a manifestation of elegance and modernity in every drop.',
             mainAccords: ['Aromatic', 'Mineral', 'Lavender', 'Citrus', 'Patchouli', 'Amber'],
             sizes: [
                 'Decante 10ML',
@@ -3182,27 +3182,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: 'Parfum homme · Fougère Aromatique · Une signature Prada minérale et moderne avec lavande métallique, bergamote d’Italie, patchouli et Ambroxan ambré sec.',
-                longDescription: 'PRADA Luna Rossa Carbon EDT, lancé en 2017, propose une expérience olfactive unique en fusionnant des notes botaniques distillées à la vapeur avec des éléments synthétiques dans un accord minéral captivant. Classé comme une fougère aromatique, il associe l’intensité de la roche la plus sombre à la fraîcheur de l’air. La composition révèle les touches métalliques de la lavande, la fraîcheur zestée du Vert di Bergamote d’Italie, le bois rayonnant du patchouli et la sécheresse ambrée de l’Ambroxan. Luna Rossa Carbon est une manifestation d’élégance et de modernité à chaque goutte.',
+                subtitle: 'Parfum homme � Foug�re Aromatique � Une signature Prada min�rale et moderne avec lavande m�tallique, bergamote d�Italie, patchouli et Ambroxan ambr� sec.',
+                longDescription: 'PRADA Luna Rossa Carbon EDT, lanc� en 2017, propose une exp�rience olfactive unique en fusionnant des notes botaniques distill�es � la vapeur avec des �l�ments synth�tiques dans un accord min�ral captivant. Class� comme une foug�re aromatique, il associe l�intensit� de la roche la plus sombre � la fra�cheur de l�air. La composition r�v�le les touches m�talliques de la lavande, la fra�cheur zest�e du Vert di Bergamote d�Italie, le bois rayonnant du patchouli et la s�cheresse ambr�e de l�Ambroxan. Luna Rossa Carbon est une manifestation d��l�gance et de modernit� � chaque goutte.',
                 notes: [
-                    { title: 'FRAÎCHEUR MINÉRALE', text: 'Des notes botaniques distillées à la vapeur et des facettes synthétiques modernes créent un profil minéral, aérien, propre et résolument contemporain.' },
-                    { title: 'LAVANDE & BERGAMOTE', text: 'La lavande métallique et le Vert di Bergamote d’Italie apportent clarté aromatique et fraîcheur citronnée à l’ouverture et au cœur.' },
-                    { title: 'PATCHOULI & AMBROXAN', text: 'Le patchouli boisé rayonnant et l’effet ambré sec de l’Ambroxan donnent à la fragrance sa structure, son élégance et sa tenue masculine moderne.' }
+                    { title: 'FRA�CHEUR MIN�RALE', text: 'Des notes botaniques distill�es � la vapeur et des facettes synth�tiques modernes cr�ent un profil min�ral, a�rien, propre et r�solument contemporain.' },
+                    { title: 'LAVANDE & BERGAMOTE', text: 'La lavande m�tallique et le Vert di Bergamote d�Italie apportent clart� aromatique et fra�cheur citronn�e � l�ouverture et au c�ur.' },
+                    { title: 'PATCHOULI & AMBROXAN', text: 'Le patchouli bois� rayonnant et l�effet ambr� sec de l�Ambroxan donnent � la fragrance sa structure, son �l�gance et sa tenue masculine moderne.' }
                 ]
             },
             images: [
-                '/assets/images/products/prada/prada-luna-rossa-carbon-edt/1.jpg',
-                '/assets/images/products/prada/prada-luna-rossa-carbon-edt/2.jpg',
-                '/assets/images/products/prada/prada-luna-rossa-carbon-edt/3.jpg',
-                '/assets/images/products/prada/prada-luna-rossa-carbon-edt/4.jpg',
-                '/assets/images/products/prada/prada-luna-rossa-carbon-edt/5.jpg'
+                'assets/images/products/prada/prada-luna-rossa-carbon-edt/1.jpg',
+                'assets/images/products/prada/prada-luna-rossa-carbon-edt/2.jpg',
+                'assets/images/products/prada/prada-luna-rossa-carbon-edt/3.jpg',
+                'assets/images/products/prada/prada-luna-rossa-carbon-edt/4.jpg',
+                'assets/images/products/prada/prada-luna-rossa-carbon-edt/5.jpg'
             ]
         },
         'prada luna rossa black eau de parfum': {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 90, longevityLabel: '10-12h', sillage: 80, sillageLabel: 'Strong', season: 68, seasonLabel: 'Fall/Winter' },
-            subtitle: "Men's fragrance · Amber Woody · A bold and sophisticated Prada signature with bergamot, angelica, woody amber, patchouli, coumarin, musk, and ambergris.",
+            subtitle: "Men's fragrance � Amber Woody � A bold and sophisticated Prada signature with bergamot, angelica, woody amber, patchouli, coumarin, musk, and ambergris.",
             longDescription: 'PRADA Luna Rossa Black Eau de Parfum for men is a bold and sophisticated expression of urban exploration, capturing the thrill of discovering new facets of the everyday landscape. Inspired by the transition between work and play, this fragrance embodies the vibrant spirit of the city as it ignites with possibilities and risks. It opens with an energetic fusion of bergamot and angelica, evolving into a captivating sweetness of woody amber, enhanced by the intensity of patchouli and coumarin. Patchouli, musk, ambergris, and the long-lasting power of coumarin intertwine to create an enveloping, magnetic, and enduring fragrance suited to any occasion.',
             mainAccords: ['Amber', 'Patchouli', 'Musky', 'Woody', 'Sweet', 'Coumarin'],
             sizes: [
@@ -3227,26 +3227,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: 'Parfum homme · Boisé Ambré · Une signature Prada audacieuse et sophistiquée avec bergamote, angélique, ambre boisé, patchouli, coumarine, musc et ambre gris.',
-                longDescription: 'PRADA Luna Rossa Black Eau de Parfum pour homme est une expression audacieuse et sophistiquée de l’exploration urbaine, capturant le frisson de découvrir de nouvelles facettes du paysage quotidien. Inspiré par la transition entre le travail et le jeu, ce parfum incarne l’esprit vibrant de la ville lorsqu’elle s’embrase de possibilités et de risques. Il s’ouvre sur une fusion énergique de bergamote et d’angélique, puis évolue vers une douceur captivante d’ambre boisé, renforcée par l’intensité du patchouli et de la coumarine. Patchouli, musc, ambre gris et la tenue longue durée de la coumarine s’entrelacent pour créer une fragrance enveloppante, magnétique et durable, adaptée à toutes les occasions.',
+                subtitle: 'Parfum homme � Bois� Ambr� � Une signature Prada audacieuse et sophistiqu�e avec bergamote, ang�lique, ambre bois�, patchouli, coumarine, musc et ambre gris.',
+                longDescription: 'PRADA Luna Rossa Black Eau de Parfum pour homme est une expression audacieuse et sophistiqu�e de l�exploration urbaine, capturant le frisson de d�couvrir de nouvelles facettes du paysage quotidien. Inspir� par la transition entre le travail et le jeu, ce parfum incarne l�esprit vibrant de la ville lorsqu�elle s�embrase de possibilit�s et de risques. Il s�ouvre sur une fusion �nergique de bergamote et d�ang�lique, puis �volue vers une douceur captivante d�ambre bois�, renforc�e par l�intensit� du patchouli et de la coumarine. Patchouli, musc, ambre gris et la tenue longue dur�e de la coumarine s�entrelacent pour cr�er une fragrance enveloppante, magn�tique et durable, adapt�e � toutes les occasions.',
                 notes: [
-                    { title: 'BERGAMOTE & ANGÉLIQUE', text: 'Une ouverture vibrante de bergamote et d’angélique crée une première impression énergique avec fraîcheur et envolée aromatique.' },
-                    { title: 'AMBRE BOISÉ, PATCHOULI & COUMARINE', text: 'Le cœur évolue vers un accord ambré boisé doux et texturé, approfondi par le patchouli et la chaleur durable de la coumarine.' },
-                    { title: 'MUSC, AMBRE GRIS & ÉLÉGANCE URBAINE', text: 'Le musc sensuel et l’ambre gris apportent une profondeur magnétique, donnant au parfum un caractère sophistiqué de nuit urbaine qui reste enveloppant pendant des heures.' }
+                    { title: 'BERGAMOTE & ANG�LIQUE', text: 'Une ouverture vibrante de bergamote et d�ang�lique cr�e une premi�re impression �nergique avec fra�cheur et envol�e aromatique.' },
+                    { title: 'AMBRE BOIS�, PATCHOULI & COUMARINE', text: 'Le c�ur �volue vers un accord ambr� bois� doux et textur�, approfondi par le patchouli et la chaleur durable de la coumarine.' },
+                    { title: 'MUSC, AMBRE GRIS & �L�GANCE URBAINE', text: 'Le musc sensuel et l�ambre gris apportent une profondeur magn�tique, donnant au parfum un caract�re sophistiqu� de nuit urbaine qui reste enveloppant pendant des heures.' }
                 ]
             },
             images: [
-                '/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg',
-                '/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/2.jpg',
-                '/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/3.jpg',
-                '/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/4.jpg'
+                'assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg',
+                'assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/2.jpg',
+                'assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/3.jpg',
+                'assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/4.jpg'
             ]
         },
         'prada l homme edt': {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 86, longevityLabel: '8-10h', sillage: 74, sillageLabel: 'Strong', season: 84, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Woody Chypre · A contrasted Prada signature with neroli, pepper, amber, patchouli, and cedar that redefines modern masculinity.",
+            subtitle: "Men's fragrance � Woody Chypre � A contrasted Prada signature with neroli, pepper, amber, patchouli, and cedar that redefines modern masculinity.",
             longDescription: "PRADA L'Homme Prada EDT for men belongs to the Woody Chypre fragrance family and is built on contrast, representing the duality of masculine identity through Prada's lens. Created in 2016 by perfumer Daniela Andrier, it blends sweet, almost feminine facets with pure masculine ingredients to create a layered and multifaceted composition. The fragrance opens with neroli and pepper, pairing a soft floral brightness with a spicy and vibrant intensity. Its heart unfolds into a warm, sensual floral-amber fusion with a creamy and comforting texture before settling into a virile base of patchouli and cedar. With its sober and edgy tone, this fragrance moves away from trends to establish a more assertive Prada masculinity, echoed by its steel-like silver bottle that reflects classic elegance and strength.",
             mainAccords: ['Neroli', 'Pepper', 'Amber', 'Patchouli', 'Cedar', 'Powdery'],
             sizes: [
@@ -3271,12 +3271,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: 'Parfum homme · Chypre Boisé · Une signature Prada contrastée avec néroli, poivre, ambre, patchouli et cèdre qui redéfinit la masculinité moderne.',
-                longDescription: "PRADA L'Homme Prada EDT pour homme appartient à la famille Chypre Boisé et se construit sur les contrastes, représentant la dualité de l'identité masculine à travers le regard de Prada. Créé en 2016 par la parfumeuse Daniela Andrier, il associe des facettes douces, presque féminines, à des ingrédients masculins purs pour former une composition en couches et multifacette. Le parfum s'ouvre sur le néroli et le poivre, alliant une luminosité florale délicate à une intensité épicée et vibrante. Son cœur dévoile une fusion florale et ambrée, chaude et sensuelle, avec une texture crémeuse et réconfortante avant de se poser sur un fond viril de patchouli et de cèdre. Avec son ton sobre et tranchant, ce parfum s'éloigne des tendances pour affirmer une masculinité Prada plus assumée, reflétée par son flacon argenté rappelant l'acier, symbole d'élégance classique et de force.",
+                subtitle: 'Parfum homme � Chypre Bois� � Une signature Prada contrast�e avec n�roli, poivre, ambre, patchouli et c�dre qui red�finit la masculinit� moderne.',
+                longDescription: "PRADA L'Homme Prada EDT pour homme appartient � la famille Chypre Bois� et se construit sur les contrastes, repr�sentant la dualit� de l'identit� masculine � travers le regard de Prada. Cr�� en 2016 par la parfumeuse Daniela Andrier, il associe des facettes douces, presque f�minines, � des ingr�dients masculins purs pour former une composition en couches et multifacette. Le parfum s'ouvre sur le n�roli et le poivre, alliant une luminosit� florale d�licate � une intensit� �pic�e et vibrante. Son c�ur d�voile une fusion florale et ambr�e, chaude et sensuelle, avec une texture cr�meuse et r�confortante avant de se poser sur un fond viril de patchouli et de c�dre. Avec son ton sobre et tranchant, ce parfum s'�loigne des tendances pour affirmer une masculinit� Prada plus assum�e, refl�t�e par son flacon argent� rappelant l'acier, symbole d'�l�gance classique et de force.",
                 notes: [
-                    { title: 'NÉROLI & POIVRE', text: 'L’ouverture équilibre le néroli délicat et le poivre épicé pour une première impression lumineuse mais intense, pleine de contraste.' },
-                    { title: 'CŒUR FLORAL AMBRÉ', text: 'Un cœur floral-ambré chaleureux apporte un confort crémeux et une profondeur sensuelle, mêlant douceur et puissance masculine.' },
-                    { title: 'FOND PATCHOULI & CÈDRE', text: 'Le patchouli et le cèdre ancrent le parfum dans une base boisée séduisante, sérieuse, raffinée et durable.' }
+                    { title: 'N�ROLI & POIVRE', text: 'L�ouverture �quilibre le n�roli d�licat et le poivre �pic� pour une premi�re impression lumineuse mais intense, pleine de contraste.' },
+                    { title: 'C�UR FLORAL AMBR�', text: 'Un c�ur floral-ambr� chaleureux apporte un confort cr�meux et une profondeur sensuelle, m�lant douceur et puissance masculine.' },
+                    { title: 'FOND PATCHOULI & C�DRE', text: 'Le patchouli et le c�dre ancrent le parfum dans une base bois�e s�duisante, s�rieuse, raffin�e et durable.' }
                 ]
             },
             images: [
@@ -3289,7 +3289,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 87, longevityLabel: '8-10h', sillage: 76, sillageLabel: 'Strong', season: 83, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Woody Citrus · An innovative Prada scent balancing Calabrian bergamot, airy musks, green bourbon geranium, Peru balsam, benzoin, and guaiac wood.",
+            subtitle: "Men's fragrance � Woody Citrus � An innovative Prada scent balancing Calabrian bergamot, airy musks, green bourbon geranium, Peru balsam, benzoin, and guaiac wood.",
             longDescription: "PRADA Paradigme Eau de Parfum offers a distinctive olfactory experience built around an inverted architecture inspired by Prada's iconic triangle. Its composition sets it apart with a balanced interplay between woody warmth and citrus freshness. The olfactory pyramid opens with Calabrian bergamot and airy musks, develops into a heart of green bourbon geranium with pink floral nuances, and settles into a base of Peru balsam resin, benzoin, and guaiac wood. The refillable bottle pairs architectural design with a black-to-green gradient lacquer finish and Prada's tilted signature triangle, reflecting the care, innovation, and modern sustainability behind the fragrance.",
             mainAccords: ['Citrus', 'Musky', 'Geranium', 'Balsamic', 'Woody', 'Fresh'],
             sizes: [
@@ -3314,25 +3314,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: 'Parfum homme · Boisé Citronné · Une création Prada innovante équilibrant bergamote de Calabre, muscs aériens, géranium bourbon vert, baume du Pérou, benjoin et bois de gaïac.',
-                longDescription: "PRADA Paradigme Eau de Parfum offre une expérience olfactive singulière construite autour d'une architecture inversée inspirée du triangle iconique de Prada. Sa composition se distingue par un équilibre entre la chaleur des bois et la fraîcheur des agrumes. La pyramide olfactive s'ouvre sur la bergamote de Calabre et des muscs aériens, évolue vers un cœur de géranium bourbon vert aux nuances florales rosées, puis se pose sur un fond de résine de baume du Pérou, de benjoin et de bois de gaïac. Son flacon rechargeable associe un design architectural à une laque dégradée noir-vert et au triangle incliné signature de Prada, reflétant le soin, l'innovation et la durabilité moderne de la fragrance.",
+                subtitle: 'Parfum homme � Bois� Citronn� � Une cr�ation Prada innovante �quilibrant bergamote de Calabre, muscs a�riens, g�ranium bourbon vert, baume du P�rou, benjoin et bois de ga�ac.',
+                longDescription: "PRADA Paradigme Eau de Parfum offre une exp�rience olfactive singuli�re construite autour d'une architecture invers�e inspir�e du triangle iconique de Prada. Sa composition se distingue par un �quilibre entre la chaleur des bois et la fra�cheur des agrumes. La pyramide olfactive s'ouvre sur la bergamote de Calabre et des muscs a�riens, �volue vers un c�ur de g�ranium bourbon vert aux nuances florales ros�es, puis se pose sur un fond de r�sine de baume du P�rou, de benjoin et de bois de ga�ac. Son flacon rechargeable associe un design architectural � une laque d�grad�e noir-vert et au triangle inclin� signature de Prada, refl�tant le soin, l'innovation et la durabilit� moderne de la fragrance.",
                 notes: [
-                    { title: 'BERGAMOTE & MUSCS AÉRIENS', text: 'La bergamote de Calabre et les muscs aériens créent une ouverture lumineuse, propre et fraîchement contemporaine.' },
-                    { title: 'GÉRANIUM BOURBON VERT', text: 'Le cœur dévoile un géranium bourbon vert aux nuances florales rosées, apportant élégance, équilibre et un noyau aromatique raffiné.' },
-                    { title: 'BAUME DU PÉROU, BENJOIN & BOIS DE GAÏAC', text: 'Un fond boisé balsamique de baume du Pérou, de benjoin et de bois de gaïac apporte une chaleur douce et un sillage posé de longue durée.' }
+                    { title: 'BERGAMOTE & MUSCS A�RIENS', text: 'La bergamote de Calabre et les muscs a�riens cr�ent une ouverture lumineuse, propre et fra�chement contemporaine.' },
+                    { title: 'G�RANIUM BOURBON VERT', text: 'Le c�ur d�voile un g�ranium bourbon vert aux nuances florales ros�es, apportant �l�gance, �quilibre et un noyau aromatique raffin�.' },
+                    { title: 'BAUME DU P�ROU, BENJOIN & BOIS DE GAI�AC', text: 'Un fond bois� balsamique de baume du P�rou, de benjoin et de bois de ga�ac apporte une chaleur douce et un sillage pos� de longue dur�e.' }
                 ]
             },
             images: [
-                '/assets/images/products/prada/prada-paradigme-eau-de-parfum/1.png',
-                '/assets/images/products/prada/prada-paradigme-eau-de-parfum/2.jpg',
-                '/assets/images/products/prada/prada-paradigme-eau-de-parfum/3.jpg'
+                'assets/images/products/prada/prada-paradigme-eau-de-parfum/1.png',
+                'assets/images/products/prada/prada-paradigme-eau-de-parfum/2.jpg',
+                'assets/images/products/prada/prada-paradigme-eau-de-parfum/3.jpg'
             ]
         },
         'prada luna rossa men edt': {
             brand: 'PRADA',
             gender: 'men',
             fragranceProfile: { longevity: 85, longevityLabel: '8-10h', sillage: 73, sillageLabel: 'Strong', season: 86, seasonLabel: 'All Year' },
-            subtitle: "Men's fragrance · Aromatic Fresh · A sophisticated Prada interpretation of lavender with bitter orange, clary sage, spearmint, Ambroxan, and amber woods.",
+            subtitle: "Men's fragrance � Aromatic Fresh � A sophisticated Prada interpretation of lavender with bitter orange, clary sage, spearmint, Ambroxan, and amber woods.",
             longDescription: 'PRADA Luna Rossa Men EDT is a sophisticated fragrance by Daniela Andrier that reinterprets classic ingredients with an innovative approach. At the center is a fresh and masculine vision of lavender, blending traditional elegance with modern aromatic energy. The fragrance opens with the vibrant freshness of bitter orange essence, sharpening the primary fresh facet of lavender with a bitter and stimulating edge. The heart unfolds with aromatic lavender essence, clary sage oil, and nanah spearmint, evoking open spaces and rich natural nuances. In the base, the sensual warmth of Ambroxan and the woody touch of hibiscus amber combine synthetic and natural elements to create a refined, dignified, and timeless sophistication.',
             mainAccords: ['Lavender', 'Citrus', 'Aromatic', 'Mint', 'Ambroxan', 'Woody'],
             sizes: [
@@ -3357,17 +3357,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             ],
             fr: {
-                subtitle: 'Parfum homme · Frais Aromatique · Une interprétation Prada sophistiquée de la lavande avec orange amère, sauge sclarée, menthe nanah, Ambroxan et bois ambrés.',
-                longDescription: 'PRADA Luna Rossa Men EDT est une fragrance sophistiquée signée Daniela Andrier qui réinterprète des ingrédients classiques avec une approche innovante. Au centre se trouve une vision fraîche et masculine de la lavande, mêlant élégance traditionnelle et énergie aromatique moderne. Le parfum s’ouvre sur la fraîcheur vibrante de l’essence d’orange amère, qui souligne la facette fraîche principale de la lavande avec une intensité stimulante et amère. Le cœur se déploie autour de l’essence aromatique de lavande, de l’huile de sauge sclarée et des essences de menthe nanah, évoquant les grands espaces et la richesse des éléments naturels. En fond, la chaleur sensuelle de l’Ambroxan et la touche boisée de l’ambre d’hibiscus associent ingrédients synthétiques et naturels pour créer une sophistication raffinée, digne et intemporelle.',
+                subtitle: 'Parfum homme � Frais Aromatique � Une interpr�tation Prada sophistiqu�e de la lavande avec orange am�re, sauge sclar�e, menthe nanah, Ambroxan et bois ambr�s.',
+                longDescription: 'PRADA Luna Rossa Men EDT est une fragrance sophistiqu�e sign�e Daniela Andrier qui r�interpr�te des ingr�dients classiques avec une approche innovante. Au centre se trouve une vision fra�che et masculine de la lavande, m�lant �l�gance traditionnelle et �nergie aromatique moderne. Le parfum s�ouvre sur la fra�cheur vibrante de l�essence d�orange am�re, qui souligne la facette fra�che principale de la lavande avec une intensit� stimulante et am�re. Le c�ur se d�ploie autour de l�essence aromatique de lavande, de l�huile de sauge sclar�e et des essences de menthe nanah, �voquant les grands espaces et la richesse des �l�ments naturels. En fond, la chaleur sensuelle de l�Ambroxan et la touche bois�e de l�ambre d�hibiscus associent ingr�dients synth�tiques et naturels pour cr�er une sophistication raffin�e, digne et intemporelle.',
                 notes: [
-                    { title: 'ORANGE AMÈRE & LAVANDE', text: 'L’essence d’orange amère dynamise l’ouverture et met en lumière une facette propre et contemporaine de la lavande avec une fraîcheur masculine éclatante.' },
-                    { title: 'LAVANDE, SAUGE SCLARÉE & MENTHE NANAH', text: 'Le cœur aromatique superpose lavande, huile de sauge sclarée et menthe nanah pour une fraîcheur verte ample aux nuances naturelles riches.' },
-                    { title: 'AMBROXAN & AMBRE D’HIBISCUS', text: 'L’Ambroxan et l’ambre boisé d’hibiscus créent un fond chaleureux et sensuel, mêlant précision synthétique et profondeur raffinée intemporelle.' }
+                    { title: 'ORANGE AM�RE & LAVANDE', text: 'L�essence d�orange am�re dynamise l�ouverture et met en lumi�re une facette propre et contemporaine de la lavande avec une fra�cheur masculine �clatante.' },
+                    { title: 'LAVANDE, SAUGE SCLAR�E & MENTHE NANAH', text: 'Le c�ur aromatique superpose lavande, huile de sauge sclar�e et menthe nanah pour une fra�cheur verte ample aux nuances naturelles riches.' },
+                    { title: 'AMBROXAN & AMBRE D�HIBISCUS', text: 'L�Ambroxan et l�ambre bois� d�hibiscus cr�ent un fond chaleureux et sensuel, m�lant pr�cision synth�tique et profondeur raffin�e intemporelle.' }
                 ]
             },
             images: [
-                '/assets/images/products/prada/prada-luna-rossa-men-edt/1.jfif',
-                '/assets/images/products/prada/prada-luna-rossa-men-edt/2.webp'
+                'assets/images/products/prada/prada-luna-rossa-men-edt/1.jfif',
+                'assets/images/products/prada/prada-luna-rossa-men-edt/2.webp'
             ]
         }
     };
@@ -3420,7 +3420,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        /* ── Bottom nav Panier badge ── */
+        /* -- Bottom nav Panier badge -- */
         const bnavBadge = document.getElementById('ipoBnavCartBadge');
         if (bnavBadge) {
             if (count > 0) {
@@ -3533,17 +3533,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return normalizedPath.includes('/pages/') ? '../prices.json' : 'prices.json';
     };
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  SIZES.JSON  –  Dynamic size configuration
+    // -------------------------------------------------------------------------
+    //  SIZES.JSON  �  Dynamic size configuration
     //
     //  As a store owner: ONLY edit sizes.json to add / remove / rename sizes.
-    //  - Remove a size entry  →  that pill disappears from every product page
-    //  - Add a size entry     →  it appears automatically (if priced in prices.json)
-    //  - Change "label"       →  the button text updates everywhere
-    //  - Change "type"        →  controls whether it shows in Décants or Full Bottles
+    //  - Remove a size entry  ?  that pill disappears from every product page
+    //  - Add a size entry     ?  it appears automatically (if priced in prices.json)
+    //  - Change "label"       ?  the button text updates everywhere
+    //  - Change "type"        ?  controls whether it shows in D�cants or Full Bottles
     //
     //  The "key" must match the key used in prices.json  (e.g. "50ml", "100ml")
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
 
     const getSizesJsonPath = () => {
         const p = window.location.pathname.replace(/\\/g, '/');
@@ -3554,18 +3554,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastKnownSizesSnapshot   = '';
     let sizesConfigWatcherStarted = false;
 
-    // Live runtime lists – populated from sizes.json as soon as it loads.
+    // Live runtime lists � populated from sizes.json as soon as it loads.
     // The defaults below are fallbacks so the site still works without the file.
     let _runtimeSizeOrder    = ['10ml', '20ml', '30ml', '50ml', '100ml', '150ml'];
     let _runtimeDecantKeys   = new Set(['10ml', '20ml', '30ml']);
     // Per-product size overrides from sizes.json "products" section.
     // Keyed by product slug (lowercase); value = ordered array of size keys.
     let _runtimeProductSizes = {}; // { [productId]: string[] }
-    // Key → priceKey: maps the sizes.json key to the prices.json field name.
-    // This is what makes label/key changes safe — prices are ALWAYS looked up
+    // Key ? priceKey: maps the sizes.json key to the prices.json field name.
+    // This is what makes label/key changes safe � prices are ALWAYS looked up
     // via priceKey, never via the visible label or renamed key.
     let _runtimePriceKeyBySizeKey = {}; // { [sizeKey]: pricesJsonFieldName }
-    // Key → label: maps the sizes.json key to the display label for that size.
+    // Key ? label: maps the sizes.json key to the display label for that size.
     let _runtimeLabelBySizeKey    = {}; // { [sizeKey]: string }
 
     /**
@@ -3578,7 +3578,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then((res) => (res.ok ? res.json() : null))
                 .then((data) => {
                     if (!data || !Array.isArray(data.sizes)) return null;
-                    // Strip comment/meta entries — only keep objects with a real "key"
+                    // Strip comment/meta entries � only keep objects with a real "key"
                     const valid = data.sizes.filter(
                         (e) => e && typeof e.key === 'string' && /[a-z0-9]/i.test(e.key)
                     );
@@ -3626,7 +3626,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * Starts a background poller (every 5 s) that reloads the page when
-     * sizes.json changes — so edits take effect without a manual refresh.
+     * sizes.json changes � so edits take effect without a manual refresh.
      */
     const watchSizesJsonChanges = () => {
         if (sizesConfigWatcherStarted) return;
@@ -3651,10 +3651,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { poll(); setInterval(poll, 5000); }, 4000);
     };
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     //  Keep PRICE_SIZE_ORDER for backward-compat. The live order is
     //  _runtimeSizeOrder (from sizes.json). Both start from the same defaults.
-    // ─────────────────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
     const PRICE_SIZE_ORDER = ['10ml', '20ml', '30ml', '50ml', '100ml', '150ml'];
 
     const formatPriceAmount = (amount) => {
@@ -3670,7 +3670,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formatSizeLabel = (sizeKey) => {
         const k = String(sizeKey || '').trim().toLowerCase();
         // Use the label defined in sizes.json if available; fall back to
-        // deriving the label from the key text (e.g. "50ml" → "50 ML").
+        // deriving the label from the key text (e.g. "50ml" ? "50 ML").
         return _runtimeLabelBySizeKey[k] || String(sizeKey || '').replace(/ml$/i, ' ML').toUpperCase();
     };
 
@@ -3682,15 +3682,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let pricesJsonPromise = null;
     let priceConfigWatcherStarted = false;
     let lastKnownPricesSnapshot = '';
-    // Firestore productOverrides cache — populated inside loadPricesJson.
+    // Firestore productOverrides cache � populated inside loadPricesJson.
     // Used by getConfiguredSizeKeys to honour admin size changes even for
     // products that have a per-product whitelist in sizes.json.
     let _firestoreProductOverridesCache = {};
 
     // Cache for extra images array saved on admin-uploaded products
-    let _firestoreProductImagesCache = {}; // slug → string[]
+    let _firestoreProductImagesCache = {}; // slug ? string[]
 
-    // Normalize a size key so "10" → "10ml", "50 ml" → "50ml", "10ml" → "10ml"
+    // Normalize a size key so "10" ? "10ml", "50 ml" ? "50ml", "10ml" ? "10ml"
     const _normSzKey = (sz) => {
         const s = String(sz || '').trim().toLowerCase().replace(/\s+/g, '');
         return /^\d+$/.test(s) ? s + 'ml' : s;
@@ -3715,7 +3715,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         snap.forEach(d => {
                             const slug = d.id;
                             const raw  = d.data();
-                            // Normalize all size keys ("10" → "10ml") for consistency
+                            // Normalize all size keys ("10" ? "10ml") for consistency
                             const normPrices = {};
                             if (raw.prices && typeof raw.prices === 'object') {
                                 Object.entries(raw.prices).forEach(([sz, price]) => {
@@ -3768,7 +3768,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     const numPrice = Number(price);
                                     if (numPrice > 0) _normAdminSizes[normSz] = numPrice;
                                 });
-                                // All sizes have price 0 — treat as out of stock, don't inject
+                                // All sizes have price 0 � treat as out of stock, don't inject
                                 if (Object.keys(_normAdminSizes).length === 0) return;
                                 pricesById[slug] = { ..._normAdminSizes };
                                 // Always overwrite _firestoreProductOverridesCache so that
@@ -3794,7 +3794,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
                                     _firestoreProductOverridesCache[slug].mainAccords = p.accords;
                                 }
-                                // Cache notes (top/heart/base) — convert to the array format used by the renderer
+                                // Cache notes (top/heart/base) � convert to the array format used by the renderer
                                 if (p.notes && typeof p.notes === 'object' && (p.notes.top || p.notes.heart || p.notes.base)) {
                                     if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
                                     const _notesArr = [];
@@ -3828,14 +3828,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
                                     _firestoreProductOverridesCache[slug].originalPrices = p.originalPrices;
                                 }
-                                // Cache admin-set promo (sale) prices — lower than full price
+                                // Cache admin-set promo (sale) prices � lower than full price
                                 if (p.promoPrices && typeof p.promoPrices === 'object') {
                                     if (!_firestoreProductOverridesCache[slug]) _firestoreProductOverridesCache[slug] = {};
                                     _firestoreProductOverridesCache[slug].promoPrices = p.promoPrices;
                                 }
                             });
                         } catch (_) { /* non-blocking */ }
-                    } catch (_) { /* non-blocking — storefront still works from prices.json */ }
+                    } catch (_) { /* non-blocking � storefront still works from prices.json */ }
                     return pricesById;
                 });
         }
@@ -3955,9 +3955,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ? fromJsonWhitelist
             : positivePriceKeys.length ? positivePriceKeys : baseKeys;
 
-        // ── Apply Firestore admin overrides (HIGHEST PRIORITY) ────────────
+        // -- Apply Firestore admin overrides (HIGHEST PRIORITY) ------------
         // When the admin has saved price/size overrides, those are the AUTHORITATIVE
-        // size list — the sizes.json whitelist is bypassed completely.
+        // size list � the sizes.json whitelist is bypassed completely.
         // This ensures renamed, added, or removed sizes always reflect exactly
         // what was saved in the admin Product Manager.
         const _fsOv = _firestoreProductOverridesCache[normalizedId];
@@ -3969,13 +3969,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const _fsPrices  = _fsOv.prices;
                 const hasFsPrices = _fsPrices && typeof _fsPrices === 'object' && Object.keys(_fsPrices).length > 0;
                 if (hasFsPrices) {
-                    // Firestore has explicit prices → derive the size list ENTIRELY from those.
+                    // Firestore has explicit prices ? derive the size list ENTIRELY from those.
                     // Any size with a positive price that is not in removedSizes is shown.
                     canonicalKeys = Object.entries(_fsPrices)
                         .filter(([sz, price]) => sz && Number(price) > 0 && !_fsRemoved.has(sz))
                         .map(([sz]) => sz);
                 } else if (_fsRemoved.size > 0) {
-                    // No Firestore prices but some sizes were removed → filter the whitelist.
+                    // No Firestore prices but some sizes were removed ? filter the whitelist.
                     canonicalKeys = canonicalKeys.filter(k => !_fsRemoved.has(k));
                 }
             }
@@ -4061,7 +4061,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const extractSizeLabelsFromText = (value) => prioritizeBottleSizeLabels(
         String(value || '')
-            .split(/\s-\s|·|\||,/)
+            .split(/\s-\s|�|\||,/)
             .map((part) => part.trim())
             .filter(Boolean)
             .map((part) => {
@@ -4083,7 +4083,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const getCatalogCardSizeLabels = (productName, productId, priceText, pricesById, fallbackLabels = []) => {
         const productOverride = productDetailOverrides[canonicalProductName(productName)] || null;
 
-        // prices.json takes priority — if this product has priced sizes there, use them
+        // prices.json takes priority � if this product has priced sizes there, use them
         const pricedOptions = getAvailableSizePriceOptions(productId, pricesById).filter((entry) => entry.price > 0);
         if (pricedOptions.length) {
             const fullBottleOptions = pricedOptions.filter((entry) => !entry.isDecante);
@@ -4172,20 +4172,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // on the Unique House page so images are identical site-wide.
         const fixedUniqueHouseGallery = {
             'akdeniz-unique-e-luxury': [
-                '/assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
-                '/assets/images/products/unique-luxury/akdeniz-uniquee-luxury/2.webp'
+                'assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
+                'assets/images/products/unique-luxury/akdeniz-uniquee-luxury/2.webp'
             ],
             'izmir-unique-e-luxury': [
-                '/assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
-                '/assets/images/products/unique-luxury/izmir-uniquee-luxury/2.webp'
+                'assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
+                'assets/images/products/unique-luxury/izmir-uniquee-luxury/2.webp'
             ],
             'ocean-the-rive-unique-e-luxury': [
-                '/assets/images/products/unique-luxury/ocean-the-rive/1.avif',
-                '/assets/images/products/unique-luxury/ocean-the-rive/2.webp'
+                'assets/images/products/unique-luxury/ocean-the-rive/1.avif',
+                'assets/images/products/unique-luxury/ocean-the-rive/2.webp'
             ],
             'woud-and-mood-absolute-by-unique-e-luxury': [
-                '/assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
-                '/assets/images/products/unique-luxury/woud-and-mood-absolute/2.webp'
+                'assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
+                'assets/images/products/unique-luxury/woud-and-mood-absolute/2.webp'
             ],
             'chocolate-makes-me-happy': [
                 'https://res.cloudinary.com/dp5eszu4p/image/upload/v1777287393/idqhoenngo6pgtzldy7n.jpg'
@@ -4200,7 +4200,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const seenImages = new Set();
         // If Firestore has images for this product (admin product), they are fully
-        // authoritative — do NOT include the URL-param image, which may be stale
+        // authoritative � do NOT include the URL-param image, which may be stale
         // (e.g. the old main image after it has been replaced in the admin panel).
         const orderedImages = fsImages.length > 0
             ? [...fsImages, ...overrideImages]
@@ -4227,7 +4227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return priceEl;
     };
 
-    // ── Firestore product cards injected into New Arrivals ───────────────────
+    // -- Firestore product cards injected into New Arrivals -------------------
     let _firestoreProductsInjected = false;
     // Cache injected carousel card nodes so limitNewArrivalsToLatest always finds them
     // even if called before or during Firestore injection.
@@ -4287,7 +4287,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const slug  = p.slug || toSlugLocal(p.name || docSnap.id);
                 const sizes = p.sizes;
 
-                // All sizes have price 0 — treat as out of stock, skip card
+                // All sizes have price 0 � treat as out of stock, skip card
                 if (!Object.values(sizes).some(price => Number(price) > 0)) return;
 
                 // Inject into pricesById so Add to Cart works
@@ -4308,10 +4308,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     `<span class="card-size-badge text-[10px] font-extrabold px-4 py-1.5 rounded-full leading-none ${i === 0 ? 'bg-[#111827] text-white' : 'border border-gray-200 text-gray-500'}">${sz.toUpperCase()}</span>`
                 ).join('') + (hiddenCount > 0 ? `<span class="card-size-badge text-[10px] font-semibold px-3 py-1.5 rounded-full leading-none border border-dashed border-gray-300 text-gray-400">+${hiddenCount}</span>` : '');
 
-                // Price line — one entry per size
-                const priceText = sizeKeys.map(sz => `${sz.toUpperCase()} ${fmtMad(sizes[sz])}`).join(' · ');
+                // Price line � one entry per size
+                const priceText = sizeKeys.map(sz => `${sz.toUpperCase()} ${fmtMad(sizes[sz])}`).join(' � ');
 
-                // 7-day NEW → LIMITED badge logic (overridden by admin badge if set)
+                // 7-day NEW ? LIMITED badge logic (overridden by admin badge if set)
                 const addedAt = p.addedAt?.toDate ? p.addedAt.toDate() : new Date(p.addedAt || 0);
                 const isNew7Days = (Date.now() - addedAt.getTime()) < 7 * 24 * 60 * 60 * 1000;
                 const _badgeText = p.badge ? p.badge.toUpperCase() : (isNew7Days ? 'NEW' : 'LIMITED');
@@ -4331,7 +4331,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const _isFr = currentLanguage === 'fr';
                 const _addToCartLabel = _isFr ? 'AJOUTER AU PANIER' : 'ADD TO CART';
 
-                // Stock indicator — show whenever admin has set stockLeft
+                // Stock indicator � show whenever admin has set stockLeft
                 const _stockLeft = typeof p.stockLeft === 'number' ? p.stockLeft : null;
                 const _stockHtml = _stockLeft === null ? ''
                     : _stockLeft === 0
@@ -4433,7 +4433,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) { console.error('[ipordise] Firestore product injection failed:', err); }
     };
 
-    // ── Size picker for Firestore product cards ───────────────────────────────
+    // -- Size picker for Firestore product cards -------------------------------
     const initFirestoreCartPicker = () => {
         let pickerModal = document.getElementById('ipo-fs-picker-modal');
         if (!pickerModal) {
@@ -4491,7 +4491,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
         sizesDiv.innerHTML = sizePriceHtml;
 
-        // Bind directly to each button — avoids the stale-closure bug where
+        // Bind directly to each button � avoids the stale-closure bug where
         // cancelling the modal (via backdrop or Cancel) left the old { once:true }
         // listener on sizesDiv, causing a previously-cancelled product to be
         // re-added to the cart when the picker was opened for a different product.
@@ -4535,7 +4535,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Always inject Firestore products if carousel exists, even if no static cards
         if (!cards.length && !carousel) return;
 
-        // Load both configs in parallel — sizes + prices
+        // Load both configs in parallel � sizes + prices
         const [pricesById] = await Promise.all([loadPricesJson(), loadSizesJson()]);
 
         // Expose globally so the Firestore size picker can read prices
@@ -4544,7 +4544,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Sort static cards immediately (visible while Firestore fetch is in flight)
         if (cards.length) limitNewArrivalsToLatest(pricesById);
 
-        // Inject Firestore admin products — awaited so they're in DOM before final re-sort
+        // Inject Firestore admin products � awaited so they're in DOM before final re-sort
         await injectFirestoreProductCards(pricesById);
 
         if (!cards.length) return;
@@ -4626,7 +4626,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name,
             brand,
             sizes: (card.dataset.productSizes || extractSizeLabelsFromCard(card).join('|') || '').trim(),
-            price: (card.dataset.productPrice || currentPriceEl?.textContent || '').trim().replace(/\s*-\s*/g, ' · '),
+            price: (card.dataset.productPrice || currentPriceEl?.textContent || '').trim().replace(/\s*-\s*/g, ' � '),
             oldPrice: (card.dataset.productOldPrice || oldPriceEl?.textContent || '').trim(),
             discount: (card.dataset.productDiscount || discountEl?.textContent || '').trim(),
             reviews: (card.dataset.productReviews || (reviewsEl?.textContent || '').replace(/[^0-9]/g, '') || '0').trim(),
@@ -5043,238 +5043,238 @@ document.addEventListener('DOMContentLoaded', () => {
             brand: 'RABANNE',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg'
+            image: 'assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg'
         },
         {
             name: 'Rabanne One Million Elixir Intense',
             brand: 'RABANNE',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp'
+            image: 'assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp'
         },
         {
             name: 'Givenchy Gentleman Society Amber Eau de Parfum',
             brand: 'GIVENCHY',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg'
+            image: 'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg'
         },
         {
             name: 'Givenchy Gentleman Society Nomade Eau de Parfum',
             brand: 'GIVENCHY',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/1.webp'
+            image: 'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/1.webp'
         },
         {
             name: 'Givenchy Gentleman Society Extreme Eau de Parfum',
             brand: 'GIVENCHY',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp'
+            image: 'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp'
         },
         {
             name: 'Gentleman Private Reserve Eau de Parfum',
             brand: 'GIVENCHY',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png'
+            image: 'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png'
         },
         {
             name: 'Jean Paul Gaultier Scandal Elixir',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg'
         },
         {
             name: 'Jean Paul Gaultier Scandal Intense Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg'
         },
         {
             name: 'Emporio Armani Stronger With You Intensely EDP',
             brand: 'GIORGIO ARMANI',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/2.webp'
+            image: 'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/2.webp'
         },
         {
             name: 'Armani Stronger With You Powerfully Eau de Parfum',
             brand: 'GIORGIO ARMANI',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp'
+            image: 'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp'
         },
         {
             name: 'Armani Stronger With You Absolutely Perfume',
             brand: 'GIORGIO ARMANI',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp'
+            image: 'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp'
         },
         {
             name: 'Yves Saint Laurent Y Eau de Parfum',
             brand: 'YVES SAINT LAURENT',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp'
+            image: 'assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp'
         },
         {
             name: 'Yves Saint Laurent Myslf Eau de Parfum',
             brand: 'YVES SAINT LAURENT',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/1.jpg'
+            image: 'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/1.jpg'
         },
         {
             name: 'Yves Saint Laurent MYSLF Le Parfum',
             brand: 'YVES SAINT LAURENT',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/1.webp'
+            image: 'assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/1.webp'
         },
         {
             name: 'Jean Paul Gaultier Le male Elixir Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp'
         },
         {
             name: 'Jean Paul Gaultier Le Male In Blue Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg'
         },
         {
             name: 'Jean Paul Gaultier Le Male Eau de Toilette',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png'
+            image: 'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png'
         },
         {
             name: 'Jean Paul Gaultier Le male Le parfum Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/2.webp'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/2.webp'
         },
         {
             name: 'Jean Paul Gaultier Le Beau Eau de Parfum',
             brand: 'JEAN PAUL GAULTIER',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp'
+            image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp'
         },
         {
             name: 'Azzaro The Most Wanted Eau de Parfum Intense',
             brand: 'AZZARO',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp'
+            image: 'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp'
         },
         {
             name: 'Azzaro Forever Wanted Elixir Eau de Parfum',
             brand: 'AZZARO',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg'
+            image: 'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg'
         },
         {
             name: 'Azzaro The Most Wanted Parfum',
             brand: 'AZZARO',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp'
+            image: 'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp'
         },
         {
             name: 'Valentino Donna Born in Roma Eau de Parfum',
             brand: 'VALENTINO',
             price: '',
             gender: 'women',
-            image: '/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/1.webp'
+            image: 'assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/1.webp'
         },
         {
             name: 'Valentino Uomo Born In Roma Coral Fantasy Eau de Toilette',
             brand: 'VALENTINO',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/1.webp'
+            image: 'assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/1.webp'
         },
         {
             name: 'Valentino Born in Roma Extradose Eau de Toilette',
             brand: 'VALENTINO',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg'
+            image: 'assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg'
         },
         {
             name: 'Dior Homme Intense Eau de Parfum',
             brand: 'DIOR',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg'
+            image: 'assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg'
         },
         {
             name: 'Valentino Born In Roma Uomo Intense Eau de Parfum',
             brand: 'VALENTINO',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp'
+            image: 'assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp'
         },
         {
             name: 'Valentino Born In Roma Donna Intense Eau de Parfum',
             brand: 'VALENTINO',
             price: '',
             gender: 'women',
-            image: '/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp'
+            image: 'assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp'
         },
         {
             name: 'Valentino Uomo Born in Roma Eau de Toilette',
             brand: 'VALENTINO',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/1.jpg'
+            image: 'assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/1.jpg'
         },
         {
             name: 'Valentino Uomo Born In Roma Purple Melancholia Eau de Toilette',
             brand: 'VALENTINO',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/1.jpg'
+            image: 'assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/1.jpg'
         },
         {
             name: 'Carolina Herrera Bad Boy Eau de Toilette',
             brand: 'CAROLINA HERRERA',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg'
+            image: 'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg'
         },
         {
             name: 'Gucci Guilty Absolu de Parfum Pour Homme',
             brand: 'GUCCI',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp'
+            image: 'assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp'
         },
         {
             name: 'Gucci Guilty Elixir Pour Homme',
             brand: 'GUCCI',
             price: '',
             gender: 'men',
-            image: '/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp'
+            image: 'assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp'
         },
         {
             name: 'Montale Arabians Tonka',
             brand: 'MONTALE',
             price: '',
             gender: 'unisex',
-            image: '/assets/images/products/montale/montale-arabians-tonka/1.webp'
+            image: 'assets/images/products/montale/montale-arabians-tonka/1.webp'
         }
     ];
 
@@ -5336,7 +5336,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const parts = String(priceText || '')
-            .split(/\s-\s|·|\||,/)
+            .split(/\s-\s|�|\||,/)
             .map((part) => part.trim())
             .filter(Boolean);
 
@@ -5350,7 +5350,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return sizeLabels.length ? sizeLabels.slice(0, 2) : ['ONE SIZE'];
     };
 
-    /* ── Format long description: splits plain text into styled blocks ── */
+    /* -- Format long description: splits plain text into styled blocks -- */
     function formatLongDesc(text) {
         if (!text) return '';
         // Sections we can detect and label
@@ -5404,7 +5404,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'AKDENIZ',
                 brand: "UNIQUE'E LUXURY",
                 price: '100ML 2 300 MAD',
-                image: '/assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
+                image: 'assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
                 gender: 'unisex'
             },
             {
@@ -5412,7 +5412,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'IZMIR',
                 brand: "UNIQUE'E LUXURY",
                 price: '100ML 2 300 MAD',
-                image: '/assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
+                image: 'assets/images/products/unique-luxury/izmir-uniquee-luxury/1.avif',
                 gender: 'unisex'
             },
             {
@@ -5420,7 +5420,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'OCEAN THE RIVE',
                 brand: "UNIQUE'E LUXURY",
                 price: '100ML 5 000 MAD',
-                image: '/assets/images/products/unique-luxury/ocean-the-rive/1.avif',
+                image: 'assets/images/products/unique-luxury/ocean-the-rive/1.avif',
                 gender: 'unisex'
             },
             {
@@ -5428,7 +5428,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'WOUD AND MOOD ABSOLUTE',
                 brand: "UNIQUE'E LUXURY",
                 price: '100ML 3 600 MAD',
-                image: '/assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
+                image: 'assets/images/products/unique-luxury/woud-and-mood-absolute/1.avif',
                 gender: 'unisex'
             },
             {
@@ -5436,7 +5436,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'APHRODISIAC TOUCH',
                 brand: "UNIQUE'E LUXURY",
                 price: '',
-                image: '/assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
+                image: 'assets/images/products/unique-luxury/aphrodisiac-touch/1.webp',
                 gender: 'unisex'
             },
             {
@@ -5444,7 +5444,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'KUTAY',
                 brand: "UNIQUE'E LUXURY",
                 price: '',
-                image: '/assets/images/products/unique-luxury/kutay/1.webp',
+                image: 'assets/images/products/unique-luxury/kutay/1.webp',
                 gender: 'unisex'
             },
             {
@@ -5573,7 +5573,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const kicker = relatedTrack.closest('section')?.querySelector('.product-section-kicker');
             const heading = relatedTrack.closest('section')?.querySelector('[data-i18n="product.related_title"]');
             if (kicker) kicker.textContent = currentLanguage === 'fr' ? 'Profil Olfactif Similaire' : 'Similar Scent Profile';
-            if (heading) heading.textContent = currentLanguage === 'fr' ? 'Vous aimerez peut-être aussi' : 'You Might Also Enjoy';
+            if (heading) heading.textContent = currentLanguage === 'fr' ? 'Vous aimerez peut-�tre aussi' : 'You Might Also Enjoy';
         }
 
         relatedTrack.innerHTML = recommendations.map((product) => {
@@ -5717,42 +5717,42 @@ document.addEventListener('DOMContentLoaded', () => {
         const accentPool = getReviewAccentPool(productName, productOverride);
         const cities = ['Casablanca', 'Rabat', 'Marrakech', 'Tangier', 'Agadir', 'Fes'];
         const openerTemplates = currentLanguage === 'fr' ? [
-            'Le %ACCENT% est ce qui m\'a immédiatement accroché — très naturel et bien intégré.',
-            'Honnêtement, le %ACCENT% est bien mieux que ce à quoi je m\'attendais pour ce prix.',
-            'On sent clairement le %ACCENT% dès l\'application, sans que ce soit écrasant.',
-            'Ce qui distingue ce parfum, c\'est vraiment le %ACCENT% — il persiste longtemps.',
-            'J\'ai commandé après avoir lu des avis et le %ACCENT% est exactement comme décrit.',
-            'Le %ACCENT% donne au parfum une vraie personnalité, pas générique du tout.',
-            'Mon entourage m\'a complimenté sur le %ACCENT% sans que je leur dise ce que je portais.',
-            'Le %ACCENT% ressort bien sur ma peau et tient facilement toute la journée.'
+            'Le %ACCENT% est ce qui m\'a imm�diatement accroch� � tr�s naturel et bien int�gr�.',
+            'Honn�tement, le %ACCENT% est bien mieux que ce � quoi je m\'attendais pour ce prix.',
+            'On sent clairement le %ACCENT% d�s l\'application, sans que ce soit �crasant.',
+            'Ce qui distingue ce parfum, c\'est vraiment le %ACCENT% � il persiste longtemps.',
+            'J\'ai command� apr�s avoir lu des avis et le %ACCENT% est exactement comme d�crit.',
+            'Le %ACCENT% donne au parfum une vraie personnalit�, pas g�n�rique du tout.',
+            'Mon entourage m\'a compliment� sur le %ACCENT% sans que je leur dise ce que je portais.',
+            'Le %ACCENT% ressort bien sur ma peau et tient facilement toute la journ�e.'
         ] : [
-            'Honestly the %ACCENT% surprised me — very natural and nothing like the cheaper versions I tried before.',
+            'Honestly the %ACCENT% surprised me � very natural and nothing like the cheaper versions I tried before.',
             'The %ACCENT% comes through really well on my skin, not synthetic at all.',
-            'I ordered based on reviews and the %ACCENT% is exactly as described — no disappointment.',
+            'I ordered based on reviews and the %ACCENT% is exactly as described � no disappointment.',
             'What sets this apart is the %ACCENT%, it sticks around for hours without becoming annoying.',
             'People around me noticed the %ACCENT% before I even mentioned what I was wearing.',
-            'The %ACCENT% gives it a real character — nothing generic about this one.',
+            'The %ACCENT% gives it a real character � nothing generic about this one.',
             'First time trying this and the %ACCENT% blew me away, very well blended.',
             'I was skeptical at first but the %ACCENT% won me over within the first hour.'
         ];
         const closerTemplates = currentLanguage === 'fr' ? [
-            'La livraison à Casablanca était rapide et l\'emballage était impeccable. Je repasserai commande.',
-            'Ça tient facilement 8 à 10 heures sur moi, ce qui est rare à ce prix.',
-            'L\'emballage à la réception était soigné et le flacon correspond exactement aux photos.',
-            'La sillage est présent sans être agressif — parfait pour le bureau ou les sorties.',
-            'Le rapport qualité-prix est franchement bon, je recommande sans hésiter.',
-            'Je l\'offre aussi en cadeau maintenant, la présentation est vraiment classe.',
-            'Commande reçue en 2 jours, parfum authentique, très satisfied de l\'expérience globale.',
-            'C\'est devenu mon parfum de référence — je suis revenu commander un deuxième flacon.'
+            'La livraison � Casablanca �tait rapide et l\'emballage �tait impeccable. Je repasserai commande.',
+            '�a tient facilement 8 � 10 heures sur moi, ce qui est rare � ce prix.',
+            'L\'emballage � la r�ception �tait soign� et le flacon correspond exactement aux photos.',
+            'La sillage est pr�sent sans �tre agressif � parfait pour le bureau ou les sorties.',
+            'Le rapport qualit�-prix est franchement bon, je recommande sans h�siter.',
+            'Je l\'offre aussi en cadeau maintenant, la pr�sentation est vraiment classe.',
+            'Commande re�ue en 2 jours, parfum authentique, tr�s satisfied de l\'exp�rience globale.',
+            'C\'est devenu mon parfum de r�f�rence � je suis revenu commander un deuxi�me flacon.'
         ] : [
-            'Delivery to me was fast and the packaging was solid — no damage at all.',
+            'Delivery to me was fast and the packaging was solid � no damage at all.',
             'It easily lasts 8 to 10 hours on my skin, which is hard to find at this price.',
             'The bottle looks exactly like the photos, really premium in person.',
             'The sillage is noticeable without being aggressive, great for work or a night out.',
-            'Value for money here is genuinely good — I have no complaints at all.',
+            'Value for money here is genuinely good � I have no complaints at all.',
             'I already gifted one to a friend and they loved it too.',
             'Got it in 2 days, completely authentic, very happy with the whole experience.',
-            'This has become my go-to — already came back to order a second bottle.'
+            'This has become my go-to � already came back to order a second bottle.'
         ];
 
         return Array.from({ length: 3 }, (_, index) => {
@@ -5774,7 +5774,7 @@ document.addEventListener('DOMContentLoaded', () => {
                              'Karim D',   'Bilal H', 'Tarik N', 'Zakaria L', 'Soufiane R', 'Adil C'];
         const femaleNames = ['Salma B', 'Imane E', 'Nadia H', 'Sara A', 'Khadija R', 'Aya M',
                              'Fatima Z', 'Hind K',  'Meryem O', 'Amina S',  'Loubna T',   'Zineb F'];
-        // pravatar.cc img IDs — curated for MENA/Moroccan appearance
+        // pravatar.cc img IDs � curated for MENA/Moroccan appearance
         const maleAvatarImgs   = [11, 12, 14, 20, 33, 51, 53, 57, 60, 65, 68, 70];
         const femaleAvatarImgs = [5,   9, 16, 23, 25, 29, 36, 38, 44, 47, 56, 64];
         const audience = inferFragranceAudience(productName, productOverride);
@@ -5893,7 +5893,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { label: 'lavender', weight: 16, color: '#b8addf', textColor: '#233044', terms: ['lavender'] },
         { label: 'vanilla', weight: 16, color: '#efe8c6', textColor: '#2b2b2b', terms: ['vanilla', 'tonka'] },
         { label: 'amber', weight: 15, color: '#d4a373', textColor: '#ffffff', terms: ['amber', 'ambery', 'ambree', 'ambrofix'] },
-        { label: 'aromatic', weight: 14, color: '#61c3b1', textColor: '#163b38', terms: ['aromatic', 'sage', 'mint', 'fougere', 'fougère', 'herbal'] },
+        { label: 'aromatic', weight: 14, color: '#61c3b1', textColor: '#163b38', terms: ['aromatic', 'sage', 'mint', 'fougere', 'foug�re', 'herbal'] },
         { label: 'woody', weight: 14, color: '#9b7a5f', textColor: '#ffffff', terms: ['woody', 'woods', 'wood', 'cedar', 'sandalwood', 'vetiver', 'patchouli'] },
         { label: 'fresh spicy', weight: 13, color: '#b6cf84', textColor: '#26321d', terms: ['fresh spice', 'fresh spicy', 'pepper', 'cardamom', 'nutmeg', 'ginger', 'spicy'] },
         { label: 'warm spicy', weight: 13, color: '#c2885d', textColor: '#ffffff', terms: ['warm spicy', 'spice', 'spicy', 'nutmeg', 'pepper', 'cardamom', 'ginger', 'cinnamon'] },
@@ -6107,7 +6107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const productId = params.get('id') || toProductDataId(productName);
         const productBrand = params.get('brand') || 'IPORDISE';
 
-        /* ── Show the product image immediately, before prices load ── */
+        /* -- Show the product image immediately, before prices load -- */
         const earlyImage = normalizeImagePathForCurrentPage(params.get('image') || '');
         const earlyOverride = productDetailOverrides[canonicalProductName(productName)] || null;
         if (earlyOverride && !earlyOverride.slug) earlyOverride && (earlyOverride._slug = productId);
@@ -6129,7 +6129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (_isCloudinaryAdminImg
             && !_firestoreProductImagesCache[_normalizedPidEarly]
             && !productDetailOverrides[canonicalProductName(productName)]) {
-            // Product was deleted from admin panel — redirect to discover page
+            // Product was deleted from admin panel � redirect to discover page
             const _discoverPath = window.location.pathname.includes('/pages/')
                 ? '../discover.html' : 'discover.html';
             window.location.replace(_discoverPath);
@@ -6159,7 +6159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             && _fsOvForPid.prices && typeof _fsOvForPid.prices === 'object'
             && Object.keys(_fsOvForPid.prices).length > 0;
 
-        // ── Disabled product: show unavailable banner and skip all size rendering ──
+        // -- Disabled product: show unavailable banner and skip all size rendering --
         if (_fsDisabled) {
             const sizeSelEl = document.getElementById('sizeSelector');
             if (sizeSelEl) {
@@ -6177,10 +6177,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (_fsDisabled) {
             productSizePriceOptions = [];
         } else if (jsonControlsThisProduct && !_fsHasPrices) {
-            // sizes.json is fully authoritative — build options DIRECTLY from it.
+            // sizes.json is fully authoritative � build options DIRECTLY from it.
             // This bypasses getAvailableSizePriceOptions / getConfiguredSizeKeys
             // entirely so nothing else can drop or reorder custom size keys.
-            // (Skipped when Firestore admin has explicit overrides — those take priority.)
+            // (Skipped when Firestore admin has explicit overrides � those take priority.)
             const _rawPrices = pricesById && typeof pricesById === 'object' ? pricesById[_normalizedPid] : null;
             productSizePriceOptions = _jsonSizeList.map((sizeKey) => {
                 // Use priceKey to read prices.json so renamed keys still find their price
@@ -6199,7 +6199,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             });
         } else {
-            // No sizes.json entry, or Firestore admin has explicit overrides — use the standard pipeline
+            // No sizes.json entry, or Firestore admin has explicit overrides � use the standard pipeline
             productSizePriceOptions = getAvailableSizePriceOptions(productId, pricesById, requestedSizeKeys);
 
             if (!_fsHasPrices) {
@@ -6227,7 +6227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const resolvedBrand = productOverride?.brand || productBrand;
-        // Admin-uploaded products (Cloudinary) have no fake reviews — show only real ones
+        // Admin-uploaded products (Cloudinary) have no fake reviews � show only real ones
         const honestReviews = _isCloudinaryAdminImg ? 0 : getHonestReviewCount(productName, productReviews);
         const honestRating = _isCloudinaryAdminImg ? null : getHonestRatingValue(productName);
         setText('productName', productName);
@@ -6236,7 +6236,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setText('productPrice', productPrice);
         setText('productOldPrice', productOldPrice || '');
         setText('productDiscount', productDiscount || '');
-        // For admin products, skip fake review count — real reviews script handles this
+        // For admin products, skip fake review count � real reviews script handles this
         if (!_isCloudinaryAdminImg) {
             setText('productReviewsCount', `(${honestReviews} reviews)`);
         }
@@ -6261,7 +6261,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const moreReviewsToolbar = document.querySelector('.customer-reviews-toolbar p');
         if (moreReviewsToolbar && !_isCloudinaryAdminImg) {
-            moreReviewsToolbar.textContent = `5 star · ${honestReviews} reviews`;
+            moreReviewsToolbar.textContent = `5 star � ${honestReviews} reviews`;
         }
 
         // Skip fake review content for admin-uploaded products
@@ -6274,8 +6274,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // For admin products, prefer Firestore fragranceProfile; fallback to static productOverride
         const fp = (_fsOvForPid?.fragranceProfile) || productOverride?.fragranceProfile;
         if (fp) {
-            const sillageFr = { 'Strong': 'Fort', 'Very Strong': 'Très fort', 'Moderate': 'Modéré', 'Moderate-Strong': 'Modéré-Fort', 'Powerful': 'Puissant' };
-            const seasonFr = { 'All Year': "Toute l'année", 'Fall/Winter': 'Automne/Hiver', 'Spring/Summer': 'Printemps/Été' };
+            const sillageFr = { 'Strong': 'Fort', 'Very Strong': 'Tr�s fort', 'Moderate': 'Mod�r�', 'Moderate-Strong': 'Mod�r�-Fort', 'Powerful': 'Puissant' };
+            const seasonFr = { 'All Year': "Toute l'ann�e", 'Fall/Winter': 'Automne/Hiver', 'Spring/Summer': 'Printemps/�t�' };
             const dnaRows = document.querySelectorAll('#fragranceProfile .product-dna-row');
             const profiles = [
                 { fill: fp.longevity, label: fp.longevityLabel },
@@ -6354,7 +6354,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // ── Ingredients tab: render from INCI lookup ──────────────────────
+        // -- Ingredients tab: render from INCI lookup ----------------------
         const ingredientsPanel = document.getElementById('tab-ingredients');
         if (ingredientsPanel) {
             const inciKey = canonicalProductName(productName);
@@ -6386,11 +6386,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // ── Stock warning & admin badge banner on product detail page ────────
+        // -- Stock warning & admin badge banner on product detail page --------
         const _fsStockLeft = _fsOvForPid?.stockLeft;
         const _fsBadge     = _fsOvForPid?.badge;
         if (_isCloudinaryAdminImg) {
-            // ── Inject admin badge into the brand-row badge span ─────────────
+            // -- Inject admin badge into the brand-row badge span -------------
             const _badgeEl = document.getElementById('productBadge');
             if (_badgeEl) {
                 if (_fsBadge) {
@@ -6416,7 +6416,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // ── Stock info bar near the size selector ────────────────────────
+            // -- Stock info bar near the size selector ------------------------
             const _sizeSelEl = document.getElementById('sizeSelector');
             if (_sizeSelEl && !document.getElementById('fsProdInfoBar')) {
                 let _stockIcon = '', _stockText = '', _stockColor = '', _stockBg = '', _stockBorder = '';
@@ -6424,7 +6424,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     _stockIcon = 'fa-circle-xmark'; _stockText = 'Out of stock';
                     _stockColor = '#6b7280'; _stockBg = 'rgba(107,114,128,0.07)'; _stockBorder = 'rgba(107,114,128,0.18)';
                 } else if (typeof _fsStockLeft === 'number' && _fsStockLeft <= 5) {
-                    _stockIcon = 'fa-fire'; _stockText = `Only <strong>${_fsStockLeft} left</strong> — order soon`;
+                    _stockIcon = 'fa-fire'; _stockText = `Only <strong>${_fsStockLeft} left</strong> � order soon`;
                     _stockColor = '#dc2626'; _stockBg = 'rgba(220,38,38,0.06)'; _stockBorder = 'rgba(220,38,38,0.2)';
                 } else if (typeof _fsStockLeft === 'number' && _fsStockLeft <= 15) {
                     _stockIcon = 'fa-triangle-exclamation'; _stockText = `<strong>${_fsStockLeft} remaining</strong> in stock`;
@@ -6444,7 +6444,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // ── Sale badge in the stock row ────────────────────────────────────
+            // -- Sale badge in the stock row ------------------------------------
             const _promoPricesMap = _fsOvForPid?.promoPrices || _fsOvForPid?.originalPrices;
             const _stockRowEl = document.querySelector('.ipp-stock-row');
             if (_stockRowEl && _promoPricesMap && typeof _promoPricesMap === 'object') {
@@ -6457,7 +6457,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const pct = Math.round((1 - promoP / fullP) * 100);
                         if (pct > _bestPct) _bestPct = pct;
                     } else if (fullP > 0 && promoP > fullP) {
-                        // legacy: originalPrices stored as WAS price (higher) — still works
+                        // legacy: originalPrices stored as WAS price (higher) � still works
                         const pct = Math.round((1 - fullP / promoP) * 100);
                         if (pct > _bestPct) _bestPct = pct;
                     }
@@ -6466,7 +6466,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const _saleBadge = document.createElement('span');
                     _saleBadge.className = 'ipp-sale-badge';
                     _saleBadge.style.cssText = 'display:inline-flex;align-items:center;gap:5px;font-size:0.7rem;font-weight:800;color:#fff;background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:999px;padding:5px 12px;letter-spacing:0.04em;box-shadow:0 2px 8px rgba(21,128,61,0.32);text-transform:uppercase';
-                    _saleBadge.innerHTML = `<i class="fas fa-bolt" style="font-size:9px"></i> Sale · Up to ${_bestPct}% off`;
+                    _saleBadge.innerHTML = `<i class="fas fa-bolt" style="font-size:9px"></i> Sale � Up to ${_bestPct}% off`;
                     _stockRowEl.appendChild(_saleBadge);
                 }
             }
@@ -6543,7 +6543,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (firstThumb) firstThumb.src = defaultImage;
             if (firstThumbBtn) firstThumbBtn.dataset.image = defaultImage;
 
-            // ── Update OG / Twitter meta tags with the resolved product image ──
+            // -- Update OG / Twitter meta tags with the resolved product image --
             // Helps JS-executing crawlers (LinkedIn, Discord, Slack, Telegram) show
             // the actual product photo instead of the site logo.
             try {
@@ -6606,7 +6606,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const _adminPromoPrices = _fsOvForPid?.promoPrices || null;
         const _adminOrigPrices  = _fsOvForPid?.originalPrices || null; // legacy
         // Debug: log what Firestore returned for promotion prices
-        console.log('[IPORDISE] Promotion data for', _normalizedPid, '→ promoPrices:', JSON.stringify(_adminPromoPrices), '| originalPrices(legacy):', JSON.stringify(_adminOrigPrices), '| prices:', JSON.stringify(_fsOvForPid?.prices || {}));
+        console.log('[IPORDISE] Promotion data for', _normalizedPid, '? promoPrices:', JSON.stringify(_adminPromoPrices), '| originalPrices(legacy):', JSON.stringify(_adminOrigPrices), '| prices:', JSON.stringify(_fsOvForPid?.prices || {}));
         const sizeOptions = sizeButtons.map((btn) => {
             const sizeKey = String(btn.dataset.sizeKey || '').trim().toLowerCase();
             const matchedOption = productSizePriceOptions.find((entry) => entry.sizeKey === sizeKey);
@@ -6672,7 +6672,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (qtyBoxContainer) qtyBoxContainer.classList.add('hidden');
                 return;
             }
-            // Product has prices — always show the Add to Cart button
+            // Product has prices � always show the Add to Cart button
             [addToCartBtn, stickyAddToCartBtn].forEach((button) => {
                 if (!button) return;
                 button.classList.remove('hidden');
@@ -6693,7 +6693,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Build the WhatsApp message
             const sizeInfo = selectedSize ? `\n- Taille : ${selectedSize.label}` : '';
-            const msg = `Bonjour IPORDISE,\n\nJe suis intéressé(e) par le produit suivant :\n\n- Produit : ${productName}\n- Marque : ${resolvedBrand}${sizeInfo}\n\nMerci !`;
+            const msg = `Bonjour IPORDISE,\n\nJe suis int�ress�(e) par le produit suivant :\n\n- Produit : ${productName}\n- Marque : ${resolvedBrand}${sizeInfo}\n\nMerci !`;
             const waHref = `https://wa.me/212663750210?text=${encodeURIComponent(msg)}`;
 
             // Full-width prominent block below the CTA
@@ -6740,14 +6740,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     discountEl.style.display = '';
                 }
             } else if (selectedSize) {
-                // No sale for this size — clear any previously shown values
+                // No sale for this size � clear any previously shown values
                 if (oldPriceEl && (_adminPromoPrices !== null || _adminOrigPrices !== null)) { oldPriceEl.innerHTML = ''; oldPriceEl.style.display = 'none'; }
                 if (discountEl && (_adminPromoPrices !== null || _adminOrigPrices !== null)) { discountEl.innerHTML = ''; discountEl.style.display = 'none'; }
             }
 
             // Update the selected-size top-right label inside the price card
             if (priceSelectedSizeEl) {
-                priceSelectedSizeEl.textContent = selectedSize ? `≈ ${selectedSize.label}` : '';
+                priceSelectedSizeEl.textContent = selectedSize ? `� ${selectedSize.label}` : '';
             }
 
             // Toggle price card vs out-of-stock box depending on selected size
@@ -6762,13 +6762,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     mainPriceEl.classList.toggle('text-gray-400', !sizeHasPrice);
                     mainPriceEl.classList.toggle('text-gray-900', !!sizeHasPrice);
                     if (!selectedSize) {
-                        mainPriceEl.textContent = '—';
+                        mainPriceEl.textContent = '�';
                     } else if (sizeHasPrice) {
                         if (_hasActivePromo) {
                             // Show the lower promo price as the main price
                             mainPriceEl.innerHTML = `${selectedSize.promoPrice}<span class="price-unit"> DH</span>`;
                         } else {
-                            // Split "270 DH" → number + styled unit span
+                            // Split "270 DH" ? number + styled unit span
                             const priceMatch = selectedPrice.match(/^(.+?)\s*(DH)$/);
                             if (priceMatch) {
                                 mainPriceEl.innerHTML = `${priceMatch[1]}<span class="price-unit"> ${priceMatch[2]}</span>`;
@@ -6884,7 +6884,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const qty = qtyValue ? Number(qtyValue.textContent) || 1 : 1;
             const nextItems = readCart();
-            // Don't include brand in the match — cart.js normalisation drops the brand
+            // Don't include brand in the match � cart.js normalisation drops the brand
             // field, so checking it would fail to detect existing items and create duplicates.
             const existingIndex = nextItems.findIndex(
                 (item) => item.name === productName && item.size === selectedSize.label
@@ -6975,9 +6975,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        /* ── Inject Product structured data (JSON-LD) — Google Merchant Listings compliant ── */
+        /* -- Inject Product structured data (JSON-LD) � Google Merchant Listings compliant -- */
         (() => {
-            // Guard: only inject on the product detail page — never on category/discover pages
+            // Guard: only inject on the product detail page � never on category/discover pages
             const _pagePath = window.location.pathname.replace(/\\/g, '/').toLowerCase();
             const _isProductPage = _pagePath.endsWith('/product.html') || _pagePath.endsWith('/product')
                 || (new URLSearchParams(window.location.search).has('id') && _pagePath.includes('product'));
@@ -7004,7 +7004,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Canonical product page URL
             const schemaUrl = `${window.location.origin}/pages/product.html?id=${encodeURIComponent(productId)}&name=${encodeURIComponent(productName)}`;
 
-            // Absolute primary image URL — required by Merchant listings
+            // Absolute primary image URL � required by Merchant listings
             const schemaImageUrl = toAbsoluteUrl(defaultImage);
 
             // Plain-text description (strip HTML tags from longDescription if present)
@@ -7012,7 +7012,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 || `${productName} by ${resolvedBrand}: an elegant luxury fragrance crafted for a modern, long-lasting trail.`;
             const plainDesc = rawDesc.replace(/<[^>]+>/g, ' ').replace(/\s{2,}/g, ' ').trim();
 
-            // ── Safe price resolver ──────────────────────────────────────────────
+            // -- Safe price resolver ----------------------------------------------
             // Priority 1: lowest positive unitPrice from the loaded size/price options
             const pricedOptions = productSizePriceOptions.filter((entry) => entry.unitPrice > 0);
             const cheapestOption = pricedOptions.reduce(
@@ -7027,7 +7027,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return Number.isFinite(num) && num > 0 ? num : 0;
             })();
 
-            // Priority 3: hardened fallback — always produces a valid positive number
+            // Priority 3: hardened fallback � always produces a valid positive number
             const resolvedPrice = cheapestOption
                 ? cheapestOption.unitPrice
                 : urlPriceRaw > 0
@@ -7035,9 +7035,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     : 100; // safe catalog floor in MAD
 
             const schemaPrice = String(resolvedPrice); // always a non-empty numeric string
-            // ────────────────────────────────────────────────────────────────────
+            // --------------------------------------------------------------------
 
-            // Base schema — always present
+            // Base schema � always present
             const schema = {
                 '@context': 'https://schema.org/',
                 '@type': 'Product',
@@ -7056,10 +7056,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // image must be an array of absolute URLs (Google requires ≥1)
+            // image must be an array of absolute URLs (Google requires =1)
             if (schemaImageUrl) schema['image'] = [schemaImageUrl];
 
-            // offers — price + priceCurrency are ALWAYS present (Google hard requirement)
+            // offers � price + priceCurrency are ALWAYS present (Google hard requirement)
             schema['offers'] = {
                 '@type': 'Offer',
                 'url': schemaUrl,
@@ -7082,7 +7082,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.head.appendChild(ldScript);
         })();
 
-        /* ── Re-render all language-sensitive content on language switch ── */
+        /* -- Re-render all language-sensitive content on language switch -- */
         onLanguageChange(() => {
             // Subtitle
             const subtitleEl = document.getElementById('productSubtitle');
@@ -7120,8 +7120,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // DNA fragrance profile sillage / season labels
             if (fp) {
-                const sillageFrMap = { 'Strong': 'Fort', 'Very Strong': 'Très fort', 'Moderate': 'Modéré', 'Moderate-Strong': 'Modéré-Fort', 'Powerful': 'Puissant' };
-                const seasonFrMap = { 'All Year': "Toute l'année", 'Fall/Winter': 'Automne/Hiver', 'Spring/Summer': 'Printemps/Été' };
+                const sillageFrMap = { 'Strong': 'Fort', 'Very Strong': 'Tr�s fort', 'Moderate': 'Mod�r�', 'Moderate-Strong': 'Mod�r�-Fort', 'Powerful': 'Puissant' };
+                const seasonFrMap = { 'All Year': "Toute l'ann�e", 'Fall/Winter': 'Automne/Hiver', 'Spring/Summer': 'Printemps/�t�' };
                 const dnaRows = document.querySelectorAll('#fragranceProfile .product-dna-row');
                 const relabels = [
                     { label: fp.longevityLabel },
@@ -7168,15 +7168,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const ratingSummaryCount = document.querySelector('.review-summary .text-sm.text-gray-500.mt-1');
             if (ratingSummaryCount) {
                 ratingSummaryCount.textContent = currentLanguage === 'fr'
-                    ? `Basé sur ${honestReviews} avis vérifiés`
+                    ? `Bas� sur ${honestReviews} avis v�rifi�s`
                     : `Based on ${honestReviews} verified reviews`;
             }
 
             const moreReviewsToolbar = document.querySelector('.customer-reviews-toolbar p');
             if (moreReviewsToolbar) {
                 moreReviewsToolbar.textContent = currentLanguage === 'fr'
-                    ? `5 étoiles · ${honestReviews} avis`
-                    : `5 star · ${honestReviews} reviews`;
+                    ? `5 �toiles � ${honestReviews} avis`
+                    : `5 star � ${honestReviews} reviews`;
             }
 
             // Re-render related products cards so button text updates
@@ -7193,7 +7193,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const allMenus = [];
 
-        // ── Mobile backdrop (only rendered on ≤640px via CSS) ──
+        // -- Mobile backdrop (only rendered on =640px via CSS) --
         const backdrop = document.createElement('div');
         backdrop.className = 'account-menu-backdrop';
         document.body.appendChild(backdrop);
@@ -7210,7 +7210,7 @@ document.addEventListener('DOMContentLoaded', () => {
             menu.style.setProperty('--acm-top', `${tRect.bottom + 10}px`);
             // Right: align the menu's right edge with the trigger's right edge,
             // clamped so it never clips off-screen on the left.
-            const menuWidth = Math.min(window.innerWidth * 0.92, 408); // 25.5rem ≈ 408px
+            const menuWidth = Math.min(window.innerWidth * 0.92, 408); // 25.5rem � 408px
             const desiredRight = window.innerWidth - tRect.right;
             const clampedRight = Math.max(8, Math.min(desiredRight, window.innerWidth - menuWidth - 8));
             menu.style.setProperty('--acm-right', `${clampedRight}px`);
@@ -7332,7 +7332,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Close immediately on any scroll — the popup stays open on mouse-wheel
+        // Close immediately on any scroll � the popup stays open on mouse-wheel
         // only when the user is scrolling inside the menu itself.
         const onScroll = () => closeAllMenus();
         window.addEventListener('scroll', onScroll, { passive: true });
@@ -7345,9 +7345,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // ── Favourite toast notification ──────────────────────────────────────────
+    // -- Favourite toast notification ------------------------------------------
     // Shows a slim pill toast after adding / removing a favourite.
-    // Self-contained — no external dependencies.
+    // Self-contained � no external dependencies.
     const showFavouriteToast = (() => {
         let _timer = null;
         return (added, productName) => {
@@ -7455,7 +7455,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             }
 
-            const firstChunk = raw.split('·')[0]?.trim() || raw;
+            const firstChunk = raw.split('�')[0]?.trim() || raw;
             const match = firstChunk.match(/(\d+\s*ML)\s*([0-9]+(?:[.,][0-9]+)?)\s*DH/i);
 
             if (match) {
@@ -7483,7 +7483,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const wishlist = readWishlist();
             const ids = new Set(wishlist.map((item) => item.id));
 
-            // Live query — always reflects current DOM (safe after carousel refresh)
+            // Live query � always reflects current DOM (safe after carousel refresh)
             document.querySelectorAll('.product-favorite-btn').forEach((button) => {
                 const favoriteId = button.dataset.favoriteId;
                 const isActive = !!favoriteId && ids.has(favoriteId);
@@ -7498,7 +7498,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const setHeaderWishlistCount = () => {
             const count = readWishlist().length;
-            // Live query — always reflects current DOM (safe after applyOfficialHeaderFooter)
+            // Live query � always reflects current DOM (safe after applyOfficialHeaderFooter)
             document.querySelectorAll('.header-icon-btn[aria-label="Wishlist"]').forEach((button) => {
                 button.classList.toggle('is-active', count > 0);
                 let badge = button.querySelector('.header-wishlist-badge');
@@ -7720,7 +7720,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (button.dataset.wishlistNavBound) return;
                 button.dataset.wishlistNavBound = 'true';
 
-                // FIX: Same pattern — ensure the wishlist button is in its own dedicated
+                // FIX: Same pattern � ensure the wishlist button is in its own dedicated
                 // wrapper so .header-wishlist-wrap only covers the wishlist icon, not the
                 // entire icons row (which would conflict with .header-account-wrap).
                 const parentEl = button.parentElement;
@@ -7758,10 +7758,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     event.preventDefault();
                     const inPages = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
                     if (!isAuthenticatedUser()) {
-                        // Not logged in → send to login page
+                        // Not logged in ? send to login page
                         navigateWithTransition(inPages ? 'login.html' : 'pages/login.html');
                     } else {
-                        // Logged in → send to My Favourites section in dashboard
+                        // Logged in ? send to My Favourites section in dashboard
                         navigateWithTransition(inPages
                             ? 'dashboard.html#section-wishlist'
                             : 'pages/dashboard.html#section-wishlist');
@@ -7801,7 +7801,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Expose a global re-sync helper so external async callers (initCatalogPrices,
         // pageshow bfcache restore, etc.) can trigger a full-heart-state refresh without
         // needing access to this closure's inner functions.
-        // Only set once — the closures are equivalent across subsequent initWishlistButtons calls.
+        // Only set once � the closures are equivalent across subsequent initWishlistButtons calls.
         if (!window.__ipordise_sync_fav_ui) {
             window.__ipordise_sync_fav_ui = () => {
                 syncFavoriteButtonsUI();
@@ -7967,7 +7967,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Prev arrow
             parts.push(`<button type="button" class="discover-page-btn discover-page-arrow${currentPage === 1 ? ' disabled' : ''}" data-discover-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''} aria-label="Previous page"><i class="fas fa-chevron-left text-[10px]"></i></button>`);
 
-            // Page numbers – show up to 5 centered around current page
+            // Page numbers � show up to 5 centered around current page
             const delta = 2;
             const rangeStart = Math.max(1, currentPage - delta);
             const rangeEnd = Math.min(totalPages, currentPage + delta);
@@ -8316,7 +8316,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 scrollY: hasSavedScrollY ? savedScrollYNumber : savedState?.scrollY
             });
         } else if (urlFilter && allowedFilters.has(urlFilter)) {
-            // Arrived via a filter link (e.g. ?filter=2026) — scroll to the grid
+            // Arrived via a filter link (e.g. ?filter=2026) � scroll to the grid
             window.requestAnimationFrame(() => scrollToGrid());
         }
 
@@ -8478,7 +8478,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="flex items-start justify-between gap-3 pb-3 border-b border-gray-100">
                         <div>
                             <p class="font-semibold text-gray-800">${item.name || 'Product'}</p>
-                            <p class="text-xs text-gray-500">${item.size || '-'} · Qty ${Math.max(1, Number(item.quantity || 1))}</p>
+                            <p class="text-xs text-gray-500">${item.size || '-'} � Qty ${Math.max(1, Number(item.quantity || 1))}</p>
                         </div>
                         <span class="font-semibold">${isPricePending ? 'Pending confirmation' : formatMad(itemTotal)}</span>
                     </div>
@@ -8764,7 +8764,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const baseIndex = touchStartIndex >= 0
                     ? touchStartIndex
                     : getNearestCarouselItemIndex(carousel, items);
-                // Fast flick (velocity > 0.6 px/ms) → advance 2 cards at once
+                // Fast flick (velocity > 0.6 px/ms) ? advance 2 cards at once
                 const steps = Math.abs(velocityX) > 0.6 ? 2 : 1;
                 pendingTouchTargetIndex = Math.max(0, Math.min(items.length - 1, baseIndex + direction * steps));
             }
@@ -8861,72 +8861,72 @@ document.addEventListener('DOMContentLoaded', () => {
         updateIndicator();
     };
 
-    /* ── Flash Offers daily rotation ─────────────────────────────────────────
+    /* -- Flash Offers daily rotation -----------------------------------------
      *  Every 24 hours a new seed-shuffled set of priced products is shown.
      *  Products are ONLY included when prices.json has at least one price > 0.
      *  If JS / prices fail, the static HTML fallback remains untouched.
-     * ────────────────────────────────────────────────────────────────────── */
+     * ---------------------------------------------------------------------- */
     const initFlashOffersRotation = async () => {
         const carousel = document.getElementById('productCarousel');
         if (!carousel) return;
 
-        /* ── Complete catalog with metadata ───────────────────────────────── */
+        /* -- Complete catalog with metadata --------------------------------- */
         const FLASH_POOL = [
             { id: 'armani-stronger-with-you-absolutely-perfume',
               name: 'Armani Stronger With You Absolutely Perfume', brand: 'GIORGIO ARMANI',
-              image: '/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp',
+              image: 'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp',
               badge: 'NEW', badgeRotate: 'NEW|BEST OFFER|TOP TREND', reviews: 5 },
             { id: 'armani-stronger-with-you-powerfully-eau-de-parfum',
               name: 'Armani Stronger With You Powerfully Eau de Parfum', brand: 'GIORGIO ARMANI',
-              image: '/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
+              image: 'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
               badge: 'HOT PICK', badgeRotate: 'NEW|HOT PICK|BEST SELLER', reviews: 6 },
             { id: 'azzaro-forever-wanted-elixir-eau-de-parfum',
               name: 'Azzaro Forever Wanted Elixir Eau de Parfum', brand: 'AZZARO',
-              image: '/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
+              image: 'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|ELIXIR|LIMITED', reviews: 9 },
             { id: 'azzaro-the-most-wanted-eau-de-parfum-intense',
               name: 'Azzaro The Most Wanted Eau de Parfum Intense', brand: 'AZZARO',
-              image: '/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp',
+              image: 'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp',
               badge: 'NEW', badgeRotate: 'NEW|INTENSE|MUST HAVE', reviews: 11 },
             { id: 'azzaro-the-most-wanted-parfum',
               name: 'Azzaro The Most Wanted Parfum', brand: 'AZZARO',
-              image: '/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp',
+              image: 'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp',
               badge: 'NEW', badgeRotate: 'NEW|TOP PICK|LUXURY', reviews: 7 },
             { id: 'bleu-de-chanel-eau-de-parfum-spray',
               name: 'BLEU DE CHANEL Eau de Parfum spray', brand: 'CHANEL',
-              image: '/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg',
+              image: 'assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg',
               badge: 'ICONIC', badgeRotate: 'ICONIC|BEST SELLER|CLASSIC', reviews: 24 },
             { id: 'boss-bottled-absolu-intense',
               name: 'Boss Bottled Absolu Intense', brand: 'HUGO BOSS',
-              image: '/assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg',
+              image: 'assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg',
               badge: 'NEW', badgeRotate: 'NEW|INTENSE|JUST LANDED', reviews: 11 },
             { id: 'carolina-herrera-bad-boy-eau-de-toilette',
               name: 'Carolina Herrera Bad Boy Eau de Toilette', brand: 'CAROLINA HERRERA',
-              image: '/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg',
+              image: 'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|BAD BOY|BOLD', reviews: 14 },
             { id: 'gucci-guilty-absolu-de-parfum-pour-homme',
               name: 'Gucci Guilty Absolu de Parfum Pour Homme', brand: 'GUCCI',
-              image: '/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp',
+              image: 'assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp',
               badge: 'LUXURY', badgeRotate: 'LUXURY|GUILTY|TOP PICK', reviews: 8 },
             { id: 'hugo-boss-boss-bottled-elixir-intense',
               name: 'Hugo Boss Boss Bottled Elixir Intense', brand: 'HUGO BOSS',
-              image: '/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg',
+              image: 'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg',
               badge: 'NEW', badgeRotate: 'NEW|ELIXIR|JUST LANDED', reviews: 9 },
             { id: 'dior-homme-intense-eau-de-parfum',
               name: 'DIOR HOMME INTENSE Eau de Parfum', brand: 'DIOR',
-              image: '/assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg',
+              image: 'assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg',
               badge: 'INTENSE', badgeRotate: 'INTENSE|DIOR|ICONIC', reviews: 16 },
             { id: 'dior-sauvage-eau-de-parfum',
               name: 'DIOR SAUVAGE Eau de Parfum', brand: 'DIOR',
-              image: '/assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg',
+              image: 'assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|SAUVAGE|BEST SELLER', reviews: 28 },
             { id: 'emporio-armani-stronger-with-you-intensely-edp',
               name: 'Emporio Armani Stronger With You Intensely EDP', brand: 'GIORGIO ARMANI',
-              image: '/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/2.webp',
+              image: 'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/2.webp',
               badge: 'BEST OFFER', badgeRotate: 'NEW|BEST SELLER|BEST OFFER', reviews: 13 },
             { id: 'gentleman-private-reserve-eau-de-parfum',
               name: 'Gentleman Private Reserve Eau de Parfum', brand: 'GIVENCHY',
-              image: '/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png',
+              image: 'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png',
               badge: 'RARE', badgeRotate: 'RARE|LUXURY|LIMITED', reviews: 7 },
             { id: 'guerlain-l-homme-ideal-l-intense-eau-de-parfum',
               name: "Guerlain L'Homme Id\u00e9al L'Intense Eau de Parfum", brand: 'GUERLAIN',
@@ -8938,23 +8938,23 @@ document.addEventListener('DOMContentLoaded', () => {
               badge: 'NEW', badgeRotate: 'NEW|EXTREME|LUXURY', reviews: 14 },
             { id: 'hugo-boss-the-scent-for-him-elixir',
               name: 'Hugo Boss The Scent For Him Elixir', brand: 'HUGO BOSS',
-              image: '/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png',
+              image: 'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png',
               badge: 'NEW', badgeRotate: 'NEW|HOT PICK|JUST LANDED', reviews: 8 },
             { id: 'givenchy-gentleman-society-amber-eau-de-parfum',
               name: 'Givenchy Gentleman Society Amber Eau de Parfum', brand: 'GIVENCHY',
-              image: '/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg',
+              image: 'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|AMBER|LUXURY', reviews: 10 },
             { id: 'versace-dylan-blue-eau-de-toilette',
               name: 'Versace Dylan Blue Eau de Toilette', brand: 'VERSACE',
-              image: '/assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg',
+              image: 'assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|BLUE|MEDITERRANEAN', reviews: 18 },
             { id: 'versace-eros-flame-eau-de-parfum',
               name: 'Versace Eros Flame Eau de Parfum', brand: 'VERSACE',
-              image: '/assets/images/products/versace/versace-eros-flame-eau-de-parfum/1.jpg',
+              image: 'assets/images/products/versace/versace-eros-flame-eau-de-parfum/1.jpg',
               badge: 'NEW', badgeRotate: 'NEW|FLAME|SEDUCTIVE', reviews: 16 },
         ];
 
-        /* ── Seeded deterministic shuffle (same result for same date) ─────── */
+        /* -- Seeded deterministic shuffle (same result for same date) ------- */
         const seededShuffle = (items, seedText) => {
             let s = 0;
             for (let i = 0; i < seedText.length; i++) { s = ((s << 5) - s) + seedText.charCodeAt(i); s |= 0; }
@@ -8974,7 +8974,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return arr;
         };
 
-        /* ── Load prices and filter pool to products with real prices ─────── */
+        /* -- Load prices and filter pool to products with real prices ------- */
         let pricesById = {};
         try { pricesById = await loadPricesJson(); } catch (_) { /* keep empty */ }
 
@@ -9002,7 +9002,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // If nothing priced, do not touch the existing static HTML
         if (!validProducts.length) return;
 
-        /* ── Pick current 2-hour block set (persist in localStorage) ────── */
+        /* -- Pick current 2-hour block set (persist in localStorage) ------ */
         const _now = new Date();
         const _twoHourBlock = Math.floor(_now.getHours() / 2) * 2;
         const timeKey  = _now.toISOString().slice(0, 10) + '-' + String(_twoHourBlock).padStart(2, '0') + 'h';
@@ -9037,13 +9037,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 .forEach((k) => localStorage.removeItem(k));
         } catch (_) { /* ignore */ }
 
-        /* ── Build card HTML for each product ────────────────────────────── */
+        /* -- Build card HTML for each product ------------------------------ */
         const esc = (str) => String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
         const buildFlashCard = (product) => {
             const priceText  = product._fsPrice || formatCatalogPrice(product.id, pricesById);
             const sizeLabels = product._fsPrice
-                ? priceText.split(/\s*[·\-]\s*/).slice(0, 2).map(s => s.split(/\s+/)[0]).filter(Boolean)
+                ? priceText.split(/\s*[�\-]\s*/).slice(0, 2).map(s => s.split(/\s+/)[0]).filter(Boolean)
                 : getCatalogCardSizeLabels(product.name, product.id, priceText, pricesById, []);
 
             // Strip brand prefix from display name (brand is shown separately)
@@ -9061,7 +9061,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return `<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-lg transition duration-300 group js-product-link relative flex flex-col h-full min-w-[260px] max-w-[260px] snap-start shrink-0 cursor-pointer lux-reveal" data-product-name="${esc(product.name)}" data-id="${esc(product.id)}" data-product-brand="${esc(product.brand)}" data-product-price="${esc(priceText)}" data-product-old-price="" data-product-discount="" data-product-reviews="${product.reviews || 8}" data-product-image="${esc(product.image)}" tabindex="0" data-product-sizes="${esc(sizeLabels.join('|'))}"><span class="absolute top-4 left-4 bg-gray-900 text-white text-[10px] uppercase font-bold px-2 py-1 rounded product-rotating-badge badge-state-new" data-badge-rotate="${esc(product.badgeRotate || 'NEW|FLASH|LIMITED')}">${esc(product.badge || 'NEW')}</span><button class="product-favorite-btn absolute top-4 right-4" data-favorite-id="${esc(favId)}"><i class="far fa-heart"></i></button><div class="h-48 flex items-center justify-center mt-6 mb-4"><img src="${esc(product.image)}" alt="${esc(product.name)}" class="max-h-full object-contain group-hover:scale-105 transition duration-300" loading="lazy" decoding="async"></div><div class="flex-grow flex flex-col"><p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">${esc(product.brand)}</p><h3 class="product-title text-sm font-semibold text-gray-800 leading-snug mb-2 flex-grow">${esc(displayName)}</h3><p class="price">${esc(priceText)}</p><div class="flex items-center gap-2 mb-3 catalog-size-badges">${sizeBadgesHTML}</div><div class="mt-auto pt-3 border-t border-gray-100 pb-1"><button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition" data-i18n="index.add_to_cart">Add to Cart</button></div></div></div>`;
         };
 
-        /* ── Inject into carousel with smooth fade ────────────────────────── */
+        /* -- Inject into carousel with smooth fade -------------------------- */
         carousel.style.transition = 'opacity 0.28s ease';
         carousel.style.opacity = '0';
 
@@ -9321,14 +9321,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const track = document.getElementById('carousel2026');
         if (!track) return;
 
-        // ── 2026 release catalogue ──────────────────────────────────────────
-        // Products confirmed in stock for 2026 — sorted by arrival date, newest first.
+        // -- 2026 release catalogue ------------------------------------------
+        // Products confirmed in stock for 2026 � sorted by arrival date, newest first.
         const catalog2026 = [
             {
                 name: 'Jean Paul Gaultier Le Male In Blue Eau de Parfum',
                 brand: 'JEAN PAUL GAULTIER',
                 id: 'jean-paul-gaultier-le-male-in-blue-eau-de-parfum',
-                image: '/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg',
+                image: 'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg',
                 price: '',
                 sizes: ['75ML', '125ML'],
                 added: '2026-01-15'
@@ -9337,7 +9337,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'Valentino Born in Roma Extradose Eau de Toilette',
                 brand: 'VALENTINO',
                 id: 'valentino-born-in-roma-extradose-eau-de-toilette',
-                image: '/assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg',
+                image: 'assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg',
                 price: '',
                 sizes: ['50ML', '100ML'],
                 added: '2026-01-01'
@@ -9346,7 +9346,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'Armani Stronger With You Powerfully Eau de Parfum',
                 brand: 'GIORGIO ARMANI',
                 id: 'armani-stronger-with-you-powerfully-eau-de-parfum',
-                image: '/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
+                image: 'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
                 price: '',
                 sizes: ['50ML', '100ML'],
                 added: '2026-01-10'
@@ -9355,13 +9355,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'Azzaro Forever Wanted Elixir Eau de Parfum',
                 brand: 'AZZARO',
                 id: 'azzaro-forever-wanted-elixir-eau-de-parfum',
-                image: '/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
+                image: 'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
                 price: '',
                 sizes: ['50ML', '100ML'],
                 added: '2026-02-01'
             }
         ];
-        // ── end catalogue ───────────────────────────────────────────────────
+        // -- end catalogue ---------------------------------------------------
 
         // Sort newest first
         catalog2026.sort((a, b) => b.added.localeCompare(a.added));
@@ -9441,7 +9441,7 @@ document.addEventListener('DOMContentLoaded', () => {
     limitNewArrivalsToLatest();
 
     /* Eagerly load all images inside the main product carousel so they are
-       ready instantly when the user swipes — lazy loading breaks on horizontal
+       ready instantly when the user swipes � lazy loading breaks on horizontal
        off-screen cards because the browser never triggers the load. */
     document.querySelectorAll('#productCarousel img').forEach((img) => {
         img.loading = 'eager';
@@ -9453,7 +9453,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCarousel('newArrivalsCarousel');
     enableCarouselAutoplay('brandCarousel', 180, 2400);
 
-    // ── New Arrivals card fix — consistent on all screen sizes ──────────
+    // -- New Arrivals card fix � consistent on all screen sizes ----------
     const fixNewArrivalCards = window._fixNewArrivalCards = () => {
         document.querySelectorAll('#newArrivalsCarousel > article').forEach((card) => {
             const imgWrap = card.querySelector(':scope > div:first-child');
@@ -9486,7 +9486,7 @@ document.addEventListener('DOMContentLoaded', () => {
     bindSectionCarouselNav('newArrivalsSection', 'newArrivalsCarousel');
     bindSectionCarouselNav('class2026Section', 'carousel2026');
 
-    // ── Carousel position reset ──────────────────────────────────────────
+    // -- Carousel position reset ------------------------------------------
     // Runs AFTER all carousel inits (bindDragScroll + setupCarouselEdgeState).
     // Two nested RAFs ensure layout is fully committed before the reset fires,
     // overriding scroll-anchor compensation or CSS snap drift.
@@ -9862,9 +9862,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    /* ═══════════════════════════════════════════════════════════════
-       SEARCH OVERLAY — full-width Druni-style search panel
-       ═══════════════════════════════════════════════════════════════ */
+    /* ---------------------------------------------------------------
+       SEARCH OVERLAY � full-width Druni-style search panel
+       --------------------------------------------------------------- */
     const initSearchOverlay = () => {
         const overlay   = document.getElementById('ipoSearchOverlay');
         const bodyEl    = document.getElementById('ipoSearchOverlayBody');
@@ -9949,10 +9949,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const norm = (s) => String(s || '').toLowerCase()
-            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')   // strip accents: é→e, â→a
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')   // strip accents: �?e, �?a
             .replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
 
-        /* synonym map — query word → replacement word(s) */
+        /* synonym map � query word ? replacement word(s) */
         const SYNONYMS = {
             'blue':    'bleu',
             'bleu':    'blue',
@@ -10002,7 +10002,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'guuci':   'gucci',
             'guci':    'gucci',
             'rabanee': 'rabanne',
-            'rabanné': 'rabanne',
+            'rabann�': 'rabanne',
             'paco':    'rabanne',
             'boss':    'hugo boss',
             'hugoboss':'hugo boss',
@@ -10047,9 +10047,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'cedar':   'cedar',
         };
 
-        /* NEW-ARRIVAL intent keywords — these bypass normal scoring */
+        /* NEW-ARRIVAL intent keywords � these bypass normal scoring */
         const NEW_ARRIVAL_INTENTS = new Set([
-            'new', 'nouveau', 'nouvelle', 'nouveaute', 'nouveautés', 'nouveautes',
+            'new', 'nouveau', 'nouvelle', 'nouveaute', 'nouveaut�s', 'nouveautes',
             'new arrival', 'new arrivals', 'latest', 'fresh', 'recent', 'just in',
             'just added', 'dernier', 'derniers', 'nouvelles', 'fresh drops'
         ]);
@@ -10097,7 +10097,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const rawTokens = normQ.split(/\s+/).filter(Boolean);
             if (!rawTokens.length) return [];
 
-            // ── New-arrival intent: "new", "latest", "nouveau", etc. ──────────
+            // -- New-arrival intent: "new", "latest", "nouveau", etc. ----------
             const isNewIntent = NEW_ARRIVAL_INTENTS.has(normQ)
                 || rawTokens.every((t) => NEW_ARRIVAL_INTENTS.has(t));
             if (isNewIntent) {
@@ -10133,7 +10133,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     let matchedTokens = 0;
 
                     for (const token of tokens) {
-                        // Score against name, brand, and notes — take best
+                        // Score against name, brand, and notes � take best
                         const ns = tokenScore(token, nameN,  nameWords);
                         const bs = tokenScore(token, brandN, brandWords);
                         const ks = notesN ? tokenScore(token, notesN, notesWords) * 0.6 : 0;
@@ -10184,7 +10184,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return true;
         };
 
-        /* ── Render default: popular searches + product cards ── */
+        /* -- Render default: popular searches + product cards -- */
         const renderDefault = () => {
             const featured = pickRandomItems(getCatalog(), 10);
             bodyEl.className = 'ipo-search-overlay-body';
@@ -10264,7 +10264,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        /* ── Render results ── */
+        /* -- Render results -- */
         const renderResults = (q) => {
             const results = searchCatalog(q);
             bodyEl.className = 'ipo-search-overlay-body is-results';
@@ -10295,7 +10295,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 '</div>';
         };
 
-        /* ── Open / Close ── */
+        /* -- Open / Close -- */
         let rendered = false;
         const openOverlay = () => {
             overlay.classList.add('is-open');
@@ -10313,7 +10313,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.ipoOpenSearchOverlay = openOverlay;
 
-        /* ── Input events ── */
+        /* -- Input events -- */
         input.addEventListener('input', () => {
             const val = input.value.trim();
             clearBtn.classList.toggle('is-visible', val.length > 0);
@@ -10339,7 +10339,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeBtn.addEventListener('click', closeOverlay);
         backdrop.addEventListener('click', closeOverlay);
 
-        /* ── Delegate clicks inside body ── */
+        /* -- Delegate clicks inside body -- */
         bodyEl.addEventListener('click', (e) => {
             const pop = e.target.closest('[data-popular]');
             if (pop) {
@@ -10360,7 +10360,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (viewAll) { closeOverlay(); goDiscover(viewAll.dataset.viewAll); }
         });
 
-        /* ── Intercept ALL search trigger points ── */
+        /* -- Intercept ALL search trigger points -- */
         document.addEventListener('click', (e) => {
             if (e.target.closest('.ipo-search-trigger-btn')) { openOverlay(); }
         });
@@ -10749,7 +10749,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
-            manageButton.innerHTML = `<i class="fas fa-shield-heart" aria-hidden="true"></i><span>${copy.manage}${statusLabel ? ` · ${statusLabel}` : ''}</span>`;
+            manageButton.innerHTML = `<i class="fas fa-shield-heart" aria-hidden="true"></i><span>${copy.manage}${statusLabel ? ` � ${statusLabel}` : ''}</span>`;
         };
 
         const closeBanner = () => {
@@ -10896,7 +10896,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const existingIndex = subscribers.findIndex((entry) => entry.email === email);
                 const payload = {
                     _replyto: email,
-                    _subject: `[IPORDISE Newsletter] New subscriber${name ? ' — ' + name : ''}`,
+                    _subject: `[IPORDISE Newsletter] New subscriber${name ? ' � ' + name : ''}`,
                     formType: 'newsletter',
                     source: window.location.pathname,
                     name,
@@ -11065,7 +11065,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     applyOfficialHeaderFooter();
 
-    /* ── Header scroll-shrink: adds .is-scrolled when page is scrolled > 40px ── */
+    /* -- Header scroll-shrink: adds .is-scrolled when page is scrolled > 40px -- */
     (() => {
         const siteHeader = document.querySelector('header.bg-brand-dark');
         if (!siteHeader) return;
@@ -11103,7 +11103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Expose globally so module scripts (e.g. discover.html Firestore injection) can rebind hearts
     window.initWishlistButtons = initWishlistButtons;
 
-    // ── Product-page wishlist button: delegated auth guard ──────────────
+    // -- Product-page wishlist button: delegated auth guard --------------
     // .product-wishlist-btn is rendered dynamically so a delegated listener
     // is the only reliable way to catch it regardless of load timing.
     document.addEventListener('click', (e) => {
@@ -11200,11 +11200,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Seed from sessionStorage so count persists across small navigations in same tab
         let stockCount = parseInt(sessionStorage.getItem('_flashStock') || '0', 10);
         if (!stockCount || stockCount < 2 || stockCount > STOCK_MAX) {
-            stockCount = Math.floor(Math.random() * 6) + 5; // 5–10
+            stockCount = Math.floor(Math.random() * 6) + 5; // 5�10
         }
         let viewerCount = parseInt(sessionStorage.getItem('_flashViewers') || '0', 10);
         if (!viewerCount || viewerCount < 8 || viewerCount > 24) {
-            viewerCount = Math.floor(Math.random() * 10) + 10; // 10–19
+            viewerCount = Math.floor(Math.random() * 10) + 10; // 10�19
         }
 
         const updateStockFill = (count) => {
@@ -11246,7 +11246,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStockDisplay(stockCount, false);
         updateViewersDisplay(viewerCount);
 
-        // Slowly decrease stock — random interval between 18s and 45s
+        // Slowly decrease stock � random interval between 18s and 45s
         const scheduleStockDrop = () => {
             const delay = (Math.random() * 27000) + 18000;
             setTimeout(() => {
@@ -11260,7 +11260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         scheduleStockDrop();
 
-        // Viewers fluctuate slightly every 12–22s
+        // Viewers fluctuate slightly every 12�22s
         const scheduleViewerFluctuation = () => {
             const delay = (Math.random() * 10000) + 12000;
             setTimeout(() => {
@@ -11274,16 +11274,16 @@ document.addEventListener('DOMContentLoaded', () => {
         scheduleViewerFluctuation();
     }
 
-    /* --- Live Visitors Counter — smart time-based simulation --- */
+    /* --- Live Visitors Counter � smart time-based simulation --- */
     (function lvcViewerPill() {
         const numEl   = document.getElementById('flashViewersNum');
         const labelEl = document.getElementById('flashViewersLabel');
         const pillEl  = document.getElementById('flashStockBar');
         if (!numEl) return;
 
-        /* ── Time-based traffic bands ────────────────────────────────────────
+        /* -- Time-based traffic bands ----------------------------------------
          *  Returns [min, max] for the current hour of day.
-         * ─────────────────────────────────────────────────────────────────── */
+         * ------------------------------------------------------------------- */
         const getTrafficBand = () => {
             const h = new Date().getHours();
             if (h >= 8  && h < 12) return [3,  12];   // morning
@@ -11292,13 +11292,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return [1, 6];                             // late night
         };
 
-        /* ── Clamp a value within the current traffic band ─────────────────── */
+        /* -- Clamp a value within the current traffic band ------------------- */
         const clampToBand = (val) => {
             const [lo, hi] = getTrafficBand();
             return Math.min(hi, Math.max(lo, val));
         };
 
-        /* ── Seed initial count from sessionStorage or derive from time band ── */
+        /* -- Seed initial count from sessionStorage or derive from time band -- */
         const [bandLo, bandHi] = getTrafficBand();
         let viewerCount = parseInt(sessionStorage.getItem('_flashViewers') || '0', 10);
         if (!viewerCount || viewerCount < bandLo || viewerCount > bandHi) {
@@ -11306,7 +11306,7 @@ document.addEventListener('DOMContentLoaded', () => {
             viewerCount = Math.floor(Math.random() * (bandHi - bandLo + 1)) + bandLo;
         }
 
-        /* ── Language helper ────────────────────────────────────────────────── */
+        /* -- Language helper -------------------------------------------------- */
         const getLang = () => localStorage.getItem('ipordise-language') === 'fr';
 
         const updateLabel = () => {
@@ -11320,7 +11320,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateLabel();
         window.addEventListener('ipordise:langchange', updateLabel);
 
-        /* ── Animate the number change (flip-out → update → flip-in) ───────── */
+        /* -- Animate the number change (flip-out ? update ? flip-in) --------- */
         const animateCount = (newVal) => {
             if (pillEl) {
                 pillEl.classList.remove('lvc-pulse');
@@ -11340,15 +11340,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 200);
         };
 
-        /* ── Scheduling logic ────────────────────────────────────────────────
-         *  - Base interval: 8–20 s
+        /* -- Scheduling logic ------------------------------------------------
+         *  - Base interval: 8�20 s
          *  - 18% chance of a "frozen" tick (skip the update, just reschedule)
-         *  - Delta: mostly ±1, sometimes ±2, rarely ±3 — capped by traffic band
-         * ─────────────────────────────────────────────────────────────────── */
+         *  - Delta: mostly �1, sometimes �2, rarely �3 � capped by traffic band
+         * ------------------------------------------------------------------- */
         let consecutiveSameDir = 0; // prevent long monotonic runs
 
         const scheduleNext = () => {
-            // Random delay: 8 000 – 20 000 ms
+            // Random delay: 8 000 � 20 000 ms
             const delay = Math.floor(Math.random() * 12000) + 8000;
 
             setTimeout(() => {
@@ -11371,7 +11371,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Prevent more than 3 consecutive same-direction steps
                 if (Math.abs(consecutiveSameDir) >= 3) dirBias = -Math.sign(consecutiveSameDir);
 
-                // Delta size: 55% → ±1, 35% → ±2, 10% → ±3
+                // Delta size: 55% ? �1, 35% ? �2, 10% ? �3
                 const r = Math.random();
                 const magnitude = r < 0.55 ? 1 : r < 0.90 ? 2 : 3;
                 const delta = dirBias * magnitude;
@@ -11613,7 +11613,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (autoSlideTimer) { clearInterval(autoSlideTimer); autoSlideTimer = null; }
         };
 
-        // Auto-slideshow is disabled — user-initiated navigation only.
+        // Auto-slideshow is disabled � user-initiated navigation only.
         // stopAutoSlide is kept available for any future use.
     }
 
@@ -11704,18 +11704,18 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.sect-reveal').forEach((el) => el.classList.add('is-visible'));
     }
 
-    /* --- Server Down Modal removed — Firebase Authentication is live --- */
+    /* --- Server Down Modal removed � Firebase Authentication is live --- */
 
-    /* ════════════════════════════════════════════════════════
-       LUXURY UI MICRO-INTERACTIONS — v4
+    /* --------------------------------------------------------
+       LUXURY UI MICRO-INTERACTIONS � v4
        Ripple, scroll-reveal, heart-pop, image lazy-load,
        touch feedback. Fully non-breaking.
-    ════════════════════════════════════════════════════════ */
+    -------------------------------------------------------- */
     const initLuxuryUI = () => {
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const reduceDecorativeMotion = prefersReducedMotion || window.matchMedia('(max-width: 767px)').matches;
 
-        /* ── 1. Ripple effect on Add-to-Cart buttons ── */
+        /* -- 1. Ripple effect on Add-to-Cart buttons -- */
         document.addEventListener('click', (e) => {
             const btn = e.target.closest('.js-card-add-btn');
             if (!btn || prefersReducedMotion) return;
@@ -11738,7 +11738,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
         });
 
-        /* ── 2. Heart-pop animation on wishlist toggle ── */
+        /* -- 2. Heart-pop animation on wishlist toggle -- */
         document.addEventListener('click', (e) => {
             const btn = e.target.closest('.product-favorite-btn');
             if (!btn) return;
@@ -11749,7 +11749,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { once: true });
         });
 
-        /* ── 3. Scroll-reveal for product cards & key sections ── */
+        /* -- 3. Scroll-reveal for product cards & key sections -- */
         if (!reduceDecorativeMotion && 'IntersectionObserver' in window) {
             const revealSelectors = [
                 '#productCarousel > .group',
@@ -11774,7 +11774,7 @@ document.addEventListener('DOMContentLoaded', () => {
             revealTargets.forEach((el) => revealObserver.observe(el));
         }
 
-        /* ── 4. Image hints: keep critical media eager, lazily load the rest ── */
+        /* -- 4. Image hints: keep critical media eager, lazily load the rest -- */
         document.querySelectorAll('img').forEach((img) => {
             if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
             if (img.hasAttribute('loading')) return;
@@ -11782,7 +11782,7 @@ document.addEventListener('DOMContentLoaded', () => {
             img.setAttribute('loading', critical ? 'eager' : 'lazy');
         });
 
-        /* ── 5. Mobile touch-press feedback on cards ── */
+        /* -- 5. Mobile touch-press feedback on cards -- */
         if (window.matchMedia('(hover: none)').matches && 'ontouchstart' in window) {
             const touchEls = document.querySelectorAll('.js-product-link');
             touchEls.forEach((el) => {
@@ -11804,18 +11804,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initLuxuryUI();
 
-    /* ══════════════════════════════════════════════════════════════════════
+    /* ----------------------------------------------------------------------
        GRATEFUL ANIMATION SYSTEM  v1.0
-       Page entrance · hero orbs · extended section reveals · counters
-    ══════════════════════════════════════════════════════════════════════ */
+       Page entrance � hero orbs � extended section reveals � counters
+    ---------------------------------------------------------------------- */
     const initGratefulAnimations = () => {
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
             || window.matchMedia('(max-width: 767px)').matches;
 
-        // ── 1. Page entrance ──────────────────────────────────────────────
+        // -- 1. Page entrance ----------------------------------------------
         document.body.classList.add('ip-loaded');
 
-        // ── 2. Hero floating gold orbs ────────────────────────────────────
+        // -- 2. Hero floating gold orbs ------------------------------------
         if (!reduced) {
             const heroEl = document.getElementById('heroSection');
             if (heroEl) {
@@ -11831,7 +11831,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // ── 3. Extended scroll-reveal for sections not yet covered ────────
+        // -- 3. Extended scroll-reveal for sections not yet covered --------
         // Reuses the existing sect-reveal / is-visible CSS system.
         // We create a fresh observer so elements added here are observed even
         // though the original sect-reveal observer already ran earlier.
@@ -11846,14 +11846,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        // Flash Offers — title words slide from sides
+        // Flash Offers � title words slide from sides
         markReveal('.flash-word-left',  'sect-reveal--left',  null);
         markReveal('.flash-word-right', 'sect-reveal--right', 'sect-reveal-d1');
-        // Flash Offers — subtitle, countdown, view-all CTA
+        // Flash Offers � subtitle, countdown, view-all CTA
         markReveal('#flashOffersSection .text-center > p.text-sm', null, 'sect-reveal-d2');
         markReveal('#flashOffersSection .flash-countdown-bar',     'sect-reveal--scale', 'sect-reveal-d3');
         markReveal('#flashOffersSection .flash-view-all-btn',      null, 'sect-reveal-d4');
-        // Promo banners — scale in with stagger
+        // Promo banners � scale in with stagger
         document.querySelectorAll('.promo-banner-card').forEach((el, i) => {
             el.classList.add('sect-reveal', 'sect-reveal--scale');
             if (i > 0) el.classList.add('sect-reveal-d2');
@@ -11861,18 +11861,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         // Brand marquee header
         markReveal('.brand-marquee-header', null, 'sect-reveal-d1');
-        // Class 2026 — kicker drops from above, sub fades up
+        // Class 2026 � kicker drops from above, sub fades up
         markReveal('.section-2026-kicker',  'sect-reveal--down', null);
         markReveal('.section-2026-sub',     null,  'sect-reveal-d2');
         markReveal('.section-2026-viewall', null,  'sect-reveal-d3');
-        // New Arrivals — header row fades up
+        // New Arrivals � header row fades up
         markReveal('#newArrivalsSection .new-arrivals-header', null, null);
-        // Valentino — copy slides from left, visual from right
+        // Valentino � copy slides from left, visual from right
         markReveal('#valentino-house-section .luxury-story-copy',   'sect-reveal--left',  null);
         markReveal('#valentino-house-section .luxury-story-visual',  'sect-reveal--right', 'sect-reveal-d1');
-        // Client proof — heading + sub
+        // Client proof � heading + sub
         markReveal('.client-proof-section h2',               null,  null);
-        // Metric items — stagger up
+        // Metric items � stagger up
         document.querySelectorAll('.proof-metrics .metric-item').forEach((el, i) => {
             const delays = [null, 'sect-reveal-d1', 'sect-reveal-d2', 'sect-reveal-d3'];
             if (delays[i]) el.classList.add(delays[i]);
@@ -11893,7 +11893,7 @@ document.addEventListener('DOMContentLoaded', () => {
             revealItems.forEach((el) => el.classList.add('is-visible'));
         }
 
-        // ── 5. Metric number counters ─────────────────────────────────────
+        // -- 5. Metric number counters -------------------------------------
         if (!reduced && 'IntersectionObserver' in window) {
             const counterObs = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
@@ -11935,7 +11935,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initGratefulAnimations();
 });
 
-/* ── Sliding nav ink-bar indicator ──────────────────────────────────── */
+/* -- Sliding nav ink-bar indicator ------------------------------------ */
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.perfume-nav-list').forEach(function (nav) {
         /* Create the sliding indicator element */
@@ -11981,7 +11981,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     matched = true;
                 }
             });
-            /* No ?filter in URL → default to the first link (ALL PERFUMES) */
+            /* No ?filter in URL ? default to the first link (ALL PERFUMES) */
             if (!matched && links.length) {
                 links[0].classList.add('is-active');
             }
@@ -12124,17 +12124,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-/* ── IPORDISE Motion Layer ──────────────────────────────────
+/* -- IPORDISE Motion Layer ----------------------------------
    1) Scroll fade-in via IntersectionObserver
    2) Button click bounce via event delegation
-   ─────────────────────────────────────────────────────────── */
+   ----------------------------------------------------------- */
 (function () {
     'use strict';
 
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
         || window.matchMedia('(max-width: 767px)').matches;
 
-    /* ── 1. Scroll fade-in ── */
+    /* -- 1. Scroll fade-in -- */
     var REVEAL_SELECTORS = [
         '.card-2026',
         '.related-card',
@@ -12185,7 +12185,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* Re-run when script.js injects new cards (discover page) */
     document.addEventListener('ipo:cards-rendered', initReveal);
 
-    /* ── 2. Button click bounce (event delegation) ── */
+    /* -- 2. Button click bounce (event delegation) -- */
     if (!reduced) {
         document.addEventListener('pointerdown', function (e) {
             var btn = e.target.closest(
@@ -12204,28 +12204,28 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }());
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   IPORDISE — PWA Install Banner
+/* -----------------------------------------------------------------------------
+   IPORDISE � PWA Install Banner
    Shows a luxury branded "Add to home screen" banner 3 s after the first visit.
    Dismissed state is stored in localStorage so it never shows again after dismiss.
    "Install" button triggers the browser's native beforeinstallprompt.
    "Download our App" footer button also triggers the same prompt (if available)
    or explains iOS steps via a tooltip.
-───────────────────────────────────────────────────────────────────────────── */
+----------------------------------------------------------------------------- */
 (function () {
     const DISMISS_KEY   = 'ipo-pwa-banner-dismissed';
     const INSTALLED_KEY = 'ipo-pwa-installed';
     let deferredPrompt  = null;
     let banner          = null;
 
-    // Already installed — skip everything
+    // Already installed � skip everything
     if (
         window.matchMedia('(display-mode: standalone)').matches ||
         window.navigator.standalone === true ||
         localStorage.getItem(INSTALLED_KEY) === '1'
     ) return;
 
-    // Already dismissed — skip everything
+    // Already dismissed � skip everything
     if (localStorage.getItem(DISMISS_KEY) === '1') return;
 
     // Capture the install prompt
@@ -12269,7 +12269,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function showBanner() {
         if (!deferredPrompt) return;
         if (!banner) banner = buildBanner();
-        // Mark as seen immediately on first show — return visits will never see it again.
+        // Mark as seen immediately on first show � return visits will never see it again.
         // The footer "Download our App" button still works for returning users.
         localStorage.setItem(DISMISS_KEY, '1');
         requestAnimationFrame(() => {
@@ -12306,7 +12306,7 @@ document.addEventListener('DOMContentLoaded', function () {
             /iphone|ipad|ipod/i.test(navigator.userAgent) &&
             !window.navigator.standalone
         ) {
-            // iOS — show a tooltip since iOS doesn't support beforeinstallprompt
+            // iOS � show a tooltip since iOS doesn't support beforeinstallprompt
             const ios = document.getElementById('ipo-ios-install-tip');
             if (ios) {
                 ios.classList.toggle('is-visible');
@@ -12322,7 +12322,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 }());
 
-/* ── Service Worker registration with auto-update ── */
+/* -- Service Worker registration with auto-update -- */
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').then((reg) => {
@@ -12366,7 +12366,7 @@ if ('serviceWorker' in navigator) {
 }
 
 /* =============================================================================
-   IPORDISE — Recently Viewed Products
+   IPORDISE � Recently Viewed Products
    Saves product data when a user views a product card/page.
    Renders a horizontal strip on the homepage (and any page with #recentlyViewedSection).
    Max 8 products. Stored in localStorage under 'ipo_recently_viewed'.
@@ -12428,7 +12428,7 @@ if ('serviceWorker' in navigator) {
         }
     });
 
-    // Hook into product card clicks — intercept before navigation
+    // Hook into product card clicks � intercept before navigation
     document.addEventListener('click', (e) => {
         const card = e.target.closest('.js-product-link[data-product-name]');
         if (!card) return;
@@ -12453,7 +12453,7 @@ if ('serviceWorker' in navigator) {
             renderRecentlyViewedSection();
             return;
         }
-        // We're on the product page — save after a short delay so data is populated
+        // We're on the product page � save after a short delay so data is populated
         setTimeout(() => {
             const params = new URLSearchParams(window.location.search);
             const name = productNameEl.textContent.trim() || params.get('name') || '';
@@ -12468,7 +12468,7 @@ if ('serviceWorker' in navigator) {
 }());
 
 /* =============================================================================
-   IPORDISE — WhatsApp Abandoned Cart Nudge
+   IPORDISE � WhatsApp Abandoned Cart Nudge
    Shows a WhatsApp nudge 20 minutes after items are added to cart,
    if the user hasn't visited the checkout page.
    Dismissed permanently for that cart session when closed.
@@ -12491,9 +12491,9 @@ if ('serviceWorker' in navigator) {
             const name = item.name || item.productName || 'Product';
             const size = item.size || item.selectedSize || '';
             const qty = item.qty || item.quantity || 1;
-            return `• ${name}${size ? ` (${size})` : ''} x${qty}`;
+            return `� ${name}${size ? ` (${size})` : ''} x${qty}`;
         });
-        const more = items.length > 3 ? `\n• +${items.length - 3} more item(s)` : '';
+        const more = items.length > 3 ? `\n� +${items.length - 3} more item(s)` : '';
         return encodeURIComponent(`Hi IPORDISE! I'd like to complete my order:\n${lines.join('\n')}${more}\n\nCan you help me finalize it?`);
     };
 
@@ -12565,7 +12565,7 @@ if ('serviceWorker' in navigator) {
 }());
 
 /* =============================================================================
-   IPORDISE — Fragrance Finder Quiz
+   IPORDISE � Fragrance Finder Quiz
    4-question interactive quiz that recommends products from relatedProductCatalog.
    Opens as a modal from the quiz banner CTA or any [data-open-quiz] element.
    ============================================================================= */
@@ -12580,7 +12580,7 @@ if ('serviceWorker' in navigator) {
         sweet:  ['gourmand','vanilla','floral','musky','powdery','caramel']
     };
 
-    // Intensity preference → longevity filter
+    // Intensity preference ? longevity filter
     const LONGEVITY_MAP = {
         light: ['edt','eau de toilette'],
         medium: ['edp','eau de parfum'],
@@ -12641,7 +12641,7 @@ if ('serviceWorker' in navigator) {
 
             if (answers.occasion === 'daily' && (nameLower.includes('edt') || nameLower.includes('toilette'))) score += 1;
             if (answers.occasion === 'evening' && (nameLower.includes('intense') || nameLower.includes('elixir') || nameLower.includes('noir'))) score += 2;
-            if (answers.occasion === 'special' && (nameLower.includes('parfum') || nameLower.includes('extrait') || nameLower.includes('privée'))) score += 2;
+            if (answers.occasion === 'special' && (nameLower.includes('parfum') || nameLower.includes('extrait') || nameLower.includes('priv�e'))) score += 2;
 
             return { ...product, _score: score };
         });
@@ -12659,10 +12659,10 @@ if ('serviceWorker' in navigator) {
         const descEl = document.getElementById('quizResultDesc');
         const emojiEl = document.getElementById('quizResultEmoji');
 
-        const styleEmojis = { fresh:'🌊', woody:'🌲', spicy:'🔥', sweet:'🍯' };
-        if (emojiEl) emojiEl.textContent = styleEmojis[answers.style] || '✨';
+        const styleEmojis = { fresh:'??', woody:'??', spicy:'??', sweet:'??' };
+        if (emojiEl) emojiEl.textContent = styleEmojis[answers.style] || '?';
         if (titleEl) titleEl.textContent = 'Your Perfect Match!';
-        if (descEl) descEl.textContent = `Based on your style preference — here are our top picks for you:`;
+        if (descEl) descEl.textContent = `Based on your style preference � here are our top picks for you:`;
 
         if (resultEl) {
             if (!recs.length) {

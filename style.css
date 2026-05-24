@@ -15299,20 +15299,20 @@ nav[aria-label="Breadcrumb"] ol {
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-    /* Hero: fixed viewport-relative height so landscape images don't collapse */
+    /* Hero: image-driven height so section never exceeds the image */
     .hero-banner-section {
-        min-height: 72vw;
+        min-height: 0;
     }
 
     .hero-banner-track,
     .hero-banner-slide:first-child {
-        min-height: 72vw;
+        min-height: 0;
     }
 
-    /* Cover-fill the fixed height — crop from centre-top so the scene stays visible */
+    /* Cover-fill — crop from centre-top so the scene stays visible */
     .hero-banner-img {
         width: 100%;
-        height: 72vw;
+        height: clamp(280px, 72vw, 460px);
         max-height: 460px;
         object-fit: cover;
         object-position: center 25%;
@@ -15367,26 +15367,26 @@ nav[aria-label="Breadcrumb"] ol {
 
 /* ── Slide 1: drifts FROM THE TOP — image tilts down toward viewer ── */
 @keyframes heroBgFromTop {
-    0%   { transform: scale(1.00) perspective(1400px) rotateX(-3.5deg) rotateY(0deg)    translateY(-18px); }
+    0%   { transform: scale(1.03) perspective(1400px) rotateX(-3.5deg) rotateY(0deg)    translateY(-18px); }
     35%  { transform: scale(1.06) perspective(1400px) rotateX(-1.2deg) rotateY(0.6deg)  translateY(-6px);  }
     65%  { transform: scale(1.08) perspective(1400px) rotateX(0.4deg)  rotateY(-0.5deg) translateY(2px);   }
-    100% { transform: scale(1.00) perspective(1400px) rotateX(-3.5deg) rotateY(0deg)    translateY(-18px); }
+    100% { transform: scale(1.03) perspective(1400px) rotateX(-3.5deg) rotateY(0deg)    translateY(-18px); }
 }
 
 /* ── Slide 2: drifts FROM THE BOTTOM — image rises up toward viewer ── */
 @keyframes heroBgFromBottom {
-    0%   { transform: scale(1.00) perspective(1400px) rotateX(3.5deg)  rotateY(0deg)    translateY(18px);  }
+    0%   { transform: scale(1.03) perspective(1400px) rotateX(3.5deg)  rotateY(0deg)    translateY(18px);  }
     35%  { transform: scale(1.06) perspective(1400px) rotateX(1.2deg)  rotateY(-0.6deg) translateY(6px);   }
     65%  { transform: scale(1.08) perspective(1400px) rotateX(-0.4deg) rotateY(0.5deg)  translateY(-2px);  }
-    100% { transform: scale(1.00) perspective(1400px) rotateX(3.5deg)  rotateY(0deg)    translateY(18px);  }
+    100% { transform: scale(1.03) perspective(1400px) rotateX(3.5deg)  rotateY(0deg)    translateY(18px);  }
 }
 
 /* ── Slide 3: drifts FROM THE SIDE — image sweeps left to right ── */
 @keyframes heroBgFromSide {
-    0%   { transform: scale(1.00) perspective(1400px) rotateY(-4.5deg) rotateX(0deg)    translateX(-20px); }
+    0%   { transform: scale(1.03) perspective(1400px) rotateY(-4.5deg) rotateX(0deg)    translateX(-20px); }
     35%  { transform: scale(1.06) perspective(1400px) rotateY(-1.5deg) rotateX(0.5deg)  translateX(-7px);  }
     65%  { transform: scale(1.08) perspective(1400px) rotateY(0.8deg)  rotateX(-0.4deg) translateX(4px);   }
-    100% { transform: scale(1.00) perspective(1400px) rotateY(-4.5deg) rotateX(0deg)    translateX(-20px); }
+    100% { transform: scale(1.03) perspective(1400px) rotateY(-4.5deg) rotateX(0deg)    translateX(-20px); }
 }
 
 /* Golden atmospheric bloom — pulsing depth light */
@@ -20464,6 +20464,12 @@ html, body {
         overflow: hidden !important;
         margin: 0 !important;
         border-radius: 0 !important;
+        min-height: 0 !important;
+    }
+
+    .hero-banner-track,
+    .hero-banner-slide:first-child {
+        min-height: 0 !important;
     }
 
     /* Hero images only */
