@@ -2164,7 +2164,7 @@ const loadNewsletterView = async () => {
             const res = await fetch('https://api.brevo.com/v3/smtp/email', {
               method: 'POST',
               headers: { 'accept':'application/json', 'content-type':'application/json', 'api-key': _bk },
-              body: JSON.stringify({ sender:{ name:'IPORDISE', email:'perfumiro@gmail.com' }, to:[{ email: s.email, name: s.name || s.email.split('@')[0] }], subject, htmlContent })
+              body: JSON.stringify({ sender:{ name:'IPORDISE', email:'newsletter@ipordise.com' }, to:[{ email: s.email, name: s.name || s.email.split('@')[0] }], subject, htmlContent })
             });
             if(res.ok){ sent++; } else { failed++; console.warn('[NL] Brevo error for', s.email, res.status, await res.text()); }
           } catch(e){ failed++; console.error('[NL] Brevo error for', s.email, e); }

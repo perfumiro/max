@@ -663,7 +663,7 @@
                         'api-key': _bk
                     },
                     body: JSON.stringify({
-                        sender: { name: 'IPORDISE', email: 'perfumiro@gmail.com' },
+                        sender: { name: 'IPORDISE', email: 'noreply@ipordise.com' },
                         to: [{ email: c.email, name: (`${c.firstName || ''} ${c.lastName || ''}`).trim() || 'Client' }],
                         subject: `IPORDISE — Confirmation de commande #${orderId || 'N/A'}`,
                         htmlContent: htmlContent,
