@@ -6,19 +6,19 @@
  *   - External CDN resources → Stale-While-Revalidate
  */
 
-const CACHE_VERSION = 'v16';
+const CACHE_VERSION = 'v18';
 const STATIC_CACHE  = `ipordise-static-${CACHE_VERSION}`;
 const CDN_CACHE     = `ipordise-cdn-${CACHE_VERSION}`;
+const IMG_CACHE     = `ipordise-img-${CACHE_VERSION}`;
 
 /* ── Assets to pre-cache on install ── */
 const PRECACHE_ASSETS = [
-    '/style.css',
+    '/style.css?v=3',
     '/assets/tailwind.min.css',
-    '/script.js',
+    '/script.js?v=23',
     '/i18n.js',
     '/pages/cart.js',
     '/pages/checkout.js',
-    '/assets/favicon.svg',
     '/manifest.json',
     '/offline.html',
     '/404.html',
@@ -48,7 +48,7 @@ self.addEventListener('message', (event) => {
 
 /* ───────── ACTIVATE ───────── */
 self.addEventListener('activate', (event) => {
-    const allowedCaches = [STATIC_CACHE, CDN_CACHE];
+    const allowedCaches = [STATIC_CACHE, CDN_CACHE, IMG_CACHE];
     event.waitUntil(
         caches.keys().then((keys) =>
             Promise.all(
@@ -116,11 +116,14 @@ self.addEventListener('fetch', (event) => {
             url.pathname.endsWith('.svg') ||
             url.pathname.endsWith('.png') ||
             url.pathname.endsWith('.jpg') ||
+            url.pathname.endsWith('.jpeg') ||
             url.pathname.endsWith('.webp') ||
+            url.pathname.endsWith('.avif') ||
             url.pathname.endsWith('.woff2')
         )
     ) {
-        event.respondWith(cacheFirst(STATIC_CACHE, request));
+        // Images get their own cache bucket with LRU-style size enforcement
+        event.respondWith(cacheFirstWithLimit(IMG_CACHE, request, 120));
         return;
     }
 
@@ -189,6 +192,27 @@ async function staleWhileRevalidate(cacheName, request) {
         return response;
     }).catch(() => null);
     return cached || await fetchPromise;
+}
+
+/* Cache-First with max-entry limit — used for images to cap disk usage */
+async function cacheFirstWithLimit(cacheName, request, maxEntries) {
+    const cache  = await caches.open(cacheName);
+    const cached = await cache.match(request);
+    if (cached) return cached;
+    try {
+        const response = await fetch(request);
+        if (!response.ok) return response;
+        cache.put(request, response.clone());
+        /* Enforce max entries — evict oldest if over limit */
+        cache.keys().then((keys) => {
+            if (keys.length > maxEntries) {
+                cache.delete(keys[0]); /* delete oldest */
+            }
+        });
+        return response;
+    } catch {
+        return new Response('', { status: 503, statusText: 'Service Unavailable' });
+    }
 }
 
 /* ───────── Background Sync (future orders) ───────── */

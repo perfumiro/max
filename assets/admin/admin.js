@@ -105,6 +105,7 @@ const switchView = (name) => {
   if (name === 'messages')  loadMessagesView().catch(e => toast(e.message, 'error'));
   if (name === 'newsletter') loadNewsletterView().catch(e => toast(e.message, 'error'));
   if (name === 'products')  loadProductsView().catch(e => toast(e.message, 'error'));
+  if (name === 'promotions') loadPromotionsView().catch(e => toast(e.message, 'error'));
   if (name === 'settings')  loadSettingsView().catch(e => toast(e.message, 'error'));
   if (window.innerWidth < 768) closeMobileSidebar();
 };
@@ -2622,10 +2623,10 @@ const loadProductsView = async () => {
               <div class="prod-promo-content" style="display:${hasPromo ? 'block' : 'none'};padding:10px 10px 10px;background:${hasInvalidPromoEntry && !hasValidPromo ? 'rgba(244,63,94,.04)' : 'rgba(200,169,106,.04)'};border:1px dashed ${hasInvalidPromoEntry && !hasValidPromo ? 'var(--rose)' : 'var(--gold)'};border-top:none;border-radius:0 0 8px 8px">
                 ${hasInvalidPromoEntry ? `<div style="background:rgba(244,63,94,.12);border:1px solid var(--rose);border-radius:6px;padding:7px 10px;margin-bottom:8px;display:flex;align-items:flex-start;gap:7px">
                   <i class="fas fa-triangle-exclamation" style="color:var(--rose);font-size:12px;flex-shrink:0;margin-top:1px"></i>
-                  <span style="font-size:10px;font-weight:700;color:var(--rose);line-height:1.5">The stored "Was" price is <strong>lower than or equal to the current sale price</strong> — it won't show on the product page. Enter a value <strong>HIGHER</strong> than the current price (shown as "? Sale: X") and click <strong>Save</strong>.</span>
+                  <span style="font-size:10px;font-weight:700;color:var(--rose);line-height:1.5">The saved sale price is <strong>equal to or higher than the full price</strong> — the promotion won't show. Enter a value <strong>LOWER</strong> than the <strong>Full</strong> price shown next to each size, then click <strong>Save</strong>.</span>
                 </div>` : ''}
                 <p style="font-size:10px;color:var(--muted);margin-bottom:8px;font-weight:600;line-height:1.4">
-                  <i class="fas fa-circle-info" style="margin-right:4px"></i>Enter the <strong style="color:var(--ink)">original (before-sale) price</strong> per size — it <strong style="color:var(--rose)">must be higher</strong> than the current price. The current price will appear as the discounted sale price with a strikethrough on the product page.
+                  <i class="fas fa-circle-info" style="margin-right:4px"></i>Enter the <strong style="color:var(--ink)">sale (discounted) price</strong> per size — it <strong style="color:var(--rose)">must be lower</strong> than the full price shown next to each size. The full price will appear with a strikethrough, and the sale price will be shown as the customer's price.
                 </p>
                 <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
                   ${Object.keys(sizes).sort((a,b)=>{ const n=s=>parseInt(s.replace(/\D/g,''),10)||0; return n(a)-n(b); }).map(sz => {
@@ -2650,10 +2651,16 @@ const loadProductsView = async () => {
                     </div>`;
                   }).join('')}
                 </div>
-                <button class="prod-promo-clear btn btn-xs" data-slug="${esc(slug)}" type="button"
-                  style="font-size:10px;color:var(--rose);background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);gap:4px;padding:3px 10px">
-                  <i class="fas fa-trash-can" style="font-size:9px"></i> Clear Promotion
-                </button>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                  <button class="prod-promo-save btn btn-xs btn-gold" data-slug="${esc(slug)}" type="button"
+                    style="font-size:11px;gap:5px;padding:5px 14px">
+                    <i class="fas fa-floppy-disk" style="font-size:10px"></i> Save Promotion
+                  </button>
+                  <button class="prod-promo-clear btn btn-xs" data-slug="${esc(slug)}" type="button"
+                    style="font-size:10px;color:var(--rose);background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);gap:4px;padding:3px 10px">
+                    <i class="fas fa-trash-can" style="font-size:9px"></i> Clear Promotion
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -2836,7 +2843,16 @@ const loadProductsView = async () => {
       const addBtn    = e.target.closest('.prod-add-size');
       const resetBtn  = e.target.closest('.prod-reset');
       const promoClearBtn = e.target.closest('.prod-promo-clear');
-      if (!saveBtn && !toggleBtn && !removeBtn && !addBtn && !resetBtn && !promoClearBtn) return;
+      const promoSaveBtn  = e.target.closest('.prod-promo-save');
+      if (!saveBtn && !toggleBtn && !removeBtn && !addBtn && !resetBtn && !promoClearBtn && !promoSaveBtn) return;
+
+      // "Save Promotion" delegates to the card's main Save button
+      if (promoSaveBtn) {
+        const slug2 = promoSaveBtn.dataset.slug;
+        const cardSave = grid.querySelector(`.prod-card[data-slug="${slug2}"] .prod-save`);
+        cardSave?.click();
+        return;
+      }
 
       const slug = (saveBtn||toggleBtn||removeBtn||addBtn||resetBtn||promoClearBtn).dataset.slug;
       const ov   = overrides[slug] || {};
@@ -3072,6 +3088,238 @@ const loadProductsView = async () => {
   } catch(e) {
     grid.innerHTML = `<div class="card"><div class="card-body" style="color:var(--rose);text-align:center;padding:32px"><i class="fas fa-triangle-exclamation"></i> ${esc(e.message)}</div></div>`;
     throw e;
+  }
+};
+
+// --- PROMOTIONS VIEW --------------------------------------------------------
+const loadPromotionsView = async () => {
+  const grid    = qs('#promoGrid');
+  const countEl = qs('#promoCount');
+  const badge   = qs('#navPromoBadge');
+  if (!grid) return;
+
+  grid.innerHTML = `<div style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading…</div>`;
+
+  // Inline product-image map (same source as loadProductsView PRODUCT_IMG)
+  const PROMO_IMG = {
+    'armani-stronger-with-you-absolutely-perfume':     'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp',
+    'armani-stronger-with-you-powerfully-eau-de-parfum':'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
+    'emporio-armani-stronger-with-you-intensely-edp':  'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp',
+    'azzaro-forever-wanted-elixir-eau-de-parfum':      'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
+    'azzaro-the-most-wanted-eau-de-parfum-intense':    'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp',
+    'azzaro-the-most-wanted-parfum':                   'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp',
+    'carolina-herrera-bad-boy-eau-de-toilette':        'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg',
+    'bleu-de-chanel-eau-de-parfum-spray':              'assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg',
+    'dior-homme-intense-eau-de-parfum':                'assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg',
+    'dior-sauvage-eau-de-parfum':                      'assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg',
+    'gentleman-private-reserve-eau-de-parfum':         'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png',
+    'givenchy-gentleman-society-amber-eau-de-parfum':  'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg',
+    'givenchy-gentleman-society-extreme-eau-de-parfum':'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp',
+    'givenchy-gentleman-society-nomade-eau-de-parfum': 'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/1.webp',
+    'gucci-guilty-absolu-de-parfum-pour-homme':        'assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp',
+    'gucci-guilty-elixir-pour-homme':                  'assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp',
+    'guerlain-l-homme-ideal-extreme':                  'assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg',
+    'guerlain-l-homme-ideal-l-intense-eau-de-parfum':  'assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp',
+    'boss-bottled-absolu-intense':                     'assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg',
+    'hugo-boss-boss-bottled-elixir-intense':           'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg',
+    'hugo-boss-the-scent-for-him-elixir':              'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png',
+    'jean-paul-gaultier-le-beau-eau-de-parfum':        'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp',
+    'jean-paul-gaultier-le-male-elixir':               'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp',
+    'jean-paul-gaultier-le-male-in-blue-eau-de-parfum':'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg',
+    'jean-paul-gaultier-le-male-le-parfum-eau-de-parfum':'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp',
+    'jean-paul-gaultier-le-male-eau-de-toilette':      'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png',
+    'jean-paul-gaultier-scandal-elixir':               'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg',
+    'jean-paul-gaultier-scandal-intense-eau-de-parfum':'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg',
+    'montale-arabians-tonka':                          'assets/images/products/montale/montale-arabians-tonka/1.webp',
+    'prada-l-homme-edt':                               'assets/images/products/prada/prada-lhomme-edt/1.jpg',
+    'prada-luna-rossa-black-eau-de-parfum':            'assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg',
+    'prada-luna-rossa-ocean-eau-de-parfum':            'assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg',
+    'rabanne-one-million-elixir-intense':              'assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp',
+    'rabanne-one-million-parfum':                      'assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg',
+    'akdeniz-unique-e-luxury':                         'assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
+    'alexandria-ii':                                   'assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp',
+    'erba-pura':                                       'assets/images/products/xerjoff/xerjoff-erba-pura/1.webp',
+    'naxos':                                           'assets/images/products/xerjoff/xerjoff-naxos/1.webp',
+    'valentino-born-in-roma-uomo-intense-eau-de-parfum':'assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp',
+    'versace-eros-eau-de-parfum':                      'assets/images/products/versace/versace-eros-eau-de-parfum/1.webp',
+    'yves-saint-laurent-y-eau-de-parfum':              'assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp',
+  };
+
+  const pName = slug => slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+
+  try {
+    const snap = await getDocs(collection(db,'productOverrides'));
+    const promos = [];
+
+    snap.forEach(docSnap => {
+      const slug = docSnap.id;
+      const d    = docSnap.data();
+      const promoPrices = d.promoPrices || {};
+      const prices      = d.prices      || {};
+
+      // promoPrices[sz] = sale/discounted price (lower)
+      // prices[sz]      = full/original price (higher)
+      // Compute best valid discount
+      let bestDiscount = 0, bestSale = 0, bestOrig = 0;
+      for (const [sz, saleP] of Object.entries(promoPrices)) {
+        const fullP = prices[sz];
+        if (!fullP || !saleP || saleP >= fullP) continue;
+        const pct = Math.round((1 - saleP / fullP) * 100);
+        if (pct > bestDiscount) { bestDiscount = pct; bestSale = saleP; bestOrig = fullP; }
+      }
+      if (bestDiscount === 0) return; // no valid promo
+
+      promos.push({
+        slug, bestDiscount, bestSale, bestOrig,
+        featured:   !!d.featuredPromo,
+        disabled:   !!d.disabled,
+        promoTitle: d.promoTitle || '',
+        promoBrand: d.promoBrand || '',
+        promoDesc:  d.promoDesc  || '',
+        promoOrder: typeof d.promoOrder === 'number' ? d.promoOrder : 99,
+      });
+    });
+
+    // Sort: featured first, then by discount desc
+    promos.sort((a, b) => {
+      if (a.featured !== b.featured) return a.featured ? -1 : 1;
+      return b.bestDiscount - a.bestDiscount;
+    });
+
+if (countEl) countEl.textContent = `${promos.length} promotion${promos.length!==1?'s':''} — all shown on homepage (max 8)`;
+      if (badge) { badge.textContent = promos.length; badge.style.display = promos.length ? '' : 'none'; }
+
+    if (!promos.length) {
+      grid.innerHTML = `<div class="card"><div class="card-body" style="text-align:center;padding:48px;color:var(--muted)">
+        <i class="fas fa-tag" style="font-size:24px;display:block;margin-bottom:10px;opacity:.35"></i>
+        <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">No active promotions</div>
+        <div style="font-size:12px">Go to <strong>Products</strong> and add a promotion to a product first.</div>
+      </div></div>`;
+      return;
+    }
+
+    grid.innerHTML = promos.map(p => {
+      const imgSrc = PROMO_IMG[p.slug] || '';
+      const imgHtml = imgSrc
+        ? `<img src="${esc(imgSrc)}" alt="" loading="lazy" style="width:62px;height:78px;object-fit:contain;border-radius:8px;background:var(--s3);flex-shrink:0;border:1px solid var(--border);mix-blend-mode:multiply">`
+        : `<div style="width:62px;height:78px;border-radius:8px;background:var(--s4);flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)"><i class="fas fa-spray-can" style="color:var(--dim);font-size:20px"></i></div>`;
+
+      const accentColor = 'var(--gold)';
+      const featuredBg  = 'rgba(200,169,106,.05)';
+
+      return `<div class="card promo-manager-card" data-promo-slug="${esc(p.slug)}"
+        style="border-left:3px solid ${accentColor};transition:border-color .2s;margin-bottom:10px">
+        <div style="padding:14px 16px">
+
+          <!-- Top row -->
+          <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px">
+            ${imgHtml}
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:800;color:var(--ink);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(pName(p.slug))}</div>
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                <span style="font-size:10px;font-weight:700;color:var(--emerald);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);padding:2px 8px;border-radius:99px">
+                  <i class="fas fa-tag" style="font-size:9px;margin-right:3px"></i>-${p.bestDiscount}% discount
+                </span>
+                ${p.disabled ? `<span style="font-size:10px;font-weight:700;color:var(--rose);background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.25);padding:2px 8px;border-radius:99px">Disabled</span>` : ''}
+                <span style="font-size:10px;font-weight:700;color:var(--emerald);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);padding:2px 8px;border-radius:99px"><i class="fas fa-circle" style="font-size:6px;margin-right:3px"></i>Live on Homepage</span>
+              </div>
+              <div style="font-size:11px;color:var(--muted);margin-top:5px">
+                Sale: <strong style="color:var(--ink)">${p.bestSale.toLocaleString()} MAD</strong>
+                <span style="color:var(--dim);margin:0 4px">was</span>
+                <span style="text-decoration:line-through">${p.bestOrig.toLocaleString()} MAD</span>
+              </div>
+            </div>
+            <!-- "Live on Homepage" indicator -->
+            <span style="flex-shrink:0;display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--emerald);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);padding:4px 11px;border-radius:99px;white-space:nowrap;align-self:flex-start">
+              <i class="fas fa-circle" style="font-size:6px"></i> Live
+            </span>
+          </div>
+
+          <!-- Customisation panel (collapsible) -->
+          <div class="promo-custom-toggle" data-promo-slug="${esc(p.slug)}"
+            style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 10px;background:${featuredBg};border:1px dashed ${accentColor};border-radius:8px;user-select:none;transition:all .15s">
+            <i class="fas fa-sliders" style="font-size:10px;color:var(--gold)"></i>
+            <span style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.4px;text-transform:uppercase;flex:1">Customise Homepage Card</span>
+            <i class="fas fa-chevron-down promo-custom-chevron" style="font-size:9px;color:var(--muted);transition:transform .2s"></i>
+          </div>
+          <div class="promo-custom-body" data-promo-slug="${esc(p.slug)}"
+            style="display:none;padding:12px;border:1px dashed ${accentColor};border-top:none;border-radius:0 0 8px 8px;background:${featuredBg}">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+              <div>
+                <label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Card Title</label>
+                <input type="text" class="promo-field-title select-sm" data-promo-slug="${esc(p.slug)}" value="${esc(p.promoTitle)}" placeholder="${esc(pName(p.slug))}" style="width:100%;font-size:12px">
+              </div>
+              <div>
+                <label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Brand Label</label>
+                <input type="text" class="promo-field-brand select-sm" data-promo-slug="${esc(p.slug)}" value="${esc(p.promoBrand)}" placeholder="e.g. DIOR" style="width:100%;font-size:12px">
+              </div>
+              <div style="grid-column:1/-1">
+                <label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Short Description</label>
+                <input type="text" class="promo-field-desc select-sm" data-promo-slug="${esc(p.slug)}" value="${esc(p.promoDesc)}" placeholder="e.g. Wild, fresh and mineral — the iconic masculine scent." style="width:100%;font-size:12px">
+              </div>
+              <div>
+                <label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Display Order</label>
+                <input type="number" min="0" class="promo-field-order select-sm" data-promo-slug="${esc(p.slug)}" value="${p.promoOrder === 99 ? '' : p.promoOrder}" placeholder="0 = first" style="width:100%;font-size:12px">
+              </div>
+            </div>
+            <button class="promo-save-custom btn btn-xs btn-gold" data-promo-slug="${esc(p.slug)}" style="gap:5px;font-size:11px;padding:5px 14px">
+              <i class="fas fa-floppy-disk"></i> Save Card Details
+            </button>
+            <span class="promo-save-msg" data-promo-slug="${esc(p.slug)}" style="font-size:11px;margin-left:10px;display:none"></span>
+          </div>
+
+        </div>
+      </div>`;
+    }).join('');
+
+    // -- Event listeners -----------------------------------------------
+    // (Feature toggle removed — all promos are auto-displayed)
+
+    // Customise collapse toggle
+    grid.querySelectorAll('.promo-custom-toggle').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const slug    = toggle.dataset.promoSlug;
+        const body    = grid.querySelector(`.promo-custom-body[data-promo-slug="${slug}"]`);
+        const chevron = toggle.querySelector('.promo-custom-chevron');
+        if (!body) return;
+        const open = body.style.display === 'block';
+        body.style.display    = open ? 'none' : 'block';
+        if (chevron) chevron.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+      });
+    });
+
+    // Save card details
+    grid.querySelectorAll('.promo-save-custom').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const slug = btn.dataset.promoSlug;
+        const titleVal = (grid.querySelector(`.promo-field-title[data-promo-slug="${slug}"]`)?.value || '').trim();
+        const brandVal = (grid.querySelector(`.promo-field-brand[data-promo-slug="${slug}"]`)?.value || '').trim();
+        const descVal  = (grid.querySelector(`.promo-field-desc[data-promo-slug="${slug}"]`)?.value || '').trim();
+        const orderVal = parseInt(grid.querySelector(`.promo-field-order[data-promo-slug="${slug}"]`)?.value || '', 10);
+        const msgEl    = grid.querySelector(`.promo-save-msg[data-promo-slug="${slug}"]`);
+
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+        try {
+          const payload = {};
+          if (titleVal) payload.promoTitle = titleVal; else payload.promoTitle = null;
+          if (brandVal) payload.promoBrand = brandVal; else payload.promoBrand = null;
+          if (descVal)  payload.promoDesc  = descVal;  else payload.promoDesc  = null;
+          payload.promoOrder = isNaN(orderVal) ? 99 : orderVal;
+          await setDoc(doc(db,'productOverrides',slug), payload, { merge: true });
+          if (msgEl) { msgEl.textContent = '✓ Saved'; msgEl.style.color = 'var(--emerald)'; msgEl.style.display = 'inline'; setTimeout(() => { msgEl.style.display = 'none'; }, 2500); }
+          toast(`Card details saved for "${pName(slug)}"`, 'success');
+        } catch(err) {
+          toast('Save failed: ' + err.message, 'error');
+        }
+        btn.disabled = false; btn.innerHTML = '<i class="fas fa-floppy-disk"></i> Save Card Details';
+      });
+    });
+
+  } catch(err) {
+    grid.innerHTML = `<div class="card"><div class="card-body" style="color:var(--rose);text-align:center;padding:32px">
+      <i class="fas fa-triangle-exclamation"></i> ${esc(err.message)}
+    </div></div>`;
+    throw err;
   }
 };
 

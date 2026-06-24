@@ -1056,10 +1056,24 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
     </section>
 
+    <!-- ═══════════════ ADMIN-ADDED XERJOFF PRODUCTS ═══════════════ -->
+    <section id="xerjoffAdminProducts" style="background:#fff;display:none">
+        <div style="max-width:1100px;margin:0 auto;padding:0 1.5rem 4rem">
+            <div style="text-align:center;margin-bottom:2.5rem;padding-top:3.5rem">
+                <p class="xerjoff-collection-label">More from XERJOFF</p>
+                <h2 class="xerjoff-collection-title">Extended Collection</h2>
+                <p style="font-size:0.85rem;color:#6b7280;margin-top:0.5rem">Full-bottle &amp; decant options</p>
+            </div>
+            <div id="xerjoffAdminGrid" style="display:flex;flex-direction:column;gap:0">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+    </section>
+
     <!-- Module script: fetches Firestore overrides then triggers dynamic size rendering -->
     <script type="module">
         import { db } from '../auth/firebase.js';
-        import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
+        import { collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
         const XERJ_SLUGS = ['alexandria-ii', 'erba-pura', 'naxos'];
         const normSz = sz => { const s = String(sz||'').trim().toLowerCase().replace(/\s+/g,''); return /^\d+$/.test(s) ? s+'ml' : s; };
         // Returns { slugId: { prices: {sizeKey: price}, removedSizes: [...] } }
@@ -1082,6 +1096,116 @@ s0.parentNode.insertBefore(s1,s0);
         // Module scripts are deferred — by the time this runs, the regular script below
         // has already defined initXerjoffSizes(). Call it now.
         if (typeof initXerjoffSizes === 'function') initXerjoffSizes();
+
+        // ── Load admin-added Xerjoff products ──
+        (async () => {
+            try {
+                const snap = await getDocs(collection(db, 'products'));
+                const products = [];
+                snap.forEach(d => {
+                    const data = d.data();
+                    if (!data.active) return;
+                    const brand = (data.brand || '').toUpperCase();
+                    if (!brand.includes('XERJOFF')) return;
+                    products.push({ id: d.id, ...data });
+                });
+                if (!products.length) return;
+
+                // Sort by addedAt ascending (oldest first)
+                products.sort((a, b) => (a.addedAt?.seconds || 0) - (b.addedAt?.seconds || 0));
+
+                const fmtMAD = n => Number(n).toLocaleString('fr-MA') + ' MAD';
+                const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+                const grid = document.getElementById('xerjoffAdminGrid');
+                const section = document.getElementById('xerjoffAdminProducts');
+                if (!grid || !section) return;
+
+                grid.innerHTML = products.map((p, i) => {
+                    const slug    = p.slug || p.id;
+                    const prefix  = 'xadm-' + i;          // must match xerjoffAddToCart(prefix,...)
+                    const mainId  = prefix + '-main';
+                    const priceId = prefix + '-price';
+                    const qtyId   = prefix + '-qty';
+                    const imgs    = Array.isArray(p.images) ? p.images : (p.image ? [p.image] : []);
+                    const mainImg = imgs[0] || '';
+
+                    const thumbs  = imgs.map((src, ti) =>
+                        `<div class="xerjoff-gallery-thumb${ti===0?' is-active':''}"
+                            onclick="xerjoffGallery('${mainId}',this,'${esc(src)}')">
+                            <img loading="lazy" decoding="async" src="${esc(src)}" alt="${esc(p.name)}">
+                        </div>`
+                    ).join('');
+
+                    const sizes   = p.sizes || {};
+                    const sizeKeys = Object.keys(sizes).sort((a,b)=>{
+                        const n = s => parseInt(String(s).replace(/\D/g,''),10)||0;
+                        return n(a)-n(b);
+                    });
+
+                    // Store in a separate map so initXerjoffSizes() cannot wipe these
+                    if (!window._adminXerjoffPrices) window._adminXerjoffPrices = {};
+                    window._adminXerjoffPrices[slug] = {};
+                    sizeKeys.forEach(sz => { window._adminXerjoffPrices[slug][sz] = Number(sizes[sz])||0; });
+
+                    const sizeBtns = sizeKeys.map(sz =>
+                        `<button class="xerjoff-size-btn" type="button" data-size-key="${esc(sz)}"
+                            onclick="xerjoffSize(this,'${priceId}')">${esc(sz)}</button>`
+                    ).join('');
+
+                    const notesTop    = p.notes?.top    || '';
+                    const notesHeart  = p.notes?.heart  || '';
+                    const notesBase   = p.notes?.base   || '';
+                    const notesHtml   = (notesTop || notesHeart || notesBase) ? `
+                        <button class="xerjoff-notes-toggle" onclick="xerjoffToggleNotes(this)">
+                            <span>Fragrance Notes</span> <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="xerjoff-notes-body">
+                            ${notesTop    ? `<div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-wind"></i> Top Notes</p><p class="xerjoff-note-tier-value">${esc(notesTop)}</p></div>` : ''}
+                            ${notesHeart  ? `<div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-heart"></i> Heart Notes</p><p class="xerjoff-note-tier-value">${esc(notesHeart)}</p></div>` : ''}
+                            ${notesBase   ? `<div class="xerjoff-note-tier"><p class="xerjoff-note-tier-label"><i class="fas fa-mountain"></i> Base Notes</p><p class="xerjoff-note-tier-value">${esc(notesBase)}</p></div>` : ''}
+                        </div>` : '';
+
+                    return `<div class="xerjoff-product-entry" id="product-${prefix}" data-product-id="${esc(slug)}">
+                        <div class="xerjoff-product-layout">
+                            <div>
+                                <div class="xerjoff-gallery-main">
+                                    <img loading="lazy" decoding="async" id="${mainId}" src="${esc(mainImg)}" alt="${esc(p.name)}">
+                                </div>
+                                <div class="xerjoff-gallery-thumbs">${thumbs}</div>
+                            </div>
+                            <div>
+                                <p class="xerjoff-product-brand-tag">XERJOFF &middot; Eau de Parfum</p>
+                                <h3 class="xerjoff-product-name">${esc(p.name)}</h3>
+                                ${p.description ? `<p class="xerjoff-product-subtitle">${esc(p.description)}</p>` : ''}
+                                <p class="xerjoff-size-label">Size</p>
+                                <div class="xerjoff-size-row">${sizeBtns}</div>
+                                <p id="${priceId}" class="xerjoff-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to see the price</p>
+                                <p class="xerjoff-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
+                                <div class="xerjoff-qty-row">
+                                    <div class="xerjoff-qty-box">
+                                        <button class="xerjoff-qty-btn" onclick="xerjoffQty('${qtyId}',-1)">&#8722;</button>
+                                        <span id="${qtyId}" class="xerjoff-qty-val">1</span>
+                                        <button class="xerjoff-qty-btn" onclick="xerjoffQty('${qtyId}',1)">+</button>
+                                    </div>
+                                    <button class="xerjoff-cart-btn" onclick="xerjoffAddToCart('${prefix}','${esc(p.name)}')">Add to Cart</button>
+                                    <button class="xerjoff-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
+                                </div>
+                                <div class="xerjoff-trust-chips">
+                                    <div class="xerjoff-trust-chip"><i class="fas fa-truck" style="color:#e73c3c"></i> Delivery: 35 MAD</div>
+                                    <div class="xerjoff-trust-chip"><i class="fas fa-shield-heart" style="color:#e73c3c"></i> 100% Authentic</div>
+                                    <div class="xerjoff-trust-chip"><i class="fas fa-flask" style="color:#e73c3c"></i> Premium Decante</div>
+                                    <div class="xerjoff-trust-chip"><i class="fas fa-gift" style="color:#e73c3c"></i> Packed with Care</div>
+                                </div>
+                                ${notesHtml}
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+
+                section.style.display = '';
+            } catch(e) { console.warn('[XERJ admin products]', e.message); }
+        })();
     </script>
 
     <script>
@@ -1196,7 +1320,9 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         function getXerjoffPrice(productId, sizeKey) {
-            var productPrices = xerjoffPrices && xerjoffPrices[productId];
+            // Check both main map (original 3 products) and admin-added products map
+            var productPrices = (xerjoffPrices && xerjoffPrices[productId])
+                             || (window._adminXerjoffPrices && window._adminXerjoffPrices[productId]);
             if (!productPrices || typeof productPrices !== 'object') return 0;
             var numericPrice = Number(productPrices[sizeKey]);
             return Number.isFinite(numericPrice) && numericPrice > 0 ? numericPrice : 0;

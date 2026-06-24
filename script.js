@@ -5283,6 +5283,31 @@ document.addEventListener('DOMContentLoaded', () => {
             price: '',
             gender: 'unisex',
             image: 'assets/images/products/montale/montale-arabians-tonka/1.webp'
+        },
+        // Xerjoff
+        {
+            id: 'alexandria',
+            name: 'Xerjoff Alexandria II Eau de Parfum',
+            brand: 'XERJOFF',
+            price: '50ML 2 800 MAD — 100ML 4 500 MAD',
+            gender: 'unisex',
+            image: 'assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp'
+        },
+        {
+            id: 'erba-pura',
+            name: 'Xerjoff Erba Pura Eau de Parfum',
+            brand: 'XERJOFF',
+            price: '50ML 2 200 MAD — 100ML 3 800 MAD',
+            gender: 'unisex',
+            image: 'assets/images/products/xerjoff/xerjoff-erba-pura/1.webp'
+        },
+        {
+            id: 'naxos',
+            name: 'Xerjoff Naxos Eau de Parfum',
+            brand: 'XERJOFF',
+            price: '50ML 2 500 MAD — 100ML 4 200 MAD',
+            gender: 'unisex',
+            image: 'assets/images/products/xerjoff/xerjoff-naxos/1.webp'
         }
     ];
 
@@ -5320,6 +5345,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (normalizedName.includes('one million')) return 'rabanne-one-million';
         if (normalizedName.includes('gentleman')) return 'givenchy-gentleman';
         if (normalizedName.includes('guilty')) return 'gucci-guilty';
+        if (normalizedName.includes('xerjoff') || normalizedName.includes('alexandria') || normalizedName.includes('erba pura') || normalizedName.includes('naxos') || normalizedName.includes('40 knots') || normalizedName.includes('torino 21') || normalizedName.includes('renaissance')) return 'xerjoff';
         return '';
     };
 
@@ -5400,6 +5426,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const renderRelatedProducts = (currentProductName, currentProductBrand, currentGender, currentProductIdFromPage = '') => {
         const relatedTrack = document.querySelector('.related-track');
         if (!relatedTrack) return;
+
+        // Fix image paths: catalog entries use root-relative "assets/..." which breaks
+        // when the page is served from the /pages/ subfolder. Prepend "../" so they resolve correctly.
+        const fixImgPath = (path) => {
+            if (!path) return '';
+            if (path.startsWith('http') || path.startsWith('/') || path.startsWith('../') || path.startsWith('data:')) return path;
+            return '../' + path;
+        };
 
         const currentCanonicalName = canonicalProductName(currentProductName);
         const currentFamily = getProductFamilyKey(currentProductName);
@@ -5500,20 +5534,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             relatedTrack.innerHTML = uniqueRecommendations.map((product) => {
                 const sizeBadges = extractSizeBadges(product.name, product.price);
-                const sizeBadgesHtml = sizeBadges.map((size, index) => (
-                    `<span class="text-[10px] font-bold border ${index === 0 ? 'border-gray-800' : 'border-gray-300 text-gray-500'} px-2 py-1 rounded">${size}</span>`
-                )).join('');
-
+                const sizeBadgesHtml = sizeBadges.map((size) => `<span class="related-size-badge">${size}</span>`).join('');
+                const img = fixImgPath(product.image);
                 return `
-                    <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${product.id}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${product.image}">
-                        <img src="${product.image}" alt="${product.name}" class="related-image" loading="lazy" decoding="async">
-                        <p class="related-brand">${product.brand}</p>
-                        <h3 class="related-title">${product.name}</h3>
-                        <div class="flex items-center gap-2 mt-2">
-                            ${sizeBadgesHtml}
+                    <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${product.id}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${img}">
+                        <div class="related-image-wrap">
+                            <button type="button" class="product-favorite-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                            <img src="${img}" alt="${product.name}" class="related-image" loading="lazy" decoding="async">
                         </div>
-                        <div class="mt-3 pt-3 border-t border-gray-100">
-                            <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">${t('product_add_to_cart')}</button>
+                        <div class="related-body">
+                            <p class="related-brand">${product.brand}</p>
+                            <h3 class="related-title">${product.name}</h3>
+                            <div class="related-sizes">${sizeBadgesHtml}</div>
+                            <button type="button" class="js-card-add-btn related-add-btn"><i class="fas fa-bag-shopping" style="font-size:0.65rem"></i> ${t('product_add_to_cart')}</button>
                         </div>
                     </article>
                 `;
@@ -5522,6 +5555,116 @@ document.addEventListener('DOMContentLoaded', () => {
             bindProductLinks();
             return;
         }
+
+        // ── XERJOFF brand page: show Xerjoff collection ──────────────────
+        const xerjoffRelatedCatalog = [
+            {
+                id: 'alexandria',
+                name: 'Xerjoff Alexandria II Eau de Parfum',
+                brand: 'XERJOFF',
+                price: '50ML 2 800 MAD — 100ML 4 500 MAD',
+                image: 'assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp',
+                gender: 'unisex'
+            },
+            {
+                id: 'erba-pura',
+                name: 'Xerjoff Erba Pura Eau de Parfum',
+                brand: 'XERJOFF',
+                price: '50ML 2 200 MAD — 100ML 3 800 MAD',
+                image: 'assets/images/products/xerjoff/xerjoff-erba-pura/1.webp',
+                gender: 'unisex'
+            },
+            {
+                id: 'naxos',
+                name: 'Xerjoff Naxos Eau de Parfum',
+                brand: 'XERJOFF',
+                price: '50ML 2 500 MAD — 100ML 4 200 MAD',
+                image: 'assets/images/products/xerjoff/xerjoff-naxos/1.webp',
+                gender: 'unisex'
+            },
+            {
+                id: 'xerjoff-40-knots',
+                name: 'Xerjoff 40 Knots Eau de Parfum',
+                brand: 'XERJOFF',
+                price: '10ML 300 MAD — 100ML 2 600 MAD',
+                image: 'assets/images/products/xerjoff/xerjoff-40-knots/1.webp',
+                gender: 'unisex'
+            },
+            {
+                id: 'xerjoff-torino-21',
+                name: 'Xerjoff Torino 21 Eau de Parfum',
+                brand: 'XERJOFF',
+                price: '10ML 300 MAD — 100ML 2 600 MAD',
+                image: 'assets/images/products/xerjoff/xerjoff-torino-21/1.webp',
+                gender: 'unisex'
+            },
+            {
+                id: 'xerjoff-renaissance',
+                name: 'Xerjoff Renaissance Eau de Parfum',
+                brand: 'XERJOFF',
+                price: '10ML 260 MAD — 100ML 2 300 MAD',
+                image: 'assets/images/products/xerjoff/xerjoff-renaissance/1.webp',
+                gender: 'unisex'
+            }
+        ];
+
+        const currentXerjoffIdCandidates = new Set([
+            currentProductId,
+            currentUrlId,
+            toProductDataId(currentProductName),
+            canonicalProductName(currentProductName)
+        ].filter(Boolean));
+
+        const isXerjoffProductPage = String(currentProductBrand || '').toLowerCase().includes('xerjoff')
+            || xerjoffRelatedCatalog.some((product) => currentXerjoffIdCandidates.has(String(product.id || '').trim().toLowerCase()));
+
+        if (isXerjoffProductPage) {
+            const currentXerjoffIndex = xerjoffRelatedCatalog.findIndex((product) => (
+                currentXerjoffIdCandidates.has(String(product.id || '').trim().toLowerCase())
+                || canonicalProductName(product.name) === currentCanonicalName
+            ));
+
+            const orderedXerjoffPool = currentXerjoffIndex >= 0
+                ? xerjoffRelatedCatalog.slice(currentXerjoffIndex + 1).concat(xerjoffRelatedCatalog.slice(0, currentXerjoffIndex + 1))
+                : xerjoffRelatedCatalog;
+
+            const xerjoffRecommendations = orderedXerjoffPool
+                .filter((product) => {
+                    const productId = String(product.id || '').trim().toLowerCase();
+                    return !currentXerjoffIdCandidates.has(productId)
+                        && canonicalProductName(product.name) !== currentCanonicalName;
+                })
+                .slice(0, 6);
+
+            const kicker = relatedTrack.closest('section')?.querySelector('.product-section-kicker');
+            const heading = relatedTrack.closest('section')?.querySelector('[data-i18n="product.related_title"]');
+            if (kicker) kicker.textContent = currentLanguage === 'fr' ? 'Collection Xerjoff' : 'Xerjoff Collection';
+            if (heading) heading.textContent = currentLanguage === 'fr' ? 'Plus de la Maison Xerjoff' : 'More from Xerjoff';
+
+            relatedTrack.innerHTML = xerjoffRecommendations.map((product) => {
+                const sizeBadges = extractSizeBadges(product.name, product.price);
+                const sizeBadgesHtml = sizeBadges.map((size) => `<span class="related-size-badge">${size}</span>`).join('');
+                const img = fixImgPath(product.image);
+                return `
+                    <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${product.id}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${img}">
+                        <div class="related-image-wrap">
+                            <button type="button" class="product-favorite-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                            <img src="${img}" alt="${product.name}" class="related-image" loading="lazy" decoding="async">
+                        </div>
+                        <div class="related-body">
+                            <p class="related-brand">${product.brand}</p>
+                            <h3 class="related-title">${product.name}</h3>
+                            <div class="related-sizes">${sizeBadgesHtml}</div>
+                            <button type="button" class="js-card-add-btn related-add-btn"><i class="fas fa-bag-shopping" style="font-size:0.65rem"></i> ${t('product_add_to_cart')}</button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            bindProductLinks();
+            return;
+        }
+        // ─────────────────────────────────────────────────────────────────
 
         const familyMatches = currentFamily
             ? relatedProductCatalog.filter((product) => (
@@ -5586,21 +5729,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         relatedTrack.innerHTML = recommendations.map((product) => {
             const sizeBadges = extractSizeBadges(product.name, product.price);
-            const sizeBadgesHtml = sizeBadges.map((size, index) => (
-                `<span class="text-[10px] font-bold border ${index === 0 ? 'border-gray-800' : 'border-gray-300 text-gray-500'} px-2 py-1 rounded">${size}</span>`
-            )).join('');
-
+            const sizeBadgesHtml = sizeBadges.map((size) => `<span class="related-size-badge">${size}</span>`).join('');
             const relatedProductId = product.id || toProductDataId(product.name);
+            const img = fixImgPath(product.image);
             return `
-                <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${relatedProductId}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${product.image}">
-                    <img src="${product.image}" alt="${product.name}" class="related-image" loading="lazy" decoding="async">
-                    <p class="related-brand">${product.brand}</p>
-                    <h3 class="related-title">${product.name}</h3>
-                    <div class="flex items-center gap-2 mt-2">
-                        ${sizeBadgesHtml}
+                <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${relatedProductId}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${img}">
+                    <div class="related-image-wrap">
+                        <button type="button" class="product-favorite-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+                        <img src="${img}" alt="${product.name}" class="related-image" loading="lazy" decoding="async">
                     </div>
-                    <div class="mt-3 pt-3 border-t border-gray-100">
-                        <button type="button" class="js-card-add-btn w-full bg-brand-red text-white text-xs font-semibold py-2 rounded-md hover:bg-brand-redHover transition">${t('product_add_to_cart')}</button>
+                    <div class="related-body">
+                        <p class="related-brand">${product.brand}</p>
+                        <h3 class="related-title">${product.name}</h3>
+                        <div class="related-sizes">${sizeBadgesHtml}</div>
+                        <button type="button" class="js-card-add-btn related-add-btn"><i class="fas fa-bag-shopping" style="font-size:0.65rem"></i> ${t('product_add_to_cart')}</button>
                     </div>
                 </article>
             `;
@@ -5989,6 +6131,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Gucci
         'gucci guilty absolu de parfum pour homme': ['boozy', 'woody', 'amber', 'warm spicy', 'white floral'],
         'gucci guilty elixir pour homme': ['amber', 'powdery', 'woody', 'smoky', 'warm spicy'],
+        // Xerjoff
+        'xerjoff alexandria ii eau de parfum': ['oud', 'woody', 'amber', 'floral', 'oriental', 'sweet'],
+        'xerjoff erba pura eau de parfum': ['fruity', 'sweet', 'musky', 'fresh', 'floral', 'vanilla'],
+        'xerjoff naxos eau de parfum': ['vanilla', 'tobacco', 'honey', 'sweet', 'woody', 'warm spicy'],
+        'xerjoff 40 knots eau de parfum': ['marine', 'aromatic', 'woody', 'fresh', 'musky', 'citrus'],
+        'xerjoff torino 21 eau de parfum': ['woody', 'warm spicy', 'oriental', 'amber', 'tobacco', 'leather'],
+        'xerjoff renaissance eau de parfum': ['floral', 'powdery', 'woody', 'white floral', 'musky', 'sweet'],
         // Montale
         'montale arabians tonka': ['sweet', 'amber', 'leather', 'woody', 'floral'],
         // Prada Luna Rossa

@@ -14877,6 +14877,14 @@ nav[aria-label="Breadcrumb"] ol {
     display: block;
     background: #0d0a0e;
     line-height: 0;
+    --hero-parallax: 0px;
+}
+
+/* Parallax: product images float upward as user scrolls */
+.hero-banner-section .hero-banner-product-img {
+    transform: translateY(var(--hero-parallax, 0px));
+    transition: transform 0s linear;
+    will-change: transform;
 }
 
 /* ── Slide track: stacks all slides on top of each other ── */
@@ -29042,3 +29050,635 @@ footer.bg-brand-dark {
 .js-product-link {
     contain: layout style;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   SPECIAL OFFERS / PROMOTIONS SECTION  (spo-)
+   ▸ Dynamic — fed from Firestore productOverrides collection
+   ▸ Admin: feature a product via the Promotions panel
+   ▸ Colours: dark #0b0609 · gold #c8a96a · crimson #c8182e
+              cream #faf8f4 · ink #1a1f2e
+   ▸ Fonts: Playfair Display (headings), Inter (body)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Section wrapper ── */
+#specialOffersSection {
+    background: #0b0609;
+    padding: 5rem 1.25rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ambient radial glows */
+#specialOffersSection::before {
+    content: '';
+    position: absolute;
+    top: -12%;
+    left: -8%;
+    width: 46%;
+    height: 75%;
+    background: radial-gradient(ellipse at center, rgba(200,169,106,0.07) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+#specialOffersSection::after {
+    content: '';
+    position: absolute;
+    bottom: -10%;
+    right: -6%;
+    width: 42%;
+    height: 68%;
+    background: radial-gradient(ellipse at center, rgba(200,24,46,0.06) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+/* ── Inner container ── */
+.spo-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Section header ── */
+.spo-header {
+    text-align: center;
+    margin-bottom: 3.25rem;
+}
+
+/* Eyebrow label — editorial dash-line style */
+.spo-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(200,169,106,0.75);
+    margin-bottom: 1.3rem;
+}
+
+.spo-label::before,
+.spo-label::after {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,169,106,0.50));
+    flex-shrink: 0;
+}
+
+.spo-label::after {
+    background: linear-gradient(270deg, transparent, rgba(200,169,106,0.50));
+}
+
+/* Main heading */
+.spo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    font-weight: 700;
+    color: #faf8f4;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+    line-height: 1.08;
+    margin: 0 0 0.7rem;
+}
+
+.spo-title-icon {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: #c8a96a;
+    opacity: 0.85;
+}
+
+/* Thin gold divider under title */
+.spo-divider {
+    width: 42px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,169,106,0.60), transparent);
+    margin: 0 auto 1.05rem;
+}
+
+/* Sub-headline */
+.spo-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.84rem;
+    color: rgba(250,248,244,0.50);
+    max-width: 460px;
+    margin: 0 auto 1.9rem;
+    line-height: 1.72;
+    font-weight: 400;
+}
+
+/* ── Countdown timer ── */
+.spo-countdown {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.62rem;
+}
+
+.spo-countdown-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.57rem;
+    font-weight: 700;
+    letter-spacing: 0.30em;
+    text-transform: uppercase;
+    color: rgba(200,169,106,0.48);
+}
+
+.spo-countdown-units {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.spo-countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 70px;
+    padding: 0.8rem 0.55rem 0.65rem;
+    background: rgba(200,169,106,0.05);
+    border: 1px solid rgba(200,169,106,0.18);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* gold shimmer line top of each box */
+.spo-countdown-unit::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 18%; right: 18%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,169,106,0.45), transparent);
+    pointer-events: none;
+}
+
+.spo-countdown-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.68rem;
+    font-weight: 800;
+    color: #faf8f4;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.spo-countdown-lbl {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.49rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(200,169,106,0.55);
+    line-height: 1;
+    margin-top: 0.42rem;
+}
+
+.spo-countdown-sep {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: rgba(200,169,106,0.28);
+    line-height: 1;
+    padding-top: 0.82rem;
+    align-self: auto;
+}
+
+/* ── Cards grid ── */
+.spo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.3rem;
+    min-height: 280px;
+}
+
+/* Adaptive column count for small sets */
+.spo-grid[data-count="1"] { grid-template-columns: minmax(300px, 680px); justify-content: center; }
+
+/* ── Single-card horizontal layout ── */
+.spo-grid[data-count="1"] .spo-card {
+    flex-direction: row;
+    max-height: 340px;
+}
+.spo-grid[data-count="1"] .spo-card-link {
+    flex-shrink: 0;
+    width: 280px;
+}
+.spo-grid[data-count="1"] .spo-card-img-wrap {
+    height: 100%;
+    width: 100%;
+    border-radius: 1.2rem 0 0 1.2rem;
+}
+.spo-grid[data-count="1"] .spo-card-body {
+    border-top: none;
+    border-left: 1px solid rgba(218,210,196,0.55);
+    justify-content: center;
+    padding: 1.5rem 1.6rem;
+}
+.spo-grid[data-count="1"] .spo-card-title {
+    font-size: 1.18rem;
+}
+.spo-grid[data-count="1"] .spo-card-desc {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+}
+.spo-grid[data-count="1"] .spo-card-btn {
+    margin-top: 1.2rem;
+}
+.spo-grid[data-count="2"] { grid-template-columns: repeat(2, minmax(240px, 370px)); justify-content: center; }
+.spo-grid[data-count="3"] { grid-template-columns: repeat(3, 1fr); }
+
+@media (max-width: 1100px) {
+    .spo-grid,
+    .spo-grid[data-count="3"] { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+    .spo-grid,
+    .spo-grid[data-count="2"],
+    .spo-grid[data-count="3"] {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .spo-grid { grid-template-columns: 1fr; gap: 0.9rem; }
+}
+
+/* ── Loading skeleton ── */
+.spo-skeleton {
+    background: linear-gradient(165deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(200,169,106,0.09);
+    border-radius: 1.15rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.spo-skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(200,169,106,0.07) 50%, transparent 100%);
+    animation: spo-shimmer 1.7s ease-in-out infinite;
+    transform: translateX(-100%);
+}
+
+@keyframes spo-shimmer {
+    to { transform: translateX(200%); }
+}
+
+.spo-skeleton-img {
+    height: 210px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(200,169,106,0.07);
+}
+
+.spo-skeleton-body {
+    padding: 1rem 1.1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.spo-skeleton-line {
+    border-radius: 4px;
+    background: rgba(255,255,255,0.07);
+}
+
+/* ── Empty state ── */
+.spo-empty {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4.5rem 2rem;
+    gap: 0.8rem;
+}
+
+.spo-empty-icon {
+    font-size: 2.25rem;
+    color: rgba(200,169,106,0.22);
+}
+
+.spo-empty-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: rgba(250,248,244,0.28);
+    text-align: center;
+    line-height: 1.65;
+}
+
+/* ── Card ── */
+.spo-card {
+    background: linear-gradient(175deg, #ffffff 0%, #faf8f4 60%, #f3ecdf 100%);
+    border: 1px solid rgba(218,210,196,0.90);
+    border-radius: 1.2rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    /* Scroll-in initial state */
+    opacity: 0;
+    transform: translateY(28px);
+    box-shadow:
+        0 4px 22px rgba(0,0,0,0.22),
+        0 1px 4px rgba(0,0,0,0.11);
+    transition:
+        opacity 0.60s ease,
+        transform 0.60s cubic-bezier(0.22,1,0.36,1),
+        box-shadow 0.35s ease,
+        border-color 0.30s ease;
+}
+
+/* Stagger each card */
+.spo-card:nth-child(1)  { transition-delay: 0.00s; }
+.spo-card:nth-child(2)  { transition-delay: 0.06s; }
+.spo-card:nth-child(3)  { transition-delay: 0.12s; }
+.spo-card:nth-child(4)  { transition-delay: 0.18s; }
+.spo-card:nth-child(5)  { transition-delay: 0.24s; }
+.spo-card:nth-child(6)  { transition-delay: 0.30s; }
+.spo-card:nth-child(7)  { transition-delay: 0.36s; }
+.spo-card:nth-child(8)  { transition-delay: 0.42s; }
+
+/* Visible state */
+.spo-card.spo-card--visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hover */
+.spo-card.spo-card--visible:hover {
+    transform: translateY(-8px);
+    box-shadow:
+        0 32px 64px rgba(0,0,0,0.30),
+        0 10px 24px rgba(0,0,0,0.15);
+    border-color: rgba(200,169,106,0.48);
+}
+
+/* Gold top shimmer line */
+.spo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 18%; right: 18%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,169,106,0.60), transparent);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* ── Card image area ── */
+.spo-card-link {
+    display: block;
+    text-decoration: none;
+}
+
+.spo-card-img-wrap {
+    position: relative;
+    background: linear-gradient(150deg, #f9f7f5 0%, #f0e9db 100%);
+    height: 212px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    overflow: hidden;
+}
+
+/* Radial warm glow in image area */
+.spo-card-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 85%, rgba(200,169,106,0.07) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+.spo-card-img {
+    max-height: 176px;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    mix-blend-mode: multiply;
+    transition: transform 0.50s cubic-bezier(0.22,1,0.36,1);
+    will-change: transform;
+    position: relative;
+    z-index: 1;
+}
+
+.spo-card.spo-card--visible:hover .spo-card-img {
+    transform: scale(1.09) translateY(-4px);
+}
+
+/* ── Discount badge ── */
+.spo-badge {
+    position: absolute;
+    top: 11px;
+    left: 11px;
+    z-index: 10;
+    background: linear-gradient(135deg, #c8182e 0%, #8b0d1e 100%);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.69rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    padding: 0.28rem 0.72rem;
+    border-radius: 999px;
+    line-height: 1.45;
+    box-shadow:
+        0 4px 16px rgba(200,24,46,0.48),
+        0 1px 3px rgba(0,0,0,0.18);
+}
+
+/* ── Card body ── */
+.spo-card-body {
+    padding: 1.05rem 1.15rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    border-top: 1px solid rgba(218,210,196,0.55);
+}
+
+/* Brand label */
+.spo-card-brand {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: #b87d2a;
+    margin-bottom: 0.32rem;
+    line-height: 1;
+}
+
+/* Product title */
+.spo-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.96rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0 0 0.5rem;
+}
+
+.spo-card-title a {
+    color: #1a1f2e;
+    text-decoration: none;
+    transition: color 0.20s ease;
+}
+
+.spo-card-title a:hover { color: #c8182e; }
+
+/* Description */
+.spo-card-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    color: #6b7280;
+    line-height: 1.58;
+    margin-bottom: 0.85rem;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Pricing row */
+.spo-card-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    margin-bottom: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.spo-card-old-price {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #9ca3af;
+    text-decoration: line-through;
+}
+
+.spo-card-new-price {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.06rem;
+    font-weight: 800;
+    color: #1a1f2e;
+    letter-spacing: 0.01em;
+}
+
+/* CTA button */
+.spo-card-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0.74rem 1rem;
+    border-radius: 999px;
+    background: linear-gradient(160deg, #1e2230 0%, #111318 100%);
+    color: #faf8f4;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid rgba(200,169,106,0.30);
+    box-shadow: 0 8px 26px rgba(14,16,22,0.20);
+    margin-top: auto;
+    transition:
+        transform 0.28s ease,
+        box-shadow 0.28s ease,
+        border-color 0.28s ease;
+}
+
+.spo-card-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(200,169,106,0.68);
+    box-shadow: 0 14px 36px rgba(14,16,22,0.30);
+    color: #faf8f4;
+    text-decoration: none;
+}
+
+/* ── Footer CTA ── */
+.spo-footer {
+    text-align: center;
+    margin-top: 2.75rem;
+}
+
+.spo-view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.9rem 2.15rem;
+    border-radius: 999px;
+    border: 1px solid rgba(200,169,106,0.35);
+    color: #c8a96a;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.70rem;
+    font-weight: 700;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+        background 0.28s ease,
+        color 0.28s ease,
+        border-color 0.28s ease,
+        transform 0.28s ease;
+}
+
+.spo-view-all:hover {
+    background: rgba(200,169,106,0.10);
+    border-color: rgba(200,169,106,0.70);
+    color: #e4c98a;
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+.spo-view-all i { transition: transform 0.28s ease; }
+.spo-view-all:hover i { transform: translateX(5px); }
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+    .spo-card,
+    .spo-card.spo-card--visible,
+    .spo-card.spo-card--visible:hover {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: box-shadow 0.2s ease, border-color 0.2s ease !important;
+    }
+    .spo-skeleton::after { animation: none; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 479px) {
+    #specialOffersSection { padding: 2.75rem 0.9rem; }
+    .spo-header { margin-bottom: 2rem; }
+    .spo-title { font-size: 1.55rem; gap: 0.55rem; }
+    .spo-countdown-unit { min-width: 58px; padding: 0.65rem 0.4rem 0.55rem; }
+    .spo-countdown-num { font-size: 1.35rem; }
+    .spo-card-img-wrap { height: 162px; padding: 1rem; }
+    .spo-card-img { max-height: 130px; }
+    .spo-card-body { padding: 0.8rem 0.9rem 0.9rem; }
+    .spo-card-title { font-size: 0.84rem; }
+    .spo-card-desc { display: none; }
+}
+
+@media (min-width: 1280px) {
+    #specialOffersSection { padding: 5.5rem 2rem; }
+    .spo-grid { gap: 1.6rem; }
+}
+
+/* ═════════════════════════════════════════ END SPECIAL OFFERS ═══ */

@@ -1375,6 +1375,20 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
     </section>
 
+    <!-- ═══════════════ ADMIN-ADDED UNIQUE'E LUXURY PRODUCTS ═══════════════ -->
+    <section id="hulAdminProducts" style="background:#fff;display:none">
+        <div style="max-width:1100px;margin:0 auto;padding:0 1.5rem 4rem">
+            <div style="text-align:center;margin-bottom:2.5rem;padding-top:3.5rem">
+                <p class="hul-collection-label">More from Unique'e Luxury</p>
+                <h2 class="hul-collection-title">Extended Collection</h2>
+                <p style="font-size:0.85rem;color:#6b7280;margin-top:0.5rem">New arrivals &amp; full-bottle options</p>
+            </div>
+            <div id="hulAdminGrid" style="display:flex;flex-direction:column;gap:0">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+    </section>
+
     <!-- Module script: fetches Firestore overrides then triggers dynamic size rendering -->
     <script type="module">
         import { db } from '../auth/firebase.js';
@@ -1401,7 +1415,116 @@ s0.parentNode.insertBefore(s1,s0);
         // Module scripts are deferred — by the time this runs, the regular script below
         // has already defined initHulSizes(). Call it now.
         if (typeof initHulSizes === 'function') initHulSizes();
-    </script>
+
+        // ── Load admin-added Unique'e Luxury products ──
+        (async () => {
+            try {
+                const { collection: col2, getDocs: gd2 } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
+                const snap = await gd2(col2(db, 'products'));
+                // Slugs already hardcoded on the page — do not duplicate
+                const EXISTING_ON_PAGE = new Set([
+                    'akdeniz-uniquee-luxury','akdeniz-unique-e-luxury',
+                    'aphrodisiac-touch','izmir-uniquee-luxury','izmir-unique-e-luxury',
+                    'kutay','ocean-the-rive','ocean-the-rive-unique-e-luxury',
+                    'woud-and-mood-absolute','woud-and-mood-absolute-by-unique-e-luxury',
+                    'chocolate-makes-me-happy',
+                ]);
+                const products = [];
+                snap.forEach(d => {
+                    const data = d.data();
+                    if (!data.active) return;
+                    const brand = (data.brand || '').toUpperCase();
+                    if (!brand.includes('UNIQUE')) return;
+                    const slug = data.slug || d.id;
+                    if (EXISTING_ON_PAGE.has(slug) || EXISTING_ON_PAGE.has(d.id)) return;
+                    products.push({ id: d.id, ...data });
+                });
+                if (!products.length) return;
+
+                products.sort((a, b) => (a.addedAt?.seconds || 0) - (b.addedAt?.seconds || 0));
+
+                const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+                const grid = document.getElementById('hulAdminGrid');
+                const section = document.getElementById('hulAdminProducts');
+                if (!grid || !section) return;
+
+                grid.innerHTML = products.map((p, i) => {
+                    const slug    = p.slug || p.id;
+                    const prefix  = 'hadm-' + i;
+                    const mainId  = prefix + '-main';
+                    const priceId = prefix + '-price';
+                    const qtyId   = prefix + '-qty';
+                    const imgs    = Array.isArray(p.images) ? p.images : (p.image ? [p.image] : []);
+                    const mainImg = imgs[0] || '';
+
+                    const thumbs = imgs.map((src, ti) =>
+                        `<div class="hul-gallery-thumb${ti===0?' is-active':''}" onclick="hulGallery('${mainId}',this,'${esc(src)}')">
+                            <img loading="lazy" decoding="async" src="${esc(src)}" alt="${esc(p.name)}">
+                        </div>`
+                    ).join('');
+
+                    const sizes    = p.sizes || {};
+                    const sizeKeys = Object.keys(sizes).sort((a,b)=>{ const n=s=>parseInt(String(s).replace(/\D/g,''),10)||0; return n(a)-n(b); });
+
+                    // Store prices in separate map safe from hulPrices reset
+                    if (!window._adminHulPrices) window._adminHulPrices = {};
+                    window._adminHulPrices[slug] = {};
+                    sizeKeys.forEach(sz => { window._adminHulPrices[slug][sz] = Number(sizes[sz])||0; });
+
+                    const sizeBtns = sizeKeys.map(sz =>
+                        `<button class="hul-size-btn" type="button" data-size-key="${esc(sz)}" onclick="hulSize(this,'${priceId}')">${esc(sz.toUpperCase().replace(/(\d)(ML)$/i,'$1 $2'))}</button>`
+                    ).join('');
+
+                    const notesTop   = p.notes?.top   || '';
+                    const notesHeart = p.notes?.heart || '';
+                    const notesBase  = p.notes?.base  || '';
+                    const notesHtml  = (notesTop||notesHeart||notesBase) ? `
+                        <button class="hul-notes-toggle" onclick="hulToggleNotes(this)"><span>Fragrance Notes</span> <i class="fas fa-chevron-down"></i></button>
+                        <div class="hul-notes-body">
+                            ${notesTop   ? `<div class="hul-note-tier"><p class="hul-note-tier-label"><i class="fas fa-wind"></i> Top Notes</p><p class="hul-note-tier-value">${esc(notesTop)}</p></div>` : ''}
+                            ${notesHeart ? `<div class="hul-note-tier"><p class="hul-note-tier-label"><i class="fas fa-heart"></i> Heart Notes</p><p class="hul-note-tier-value">${esc(notesHeart)}</p></div>` : ''}
+                            ${notesBase  ? `<div class="hul-note-tier"><p class="hul-note-tier-label"><i class="fas fa-mountain"></i> Base Notes</p><p class="hul-note-tier-value">${esc(notesBase)}</p></div>` : ''}
+                        </div>` : '';
+
+                    return `<div class="hul-product-entry" id="product-${prefix}" data-product-id="${esc(slug)}">
+                        <div class="hul-product-layout">
+                            <div>
+                                <div class="hul-gallery-main"><img loading="lazy" decoding="async" id="${mainId}" src="${esc(mainImg)}" alt="${esc(p.name)}"></div>
+                                <div class="hul-gallery-thumbs">${thumbs}</div>
+                            </div>
+                            <div>
+                                <p class="hul-product-brand-tag">UNIQUE'E LUXURY &middot; Extrait de Parfum</p>
+                                <h3 class="hul-product-name">${esc(p.name)}</h3>
+                                ${p.description ? `<p class="hul-product-subtitle">${esc(p.description)}</p>` : ''}
+                                <p class="hul-size-label">Size</p>
+                                <div class="hul-size-row">${sizeBtns}</div>
+                                <p id="${priceId}" class="hul-price-display" style="color:#9ca3af;font-size:1rem;font-weight:600;">Choose a size to see the price</p>
+                                <p class="hul-price-note">Delivery in Morocco: 35 MAD &mdash; VAT included</p>
+                                <div class="hul-qty-row">
+                                    <div class="hul-qty-box">
+                                        <button class="hul-qty-btn" onclick="hulQty('${qtyId}',-1)">&#8722;</button>
+                                        <span id="${qtyId}" class="hul-qty-val">1</span>
+                                        <button class="hul-qty-btn" onclick="hulQty('${qtyId}',1)">+</button>
+                                    </div>
+                                    <button class="hul-cart-btn" onclick="hulAddToCart('${prefix}','${esc(p.name)}')">Add to Cart</button>
+                                    <button class="hul-wish-btn" aria-label="Wishlist"><i class="far fa-heart"></i></button>
+                                </div>
+                                <div class="hul-trust-chips">
+                                    <div class="hul-trust-chip"><i class="fas fa-truck" style="color:#c8102e"></i> Delivery: 35 MAD</div>
+                                    <div class="hul-trust-chip"><i class="fas fa-shield-heart" style="color:#c8102e"></i> 100% Authentic</div>
+                                    <div class="hul-trust-chip"><i class="fas fa-flask" style="color:#c8102e"></i> Extrait de Parfum</div>
+                                    <div class="hul-trust-chip"><i class="fas fa-gift" style="color:#c8102e"></i> Packed with Care</div>
+                                </div>
+                                ${notesHtml}
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+
+                section.style.display = '';
+            } catch(e) { console.warn('[HUL admin products]', e.message); }
+        })();
 
     <script>
         var hulPrices = {};
@@ -1503,7 +1626,9 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         function getHulPrice(productId, sizeKey) {
-            var p = hulPrices && hulPrices[productId];
+            // Check both main map and admin-added products map
+            var p = (hulPrices && hulPrices[productId])
+                 || (window._adminHulPrices && window._adminHulPrices[productId]);
             if (!p || typeof p !== 'object') return 0;
             var n = Number(p[sizeKey]);
             return Number.isFinite(n) && n > 0 ? n : 0;

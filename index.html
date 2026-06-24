@@ -6,14 +6,20 @@
 
     <!-- SEO: Canonical redirect — normalises /index.html ? / and www ? apex -->
     <script>(function(){var u=window.location.href,h=window.location.hostname,p=window.location.pathname;if(h==='www.ipordise.com')u=u.replace('://www.ipordise.com','://ipordise.com');if(p==='/index.html')u=u.replace('/index.html','/');if(u!==window.location.href)window.location.replace(u);}());</script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-70NCC2RZM6"></script>
+    <!-- Google Analytics: deferred after load to not block LCP -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
-      gtag('config', 'G-70NCC2RZM6');
+      gtag('config', 'G-70NCC2RZM6', { 'send_page_view': false });
+      /* Load gtag script after page fully loads */
+      window.addEventListener('load', function() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-70NCC2RZM6';
+        document.head.appendChild(s);
+        s.onload = function() { gtag('event', 'page_view'); };
+      }, { once: true });
     </script>
     <title data-i18n-title="index.page_title">IPORDISE | Buy Luxury Perfumes Online in Morocco — Niche, Designer &amp; Arabian</title>
     <meta name="description" content="Shop 40+ authentic luxury perfumes in Morocco at IPORDISE. Niche, designer &amp; Arabian fragrances for men &amp; women. Free delivery — flat 35 MAD. 400+ happy customers. 100% verified.">
@@ -127,146 +133,92 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+    <!-- Preconnect: Firebase, FA, Analytics, Tawk -->
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://embed.tawk.to">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://ipordise-aef54.firebaseio.com">
+    <!-- Critical CSS: load style.css FIRST to unblock render -->
+    <link rel="preload" href="style.css?v=3" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="style.css?v=3"></noscript>
     <link rel="stylesheet" href="assets/tailwind.min.css">
+    <!-- Fonts: reduced to 3 weights only — drops ~18 KB of font data -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     <script src="script.js?v=23" defer></script>
     <script src="i18n.js" defer></script>
-    <link rel="stylesheet" href="style.css?v=3">
-<!--Start of Tawk.to Script — deferred until first user interaction for performance -->
+<!-- WhatsApp Chat Widget — renders immediately, independent of Tawk.to -->
+<style>
+  #ipo-tawk-wrap{position:fixed;bottom:calc(100px + 0.75rem + env(safe-area-inset-bottom,0px));right:1.25rem;z-index:99999;display:flex;align-items:center;gap:10px;flex-direction:row;animation:ipo-pop-in .5s cubic-bezier(.34,1.56,.64,1) .3s both;}
+  @keyframes ipo-pop-in{from{opacity:0;transform:scale(.5) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
+  #ipo-tawk-label{background:#fff;color:#1a1a1a;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;font-family:Inter,system-ui,sans-serif;white-space:nowrap;box-shadow:0 4px 24px rgba(0,0,0,.13),0 1px 0 rgba(200,169,106,.18);border:1px solid rgba(200,169,106,.25);display:flex;align-items:center;gap:7px;cursor:pointer;letter-spacing:.01em;opacity:0;transform:translateX(20px) scale(.94);transition:opacity .5s ease,transform .5s cubic-bezier(.34,1.36,.64,1);pointer-events:none;user-select:none;animation:ipo-lbl-in .6s cubic-bezier(.34,1.36,.64,1) 1.2s forwards;}
+  @keyframes ipo-lbl-in{0%{opacity:0;transform:translateX(20px) scale(.94);}100%{opacity:1;transform:translateX(0) scale(1);pointer-events:auto;}}
+  #ipo-tawk-label.ipo-lbl-ready{opacity:1;transform:translateX(0) scale(1);pointer-events:auto;}
+  #ipo-tawk-label.ipo-lbl-hide{opacity:0;transform:translateX(14px) scale(.96);pointer-events:none;transition:opacity .4s ease,transform .4s ease;animation:none;}
+  #ipo-tawk-label-dot{width:8px;height:8px;border-radius:50%;background:#25D366;flex-shrink:0;animation:ipo-dot-blink 1.6s ease-in-out infinite;}
+  @keyframes ipo-dot-blink{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(37,211,102,.7);}50%{opacity:.55;box-shadow:0 0 0 4px rgba(37,211,102,0);}}
+  #ipo-tawk-label-text{line-height:1.2;}
+  #ipo-tawk-label-sub{display:block;font-size:10px;font-weight:400;color:#6b7280;letter-spacing:.02em;margin-top:1px;}
+  #ipo-tawk-btn{position:relative;width:60px;height:60px;border-radius:50%;background:linear-gradient(145deg,#2de370 0%,#20bf55 45%,#1a9e47 100%);box-shadow:0 8px 28px rgba(37,211,102,.35),0 2px 8px rgba(0,0,0,.18);cursor:pointer;border:none;padding:0;overflow:visible;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s ease;flex-shrink:0;}
+  #ipo-tawk-btn:hover{transform:scale(1.12);box-shadow:0 14px 40px rgba(37,211,102,.45),0 4px 14px rgba(0,0,0,.2);}
+  #ipo-tawk-btn:active{transform:scale(.9);}
+  #ipo-tawk-ring{position:absolute;inset:-7px;border-radius:50%;border:2.5px solid rgba(37,211,102,.5);pointer-events:none;animation:ipo-ring 2.8s ease-out 2s infinite;}
+  @keyframes ipo-ring{0%{transform:scale(1);opacity:.7;}100%{transform:scale(1.55);opacity:0;}}
+  #ipo-tawk-img{color:#fff;font-size:32px;line-height:1;pointer-events:none;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.2));}
+  #ipo-tawk-dot{position:absolute;top:-10px;right:-10px;min-width:24px;height:24px;padding:0 5px;background:linear-gradient(135deg,#ff3a3a 0%,#c8102e 100%);color:#fff;font-size:12px;font-weight:800;font-family:Inter,system-ui,sans-serif;border-radius:999px;display:flex;align-items:center;justify-content:center;border:2.5px solid #fff;z-index:5;box-shadow:0 3px 14px rgba(200,16,46,.55);animation:ipo-bdg-pop .55s cubic-bezier(.34,1.56,.64,1) 1.8s both,ipo-bdg-pulse 2.4s ease-out 3s infinite;pointer-events:none;line-height:1;}
+  @keyframes ipo-bdg-pop{0%{transform:scale(0) rotate(-20deg);opacity:0;}60%{transform:scale(1.35) rotate(8deg);opacity:1;}80%{transform:scale(.9) rotate(-4deg);}100%{transform:scale(1) rotate(0);opacity:1;}}
+  @keyframes ipo-bdg-pulse{0%{box-shadow:0 0 0 0 rgba(200,16,46,.8),0 3px 14px rgba(200,16,46,.55);}60%{box-shadow:0 0 0 10px rgba(200,16,46,0),0 3px 14px rgba(200,16,46,.55);}100%{box-shadow:0 0 0 0 rgba(200,16,46,0),0 3px 14px rgba(200,16,46,.55);}}
+  @media(prefers-reduced-motion:reduce){#ipo-tawk-wrap,#ipo-tawk-ring,#ipo-tawk-dot,#ipo-tawk-label-dot{animation:none;}}
+  @media(min-width:640px){#ipo-tawk-wrap{bottom:5rem;right:1.75rem;}#ipo-tawk-btn{width:64px;height:64px;}#ipo-tawk-img{font-size:34px;}}
+  @media(max-width:400px){#ipo-tawk-label{display:none;}}
+</style>
+<div id="ipo-tawk-wrap" role="complementary" aria-label="WhatsApp support">
+  <div id="ipo-tawk-label" role="button" tabindex="0" aria-label="Chat with us on WhatsApp">
+    <span id="ipo-tawk-label-dot"></span>
+    <span id="ipo-tawk-label-text">Need help?<span id="ipo-tawk-label-sub">We reply instantly</span></span>
+  </div>
+  <button id="ipo-tawk-btn" aria-label="Chat with us on WhatsApp">
+    <div id="ipo-tawk-ring"></div>
+    <i id="ipo-tawk-img" class="fab fa-whatsapp"></i>
+    <div id="ipo-tawk-dot" aria-hidden="true">1</div>
+  </button>
+</div>
+<script>
+(function(){
+  function openWA(){
+    var b=document.getElementById('ipo-tawk-dot');
+    if(b&&b.style.display!=='none'){b.style.transition='transform .2s,opacity .2s';b.style.transform='scale(0)';b.style.opacity='0';setTimeout(function(){b.style.display='none';},220);}
+    window.open('https://wa.me/212663750210','_blank','noopener,noreferrer');
+  }
+  document.getElementById('ipo-tawk-btn').addEventListener('click',openWA);
+  var lbl=document.getElementById('ipo-tawk-label');
+  lbl.addEventListener('click',openWA);
+  lbl.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')openWA();});
+  setTimeout(function(){var l=document.getElementById('ipo-tawk-label');if(l){l.classList.add('ipo-lbl-ready');setTimeout(function(){l.classList.add('ipo-lbl-hide');},4200);}},1200);
+  var wrap=document.getElementById('ipo-tawk-wrap');
+  wrap.addEventListener('mouseenter',function(){var l=document.getElementById('ipo-tawk-label');if(l){l.style.transition='opacity .4s ease,transform .4s cubic-bezier(.34,1.36,.64,1)';l.classList.remove('ipo-lbl-hide');}});
+  wrap.addEventListener('mouseleave',function(){var l=document.getElementById('ipo-tawk-label');if(l)l.classList.add('ipo-lbl-hide');});
+})();
+</script>
+<!--Start of Tawk.to Script — deferred, widget is hidden -->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{};
 var Tawk_LoadStart=new Date();
-Tawk_API.onLoad=function(){
-  Tawk_API.hideWidget();
-  /* -- Custom floating WhatsApp button -- */
-  var style=document.createElement('style');
-  style.textContent='\
-    #ipo-tawk-wrap{\
-      position:fixed;\
-      bottom:calc(100px + 0.75rem + env(safe-area-inset-bottom,0px));\
-      right:1.25rem;\
-      z-index:99999;\
-      display:flex;\
-      align-items:center;\
-      justify-content:center;\
-      animation:ipo-pop-in .4s cubic-bezier(.34,1.56,.64,1) both;\
-    }\
-    @keyframes ipo-pop-in{\
-      from{opacity:0;transform:scale(.6);}\
-      to{opacity:1;transform:scale(1);}\
-    }\
-    #ipo-tawk-btn{\
-      position:relative;\
-      width:60px;height:60px;\
-      border-radius:50%;\
-      background:#25D366;\
-      box-shadow:0 8px 30px rgba(0,0,0,.28);\
-      cursor:pointer;\
-      border:none;\
-      padding:0;\
-      overflow:visible;\
-      -webkit-tap-highlight-color:transparent;\
-      display:flex;\
-      align-items:center;\
-      justify-content:center;\
-      transition:transform .18s ease,box-shadow .18s ease;\
-    }\
-    #ipo-tawk-btn:hover{\
-      transform:scale(1.1);\
-      box-shadow:0 12px 38px rgba(0,0,0,.32);\
-    }\
-    #ipo-tawk-btn:active{transform:scale(.92);}\
-    #ipo-tawk-img{\
-      color:#fff;\
-      font-size:34px;\
-      line-height:1;\
-      pointer-events:none;\
-      display:block;\
-    }\
-    #ipo-tawk-dot{\
-      position:absolute;\
-      top:-11px;right:-11px;\
-      width:26px;height:26px;\
-      background:linear-gradient(135deg,#ff2525 0%,#c40000 100%);\
-      color:#fff;\
-      font-size:13px;\
-      font-weight:900;\
-      font-family:Inter,system-ui,sans-serif;\
-      border-radius:50%;\
-      display:flex;\
-      align-items:center;\
-      justify-content:center;\
-      border:3px solid #fff;\
-      z-index:5;\
-      box-shadow:0 0 0 0 rgba(239,68,68,.75),0 4px 18px rgba(196,0,0,.60);\
-      animation:ipo-bdg-pop .6s cubic-bezier(.34,1.56,.64,1) 1.5s both,ipo-bdg-pulse 2.2s ease-out 2.5s infinite,ipo-bdg-shake 5s ease-in-out 6s infinite;\
-      pointer-events:none;\
-      line-height:1;\
-      letter-spacing:-.5px;\
-    }\
-    @keyframes ipo-bdg-pop{\
-      0%{transform:scale(0) rotate(-30deg);opacity:0;filter:blur(4px);}\
-      40%{transform:scale(1.6) rotate(12deg);opacity:1;filter:blur(0);}\
-      60%{transform:scale(.82) rotate(-6deg);}\
-      80%{transform:scale(1.15) rotate(3deg);}\
-      100%{transform:scale(1) rotate(0deg);opacity:1;}\
-    }\
-    @keyframes ipo-bdg-pulse{\
-      0%{box-shadow:0 0 0 0 rgba(239,68,68,.9),0 0 0 0 rgba(239,68,68,.45),0 4px 18px rgba(196,0,0,.60);}\
-      50%{box-shadow:0 0 0 14px rgba(239,68,68,0),0 0 0 7px rgba(239,68,68,.22),0 4px 18px rgba(196,0,0,.60);}\
-      100%{box-shadow:0 0 0 0 rgba(239,68,68,0),0 0 0 0 rgba(239,68,68,0),0 4px 18px rgba(196,0,0,.60);}\
-    }\
-    @keyframes ipo-bdg-shake{\
-      0%,85%,100%{transform:scale(1) rotate(0deg);}\
-      88%{transform:scale(1.2) rotate(-12deg);}\
-      91%{transform:scale(1.2) rotate(12deg);}\
-      94%{transform:scale(1.1) rotate(-7deg);}\
-      97%{transform:scale(1.1) rotate(7deg);}\
-    }\
-    @media(prefers-reduced-motion:reduce){\
-      #ipo-tawk-wrap{animation:none;}\
-    }\
-    @media(min-width:640px){\
-      #ipo-tawk-wrap{bottom:6rem;right:2rem;}\
-      #ipo-tawk-btn{width:64px;height:64px;}\
-    }\
-  ';
-  document.head.appendChild(style);
-  var wrap=document.createElement('div');
-  wrap.id='ipo-tawk-wrap';
-  wrap.innerHTML='\
-    <button id="ipo-tawk-btn" aria-label="Chat with us">\
-      <i id="ipo-tawk-img" class="fab fa-whatsapp"></i>\
-      <div id="ipo-tawk-dot">1</div>\
-    </button>';
-  document.body.appendChild(wrap);
-  document.getElementById('ipo-tawk-btn').addEventListener('click',function(){
-    var b=document.getElementById('ipo-tawk-dot');
-    if(b){b.style.transition='transform .2s,opacity .2s';b.style.transform='scale(0)';b.style.opacity='0';setTimeout(function(){b.style.display='none';},220);}
-    window.open('https://wa.me/212663750210', '_blank');
-  });
-
-};
-/* Defer Tawk.to loading — only load after first user interaction or 8s idle */
+Tawk_API.onLoad=function(){ Tawk_API.hideWidget(); };
 (function(){
   var loaded=false;
   function loadTawk(){
     if(loaded)return;loaded=true;
-    var s1=document.createElement("script");
-    s1.async=true;
+    var s1=document.createElement("script");s1.async=true;
     s1.src='https://embed.tawk.to/69c93f783157ae1c386572f6/default';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
+    s1.charset='UTF-8';s1.setAttribute('crossorigin','*');
     document.head.appendChild(s1);
   }
-  /* Load on first interaction */
-  ['scroll','click','touchstart','mousemove','keydown'].forEach(function(evt){
-    window.addEventListener(evt,loadTawk,{once:true,passive:true});
-  });
-  /* Safety: load after 8s even without interaction */
+  ['scroll','click','touchstart','mousemove','keydown'].forEach(function(evt){window.addEventListener(evt,loadTawk,{once:true,passive:true});});
   setTimeout(loadTawk,8000);
 })();
 </script>
@@ -1620,21 +1572,20 @@ Tawk_API.onLoad=function(){
                         class="hero-banner-img"
                         fetchpriority="high"
                         loading="eager"
-                        decoding="async"
+                        decoding="sync"
+                        width="1440" height="810"
                     >
                 </a>
                 <img
                     src="assets/hero section web version 3d/ysl y edp transparent.png"
                     alt=""
-                    class="hero-banner-product"
+                    class="hero-banner-product hero-banner-product-img"
                     loading="eager"
                     decoding="async"
+                    width="600" height="800"
                     aria-hidden="true"
                 >
                 <div class="hero-banner-headline" aria-hidden="true">
-                    <p class="hero-banner-hlabel">Fresh Apple Energy</p>
-                    <h2 class="hero-banner-htitle">Y Eau de Parfum</h2>
-                    <div class="hero-banner-hdivider"></div>
                 </div>
             </div>
 
@@ -1647,20 +1598,19 @@ Tawk_API.onLoad=function(){
                         class="hero-banner-img"
                         loading="lazy"
                         decoding="async"
+                        width="1440" height="810"
                     >
                 </a>
                 <img
                     src="assets/hero section web version 3d/born in roma donna transparent.png"
                     alt=""
-                    class="hero-banner-product"
+                    class="hero-banner-product hero-banner-product-img"
                     loading="lazy"
                     decoding="async"
+                    width="600" height="800"
                     aria-hidden="true"
                 >
                 <div class="hero-banner-headline" aria-hidden="true">
-                    <p class="hero-banner-hlabel">Italian Elegance</p>
-                    <h2 class="hero-banner-htitle">Born in Roma</h2>
-                    <div class="hero-banner-hdivider"></div>
                 </div>
             </div>
 
@@ -1673,20 +1623,19 @@ Tawk_API.onLoad=function(){
                         class="hero-banner-img"
                         loading="lazy"
                         decoding="async"
+                        width="1440" height="810"
                     >
                 </a>
                 <img
                     src="assets/hero section web version 3d/stronger with you intensly transparent.png"
                     alt=""
-                    class="hero-banner-product"
+                    class="hero-banner-product hero-banner-product-img"
                     loading="lazy"
                     decoding="async"
+                    width="600" height="800"
                     aria-hidden="true"
                 >
                 <div class="hero-banner-headline" aria-hidden="true">
-                    <p class="hero-banner-hlabel">Powerful &amp; Sensual</p>
-                    <h2 class="hero-banner-htitle">Stronger With You</h2>
-                    <div class="hero-banner-hdivider"></div>
                 </div>
             </div>
 
@@ -1808,6 +1757,404 @@ Tawk_API.onLoad=function(){
         startTimer();
     })();
     </script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SPECIAL OFFERS / PROMOTIONS SECTION
+         ▸ Inserted between hero carousel and Flash Offers
+         ▸ All editable values marked with ✏ comments
+         ═══════════════════════════════════════════════════════════ -->
+    <section id="specialOffersSection" aria-labelledby="spoTitle">
+        <div class="spo-inner">
+
+            <!-- ── Section Header ── -->
+            <div class="spo-header">
+                <span class="spo-label">Limited Time</span>
+
+                <h2 class="spo-title" id="spoTitle">
+                    <span>EXCLUSIVE</span>
+                    <i class="fas fa-gem spo-title-icon" aria-hidden="true"></i>
+                    <span>OFFERS</span>
+                </h2>
+
+                <div class="spo-divider" aria-hidden="true"></div>
+
+                <p class="spo-subtitle">Curated fragrances at exceptional prices — renewed daily for our most discerning clients.</p>
+
+                <!-- Countdown timer: counts down to midnight — hidden until promos load -->
+                <div class="spo-countdown" aria-label="Offer expires in" role="timer" id="spoCountdown" style="display:none">
+                    <span class="spo-countdown-label">Expires in</span>
+                    <div class="spo-countdown-units">
+                        <div class="spo-countdown-unit">
+                            <span class="spo-countdown-num" id="spoHours">00</span>
+                            <span class="spo-countdown-lbl">hrs</span>
+                        </div>
+                        <span class="spo-countdown-sep" aria-hidden="true">:</span>
+                        <div class="spo-countdown-unit">
+                            <span class="spo-countdown-num" id="spoMins">00</span>
+                            <span class="spo-countdown-lbl">min</span>
+                        </div>
+                        <span class="spo-countdown-sep" aria-hidden="true">:</span>
+                        <div class="spo-countdown-unit">
+                            <span class="spo-countdown-num" id="spoSecs">00</span>
+                            <span class="spo-countdown-lbl">sec</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Section Header -->
+
+            <!-- ── Dynamic Promotion Cards Grid ── -->
+            <div class="spo-grid" id="spoGrid" aria-live="polite" aria-busy="true">
+                <!-- Skeleton loading state (4 placeholders) -->
+                <div class="spo-skeleton" aria-hidden="true">
+                    <div class="spo-skeleton-img"></div>
+                    <div class="spo-skeleton-body">
+                        <div class="spo-skeleton-line" style="height:8px;width:38%"></div>
+                        <div class="spo-skeleton-line" style="height:15px;width:82%"></div>
+                        <div class="spo-skeleton-line" style="height:10px;width:65%"></div>
+                        <div class="spo-skeleton-line" style="height:10px;width:48%"></div>
+                        <div class="spo-skeleton-line" style="height:38px;width:100%;margin-top:10px;border-radius:999px"></div>
+                    </div>
+                </div>
+                <div class="spo-skeleton" aria-hidden="true">
+                    <div class="spo-skeleton-img"></div>
+                    <div class="spo-skeleton-body">
+                        <div class="spo-skeleton-line" style="height:8px;width:44%"></div>
+                        <div class="spo-skeleton-line" style="height:15px;width:75%"></div>
+                        <div class="spo-skeleton-line" style="height:10px;width:58%"></div>
+                        <div class="spo-skeleton-line" style="height:10px;width:50%"></div>
+                        <div class="spo-skeleton-line" style="height:38px;width:100%;margin-top:10px;border-radius:999px"></div>
+                    </div>
+                </div>
+                <div class="spo-skeleton" aria-hidden="true">
+                    <div class="spo-skeleton-img"></div>
+                    <div class="spo-skeleton-body">
+                        <div class="spo-skeleton-line" style="height:8px;width:40%"></div>
+                        <div class="spo-skeleton-line" style="height:15px;width:88%"></div>
+                        <div class="spo-skeleton-line" style="height:10px;width:62%"></div>
+                        <div class="spo-skeleton-line" style="height:10px;width:42%"></div>
+                        <div class="spo-skeleton-line" style="height:38px;width:100%;margin-top:10px;border-radius:999px"></div>
+                    </div>
+                </div>
+                <div class="spo-skeleton" aria-hidden="true">
+                    <div class="spo-skeleton-img"></div>
+                    <div class="spo-skeleton-body">
+                        <div class="spo-skeleton-line" style="height:8px;width:35%"></div>
+                        <div class="spo-skeleton-line" style="height:15px;width:79%"></div>
+                        <div class="spo-skeleton-line" style="height:10px;width:55%"></div>
+                        <div class="spo-skeleton-line" style="height:10px;width:46%"></div>
+                        <div class="spo-skeleton-line" style="height:38px;width:100%;margin-top:10px;border-radius:999px"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- /spo-grid -->
+
+            <!-- ── View All footer CTA ── -->
+            <div class="spo-footer">
+                <a href="discover.html?filter=offers" class="spo-view-all">
+                    <span>View All Offers</span>
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+
+        </div>
+        <!-- /spo-inner -->
+
+        <!-- Countdown timer JS — only starts when promos are present -->
+        <script>
+        (function () {
+            var h = document.getElementById('spoHours');
+            var m = document.getElementById('spoMins');
+            var s = document.getElementById('spoSecs');
+            var el = document.getElementById('spoCountdown');
+            function pad(n) { return n < 10 ? '0' + n : String(n); }
+            function tick() {
+                var now = new Date();
+                var end = new Date(); end.setHours(23, 59, 59, 999);
+                var diff = Math.max(0, end - now);
+                if (h) h.textContent = pad(Math.floor(diff / 3600000));
+                if (m) m.textContent = pad(Math.floor((diff % 3600000) / 60000));
+                if (s) s.textContent = pad(Math.floor((diff % 60000) / 1000));
+            }
+            window._spoStartCountdown = function () {
+                if (!el) return;
+                el.style.display = '';
+                tick();
+                setInterval(tick, 1000);
+            };
+        })();
+        </script>
+
+        <!-- Dynamic promotions loader — reads from Firestore productOverrides -->
+        <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js';
+        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
+
+        const _fbCfg = {
+            apiKey:            'AIzaSyAt-fnGB3Y69qEmg4pjOWneKrutbnQLMM4',
+            authDomain:        'ipordise-aef54.firebaseapp.com',
+            projectId:         'ipordise-aef54',
+            storageBucket:     'ipordise-aef54.firebasestorage.app',
+            messagingSenderId: '870679323928',
+            appId:             '1:870679323928:web:d3f03a8dddff119951ea6d',
+        };
+
+        // Reuse existing app if already initialised by another module on the page
+        let _app;
+        try {
+            const { getApp } = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js');
+            _app = getApp();
+        } catch (_) {
+            _app = initializeApp(_fbCfg, 'spo-loader');
+        }
+        const _db = getFirestore(_app);
+
+        /* ── Product image map ── */
+        const PROD_IMG = {
+            'armani-stronger-with-you-absolutely-perfume':     'assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp',
+            'armani-stronger-with-you-powerfully-eau-de-parfum':'assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp',
+            'emporio-armani-stronger-with-you-intensely-edp':  'assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp',
+            'azzaro-forever-wanted-elixir-eau-de-parfum':      'assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg',
+            'azzaro-the-most-wanted-eau-de-parfum-intense':    'assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp',
+            'azzaro-the-most-wanted-parfum':                   'assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp',
+            'carolina-herrera-bad-boy-eau-de-toilette':        'assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg',
+            'bleu-de-chanel-eau-de-parfum-spray':              'assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg',
+            'dior-homme-intense-eau-de-parfum':                'assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg',
+            'dior-sauvage-eau-de-parfum':                      'assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg',
+            'gentleman-private-reserve-eau-de-parfum':         'assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png',
+            'givenchy-gentleman-society-amber-eau-de-parfum':  'assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg',
+            'givenchy-gentleman-society-extreme-eau-de-parfum':'assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp',
+            'givenchy-gentleman-society-nomade-eau-de-parfum': 'assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/1.webp',
+            'gucci-guilty-absolu-de-parfum-pour-homme':        'assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp',
+            'gucci-guilty-elixir-pour-homme':                  'assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp',
+            'guerlain-l-homme-ideal-extreme':                  'assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg',
+            'guerlain-l-homme-ideal-l-intense-eau-de-parfum':  'assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp',
+            'boss-bottled-absolu-intense':                     'assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg',
+            'hugo-boss-boss-bottled-elixir-intense':           'assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg',
+            'hugo-boss-the-scent-for-him-elixir':              'assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png',
+            'jean-paul-gaultier-le-beau-eau-de-parfum':        'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp',
+            'jean-paul-gaultier-le-male-elixir':               'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp',
+            'jean-paul-gaultier-le-male-in-blue-eau-de-parfum':'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg',
+            'jean-paul-gaultier-le-male-le-parfum-eau-de-parfum':'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp',
+            'jean-paul-gaultier-le-male-eau-de-toilette':      'assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png',
+            'jean-paul-gaultier-scandal-elixir':               'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg',
+            'jean-paul-gaultier-scandal-intense-eau-de-parfum':'assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg',
+            'montale-arabians-tonka':                          'assets/images/products/montale/montale-arabians-tonka/1.webp',
+            'prada-l-homme-edt':                               'assets/images/products/prada/prada-lhomme-edt/1.jpg',
+            'prada-luna-rossa-black-eau-de-parfum':            'assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg',
+            'prada-luna-rossa-ocean-eau-de-parfum':            'assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg',
+            'rabanne-one-million-elixir-intense':              'assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp',
+            'rabanne-one-million-parfum':                      'assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg',
+            'akdeniz-unique-e-luxury':                         'assets/images/products/unique-luxury/akdeniz-uniquee-luxury/1.avif',
+            'alexandria-ii':                                   'assets/images/products/xerjoff/xerjoff-alexandria-ll-eau-de-parfum/1.webp',
+            'erba-pura':                                       'assets/images/products/xerjoff/xerjoff-erba-pura/1.webp',
+            'naxos':                                           'assets/images/products/xerjoff/xerjoff-naxos/1.webp',
+            'valentino-born-in-roma-uomo-intense-eau-de-parfum':'assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp',
+            'versace-eros-eau-de-parfum':                      'assets/images/products/versace/versace-eros-eau-de-parfum/1.webp',
+            'yves-saint-laurent-y-eau-de-parfum':              'assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp',
+            'yves-saint-laurent-myslf-eau-de-parfum':          'assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/1.jpg',
+        };
+
+        /* ── Slug → brand ── */
+        const BRANDS = [
+            ['emporio-armani', 'EMPORIO ARMANI'],
+            ['armani', 'ARMANI'], ['azzaro', 'AZZARO'],
+            ['carolina-herrera', 'CAROLINA HERRERA'],
+            ['bleu-de-chanel', 'CHANEL'], ['chanel', 'CHANEL'],
+            ['dior', 'DIOR'], ['gentleman', 'GIVENCHY'],
+            ['givenchy', 'GIVENCHY'], ['gucci', 'GUCCI'],
+            ['guerlain', 'GUERLAIN'], ['hugo-boss', 'HUGO BOSS'],
+            ['boss', 'HUGO BOSS'], ['jean-paul-gaultier', 'JPG'],
+            ['montale', 'MONTALE'], ['prada', 'PRADA'],
+            ['rabanne', 'RABANNE'], ['valentino', 'VALENTINO'],
+            ['versace', 'VERSACE'], ['yves-saint-laurent', 'YSL'],
+            ['xerjoff', 'XERJOFF'], ['akdeniz', "UNIQUE'E LUXURY"],
+            ['alexandria-ii', 'XERJOFF'], ['erba-pura', 'XERJOFF'],
+            ['naxos', 'XERJOFF'],
+        ];
+
+        function brandOf(slug) {
+            for (const [k, v] of BRANDS) { if (slug.startsWith(k) || slug === k) return v; }
+            return slug.split('-')[0].toUpperCase();
+        }
+
+        function nameOf(slug) {
+            return slug
+                .replace(/-?(eau-de-parfum|eau-de-toilette|extrait-de-parfum|le-parfum|edp|edt)$/i, '')
+                .replace(/-/g, ' ').trim()
+                .replace(/\b\w/g, c => c.toUpperCase());
+        }
+
+        function fmtPrice(n) {
+            return Number(n).toLocaleString('fr-MA') + '\u00a0MAD';
+        }
+
+        function escHtml(s) {
+            const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML;
+        }
+
+        /* ── Scroll-reveal ── */
+        function revealCards() {
+            const cards = document.querySelectorAll('#spoGrid .spo-card');
+            if (!cards.length) return;
+            if (!('IntersectionObserver' in window)) {
+                cards.forEach(c => c.classList.add('spo-card--visible')); return;
+            }
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) { e.target.classList.add('spo-card--visible'); obs.unobserve(e.target); }
+                });
+            }, { threshold: 0.10 });
+            cards.forEach(c => obs.observe(c));
+        }
+
+        /* ── Render cards ── */
+        function renderCards(promos) {
+            const grid = document.getElementById('spoGrid');
+            if (!grid) return;
+
+            if (!promos.length) {
+                grid.setAttribute('aria-busy', 'false');
+                grid.innerHTML = `
+                    <div class="spo-empty">
+                        <i class="fas fa-tag spo-empty-icon"></i>
+                        <p class="spo-empty-text">No active promotions at the moment.<br>Check back soon for exclusive offers.</p>
+                    </div>`;
+                return;
+            }
+
+            grid.setAttribute('data-count', String(Math.min(promos.length, 8)));
+            grid.setAttribute('aria-busy', 'false');
+            // Start countdown now that we have live promotions
+            if (typeof window._spoStartCountdown === 'function') window._spoStartCountdown();
+            grid.innerHTML = promos.slice(0, 8).map(p => {
+                const href    = 'pages/product.html?id=' + encodeURIComponent(p.slug) + '&name=' + encodeURIComponent(p.displayName);
+                const imgSrc  = p.promoImg || PROD_IMG[p.slug] || '';
+                const imgHtml = imgSrc
+                    ? `<img src="${escHtml(imgSrc)}" alt="${escHtml(p.displayName)}" class="spo-card-img" loading="lazy" decoding="async">`
+                    : `<i class="fas fa-spray-can" style="font-size:2.5rem;color:rgba(180,160,120,0.35)"></i>`;
+
+                return `<article class="spo-card" aria-label="${escHtml(p.displayName)} — Special Offer">
+                    <a href="${escHtml(href)}" class="spo-card-link" tabindex="-1" aria-hidden="true">
+                        <div class="spo-card-img-wrap">
+                            <span class="spo-badge">-${p.discount}%</span>
+                            ${imgHtml}
+                        </div>
+                    </a>
+                    <div class="spo-card-body">
+                        <p class="spo-card-brand">${escHtml(p.brand)}</p>
+                        <h3 class="spo-card-title">
+                            <a href="${escHtml(href)}">${escHtml(p.displayName)}</a>
+                        </h3>
+                        <p class="spo-card-desc">${escHtml(p.desc)}</p>
+                        <div class="spo-card-pricing">
+                            <span class="spo-card-old-price">${fmtPrice(p.origPrice)}</span>
+                            <span class="spo-card-new-price">${fmtPrice(p.salePrice)}</span>
+                        </div>
+                        <a href="${escHtml(href)}" class="spo-card-btn">Shop Now</a>
+                    </div>
+                </article>`;
+            }).join('');
+
+            revealCards();
+        }
+
+        /* ── Load from Firestore ── */
+        (async function loadPromos() {
+            try {
+                // Fetch both sources in parallel
+                const [overridesSnap, productsSnap] = await Promise.all([
+                    getDocs(collection(_db, 'productOverrides')),
+                    getDocs(collection(_db, 'products')),
+                ]);
+                const promos = [];
+
+                // ── Source 1: productOverrides (standard products from prices.json) ──
+                overridesSnap.forEach(docSnap => {
+                    const slug = docSnap.id;
+                    const d    = docSnap.data();
+                    if (d.disabled) return;
+
+                    const promoPrices = d.promoPrices || {};
+                    const prices      = d.prices || {};
+
+                    // promoPrices[sz] = sale/discounted price (lower)
+                    // prices[sz]      = full/original price (higher, crossed out)
+                    let bestDiscount = 0, bestSalePrice = 0, bestOrigPrice = 0;
+                    for (const [sz, saleP] of Object.entries(promoPrices)) {
+                        const fullP = prices[sz];
+                        if (!fullP || !saleP || saleP >= fullP) continue;
+                        const pct = Math.round((1 - saleP / fullP) * 100);
+                        if (pct > bestDiscount) {
+                            bestDiscount  = pct;
+                            bestSalePrice = saleP;
+                            bestOrigPrice = fullP;
+                        }
+                    }
+                    if (bestDiscount === 0) return;
+
+                    const displayName = d.promoTitle || nameOf(slug);
+                    const brand       = d.promoBrand || brandOf(slug);
+                    const desc        = d.promoDesc  || '';
+                    const promoImg    = d.promoImg    || null;
+                    const order       = typeof d.promoOrder === 'number' ? d.promoOrder : 99;
+                    promos.push({ slug, displayName, brand, desc, promoImg, order,
+                        discount: bestDiscount, salePrice: bestSalePrice, origPrice: bestOrigPrice });
+                });
+
+                // ── Source 2: products (admin-added products with originalPrices) ──
+                productsSnap.forEach(docSnap => {
+                    const d = docSnap.data();
+                    if (!d.active) return;
+                    const origPrices = d.originalPrices || {};
+                    const sizes      = d.sizes || {};
+                    if (!Object.keys(origPrices).length) return; // no sale set
+
+                    // Find best valid discount
+                    let bestDiscount = 0, bestSalePrice = 0, bestOrigPrice = 0;
+                    for (const [sz, origP] of Object.entries(origPrices)) {
+                        const saleP = sizes[sz];
+                        if (!saleP || !origP || saleP >= origP) continue;
+                        const pct = Math.round((1 - saleP / origP) * 100);
+                        if (pct > bestDiscount) {
+                            bestDiscount  = pct;
+                            bestSalePrice = saleP;
+                            bestOrigPrice = origP;
+                        }
+                    }
+                    if (bestDiscount === 0) return;
+
+                    const slug  = d.slug || docSnap.id;
+                    promos.push({
+                        slug,
+                        displayName: d.name || nameOf(slug),
+                        brand:       d.brand || '',
+                        desc:        d.description || '',
+                        promoImg:    d.image || null,
+                        order:       99,
+                        discount:    bestDiscount,
+                        salePrice:   bestSalePrice,
+                        origPrice:   bestOrigPrice,
+                        // admin-added products link to /products/ path
+                        isAdminProduct: true,
+                    });
+                });
+
+                promos.sort((a, b) => a.order - b.order || b.discount - a.discount);
+                renderCards(promos);
+            } catch (err) {
+                console.warn('[SPO] Firestore load failed:', err.message);
+                // On error, hide the section gracefully
+                const grid = document.getElementById('spoGrid');
+                if (grid) {
+                    grid.setAttribute('aria-busy', 'false');
+                    grid.innerHTML = `<div class="spo-empty"><i class="fas fa-tag spo-empty-icon"></i><p class="spo-empty-text">Offers will appear here shortly.</p></div>`;
+                }
+            }
+        })();
+        </script>
+    </section>
+    <!-- ═══════════════════════════ END SPECIAL OFFERS SECTION ═══════════════ -->
 
     <!-- Flash Offers Section -->
     <section id="flashOffersSection" class="py-16 bg-brand-light carousel-section" style="--carousel-nav-top: 135px;">
@@ -3239,81 +3586,6 @@ Tawk_API.onLoad=function(){
         </div>
     </section>
 
-    <!-- Scent Finder CTA Section -->
-    <section class="home-edit-wrap">
-        <!-- Background brand watermark -->
-        <div class="home-edit-bg-word" aria-hidden="true">Ipordise</div>
-
-        <div class="home-edit-shell">
-            <!-- Centered editorial header -->
-            <header class="home-edit-intro">
-                <div class="home-edit-kicker-row">
-                    <span class="home-edit-kicker-rule" aria-hidden="true"></span>
-                    <span class="home-edit-kicker" data-i18n="index.edit_kicker" data-i18n-orig="Curated With Intention">Curated With Intention</span>
-                    <span class="home-edit-kicker-rule home-edit-kicker-rule--right" aria-hidden="true"></span>
-                </div>
-                <h2 class="home-edit-title" data-i18n-html="index.edit_title" data-i18n-orig-html="A More Graceful Way to Discover&lt;em&gt;Your Next Perfume&lt;/em&gt;">A More Graceful Way to Discover<em>Your Next Perfume</em></h2>
-                <p class="home-edit-sub" data-i18n="index.edit_sub" data-i18n-orig="Skip the noisy scroll. Start with three carefully shaped paths built around how you want to feel, wear, and gift fragrance.">Skip the noisy scroll. Start with three carefully shaped paths built around how you want to feel, wear, and gift fragrance.</p>
-                <!-- Ornamental divider -->
-                <div class="home-edit-orn" aria-hidden="true">
-                    <span></span>
-                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="5,0 10,5 5,10 0,5" fill="#9b5c32" opacity="0.65"/></svg>
-                    <span></span>
-                </div>
-            </header>
-
-            <!-- Asymmetric discovery grid -->
-            <div class="home-edit-grid">
-                <!-- Feature card — spans both rows on desktop -->
-                <a href="discover.html?filter=designer" class="home-edit-card home-edit-card-amber home-edit-card--feature">
-                    <video
-                        src="https://www.dropbox.com/scl/fi/dal95fet1i8hh96z1nadb/1773731800324.mp4?rlkey=dlr0kvl86khv5yglf32l2w3ii&st=7lb445cr&raw=1"
-                        autoplay muted loop playsinline
-                        class="home-edit-card-bg-video"
-                        aria-hidden="true">
-                    </video>
-                    <span class="home-edit-card-label" data-i18n="index.edit_card1_label" data-i18n-orig="Everyday Elegance">Everyday Elegance</span>
-                    <div class="home-edit-card-body">
-                        <h3 data-i18n="index.edit_card1_title" data-i18n-orig="Designer signatures for effortless wear">Designer signatures for effortless wear</h3>
-                        <p data-i18n="index.edit_card1_desc" data-i18n-orig="Clean woods, polished florals, and versatile favorites that stay refined from first spray to late evening.">Clean woods, polished florals, and versatile favorites that stay refined from first spray to late evening.</p>
-                    </div>
-                    <span class="home-edit-card-meta" data-i18n="index.edit_card1_meta" data-i18n-orig="Explore Designer">Explore Designer</span>
-                </a>
-
-                <a href="discover.html?filter=niche" class="home-edit-card home-edit-card-noir">
-                    <video
-                        src="https://www.dropbox.com/scl/fi/o4v5vtd0b3hxopzg9d325/1773731989836.mp4?rlkey=1mk8v8bdkfkwrpdo58k630g1n&st=4i3l4xe0&raw=1"
-                        autoplay muted loop playsinline
-                        class="home-edit-card-bg-video"
-                        aria-hidden="true">
-                    </video>
-                    <span class="home-edit-card-label" data-i18n="index.edit_card2_label" data-i18n-orig="After Dark">After Dark</span>
-                    <div class="home-edit-card-body">
-                        <h3 data-i18n="index.edit_card2_title" data-i18n-orig="Bolder niche compositions with depth">Bolder niche compositions with depth</h3>
-                        <p data-i18n="index.edit_card2_desc" data-i18n-orig="Spice, amber, smoke, and projection for nights that need a scent with real presence and character.">Spice, amber, smoke, and projection for nights that need a scent with real presence and character.</p>
-                    </div>
-                    <span class="home-edit-card-meta" data-i18n="index.edit_card2_meta" data-i18n-orig="Enter the Niche Edit">Enter the Niche Edit</span>
-                </a>
-
-                <a href="discover.html?filter=discovery-sets" class="home-edit-card home-edit-card-rose">
-                    <video
-                        src="https://www.dropbox.com/scl/fi/8cj26em1ldyvafj4iszm7/1773732119119.mp4?rlkey=yoe8kiwv86vtrb8hoi1mlv4w6&st=5xiikf8g&raw=1"
-                        autoplay muted loop playsinline
-                        class="home-edit-card-bg-video"
-                        aria-hidden="true">
-                    </video>
-                    <span class="home-edit-card-label" data-i18n="index.edit_card3_label" data-i18n-orig="Gift-Ready">Gift-Ready</span>
-                    <div class="home-edit-card-body">
-                        <h3 data-i18n="index.edit_card3_title" data-i18n-orig="Discovery sets and flexible decants">Discovery sets and flexible decants</h3>
-                        <p data-i18n="index.edit_card3_desc" data-i18n-orig="Perfect when you want range, travel convenience, or a refined gift without guessing one full bottle.">Perfect when you want range, travel convenience, or a refined gift without guessing one full bottle.</p>
-                    </div>
-                    <span class="home-edit-card-meta" data-i18n="index.edit_card3_meta" data-i18n-orig="See Discovery Options">See Discovery Options</span>
-                </a>
-            </div>
-
-        </div>
-    </section>
-
     <!-- Social Media Video Section (hidden until real video IDs are added) -->
     <section id="socialVideoSection" class="py-16 bg-white" hidden>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -4006,13 +4278,238 @@ Tawk_API.onLoad=function(){
     </div>
 
     <script src="assets/scroll-progress.js" defer></script>
+
+<!-- ═══════════════════════════════════════════════════
+     IPORDISE — Luxury Scroll Animation System
+     Fade-up · Slide-in · Scale · Stagger · Parallax
+═══════════════════════════════════════════════════ -->
+<style>
+/* Base reveal state — elements start hidden */
+[data-sr]{opacity:0;will-change:opacity,transform;}
+[data-sr="fade-up"]{transform:translateY(48px);}
+[data-sr="fade-down"]{transform:translateY(-40px);}
+[data-sr="fade-left"]{transform:translateX(-56px);}
+[data-sr="fade-right"]{transform:translateX(56px);}
+[data-sr="scale"]{transform:scale(.88);}
+[data-sr="scale-up"]{transform:scale(.88) translateY(32px);}
+[data-sr="flip-y"]{transform:perspective(600px) rotateY(18deg) translateX(30px);}
+
+/* Revealed state */
+[data-sr].sr-visible{
+  opacity:1;transform:none;
+  transition:opacity .72s cubic-bezier(.22,1,.36,1),transform .72s cubic-bezier(.22,1,.36,1);
+}
+
+/* Stagger children */
+[data-sr-group]>*{opacity:0;transform:translateY(36px);will-change:opacity,transform;}
+[data-sr-group].sr-visible>*{
+  opacity:1;transform:none;
+  transition:opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1);
+}
+[data-sr-group].sr-visible>*:nth-child(1){transition-delay:.06s;}
+[data-sr-group].sr-visible>*:nth-child(2){transition-delay:.14s;}
+[data-sr-group].sr-visible>*:nth-child(3){transition-delay:.22s;}
+[data-sr-group].sr-visible>*:nth-child(4){transition-delay:.30s;}
+[data-sr-group].sr-visible>*:nth-child(5){transition-delay:.38s;}
+[data-sr-group].sr-visible>*:nth-child(6){transition-delay:.46s;}
+[data-sr-group].sr-visible>*:nth-child(7){transition-delay:.54s;}
+[data-sr-group].sr-visible>*:nth-child(8){transition-delay:.62s;}
+
+/* Section title line sweep */
+.sr-line{
+  display:inline-block;
+  background:linear-gradient(90deg,#c8a96a,#e8d5a0,#c8a96a);
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-position:200% center;
+  transition:background-position 1.1s ease;
+}
+[data-sr].sr-visible .sr-line,
+[data-sr-group].sr-visible .sr-line{
+  background-position:0% center;
+}
+
+/* Luxury underline wipe on section headings */
+.sr-underline{
+  position:relative;display:inline-block;
+}
+.sr-underline::after{
+  content:'';position:absolute;bottom:-4px;left:0;
+  width:0;height:2px;
+  background:linear-gradient(90deg,#c8a96a,transparent);
+  transition:width 1s cubic-bezier(.22,1,.36,1) .3s;
+}
+[data-sr].sr-visible .sr-underline::after,
+[data-sr-group].sr-visible .sr-underline::after{
+  width:100%;
+}
+
+/* Number counter glint */
+@keyframes sr-glint{
+  0%{filter:brightness(1);}
+  40%{filter:brightness(1.6) drop-shadow(0 0 6px #c8a96a);}
+  100%{filter:brightness(1);}
+}
+[data-sr-counter].sr-counted{animation:sr-glint .8s ease .6s both;}
+
+/* Reduce motion */
+@media(prefers-reduced-motion:reduce){
+  [data-sr],[data-sr-group]>*{opacity:1 !important;transform:none !important;transition:none !important;}
+}
+</style>
+
+<script>
+/* Run scroll animations after first idle tick to not block LCP */
+(function(){
+  if(typeof requestIdleCallback === 'function'){
+    requestIdleCallback(function(){ initScrollAnimations(); },{timeout:2000});
+  } else {
+    setTimeout(initScrollAnimations, 200);
+  }
+  function initScrollAnimations(){
+  if(!('IntersectionObserver' in window))return;
+
+  /* ── 1. Tag elements with data-sr ── */
+  var map=[
+    /* section headers */
+    ['.spo-header,.spo-label,.spo-title,.spo-subtitle',         'fade-up'],
+    ['.spo-divider',                                             'scale'],
+    ['#flashOffersSection .carousel-section-header',            'fade-up'],
+    ['#newArrivalsSection .carousel-section-header',            'fade-up'],
+    ['#class2026Section .section-header-2026, #class2026Section h2','fade-up'],
+    ['#valentino-house-section h2, #valentino-house-section .section-label','fade-up'],
+    ['.aether-cinematic-section h2, .aether-cinematic-section .eyebrow','fade-up'],
+    /* category / feature tiles */
+    ['.category-layout-section',                                'sr-group'],
+    /* brand strip */
+    ['.brand-strip-wrap, .brands-section',                      'fade-up'],
+    /* quick filter pills */
+    ['.quick-cat-container, .quick-cat-pills',                  'fade-up'],
+    /* trust bar */
+    ['.trust-bar',                                              'fade-down'],
+    /* valentino section inner */
+    ['#valentino-house-section .valentino-left',                'fade-left'],
+    ['#valentino-house-section .valentino-right',               'fade-right'],
+    /* footer */
+    ['footer',                                                  'fade-up'],
+    /* stat counters */
+    ['[data-stat-val]',                                         'scale'],
+  ];
+
+  /* Apply data-sr to matching elements */
+  map.forEach(function(pair){
+    var sel=pair[0], type=pair[1];
+    document.querySelectorAll(sel).forEach(function(el){
+      if(el.dataset.aetherReveal)return; /* skip already-animated */
+      if(type==='sr-group'){
+        el.setAttribute('data-sr-group','');
+      } else {
+        if(!el.hasAttribute('data-sr')) el.setAttribute('data-sr',type);
+      }
+    });
+  });
+
+  /* ── 2. Individual card stagger for product carousels ── */
+  document.querySelectorAll(
+    '#flashOffersSection .carousel-track, #newArrivalsSection .carousel-track, #class2026Section .products-grid-2026'
+  ).forEach(function(track){
+    track.setAttribute('data-sr-group','');
+  });
+
+  /* ── 3. Observer for [data-sr] ── */
+  var srObs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('sr-visible');
+        srObs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.10,rootMargin:'0px 0px -40px 0px'});
+
+  document.querySelectorAll('[data-sr]').forEach(function(el){srObs.observe(el);});
+
+  /* ── 4. Observer for [data-sr-group] ── */
+  var grpObs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('sr-visible');
+        grpObs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+
+  document.querySelectorAll('[data-sr-group]').forEach(function(el){grpObs.observe(el);});
+
+  /* ── 5. Re-observe dynamically added cards (MutationObserver) ── */
+  var dynTargets=['#spoGrid','#flashOffersSection .carousel-track','#newArrivalsSection .carousel-track'];
+  var mutObs=new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      if(m.addedNodes.length){
+        var parent=m.target;
+        if(!parent.hasAttribute('data-sr-group')){
+          parent.setAttribute('data-sr-group','');
+          grpObs.observe(parent);
+        } else {
+          parent.classList.remove('sr-visible');
+          requestAnimationFrame(function(){
+            parent.classList.add('sr-visible');
+          });
+        }
+      }
+    });
+  });
+  dynTargets.forEach(function(sel){
+    var el=document.querySelector(sel);
+    if(el) mutObs.observe(el,{childList:true});
+  });
+
+  /* ── 6. Subtle parallax on hero section ── */
+  var hero=document.getElementById('heroSection');
+  if(hero){
+    var ticking=false;
+    window.addEventListener('scroll',function(){
+      if(ticking)return;
+      ticking=true;
+      requestAnimationFrame(function(){
+        var scrollY=window.scrollY;
+        if(scrollY<window.innerHeight){
+          hero.style.setProperty('--hero-parallax',(-scrollY*0.18)+'px');
+        }
+        ticking=false;
+      });
+    },{passive:true}); /* passive: true — never blocks scroll, key for INP */
+  }
+
+  /* ── 7. Animated stat counters ── */
+  var counterObs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting)return;
+      var el=e.target;
+      var target=parseFloat(el.getAttribute('data-stat-val'));
+      var suffix=el.getAttribute('data-stat-suffix')||'';
+      var dec=el.getAttribute('data-stat-dec')||0;
+      var dur=1200,start=null,from=0;
+      el.classList.add('sr-counted');
+      function step(ts){
+        if(!start)start=ts;
+        var p=Math.min((ts-start)/dur,1);
+        var ease=1-Math.pow(1-p,4);
+        el.textContent=(from+(target-from)*ease).toFixed(dec)+suffix;
+        if(p<1)requestAnimationFrame(step);
+        else el.textContent=target.toFixed(dec)+suffix;
+      }
+      requestAnimationFrame(step);
+      counterObs.unobserve(el);
+    });
+  },{threshold:0.5});
+  document.querySelectorAll('[data-stat-val]').forEach(function(el){counterObs.observe(el);});
+
+  } /* end initScrollAnimations */
+})();
+</script>
 </body>
 </html>
-
-
-
-
-
 
 
 
