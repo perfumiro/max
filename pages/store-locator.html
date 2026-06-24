@@ -287,7 +287,7 @@ s0.parentNode.insertBefore(s1,s0);
         </nav>
     </header>
 
-    <section class="page-hero">
+    <section class="page-hero" style="position:relative;overflow:hidden;">
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
             <p class="text-white/60 text-xs mb-4 flex items-center gap-1.5">
                 <a href="/" class="hover:text-white transition" data-i18n="common.home_breadcrumb">Home</a>
@@ -296,6 +296,11 @@ s0.parentNode.insertBefore(s1,s0);
             </p>
             <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-serif font-bold leading-tight" data-i18n="locator.h1">Find a Store</h1>
             <p class="mt-2 text-white/65 max-w-xl text-sm sm:text-base" data-i18n="locator.subtitle">Visit one of our showrooms to experience our full fragrance collection in person.</p>
+        </div>
+        <div style="position:absolute;bottom:-1px;left:0;width:100%;line-height:0;z-index:3;">
+            <svg viewBox="0 0 1440 72" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+                <path d="M0,36 C240,72 480,0 720,36 C960,72 1200,0 1440,36 L1440,72 L0,72 Z" fill="#f5f6f9"/>
+            </svg>
         </div>
     </section>
 
