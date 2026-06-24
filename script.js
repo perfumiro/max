@@ -5540,7 +5540,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${product.id}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${img}">
                         <div class="related-image-wrap">
                             <button type="button" class="product-favorite-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
-                            <img src="${img}" alt="${product.name}" class="related-image" loading="lazy" decoding="async">
+                            <img src="${img}" alt="${product.name}" class="related-image" loading="lazy" decoding="async" onerror="this.closest(\".related-card\").style.display=\"none\"">
                         </div>
                         <div class="related-body">
                             <p class="related-brand">${product.brand}</p>
@@ -5580,30 +5580,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 brand: 'XERJOFF',
                 price: '50ML 2 500 MAD — 100ML 4 200 MAD',
                 image: 'assets/images/products/xerjoff/xerjoff-naxos/1.webp',
-                gender: 'unisex'
-            },
-            {
-                id: 'xerjoff-40-knots',
-                name: 'Xerjoff 40 Knots Eau de Parfum',
-                brand: 'XERJOFF',
-                price: '10ML 300 MAD — 100ML 2 600 MAD',
-                image: 'assets/images/products/xerjoff/xerjoff-40-knots/1.webp',
-                gender: 'unisex'
-            },
-            {
-                id: 'xerjoff-torino-21',
-                name: 'Xerjoff Torino 21 Eau de Parfum',
-                brand: 'XERJOFF',
-                price: '10ML 300 MAD — 100ML 2 600 MAD',
-                image: 'assets/images/products/xerjoff/xerjoff-torino-21/1.webp',
-                gender: 'unisex'
-            },
-            {
-                id: 'xerjoff-renaissance',
-                name: 'Xerjoff Renaissance Eau de Parfum',
-                brand: 'XERJOFF',
-                price: '10ML 260 MAD — 100ML 2 300 MAD',
-                image: 'assets/images/products/xerjoff/xerjoff-renaissance/1.webp',
                 gender: 'unisex'
             }
         ];
@@ -5649,7 +5625,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${product.id}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${img}">
                         <div class="related-image-wrap">
                             <button type="button" class="product-favorite-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
-                            <img src="${img}" alt="${product.name}" class="related-image" loading="lazy" decoding="async">
+                            <img src="${img}" alt="${product.name}" class="related-image" loading="lazy" decoding="async" onerror="this.closest(\".related-card\").style.display=\"none\"">
                         </div>
                         <div class="related-body">
                             <p class="related-brand">${product.brand}</p>
@@ -5736,7 +5712,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <article class="related-card js-product-link" data-product-name="${product.name}" data-id="${relatedProductId}" data-product-brand="${product.brand}" data-product-price="${product.price}" data-product-old-price="" data-product-discount="" data-product-reviews="0" data-product-image="${img}">
                     <div class="related-image-wrap">
                         <button type="button" class="product-favorite-btn" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
-                        <img src="${img}" alt="${product.name}" class="related-image" loading="lazy" decoding="async">
+                        <img src="${img}" alt="${product.name}" class="related-image" loading="lazy" decoding="async" onerror="this.closest(\".related-card\").style.display=\"none\"">
                     </div>
                     <div class="related-body">
                         <p class="related-brand">${product.brand}</p>

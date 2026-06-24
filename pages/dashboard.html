@@ -1940,7 +1940,7 @@
   onAuthChange(async (user) => {
     clearTimeout(guardTimeout);
 
-    if (!user) { window.location.replace('login.html'); return; }
+    if (!user || user.isAnonymous) { window.location.replace('login.html'); return; }
 
     // Block users who signed up with email but never verified it
     if (!user.emailVerified && user.providerData?.[0]?.providerId === 'password') {
