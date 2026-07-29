@@ -326,48 +326,136 @@
   margin-bottom: 10px !important;
 }
 
-/* --- SIZE SELECTOR CHIPS -------------------------------------- */
-.size-group-label { display: none !important; }
-.size-group { margin-bottom: 8px !important; }
+/* --- PREMIUM SIZE SELECTOR ------------------------------------ */
+.price-size-heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  margin-bottom: 12px !important;
+}
+.price-choose-size-label {
+  margin: 0 !important;
+  color: var(--ipp-dark) !important;
+  font-size: 0.7rem !important;
+}
+.price-live-note {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  color: #64748b !important;
+  font-size: 0.64rem !important;
+  font-weight: 650 !important;
+  white-space: nowrap !important;
+}
+.price-live-note::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22,163,74,.12);
+}
+.size-selector-grid { gap: 12px !important; }
+.size-group {
+  gap: 8px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.size-group-label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin: 0 !important;
+  color: #64748b !important;
+  font-size: 0.6rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+}
+.size-group-label::after { background: #e8eaed !important; }
+.size-group-label i { color: #d91f3d !important; opacity: 1 !important; }
+.size-group-pills {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+.size-group-bottles .size-group-pills {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
 .size-pill {
-  min-width: 4.5rem !important;
-  background: #fff !important;
-  border: 1px solid #e5e7eb !important;
-  border-radius: 10px !important;
-  padding: 0.55rem 0.75rem !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 64px !important;
+  justify-content: center !important;
+  background: linear-gradient(180deg,#fff 0%,#fbfbfc 100%) !important;
+  border: 1px solid #d9dde3 !important;
+  border-radius: 12px !important;
+  padding: 0.72rem 0.65rem !important;
   cursor: pointer !important;
-  transition: border-color 0.18s, background 0.18s, transform 0.18s, box-shadow 0.18s !important;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s, box-shadow 0.2s !important;
   position: relative !important;
+  box-shadow: 0 1px 2px rgba(15,23,42,.03) !important;
 }
 .size-pill:hover {
-  border-color: var(--ipp-dark) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1) !important;
+  border-color: #9ca3af !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 7px 18px rgba(15,23,42,.09) !important;
 }
 .size-pill.is-active {
   background: var(--ipp-black) !important;
   border-color: var(--ipp-black) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,.2), inset 0 2px 0 #e11d48 !important;
 }
 .size-pill.is-active .spill-vol,
 .size-pill.is-active .spill-price { color: #fff !important; }
-.size-pill.is-active .spill-vol::after { color: rgba(255,255,255,0.6) !important; }
+.size-pill.is-active .spill-vol::after { background: rgba(255,255,255,.22) !important; }
+.size-pill.is-active::before {
+  content: '\2713' !important;
+  display: grid !important;
+  place-items: center !important;
+  position: absolute !important;
+  top: 6px !important;
+  right: 7px !important;
+  width: 15px !important;
+  height: 15px !important;
+  border-radius: 999px !important;
+  color: #111 !important;
+  background: #fff !important;
+  font-size: 9px !important;
+  font-weight: 900 !important;
+}
 .spill-vol {
-  font-size: 0.8rem !important;
-  font-weight: 800 !important;
+  font-size: 0.9rem !important;
+  font-weight: 850 !important;
   color: var(--ipp-dark) !important;
   display: block !important;
   line-height: 1.2 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
 }
+.spill-vol::after { display: none !important; }
 .spill-price {
-  font-size: 0.72rem !important;
-  font-weight: 700 !important;
-  color: var(--ipp-gray) !important;
+  font-size: 0.64rem !important;
+  font-weight: 750 !important;
+  color: #6b7280 !important;
   display: block !important;
-  margin-top: 2px !important;
+  margin-top: 4px !important;
+  letter-spacing: 0.02em !important;
 }
 .spill-indicator { display: none !important; }
+@media (max-width: 390px) {
+  .size-group-pills { gap: 6px !important; }
+  .size-pill { min-height: 60px !important; padding: 0.62rem 0.4rem !important; }
+  .spill-vol { font-size: 0.82rem !important; }
+  .spill-price { font-size: 0.58rem !important; }
+  .price-live-note { font-size: 0.58rem !important; }
+}
 
 /* --- QUANTITY SELECTOR ---------------------------------------- */
 .qty-box {
@@ -1428,7 +1516,10 @@ s0.parentNode.insertBefore(s1,s0);
                                 <span id="priceSelectedSize" class="price-selected-size"></span>
                             </div>
                             <hr class="price-separator">
-                            <p class="price-choose-size-label">CHOOSE SIZE</p>
+                            <div class="price-size-heading">
+                                <p class="price-choose-size-label">CHOOSE YOUR SIZE</p>
+                                <span class="price-live-note">Live dashboard prices</span>
+                            </div>
                             <!-- Size selector (inside the card) -->
                             <div id="sizeSelector" class="size-selector-grid">
                                 <div class="size-group size-group-decants">
