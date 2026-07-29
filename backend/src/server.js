@@ -673,7 +673,7 @@ const buildAdminEmail = (orderData, orderId) => {
     </table>
   </td></tr>
   <tr><td style="padding:24px 36px;text-align:center">
-    <a href="https://ipordise.com/admin.html" style="display:inline-block;background:#1a1a1a;color:#d4af37;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;letter-spacing:.05em">VIEW IN ADMIN PANEL &#x2192;</a>
+    <a href="https://ipordise.com/app/" style="display:inline-block;background:#1a1a1a;color:#d4af37;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;letter-spacing:.05em">VIEW IN ADMIN PANEL &#x2192;</a>
   </td></tr>
   <tr><td style="background:#f9fafb;border-top:1px solid #e5e7eb;padding:16px 36px;text-align:center">
     <div style="font-size:11px;color:#9ca3af">IPORDISE &middot; Luxury Perfumes &middot; Morocco</div>
