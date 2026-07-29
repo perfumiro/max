@@ -32,6 +32,50 @@ const CLOUDINARY_PRESET = 'IPORIDSE_PRODUCTS';
 
 // Change this to match the admin account email in your Firebase Auth console
 const ADMIN_EMAIL = 'admin@ipordise.com';
+const MOBILE_CATALOG_DOC_ID = '__mobile_catalog__';
+let mobileCatalogOverrides = {};
+
+const syncMobileCatalogEntry = async (section, id, value) => {
+  if (!id || id === MOBILE_CATALOG_DOC_ID) return;
+  try {
+    await setDoc(doc(db, 'products', MOBILE_CATALOG_DOC_ID), {
+      system: true,
+      active: false,
+      [section]: { [id]: value },
+      updatedAt: serverTimestamp(),
+    }, { merge: true });
+  } catch (error) {
+    console.warn('[Mobile catalog] Incremental sync deferred:', error);
+  }
+};
+
+const publishMobileCatalogSnapshot = async (productDocs) => {
+  const products = {};
+  productDocs.forEach(productDoc => {
+    if (productDoc.id !== MOBILE_CATALOG_DOC_ID) products[productDoc.id] = productDoc.data();
+  });
+  try {
+    await setDoc(doc(db, 'products', MOBILE_CATALOG_DOC_ID), {
+      system: true,
+      active: false,
+      complete: true,
+      overrides: mobileCatalogOverrides,
+      products,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.warn('[Mobile catalog] Full snapshot deferred:', error);
+  }
+};
+
+const syncMobileProductFromStore = async (slug) => {
+  try {
+    const snapshot = await getDoc(doc(db, 'products', slug));
+    await syncMobileCatalogEntry('products', slug, snapshot.exists() ? snapshot.data() : null);
+  } catch (error) {
+    console.warn('[Mobile catalog] Product sync deferred:', error);
+  }
+};
 
 // --- UTILITIES ----------------------------------------------------------------
 const qs  = (sel, ctx = document) => ctx.querySelector(sel);
@@ -2238,6 +2282,7 @@ const loadProductsView = async () => {
 
     const overrides = {};
     overridesSnap.docs.forEach(d => { overrides[d.id] = normalizeOv(d.data()); });
+    mobileCatalogOverrides = overrides;
 
     // Canonical Unique'e Luxury IDs used on storefront/product pages.
     const UNIQUE_ADMIN_SLUGS = [
@@ -2964,6 +3009,7 @@ const loadProductsView = async () => {
           if (btn2) { btn2.disabled=true; btn2.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
           try {
             await deleteDoc(doc(db,'productOverrides',slug));
+            await syncMobileCatalogEntry('overrides', slug, null);
             delete overrides[slug];
             dirty.delete(slug);
             toast(`? ${productName(slug)} saved (no prices set — override cleared)`, 'success');
@@ -2984,6 +3030,7 @@ const loadProductsView = async () => {
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
         try {
           await setDoc(doc(db,'productOverrides',slug), overrides[slug]);
+          await syncMobileCatalogEntry('overrides', slug, overrides[slug]);
           dirty.delete(slug);
           toast(`? ${productName(slug)} saved`, 'success');
           render();
@@ -3001,6 +3048,7 @@ const loadProductsView = async () => {
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
         try {
           await setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true});
+          await syncMobileCatalogEntry('overrides', slug, overrides[slug]);
           toast(`${productName(slug)} ${newDisabled?'disabled':'enabled'}`, 'success');
           render();
         } catch(err) {
@@ -3017,6 +3065,7 @@ const loadProductsView = async () => {
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
         try {
           await deleteDoc(doc(db,'productOverrides',slug));
+          await syncMobileCatalogEntry('overrides', slug, null);
           delete overrides[slug];
           delete pendingRemovals[slug];
           dirty.delete(slug);
@@ -3281,6 +3330,7 @@ if (countEl) countEl.textContent = `${promos.length} promotion${promos.length!==
           if (descVal)  payload.promoDesc  = descVal;  else payload.promoDesc  = null;
           payload.promoOrder = isNaN(orderVal) ? 99 : orderVal;
           await setDoc(doc(db,'productOverrides',slug), payload, { merge: true });
+          await syncMobileCatalogEntry('overrides', slug, { ...(mobileCatalogOverrides[slug] || {}), ...payload });
           if (msgEl) { msgEl.textContent = '✓ Saved'; msgEl.style.color = 'var(--emerald)'; msgEl.style.display = 'inline'; setTimeout(() => { msgEl.style.display = 'none'; }, 2500); }
           toast(`Card details saved for "${pName(slug)}"`, 'success');
         } catch(err) {
@@ -4202,6 +4252,7 @@ const initAddProductModal = () => {
         fragranceProfile: addFragranceProfile,
         addedAt: serverTimestamp(), source: 'admin',
       });
+      await syncMobileProductFromStore(slug);
       progressBar.style.width = '100%';
       progressLabel.textContent = 'Product saved!';
       setTimeout(() => {
@@ -4784,6 +4835,8 @@ const initEditProductModal = () => {
         }
         await setDoc(doc(db, 'products', newSlug), payload);
         await deleteDoc(doc(db, 'products', originalSlug));
+        await syncMobileProductFromStore(newSlug);
+        await syncMobileCatalogEntry('products', originalSlug, null);
         // Remove any stale productOverrides entries — admin products are managed
         // exclusively via products.sizes, never via productOverrides.
         try { await deleteDoc(doc(db, 'productOverrides', newSlug)); } catch (_) {}
@@ -4800,6 +4853,7 @@ const initEditProductModal = () => {
         }
         // Full overwrite (no merge) so removed sizes are actually deleted
         await setDoc(doc(db, 'products', originalSlug), payload);
+        await syncMobileProductFromStore(originalSlug);
         // Remove any stale productOverrides entry for the same reason.
         try { await deleteDoc(doc(db, 'productOverrides', originalSlug)); } catch (_) {}
       }
@@ -4926,6 +4980,7 @@ const loadFirestoreProductsSection = async () => {
   };
   try {
     const snap = await getDocs(query(collection(db, 'products'), orderBy('addedAt', 'desc')));
+    await publishMobileCatalogSnapshot(snap.docs);
     if (snap.empty) { section.innerHTML = ''; return; }
 
     const cards = snap.docs.map(d => {
@@ -4996,6 +5051,7 @@ const loadFirestoreProductsSection = async () => {
         const isActive = toggleBtn.dataset.active === 'true';
         try {
           await setDoc(doc(db, 'products', slug), { active: !isActive }, { merge: true });
+          await syncMobileProductFromStore(slug);
           toast(isActive ? 'Product disabled (hidden from site)' : 'Product enabled (live on site)', 'success');
           loadFirestoreProductsSection();
         } catch (err) { toast(err.message, 'error'); }
@@ -5008,6 +5064,7 @@ const loadFirestoreProductsSection = async () => {
         if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
         try {
           await deleteDoc(doc(db, 'products', slug));
+          await syncMobileCatalogEntry('products', slug, null);
           toast(`"${name}" deleted.`, 'success');
           loadFirestoreProductsSection();
         } catch (err) { toast(err.message, 'error'); }
