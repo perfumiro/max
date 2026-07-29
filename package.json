@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "generate:catalog": "node scripts/generate-catalog.mjs"
+  },
   "dependencies": {
     "firebase": "^12.13.0"
   }
