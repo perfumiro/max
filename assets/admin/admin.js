@@ -33,7 +33,14 @@ const CLOUDINARY_PRESET = 'IPORIDSE_PRODUCTS';
 // Change this to match the admin account email in your Firebase Auth console
 const ADMIN_EMAIL = 'admin@ipordise.com';
 const MOBILE_CATALOG_DOC_ID = '__mobile_catalog__';
+const SUPABASE_SYNC_URL = 'https://gdgrskgegrcgmzswefmn.supabase.co/functions/v1/admin-catalog-sync';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_XbhrBW9Na65u8EkpgtEz4g_PuYkxs_H';
 let mobileCatalogOverrides = {};
+
+const legacyCatalogWrite = async (operation) => {
+  try { await operation; }
+  catch (error) { console.warn('[Legacy Firebase catalog] Write deferred:', error); }
+};
 
 const syncMobileCatalogEntry = async (section, id, value) => {
   if (!id || id === MOBILE_CATALOG_DOC_ID) return;
@@ -46,6 +53,21 @@ const syncMobileCatalogEntry = async (section, id, value) => {
     }, { merge: true });
   } catch (error) {
     console.warn('[Mobile catalog] Incremental sync deferred:', error);
+  }
+  const firebaseToken = await auth.currentUser?.getIdToken();
+  if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
+  const response = await fetch(SUPABASE_SYNC_URL, {
+    method: 'POST',
+    headers: {
+      apikey: SUPABASE_PUBLISHABLE_KEY,
+      Authorization: `Bearer ${firebaseToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ section, id, value }),
+  });
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    throw new Error(payload.error || `Supabase sync failed (${response.status})`);
   }
 };
 
@@ -3008,7 +3030,7 @@ const loadProductsView = async () => {
           const btn2 = card.querySelector('.prod-save');
           if (btn2) { btn2.disabled=true; btn2.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
           try {
-            await deleteDoc(doc(db,'productOverrides',slug));
+            await legacyCatalogWrite(deleteDoc(doc(db,'productOverrides',slug)));
             await syncMobileCatalogEntry('overrides', slug, null);
             delete overrides[slug];
             dirty.delete(slug);
@@ -3029,7 +3051,7 @@ const loadProductsView = async () => {
         const btn = card.querySelector('.prod-save');
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
         try {
-          await setDoc(doc(db,'productOverrides',slug), overrides[slug]);
+          await legacyCatalogWrite(setDoc(doc(db,'productOverrides',slug), overrides[slug]));
           await syncMobileCatalogEntry('overrides', slug, overrides[slug]);
           dirty.delete(slug);
           toast(`? ${productName(slug)} saved`, 'success');
@@ -3047,7 +3069,7 @@ const loadProductsView = async () => {
         const btn = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-toggle`);
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
         try {
-          await setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true});
+          await legacyCatalogWrite(setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true}));
           await syncMobileCatalogEntry('overrides', slug, overrides[slug]);
           toast(`${productName(slug)} ${newDisabled?'disabled':'enabled'}`, 'success');
           render();
@@ -3064,7 +3086,7 @@ const loadProductsView = async () => {
         const btn = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-reset`);
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
         try {
-          await deleteDoc(doc(db,'productOverrides',slug));
+          await legacyCatalogWrite(deleteDoc(doc(db,'productOverrides',slug)));
           await syncMobileCatalogEntry('overrides', slug, null);
           delete overrides[slug];
           delete pendingRemovals[slug];
@@ -3329,7 +3351,7 @@ if (countEl) countEl.textContent = `${promos.length} promotion${promos.length!==
           if (brandVal) payload.promoBrand = brandVal; else payload.promoBrand = null;
           if (descVal)  payload.promoDesc  = descVal;  else payload.promoDesc  = null;
           payload.promoOrder = isNaN(orderVal) ? 99 : orderVal;
-          await setDoc(doc(db,'productOverrides',slug), payload, { merge: true });
+          await legacyCatalogWrite(setDoc(doc(db,'productOverrides',slug), payload, { merge: true }));
           await syncMobileCatalogEntry('overrides', slug, { ...(mobileCatalogOverrides[slug] || {}), ...payload });
           if (msgEl) { msgEl.textContent = '✓ Saved'; msgEl.style.color = 'var(--emerald)'; msgEl.style.display = 'inline'; setTimeout(() => { msgEl.style.display = 'none'; }, 2500); }
           toast(`Card details saved for "${pName(slug)}"`, 'success');
@@ -4238,7 +4260,7 @@ const initAddProductModal = () => {
 
       progressLabel.textContent = 'Saving product data...';
       progressBar.style.width = '92%';
-      await setDoc(doc(db, 'products', slug), {
+      await legacyCatalogWrite(setDoc(doc(db, 'products', slug), {
         name, brand: brand.toUpperCase(), slug,
         image: downloadURL, images: allImages, sizes, active: true,
         filters: ['new-in', gender, category],
@@ -4251,7 +4273,7 @@ const initAddProductModal = () => {
         ...(Object.keys(originalPrices).length ? { originalPrices } : {}),
         fragranceProfile: addFragranceProfile,
         addedAt: serverTimestamp(), source: 'admin',
-      });
+      }));
       await syncMobileProductFromStore(slug);
       progressBar.style.width = '100%';
       progressLabel.textContent = 'Product saved!';
@@ -4833,8 +4855,8 @@ const initEditProductModal = () => {
           payload.addedAt = serverTimestamp();
           payload.source  = 'admin';
         }
-        await setDoc(doc(db, 'products', newSlug), payload);
-        await deleteDoc(doc(db, 'products', originalSlug));
+        await legacyCatalogWrite(setDoc(doc(db, 'products', newSlug), payload));
+        await legacyCatalogWrite(deleteDoc(doc(db, 'products', originalSlug)));
         await syncMobileProductFromStore(newSlug);
         await syncMobileCatalogEntry('products', originalSlug, null);
         // Remove any stale productOverrides entries — admin products are managed
@@ -4852,7 +4874,7 @@ const initEditProductModal = () => {
           payload.source  = 'admin';
         }
         // Full overwrite (no merge) so removed sizes are actually deleted
-        await setDoc(doc(db, 'products', originalSlug), payload);
+        await legacyCatalogWrite(setDoc(doc(db, 'products', originalSlug), payload));
         await syncMobileProductFromStore(originalSlug);
         // Remove any stale productOverrides entry for the same reason.
         try { await deleteDoc(doc(db, 'productOverrides', originalSlug)); } catch (_) {}
@@ -5050,7 +5072,7 @@ const loadFirestoreProductsSection = async () => {
         const slug = toggleBtn.dataset.slug;
         const isActive = toggleBtn.dataset.active === 'true';
         try {
-          await setDoc(doc(db, 'products', slug), { active: !isActive }, { merge: true });
+          await legacyCatalogWrite(setDoc(doc(db, 'products', slug), { active: !isActive }, { merge: true }));
           await syncMobileProductFromStore(slug);
           toast(isActive ? 'Product disabled (hidden from site)' : 'Product enabled (live on site)', 'success');
           loadFirestoreProductsSection();
@@ -5063,7 +5085,7 @@ const loadFirestoreProductsSection = async () => {
         const name = card?.querySelector('span[style*="font-weight:700"]')?.textContent || slug;
         if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
         try {
-          await deleteDoc(doc(db, 'products', slug));
+          await legacyCatalogWrite(deleteDoc(doc(db, 'products', slug)));
           await syncMobileCatalogEntry('products', slug, null);
           toast(`"${name}" deleted.`, 'success');
           loadFirestoreProductsSection();
