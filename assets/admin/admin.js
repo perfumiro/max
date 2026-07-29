@@ -4260,7 +4260,7 @@ const initAddProductModal = () => {
 
       progressLabel.textContent = 'Saving product data...';
       progressBar.style.width = '92%';
-      await legacyCatalogWrite(setDoc(doc(db, 'products', slug), {
+      const productPayload = {
         name, brand: brand.toUpperCase(), slug,
         image: downloadURL, images: allImages, sizes, active: true,
         filters: ['new-in', gender, category],
@@ -4273,8 +4273,9 @@ const initAddProductModal = () => {
         ...(Object.keys(originalPrices).length ? { originalPrices } : {}),
         fragranceProfile: addFragranceProfile,
         addedAt: serverTimestamp(), source: 'admin',
-      }));
-      await syncMobileProductFromStore(slug);
+      };
+      await legacyCatalogWrite(setDoc(doc(db, 'products', slug), productPayload));
+      await syncMobileCatalogEntry('products', slug, productPayload);
       progressBar.style.width = '100%';
       progressLabel.textContent = 'Product saved!';
       setTimeout(() => {
@@ -4857,7 +4858,7 @@ const initEditProductModal = () => {
         }
         await legacyCatalogWrite(setDoc(doc(db, 'products', newSlug), payload));
         await legacyCatalogWrite(deleteDoc(doc(db, 'products', originalSlug)));
-        await syncMobileProductFromStore(newSlug);
+        await syncMobileCatalogEntry('products', newSlug, payload);
         await syncMobileCatalogEntry('products', originalSlug, null);
         // Remove any stale productOverrides entries — admin products are managed
         // exclusively via products.sizes, never via productOverrides.
@@ -4875,7 +4876,7 @@ const initEditProductModal = () => {
         }
         // Full overwrite (no merge) so removed sizes are actually deleted
         await legacyCatalogWrite(setDoc(doc(db, 'products', originalSlug), payload));
-        await syncMobileProductFromStore(originalSlug);
+        await syncMobileCatalogEntry('products', originalSlug, payload);
         // Remove any stale productOverrides entry for the same reason.
         try { await deleteDoc(doc(db, 'productOverrides', originalSlug)); } catch (_) {}
       }
@@ -5073,7 +5074,7 @@ const loadFirestoreProductsSection = async () => {
         const isActive = toggleBtn.dataset.active === 'true';
         try {
           await legacyCatalogWrite(setDoc(doc(db, 'products', slug), { active: !isActive }, { merge: true }));
-          await syncMobileProductFromStore(slug);
+          await syncMobileCatalogEntry('products', slug, { active: !isActive });
           toast(isActive ? 'Product disabled (hidden from site)' : 'Product enabled (live on site)', 'success');
           loadFirestoreProductsSection();
         } catch (err) { toast(err.message, 'error'); }
