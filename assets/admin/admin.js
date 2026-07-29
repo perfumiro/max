@@ -2111,7 +2111,8 @@ const loadNewsletterView = async () => {
       });
     }
 
-    // ── Send newsletter via Brevo API ──
+    // Queue campaigns in Firestore. Delivery is performed by a private server-side
+    // worker so email-provider credentials never ship to the browser.
     const sendBrevoBtn = document.getElementById('nlSendBrevoBtn');
     if(sendBrevoBtn){ const b2=sendBrevoBtn.cloneNode(true); sendBrevoBtn.replaceWith(b2);
       b2.addEventListener('click', async () => {
@@ -2130,59 +2131,33 @@ const loadNewsletterView = async () => {
         if(progressEl) progressEl.style.display = '';
         b2.disabled = true;
 
-        const photoUrl = nlPhotoUrl;
-        const photoHtml = photoUrl ? `<div style="text-align:center;margin:20px 0"><img src="${photoUrl.replace(/"/g,'&quot;')}" alt="Newsletter" style="max-width:100%;border-radius:12px;max-height:400px"></div>` : '';
-
-        const bodyHtml = body.split('\n').map(l => `<p style="margin:0 0 10px;font-size:15px;color:#374151;line-height:1.7">${l.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>`).join('');
-
-        const htmlContent = `<table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fa;padding:40px 0;font-family:Arial,Helvetica,sans-serif">
-<tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06)">
-  <tr><td style="background:#111827;padding:32px 40px;text-align:center">
-    <h1 style="margin:0;color:#fff;font-family:Georgia,serif;font-size:28px;letter-spacing:6px;font-weight:400">IPORDISE</h1>
-    <p style="margin:6px 0 0;color:rgba(255,255,255,0.5);font-size:11px;letter-spacing:3px">LUXURY FRAGRANCES</p>
-  </td></tr>
-  <tr><td style="padding:40px">
-    ${bodyHtml}
-    ${photoHtml}
-  </td></tr>
-  <tr><td style="background:#f9fafb;padding:20px 40px;text-align:center;border-top:1px solid #e5e7eb">
-    <a href="https://ipordise.com" style="color:#111827;font-size:13px;text-decoration:none;font-weight:600">Shop Now at IPORDISE</a>
-    <p style="color:#9ca3af;font-size:11px;margin:8px 0 0;letter-spacing:.5px">&copy; 2026 IPORDISE &middot; Luxury Fragrances &middot; Morocco</p>
-    <p style="margin:4px 0 0"><a href="https://ipordise.com" style="color:#9ca3af;font-size:10px">Unsubscribe</a></p>
-  </td></tr>
-</table>
-</td></tr></table>`;
-
-        const _bk = ['xkeysib','af6aab934f2296cf608b17da7fcf9219721731c168849201a62c1c77d0911d07','VAHSaAnk2wfodov4'].join('-');
-
-        // Send one email per recipient (privacy + reliability)
-        let sent = 0, failed = 0;
-        for(let i = 0; i < audience.length; i++){
-          const s = audience[i];
-          if(!s.email) { failed++; continue; }
-          try {
-            const res = await fetch('https://api.brevo.com/v3/smtp/email', {
-              method: 'POST',
-              headers: { 'accept':'application/json', 'content-type':'application/json', 'api-key': _bk },
-              body: JSON.stringify({ sender:{ name:'IPORDISE', email:'newsletter@ipordise.com' }, to:[{ email: s.email, name: s.name || s.email.split('@')[0] }], subject, htmlContent })
-            });
-            if(res.ok){ sent++; } else { failed++; console.warn('[NL] Brevo error for', s.email, res.status, await res.text()); }
-          } catch(e){ failed++; console.error('[NL] Brevo error for', s.email, e); }
-          const pct = Math.round(((i + 1) / audience.length) * 100);
-          if(barEl) barEl.style.width = pct + '%';
-          if(statusEl) statusEl.textContent = `Sending… ${i + 1}/${audience.length}`;
+        try {
+          const recipients = audience.filter(s => s.email).map(s => ({
+            email: s.email,
+            name: s.name || '',
+            gender: s.gender || '',
+          }));
+          const campaignId = `newsletter-campaign-${Date.now()}`;
+          await setDoc(doc(db, 'admin_config', campaignId), {
+            type: 'newsletterCampaign', status: 'queued', subject, body,
+            photoUrl: nlPhotoUrl || '', recipients,
+            recipientCount: recipients.length,
+            requestedBy: auth.currentUser?.email || ADMIN_EMAIL,
+            createdAt: serverTimestamp(),
+          });
+          if(barEl) barEl.style.width = '100%';
+          if(spinnerEl) { spinnerEl.className = 'fas fa-clock'; spinnerEl.style.color = '#059669'; }
+          if(statusEl) statusEl.textContent = `Campaign queued securely for ${recipients.length} subscriber${recipients.length!==1?'s':''}`;
+          toast('Campaign queued securely. Server delivery must be connected.', 'success');
+        } catch (error) {
+          console.error('[NL] Queue error', error);
+          if(spinnerEl) { spinnerEl.className = 'fas fa-times-circle'; spinnerEl.style.color = 'var(--rose)'; }
+          if(statusEl) statusEl.textContent = 'Could not queue this campaign';
+          toast('Could not queue newsletter campaign', 'error');
+        } finally {
+          b2.disabled = false;
+          setTimeout(() => { if(progressEl) progressEl.style.display = 'none'; }, 6000);
         }
-
-        b2.disabled = false;
-        if(spinnerEl) spinnerEl.className = sent > 0 ? 'fas fa-check-circle' : 'fas fa-times-circle';
-        if(spinnerEl) spinnerEl.style.color = sent > 0 ? '#059669' : 'var(--rose)';
-        if(statusEl) statusEl.textContent = failed === 0
-          ? `✓ Newsletter sent to ${sent} subscriber${sent!==1?'s':''}`
-          : `Sent ${sent}, failed ${failed}`;
-        if(barEl) barEl.style.width = '100%';
-        toast(failed === 0 ? `Newsletter sent to ${sent} subscribers!` : `Sent ${sent}, failed ${failed}`, failed === 0 ? 'success' : 'error');
-        setTimeout(() => { if(progressEl) progressEl.style.display = 'none'; }, 6000);
       });
     }
 
