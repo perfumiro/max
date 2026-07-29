@@ -71,6 +71,39 @@ const syncMobileCatalogEntry = async (section, id, value) => {
   }
 };
 
+const fetchSupabaseAdminProducts = async (source = '') => {
+  const firebaseToken = await auth.currentUser?.getIdToken();
+  if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
+  const url = source ? `${SUPABASE_SYNC_URL}?source=${encodeURIComponent(source)}` : SUPABASE_SYNC_URL;
+  const response = await fetch(url, {
+    headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${firebaseToken}` },
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Could not load Supabase catalog (${response.status})`);
+  return Array.isArray(payload.products) ? payload.products : [];
+};
+
+const supabaseRowToAdminProduct = (row) => ({
+  slug: row.id,
+  name: row.name,
+  brand: row.brand,
+  image: row.image,
+  images: Array.isArray(row.gallery) && row.gallery.length ? row.gallery : [row.image].filter(Boolean),
+  sizes: row.sizes || {},
+  originalPrices: row.original_prices || {},
+  filters: row.filters || [],
+  badge: row.badge || '',
+  description: row.description || '',
+  accords: row.accords || [],
+  notes: row.notes || {},
+  ingredients: row.ingredients || '',
+  rating: row.rating,
+  reviewCount: row.review_count,
+  stockLeft: row.stock_left,
+  active: row.active !== false,
+  source: row.source || 'website',
+});
+
 const publishMobileCatalogSnapshot = async (productDocs) => {
   const products = {};
   productDocs.forEach(productDoc => {
@@ -2284,9 +2317,9 @@ const loadProductsView = async () => {
   if (!grid) return;
   grid.innerHTML = `<div style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading products...</div>`;
   try {
-    const [pricesRes, overridesSnap] = await Promise.all([
+    const [pricesRes, supabaseRows] = await Promise.all([
       fetch('/prices.json').then(r=>r.json()),
-      getDocs(collection(db,'productOverrides'))
+      fetchSupabaseAdminProducts('website')
     ]);
 
     // -- Helpers ------------------------------------------------------------
@@ -2303,7 +2336,17 @@ const loadProductsView = async () => {
     };
 
     const overrides = {};
-    overridesSnap.docs.forEach(d => { overrides[d.id] = normalizeOv(d.data()); });
+    supabaseRows.forEach(row => {
+      const current = normalizeOv({ prices: row.sizes || {} }).prices;
+      const originals = normalizeOv({ prices: row.original_prices || {} }).prices;
+      const base = normalizeOv({ prices: row.base_sizes || {} }).prices;
+      const prices = { ...current, ...originals };
+      const promoPrices = Object.fromEntries(Object.keys(originals)
+        .filter(size => Number(current[size]) > 0 && Number(current[size]) < Number(originals[size]))
+        .map(size => [size, current[size]]));
+      const removedSizes = Object.keys(base).filter(size => !(size in prices));
+      overrides[row.id] = normalizeOv({ prices, promoPrices, removedSizes, disabled: row.active === false });
+    });
     mobileCatalogOverrides = overrides;
 
     // Canonical Unique'e Luxury IDs used on storefront/product pages.
@@ -3194,14 +3237,14 @@ const loadPromotionsView = async () => {
   const pName = slug => slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 
   try {
-    const snap = await getDocs(collection(db,'productOverrides'));
+    const rows = await fetchSupabaseAdminProducts('website');
     const promos = [];
 
-    snap.forEach(docSnap => {
-      const slug = docSnap.id;
-      const d    = docSnap.data();
-      const promoPrices = d.promoPrices || {};
-      const prices      = d.prices      || {};
+    rows.forEach(row => {
+      const slug = row.id;
+      const promoPrices = row.sizes || {};
+      const prices = { ...(row.sizes || {}), ...(row.original_prices || {}) };
+      const d = {};
 
       // promoPrices[sz] = sale/discounted price (lower)
       // prices[sz]      = full/original price (higher)
@@ -5002,13 +5045,12 @@ const loadFirestoreProductsSection = async () => {
     'chocolate-makes-me-happy': 'https://res.cloudinary.com/dp5eszu4p/image/upload/v1777287393/idqhoenngo6pgtzldy7n.jpg'
   };
   try {
-    const snap = await getDocs(query(collection(db, 'products'), orderBy('addedAt', 'desc')));
-    await publishMobileCatalogSnapshot(snap.docs);
-    if (snap.empty) { section.innerHTML = ''; return; }
+    const rows = await fetchSupabaseAdminProducts('admin');
+    if (!rows.length) { section.innerHTML = ''; return; }
 
-    const cards = snap.docs.map(d => {
-      const p = d.data();
-      const slug = String(p.slug || d.id || '').trim().toLowerCase();
+    const products = rows.map(supabaseRowToAdminProduct);
+    const cards = products.map(p => {
+      const slug = String(p.slug || '').trim().toLowerCase();
       const displayImage = UNIQUE_LOCAL_IMAGE_BY_SLUG[slug] || p.image || '';
       const _visibleSizes = Object.entries(p.sizes || {}).filter(([, price]) => Number(price) > 0);
       const sizesHtml = _visibleSizes.map(([sz, price], i) =>
@@ -5018,7 +5060,7 @@ const loadFirestoreProductsSection = async () => {
         ? '<span style="font-size:10px;font-weight:700;background:rgba(239,68,68,0.12);color:var(--rose);padding:3px 8px;border-radius:20px;border:1px solid rgba(239,68,68,0.25)">Disabled</span>'
         : '<span style="font-size:10px;font-weight:700;background:rgba(34,197,94,0.12);color:var(--emerald);padding:3px 8px;border-radius:20px;border:1px solid rgba(34,197,94,0.25)">Live</span>';
       return `
-        <div style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:flex-start" data-fsprod-slug="${esc(p.slug||d.id)}">
+        <div style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:flex-start" data-fsprod-slug="${esc(p.slug)}">
           <img src="${esc(displayImage)}" alt="${esc(p.name||'')}" style="width:64px;height:64px;object-fit:contain;border-radius:8px;background:var(--s3);flex-shrink:0" onerror="this.style.display='none'">
           <div style="flex:1;min-width:0">
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
@@ -5029,13 +5071,13 @@ const loadFirestoreProductsSection = async () => {
             <div style="display:flex;gap:6px;flex-wrap:wrap">${sizesHtml}</div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
-            <button class="btn btn-xs fsprod-edit" data-slug="${esc(p.slug||d.id)}"
+            <button class="btn btn-xs fsprod-edit" data-slug="${esc(p.slug)}"
               style="font-size:11px;background:rgba(200,169,106,0.12);color:var(--gold);border-color:rgba(200,169,106,0.35)">
               <i class="fas fa-pen"></i> Edit
             </button>
-            <button class="btn btn-xs fsprod-toggle" data-slug="${esc(p.slug||d.id)}" data-active="${p.active!==false}"
+            <button class="btn btn-xs fsprod-toggle" data-slug="${esc(p.slug)}" data-active="${p.active!==false}"
               style="font-size:11px">${p.active===false?'Enable':'Disable'}</button>
-            <button class="btn btn-xs fsprod-delete" data-slug="${esc(p.slug||d.id)}"
+            <button class="btn btn-xs fsprod-delete" data-slug="${esc(p.slug)}"
               style="font-size:11px;background:rgba(239,68,68,0.1);color:var(--rose);border-color:rgba(239,68,68,0.25)">
               <i class="fas fa-trash-can"></i> Delete
             </button>
@@ -5047,7 +5089,7 @@ const loadFirestoreProductsSection = async () => {
       <div style="margin-bottom:10px">
         <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px">
           <i class="fas fa-database" style="color:var(--gold)"></i> Products Added via Admin Panel
-          <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">(${snap.size} product${snap.size!==1?'s':''})</span>
+          <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">(${products.length} product${products.length!==1?'s':''})</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px">${cards}</div>
       </div>
@@ -5062,9 +5104,9 @@ const loadFirestoreProductsSection = async () => {
       if (editBtn) {
         const slug = editBtn.dataset.slug;
         try {
-          const snap = await getDoc(doc(db, 'products', slug));
-          if (!snap.exists()) { toast('Product not found.', 'error'); return; }
-          openEditProductModal(slug, snap.data());
+          const row = rows.find(product => product.id === slug);
+          if (!row) { toast('Product not found.', 'error'); return; }
+          openEditProductModal(slug, supabaseRowToAdminProduct(row));
         } catch (err) { toast(err.message, 'error'); }
         return;
       }
