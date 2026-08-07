@@ -6,7 +6,7 @@
  *   - External CDN resources → Stale-While-Revalidate
  */
 
-const CACHE_VERSION = 'v19';
+const CACHE_VERSION = 'v20';
 const STATIC_CACHE  = `ipordise-static-${CACHE_VERSION}`;
 const CDN_CACHE     = `ipordise-cdn-${CACHE_VERSION}`;
 const IMG_CACHE     = `ipordise-img-${CACHE_VERSION}`;
@@ -79,6 +79,17 @@ self.addEventListener('fetch', (event) => {
         url.hostname === 'www.googletagmanager.com' ||
         url.hostname === 'www.google-analytics.com'
     ) return;
+
+    // The administration app is independently deployed and uses hashed Expo
+    // bundles. Never serve it through the storefront cache: a stale bundle can
+    // otherwise leave returning staff on a blank screen after a release.
+    if (
+        url.origin === self.location.origin &&
+        (url.pathname === '/app' || url.pathname.startsWith('/app/') || url.pathname.startsWith('/_expo/'))
+    ) {
+        event.respondWith(fetch(request, { cache: 'no-store' }));
+        return;
+    }
 
     // External CDN (fonts and FA icons) -> Stale-While-Revalidate
     const externalCDN = [

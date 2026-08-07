@@ -32,6 +32,28 @@
     </noscript>
     <!-- The root element for your Expo app. -->
     <div id="root"></div>
+  <script>
+    // One-time recovery for browsers that previously cached an obsolete Expo
+    // bundle through the storefront service worker.
+    (() => {
+      const recoveryKey = 'ipordise-admin-cache-recovery-v1';
+      try {
+        if (!sessionStorage.getItem(recoveryKey)) {
+          sessionStorage.setItem(recoveryKey, '1');
+          if ('caches' in window) {
+            caches.keys().then((names) => Promise.all(
+              names
+                .filter((name) => name.startsWith('ipordise-static-'))
+                .map((name) => caches.delete(name))
+            )).catch(() => {});
+          }
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistration('/').then((registration) => registration?.update()).catch(() => {});
+          }
+        }
+      } catch (_) {}
+    })();
+  </script>
   <script src="/_expo/static/js/web/AppEntry-99595d004bbae3b49cb9691df79fc619.js" defer></script>
 </body>
 </html>
