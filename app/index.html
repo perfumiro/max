@@ -22,6 +22,43 @@
         height: 100%;
         flex: 1;
       }
+      #admin-recovery {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: #f7f4f2;
+        color: #171310;
+        font-family: Arial, sans-serif;
+      }
+      .admin-recovery-card {
+        width: min(100%, 460px);
+        padding: 36px;
+        border: 1px solid #e4dcd7;
+        border-radius: 24px;
+        background: #fff;
+        box-shadow: 0 18px 55px rgba(42, 25, 22, .12);
+        text-align: center;
+      }
+      .admin-recovery-brand { font: 700 28px Georgia, serif; }
+      .admin-recovery-label { margin-top: 18px; color: #d7193f; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; }
+      .admin-recovery-title { margin: 8px 0 0; font: 700 28px/1.2 Georgia, serif; }
+      .admin-recovery-copy { margin: 10px auto 22px; max-width: 340px; color: #766b65; font-size: 14px; line-height: 1.55; }
+      .admin-recovery-link {
+        display: block;
+        padding: 17px 22px;
+        border-radius: 999px;
+        background: #d7193f;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .8px;
+        text-decoration: none;
+      }
+      .admin-recovery-help { margin-top: 14px; color: #8b8079; font-size: 11px; }
     </style>
   <link rel="icon" href="/favicon.ico" /></head>
 
@@ -32,6 +69,16 @@
     </noscript>
     <!-- The root element for your Expo app. -->
     <div id="root"></div>
+    <div id="admin-recovery" role="status" aria-live="polite">
+      <div class="admin-recovery-card">
+        <div class="admin-recovery-brand">IPORDISE</div>
+        <div class="admin-recovery-label">SECURE ADMINISTRATION</div>
+        <h1 class="admin-recovery-title">Opening your dashboard…</h1>
+        <p class="admin-recovery-copy">If your browser blocks the application bundle, use the secure production access below.</p>
+        <a class="admin-recovery-link" href="https://ipordise-app.vercel.app/app">OPEN SECURE ADMIN</a>
+        <div class="admin-recovery-help">Protected staff access · IPORDISE Morocco</div>
+      </div>
+    </div>
   <script>
     // One-time recovery for browsers that previously cached an obsolete Expo
     // bundle through the storefront service worker.
@@ -52,8 +99,16 @@
           }
         }
       } catch (_) {}
+
+      const root = document.getElementById('root');
+      const recovery = document.getElementById('admin-recovery');
+      const revealApp = () => {
+        if (root && root.childElementCount > 0 && recovery) recovery.remove();
+      };
+      if (root) new MutationObserver(revealApp).observe(root, { childList: true });
+      revealApp();
     })();
   </script>
-  <script src="/_expo/static/js/web/AppEntry-99595d004bbae3b49cb9691df79fc619.js" defer></script>
+  <script src="/_expo/static/js/web/AppEntry-3f88ba42efa8e5b14cb396161ae228d3.js" defer></script>
 </body>
 </html>
