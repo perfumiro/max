@@ -6,7 +6,7 @@
  *   - External CDN resources → Stale-While-Revalidate
  */
 
-const CACHE_VERSION = 'v20';
+const CACHE_VERSION = 'v21';
 const STATIC_CACHE  = `ipordise-static-${CACHE_VERSION}`;
 const CDN_CACHE     = `ipordise-cdn-${CACHE_VERSION}`;
 const IMG_CACHE     = `ipordise-img-${CACHE_VERSION}`;
@@ -85,7 +85,7 @@ self.addEventListener('fetch', (event) => {
     // otherwise leave returning staff on a blank screen after a release.
     if (
         url.origin === self.location.origin &&
-        (url.pathname === '/app' || url.pathname.startsWith('/app/') || url.pathname.startsWith('/_expo/'))
+        (url.pathname === '/admin' || url.pathname === '/admin.html' || url.pathname === '/app' || url.pathname.startsWith('/app/') || url.pathname.startsWith('/_expo/'))
     ) {
         event.respondWith(fetch(request, { cache: 'no-store' }));
         return;
