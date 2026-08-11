@@ -34,6 +34,7 @@ const CLOUDINARY_PRESET = 'IPORIDSE_PRODUCTS';
 const ADMIN_EMAIL = 'admin@ipordise.com';
 const MOBILE_CATALOG_DOC_ID = '__mobile_catalog__';
 const SUPABASE_SYNC_URL = 'https://gdgrskgegrcgmzswefmn.supabase.co/functions/v1/admin-catalog-sync';
+const SUPABASE_ADMIN_ORDERS_URL = 'https://gdgrskgegrcgmzswefmn.supabase.co/functions/v1/admin-orders';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_XbhrBW9Na65u8EkpgtEz4g_PuYkxs_H';
 let mobileCatalogOverrides = {};
 
@@ -81,6 +82,79 @@ const fetchSupabaseAdminProducts = async (source = '') => {
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(payload.error || `Could not load Supabase catalog (${response.status})`);
   return Array.isArray(payload.products) ? payload.products : [];
+};
+
+const supabaseOrderToCommandCenterOrder = (row) => {
+  const fullName = String(row.customer?.name || '').trim();
+  const nameParts = fullName.split(/\s+/).filter(Boolean);
+  const firstName = nameParts.shift() || '';
+  const lastName = nameParts.join(' ');
+  return {
+    id: row.id,
+    orderId: row.order_number || row.id,
+    channel: 'app',
+    customer: {
+      firstName,
+      lastName,
+      phone: row.customer?.phone || '',
+      email: row.customer?.email || '',
+      city: row.customer?.city || '',
+      address: row.customer?.address || '',
+      notes: row.notes || '',
+    },
+    items: (row.items || []).map((item) => ({
+      ...item,
+      qty: Number(item.quantity || item.qty || 1),
+      price: Number(item.unitPrice || item.price || 0),
+      pricePending: false,
+    })),
+    summary: {
+      subtotal: Number(row.subtotal || 0),
+      shipping: Number(row.delivery_fee || 0),
+      total: Number(row.total || 0),
+      hasPendingPricing: false,
+    },
+    status: row.status || 'pending',
+    paymentMethod: row.payment_method || 'cash_on_delivery',
+    notificationStatus: row.notification_status || 'pending',
+    riskScore: Number(row.risk_score || 0),
+    riskLevel: row.risk_level || 'low',
+    riskFlags: Array.isArray(row.risk_flags) ? row.risk_flags : [],
+    createdAt: row.created_at ? new Date(row.created_at) : null,
+  };
+};
+
+const fetchSupabaseAdminOrders = async () => {
+  const firebaseToken = await auth.currentUser?.getIdToken();
+  if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
+  const response = await fetch(SUPABASE_ADMIN_ORDERS_URL, {
+    cache: 'no-store',
+    headers: {
+      apikey: SUPABASE_PUBLISHABLE_KEY,
+      Authorization: `Bearer ${firebaseToken}`,
+      Accept: 'application/json',
+    },
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Could not load orders (${response.status})`);
+  return (Array.isArray(payload.orders) ? payload.orders : []).map(supabaseOrderToCommandCenterOrder);
+};
+
+const updateSupabaseAdminOrderStatus = async (id, status) => {
+  const firebaseToken = await auth.currentUser?.getIdToken();
+  if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
+  const response = await fetch(SUPABASE_ADMIN_ORDERS_URL, {
+    method: 'PATCH',
+    headers: {
+      apikey: SUPABASE_PUBLISHABLE_KEY,
+      Authorization: `Bearer ${firebaseToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id, status }),
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Could not update order (${response.status})`);
+  return payload.order;
 };
 
 const supabaseRowToAdminProduct = (row) => ({
@@ -787,6 +861,7 @@ const bootstrapDashboard = async (user) => {
   state.pollers = [
     setInterval(() => loadOverview().catch(() => {}),  30_000),
     setInterval(() => { if (state.currentView === 'activity') loadActivity().catch(() => {}); }, 15_000),
+    setInterval(() => loadOrdersView({ quiet: true }).catch(() => {}), 15_000),
   ];
 };
 
@@ -814,6 +889,7 @@ let _ordersUnsubscribe = null;  // holds the onSnapshot unsubscribe fn
 
 const ORDER_STATUS = {
   pending:    { color: '#f59e0b', label: 'Pending' },
+  confirmed:  { color: '#0ea5e9', label: 'Confirmed' },
   processing: { color: '#3b82f6', label: 'Processing' },
   shipped:    { color: '#8b5cf6', label: 'Shipped' },
   delivered:  { color: '#16a34a', label: 'Delivered' },
@@ -830,7 +906,7 @@ const _renderOrdersError = (msg) => {
       <div style="font-size:1.5rem;margin-bottom:8px">??</div>
       <div style="font-weight:700;color:#dc2626;margin-bottom:6px">Could not load orders</div>
       <div style="font-size:12px;color:#7f1d1d;background:#fff;border-radius:8px;padding:8px 12px;font-family:monospace;margin-bottom:12px;text-align:left;word-break:break-all">${esc(msg)}</div>
-      <div style="font-size:12px;color:#6b7280;margin-bottom:12px">This usually means Firestore rules have not been deployed yet.<br>Run: <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px">firebase deploy --only firestore:rules</code></div>
+      <div style="font-size:12px;color:#6b7280;margin-bottom:12px">The protected order service could not be reached. Check your connection and retry.</div>
       <button class="btn btn-xs btn-gold" id="ordersRetryBtn"><i class="fas fa-rotate-right"></i> Retry</button>
     </div>
   </td></tr>`;
@@ -845,7 +921,7 @@ const _renderOrdersEmpty = () => {
       <div style="font-size:2rem;margin-bottom:8px">??</div>
       <div style="font-weight:700;color:var(--text);margin-bottom:6px">No orders yet</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:14px">When customers complete checkout, their orders will appear here automatically in real time.</div>
-      <button class="btn btn-xs btn-gold" id="ordersTestBtn"><i class="fas fa-flask"></i> Test Firestore Connection</button>
+      <button class="btn btn-xs btn-gold" id="ordersTestBtn"><i class="fas fa-rotate-right"></i> Refresh Orders</button>
     </div>
   </td></tr>`;
   qs('#ordersTestBtn')?.addEventListener('click', _testOrdersConnection);
@@ -855,28 +931,12 @@ const _testOrdersConnection = async () => {
   const btn = qs('#ordersTestBtn');
   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...'; }
   try {
-    // Try writing a test doc to verify write permission
-    const testId = 'TEST-' + Date.now();
-    await setDoc(doc(db, 'orders', testId), {
-      orderId: testId,
-      channel: 'admin-test',
-      items: [{ name: 'Test Product', qty: 1, price: 0 }],
-      customer: { firstName: 'Test', lastName: 'Order', phone: '0600000000', email: '', address: 'Test', city: 'Casablanca', notes: '' },
-      summary: { subtotal: 0, shipping: 0, total: 0, hasPendingPricing: false },
-      status: 'pending',
-      createdAt: new Date(),
-      _isTest: true,
-    });
-    // Now read it back
-    const snap = await getDocs(collection(db, 'orders'));
-    const count = snap.size;
-    // Clean up test doc
-    await deleteDoc(doc(db, 'orders', testId)).catch(() => {});
-    toast(`? Firestore works! Found ${count - 1} real orders in database.`, 'success', 5000);
+    const orders = await fetchSupabaseAdminOrders();
+    toast(`Order service connected. Found ${orders.length} order${orders.length === 1 ? '' : 's'}.`, 'success', 5000);
     await loadOrdersView();
   } catch (e) {
-    toast('? Firestore error: ' + e.message, 'error', 8000);
-    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-flask"></i> Test Firestore Connection'; }
+    toast('Order service error: ' + e.message, 'error', 8000);
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-rotate-right"></i> Refresh Orders'; }
   }
 };
 
@@ -956,29 +1016,29 @@ const applyOrderFilters = () => {
   if (countEl) countEl.textContent = `${filtered.length} order${filtered.length !== 1 ? 's' : ''}`;
 };
 
-const loadOrdersView = async () => {
+const loadOrdersView = async ({ quiet = false } = {}) => {
   const tbody = qs('#ordersTableBody');
-  if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading orders...</td></tr>`;
+  if (tbody && !quiet) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading orders...</td></tr>`;
 
   // Tear down any previous real-time listener
   if (_ordersUnsubscribe) { _ordersUnsubscribe(); _ordersUnsubscribe = null; }
 
   // -- Step 1: initial load via getDocs (no index required, works immediately) --
   try {
-    const snap = await getDocs(collection(db, 'orders'));
-    const rows = snap.docs.map((d) => {
-      const data = d.data();
-      return { ...data, id: d.id, createdAt: data.createdAt?.toDate?.() || null };
-    });
-    rows.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-    _allOrders = rows;
+    _allOrders = await fetchSupabaseAdminOrders();
+    _allOrders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     const badge = qs('#navOrdersBadge');
     if (badge) { badge.textContent = _allOrders.length; badge.style.display = _allOrders.length ? '' : 'none'; }
     applyOrderFilters();
   } catch (e) {
-    _renderOrdersError(e.message);
-    return;
+    if (!quiet) _renderOrdersError(e.message);
+    throw e;
   }
+
+  // Supabase is the authoritative order store. Refresh polling is configured
+  // during dashboard bootstrap, so the legacy Firestore listener must not
+  // overwrite this list with a different collection.
+  return;
 
   // -- Step 2: upgrade to real-time listener (best effort, non-blocking) --
   try {
@@ -1185,9 +1245,7 @@ window._adminViewOrder = (orderId) => {
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     try {
-      const update = { status: newStatus };
-      if (tracking) update.trackingNumber = tracking;
-      await setDoc(doc(db, 'orders', orderId), update, { merge: true });
+      await updateSupabaseAdminOrderStatus(orderId, newStatus);
       const ord = _allOrders.find((o) => o.id === orderId);
       if (ord) { ord.status = newStatus; if (tracking) ord.trackingNumber = tracking; }
       if (msgEl) {
@@ -1214,7 +1272,7 @@ document.addEventListener('change', async (e) => {
   const id = sel.dataset.id;
   const newStatus = sel.value;
   try {
-    await setDoc(doc(db, 'orders', id), { status: newStatus }, { merge: true });
+    await updateSupabaseAdminOrderStatus(id, newStatus);
     const ord = _allOrders.find((o) => o.id === id);
     if (ord) ord.status = newStatus;
     toast('Order status updated', 'success');
@@ -1498,8 +1556,7 @@ const loadRevenueView = async () => {
   if (monthlyBody) monthlyBody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>`;
 
   try {
-    const snap = await getDocs(collection(db, 'orders'));
-    const orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const orders = await fetchSupabaseAdminOrders();
 
     const now = new Date();
     const thisMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -1914,6 +1971,36 @@ const initNotifications = () => {
     badge.style.display = 'none';
     dropdown.style.display = 'none';
   });
+
+  const refreshPendingOrders = async () => {
+    const items = (await fetchSupabaseAdminOrders()).filter(order => order.status === 'pending').slice(0, 20);
+    if (items.length === 0) {
+      if (list) list.innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);font-size:12px">No pending orders</div>';
+      badge.style.display = 'none';
+      return;
+    }
+    badge.style.display = 'flex';
+    badge.textContent = items.length;
+    if (list) list.innerHTML = items.map(order => {
+      const customer = order.customer || {};
+      const name = esc(`${customer.firstName || ''} ${customer.lastName || ''}`.trim() || 'Customer');
+      const total = fmtMAD(order.summary?.total || 0);
+      const when = order.createdAt
+        ? order.createdAt.toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+        : '-';
+      return `<div style="padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s"
+                  onmouseover="this.style.background='var(--s3)'" onmouseout="this.style.background=''"
+                  onclick="document.querySelector('[data-view=orders]').click()">
+        <div style="font-size:12px;font-weight:600;color:var(--ink)">${name} - ${total}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${when} - <span style="color:var(--amber);font-weight:600">Pending</span></div>
+      </div>`;
+    }).join('');
+  };
+  if (_notifUnsubscribe) _notifUnsubscribe();
+  void refreshPendingOrders().catch(() => {});
+  const notificationTimer = setInterval(() => void refreshPendingOrders().catch(() => {}), 15_000);
+  _notifUnsubscribe = () => clearInterval(notificationTimer);
+  return;
 
   // Live listener: pending orders
   if (_notifUnsubscribe) _notifUnsubscribe();
