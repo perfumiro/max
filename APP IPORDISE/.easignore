@@ -1,6 +1,7 @@
 node_modules/
 .expo/
 .preview-export/
+.eas-build-inspect/
 out/
 out-*/
 dist/

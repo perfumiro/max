@@ -1,0 +1,48 @@
+# EAS archives from this Git root. Exclude the website and repository metadata.
+.git/
+/.vscode/
+/admin/
+/analytics/
+/app/
+/assets/
+/auth/
+/backend/
+/en/
+/fr/
+/node_modules/
+/out/
+/pages/
+/products/
+/scripts/
+/uniqueeluxury products/
+/Xerjoff Products/
+/_expo/
+
+# Exclude local/generated files from the nested Expo application.
+node_modules/
+.expo/
+.preview-export/
+.eas-build-inspect/
+out/
+out-*/
+dist/
+dist-*/
+design-qa/
+tmp/
+IPORDISE/
+website-ipordise/
+*.log
+.DS_Store
+.env
+.env.local
+.env.*.local
+.vercel/
+*.jks
+*.keystore
+*.p8
+*.p12
+google-services.json
+GoogleService-Info.plist
+/(\{name
+/(\{text
+/e.children.length
