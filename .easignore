@@ -30,7 +30,8 @@ dist-*/
 design-qa/
 tmp/
 IPORDISE/
-website-ipordise/
+website-ipordise/*
+!APP IPORDISE/website-ipordise/catalog.json
 *.log
 .DS_Store
 .env

@@ -10,7 +10,8 @@ dist-*/
 design-qa/
 tmp/
 IPORDISE/
-website-ipordise/
+website-ipordise/*
+!website-ipordise/catalog.json
 *.log
 .DS_Store
 .env

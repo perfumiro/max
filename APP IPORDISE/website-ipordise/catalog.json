@@ -1,0 +1,1415 @@
+{
+  "version": 1,
+  "currency": "MAD",
+  "source": "ipordise.com",
+  "products": [
+    {
+      "id": "versace-dylan-blue-eau-de-toilette",
+      "slug": "versace-dylan-blue-eau-de-toilette",
+      "name": "Versace Dylan Blue Eau de Toilette",
+      "brand": "VERSACE",
+      "image": "/assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg",
+      "gallery": [
+        "/assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg",
+        "/assets/images/products/versace/versace-dylan-blue-eau-de-toilette/2.jpg"
+      ],
+      "sizes": {
+        "10ml": 100,
+        "20ml": 185,
+        "30ml": 270,
+        "50ml": 450,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 18,
+      "active": true
+    },
+    {
+      "id": "versace-eros-energy-eau-de-parfum",
+      "slug": "versace-eros-energy-eau-de-parfum",
+      "name": "Versace Eros Energy Eau de Parfum",
+      "brand": "VERSACE",
+      "image": "/assets/images/products/versace/versace-eros-energy-eau-de-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/versace/versace-eros-energy-eau-de-parfum/1.jpg",
+        "/assets/images/products/versace/versace-eros-energy-eau-de-parfum/2.jpg",
+        "/assets/images/products/versace/versace-eros-energy-eau-de-parfum/3.jpg"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 14,
+      "active": true
+    },
+    {
+      "id": "versace-eros-flame-eau-de-parfum",
+      "slug": "versace-eros-flame-eau-de-parfum",
+      "name": "Versace Eros Flame Eau de Parfum",
+      "brand": "VERSACE",
+      "image": "/assets/images/products/versace/versace-eros-flame-eau-de-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/versace/versace-eros-flame-eau-de-parfum/1.jpg",
+        "/assets/images/products/versace/versace-eros-flame-eau-de-parfum/2.jpg"
+      ],
+      "sizes": {
+        "10ml": 100,
+        "20ml": 185,
+        "30ml": 270,
+        "50ml": 450,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 16,
+      "active": true
+    },
+    {
+      "id": "versace-eros-eau-de-parfum",
+      "slug": "versace-eros-eau-de-parfum",
+      "name": "Versace Eros Eau de Parfum",
+      "brand": "VERSACE",
+      "image": "/assets/images/products/versace/versace-eros-eau-de-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/versace/versace-eros-eau-de-parfum/1.webp",
+        "/assets/images/products/versace/versace-eros-eau-de-parfum/2.jpg"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.9,
+      "reviewCount": 22,
+      "active": true
+    },
+    {
+      "id": "carolina-herrera-bad-boy-eau-de-toilette",
+      "slug": "carolina-herrera-bad-boy-eau-de-toilette",
+      "name": "Carolina Herrera Bad Boy Eau de Toilette",
+      "brand": "CAROLINA HERRERA",
+      "image": "/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg",
+      "gallery": [
+        "/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/1.jpg",
+        "/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/2.jpg",
+        "/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/3.jpg",
+        "/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/4.jpg",
+        "/assets/images/products/carolina-herrera/carolina-herrera-bad-boy-eau-de-toilette/5.jpg"
+      ],
+      "sizes": {
+        "10ml": 100,
+        "20ml": 200,
+        "30ml": 300,
+        "50ml": 500,
+        "100ml": 870
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 14,
+      "active": true
+    },
+    {
+      "id": "gucci-guilty-absolu-de-parfum-pour-homme",
+      "slug": "gucci-guilty-absolu-de-parfum-pour-homme",
+      "name": "Gucci Guilty Absolu de Parfum Pour Homme",
+      "brand": "GUCCI",
+      "image": "/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp",
+      "gallery": [
+        "/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/1.webp",
+        "/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/2.webp",
+        "/assets/images/products/gucci/gucci-guilty-absolu-de-parfum-pour-homme/3.jpg"
+      ],
+      "sizes": {
+        "10ml": 180,
+        "20ml": 360,
+        "30ml": 540
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 6,
+      "active": true
+    },
+    {
+      "id": "gucci-guilty-elixir-pour-homme",
+      "slug": "gucci-guilty-elixir-pour-homme",
+      "name": "Gucci Guilty Elixir Pour Homme",
+      "brand": "GUCCI",
+      "image": "/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp",
+      "gallery": [
+        "/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/1.webp",
+        "/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/2.webp",
+        "/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/3.webp",
+        "/assets/images/products/gucci/gucci-guilty-elixir-pour-homme/4.webp"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 5,
+      "active": true
+    },
+    {
+      "id": "montale-arabians-tonka",
+      "slug": "montale-arabians-tonka",
+      "name": "Montale Arabians Tonka",
+      "brand": "MONTALE",
+      "image": "/assets/images/products/montale/montale-arabians-tonka/1.webp",
+      "gallery": [
+        "/assets/images/products/montale/montale-arabians-tonka/1.webp",
+        "/assets/images/products/montale/montale-arabians-tonka/2.webp",
+        "/assets/images/products/montale/montale-arabians-tonka/3.webp"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "unisex",
+        "niche",
+        "best-sellers"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.7,
+      "reviewCount": 4,
+      "active": true
+    },
+    {
+      "id": "guerlain-l-homme-ideal-extreme",
+      "slug": "guerlain-l-homme-ideal-extreme",
+      "name": "GUERLAIN L'homme Idéal Extrême",
+      "brand": "GUERLAIN",
+      "image": "/assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg",
+      "gallery": [
+        "/assets/images/products/guerlain/lhomme-ideal-extreme/1.jpg",
+        "/assets/images/products/guerlain/lhomme-ideal-extreme/2.jpg"
+      ],
+      "sizes": {
+        "10ml": 150,
+        "20ml": 300,
+        "30ml": 450,
+        "50ml": 650,
+        "100ml": 1250
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 13,
+      "active": true
+    },
+    {
+      "id": "guerlain-l-homme-ideal-l-intense-eau-de-parfum",
+      "slug": "guerlain-l-homme-ideal-l-intense-eau-de-parfum",
+      "name": "Guerlain L'Homme Idéal L'Intense Eau de Parfum",
+      "brand": "GUERLAIN",
+      "image": "/assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/1.webp",
+        "/assets/images/products/guerlain/lhomme-ideal-lintense-eau-de-parfum/2.jpg"
+      ],
+      "sizes": {
+        "10ml": 150,
+        "20ml": 300,
+        "30ml": 450,
+        "50ml": 650,
+        "100ml": 1250
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 10,
+      "active": true
+    },
+    {
+      "id": "hugo-boss-boss-bottled-elixir-intense",
+      "slug": "hugo-boss-boss-bottled-elixir-intense",
+      "name": "Hugo Boss Boss Bottled Elixir Intense",
+      "brand": "HUGO BOSS",
+      "image": "/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg",
+      "gallery": [
+        "/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/1.jpeg",
+        "/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/2.jpeg",
+        "/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/3.jpg",
+        "/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/4.jpg",
+        "/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/5.jpg",
+        "/assets/images/products/hugo-boss/hugo-boss-boss-bottled-elixir-intense/6.jpg"
+      ],
+      "sizes": {
+        "10ml": 140,
+        "20ml": 280,
+        "30ml": 390,
+        "50ml": 650,
+        "100ml": 1100
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 9,
+      "active": true
+    },
+    {
+      "id": "boss-bottled-absolu-intense",
+      "slug": "boss-bottled-absolu-intense",
+      "name": "Boss Bottled Absolu Intense",
+      "brand": "HUGO BOSS",
+      "image": "/assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg",
+      "gallery": [
+        "/assets/images/products/hugo-boss/boss-bottled-absolu-intense/1.jpeg",
+        "/assets/images/products/hugo-boss/boss-bottled-absolu-intense/2.jpeg",
+        "/assets/images/products/hugo-boss/boss-bottled-absolu-intense/3.jpeg",
+        "/assets/images/products/hugo-boss/boss-bottled-absolu-intense/4.jpeg",
+        "/assets/images/products/hugo-boss/boss-bottled-absolu-intense/5.jpeg",
+        "/assets/images/products/hugo-boss/boss-bottled-absolu-intense/6.jpeg"
+      ],
+      "sizes": {
+        "10ml": 130,
+        "20ml": 260,
+        "30ml": 375,
+        "50ml": 625,
+        "100ml": 1000
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 11,
+      "active": true
+    },
+    {
+      "id": "hugo-boss-the-scent-for-him-elixir",
+      "slug": "hugo-boss-the-scent-for-him-elixir",
+      "name": "Hugo Boss The Scent For Him Elixir",
+      "brand": "HUGO BOSS",
+      "image": "/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png",
+      "gallery": [
+        "/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/1.png",
+        "/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/2.png",
+        "/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/3.png",
+        "/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/4.png",
+        "/assets/images/products/hugo-boss/hugo-boss-the-scent-for-him-elixir/5.png"
+      ],
+      "sizes": {
+        "10ml": 140,
+        "20ml": 280,
+        "30ml": 390,
+        "50ml": 650,
+        "100ml": 1100
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 8,
+      "active": true
+    },
+    {
+      "id": "bleu-de-chanel-eau-de-parfum-spray",
+      "slug": "bleu-de-chanel-eau-de-parfum-spray",
+      "name": "BLEU DE CHANEL Eau de Parfum spray",
+      "brand": "CHANEL",
+      "image": "/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg",
+      "gallery": [
+        "/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/1.jpg",
+        "/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/2.jpg",
+        "/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/3.jpg",
+        "/assets/images/products/chanel/bleu-de-chanel-eau-de-parfum-spray/4.jpg"
+      ],
+      "sizes": {
+        "10ml": 120,
+        "20ml": 240,
+        "30ml": 360,
+        "50ml": 600,
+        "100ml": 1350,
+        "150ml": 1900
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.9,
+      "reviewCount": 26,
+      "active": true
+    },
+    {
+      "id": "rabanne-one-million-parfum",
+      "slug": "rabanne-one-million-parfum",
+      "name": "Rabanne One Million Parfum",
+      "brand": "RABANNE",
+      "image": "/assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/rabanne/rabanne-one-million-parfum/1.jpg",
+        "/assets/images/products/rabanne/rabanne-one-million-parfum/2.jpg",
+        "/assets/images/products/rabanne/rabanne-one-million-parfum/3.jpg",
+        "/assets/images/products/rabanne/rabanne-one-million-parfum/4.jpg"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "best-sellers",
+        "for-men",
+        "designer"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.9,
+      "reviewCount": 20,
+      "active": true
+    },
+    {
+      "id": "rabanne-one-million-elixir-intense",
+      "slug": "rabanne-one-million-elixir-intense",
+      "name": "Rabanne One Million Elixir Intense",
+      "brand": "RABANNE",
+      "image": "/assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp",
+      "gallery": [
+        "/assets/images/products/rabanne/rabanne-one-million-elixir-intense/1.webp",
+        "/assets/images/products/rabanne/rabanne-one-million-elixir-intense/2.webp",
+        "/assets/images/products/rabanne/rabanne-one-million-elixir-intense/3.jpg",
+        "/assets/images/products/rabanne/rabanne-one-million-elixir-intense/4.jpg",
+        "/assets/images/products/rabanne/rabanne-one-million-elixir-intense/5.jpg"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "best-sellers",
+        "for-men",
+        "designer"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.8,
+      "reviewCount": 16,
+      "active": true
+    },
+    {
+      "id": "givenchy-gentleman-society-amber-eau-de-parfum",
+      "slug": "givenchy-gentleman-society-amber-eau-de-parfum",
+      "name": "Givenchy Gentleman Society Amber Eau de Parfum",
+      "brand": "GIVENCHY",
+      "image": "/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/1.jpg",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/2.jpg",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/3.jpg",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/4.jpg",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-amber-eau-de-parfum/5.jpg"
+      ],
+      "sizes": {
+        "10ml": 100,
+        "20ml": 200,
+        "30ml": 300,
+        "50ml": 500,
+        "100ml": 900
+      },
+      "filters": [
+        "new-in",
+        "best-sellers",
+        "for-men",
+        "designer"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.7,
+      "reviewCount": 8,
+      "active": true
+    },
+    {
+      "id": "givenchy-gentleman-society-nomade-eau-de-parfum",
+      "slug": "givenchy-gentleman-society-nomade-eau-de-parfum",
+      "name": "Givenchy Gentleman Society Nomade Eau de Parfum",
+      "brand": "GIVENCHY",
+      "image": "/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/1.webp",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/2.jpg",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/3.jpg",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/4.jpg",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-nomade-eau-de-parfum/5.jpg"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "best-sellers",
+        "for-men",
+        "designer"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.7,
+      "reviewCount": 6,
+      "active": true
+    },
+    {
+      "id": "givenchy-gentleman-society-extreme-eau-de-parfum",
+      "slug": "givenchy-gentleman-society-extreme-eau-de-parfum",
+      "name": "Givenchy Gentleman Society Extreme Eau de Parfum",
+      "brand": "GIVENCHY",
+      "image": "/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/1.webp",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/2.webp",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/3.jpg",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/4.jpg",
+        "/assets/images/products/givenchy/givenchy-gentleman-society-extreme-eau-de-parfum/5.jpg"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "best-sellers",
+        "for-men",
+        "designer"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.7,
+      "reviewCount": 7,
+      "active": true
+    },
+    {
+      "id": "gentleman-private-reserve-eau-de-parfum",
+      "slug": "gentleman-private-reserve-eau-de-parfum",
+      "name": "Gentleman Private Reserve Eau de Parfum",
+      "brand": "GIVENCHY",
+      "image": "/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png",
+      "gallery": [
+        "/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/1.png",
+        "/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/2.webp",
+        "/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/3.jpg",
+        "/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/4.jpg",
+        "/assets/images/products/givenchy/gentleman-private-reserve-eau-de-parfum/5.jpg"
+      ],
+      "sizes": {
+        "10ml": 100,
+        "20ml": 200,
+        "30ml": 300,
+        "50ml": 500,
+        "100ml": 950
+      },
+      "filters": [
+        "new-in",
+        "best-sellers",
+        "for-men",
+        "designer"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.7,
+      "reviewCount": 7,
+      "active": true
+    },
+    {
+      "id": "jean-paul-gaultier-scandal-elixir",
+      "slug": "jean-paul-gaultier-scandal-elixir",
+      "name": "Jean Paul Gaultier Scandal Elixir",
+      "brand": "JEAN PAUL GAULTIER",
+      "image": "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg",
+      "gallery": [
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/1.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/2.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/3.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/4.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-elixir/5.jpg"
+      ],
+      "sizes": {
+        "75ml": 990,
+        "125ml": 1350
+      },
+      "filters": [
+        "new-in",
+        "best-sellers",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.7,
+      "reviewCount": 8,
+      "active": true
+    },
+    {
+      "id": "jean-paul-gaultier-scandal-intense-eau-de-parfum",
+      "slug": "jean-paul-gaultier-scandal-intense-eau-de-parfum",
+      "name": "Jean Paul Gaultier Scandal Intense Eau de Parfum",
+      "brand": "JEAN PAUL GAULTIER",
+      "image": "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/1.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/2.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/3.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/4.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-scandal-intense-eau-de-parfum/5.jpg"
+      ],
+      "sizes": {
+        "50ml": 850,
+        "100ml": 1190
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 7,
+      "active": true
+    },
+    {
+      "id": "emporio-armani-stronger-with-you-intensely-edp",
+      "slug": "emporio-armani-stronger-with-you-intensely-edp",
+      "name": "Emporio Armani Stronger With You Intensely EDP",
+      "brand": "GIORGIO ARMANI",
+      "image": "/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp",
+      "gallery": [
+        "/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/1.webp",
+        "/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/2.webp",
+        "/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/3.webp",
+        "/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/4.webp",
+        "/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/5.webp",
+        "/assets/images/products/armani/emporio-armani-stronger-with-you-intensely/6.webp"
+      ],
+      "sizes": {
+        "10ml": 95,
+        "20ml": 190,
+        "30ml": 270,
+        "50ml": 450,
+        "100ml": 800
+      },
+      "filters": [
+        "new-in",
+        "best-sellers",
+        "for-men",
+        "designer",
+        "offers"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.8,
+      "reviewCount": 13,
+      "active": true
+    },
+    {
+      "id": "armani-stronger-with-you-powerfully-eau-de-parfum",
+      "slug": "armani-stronger-with-you-powerfully-eau-de-parfum",
+      "name": "Armani Stronger With You Powerfully Eau de Parfum",
+      "brand": "GIORGIO ARMANI",
+      "image": "/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/1.webp",
+        "/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/2.webp",
+        "/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/3.webp",
+        "/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/4.webp",
+        "/assets/images/products/armani/armani-stronger-with-you-powerfully-eau-de-parfum/5.webp"
+      ],
+      "sizes": {
+        "10ml": 120,
+        "20ml": 230,
+        "30ml": 330,
+        "50ml": 550,
+        "100ml": 1000
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "offers",
+        "2026"
+      ],
+      "badge": "OFFER",
+      "rating": 4.7,
+      "reviewCount": 6,
+      "active": true
+    },
+    {
+      "id": "armani-stronger-with-you-absolutely-perfume",
+      "slug": "armani-stronger-with-you-absolutely-perfume",
+      "name": "Armani Stronger With You Absolutely Perfume",
+      "brand": "GIORGIO ARMANI",
+      "image": "/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp",
+      "gallery": [
+        "/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/1.webp",
+        "/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/2.webp",
+        "/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/3.webp",
+        "/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/4.webp",
+        "/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/5.webp",
+        "/assets/images/products/armani/armani-stronger-with-you-absolutely-perfume/6.webp"
+      ],
+      "sizes": {
+        "10ml": 100,
+        "20ml": 180,
+        "30ml": 270,
+        "50ml": 450,
+        "100ml": 750
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "offers"
+      ],
+      "badge": "OFFER",
+      "rating": 4.7,
+      "reviewCount": 5,
+      "active": true
+    },
+    {
+      "id": "yves-saint-laurent-y-eau-de-parfum",
+      "slug": "yves-saint-laurent-y-eau-de-parfum",
+      "name": "Yves Saint Laurent Y Eau de Parfum",
+      "brand": "YVES SAINT LAURENT",
+      "image": "/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/1.webp",
+        "/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/2.webp",
+        "/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/3.webp",
+        "/assets/images/products/ysl/yves-saint-laurent-y-eau-de-parfum/4.webp"
+      ],
+      "sizes": {
+        "60ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "offers"
+      ],
+      "badge": "OFFER",
+      "rating": 4.9,
+      "reviewCount": 24,
+      "active": true
+    },
+    {
+      "id": "dior-sauvage-eau-de-parfum",
+      "slug": "dior-sauvage-eau-de-parfum",
+      "name": "DIOR SAUVAGE Eau de Parfum",
+      "brand": "DIOR",
+      "image": "/assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/dior/dior-sauvage-eau-de-parfum/1.jpg",
+        "/assets/images/products/dior/dior-sauvage-eau-de-parfum/2.jpg",
+        "/assets/images/products/dior/dior-sauvage-eau-de-parfum/3.webp"
+      ],
+      "sizes": {
+        "10ml": 130,
+        "20ml": 250,
+        "30ml": 375,
+        "50ml": 625,
+        "100ml": 1100
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "offers"
+      ],
+      "badge": "OFFER",
+      "rating": 4.9,
+      "reviewCount": 28,
+      "active": true
+    },
+    {
+      "id": "yves-saint-laurent-myslf-eau-de-parfum",
+      "slug": "yves-saint-laurent-myslf-eau-de-parfum",
+      "name": "Yves Saint Laurent Myslf Eau de Parfum",
+      "brand": "YVES SAINT LAURENT",
+      "image": "/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/1.jpg",
+        "/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/2.webp",
+        "/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/3.webp",
+        "/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/4.webp",
+        "/assets/images/products/ysl/yves-saint-laurent-myslf-eau-de-parfum/5.webp"
+      ],
+      "sizes": {
+        "60ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "offers"
+      ],
+      "badge": "OFFER",
+      "rating": 4.8,
+      "reviewCount": 15,
+      "active": true
+    },
+    {
+      "id": "yves-saint-laurent-myslf-le-parfum",
+      "slug": "yves-saint-laurent-myslf-le-parfum",
+      "name": "Yves Saint Laurent MYSLF Le Parfum",
+      "brand": "YVES SAINT LAURENT",
+      "image": "/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/1.webp",
+        "/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/2.webp",
+        "/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/3.webp",
+        "/assets/images/products/ysl/yves-saint-laurent-myslf-le-parfum/4.jpg"
+      ],
+      "sizes": {
+        "60ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "offers"
+      ],
+      "badge": "OFFER",
+      "rating": 4.7,
+      "reviewCount": 9,
+      "active": true
+    },
+    {
+      "id": "azzaro-the-most-wanted-eau-de-parfum-intense",
+      "slug": "azzaro-the-most-wanted-eau-de-parfum-intense",
+      "name": "Azzaro The Most Wanted Eau de Parfum Intense",
+      "brand": "AZZARO",
+      "image": "/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp",
+      "gallery": [
+        "/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/1.webp",
+        "/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/2.webp",
+        "/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/3.webp",
+        "/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/4.webp",
+        "/assets/images/products/azzaro/azzaro-the-most-wanted-eau-de-parfum-intense/5.webp"
+      ],
+      "sizes": {
+        "10ml": 100,
+        "20ml": 200,
+        "30ml": 300,
+        "50ml": 500,
+        "100ml": 800
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "offers"
+      ],
+      "badge": "OFFER",
+      "rating": 4.8,
+      "reviewCount": 13,
+      "active": true
+    },
+    {
+      "id": "azzaro-forever-wanted-elixir-eau-de-parfum",
+      "slug": "azzaro-forever-wanted-elixir-eau-de-parfum",
+      "name": "Azzaro Forever Wanted Elixir Eau de Parfum",
+      "brand": "AZZARO",
+      "image": "/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/1.jpg",
+        "/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/2.avif",
+        "/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/3.avif",
+        "/assets/images/products/azzaro/azzaro-forever-wanted-elixir-eau-de-parfum/4.jpg"
+      ],
+      "sizes": {
+        "10ml": 130,
+        "20ml": 260,
+        "30ml": 390,
+        "50ml": 650,
+        "100ml": 1000
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "offers"
+      ],
+      "badge": "OFFER",
+      "rating": 4.8,
+      "reviewCount": 10,
+      "active": true
+    },
+    {
+      "id": "azzaro-the-most-wanted-parfum",
+      "slug": "azzaro-the-most-wanted-parfum",
+      "name": "Azzaro The Most Wanted Parfum",
+      "brand": "AZZARO",
+      "image": "/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/1.webp",
+        "/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/2.webp",
+        "/assets/images/products/azzaro/azzaro-the-most-wanted-parfum/3.webp"
+      ],
+      "sizes": {
+        "10ml": 100,
+        "20ml": 200,
+        "30ml": 300,
+        "50ml": 500,
+        "100ml": 800
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "offers"
+      ],
+      "badge": "OFFER",
+      "rating": 4.8,
+      "reviewCount": 15,
+      "active": true
+    },
+    {
+      "id": "valentino-donna-born-in-roma-eau-de-parfum",
+      "slug": "valentino-donna-born-in-roma-eau-de-parfum",
+      "name": "Valentino Donna Born in Roma Eau de Parfum",
+      "brand": "VALENTINO",
+      "image": "/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/1.webp",
+        "/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/2.webp",
+        "/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/3.webp",
+        "/assets/images/products/valentino/valentino-donna-born-in-roma-eau-de-parfum/4.webp"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-women",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 12,
+      "active": true
+    },
+    {
+      "id": "valentino-born-in-roma-extradose-eau-de-toilette",
+      "slug": "valentino-born-in-roma-extradose-eau-de-toilette",
+      "name": "Valentino Born in Roma Extradose Eau de Toilette",
+      "brand": "VALENTINO",
+      "image": "/assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg",
+      "gallery": [
+        "/assets/images/products/valentino/valentino-born-in-rome-extradose/1.jpg",
+        "/assets/images/products/valentino/valentino-born-in-rome-extradose/2.jpg",
+        "/assets/images/products/valentino/valentino-born-in-rome-extradose/3.jpg",
+        "/assets/images/products/valentino/valentino-born-in-rome-extradose/4.jpg"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 9,
+      "active": true
+    },
+    {
+      "id": "valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette",
+      "slug": "valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette",
+      "name": "Valentino Uomo Born In Roma Purple Melancholia Eau de Toilette",
+      "brand": "VALENTINO",
+      "image": "/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/1.jpg",
+      "gallery": [
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/1.jpg",
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/2.jpg",
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-purple-melancholia-eau-de-toilette/3.jpg"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 5,
+      "active": true
+    },
+    {
+      "id": "dior-homme-intense-eau-de-parfum",
+      "slug": "dior-homme-intense-eau-de-parfum",
+      "name": "Dior Homme Intense Eau de Parfum",
+      "brand": "DIOR",
+      "image": "/assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/dior/dior-homme-intense-eau-de-parfum/1.jpg",
+        "/assets/images/products/dior/dior-homme-intense-eau-de-parfum/2.webp",
+        "/assets/images/products/dior/dior-homme-intense-eau-de-parfum/3.avif",
+        "/assets/images/products/dior/dior-homme-intense-eau-de-parfum/4.avif"
+      ],
+      "sizes": {
+        "10ml": 110,
+        "20ml": 220,
+        "30ml": 300,
+        "50ml": 500,
+        "100ml": 1050
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 17,
+      "active": true
+    },
+    {
+      "id": "valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette",
+      "slug": "valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette",
+      "name": "Valentino Uomo Born In Roma Coral Fantasy Eau de Toilette",
+      "brand": "VALENTINO",
+      "image": "/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/1.webp",
+      "gallery": [
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/1.webp",
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/2.webp",
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/3.webp",
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-coral-fantasy-eau-de-toilette/4.webp"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 6,
+      "active": true
+    },
+    {
+      "id": "valentino-born-in-roma-uomo-intense-eau-de-parfum",
+      "slug": "valentino-born-in-roma-uomo-intense-eau-de-parfum",
+      "name": "Valentino Born In Roma Uomo Intense Eau de Parfum",
+      "brand": "VALENTINO",
+      "image": "/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/1.webp",
+        "/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/2.webp",
+        "/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/3.webp",
+        "/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/4.webp",
+        "/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/5.webp",
+        "/assets/images/products/valentino/valentino-born-in-roma-uomo-intense-eau-de-parfum/6.webp"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 8,
+      "active": true
+    },
+    {
+      "id": "valentino-born-in-roma-donna-intense-eau-de-parfum",
+      "slug": "valentino-born-in-roma-donna-intense-eau-de-parfum",
+      "name": "Valentino Born In Roma Donna Intense Eau de Parfum",
+      "brand": "VALENTINO",
+      "image": "/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/1.webp",
+        "/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/2.webp",
+        "/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/3.webp",
+        "/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/4.webp",
+        "/assets/images/products/valentino/valentino-born-in-roma-donna-intense-eau-de-parfum/5.webp"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-women",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 10,
+      "active": true
+    },
+    {
+      "id": "valentino-uomo-born-in-roma-eau-de-toilette",
+      "slug": "valentino-uomo-born-in-roma-eau-de-toilette",
+      "name": "Valentino Uomo Born in Roma Eau de Toilette",
+      "brand": "VALENTINO",
+      "image": "/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/1.jpg",
+      "gallery": [
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/1.jpg",
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/2.jpg",
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/3.jpg",
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/4.jpg",
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/5.jpg",
+        "/assets/images/products/valentino/valentino-uomo-born-in-roma-eau-de-toilette/6.jpg"
+      ],
+      "sizes": {
+        "50ml": 650,
+        "100ml": 850
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 11,
+      "active": true
+    },
+    {
+      "id": "jean-paul-gaultier-le-male-le-parfum-eau-de-parfum",
+      "slug": "jean-paul-gaultier-le-male-le-parfum-eau-de-parfum",
+      "name": "Jean Paul Gaultier Le male Le parfum Eau de Parfum",
+      "brand": "JEAN PAUL GAULTIER",
+      "image": "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/1.webp",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/2.webp",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/3.webp",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/4.webp",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-le-parfum-eau-de-parfum/5.webp"
+      ],
+      "sizes": {
+        "75ml": 950,
+        "125ml": 1290
+      },
+      "filters": [
+        "best-sellers",
+        "for-men",
+        "designer"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.8,
+      "reviewCount": 11,
+      "active": true
+    },
+    {
+      "id": "jean-paul-gaultier-le-male-elixir-eau-de-parfum",
+      "slug": "jean-paul-gaultier-le-male-elixir-eau-de-parfum",
+      "name": "Jean Paul Gaultier Le male Elixir Eau de Parfum",
+      "brand": "JEAN PAUL GAULTIER",
+      "image": "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp",
+      "gallery": [
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/1.webp",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/2.webp",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/3.webp",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-elixir/4.webp"
+      ],
+      "sizes": {
+        "75ml": 990,
+        "125ml": 1350
+      },
+      "filters": [
+        "new-in",
+        "best-sellers",
+        "for-men",
+        "designer"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.8,
+      "reviewCount": 12,
+      "active": true
+    },
+    {
+      "id": "jean-paul-gaultier-le-male-in-blue-eau-de-parfum",
+      "slug": "jean-paul-gaultier-le-male-in-blue-eau-de-parfum",
+      "name": "Jean Paul Gaultier Le Male In Blue Eau de Parfum",
+      "brand": "JEAN PAUL GAULTIER",
+      "image": "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/1.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/2.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-male-in-blue-eau-de-parfum/3.jpg"
+      ],
+      "sizes": {
+        "75ml": 850,
+        "125ml": 1150
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 6,
+      "active": true
+    },
+    {
+      "id": "jean-paul-gaultier-le-male-eau-de-toilette",
+      "slug": "jean-paul-gaultier-le-male-eau-de-toilette",
+      "name": "Jean Paul Gaultier Le Male Eau de Toilette",
+      "brand": "JEAN PAUL GAULTIER",
+      "image": "/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png",
+      "gallery": [
+        "/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/1.png",
+        "/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/2.png",
+        "/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/3.jpg",
+        "/assets/images/products/jean-paul-gaultier/le-male-eau-de-toilette/4.jpg"
+      ],
+      "sizes": {
+        "75ml": 850,
+        "125ml": 1150
+      },
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "NEW",
+      "rating": 4.8,
+      "reviewCount": 19,
+      "active": true
+    },
+    {
+      "id": "jean-paul-gaultier-le-beau-eau-de-parfum",
+      "slug": "jean-paul-gaultier-le-beau-eau-de-parfum",
+      "name": "Jean Paul Gaultier Le Beau Eau de Parfum",
+      "brand": "JEAN PAUL GAULTIER",
+      "image": "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp",
+      "gallery": [
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/1.webp",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/2.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/3.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/4.jpg",
+        "/assets/images/products/jean-paul-gaultier/jean-paul-gaultier-le-beau-eau-de-parfum/5.jpg"
+      ],
+      "sizes": {
+        "75ml": 980,
+        "125ml": 1320
+      },
+      "filters": [
+        "new-in",
+        "best-sellers",
+        "for-men",
+        "designer"
+      ],
+      "badge": "BESTSELLER",
+      "rating": 4.8,
+      "reviewCount": 10,
+      "active": true
+    },
+    {
+      "id": "prada-luna-rossa-ocean-eau-de-parfum",
+      "slug": "prada-luna-rossa-ocean-eau-de-parfum",
+      "name": "Prada Luna Rossa Ocean Eau de Parfum",
+      "brand": "PRADA",
+      "image": "/assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/1.jpg",
+        "/assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/2.jpg",
+        "/assets/images/products/prada/prada-luna-rossa-ocean-eau-de-parfum/3.jpg"
+      ],
+      "sizes": {},
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 7,
+      "active": true
+    },
+    {
+      "id": "prada-luna-rossa-carbon-edt",
+      "slug": "prada-luna-rossa-carbon-edt",
+      "name": "Prada Luna Rossa Carbon EDT",
+      "brand": "PRADA",
+      "image": "/assets/images/products/prada/prada-luna-rossa-carbon-edt/1.jpg",
+      "gallery": [
+        "/assets/images/products/prada/prada-luna-rossa-carbon-edt/1.jpg",
+        "/assets/images/products/prada/prada-luna-rossa-carbon-edt/2.jpg",
+        "/assets/images/products/prada/prada-luna-rossa-carbon-edt/3.jpg",
+        "/assets/images/products/prada/prada-luna-rossa-carbon-edt/4.jpg",
+        "/assets/images/products/prada/prada-luna-rossa-carbon-edt/5.jpg"
+      ],
+      "sizes": {},
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 6,
+      "active": true
+    },
+    {
+      "id": "prada-luna-rossa-black-eau-de-parfum",
+      "slug": "prada-luna-rossa-black-eau-de-parfum",
+      "name": "Prada Luna Rossa Black Eau de Parfum",
+      "brand": "PRADA",
+      "image": "/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg",
+      "gallery": [
+        "/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/1.jpg",
+        "/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/2.jpg",
+        "/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/3.jpg",
+        "/assets/images/products/prada/prada-luna-rossa-black-eau-de-parfum/4.jpg"
+      ],
+      "sizes": {},
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 6,
+      "active": true
+    },
+    {
+      "id": "prada-l-homme-edt",
+      "slug": "prada-l-homme-edt",
+      "name": "Prada L'Homme EDT",
+      "brand": "PRADA",
+      "image": "/assets/images/products/prada/prada-lhomme-edt/1.jpg",
+      "gallery": [
+        "/assets/images/products/prada/prada-lhomme-edt/1.jpg",
+        "/assets/images/products/prada/prada-lhomme-edt/2.jpg",
+        "/assets/images/products/prada/prada-lhomme-edt/3.jpg"
+      ],
+      "sizes": {},
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 7,
+      "active": true
+    },
+    {
+      "id": "prada-paradigme-eau-de-parfum",
+      "slug": "prada-paradigme-eau-de-parfum",
+      "name": "Prada Paradigme Eau de Parfum",
+      "brand": "PRADA",
+      "image": "/assets/images/products/prada/prada-paradigme-eau-de-parfum/1.png",
+      "gallery": [
+        "/assets/images/products/prada/prada-paradigme-eau-de-parfum/1.png",
+        "/assets/images/products/prada/prada-paradigme-eau-de-parfum/2.jpg",
+        "/assets/images/products/prada/prada-paradigme-eau-de-parfum/3.jpg",
+        "/assets/images/products/prada/prada-paradigme-eau-de-parfum/4.jpg"
+      ],
+      "sizes": {},
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 5,
+      "active": true
+    },
+    {
+      "id": "prada-luna-rossa-men-edt",
+      "slug": "prada-luna-rossa-men-edt",
+      "name": "Prada Luna Rossa Men EDT",
+      "brand": "PRADA",
+      "image": "/assets/images/products/prada/prada-luna-rossa-men-edt/1.jfif",
+      "gallery": [
+        "/assets/images/products/prada/prada-luna-rossa-men-edt/1.jfif",
+        "/assets/images/products/prada/prada-luna-rossa-men-edt/2.webp"
+      ],
+      "sizes": {},
+      "filters": [
+        "new-in",
+        "for-men",
+        "designer",
+        "2026"
+      ],
+      "badge": "NEW",
+      "rating": 4.7,
+      "reviewCount": 6,
+      "active": true
+    }
+  ]
+}
