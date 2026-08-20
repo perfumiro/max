@@ -229,7 +229,7 @@ const fragranceHouses=[
   {name:'XERJOFF',origin:'TURIN · ITALY',logo:require('./assets/brand-logos/xerjoff.png')},
   {name:'ARMANI',origin:'MILAN · ITALY',logo:require('./assets/brand-logos/armani.png')},
   {name:'YVES SAINT LAURENT',origin:'PARIS · FRANCE',logo:require('./assets/brand-logos/ysl.png')},
-  {name:'GUERLAIN',origin:'PARIS · FRANCE',logo:require('./assets/brand-logos/guerlain.png')},
+  {name:'GUERLAIN',origin:'PARIS · FRANCE',logo:require('./assets/brand-logos/guerlain.jpg')},
   {name:'TOM FORD',origin:'NEW YORK · USA',logo:require('./assets/brand-logos/tom-ford.png')},
   {name:'GIVENCHY',origin:'PARIS · FRANCE',logo:require('./assets/brand-logos/givenchy.png')},
   {name:'VERSACE',origin:'MILAN · ITALY',logo:require('./assets/brand-logos/versace.png')},

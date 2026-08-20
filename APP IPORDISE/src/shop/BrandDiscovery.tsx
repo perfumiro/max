@@ -25,7 +25,7 @@ const BRAND_LOGOS: Record<string, ImageSourcePropType> = {
   chanel: require('../../assets/brand-logos/chanel.png'),
   dior: require('../../assets/brand-logos/dior.png'),
   givenchy: require('../../assets/brand-logos/givenchy.png'),
-  guerlain: require('../../assets/brand-logos/guerlain.png'),
+  guerlain: require('../../assets/brand-logos/guerlain.jpg'),
   'jean paul gaultier': require('../../assets/brand-logos/jean-paul-gaultier.png'),
   'maison francis kurkdjian': require('../../assets/brand-logos/maison-francis-kurkdjian.png'),
   'tom ford': require('../../assets/brand-logos/tom-ford.png'),

@@ -19,3 +19,8 @@ test('native release configuration contains required store identifiers', async (
 test('release validator reports incomplete configuration', () => {
   assert.ok(validateReleaseConfig({ expo: {} }).length >= 5);
 });
+
+test('Guerlain logo uses its actual JPEG file type', async () => {
+  const logo = await readFile(new URL('../assets/brand-logos/guerlain.jpg', import.meta.url));
+  assert.deepEqual([...logo.subarray(0, 3)], [0xff, 0xd8, 0xff]);
+});
