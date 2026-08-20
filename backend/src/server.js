@@ -23,7 +23,7 @@ if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 
 const app = express();
 const PORT = Number(process.env.PORT || 5050);
-const JWT_SECRET = process.env.JWT_SECRET || 'change-me-in-env';
+const JWT_SECRET = String(process.env.JWT_SECRET || '');
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '8h';
 const COOKIE_NAME = process.env.COOKIE_NAME || 'ipordise_admin_token';
 const ADMIN_USER = String(process.env.ADMIN_USER || 'admin@ipordise.com').toLowerCase();
@@ -55,7 +55,7 @@ const mailer = emailEnabled
 
 app.set('trust proxy', TRUST_PROXY);
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '128kb', strict: true }));
 app.use(cookieParser());
 
 const allowedOrigins = new Set([
@@ -167,6 +167,22 @@ const authCookieOptions = {
   path: '/'
 };
 
+const loginAttempts = new Map();
+const consumeLoginAttempt = (key) => {
+  const now = Date.now();
+  const previous = loginAttempts.get(key);
+  const entry = !previous || previous.expiresAt <= now ? { count: 0, expiresAt: now + 15 * 60_000 } : previous;
+  entry.count += 1;
+  loginAttempts.set(key, entry);
+  if (loginAttempts.size > 10_000) {
+    for (const [candidate, value] of loginAttempts) if (value.expiresAt <= now) loginAttempts.delete(candidate);
+  }
+  return entry.count <= 10;
+};
+
+const jwtConfigured = JWT_SECRET.length >= 32
+  && !['change-me-in-env', 'replace-with-a-long-random-secret'].includes(JWT_SECRET);
+
 const maskIp = (ipAddress) => {
   if (!ipAddress) return '';
   const ip = String(ipAddress).trim();
@@ -230,6 +246,7 @@ const getRevokeBefore = () => {
 };
 
 const requireAdminAuth = (req, res, next) => {
+  if (!jwtConfigured) return res.status(503).json({ ok: false, error: 'Administration is unavailable' });
   const token = req.cookies[COOKIE_NAME];
   if (!token) {
     return res.status(401).json({ ok: false, error: 'Unauthorized' });
@@ -382,8 +399,12 @@ app.post('/api/admin/login', async (req, res) => {
   const user = String(username || '').toLowerCase().trim();
   const pass = String(password || '');
 
-  if (!ADMIN_PASSWORD_HASH || ADMIN_PASSWORD_HASH.length < 20) {
-    return res.status(500).json({ ok: false, error: 'Server admin password hash is not configured' });
+  if (!consumeLoginAttempt(getIpAddress(req))) {
+    res.setHeader('Retry-After', '900');
+    return res.status(429).json({ ok: false, error: 'Too many sign-in attempts. Please try again later.' });
+  }
+  if (!jwtConfigured || !ADMIN_PASSWORD_HASH || ADMIN_PASSWORD_HASH.length < 20) {
+    return res.status(503).json({ ok: false, error: 'Administration is unavailable' });
   }
 
   if (user !== ADMIN_USER) {
@@ -786,6 +807,15 @@ const buildClientEmail = (orderData, orderId) => {
 </body></html>`;
 };
 
+// Canonical checkout owns notification delivery. Prevent client-authored totals
+// from producing official-looking confirmation emails through this legacy API.
+app.post('/api/orders/notify', (_req, res) => res.status(410).json({
+  ok: false,
+  error: 'This endpoint has been retired. Create orders through canonical checkout.',
+}));
+
+// Historical implementation retained temporarily for data-migration reference.
+// It is unreachable because the retirement handler above always completes.
 // POST /api/orders/notify — send admin + client confirmation emails
 app.post('/api/orders/notify', async (req, res) => {
   const { orderData, orderId } = req.body || {};
@@ -856,4 +886,5 @@ app.listen(PORT, () => {
   if (!ADMIN_PASSWORD_HASH || ADMIN_PASSWORD_HASH.length < 20) {
     console.warn('WARNING: ADMIN_PASSWORD_HASH is not configured in backend/.env');
   }
+  if (!jwtConfigured) console.warn('WARNING: JWT_SECRET must be a unique random value of at least 32 characters; administration is disabled.');
 });

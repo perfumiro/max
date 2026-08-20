@@ -34,6 +34,8 @@ const CLOUDINARY_PRESET = 'IPORIDSE_PRODUCTS';
 const ADMIN_EMAIL = 'admin@ipordise.com';
 const MOBILE_CATALOG_DOC_ID = '__mobile_catalog__';
 const SUPABASE_SYNC_URL = 'https://gdgrskgegrcgmzswefmn.supabase.co/functions/v1/admin-catalog-sync';
+const SUPABASE_ORDERS_URL = 'https://gdgrskgegrcgmzswefmn.supabase.co/functions/v1/admin-orders';
+const SUPABASE_CUSTOMERS_URL = 'https://gdgrskgegrcgmzswefmn.supabase.co/functions/v1/admin-customers';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_XbhrBW9Na65u8EkpgtEz4g_PuYkxs_H';
 let mobileCatalogOverrides = {};
 
@@ -44,16 +46,6 @@ const legacyCatalogWrite = async (operation) => {
 
 const syncMobileCatalogEntry = async (section, id, value) => {
   if (!id || id === MOBILE_CATALOG_DOC_ID) return;
-  try {
-    await setDoc(doc(db, 'products', MOBILE_CATALOG_DOC_ID), {
-      system: true,
-      active: false,
-      [section]: { [id]: value },
-      updatedAt: serverTimestamp(),
-    }, { merge: true });
-  } catch (error) {
-    console.warn('[Mobile catalog] Incremental sync deferred:', error);
-  }
   const firebaseToken = await auth.currentUser?.getIdToken();
   if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
   const response = await fetch(SUPABASE_SYNC_URL, {
@@ -74,7 +66,9 @@ const syncMobileCatalogEntry = async (section, id, value) => {
 const fetchSupabaseAdminProducts = async (source = '') => {
   const firebaseToken = await auth.currentUser?.getIdToken();
   if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
-  const url = source ? `${SUPABASE_SYNC_URL}?source=${encodeURIComponent(source)}` : SUPABASE_SYNC_URL;
+  const params = new URLSearchParams({ page: '1', pageSize: '100' });
+  if (source) params.set('source', source);
+  const url = `${SUPABASE_SYNC_URL}?${params}`;
   const response = await fetch(url, {
     headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${firebaseToken}` },
   });
@@ -101,8 +95,76 @@ const supabaseRowToAdminProduct = (row) => ({
   reviewCount: row.review_count,
   stockLeft: row.stock_left,
   active: row.active !== false,
+  publicationStatus: row.publication_status || (row.active === false ? 'archived' : 'active'),
+  variantStocks: Object.fromEntries((row.product_variants || []).map(variant => [variant.size_key, variant.stock_quantity])),
   source: row.source || 'website',
 });
+
+const fetchSupabaseAdminOrders = async ({ page = 1, status = '', q = '' } = {}) => {
+  const firebaseToken = await auth.currentUser?.getIdToken();
+  if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
+  const params = new URLSearchParams({ page: String(page), pageSize: '50' });
+  if (status) params.set('status', status);
+  if (q) params.set('q', q);
+  const response = await fetch(`${SUPABASE_ORDERS_URL}?${params}`, {
+    headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${firebaseToken}` },
+    cache: 'no-store',
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Could not load orders (${response.status})`);
+  return { orders: Array.isArray(payload.orders) ? payload.orders : [], pagination: payload.pagination || {} };
+};
+
+const fetchSupabaseAdminCustomers = async ({ page = 1, q = '' } = {}) => {
+  const firebaseToken = await auth.currentUser?.getIdToken();
+  if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
+  const params = new URLSearchParams({ page: String(page), pageSize: '50' });
+  if (q) params.set('q', q);
+  const response = await fetch(`${SUPABASE_CUSTOMERS_URL}?${params}`, {
+    headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${firebaseToken}` },
+    cache: 'no-store',
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Could not load customers (${response.status})`);
+  return { customers: Array.isArray(payload.customers) ? payload.customers : [], pagination: payload.pagination || {} };
+};
+
+const updateSupabaseOrderStatus = async (id, status) => {
+  const firebaseToken = await auth.currentUser?.getIdToken();
+  if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
+  const response = await fetch(SUPABASE_ORDERS_URL, {
+    method: 'PATCH',
+    headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${firebaseToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, status }),
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Could not update order (${response.status})`);
+  return payload.order;
+};
+
+const fetchSupabaseRevenueSummary = async () => {
+  const firebaseToken = await auth.currentUser?.getIdToken();
+  if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
+  const response = await fetch(`${SUPABASE_ORDERS_URL}?view=revenue`, {
+    headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${firebaseToken}` },
+    cache: 'no-store',
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Could not load revenue (${response.status})`);
+  return payload.summary || {};
+};
+
+const supabaseRowToAdminOrder = row => {
+  const customer = row.customer || {};
+  return {
+    id: row.id, uid: row.user_id, orderId: row.order_number, status: row.status, source: row.source,
+    channel: row.payment_method || 'cash_on_delivery', createdAt: row.created_at ? new Date(row.created_at) : null,
+    customer: { firstName: customer.name || '', lastName: '', phone: customer.phone || '', email: customer.email || '', address: customer.address || '', city: customer.city || '', notes: row.notes || '' },
+    items: (row.items || []).map(item => ({ ...item, name: item.name || item.productName, qty: Number(item.quantity || 1), price: Number(item.unitPrice || 0) })),
+    summary: { subtotal: Number(row.subtotal || 0), shipping: Number(row.delivery_fee || 0), discount: Number(row.discount || 0), total: Number(row.total || 0), hasPendingPricing: false },
+    paymentMethod: row.payment_method, statusHistory: row.order_status_history || [],
+  };
+};
 
 const publishMobileCatalogSnapshot = async (productDocs) => {
   const products = {};
@@ -693,6 +755,7 @@ const REMEMBER_KEY = 'ipordise-admin-remember-email';
 const doLogout = async () => {
   state.pollers.forEach(clearInterval); state.pollers = [];
   if (_ordersUnsubscribe) { _ordersUnsubscribe(); _ordersUnsubscribe = null; }
+  if (_notifUnsubscribe) { _notifUnsubscribe(); _notifUnsubscribe = null; }
   Object.values(state.charts).forEach(c => { if (c) { try { c.destroy(); } catch {} } });
   state.charts.visitsOverTime = null; state.charts.deviceBreakdown = null; state.charts.analyticsDaily = null;
   await signOut(auth).catch(() => {});
@@ -781,6 +844,7 @@ const bootstrapDashboard = async (user) => {
 
   // Start real-time orders listener immediately so badge + data are always fresh
   loadOrdersView().catch(() => {});
+  startCanonicalOrderNotifications();
 
   await refreshAll().catch(e => toast(e.message, 'error'));
   state.pollers.forEach(clearInterval); state.pollers = [];
@@ -811,9 +875,13 @@ const init = () => {
 // --- ORDERS VIEW --------------------------------------------------------------
 let _allOrders = [];
 let _ordersUnsubscribe = null;  // holds the onSnapshot unsubscribe fn
+let _ordersPage = 1;
+let _ordersTotalPages = 1;
+let _ordersSearchTimer = null;
 
 const ORDER_STATUS = {
   pending:    { color: '#f59e0b', label: 'Pending' },
+  confirmed:  { color: '#0ea5e9', label: 'Confirmed' },
   processing: { color: '#3b82f6', label: 'Processing' },
   shipped:    { color: '#8b5cf6', label: 'Shipped' },
   delivered:  { color: '#16a34a', label: 'Delivered' },
@@ -845,7 +913,7 @@ const _renderOrdersEmpty = () => {
       <div style="font-size:2rem;margin-bottom:8px">??</div>
       <div style="font-weight:700;color:var(--text);margin-bottom:6px">No orders yet</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:14px">When customers complete checkout, their orders will appear here automatically in real time.</div>
-      <button class="btn btn-xs btn-gold" id="ordersTestBtn"><i class="fas fa-flask"></i> Test Firestore Connection</button>
+      <button class="btn btn-xs btn-gold" id="ordersTestBtn"><i class="fas fa-flask"></i> Test Commerce Connection</button>
     </div>
   </td></tr>`;
   qs('#ordersTestBtn')?.addEventListener('click', _testOrdersConnection);
@@ -855,28 +923,13 @@ const _testOrdersConnection = async () => {
   const btn = qs('#ordersTestBtn');
   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...'; }
   try {
-    // Try writing a test doc to verify write permission
-    const testId = 'TEST-' + Date.now();
-    await setDoc(doc(db, 'orders', testId), {
-      orderId: testId,
-      channel: 'admin-test',
-      items: [{ name: 'Test Product', qty: 1, price: 0 }],
-      customer: { firstName: 'Test', lastName: 'Order', phone: '0600000000', email: '', address: 'Test', city: 'Casablanca', notes: '' },
-      summary: { subtotal: 0, shipping: 0, total: 0, hasPendingPricing: false },
-      status: 'pending',
-      createdAt: new Date(),
-      _isTest: true,
-    });
-    // Now read it back
-    const snap = await getDocs(collection(db, 'orders'));
-    const count = snap.size;
-    // Clean up test doc
-    await deleteDoc(doc(db, 'orders', testId)).catch(() => {});
-    toast(`? Firestore works! Found ${count - 1} real orders in database.`, 'success', 5000);
+    const result = await fetchSupabaseAdminOrders();
+    toast(`Supabase commerce is reachable. ${Number(result.pagination.total || result.orders.length)} orders found.`, 'success', 5000);
     await loadOrdersView();
-  } catch (e) {
-    toast('? Firestore error: ' + e.message, 'error', 8000);
-    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-flask"></i> Test Firestore Connection'; }
+  } catch (error) {
+    toast('Commerce API error: ' + error.message, 'error', 8000);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-flask"></i> Test Commerce Connection'; }
   }
 };
 
@@ -959,43 +1012,32 @@ const applyOrderFilters = () => {
 const loadOrdersView = async () => {
   const tbody = qs('#ordersTableBody');
   if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading orders...</td></tr>`;
-
-  // Tear down any previous real-time listener
   if (_ordersUnsubscribe) { _ordersUnsubscribe(); _ordersUnsubscribe = null; }
-
-  // -- Step 1: initial load via getDocs (no index required, works immediately) --
   try {
-    const snap = await getDocs(collection(db, 'orders'));
-    const rows = snap.docs.map((d) => {
-      const data = d.data();
-      return { ...data, id: d.id, createdAt: data.createdAt?.toDate?.() || null };
-    });
-    rows.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-    _allOrders = rows;
+    const status = qs('#ordersStatusFilter')?.value || '';
+    const q = (qs('#ordersSearch')?.value || '').trim();
+    const result = await fetchSupabaseAdminOrders({ page: _ordersPage, status, q });
+    _allOrders = result.orders.map(supabaseRowToAdminOrder);
+    const total = Number(result.pagination.total || _allOrders.length);
+    _ordersTotalPages = Math.max(1, Math.ceil(total / Number(result.pagination.pageSize || 50)));
     const badge = qs('#navOrdersBadge');
-    if (badge) { badge.textContent = _allOrders.length; badge.style.display = _allOrders.length ? '' : 'none'; }
-    applyOrderFilters();
-  } catch (e) {
-    _renderOrdersError(e.message);
-    return;
+    if (badge) { badge.textContent = total; badge.style.display = total ? '' : 'none'; }
+    renderOrdersTable(_allOrders);
+    const countEl = qs('#ordersCount');
+    if (countEl) countEl.textContent = `${total} order${total !== 1 ? 's' : ''} · page ${_ordersPage} of ${_ordersTotalPages}`;
+    let controls = qs('#ordersApiPagination');
+    if (!controls && countEl?.parentElement) {
+      controls = document.createElement('span'); controls.id = 'ordersApiPagination'; controls.style.cssText = 'display:inline-flex;gap:6px;margin-left:10px'; countEl.parentElement.appendChild(controls);
+    }
+    if (controls) {
+      controls.innerHTML = `<button class="page-btn" id="ordersPagePrev" ${_ordersPage <= 1 ? 'disabled' : ''}>Prev</button><button class="page-btn" id="ordersPageNext" ${_ordersPage >= _ordersTotalPages ? 'disabled' : ''}>Next</button>`;
+      qs('#ordersPagePrev')?.addEventListener('click', () => { if (_ordersPage > 1) { _ordersPage--; loadOrdersView().catch(error => toast(error.message, 'error')); } });
+      qs('#ordersPageNext')?.addEventListener('click', () => { if (_ordersPage < _ordersTotalPages) { _ordersPage++; loadOrdersView().catch(error => toast(error.message, 'error')); } });
+    }
+  } catch (error) {
+    _renderOrdersError(error.message);
+    throw error;
   }
-
-  // -- Step 2: upgrade to real-time listener (best effort, non-blocking) --
-  try {
-    _ordersUnsubscribe = onSnapshot(
-      query(collection(db, 'orders'), orderBy('createdAt', 'desc')),
-      (snap) => {
-        _allOrders = snap.docs.map((d) => {
-          const data = d.data();
-          return { ...data, id: d.id, createdAt: data.createdAt?.toDate?.() || null };
-        });
-        const badge = qs('#navOrdersBadge');
-        if (badge) { badge.textContent = _allOrders.length; badge.style.display = _allOrders.length ? '' : 'none'; }
-        applyOrderFilters();
-      },
-      () => { /* real-time failed — stay on getDocs snapshot, no error shown */ }
-    );
-  } catch (_) { /* index not ready — initial getDocs data is already showing */ }
 };
 
 // View order detail modal
@@ -1015,9 +1057,7 @@ window._adminViewOrder = (orderId) => {
   const phoneClean = phone.replace(/\D/g, '');
   const waPhone = phoneClean.startsWith('212') ? phoneClean : (phoneClean.startsWith('0') ? '212' + phoneClean.slice(1) : phoneClean);
 
-  const channelBadge = order.channel === 'whatsapp'
-    ? `<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#15803d;background:#dcfce7;padding:3px 10px;border-radius:99px;font-weight:600;border:1px solid #bbf7d0"><i class="fab fa-whatsapp" style="font-size:12px"></i> WhatsApp</span>`
-    : `<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#4f46e5;background:#ede9fe;padding:3px 10px;border-radius:99px;font-weight:600;border:1px solid #c4b5fd"><i class="fas fa-envelope" style="font-size:11px"></i> Email</span>`;
+  const channelBadge = `<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#4f46e5;background:#ede9fe;padding:3px 10px;border-radius:99px;font-weight:600;border:1px solid #c4b5fd"><i class="fas fa-mobile-screen" style="font-size:11px"></i> ${esc(String(order.source || 'website').replaceAll('_',' '))} · ${esc(String(order.paymentMethod || 'cash on delivery').replaceAll('_',' '))}</span>`;
 
   const dateStr = order.createdAt
     ? new Intl.DateTimeFormat('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }).format(order.createdAt)
@@ -1047,6 +1087,7 @@ window._adminViewOrder = (orderId) => {
   // Financial summary
   const subtotal = Number(s.subtotal || 0);
   const shipping = Number(s.shipping || 0);
+  const discount = Number(s.discount || 0);
   const total    = Number(s.total    || 0);
   const summaryHtml = s.hasPendingPricing
     ? `<div style="padding:12px 0 0;color:var(--amber);font-weight:600;font-size:13px;display:flex;align-items:center;gap:6px">
@@ -1060,6 +1101,7 @@ window._adminViewOrder = (orderId) => {
           <span>Shipping</span>
           <span>${shipping === 0 ? '<span style="color:#16a34a;font-weight:600">Free</span>' : fmtMAD(shipping)}</span>
         </div>
+        ${discount > 0 ? `<div style="display:flex;justify-content:space-between;font-size:12px;color:#16a34a"><span>Discount</span><span>- ${fmtMAD(discount)}</span></div>` : ''}
         <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;margin-top:2px">
           <span style="color:var(--ink)">Total</span>
           <span style="color:var(--gold)">${fmtMAD(total)}</span>
@@ -1151,8 +1193,8 @@ window._adminViewOrder = (orderId) => {
           <i class="fas fa-check"></i> Save
         </button>
       </div>
-      <input type="text" class="select-sm" id="modalTrackingInput"
-             placeholder="Tracking number (optional)"
+      <input type="text" class="select-sm" id="modalTrackingInput" disabled
+             placeholder="Carrier tracking is not configured"
              value="${esc(order.trackingNumber || '')}"
              style="width:100%">
       <div id="modalSaveMsg" style="display:none;font-size:12px;margin-top:8px;padding:7px 11px;border-radius:8px"></div>
@@ -1185,11 +1227,9 @@ window._adminViewOrder = (orderId) => {
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     try {
-      const update = { status: newStatus };
-      if (tracking) update.trackingNumber = tracking;
-      await setDoc(doc(db, 'orders', orderId), update, { merge: true });
+      await updateSupabaseOrderStatus(orderId, newStatus);
       const ord = _allOrders.find((o) => o.id === orderId);
-      if (ord) { ord.status = newStatus; if (tracking) ord.trackingNumber = tracking; }
+      if (ord) ord.status = newStatus;
       if (msgEl) {
         msgEl.textContent = '? Status updated!';
         msgEl.style.cssText = 'display:block;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;font-size:12px;margin-top:8px;padding:6px 10px;border-radius:8px';
@@ -1214,7 +1254,7 @@ document.addEventListener('change', async (e) => {
   const id = sel.dataset.id;
   const newStatus = sel.value;
   try {
-    await setDoc(doc(db, 'orders', id), { status: newStatus }, { merge: true });
+    await updateSupabaseOrderStatus(id, newStatus);
     const ord = _allOrders.find((o) => o.id === id);
     if (ord) ord.status = newStatus;
     toast('Order status updated', 'success');
@@ -1224,15 +1264,20 @@ document.addEventListener('change', async (e) => {
 
 // Wire up orders filters — runs directly (module is already deferred, DOM is ready)
 const _initOrdersFilters = () => {
-  qs('#ordersStatusFilter')?.addEventListener('change', applyOrderFilters);
-  qs('#ordersSearch')?.addEventListener('input', applyOrderFilters);
+  qs('#ordersStatusFilter')?.addEventListener('change', () => { _ordersPage = 1; loadOrdersView().catch(error => toast(error.message, 'error')); });
+  qs('#ordersSearch')?.addEventListener('input', () => { clearTimeout(_ordersSearchTimer); _ordersSearchTimer = setTimeout(() => { _ordersPage = 1; loadOrdersView().catch(error => toast(error.message, 'error')); }, 300); });
   qs('#refreshOrdersBtn')?.addEventListener('click', () => loadOrdersView().catch(e => toast(e.message, 'error')));
   qs('#refreshCustomersBtn')?.addEventListener('click', () => loadCustomersView().catch(e => toast(e.message, 'error')));
-  qs('#customersSearch')?.addEventListener('input', applyCustomerFilters);
+  qs('#customersSearch')?.addEventListener('input', () => { clearTimeout(_customersSearchTimer); _customersSearchTimer = setTimeout(() => { _customersPage = 1; loadCustomersView().catch(error => toast(error.message, 'error')); }, 300); });
+  qs('#customersPrevBtn')?.addEventListener('click', () => { if (_customersPage > 1) { _customersPage -= 1; loadCustomersView().catch(error => toast(error.message, 'error')); } });
+  qs('#customersNextBtn')?.addEventListener('click', () => { if (_customersPage < _customersTotalPages) { _customersPage += 1; loadCustomersView().catch(error => toast(error.message, 'error')); } });
 };
 
 // --- CUSTOMERS VIEW -----------------------------------------------------------
 let _allCustomers = [];
+let _customersPage = 1;
+let _customersTotalPages = 1;
+let _customersSearchTimer = null;
 
 const renderCustomersTable = (customers) => {
   const tbody = qs('#customersTableBody');
@@ -1247,7 +1292,8 @@ const renderCustomersTable = (customers) => {
     const phone = esc(p.phone || '-');
     const city  = esc(p.city  || '-');
     const orders = c.orderCount || 0;
-    const joined = c.createdAt ? new Intl.DateTimeFormat('en-GB', { day:'2-digit', month:'short', year:'numeric' }).format(c.createdAt) : '-';
+    const joinedDate = c.createdAt ? new Date(c.createdAt) : null;
+    const joined = joinedDate && Number.isFinite(joinedDate.getTime()) ? new Intl.DateTimeFormat('en-GB', { day:'2-digit', month:'short', year:'numeric' }).format(joinedDate) : '-';
     return `<tr style="border-bottom:1px solid var(--border)">
       <td style="padding:10px 12px;color:var(--text)">
         <div style="font-weight:600">${name}</div>
@@ -1267,46 +1313,33 @@ const renderCustomersTable = (customers) => {
   }).join('');
 };
 
-const applyCustomerFilters = () => {
-  const search = (qs('#customersSearch')?.value || '').toLowerCase().trim();
-  const filtered = search
-    ? _allCustomers.filter((c) => {
-        const p = c.profile || {};
-        const hay = [p.firstName, p.lastName, p.phone, p.city, p.email].join(' ').toLowerCase();
-        return hay.includes(search);
-      })
-    : _allCustomers;
-  renderCustomersTable(filtered);
+const renderCustomerPagination = (pagination = {}) => {
+  const total = Number(pagination.total || 0);
+  const pageSize = Number(pagination.pageSize || 50);
+  _customersPage = Number(pagination.page || _customersPage);
+  _customersTotalPages = Math.max(1, Math.ceil(total / pageSize));
+  renderCustomersTable(_allCustomers);
   const countEl = qs('#customersCount');
-  if (countEl) countEl.textContent = `${filtered.length} customer${filtered.length !== 1 ? 's' : ''}`;
+  if (countEl) countEl.textContent = `${total} customer${total !== 1 ? 's' : ''}`;
+  const pageEl = qs('#customersPageLabel');
+  if (pageEl) pageEl.textContent = `Page ${_customersPage} of ${_customersTotalPages}`;
+  const prev = qs('#customersPrevBtn');
+  const next = qs('#customersNextBtn');
+  if (prev) prev.disabled = _customersPage <= 1;
+  if (next) next.disabled = _customersPage >= _customersTotalPages;
 };
 
 const loadCustomersView = async () => {
   const tbody = qs('#customersTableBody');
   if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>`;
   try {
-    // Load all user profile docs from Firestore
-    const snap = await getDocs(collection(db, 'users'));
-    // For each user, also count their orders
-    const ordersSnap = await getDocs(collection(db, 'orders'));
-    const orderCountByUid = {};
-    ordersSnap.docs.forEach((d) => {
-      const uid = d.data().uid;
-      if (uid) orderCountByUid[uid] = (orderCountByUid[uid] || 0) + 1;
-    });
-
-    _allCustomers = snap.docs
-      .map((d) => {
-        const data = d.data();
-        const createdAt = data.createdAt?.toDate?.() || null;
-        return { uid: d.id, ...data, createdAt, orderCount: orderCountByUid[d.id] || 0 };
-      })
-      .filter((c) => c.profile) // only users who completed their profile
-      .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    const q = (qs('#customersSearch')?.value || '').trim();
+    const result = await fetchSupabaseAdminCustomers({ page: _customersPage, q });
+    _allCustomers = result.customers;
 
     const badge = qs('#navCustomersBadge');
-    if (badge) { badge.textContent = _allCustomers.length; badge.style.display = ''; }
-    applyCustomerFilters();
+    if (badge) { badge.textContent = Number(result.pagination.total || 0); badge.style.display = ''; }
+    renderCustomerPagination(result.pagination);
   } catch (e) {
     if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:#e73c3c">Error: ${esc(e.message)}</td></tr>`;
   }
@@ -1498,45 +1531,16 @@ const loadRevenueView = async () => {
   if (monthlyBody) monthlyBody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>`;
 
   try {
-    const snap = await getDocs(collection(db, 'orders'));
-    const orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const summary = await fetchSupabaseRevenueSummary();
 
     const now = new Date();
     const thisMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 
-    let totalRevenue = 0, deliveredCount = 0, thisMonthRevenue = 0;
-    let pendingCount = 0;
-    const monthMap = {}; // { 'YYYY-MM': { count, revenue } }
-    const productMap = {}; // { productName: revenue }
-
-    orders.forEach(o => {
-      const status = (o.status || '').toLowerCase();
-      const total = Number(o.summary?.total || 0);
-      const ts = o.createdAt?.toDate?.() || (o.createdAt ? new Date(o.createdAt) : null);
-      const monthKey = ts ? `${ts.getFullYear()}-${String(ts.getMonth() + 1).padStart(2, '0')}` : null;
-
-      if (status === 'delivered') {
-        totalRevenue += total;
-        deliveredCount++;
-        if (monthKey) {
-          if (!monthMap[monthKey]) monthMap[monthKey] = { count: 0, revenue: 0 };
-          monthMap[monthKey].count++;
-          monthMap[monthKey].revenue += total;
-          if (monthKey === thisMonthKey) thisMonthRevenue += total;
-        }
-        // Count products
-        (o.items || []).forEach(item => {
-          const name = item.name || 'Unknown';
-          const itemRevenue = item.pricePending ? 0 : Number(item.price || 0) * Number(item.qty || 1);
-          if (!productMap[name]) productMap[name] = 0;
-          productMap[name] += itemRevenue;
-        });
-      }
-
-      if (status === 'pending' || status === 'processing') pendingCount++;
-    });
-
-    const avgOrder = deliveredCount > 0 ? Math.round(totalRevenue / deliveredCount) : 0;
+    const totalRevenue = Number(summary.totalRevenue || 0);
+    const deliveredCount = Number(summary.deliveredCount || 0);
+    const thisMonthRevenue = Number(summary.thisMonthRevenue || 0);
+    const pendingCount = Number(summary.pendingCount || 0);
+    const avgOrder = Number(summary.averageOrder || 0);
 
     setEl('revTotalRevenue', totalRevenue.toLocaleString('fr-MA') + ' MAD');
     setEl('revDeliveredCount', deliveredCount.toString());
@@ -1546,15 +1550,17 @@ const loadRevenueView = async () => {
 
     // Monthly breakdown table
     const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const sortedMonths = Object.keys(monthMap).sort((a, b) => b.localeCompare(a));
+    const sortedMonths = Array.isArray(summary.months) ? summary.months : [];
     if (monthlyBody) {
       if (!sortedMonths.length) {
         monthlyBody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)">No delivered orders yet.</td></tr>`;
       } else {
-        monthlyBody.innerHTML = sortedMonths.map(key => {
+        monthlyBody.innerHTML = sortedMonths.map(entry => {
+          const key = String(entry.month || '');
           const [y, m] = key.split('-');
           const label = `${MONTHS[Number(m) - 1]} ${y}`;
-          const { count, revenue } = monthMap[key];
+          const count = Number(entry.count || 0);
+          const revenue = Number(entry.revenue || 0);
           const avg = count > 0 ? Math.round(revenue / count) : 0;
           const isCurrentMonth = key === thisMonthKey;
           return `<tr style="border-bottom:1px solid var(--border);${isCurrentMonth ? 'background:rgba(200,169,106,.06)' : ''}">
@@ -1571,7 +1577,7 @@ const loadRevenueView = async () => {
 
     // Top products
     if (topProducts) {
-      const sorted = Object.entries(productMap).sort((a, b) => b[1] - a[1]).slice(0, 10);
+      const sorted = (Array.isArray(summary.products) ? summary.products : []).map(entry => [String(entry.name || 'Unknown'), Number(entry.revenue || 0)]);
       const maxRev = sorted[0]?.[1] || 1;
       if (!sorted.length) {
         topProducts.innerHTML = `<div style="text-align:center;padding:32px;color:var(--muted)">No data yet.</div>`;
@@ -1887,6 +1893,48 @@ document.addEventListener('click', async (e) => {
 
 // --- NOTIFICATIONS BELL -----------------------------------------------------
 let _notifUnsubscribe = null;
+let _notifRefreshInFlight = false;
+
+const refreshCanonicalOrderNotifications = async () => {
+  if (_notifRefreshInFlight || !auth.currentUser) return;
+  _notifRefreshInFlight = true;
+  try {
+    const result = await fetchSupabaseAdminOrders({ page: 1, status: 'pending' });
+    const items = result.orders.slice(0, 20);
+    const pendingTotal = Number(result.pagination.total || items.length);
+    const badge = document.getElementById('notifBadge');
+    const list = document.getElementById('notifList');
+    if (!badge || !list) return;
+    if (!items.length) {
+      list.innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);font-size:12px">No pending orders</div>';
+      badge.style.display = 'none';
+      return;
+    }
+    badge.style.display = 'flex';
+    badge.textContent = pendingTotal > 99 ? '99+' : String(pendingTotal);
+    list.innerHTML = items.map(order => {
+      const customer = order.customer || {};
+      const name = esc(customer.name || '—');
+      const total = fmtMAD(Number(order.total || 0));
+      const created = order.created_at ? new Date(order.created_at) : null;
+      const when = created && Number.isFinite(created.getTime()) ? created.toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
+      return `<div style="padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s"
+                  onmouseover="this.style.background='var(--s3)'" onmouseout="this.style.background=''"
+                  onclick="document.querySelector('[data-view=orders]').click()">
+        <div style="font-size:12px;font-weight:600;color:var(--ink)">${name} — ${total}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${when} — <span style="color:var(--amber);font-weight:600">Pending</span></div>
+      </div>`;
+    }).join('');
+  } catch { /* Keep the last successful snapshot while offline. */ }
+  finally { _notifRefreshInFlight = false; }
+};
+
+const startCanonicalOrderNotifications = () => {
+  if (_notifUnsubscribe) _notifUnsubscribe();
+  void refreshCanonicalOrderNotifications();
+  const timer = setInterval(() => { void refreshCanonicalOrderNotifications(); }, 30_000);
+  _notifUnsubscribe = () => clearInterval(timer);
+};
 
 const initNotifications = () => {
   const bellBtn    = document.getElementById('notifBellBtn');
@@ -1915,30 +1963,7 @@ const initNotifications = () => {
     dropdown.style.display = 'none';
   });
 
-  // Live listener: pending orders
-  if (_notifUnsubscribe) _notifUnsubscribe();
-  const pendingQ = query(collection(db, 'orders'), where('status', '==', 'pending'), orderBy('createdAt', 'desc'), limit(20));
-  _notifUnsubscribe = onSnapshot(pendingQ, (snap) => {
-    const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    if (items.length === 0) {
-      if (list) list.innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);font-size:12px">No pending orders</div>';
-      badge.style.display = 'none';
-      return;
-    }
-    badge.style.display = 'flex';
-    badge.textContent = items.length;
-    if (list) list.innerHTML = items.map(o => {
-      const name = esc(o.customerName || o.name || '—');
-      const total = fmtMAD(o.total || 0);
-      const when = o.createdAt?.toDate ? new Date(o.createdAt.toDate()).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
-      return `<div style="padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s"
-                  onmouseover="this.style.background='var(--s3)'" onmouseout="this.style.background=''"
-                  onclick="document.querySelector('[data-view=orders]').click()">
-        <div style="font-size:12px;font-weight:600;color:var(--ink)">${name} — ${total}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">${when} — <span style="color:var(--amber);font-weight:600">Pending</span></div>
-      </div>`;
-    }).join('');
-  }, () => {});
+  startCanonicalOrderNotifications();
 };
 
 // --- MESSAGES VIEW ---------------------------------------------------------
@@ -3073,7 +3098,6 @@ const loadProductsView = async () => {
           const btn2 = card.querySelector('.prod-save');
           if (btn2) { btn2.disabled=true; btn2.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
           try {
-            await legacyCatalogWrite(deleteDoc(doc(db,'productOverrides',slug)));
             await syncMobileCatalogEntry('overrides', slug, null);
             delete overrides[slug];
             dirty.delete(slug);
@@ -3094,7 +3118,6 @@ const loadProductsView = async () => {
         const btn = card.querySelector('.prod-save');
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
         try {
-          await legacyCatalogWrite(setDoc(doc(db,'productOverrides',slug), overrides[slug]));
           await syncMobileCatalogEntry('overrides', slug, overrides[slug]);
           dirty.delete(slug);
           toast(`? ${productName(slug)} saved`, 'success');
@@ -3112,7 +3135,6 @@ const loadProductsView = async () => {
         const btn = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-toggle`);
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
         try {
-          await legacyCatalogWrite(setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true}));
           await syncMobileCatalogEntry('overrides', slug, overrides[slug]);
           toast(`${productName(slug)} ${newDisabled?'disabled':'enabled'}`, 'success');
           render();
@@ -3129,7 +3151,6 @@ const loadProductsView = async () => {
         const btn = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-reset`);
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
         try {
-          await legacyCatalogWrite(deleteDoc(doc(db,'productOverrides',slug)));
           await syncMobileCatalogEntry('overrides', slug, null);
           delete overrides[slug];
           delete pendingRemovals[slug];
@@ -3394,7 +3415,6 @@ if (countEl) countEl.textContent = `${promos.length} promotion${promos.length!==
           if (brandVal) payload.promoBrand = brandVal; else payload.promoBrand = null;
           if (descVal)  payload.promoDesc  = descVal;  else payload.promoDesc  = null;
           payload.promoOrder = isNaN(orderVal) ? 99 : orderVal;
-          await legacyCatalogWrite(setDoc(doc(db,'productOverrides',slug), payload, { merge: true }));
           await syncMobileCatalogEntry('overrides', slug, { ...(mobileCatalogOverrides[slug] || {}), ...payload });
           if (msgEl) { msgEl.textContent = '✓ Saved'; msgEl.style.color = 'var(--emerald)'; msgEl.style.display = 'inline'; setTimeout(() => { msgEl.style.display = 'none'; }, 2500); }
           toast(`Card details saved for "${pName(slug)}"`, 'success');
@@ -4315,9 +4335,8 @@ const initAddProductModal = () => {
         ...(addBadge ? { badge: addBadge } : {}),
         ...(Object.keys(originalPrices).length ? { originalPrices } : {}),
         fragranceProfile: addFragranceProfile,
-        addedAt: serverTimestamp(), source: 'admin',
+        addedAt: new Date().toISOString(), source: 'admin', createOnly: true,
       };
-      await legacyCatalogWrite(setDoc(doc(db, 'products', slug), productPayload));
       await syncMobileCatalogEntry('products', slug, productPayload);
       progressBar.style.width = '100%';
       progressLabel.textContent = 'Product saved!';
@@ -4873,7 +4892,9 @@ const initEditProductModal = () => {
       progressLabel.textContent = 'Saving changes...';
       progressBar.style.width = '90%';
 
-      const newSlug = _apToSlug(name);
+      // Product identity is stable. Renaming a product must not create a new
+      // catalogue row or break historical/order variant references.
+      const newSlug = originalSlug;
       const payload = {
         name, brand: brand.toUpperCase(), slug: newSlug,
         image: mainUrl, images: allImages, sizes, active: true,
@@ -4918,7 +4939,6 @@ const initEditProductModal = () => {
           payload.source  = 'admin';
         }
         // Full overwrite (no merge) so removed sizes are actually deleted
-        await legacyCatalogWrite(setDoc(doc(db, 'products', originalSlug), payload));
         await syncMobileCatalogEntry('products', originalSlug, payload);
         // Remove any stale productOverrides entry for the same reason.
         try { await deleteDoc(doc(db, 'productOverrides', originalSlug)); } catch (_) {}
@@ -5115,7 +5135,6 @@ const loadFirestoreProductsSection = async () => {
         const slug = toggleBtn.dataset.slug;
         const isActive = toggleBtn.dataset.active === 'true';
         try {
-          await legacyCatalogWrite(setDoc(doc(db, 'products', slug), { active: !isActive }, { merge: true }));
           await syncMobileCatalogEntry('products', slug, { active: !isActive });
           toast(isActive ? 'Product disabled (hidden from site)' : 'Product enabled (live on site)', 'success');
           loadFirestoreProductsSection();
@@ -5128,7 +5147,6 @@ const loadFirestoreProductsSection = async () => {
         const name = card?.querySelector('span[style*="font-weight:700"]')?.textContent || slug;
         if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
         try {
-          await legacyCatalogWrite(deleteDoc(doc(db, 'products', slug)));
           await syncMobileCatalogEntry('products', slug, null);
           toast(`"${name}" deleted.`, 'success');
           loadFirestoreProductsSection();
