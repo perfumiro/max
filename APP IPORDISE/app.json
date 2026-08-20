@@ -11,10 +11,10 @@
     ],
     "orientation": "default",
     "newArchEnabled": true,
-    "icon": "./assets/icon.png",
+    "icon": "./assets/ipordise-app-icon-v2.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/icon.png",
+      "image": "./assets/ipordise-app-icon-v2.png",
       "resizeMode": "contain",
       "backgroundColor": "#030303"
     },
@@ -29,7 +29,7 @@
         "android.permission.SYSTEM_ALERT_WINDOW"
       ],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/ipordise-app-icon-v2.png",
         "backgroundColor": "#030303"
       }
     },
@@ -48,7 +48,7 @@
     },
     "web": {
       "bundler": "metro",
-      "favicon": "./assets/icon.png"
+      "favicon": "./assets/ipordise-app-icon-v2.png"
     },
     "plugins": [
       [
