@@ -12,12 +12,21 @@ export const validateReleaseConfig = (config, easConfig) => {
   if (expo?.name !== 'IPORDISE') errors.push('Customer-facing app name must be IPORDISE');
   if (expo?.android?.package !== expo?.ios?.bundleIdentifier) errors.push('Android package and iOS bundle identifier must stay aligned');
   if (!expo?.android?.blockedPermissions?.includes('android.permission.READ_EXTERNAL_STORAGE') || !expo?.android?.blockedPermissions?.includes('android.permission.WRITE_EXTERNAL_STORAGE')) errors.push('Legacy Android storage permissions must be blocked');
+  if (new Set(expo?.android?.blockedPermissions || []).size !== (expo?.android?.blockedPermissions || []).length) errors.push('Android blocked permissions must not contain duplicates');
   if (expo?.ios?.infoPlist?.NSAppTransportSecurity?.NSAllowsArbitraryLoads !== false) errors.push('iOS arbitrary HTTP loads must be disabled');
+  const projectId = expo?.extra?.eas?.projectId;
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(projectId || '')) errors.push('A valid existing EAS project ID is required');
+  if (expo?.updates?.url !== `https://u.expo.dev/${projectId}`) errors.push('EAS Update URL must match the linked project ID');
+  if (expo?.runtimeVersion?.policy !== 'appVersion') errors.push('Runtime version must use the appVersion policy');
   if (easConfig) {
     if (easConfig?.cli?.appVersionSource !== 'remote') errors.push('EAS must remain the single source for store build numbers');
     if (easConfig?.build?.production?.distribution !== 'store') errors.push('Production EAS distribution must be store');
     if (easConfig?.build?.production?.android?.buildType !== 'app-bundle') errors.push('Production Android artifact must be an App Bundle');
     if (easConfig?.build?.production?.environment !== 'production') errors.push('Production EAS profile must use the production environment');
+    for (const profile of ['development', 'preview', 'production']) {
+      if (easConfig?.build?.[profile]?.channel !== profile) errors.push(`${profile} EAS profile must use the ${profile} update channel`);
+      if (easConfig?.build?.[profile]?.environment !== profile) errors.push(`${profile} EAS profile must use the ${profile} environment`);
+    }
   }
   return errors;
 };

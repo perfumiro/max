@@ -10,7 +10,7 @@ Release identity: `IPORDISE`; bundle ID `com.ipordise.app`; marketing version `1
 - [x] Branded square 1254×1254 PNG icon has no alpha channel; launch screen uses the brand asset with `contain` on black.
 - [x] HTTPS transport is required and standard OS TLS is declared as exempt encryption; no private credentials are bundled.
 - [x] Optional profile-photo access has a specific purpose string. Camera and microphone access are disabled.
-- [x] No advertising, attribution, analytics, location, contacts, Bluetooth, push, or tracking SDK is configured; ATT is not requested.
+- [x] No advertising, attribution, analytics, location, contacts, Bluetooth, or tracking SDK is configured; ATT is not requested. Expo notifications are configured without bundling private push credentials.
 - [x] Email/password is the only account sign-in method, so Apple guideline 4.8 does not require Sign in with Apple.
 - [x] Checkout is for physical perfume delivered cash on delivery; Apple In-App Purchase is not applicable.
 - [x] In-app account deletion requires confirmation and password reauthentication, then immediately deletes the authenticated backend account and associated personal data while anonymizing retained order records.
@@ -20,7 +20,7 @@ Release identity: `IPORDISE`; bundle ID `com.ipordise.app`; marketing version `1
 ## Requires Apple Developer account
 
 - [ ] Confirm the account/team that owns the registered App ID `com.ipordise.app`.
-- [ ] Link this repository to the correct EAS owner (`lecomax` or `lecomaxs-team`).
+- [x] Link this repository to the existing `@ipordises-team/ipordise` EAS project.
 - [ ] Let EAS securely create or reuse the iOS distribution certificate and provisioning profile.
 - [ ] Confirm Apple agreements and membership are active.
 

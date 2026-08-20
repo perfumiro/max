@@ -10,7 +10,7 @@
 
 ## One-time production setup
 
-1. Choose the correct EAS owner (`lecomax` or `lecomaxs-team`) and run `eas init` through the normal project-link flow. Do not hardcode a project ID from another application.
+1. The app is linked to the existing `@ipordises-team/ipordise` EAS project. Preserve project ID `84df51a3-014e-4c04-8f83-7b159866d3f5`; do not create a duplicate project.
 2. Apply `supabase/migrations/202608200004_push_notifications.sql` by itself after reconciling the remote migration history. A normal `supabase db push` is currently unsafe because the remote history does not mark older migrations as applied.
 3. Deploy `push-devices` and the updated `admin-catalog-sync` Edge Functions.
 4. Configure Android FCM V1 credentials for `com.ipordise.app` in EAS credentials.

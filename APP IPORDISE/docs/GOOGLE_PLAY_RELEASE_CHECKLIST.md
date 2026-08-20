@@ -19,9 +19,9 @@
 ## Account owner / backend actions
 
 - [ ] Confirm `com.ipordise.app` is owned by IPORDISE in Play Console before the first upload. Do not change it afterward.
-- [ ] Link/create the EAS project and verify the project owner; add `extra.eas.projectId` only through the normal EAS project-link flow.
+- [x] Reuse and verify the existing `@ipordises-team/ipordise` EAS project; `extra.eas.projectId` matches the linked project.
 - [ ] Configure Android signing in EAS Credentials and securely back up the upload key. Never commit keystores or passwords.
-- [ ] Configure EAS production environment values: `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `EXPO_PUBLIC_ADMIN_DASHBOARD_URL`, `EXPO_PUBLIC_FIREBASE_FUNCTIONS_URL`, and `EXPO_PUBLIC_FIREBASE_ORDER_API_ENABLED`. Only the first two plus public URLs/flags should be present in the mobile environment; keep service keys server-side.
+- [x] Configure EAS development, preview, and production environment values: `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `EXPO_PUBLIC_ADMIN_DASHBOARD_URL`, `EXPO_PUBLIC_FIREBASE_FUNCTIONS_URL`, and `EXPO_PUBLIC_FIREBASE_ORDER_API_ENABLED`. Server keys remain outside the mobile environments.
 - [ ] Verify the Firebase staff email is marked verified. Protected staff functions reject unverified or disabled accounts.
 - [ ] Deploy the updated website, then verify Privacy Policy, Support, Terms, and Account Deletion URLs over HTTPS.
 - [ ] Implement and document the operational deletion job that fulfils rows in `account_deletion_requests`, removes associated profile/address/cart/wishlist/avatar data, and retains only legally required order records. Test one complete deletion end-to-end.

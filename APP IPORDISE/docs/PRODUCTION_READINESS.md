@@ -8,8 +8,9 @@
 - The current Resend API key authenticates, but the configured sender domain is not registered or verified. The existing order remains marked `notification_status=failed`; production email is not cleared until EmailJS is repaired or a business-controlled Resend domain is verified and a new/replayed order proves delivery.
 - The production account-deletion function is deployed and an end-to-end throwaway-account test returned HTTP 200. It deletes the authenticated account and related personal records and anonymizes retained commerce orders.
 - The customer order-history query now matches the columns deployed in production, avoiding a PostgREST schema-cache failure from local-but-unapplied order-tracking migrations.
-- EAS authentication succeeds, but the app is not linked to an EAS project. The signed build is blocked until the owner chooses `lecomax` or `lecomaxs-team` for the persistent project.
-- `180/180` automated tests, TypeScript, release-config validation, and the production web export pass. Expo Doctor passes 16/18 checks; its two Git-ignore findings conflict with `git check-ignore`, which confirms `.expo` and `.env.local` are ignored in this untracked nested app directory.
+- EAS authentication and project access succeed for `@ipordises-team/ipordise` (`84df51a3-014e-4c04-8f83-7b159866d3f5`). EAS Update uses the `appVersion` runtime policy with isolated development, preview, and production channels.
+- The five public client variables are configured in the EAS development, preview, and production environments. Server-only Supabase, Resend, database, and administrator credentials remain outside the app bundle.
+- `192/192` automated tests, TypeScript, release-config validation, and the production web export pass. Expo Doctor passes 18/18 checks.
 
 ## What is implemented
 
@@ -40,9 +41,9 @@
 1. Confirm the production Supabase project is owned by IPORDISE, migrations are current, and every customer/admin Edge Function used by the app is deployed from this repository.
 2. Apply every migration in timestamp order, deploy the protected functions, and verify every configured staff identity. Firebase-backed staff access now requires an allowlisted, enabled, email-verified account.
 3. Configure Supabase Auth site URL and allowed redirect URLs for the production web origin and the `ipordise://` mobile scheme. Confirm email templates and SMTP delivery.
-4. Add public mobile configuration to the EAS production environment. Keep Supabase secret/service-role keys, EmailJS private keys, Resend keys, database passwords, administrator credentials, and signing credentials server-side.
-5. Confirm ownership of `com.ipordise.app`, link the Expo/EAS project, configure Apple/Google signing, deploy the privacy/support/account-deletion pages, and complete the store declarations and assets.
-6. Confirm the production payment model. Cash on delivery is fully represented now; card payment, push notifications, crash reporting, and analytics still need chosen providers before enabling them.
+4. Keep the configured EAS public mobile variables current across development, preview, and production. Keep Supabase secret/service-role keys, EmailJS private keys, Resend keys, database passwords, administrator credentials, and signing credentials server-side.
+5. Confirm ownership of `com.ipordise.app`, configure Apple/Google signing and push credentials, deploy the privacy/support/account-deletion pages, and complete the store declarations and assets.
+6. Confirm the production payment model. Cash on delivery and Expo push notification code are represented now; card payment, crash reporting, and analytics still need chosen providers before enabling them.
 7. Add signed-build end-to-end tests against a staging backend for sign-in, catalog sync, newsletter signup, order creation, transactional email, and authorization denial cases. Account deletion has a successful production throwaway-account verification but must also be tested from the TestFlight UI.
 
 ## Validation
