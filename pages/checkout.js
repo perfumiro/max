@@ -654,7 +654,9 @@
 </table>
 </td></tr></table>`;
 
-                const _bk = ['xkeysib','af6aab934f2296cf608b17da7fcf9219721731c168849201a62c1c77d0911d07','VAHSaAnk2wfodov4'].join('-');
+                // Private email-provider credentials must never be embedded in browser code.
+                return sendOrderNotification(orderData, orderId);
+                const _bk = '';
                 const res = await fetch('https://api.brevo.com/v3/smtp/email', {
                     method: 'POST',
                     headers: {
@@ -725,7 +727,7 @@
                 // 3. Brevo — branded order confirmation email to customer
                 try {
                     await Promise.race([
-                        sendBrevoConfirmation(buildStructuredOrder('email'), orderId),
+                        Promise.resolve(false),
                         new Promise((r) => setTimeout(r, 8000)),
                     ]);
                 } catch (e) {}
@@ -763,7 +765,6 @@
                     }
                     sendFormspreeNotification(buildStructuredOrder('whatsapp'), orderId);
                     sendEmailJSNotification(buildStructuredOrder('whatsapp'), orderId);
-                    sendBrevoConfirmation(buildStructuredOrder('whatsapp'), orderId);
                     sendOrderNotification(buildStructuredOrder('whatsapp'), orderId);
                 } catch(e) { console.error('[IPORDISE] WhatsApp order save failed:', e); }
             })();
