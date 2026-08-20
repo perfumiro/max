@@ -3686,9 +3686,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const isDecanteSizeKey = (sizeKey) =>
         _runtimeDecantKeys.has(String(sizeKey || '').trim().toLowerCase());
     const PRICE_CONFIG_REFRESH_MS = 3000;
+    const LIVE_CATALOG_REFRESH_MS = 15000;
+    const CATALOG_SUPABASE_URL = 'https://gdgrskgegrcgmzswefmn.supabase.co';
+    const CATALOG_SUPABASE_KEY = 'sb_publishable_XbhrBW9Na65u8EkpgtEz4g_PuYkxs_H';
 
     let pricesJsonPromise = null;
     let priceConfigWatcherStarted = false;
+    let liveCatalogWatcherStarted = false;
+    let liveCatalogRefreshTimer = null;
+    let liveCatalogRefreshRunning = false;
+    let liveCatalogPollStarted = false;
+    let lastKnownSupabaseCatalogSnapshot = '';
     let lastKnownPricesSnapshot = '';
     // Firestore productOverrides cache — populated inside loadPricesJson.
     // Used by getConfiguredSizeKeys to honour admin size changes even for
@@ -3844,6 +3852,45 @@ document.addEventListener('DOMContentLoaded', () => {
                             });
                         } catch (_) { /* non-blocking */ }
                     } catch (_) { /* non-blocking — storefront still works from prices.json */ }
+                    // Supabase is the canonical catalogue used by checkout and the app.
+                    // Merge it last so Firestore quota/cache failures can never hide a
+                    // newly published size or leave an old customer-facing price behind.
+                    try {
+                        const select = encodeURIComponent('id,sizes,original_prices,active,updated_at');
+                        const response = await fetch(
+                            `${CATALOG_SUPABASE_URL}/rest/v1/products?select=${select}&active=eq.true&order=updated_at.desc`,
+                            {
+                                cache: 'no-store',
+                                headers: { apikey: CATALOG_SUPABASE_KEY, Accept: 'application/json' },
+                            }
+                        );
+                        if (!response.ok) throw new Error(`Catalog API returned ${response.status}`);
+                        const rows = await response.json();
+                        if (!Array.isArray(rows)) throw new Error('Catalog API returned invalid data');
+                        rows.forEach((row) => {
+                            const slug = String(row?.id || '').trim();
+                            if (!slug || !row.sizes || typeof row.sizes !== 'object') return;
+                            const normalizedSizes = {};
+                            Object.entries(row.sizes).forEach(([size, price]) => {
+                                const normalizedSize = _normSzKey(size);
+                                const numericPrice = Number(price);
+                                if (normalizedSize && numericPrice > 0) normalizedSizes[normalizedSize] = numericPrice;
+                            });
+                            if (!Object.keys(normalizedSizes).length) return;
+                            pricesById[slug] = normalizedSizes;
+                            const existing = _firestoreProductOverridesCache[slug] || {};
+                            _firestoreProductOverridesCache[slug] = {
+                                ...existing,
+                                prices: normalizedSizes,
+                                removedSizes: [],
+                                ...(row.original_prices && typeof row.original_prices === 'object'
+                                    ? { originalPrices: row.original_prices }
+                                    : {}),
+                            };
+                        });
+                    } catch (error) {
+                        console.warn('[Catalog API] Using static/Firestore prices:', error);
+                    }
                     return pricesById;
                 });
         }
@@ -3903,6 +3950,89 @@ document.addEventListener('DOMContentLoaded', () => {
                 void checkForPricesJsonUpdate();
             }
         });
+    };
+
+    const refreshLiveCatalog = async () => {
+        if (liveCatalogRefreshRunning) return;
+        liveCatalogRefreshRunning = true;
+        try {
+            // Rebuild product pages from one clean catalogue version. Re-running
+            // their initializer in place would duplicate purchase event handlers.
+            if (document.getElementById('productName') && document.getElementById('sizeSelector')) {
+                window.location.reload();
+                return;
+            }
+            pricesJsonPromise = null;
+            _firestoreProductsInjected = false;
+            window._ipordiseFsCarouselCards = [];
+            await initCatalogPrices();
+            document.dispatchEvent(new CustomEvent('ipordise:catalog-updated'));
+        } finally {
+            liveCatalogRefreshRunning = false;
+        }
+    };
+
+    const fetchSupabaseCatalogSnapshot = async () => {
+        try {
+            const select = encodeURIComponent('id,sizes,active,updated_at');
+            const response = await fetch(
+                `${CATALOG_SUPABASE_URL}/rest/v1/products?select=${select}&active=eq.true&order=id.asc`,
+                { cache: 'no-store', headers: { apikey: CATALOG_SUPABASE_KEY, Accept: 'application/json' } }
+            );
+            return response.ok ? await response.text() : '';
+        } catch (_) {
+            return '';
+        }
+    };
+
+    const checkSupabaseCatalogUpdate = async () => {
+        const snapshot = await fetchSupabaseCatalogSnapshot();
+        if (!snapshot) return;
+        if (!lastKnownSupabaseCatalogSnapshot) {
+            lastKnownSupabaseCatalogSnapshot = snapshot;
+            return;
+        }
+        if (snapshot !== lastKnownSupabaseCatalogSnapshot) {
+            lastKnownSupabaseCatalogSnapshot = snapshot;
+            void refreshLiveCatalog();
+        }
+    };
+
+    const watchSupabaseCatalogChanges = () => {
+        if (liveCatalogPollStarted) return;
+        liveCatalogPollStarted = true;
+        void checkSupabaseCatalogUpdate();
+        window.setInterval(() => {
+            if (!document.hidden) void checkSupabaseCatalogUpdate();
+        }, LIVE_CATALOG_REFRESH_MS);
+        window.addEventListener('focus', () => { void checkSupabaseCatalogUpdate(); });
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) void checkSupabaseCatalogUpdate();
+        });
+    };
+
+    // Firestore mirrors every successful admin publication. Listen to both
+    // collections so an open storefront updates without a manual reload.
+    const watchLiveCatalogChanges = async () => {
+        if (liveCatalogWatcherStarted) return;
+        liveCatalogWatcherStarted = true;
+        watchSupabaseCatalogChanges();
+        try {
+            const { db: fsDb } = await import('./auth/firebase.js');
+            const { collection: col, onSnapshot: fsOnSnapshot }
+                = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
+            let initialSnapshots = 0;
+            const handleSnapshot = () => {
+                if (initialSnapshots < 2) { initialSnapshots += 1; return; }
+                window.clearTimeout(liveCatalogRefreshTimer);
+                liveCatalogRefreshTimer = window.setTimeout(() => { void refreshLiveCatalog(); }, 250);
+            };
+            const handleError = (error) => console.warn('[Catalog live updates] Listener unavailable:', error);
+            fsOnSnapshot(col(fsDb, 'products'), handleSnapshot, handleError);
+            fsOnSnapshot(col(fsDb, 'productOverrides'), handleSnapshot, handleError);
+        } catch (error) {
+            console.warn('[Catalog live updates] Setup unavailable:', error);
+        }
     };
 
     const getPriceTextByProductId = (productId, pricesById) => {
@@ -4587,6 +4717,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Hide card completely when admin has disabled this product
+            card.style.removeProperty('display');
             if (_firestoreProductOverridesCache[productId]?.disabled) {
                 card.style.display = 'none';
                 return;
@@ -9675,6 +9806,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 // Re-check Firestore carousel: deleted/disabled products must disappear
                 // even when page is restored from bfcache.
+                pricesJsonPromise = null;
                 _firestoreProductsInjected = false;
                 window._ipordiseFsCarouselCards = []; // reset cache before re-injection
                 loadPricesJson().then(pb => injectFirestoreProductCards(pb)).catch(() => {});
@@ -11277,7 +11409,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, true); // capture phase so it runs before any other listener
     setHeaderCartCount();
     initDiscoverFilters();
-    void initCatalogPrices();
+    void initCatalogPrices().finally(() => { void watchLiveCatalogChanges(); });
     initHeaderSearchSuggestions();
     watchPricesJsonChanges();
     watchSizesJsonChanges();  // auto-reload when sizes.json changes

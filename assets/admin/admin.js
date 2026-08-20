@@ -34,6 +34,7 @@ const CLOUDINARY_PRESET = 'IPORIDSE_PRODUCTS';
 const ADMIN_EMAIL = 'admin@ipordise.com';
 const MOBILE_CATALOG_DOC_ID = '__mobile_catalog__';
 const SUPABASE_FUNCTIONS_URL = 'https://gdgrskgegrcgmzswefmn.supabase.co/functions/v1';
+const SUPABASE_REST_URL = 'https://gdgrskgegrcgmzswefmn.supabase.co/rest/v1';
 const SUPABASE_SYNC_URL = `${SUPABASE_FUNCTIONS_URL}/admin-catalog-sync`;
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_XbhrBW9Na65u8EkpgtEz4g_PuYkxs_H';
 let mobileCatalogOverrides = {};
@@ -72,23 +73,8 @@ const fetchAllSupabaseAdminRows = async (functionName, field) => {
   return rows;
 };
 
-const legacyCatalogWrite = async (operation) => {
-  try { await operation; }
-  catch (error) { console.warn('[Legacy Firebase catalog] Write deferred:', error); }
-};
-
 const syncMobileCatalogEntry = async (section, id, value) => {
   if (!id || id === MOBILE_CATALOG_DOC_ID) return;
-  try {
-    await setDoc(doc(db, 'products', MOBILE_CATALOG_DOC_ID), {
-      system: true,
-      active: false,
-      [section]: { [id]: value },
-      updatedAt: serverTimestamp(),
-    }, { merge: true });
-  } catch (error) {
-    console.warn('[Mobile catalog] Incremental sync deferred:', error);
-  }
   const firebaseToken = await auth.currentUser?.getIdToken();
   if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
   const response = await fetch(SUPABASE_SYNC_URL, {
@@ -104,6 +90,31 @@ const syncMobileCatalogEntry = async (section, id, value) => {
     const payload = await response.json().catch(() => ({}));
     throw new Error(payload.error || `Supabase sync failed (${response.status})`);
   }
+
+  // Supabase is the canonical commerce catalogue used by the app. Mirror the
+  // same confirmed change to Firestore, which powers live website updates.
+  // These operations are idempotent, so retrying a partially mirrored save is safe.
+  const collectionName = section === 'products' ? 'products' : 'productOverrides';
+  const target = doc(db, collectionName, id);
+  if (value === null) {
+    await deleteDoc(target);
+  } else {
+    const partialProductUpdate = section === 'products' && !value.name;
+    await setDoc(target, value, { merge: partialProductUpdate });
+  }
+
+  // Keep the compatibility snapshot current for older app releases. Failure
+  // here does not affect the canonical Supabase + Firestore publication.
+  try {
+    await setDoc(doc(db, 'products', MOBILE_CATALOG_DOC_ID), {
+      system: true,
+      active: false,
+      [section]: { [id]: value },
+      updatedAt: serverTimestamp(),
+    }, { merge: true });
+  } catch (error) {
+    console.warn('[Catalog compatibility snapshot] Sync deferred:', error);
+  }
 };
 
 const fetchSupabaseAdminProducts = async (source = '') => {
@@ -114,30 +125,70 @@ const fetchSupabaseAdminProducts = async (source = '') => {
     headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${firebaseToken}` },
   });
   const payload = await response.json().catch(() => ({}));
+  if (response.status >= 500) {
+    const search = new URLSearchParams({ select: '*', order: 'updated_at.desc', limit: '1000' });
+    if (source === 'website' || source === 'admin') search.set('source', `eq.${source}`);
+    const fallbackResponse = await fetch(`${SUPABASE_REST_URL}/products?${search}`, {
+      headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Accept: 'application/json' },
+      cache: 'no-store',
+    });
+    if (fallbackResponse.ok) {
+      console.warn('[Admin catalog] Protected read failed; showing active products from the public catalog.');
+      const fallbackProducts = await fallbackResponse.json().catch(() => []);
+      if (Array.isArray(fallbackProducts)) return fallbackProducts;
+    }
+  }
   if (!response.ok) throw new Error(payload.error || `Could not load Supabase catalog (${response.status})`);
   return Array.isArray(payload.products) ? payload.products : [];
 };
 
-const supabaseRowToAdminProduct = (row) => ({
-  slug: row.id,
-  name: row.name,
-  brand: row.brand,
-  image: row.image,
-  images: Array.isArray(row.gallery) && row.gallery.length ? row.gallery : [row.image].filter(Boolean),
-  sizes: row.sizes || {},
-  originalPrices: row.original_prices || {},
-  filters: row.filters || [],
-  badge: row.badge || '',
-  description: row.description || '',
-  accords: row.accords || [],
-  notes: row.notes || {},
-  ingredients: row.ingredients || '',
-  rating: row.rating,
-  reviewCount: row.review_count,
-  stockLeft: row.stock_left,
-  active: row.active !== false,
-  source: row.source || 'website',
-});
+// Product variants are the live source of truth used by the storefront and
+// checkout. Keep the legacy JSON columns only as a fallback for products that
+// have not been migrated yet.
+const supabaseRowPricing = (row) => {
+  const fallbackSizes = row?.sizes && typeof row.sizes === 'object' ? row.sizes : {};
+  const fallbackOriginals = row?.original_prices && typeof row.original_prices === 'object' ? row.original_prices : {};
+  const variants = Array.isArray(row?.product_variants) ? row.product_variants : [];
+  if (!variants.length) return { sizes: fallbackSizes, originalPrices: fallbackOriginals };
+
+  const sizes = {};
+  const originalPrices = {};
+  variants.forEach(variant => {
+    const size = String(variant?.size_key || '').trim().toLowerCase().replace(/\s+/g, '');
+    const price = Number(variant?.price_minor) / 100;
+    const compareAt = variant?.compare_at_price_minor == null ? 0 : Number(variant.compare_at_price_minor) / 100;
+    if (!size || !Number.isFinite(price) || price < 0) return;
+    sizes[size] = price;
+    if (Number.isFinite(compareAt) && compareAt > price) originalPrices[size] = compareAt;
+  });
+  return Object.keys(sizes).length
+    ? { sizes, originalPrices }
+    : { sizes: fallbackSizes, originalPrices: fallbackOriginals };
+};
+
+const supabaseRowToAdminProduct = (row) => {
+  const pricing = supabaseRowPricing(row);
+  return {
+    slug: row.id,
+    name: row.name,
+    brand: row.brand,
+    image: row.image,
+    images: Array.isArray(row.gallery) && row.gallery.length ? row.gallery : [row.image].filter(Boolean),
+    sizes: pricing.sizes,
+    originalPrices: pricing.originalPrices,
+    filters: row.filters || [],
+    badge: row.badge || '',
+    description: row.description || '',
+    accords: row.accords || [],
+    notes: row.notes || {},
+    ingredients: row.ingredients || '',
+    rating: row.rating,
+    reviewCount: row.review_count,
+    stockLeft: row.stock_left,
+    active: row.active !== false,
+    source: row.source || 'website',
+  };
+};
 
 const publishMobileCatalogSnapshot = async (productDocs) => {
   const products = {};
@@ -2414,8 +2465,9 @@ const loadProductsView = async () => {
 
     const overrides = {};
     supabaseRows.forEach(row => {
-      const current = normalizeOv({ prices: row.sizes || {} }).prices;
-      const originals = normalizeOv({ prices: row.original_prices || {} }).prices;
+      const livePricing = supabaseRowPricing(row);
+      const current = normalizeOv({ prices: livePricing.sizes }).prices;
+      const originals = normalizeOv({ prices: livePricing.originalPrices }).prices;
       const base = normalizeOv({ prices: row.base_sizes || {} }).prices;
       const prices = { ...current, ...originals };
       const promoPrices = Object.fromEntries(Object.keys(originals)
@@ -2692,19 +2744,19 @@ const loadProductsView = async () => {
 
         const imgSrc = PRODUCT_IMG[slug] || '';
         const imgHtml = imgSrc
-          ? `<img src="${imgSrc}" alt="" loading="lazy"
+          ? `<img class="prod-thumb" src="${imgSrc}" alt="" loading="lazy"
               style="width:60px;height:76px;object-fit:contain;border-radius:8px;background:var(--s3);flex-shrink:0;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.08)"
               onerror="this.style.display='none'">`
-          : `<div style="width:60px;height:76px;border-radius:8px;background:var(--s4);flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)"><i class="fas fa-spray-can" style="color:var(--dim);font-size:22px"></i></div>`;
+          : `<div class="prod-thumb prod-thumb-placeholder" style="width:60px;height:76px;border-radius:8px;background:var(--s4);flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)"><i class="fas fa-spray-can" style="color:var(--dim);font-size:22px"></i></div>`;
 
         return `<div class="card prod-card" data-slug="${esc(slug)}"
           style="transition:box-shadow .2s,border-color .2s;border-left:3px solid ${accentColor};${disabled?'opacity:.7':''}">
-          <div style="padding:14px 16px 12px 14px">
+          <div class="prod-card-body" style="padding:14px 16px 12px 14px">
 
             <!-- -- Top row: image + meta + actions -- -->
-            <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px">
+            <div class="prod-card-head" style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px">
               ${imgHtml}
-              <div style="flex:1;min-width:0">
+              <div class="prod-card-meta" style="flex:1;min-width:0">
                 <div style="font-size:13px;font-weight:800;color:var(--ink);line-height:1.3;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${esc(name)}">${esc(name)}</div>
                 <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
                   ${statusBadge}
@@ -2715,8 +2767,8 @@ const loadProductsView = async () => {
               </div>
 
               <!-- Action buttons -->
-              <div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;align-items:flex-end">
-                <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end">
+              <div class="prod-card-actions" style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;align-items:flex-end">
+                <div class="prod-primary-actions" style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end">
                   <button class="btn btn-xs btn-gold prod-save" data-slug="${esc(slug)}" style="gap:4px;font-size:11px;padding:4px 10px">
                     <i class="fas fa-floppy-disk"></i> Save
                   </button>
@@ -2725,7 +2777,7 @@ const loadProductsView = async () => {
                     <i class="fas fa-${disabled?'circle-check':'circle-xmark'}"></i> ${disabled?'Enable':'Disable'}
                   </button>
                 </div>
-                <div style="display:flex;gap:5px;justify-content:flex-end">
+                <div class="prod-secondary-actions" style="display:flex;gap:5px;justify-content:flex-end">
                   ${hasOverride ? `<button class="btn btn-xs btn-outline prod-reset" data-slug="${esc(slug)}"
                     title="Restore original prices from prices.json"
                     style="gap:4px;font-size:11px;padding:3px 9px;color:var(--muted);border-color:var(--border)">
@@ -2745,7 +2797,7 @@ const loadProductsView = async () => {
             <div style="height:1px;background:var(--border);margin:0 -2px 10px -2px"></div>
 
             <!-- -- Sizes row -- -->
-            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0;min-height:32px">
+            <div class="prod-sizes" style="display:flex;flex-wrap:wrap;align-items:center;gap:0;min-height:32px">
               ${sizeChips || `<span style="font-size:11px;color:var(--dim);font-style:italic;padding:4px 2px">No sizes — add one below</span>`}
             </div>
 
@@ -2840,13 +2892,13 @@ const loadProductsView = async () => {
       const _brandSection = (label, sub, icon, accent, groupSlugs) => {
         if (groupSlugs.length === 0) return '';
         return '<div class="prod-brand-section" style="margin-bottom:28px">' +
-          '<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--s3);border-radius:10px 10px 0 0;border:1px solid var(--border);border-bottom:3px solid ' + accent + '">' +
+          '<div class="prod-brand-header" style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--s3);border-radius:10px 10px 0 0;border:1px solid var(--border);border-bottom:3px solid ' + accent + '">' +
           '<i class="' + icon + '" style="color:' + accent + ';font-size:18px;flex-shrink:0"></i>' +
-          '<div style="flex:1;min-width:0">' +
+          '<div class="prod-brand-copy" style="flex:1;min-width:0">' +
           '<div style="font-size:13px;font-weight:800;color:var(--ink);letter-spacing:.5px;text-transform:uppercase">' + label + '</div>' +
           '<div style="font-size:10px;color:var(--muted);margin-top:2px">' + sub + '</div>' +
           '</div>' +
-          '<span style="font-size:11px;font-weight:700;color:' + accent + ';padding:3px 12px;border-radius:99px;border:1.5px solid ' + accent + ';background:var(--s4);white-space:nowrap">' + groupSlugs.length + ' product' + (groupSlugs.length !== 1 ? 's' : '') + '</span>' +
+          '<span class="prod-brand-count" style="font-size:11px;font-weight:700;color:' + accent + ';padding:3px 12px;border-radius:99px;border:1.5px solid ' + accent + ';background:var(--s4);white-space:nowrap">' + groupSlugs.length + ' product' + (groupSlugs.length !== 1 ? 's' : '') + '</span>' +
           '</div>' +
           '<div style="display:grid;gap:10px;padding:10px 0 4px 0">' + groupSlugs.map(renderCard).join('') + '</div>' +
           '</div>';
@@ -2854,13 +2906,13 @@ const loadProductsView = async () => {
 
       const _mainSection = _mainSlugs.length > 0
         ? '<div class="prod-brand-section" style="margin-bottom:28px">' +
-          '<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--s3);border-radius:10px 10px 0 0;border:1px solid var(--border);border-bottom:3px solid var(--sky)">' +
+          '<div class="prod-brand-header" style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--s3);border-radius:10px 10px 0 0;border:1px solid var(--border);border-bottom:3px solid var(--sky)">' +
           '<i class="fas fa-bottle-droplet" style="color:var(--sky);font-size:18px;flex-shrink:0"></i>' +
-          '<div style="flex:1;min-width:0">' +
+          '<div class="prod-brand-copy" style="flex:1;min-width:0">' +
           '<div style="font-size:13px;font-weight:800;color:var(--ink);letter-spacing:.5px;text-transform:uppercase">Main Collection</div>' +
           '<div style="font-size:10px;color:var(--muted);margin-top:2px">Standard products — prices.json</div>' +
           '</div>' +
-          '<span style="font-size:11px;font-weight:700;color:var(--sky);padding:3px 12px;border-radius:99px;border:1.5px solid var(--sky);background:var(--s4);white-space:nowrap">' + _mainSlugs.length + ' products</span>' +
+          '<span class="prod-brand-count" style="font-size:11px;font-weight:700;color:var(--sky);padding:3px 12px;border-radius:99px;border:1.5px solid var(--sky);background:var(--s4);white-space:nowrap">' + _mainSlugs.length + ' products</span>' +
           '</div>' +
           '<div style="display:grid;gap:10px;padding:10px 0 4px 0">' + _mainSlugs.map(renderCard).join('') + '</div>' +
           '</div>'
@@ -3150,7 +3202,6 @@ const loadProductsView = async () => {
           const btn2 = card.querySelector('.prod-save');
           if (btn2) { btn2.disabled=true; btn2.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
           try {
-            await legacyCatalogWrite(deleteDoc(doc(db,'productOverrides',slug)));
             await syncMobileCatalogEntry('overrides', slug, null);
             delete overrides[slug];
             dirty.delete(slug);
@@ -3171,7 +3222,6 @@ const loadProductsView = async () => {
         const btn = card.querySelector('.prod-save');
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
         try {
-          await legacyCatalogWrite(setDoc(doc(db,'productOverrides',slug), overrides[slug]));
           await syncMobileCatalogEntry('overrides', slug, overrides[slug]);
           dirty.delete(slug);
           toast(`? ${productName(slug)} saved`, 'success');
@@ -3189,7 +3239,6 @@ const loadProductsView = async () => {
         const btn = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-toggle`);
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
         try {
-          await legacyCatalogWrite(setDoc(doc(db,'productOverrides',slug), overrides[slug], {merge:true}));
           await syncMobileCatalogEntry('overrides', slug, overrides[slug]);
           toast(`${productName(slug)} ${newDisabled?'disabled':'enabled'}`, 'success');
           render();
@@ -3206,7 +3255,6 @@ const loadProductsView = async () => {
         const btn = grid.querySelector(`.prod-card[data-slug="${slug}"] .prod-reset`);
         if (btn) { btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
         try {
-          await legacyCatalogWrite(deleteDoc(doc(db,'productOverrides',slug)));
           await syncMobileCatalogEntry('overrides', slug, null);
           delete overrides[slug];
           delete pendingRemovals[slug];
@@ -3319,8 +3367,9 @@ const loadPromotionsView = async () => {
 
     rows.forEach(row => {
       const slug = row.id;
-      const promoPrices = row.sizes || {};
-      const prices = { ...(row.sizes || {}), ...(row.original_prices || {}) };
+      const livePricing = supabaseRowPricing(row);
+      const promoPrices = livePricing.sizes;
+      const prices = { ...livePricing.sizes, ...livePricing.originalPrices };
       const d = {};
 
       // promoPrices[sz] = sale/discounted price (lower)
@@ -3471,7 +3520,6 @@ if (countEl) countEl.textContent = `${promos.length} promotion${promos.length!==
           if (brandVal) payload.promoBrand = brandVal; else payload.promoBrand = null;
           if (descVal)  payload.promoDesc  = descVal;  else payload.promoDesc  = null;
           payload.promoOrder = isNaN(orderVal) ? 99 : orderVal;
-          await legacyCatalogWrite(setDoc(doc(db,'productOverrides',slug), payload, { merge: true }));
           await syncMobileCatalogEntry('overrides', slug, { ...(mobileCatalogOverrides[slug] || {}), ...payload });
           if (msgEl) { msgEl.textContent = '✓ Saved'; msgEl.style.color = 'var(--emerald)'; msgEl.style.display = 'inline'; setTimeout(() => { msgEl.style.display = 'none'; }, 2500); }
           toast(`Card details saved for "${pName(slug)}"`, 'success');
@@ -4394,7 +4442,6 @@ const initAddProductModal = () => {
         fragranceProfile: addFragranceProfile,
         addedAt: serverTimestamp(), source: 'admin',
       };
-      await legacyCatalogWrite(setDoc(doc(db, 'products', slug), productPayload));
       await syncMobileCatalogEntry('products', slug, productPayload);
       progressBar.style.width = '100%';
       progressLabel.textContent = 'Product saved!';
@@ -4976,8 +5023,6 @@ const initEditProductModal = () => {
           payload.addedAt = serverTimestamp();
           payload.source  = 'admin';
         }
-        await legacyCatalogWrite(setDoc(doc(db, 'products', newSlug), payload));
-        await legacyCatalogWrite(deleteDoc(doc(db, 'products', originalSlug)));
         await syncMobileCatalogEntry('products', newSlug, payload);
         await syncMobileCatalogEntry('products', originalSlug, null);
         // Remove any stale productOverrides entries — admin products are managed
@@ -4995,7 +5040,6 @@ const initEditProductModal = () => {
           payload.source  = 'admin';
         }
         // Full overwrite (no merge) so removed sizes are actually deleted
-        await legacyCatalogWrite(setDoc(doc(db, 'products', originalSlug), payload));
         await syncMobileCatalogEntry('products', originalSlug, payload);
         // Remove any stale productOverrides entry for the same reason.
         try { await deleteDoc(doc(db, 'productOverrides', originalSlug)); } catch (_) {}
@@ -5137,9 +5181,9 @@ const loadFirestoreProductsSection = async () => {
         ? '<span style="font-size:10px;font-weight:700;background:rgba(239,68,68,0.12);color:var(--rose);padding:3px 8px;border-radius:20px;border:1px solid rgba(239,68,68,0.25)">Disabled</span>'
         : '<span style="font-size:10px;font-weight:700;background:rgba(34,197,94,0.12);color:var(--emerald);padding:3px 8px;border-radius:20px;border:1px solid rgba(34,197,94,0.25)">Live</span>';
       return `
-        <div style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:flex-start" data-fsprod-slug="${esc(p.slug)}">
+        <div class="admin-product-card" style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:flex-start" data-fsprod-slug="${esc(p.slug)}">
           <img src="${esc(displayImage)}" alt="${esc(p.name||'')}" style="width:64px;height:64px;object-fit:contain;border-radius:8px;background:var(--s3);flex-shrink:0" onerror="this.style.display='none'">
-          <div style="flex:1;min-width:0">
+          <div class="admin-product-body" style="flex:1;min-width:0">
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
               <span style="font-size:0.85rem;font-weight:700;color:var(--text)">${esc(p.name||'')}</span>
               ${statusBadge}
@@ -5147,7 +5191,7 @@ const loadFirestoreProductsSection = async () => {
             <div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px">${esc(p.brand||'')} — Added via Admin</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap">${sizesHtml}</div>
           </div>
-          <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+          <div class="admin-product-actions" style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
             <button class="btn btn-xs fsprod-edit" data-slug="${esc(p.slug)}"
               style="font-size:11px;background:rgba(200,169,106,0.12);color:var(--gold);border-color:rgba(200,169,106,0.35)">
               <i class="fas fa-pen"></i> Edit
@@ -5192,7 +5236,6 @@ const loadFirestoreProductsSection = async () => {
         const slug = toggleBtn.dataset.slug;
         const isActive = toggleBtn.dataset.active === 'true';
         try {
-          await legacyCatalogWrite(setDoc(doc(db, 'products', slug), { active: !isActive }, { merge: true }));
           await syncMobileCatalogEntry('products', slug, { active: !isActive });
           toast(isActive ? 'Product disabled (hidden from site)' : 'Product enabled (live on site)', 'success');
           loadFirestoreProductsSection();
@@ -5205,7 +5248,6 @@ const loadFirestoreProductsSection = async () => {
         const name = card?.querySelector('span[style*="font-weight:700"]')?.textContent || slug;
         if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
         try {
-          await legacyCatalogWrite(deleteDoc(doc(db, 'products', slug)));
           await syncMobileCatalogEntry('products', slug, null);
           toast(`"${name}" deleted.`, 'success');
           loadFirestoreProductsSection();

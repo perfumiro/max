@@ -1,0 +1,12 @@
+.git
+.env
+.env.*
+.expo
+.preview-export
+dist
+dist-*
+out
+tmp
+website-ipordise
+docs
+*.log

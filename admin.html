@@ -9,9 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="assets/admin/admin.css?v=2">
+  <link rel="stylesheet" href="assets/admin/admin.css?v=3">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script type="module" src="assets/admin/admin.js?v=31"></script>
+<script type="module" src="assets/admin/admin.js?v=35"></script>
 </head>
 <body data-theme="dark">
   <div id="toastContainer" aria-live="polite"></div>
@@ -654,11 +654,11 @@
 
         <!-- —”——”— Products Manager View —”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”——”— -->
         <section id="view-products" class="view">
-          <div class="view-title">Product Manager <span class="view-title-sub" id="productsCount"></span></div>
-          <div class="card mb-4">
-            <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
-              <input type="text" class="select-sm" id="productsSearch" placeholder="Search product name..." style="min-width:220px;flex:1">
-              <select class="select-sm" id="productsStatusFilter" style="min-width:160px">
+          <div class="view-title product-view-title">Product Manager <span class="view-title-sub" id="productsCount"></span></div>
+          <div class="card mb-4 product-toolbar">
+            <div class="card-body product-toolbar-body">
+              <input type="text" class="select-sm product-search" id="productsSearch" placeholder="Search product name...">
+              <select class="select-sm product-filter" id="productsStatusFilter">
                 <option value="">All Products</option>
                 <optgroup label="—”——”— Status —”——”═>
                   <option value="active">Active only</option>
@@ -677,12 +677,12 @@
                   <option value="admin-added">Admin Added</option>
                 </optgroup>
               </select>
-              <button class="btn btn-xs btn-gold" id="refreshProductsBtn"><i class="fas fa-rotate-right"></i> Refresh</button>
-              <button class="btn btn-xs btn-gold" id="addNewProductBtn"><i class="fas fa-plus"></i> Add New Product</button>
+              <button class="btn btn-xs btn-gold product-refresh" id="refreshProductsBtn"><i class="fas fa-rotate-right"></i> Refresh</button>
+              <button class="btn btn-xs btn-gold product-add" id="addNewProductBtn"><i class="fas fa-plus"></i> Add New Product</button>
             </div>
           </div>
           <!-- Legend -->
-          <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;font-size:11px;color:var(--muted)">
+          <div class="product-legend">
             <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--s3);border:1.5px solid var(--border);margin-right:4px;vertical-align:middle"></span>Original price</span>
             <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--s3);border:1.5px solid var(--amber);margin-right:4px;vertical-align:middle"></span>Price changed</span>
             <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--s3);border:1.5px solid var(--gold);margin-right:4px;vertical-align:middle"></span>New size added</span>

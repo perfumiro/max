@@ -12,6 +12,11 @@ download_assets2.ps1
 # Build tools
 tailwindcss.exe
 node_modules/
+.expo/
+.env*.local
+/out/
+APP IPORDISE/.expo/
+APP IPORDISE/.env*.local
 backend/node_modules/
 backend/data/
 backend/.env
