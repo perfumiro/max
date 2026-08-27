@@ -12,7 +12,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Svg, { Path, Text as SvgText } from 'react-native-svg';
 import { colors, radius, shadow, sizes, spacing } from './src/designSystem';
 import { useResponsiveLayout } from './src/useResponsiveLayout';
-import { displaySize, formatMad, loadSharedProducts, type Product } from './src/sharedCatalog';
+import { displaySize, formatMad, loadBundledProducts, loadSharedProducts, type Product } from './src/sharedCatalog';
 import { createProductShareCard, downloadProductShareCard } from './src/sharing/productShareCard';
 import { ShoppingProvider, useBagSnapshot, useFavouriteSnapshot, useLastAdded, useShoppingActions } from './src/commerce/ShoppingContext';
 import { AppErrorBoundary } from './src/components/AppErrorBoundary';
@@ -596,7 +596,7 @@ function HomeContent({initialFilter='',initialQuery='',initialBrand='',initialPr
   const deferredQuery=useDeferredValue(query);
   const [activeFilter, setActiveFilter] = useState(initialFilter);
   const [collectionBrowseActive,setCollectionBrowseActive]=useState(Boolean(initialFilter));
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(() => loadBundledProducts());
   const [bestsellerIds,setBestsellerIds]=useState<string[]>([]);
   const [catalogSynced, setCatalogSynced] = useState(false);
   const [catalogError,setCatalogError]=useState(false);

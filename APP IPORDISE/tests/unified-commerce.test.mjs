@@ -63,12 +63,14 @@ test('staff can permanently remove an order through the protected audited endpoi
   assert.match(source, /ORDER_HAS_VERIFIED_REVIEW/);
 });
 
-test('mobile catalog reads canonical Supabase products and embedded sizes first', async () => {
+test('mobile catalog reads canonical Supabase products and starts from a canonical build snapshot', async () => {
   const source = await readFile(catalogPath, 'utf8');
   assert.match(source, /loadSupabaseProducts/);
   assert.match(source, /products\?select=/);
   assert.match(source, /sizes,original_prices,stock_left/);
   assert.match(source, /return loadSupabaseProducts\(\)/);
+  assert.match(source, /catalogSnapshot/);
+  assert.match(source, /loadBundledProducts/);
   assert.doesNotMatch(source, /using_migration_fallback|catalog_offline_cache_used/);
 });
 

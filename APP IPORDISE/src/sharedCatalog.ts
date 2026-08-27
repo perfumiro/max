@@ -1,5 +1,6 @@
 import type { ImageSourcePropType } from 'react-native';
 import { appConfig } from './config';
+import catalogSnapshot from './generated/catalogSnapshot.json';
 import { logger } from './observability/logger';
 import { mergeProductGallery } from './productGallery';
 import { normalizeProductNotes, type ProductNotes } from './productNotes';
@@ -56,7 +57,7 @@ const fetchJson = async (url: string, label: string, headers: Record<string, str
   let lastError: unknown;
   for (let attempt = 0; attempt <= appConfig.requestRetries; attempt += 1) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), appConfig.requestTimeoutMs);
+    const timeout = setTimeout(() => controller.abort(), Math.max(appConfig.requestTimeoutMs, 20_000));
     try {
       const response = await fetch(url, {
         signal: controller.signal,
@@ -294,6 +295,12 @@ const productFromSupabase = (raw: JsonMap, rows: JsonMap[]): Product | null => {
   const originalPrices = Object.fromEntries(variants.filter(variant => variant.compareAtPrice).map(variant => [variant.sizeKey, variant.compareAtPrice!]));
   const product = productFromFirestore({ ...raw, sizes, original_prices: originalPrices });
   return product ? { ...product, sizes, originalSizes: originalPrices, variants } : null;
+};
+
+export const loadBundledProducts = (): Product[] => {
+  const products = Array.isArray(catalogSnapshot.products) ? catalogSnapshot.products as JsonMap[] : [];
+  const variants = Array.isArray(catalogSnapshot.variants) ? catalogSnapshot.variants as JsonMap[] : [];
+  return products.map(row => productFromSupabase(row, variants)).filter(Boolean) as Product[];
 };
 
 const loadSupabaseProducts = async (): Promise<Product[]> => {

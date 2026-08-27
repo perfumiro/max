@@ -15,6 +15,7 @@
     "typecheck": "tsc --noEmit",
     "check:release": "node scripts/check-release-config.mjs",
     "check:api": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/check-catalog-api.mjs",
+    "generate:catalog-snapshot": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/generate-catalog-snapshot.mjs",
     "validate:offline": "npm run check:release && npm run typecheck && npm test",
     "validate": "npm run validate:offline && npm run lint && npm run check:api && npx expo-doctor",
     "lint": "eslint .",

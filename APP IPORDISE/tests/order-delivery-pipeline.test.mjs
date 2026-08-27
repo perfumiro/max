@@ -5,11 +5,19 @@ import test from 'node:test';
 const read = path => readFile(new URL(path, import.meta.url), 'utf8');
 
 test('app catalog uses the exact canonical variants accepted by checkout', async () => {
-  const catalog = await read('../src/sharedCatalog.ts');
+  const [catalog, app, snapshot] = await Promise.all([
+    read('../src/sharedCatalog.ts'),
+    read('../App.tsx'),
+    read('../src/generated/catalogSnapshot.json').then(JSON.parse),
+  ]);
   assert.match(catalog, /product_variants\?select=/);
   assert.match(catalog, /productFromSupabase\(row, variantRows\)/);
   assert.match(catalog, /id: String\(row\.id \|\| ''\)/);
   assert.match(catalog, /price = Number\(row\.price_minor\) \/ 100/);
+  assert.match(catalog, /loadBundledProducts/);
+  assert.match(app, /useState<Product\[\]>\(\(\) => loadBundledProducts\(\)\)/);
+  assert.ok(snapshot.products.length > 0);
+  assert.ok(snapshot.variants.length > 0);
 });
 
 test('app and website orders use the same Supabase order and admin pipeline', async () => {
