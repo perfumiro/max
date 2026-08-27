@@ -32,7 +32,7 @@ export function PushNotificationProvider({ children }: PropsWithChildren) {
   const pushPreferences = session ? accountPreferences : guestPreferences;
   const refreshPermission = useCallback(async () => setPermission(await getPushPermissionStatus()), []);
   const sync = useCallback(async (token: string, action: 'register' | 'preferences' = 'register') => savePushDevice({ token, accessToken: session?.access_token, language, preferences: pushPreferences, action }), [language, pushPreferences, session?.access_token]);
-  const enable = useCallback(async (preferencePatch: Partial<PushPreferences> = { newProductsEnabled: true }) => {
+  const enable = useCallback(async (preferencePatch: Partial<PushPreferences> = { newProductsEnabled: true, offersEnabled: true }) => {
     setEnabling(true); setError('');
     await markPushPromptSeen();
     try {

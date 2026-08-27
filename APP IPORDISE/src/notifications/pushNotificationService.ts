@@ -56,6 +56,7 @@ async function configureAndroidChannels() {
   if (Platform.OS !== 'android') return;
   await Promise.all([
     Notifications.setNotificationChannelAsync('new-products', { name: 'New arrivals', description: 'New fragrances and products from IPORDISE.', importance: Notifications.AndroidImportance.DEFAULT, sound: 'default', vibrationPattern: [0, 180, 120, 180], lightColor: '#D7193F' }),
+    Notifications.setNotificationChannelAsync('offers', { name: '48H promotions', description: 'Limited-time fragrance promotions from IPORDISE.', importance: Notifications.AndroidImportance.HIGH, sound: 'default', vibrationPattern: [0, 180, 120, 180], lightColor: '#D7193F' }),
     Notifications.setNotificationChannelAsync('order-updates', { name: 'Order updates', description: 'Confirmation, preparation, shipping and delivery updates.', importance: Notifications.AndroidImportance.HIGH, sound: 'default', vibrationPattern: [0, 180, 120, 180], lightColor: '#D7193F' }),
   ]);
 }

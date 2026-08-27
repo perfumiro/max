@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { normalizePushPermission, safeNotificationProductId, shouldDeliverNewProduct, shouldScheduleNewProduct, shouldShowNotificationInvitation } from '../src/notifications/notificationLogic.ts';
-import { processPendingExpoReceipts, sendNewProductNotification } from '../supabase/functions/_shared/pushNotifications.ts';
+import { processPendingExpoReceipts, sendNewProductNotification, sendPromotionNotification } from '../supabase/functions/_shared/pushNotifications.ts';
 
 test('Android and iOS permission states normalize without repeated invitations', () => {
   for (const platform of ['android', 'ios']) {
@@ -92,6 +92,24 @@ test('duplicate campaign reservation sends nothing', async () => {
   try {
     assert.deepEqual(await sendNewProductNotification(admin, { id: 'new-product', name: 'New Product' }), { status: 'duplicate', attempted: 0, accepted: 0, failed: 0 });
     assert.equal(called, false);
+  } finally { globalThis.fetch = originalFetch; }
+});
+
+test('promotion campaigns send offer-preferring devices a product deep link', async () => {
+  const admin = campaignAdmin({ devices: [{ id: 'offer-device', expo_push_token: 'ExpoPushToken[offer_token]', language: 'en', platform: 'android' }] });
+  const originalFetch = globalThis.fetch;
+  let payload;
+  globalThis.fetch = async (_url, init) => {
+    const messages = JSON.parse(init.body);
+    payload = messages[0];
+    return new Response(JSON.stringify({ data: [{ status: 'ok', id: 'promotion-ticket' }] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  };
+  try {
+    const result = await sendPromotionNotification(admin, { id: 'promotion-product', name: 'Promotion Product', startsAt: '2026-08-27T10:00:00.000Z' });
+    assert.equal(result.status, 'sent');
+    assert.equal(payload.data.type, 'promotion');
+    assert.equal(payload.data.productId, 'promotion-product');
+    assert.equal(payload.channelId, 'offers');
   } finally { globalThis.fetch = originalFetch; }
 });
 

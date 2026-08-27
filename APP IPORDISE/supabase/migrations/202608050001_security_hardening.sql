@@ -28,6 +28,13 @@ create table if not exists public.admin_audit_logs (
   created_at timestamptz not null default now()
 );
 
+-- Some early production installs created this table before the canonical
+-- administrator identity column was introduced. CREATE TABLE IF NOT EXISTS
+-- does not reconcile columns on an existing table, so make that upgrade
+-- explicit before policies and indexes reference it.
+alter table public.admin_audit_logs
+  add column if not exists admin_user_id uuid references auth.users(id) on delete set null;
+
 alter table public.orders add column if not exists user_id uuid references auth.users(id) on delete set null;
 alter table public.orders add column if not exists currency text not null default 'MAD';
 alter table public.orders add column if not exists idempotency_key text;

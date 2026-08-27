@@ -34,6 +34,12 @@ test('admin sync validates roles, payload size, ids, and hides internal errors',
   assert.match(source, /error: detail \? `Catalog sync failed: \$\{detail\}` : 'Catalog sync failed', requestId/);
 });
 
+test('official local admin origin is allowed by protected edge APIs', async () => {
+  const security = await readFile(new URL('../supabase/functions/_shared/security.ts', import.meta.url), 'utf8');
+  assert.match(security, /http:\/\/localhost:5050/);
+  assert.match(security, /http:\/\/127\.0\.0\.1:5050/);
+});
+
 test('support inbox keeps customer threads token-protected and staff-authorized', async () => {
   const [sql, source] = await Promise.all([
     readFile(supportMigrationUrl, 'utf8'),

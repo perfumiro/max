@@ -18,6 +18,11 @@ const localizedCopy = (name: string) => ({
   fr: { title: 'Nouveau chez IPORDISE ✨', body: `${name} vient d’arriver. Découvrez-le maintenant.` },
   ar: { title: 'جديد لدى IPORDISE ✨', body: `وصل الآن ${name}. اكتشفه الآن.` },
 });
+const localizedPromotionCopy = (name: string) => ({
+  en: { title: '48H offer at IPORDISE', body: `${name} is now on promotion for 48 hours. Shop before it ends.` },
+  fr: { title: 'Offre 48H chez IPORDISE', body: `${name} est maintenant en promotion pendant 48 heures. Profitez-en avant la fin.` },
+  ar: { title: 'عرض 48 ساعة من IPORDISE', body: `${name} متوفر الآن بسعر ترويجي لمدة 48 ساعة. اكتشفه قبل انتهاء العرض.` },
+});
 
 export async function processPendingExpoReceipts(admin: any) {
   const cutoff = new Date(Date.now() - 15 * 60_000).toISOString();
@@ -44,21 +49,29 @@ export async function processPendingExpoReceipts(admin: any) {
   }
 }
 
-export async function sendNewProductNotification(admin: any, product: { id: string; name: unknown }) {
+type ProductCampaignConfig = {
+  type: 'NEW_PRODUCT' | 'PROMOTION';
+  dedupeKey: string;
+  preference: 'new_products_enabled' | 'offers_enabled';
+  dataType: 'new_product' | 'promotion';
+  androidChannel: 'new-products' | 'offers';
+  copy: ReturnType<typeof localizedCopy>;
+};
+
+async function sendProductNotification(admin: any, product: { id: string; name: unknown }, config: ProductCampaignConfig) {
   const productName = cleanProductName(product.name);
   if (!productName || !/^[a-z0-9][a-z0-9_.:-]{1,127}$/i.test(product.id)) throw new Error('INVALID_PUSH_PRODUCT');
-  const copy = localizedCopy(productName);
   const { data: campaign, error: campaignError } = await admin.from('push_campaigns').insert({
-    type: 'NEW_PRODUCT', product_id: product.id,
-    title: { en: copy.en.title, fr: copy.fr.title, ar: copy.ar.title },
-    body: { en: copy.en.body, fr: copy.fr.body, ar: copy.ar.body }, status: 'sending',
+    type: config.type, product_id: product.id, dedupe_key: config.dedupeKey,
+    title: { en: config.copy.en.title, fr: config.copy.fr.title, ar: config.copy.ar.title },
+    body: { en: config.copy.en.body, fr: config.copy.fr.body, ar: config.copy.ar.body }, status: 'sending',
   }).select('id').single();
   if (campaignError?.code === '23505') return { status: 'duplicate' as const, attempted: 0, accepted: 0, failed: 0 };
   if (campaignError) throw campaignError;
   await processPendingExpoReceipts(admin);
   const devices: Device[] = [];
   for (let from = 0; ; from += 1000) {
-    const { data, error } = await admin.from('push_devices').select('id,expo_push_token,language,platform').eq('enabled', true).eq('new_products_enabled', true).range(from, from + 999);
+    const { data, error } = await admin.from('push_devices').select('id,expo_push_token,language,platform').eq('enabled', true).eq(config.preference, true).range(from, from + 999);
     if (error) throw error;
     devices.push(...((data || []) as Device[]));
     if (!data || data.length < 1000) break;
@@ -69,11 +82,11 @@ export async function sendNewProductNotification(admin: any, product: { id: stri
     const results = await Promise.all(wave.map(async batch => {
       try {
         const messages = batch.map(device => {
-          const language = copy[device.language] ? device.language : 'fr';
+          const language = config.copy[device.language] ? device.language : 'fr';
           return {
-            to: device.expo_push_token, sound: 'default', title: copy[language].title, body: copy[language].body,
-            data: { type: 'new_product', productId: product.id, route: `ipordise://product/${encodeURIComponent(product.id)}` },
-            channelId: device.platform === 'android' ? 'new-products' : undefined,
+            to: device.expo_push_token, sound: 'default', title: config.copy[language].title, body: config.copy[language].body,
+            data: { type: config.dataType, productId: product.id, route: `ipordise://product/${encodeURIComponent(product.id)}` },
+            channelId: device.platform === 'android' ? config.androidChannel : undefined,
             priority: 'high',
           };
         });
@@ -106,4 +119,26 @@ export async function sendNewProductNotification(admin: any, product: { id: stri
   const status = failed === 0 ? 'sent' : accepted > 0 ? 'partial' : 'failed';
   await admin.from('push_campaigns').update({ status, attempted_count: devices.length, accepted_count: accepted, failed_count: failed, sent_at: new Date().toISOString() }).eq('id', campaign.id);
   return { status, attempted: devices.length, accepted, failed };
+}
+
+export function sendNewProductNotification(admin: any, product: { id: string; name: unknown }) {
+  return sendProductNotification(admin, product, {
+    type: 'NEW_PRODUCT',
+    dedupeKey: `NEW_PRODUCT:${product.id}`,
+    preference: 'new_products_enabled',
+    dataType: 'new_product',
+    androidChannel: 'new-products',
+    copy: localizedCopy(cleanProductName(product.name)),
+  });
+}
+
+export function sendPromotionNotification(admin: any, product: { id: string; name: unknown; startsAt: string }) {
+  return sendProductNotification(admin, product, {
+    type: 'PROMOTION',
+    dedupeKey: `PROMOTION:${product.id}:${product.startsAt}`,
+    preference: 'offers_enabled',
+    dataType: 'promotion',
+    androidChannel: 'offers',
+    copy: localizedPromotionCopy(cleanProductName(product.name)),
+  });
 }

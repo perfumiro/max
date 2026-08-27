@@ -33,6 +33,8 @@ export type HomeConfig = {
   featuredBrands: string[];
 };
 
+const storefrontCategoryFilters = new Set(['new-in', 'for-women', 'for-men']);
+
 export const defaultHomeConfig: HomeConfig = {
   announcements:['100% authentic fragrances','Delivery across Morocco','Pay when your order arrives','Carefully prepared by IPORDISE'],
   heroSlides:[
@@ -45,11 +47,6 @@ export const defaultHomeConfig: HomeConfig = {
     {id:'new',label:'New arrivals',filter:'new-in',icon:'sparkles-outline',active:true,order:1},
     {id:'women',label:'Women',filter:'for-women',icon:'female-outline',active:true,order:2},
     {id:'men',label:'Men',filter:'for-men',icon:'male-outline',active:true,order:3},
-    {id:'unisex',label:'Unisex',filter:'unisex',icon:'male-female-outline',active:true,order:4},
-    {id:'luxury',label:'Luxury',filter:'niche',icon:'diamond-outline',active:true,order:5},
-    {id:'gifts',label:'Gift sets',filter:'discovery-sets',icon:'gift-outline',active:true,order:6},
-    {id:'miniatures',label:'Miniatures',filter:'miniatures',icon:'flask-outline',active:true,order:7},
-    {id:'offers',label:'Offers',filter:'offers',icon:'ticket-outline',active:true,order:8},
   ],
   sectionOrder:['benefits','categories','hero','offers','bestsellers','xerjoff','unique','products','seasonal','families','new','brands','trust'],
   hiddenSections:[],
@@ -70,7 +67,7 @@ export function normalizeHomeConfig(value:unknown,includeInactive=false):HomeCon
   return {
     announcements:Array.isArray(candidate.announcements)&&candidate.announcements.length?candidate.announcements.filter((item):item is string=>typeof item==='string'&&item.trim().length>0):defaultHomeConfig.announcements,
     heroSlides:Array.isArray(candidate.heroSlides)?candidate.heroSlides.filter((item):item is HomeHeroSlide=>Boolean(item&&typeof item.id==='string'&&typeof item.destination==='string'&&(includeInactive||(item.active&&isCurrent(item))))).sort((a,b)=>a.order-b.order):defaultHomeConfig.heroSlides,
-    categories:Array.isArray(candidate.categories)?candidate.categories.filter((item):item is HomeCategory=>Boolean(item&&typeof item.id==='string'&&typeof item.filter==='string'&&(includeInactive||item.active))).sort((a,b)=>a.order-b.order):defaultHomeConfig.categories,
+    categories:Array.isArray(candidate.categories)?candidate.categories.filter((item):item is HomeCategory=>Boolean(item&&typeof item.id==='string'&&typeof item.filter==='string'&&storefrontCategoryFilters.has(item.filter)&&(includeInactive||item.active))).sort((a,b)=>a.order-b.order):defaultHomeConfig.categories,
     sectionOrder,
     hiddenSections:Array.isArray(candidate.hiddenSections)?candidate.hiddenSections.filter((item):item is string=>typeof item==='string'):[],
     featuredBrands:Array.isArray(candidate.featuredBrands)?candidate.featuredBrands.filter((item):item is string=>typeof item==='string'):[],

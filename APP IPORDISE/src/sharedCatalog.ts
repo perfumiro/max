@@ -3,6 +3,7 @@ import { appConfig } from './config';
 import { logger } from './observability/logger';
 import { mergeProductGallery } from './productGallery';
 import { normalizeProductNotes, type ProductNotes } from './productNotes';
+import { isPromotionWindowActive } from './offers/promotionLogic';
 
 const { storeOrigin: STORE_ORIGIN, firestoreRoot: FIRESTORE_ROOT, firebaseApiKey: FIREBASE_API_KEY } = appConfig;
 let cachedProducts: Product[] | null = null;
@@ -259,24 +260,52 @@ const productFromFirestore = (raw: JsonMap): Product | null => {
     stockLeft,
     description: raw.description || undefined,
     notes: normalizeProductNotes(String(id || ''), raw.notes),
-    offerStart: typeof raw.offerStart === 'string' ? raw.offerStart : undefined,
-    offerEnd: typeof raw.offerEnd === 'string' ? raw.offerEnd : undefined,
-    offerFeatured: raw.offerFeatured === true,
-    offerBadge: typeof raw.offerBadge === 'string' ? raw.offerBadge : undefined,
-    sortOrder: Number.isFinite(Number(raw.sortOrder)) ? Number(raw.sortOrder) : undefined,
+    offerStart: typeof (raw.offerStart ?? raw.offer_start) === 'string' ? String(raw.offerStart ?? raw.offer_start) : undefined,
+    offerEnd: typeof (raw.offerEnd ?? raw.offer_end) === 'string' ? String(raw.offerEnd ?? raw.offer_end) : undefined,
+    offerFeatured: (raw.offerFeatured ?? raw.offer_featured) === true,
+    offerBadge: typeof (raw.offerBadge ?? raw.offer_badge) === 'string' ? String(raw.offerBadge ?? raw.offer_badge) : undefined,
+    sortOrder: Number.isFinite(Number(raw.offerDisplayOrder ?? raw.offer_display_order ?? raw.sortOrder ?? raw.sort_order)) ? Number(raw.offerDisplayOrder ?? raw.offer_display_order ?? raw.sortOrder ?? raw.sort_order) : undefined,
     variants: legacyVariants(id, sizes, originalSizes, stockLeft),
   };
 };
 
+const productFromSupabase = (raw: JsonMap, rows: JsonMap[]): Product | null => {
+  const promotionActive = isPromotionWindowActive(raw.offer_start, raw.offer_end);
+  const baseSizes = normalizeSizes(raw.base_sizes);
+  const variants = rows
+    .filter(row => row.enabled !== false && String(row.product_id || '') === String(raw.id || ''))
+    .map(row => {
+      const sizeKey = String(row.size_key || '').toLowerCase().replace(/\s+/g, '');
+      const price = Number(row.price_minor) / 100;
+      const scheduledPrice = promotionActive ? price : (baseSizes[sizeKey] || price);
+      const compareAtPrice = promotionActive && row.compare_at_price_minor != null ? Number(row.compare_at_price_minor) / 100 : undefined;
+      return {
+        id: String(row.id || ''), size: String(row.size_label || displaySize(sizeKey)), sizeKey,
+        format: ['decant', 'full_bottle', 'other'].includes(String(row.format)) ? row.format : 'other',
+        price: scheduledPrice, compareAtPrice: compareAtPrice && compareAtPrice > scheduledPrice ? compareAtPrice : undefined,
+        stock: row.stock_quantity == null ? null : Math.max(0, Number(row.stock_quantity) || 0),
+        sku: typeof row.sku === 'string' ? row.sku : undefined,
+        enabled: Boolean(row.id && sizeKey && scheduledPrice > 0),
+      } as ProductVariant;
+    })
+    .filter(variant => variant.enabled);
+  if (!variants.length) return null;
+  const sizes = Object.fromEntries(variants.map(variant => [variant.sizeKey, variant.price]));
+  const originalPrices = Object.fromEntries(variants.filter(variant => variant.compareAtPrice).map(variant => [variant.sizeKey, variant.compareAtPrice!]));
+  const product = productFromFirestore({ ...raw, sizes, original_prices: originalPrices });
+  return product ? { ...product, sizes, originalSizes: originalPrices, variants } : null;
+};
+
 const loadSupabaseProducts = async (): Promise<Product[]> => {
   if (!appConfig.supabaseUrl || !appConfig.supabasePublishableKey) throw new Error('Supabase catalogue is not configured');
-  // Production stores live variants directly in products.sizes. Query that
-  // canonical schema once instead of first calling an unavailable relation and
-  // then waiting for rate-limited Firestore retries during every cold launch.
-  const select = 'id,name,brand,image,gallery,filters,badge,description,notes,rating,review_count,active,sort_order,sizes,original_prices,stock_left';
-  const rows = await fetchJson(`${appConfig.supabaseUrl}/rest/v1/products?select=${encodeURIComponent(select)}&active=eq.true&order=sort_order.asc,updated_at.desc`, 'IPORDISE commerce catalogue', { apikey: appConfig.supabasePublishableKey });
-  if (!Array.isArray(rows)) throw new Error('IPORDISE commerce catalogue returned invalid data');
-  const products = rows.map(productFromFirestore).filter(Boolean) as Product[];
+  const select = 'id,name,brand,image,gallery,filters,badge,description,notes,rating,review_count,active,sort_order,sizes,base_sizes,original_prices,stock_left,offer_start,offer_end,offer_featured,offer_badge,offer_display_order';
+  const variantSelect = 'id,product_id,size_label,size_key,format,sku,price_minor,compare_at_price_minor,stock_quantity,enabled,sort_order';
+  const [rows, variantRows] = await Promise.all([
+    fetchJson(`${appConfig.supabaseUrl}/rest/v1/products?select=${encodeURIComponent(select)}&active=eq.true&order=sort_order.asc,updated_at.desc`, 'IPORDISE commerce catalogue', { apikey: appConfig.supabasePublishableKey }),
+    fetchJson(`${appConfig.supabaseUrl}/rest/v1/product_variants?select=${encodeURIComponent(variantSelect)}&enabled=eq.true&order=sort_order.asc`, 'IPORDISE commerce variants', { apikey: appConfig.supabasePublishableKey }),
+  ]);
+  if (!Array.isArray(rows) || !Array.isArray(variantRows)) throw new Error('IPORDISE commerce catalogue returned invalid data');
+  const products = rows.map(row => productFromSupabase(row, variantRows)).filter(Boolean) as Product[];
   if (!products.length) throw new Error('IPORDISE commerce catalogue contains no published products');
   return products;
 };
@@ -328,7 +357,17 @@ export const loadSharedProducts = async (forceRefresh = false): Promise<Product[
   pendingCatalogRequest = fetchSharedProducts()
     .then(products => {
       cachedProducts = products;
+      const now = Date.now();
+      const nextPromotionBoundary = products
+        .flatMap(product => [product.offerStart, product.offerEnd])
+        .map(value => value ? Date.parse(value) : Number.NaN)
+        .filter(value => Number.isFinite(value) && value > now)
+        .sort((a, b) => a - b)[0];
       cacheExpiresAt = Date.now() + appConfig.catalogCacheTtlMs;
+      cacheExpiresAt = Math.min(
+        cacheExpiresAt,
+        nextPromotionBoundary || Number.POSITIVE_INFINITY,
+      );
       return products;
     })
     .finally(() => { pendingCatalogRequest = null; });

@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import { appConfig } from "../config";
 import type { HomeConfig } from "../home/homeConfig";
 import type { OfferHeroConfig } from "../offers/offerConfig";
+import { createPromotionWindow } from "../offers/promotionLogic";
 import type { HelpConfig } from "../help/helpConfig";
 import type { ShopConfig } from "../shop/shopConfig";
 import {
@@ -33,6 +34,7 @@ export type AdminProduct = {
   image: string;
   gallery: string[];
   sizes: Record<string, number>;
+  base_sizes: Record<string, number>;
   original_prices: Record<string, number>;
   variant_stocks: Record<string, number | null>;
   stock_left: number | null;
@@ -43,6 +45,11 @@ export type AdminProduct = {
   filters: string[];
   notes?: Record<string, string>;
   sort_order: number;
+  offer_start: string | null;
+  offer_end: string | null;
+  offer_featured: boolean;
+  offer_badge: string | null;
+  offer_display_order: number;
   updated_at: string;
 };
 export type AdminProductPatch = Pick<
@@ -56,7 +63,17 @@ export type AdminProductPatch = Pick<
   | "original_prices"
   | "stock_left"
   | "active"
-> & { variant_stocks?: Record<string, number | null> };
+> & {
+  variant_stocks?: Record<string, number | null>;
+  base_sizes?: Record<string, number>;
+  offer_start?: string | null;
+  offer_end?: string | null;
+  offer_featured?: boolean;
+  offer_badge?: string | null;
+  offer_display_order?: number;
+  notify_promotion?: boolean;
+  badge?: string | null;
+};
 export type NewAdminProduct = {
   name: string;
   brand: string;
@@ -66,6 +83,8 @@ export type NewAdminProduct = {
   stock: number | null;
   active: boolean;
   notes: Record<string, string>;
+  promotion: boolean;
+  originalPrice: number | null;
 };
 export type AdminOrder = {
   id: string;
@@ -604,6 +623,12 @@ const mapProduct = (raw: JsonMap): AdminProduct => {
         ? raw.images
         : [],
     sizes: pricing.sizes,
+    base_sizes:
+      raw.base_sizes && typeof raw.base_sizes === "object"
+        ? raw.base_sizes
+        : Object.keys(pricing.originalPrices).length
+          ? { ...pricing.sizes, ...pricing.originalPrices }
+          : pricing.sizes,
     original_prices: pricing.originalPrices,
     variant_stocks: Object.fromEntries(
       (Array.isArray(raw.product_variants) ? raw.product_variants : []).map(
@@ -623,6 +648,13 @@ const mapProduct = (raw: JsonMap): AdminProduct => {
     filters: Array.isArray(raw.filters) ? raw.filters : [],
     notes: raw.notes && typeof raw.notes === "object" ? raw.notes : {},
     sort_order: Number(raw.sort_order ?? raw.sortOrder ?? 0),
+    offer_start: raw.offer_start || raw.offerStart || null,
+    offer_end: raw.offer_end || raw.offerEnd || null,
+    offer_featured: raw.offer_featured === true || raw.offerFeatured === true,
+    offer_badge: raw.offer_badge || raw.offerBadge || null,
+    offer_display_order: Number(
+      raw.offer_display_order ?? raw.offerDisplayOrder ?? 100,
+    ),
     updated_at: dateValue(raw.updated_at || raw.updatedAt),
   };
 };
@@ -853,15 +885,23 @@ export async function updateAdminProduct(
     image: patch.image,
     images: gallery,
     sizes: patch.sizes,
+    baseSizes: patch.base_sizes ?? current.base_sizes,
     originalPrices: patch.original_prices,
     variantStocks,
     stockLeft: patch.stock_left,
     active: patch.active,
     publicationStatus: patch.active ? "active" : "archived",
-    badge: current.badge,
+    badge: patch.badge === undefined ? current.badge : patch.badge,
     description: patch.description,
     filters: current.filters,
     notes: patch.notes,
+    offerStart: patch.offer_start ?? current.offer_start,
+    offerEnd: patch.offer_end ?? current.offer_end,
+    offerFeatured: patch.offer_featured ?? current.offer_featured,
+    offerBadge: patch.offer_badge ?? current.offer_badge,
+    offerDisplayOrder:
+      patch.offer_display_order ?? current.offer_display_order,
+    notifyPromotion: patch.notify_promotion === true,
   };
   await syncCatalogProduct(session, id, value);
   return {
@@ -869,7 +909,15 @@ export async function updateAdminProduct(
     ...patch,
     gallery,
     variant_stocks: variantStocks,
+    base_sizes: patch.base_sizes ?? current.base_sizes,
     publication_status: patch.active ? "active" : "archived",
+    badge: patch.badge === undefined ? current.badge : patch.badge,
+    offer_start: patch.offer_start ?? current.offer_start,
+    offer_end: patch.offer_end ?? current.offer_end,
+    offer_featured: patch.offer_featured ?? current.offer_featured,
+    offer_badge: patch.offer_badge ?? current.offer_badge,
+    offer_display_order:
+      patch.offer_display_order ?? current.offer_display_order,
     updated_at: new Date().toISOString(),
   };
 }
@@ -888,32 +936,51 @@ export async function createAdminProduct(
       .slice(0, 100) || "fragrance";
   const id = `${base}-${crypto.randomUUID().slice(0, 8)}`;
   const size = input.size.trim().toLowerCase().replace(/\s+/g, "");
+  const promotionPriceIsValid =
+    !input.promotion ||
+    (input.originalPrice !== null &&
+      Number.isFinite(input.originalPrice) &&
+      input.originalPrice > input.price);
   if (
     input.name.trim().length < 2 ||
     input.brand.trim().length < 2 ||
     !/^https:\/\//i.test(input.image) ||
     !/^\d+(?:\.\d+)?ml$/.test(size) ||
     !Number.isFinite(input.price) ||
-    input.price <= 0
+    input.price <= 0 ||
+    !promotionPriceIsValid
   )
     throw new AdminApiError(
-      "Complete the product name, brand, HTTPS image, size and price.",
+      "Complete the product details. A promotion also needs an original price above its sale price.",
     );
+  const promotionWindow = input.promotion ? createPromotionWindow() : null;
+  const publishNow = input.active || input.promotion;
   const value = {
     name: input.name.trim(),
     brand: input.brand.trim().toUpperCase(),
     image: input.image.trim(),
     images: [input.image.trim()],
     sizes: { [size]: input.price },
-    originalPrices: {},
+    baseSizes: {
+      [size]: input.promotion ? Number(input.originalPrice) : input.price,
+    },
+    originalPrices: input.promotion
+      ? { [size]: Number(input.originalPrice) }
+      : {},
     variantStocks: { [size]: input.stock },
     stockLeft: input.stock,
-    active: input.active,
-    publicationStatus: input.active ? "active" : "draft",
+    active: publishNow,
+    publicationStatus: publishNow ? "active" : "draft",
     createOnly: true,
     filters: ["new-in"],
-    badge: "NEW",
+    badge: input.promotion ? "48H OFFER" : "NEW",
     notes: input.notes,
+    offerStart: promotionWindow?.startsAt ?? null,
+    offerEnd: promotionWindow?.endsAt ?? null,
+    offerFeatured: input.promotion,
+    offerBadge: input.promotion ? "48H OFFER" : null,
+    offerDisplayOrder: 100,
+    notifyPromotion: input.promotion,
   };
   await syncCatalogProduct(session, id, value);
   return {
@@ -923,16 +990,22 @@ export async function createAdminProduct(
     image: value.image,
     gallery: value.images,
     sizes: value.sizes,
-    original_prices: {},
+    base_sizes: value.baseSizes,
+    original_prices: value.originalPrices,
     variant_stocks: value.variantStocks,
     stock_left: input.stock,
-    active: input.active,
-    publication_status: input.active ? "active" : "draft",
-    badge: "NEW",
+    active: publishNow,
+    publication_status: publishNow ? "active" : "draft",
+    badge: value.badge,
     description: null,
     filters: value.filters,
     notes: input.notes,
     sort_order: 100,
+    offer_start: value.offerStart,
+    offer_end: value.offerEnd,
+    offer_featured: value.offerFeatured,
+    offer_badge: value.offerBadge,
+    offer_display_order: value.offerDisplayOrder,
     updated_at: new Date().toISOString(),
   };
 }

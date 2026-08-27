@@ -57,6 +57,12 @@ import {
   normalizeOfferHero,
   type OfferHeroConfig,
 } from "../offers/offerConfig";
+import {
+  createPromotionWindow,
+  formatPromotionCountdown,
+  isPromotionWindowActive,
+  promotionRemainingMilliseconds,
+} from "../offers/promotionLogic";
 import { normalizeHelpConfig, type HelpConfig } from "../help/helpConfig";
 import { SmoothScrollView as ScrollView } from "../components/smoothHorizontalScroll";
 import {
@@ -1117,6 +1123,8 @@ function NewProductEditor({
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
   const [price, setPrice] = useState("");
+  const [originalPrice, setOriginalPrice] = useState("");
+  const [promotion, setPromotion] = useState(false);
   const [stock, setStock] = useState("");
   const [notesTop, setNotesTop] = useState("");
   const [notesHeart, setNotesHeart] = useState("");
@@ -1131,6 +1139,7 @@ function NewProductEditor({
   };
   const submit = () => {
     const numericPrice = Number(price);
+    const numericOriginalPrice = originalPrice.trim() === "" ? null : Number(originalPrice);
     const numericStock = stock.trim() === "" ? null : Number(stock);
     if (
       name.trim().length < 2 ||
@@ -1139,11 +1148,15 @@ function NewProductEditor({
       !/^\d+(?:\.\d+)?\s*ml$/i.test(size.trim()) ||
       !Number.isFinite(numericPrice) ||
       numericPrice <= 0 ||
+      (promotion &&
+        (numericOriginalPrice === null ||
+          !Number.isFinite(numericOriginalPrice) ||
+          numericOriginalPrice <= numericPrice)) ||
       (numericStock !== null &&
         (!Number.isInteger(numericStock) || numericStock < 0))
     ) {
       setError(
-        "Add a name, brand, HTTPS image, size such as 20 ml, valid price and non-negative stock.",
+        "Add valid product details. For a 48H promotion, the original price must be above the sale price.",
       );
       return;
     }
@@ -1160,6 +1173,8 @@ function NewProductEditor({
         heart: notesHeart.trim(),
         base: notesBase.trim(),
       },
+      promotion,
+      originalPrice: numericOriginalPrice,
     });
   };
   return (
@@ -1233,6 +1248,39 @@ function NewProductEditor({
                 style={[styles.editorInput, { flex: 1, marginTop: 0 }]}
               />
             </View>
+            <View style={styles.editorToggleRow}>
+              <View style={{ flex: 1, minWidth: 0 }}>
+                <Text style={styles.fieldLabel}>LAUNCH AS 48H PROMOTION</Text>
+                <Text style={styles.editorHelp}>
+                  Publishes immediately in Promotions and notifies customers who enabled offers.
+                </Text>
+              </View>
+              <Pressable
+                accessibilityRole="switch"
+                accessibilityState={{ checked: promotion }}
+                onPress={() => {
+                  setPromotion((value) => !value);
+                  setActive(true);
+                }}
+                style={[styles.toggle, promotion && styles.toggleActive]}
+              >
+                <View style={[styles.toggleKnob, promotion && styles.toggleKnobActive]} />
+              </Pressable>
+            </View>
+            {promotion ? (
+              <>
+                <Text style={styles.fieldLabel}>ORIGINAL PRICE BEFORE PROMOTION</Text>
+                <TextInput
+                  accessibilityLabel="Original price before promotion"
+                  value={originalPrice}
+                  onChangeText={setOriginalPrice}
+                  keyboardType="decimal-pad"
+                  placeholder="Original price MAD"
+                  placeholderTextColor="#a29994"
+                  style={styles.editorInput}
+                />
+              </>
+            ) : null}
             <Text style={styles.fieldLabel}>VARIANT STOCK</Text>
             <TextInput
               value={stock}
@@ -1601,6 +1649,211 @@ function UnifiedProducts({
   );
 }
 
+function PromotionEditor({
+  product,
+  visible,
+  saving,
+  onClose,
+  onSave,
+}: {
+  product: AdminProduct | null;
+  visible: boolean;
+  saving: boolean;
+  onClose: () => void;
+  onSave: (patch: AdminProductPatch) => void;
+}) {
+  const phone = useResponsiveLayout().width < 600;
+  const [salePrices, setSalePrices] = useState<Record<string, string>>({});
+  const [featured, setFeatured] = useState(true);
+  const [badge, setBadge] = useState("48H OFFER");
+  const [displayOrder, setDisplayOrder] = useState("100");
+  const [error, setError] = useState("");
+  const [clock, setClock] = useState(Date.now());
+  const basePrices = useMemo(() => {
+    if (!product) return {};
+    if (Object.keys(product.base_sizes || {}).length) return product.base_sizes;
+    return { ...product.sizes, ...product.original_prices };
+  }, [product]);
+  const active = Boolean(
+    product &&
+      Object.keys(product.original_prices).length &&
+      isPromotionWindowActive(product.offer_start, product.offer_end, clock),
+  );
+  useEffect(() => {
+    setClock(Date.now());
+    if (!visible || !product?.offer_end) return;
+    const timer = setInterval(() => setClock(Date.now()), 1_000);
+    return () => clearInterval(timer);
+  }, [product?.offer_end, visible]);
+  useEffect(() => {
+    if (!product) return;
+    const regularPrices = Object.keys(product.base_sizes || {}).length
+      ? product.base_sizes
+      : { ...product.sizes, ...product.original_prices };
+    setSalePrices(
+      Object.fromEntries(
+        Object.keys(regularPrices).map((size) => [
+          size,
+          product.original_prices[size] ? String(product.sizes[size]) : "",
+        ]),
+      ),
+    );
+    setFeatured(product.offer_featured || !product.offer_start);
+    setBadge(product.offer_badge || "48H OFFER");
+    setDisplayOrder(String(product.offer_display_order || 100));
+    setError("");
+  }, [product]);
+  if (!product) return null;
+  const commonPatch = (): AdminProductPatch => ({
+    name: product.name,
+    brand: product.brand,
+    image: product.image,
+    description: product.description || null,
+    notes: product.notes,
+    sizes: product.sizes,
+    original_prices: product.original_prices,
+    stock_left: product.stock_left,
+    active: true,
+    variant_stocks: product.variant_stocks,
+    base_sizes: basePrices,
+  });
+  const launch = () => {
+    const promotionPrices = Object.fromEntries(
+      Object.entries(salePrices)
+        .filter(([, value]) => value.trim() !== "")
+        .map(([size, value]) => [size, Number(value)]),
+    );
+    if (
+      !Object.keys(promotionPrices).length ||
+      Object.entries(promotionPrices).some(
+        ([size, value]) =>
+          !Number.isFinite(value) || value <= 0 || value >= basePrices[size],
+      )
+    ) {
+      setError("Add at least one sale price below its regular price.");
+      return;
+    }
+    const order = Number(displayOrder);
+    if (!Number.isInteger(order) || order < 0 || order > 10_000) {
+      setError("Display order must be a whole number between 0 and 10,000.");
+      return;
+    }
+    const window = createPromotionWindow();
+    const sizes = { ...basePrices, ...promotionPrices };
+    const originalPrices = Object.fromEntries(
+      Object.keys(promotionPrices).map((size) => [size, basePrices[size]]),
+    );
+    setError("");
+    onSave({
+      ...commonPatch(),
+      sizes,
+      original_prices: originalPrices,
+      offer_start: window.startsAt,
+      offer_end: window.endsAt,
+      offer_featured: featured,
+      offer_badge: badge.trim().slice(0, 40) || "48H OFFER",
+      offer_display_order: order,
+      notify_promotion: true,
+      badge: "OFFER",
+    });
+  };
+  const stop = () => {
+    setError("");
+    onSave({
+      ...commonPatch(),
+      sizes: basePrices,
+      original_prices: {},
+      offer_start: null,
+      offer_end: null,
+      offer_featured: false,
+      offer_badge: null,
+      offer_display_order: 100,
+      notify_promotion: false,
+      badge: null,
+    });
+  };
+  return (
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+      <View style={[styles.modalBackdrop, phone && styles.modalBackdropPhone]}>
+        <View style={[styles.editor, phone && styles.editorPhone]}>
+          <View style={styles.editorHead}>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={styles.sectionEyebrow}>48H PROMOTION CONTROL</Text>
+              <Text numberOfLines={2} style={styles.editorTitle}>{product.name}</Text>
+              <Text style={styles.editorMeta}>
+                {active
+                  ? `${formatPromotionCountdown(promotionRemainingMilliseconds(product.offer_end, clock))} remaining`
+                  : "Ready to launch immediately"}
+              </Text>
+            </View>
+            <Pressable accessibilityLabel="Close promotion editor" onPress={onClose} style={styles.closeButton}>
+              <Ionicons name="close" size={20} />
+            </Pressable>
+          </View>
+          <ScrollView contentContainerStyle={styles.editorBody}>
+            <Text style={styles.editorHelp}>
+              Enter a sale price for one or more sizes. Launching starts a fresh 48-hour window and sends one alert to customers who enabled offer notifications.
+            </Text>
+            <View style={styles.priceHead}>
+              <Text style={styles.fieldLabel}>REGULAR / 48H SALE PRICE</Text>
+              <Text style={styles.priceCurrency}>MAD</Text>
+            </View>
+            {Object.entries(basePrices).map(([size, regularPrice]) => (
+              <View key={size} style={styles.priceRow}>
+                <View style={styles.sizeBadge}>
+                  <Text style={styles.sizeBadgeText}>{size.toUpperCase()}</Text>
+                </View>
+                <View style={[styles.priceInput, { justifyContent: "center" }]}>
+                  <Text style={styles.editorHelp}>{money(regularPrice)}</Text>
+                </View>
+                <TextInput
+                  accessibilityLabel={`${size} 48 hour sale price`}
+                  value={salePrices[size] || ""}
+                  onChangeText={(value) =>
+                    setSalePrices((current) => ({ ...current, [size]: value }))
+                  }
+                  keyboardType="decimal-pad"
+                  placeholder="Sale price"
+                  placeholderTextColor="#a29994"
+                  style={styles.priceInput}
+                />
+              </View>
+            ))}
+            <Text style={styles.fieldLabel}>PROMOTION BADGE</Text>
+            <TextInput value={badge} onChangeText={setBadge} maxLength={40} style={styles.editorInput} />
+            <Text style={styles.fieldLabel}>DISPLAY ORDER</Text>
+            <TextInput value={displayOrder} onChangeText={setDisplayOrder} keyboardType="number-pad" style={styles.editorInput} />
+            <View style={styles.editorToggleRow}>
+              <View style={{ flex: 1, minWidth: 0 }}>
+                <Text style={styles.fieldLabel}>FEATURE ON TOP</Text>
+                <Text style={styles.editorHelp}>Featured offers appear first in the customer section.</Text>
+              </View>
+              <Pressable accessibilityRole="switch" accessibilityState={{ checked: featured }} onPress={() => setFeatured((value) => !value)} style={[styles.toggle, featured && styles.toggleActive]}>
+                <View style={[styles.toggleKnob, featured && styles.toggleKnobActive]} />
+              </Pressable>
+            </View>
+            {error ? <Text accessibilityRole="alert" style={styles.editorError}>{error}</Text> : null}
+          </ScrollView>
+          <View style={styles.editorFooter}>
+            {active ? (
+              <Pressable disabled={saving} onPress={stop} style={styles.secondaryButton}>
+                <Text style={styles.secondaryButtonText}>Stop promotion</Text>
+              </Pressable>
+            ) : (
+              <Pressable disabled={saving} onPress={onClose} style={styles.secondaryButton}>
+                <Text style={styles.secondaryButtonText}>Cancel</Text>
+              </Pressable>
+            )}
+            <Pressable disabled={saving} onPress={launch} style={[styles.primaryButton, saving && styles.pressed]}>
+              {saving ? <ActivityIndicator color="#fff" /> : <><Text style={styles.primaryButtonText}>{active ? "Restart for 48H" : "Launch 48H offer"}</Text><Ionicons name="notifications-outline" size={18} color="#fff" /></>}
+            </Pressable>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 function Promotions({
   data,
   onSave,
@@ -1616,6 +1869,15 @@ function Promotions({
         Number(product.original_prices[size]) > Number(product.sizes[size] || 0),
     ),
   );
+  const activePromotions = promoted.filter((product) =>
+    isPromotionWindowActive(product.offer_start, product.offer_end),
+  );
+  const activePromotionIds = new Set(activePromotions.map((product) => product.id));
+  const products = [...data.products].sort((a, b) => {
+    const aActive = activePromotionIds.has(a.id);
+    const bActive = activePromotionIds.has(b.id);
+    return Number(bActive) - Number(aActive) || a.brand.localeCompare(b.brand) || a.name.localeCompare(b.name);
+  });
   const save = async (patch: AdminProductPatch) => {
     if (!selected) return;
     setSaving(true);
@@ -1631,16 +1893,16 @@ function Promotions({
       <SectionHeader
         eyebrow="PRICING & OFFERS"
         title="Promotions"
-        detail="Compare-at prices publish to both customer storefronts from the canonical catalogue."
+        detail="Launch, feature, reorder, restart or stop a product offer. Every launch runs for exactly 48 hours."
         action={
           <View style={styles.countBadge}>
-            <Text style={styles.countValue}>{promoted.length}</Text>
+            <Text style={styles.countValue}>{activePromotions.length}</Text>
             <Text style={styles.countLabel}>ACTIVE</Text>
           </View>
         }
       />
       <View style={styles.orderList}>
-        {promoted.map((product) => (
+        {products.map((product) => (
           <View key={product.id} style={styles.orderCard}>
             <View style={styles.orderCustomer}>
               <Image
@@ -1658,25 +1920,29 @@ function Promotions({
               </View>
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={`Edit promotion for ${product.name}`}
+                accessibilityLabel={`Control promotion for ${product.name}`}
                 onPress={() => setSelected(product)}
                 style={styles.orderAdvance}
               >
-                <Text style={styles.orderAdvanceText}>Edit offer</Text>
+                <Text style={styles.orderAdvanceText}>
+                  {activePromotionIds.has(product.id)
+                    ? "Control offer"
+                    : "Create 48H offer"}
+                </Text>
                 <Ionicons name="create-outline" size={14} color="#fff" />
               </Pressable>
             </View>
           </View>
         ))}
       </View>
-      {!promoted.length ? (
+      {!data.products.length ? (
         <EmptyState
           icon="pricetag-outline"
-          title="No active product promotions"
-          text="Edit a product and add a compare-at price above its current price. Storefront hero offers remain in Manage App."
+          title="No products available"
+          text="Add a catalogue product first, then launch it as a 48-hour promotion here."
         />
       ) : null}
-      <ProductEditor
+      <PromotionEditor
         product={selected}
         visible={!!selected}
         saving={saving}

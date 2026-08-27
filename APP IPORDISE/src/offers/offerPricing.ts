@@ -11,12 +11,12 @@ export const summarizeOffer=(product:Product)=>{
   return selected?{...selected,saved:selected.original-selected.price,discount:Math.round((1-selected.price/selected.original)*100)}:null;
 };
 
-export const isEligibleOffer=(product:Product,now=Date.now())=>product.active
-  && getOfferVariants(product).length>0
-  && isOfferScheduleActive(product.offerStart||'',product.offerEnd||'',now);
-
-const isOfferScheduleActive=(startsAt:string,endsAt:string,now:number)=>{
+const isPromotionWindowActive=(startsAt:string|undefined,endsAt:string|undefined,now:number)=>{
   const start=startsAt?Date.parse(startsAt):Number.NaN;
   const end=endsAt?Date.parse(endsAt):Number.NaN;
-  return (!Number.isFinite(start)||start<=now)&&(!Number.isFinite(end)||end>=now);
+  return (!Number.isFinite(start)||start<=now)&&(!Number.isFinite(end)||end>now);
 };
+
+export const isEligibleOffer=(product:Product,now=Date.now())=>product.active
+  && getOfferVariants(product).length>0
+  && isPromotionWindowActive(product.offerStart,product.offerEnd,now);

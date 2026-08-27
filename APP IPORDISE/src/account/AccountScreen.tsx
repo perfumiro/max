@@ -870,11 +870,13 @@ const RecentOrderCard = memo(function RecentOrderCard({
 }) {
   const { t, rtl } = useLanguage();
   const item = order.items?.[0];
+  const itemCount = order.items?.length ?? 0;
   const locale = language === "ar" ? "ar-MA" : language === "en" ? "en-GB" : "fr-MA";
   const date = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric" }).format(new Date(order.created_at));
   const total = new Intl.NumberFormat(locale, { style: "currency", currency: order.currency || "MAD", maximumFractionDigits: 0 }).format(order.total);
   return (
     <View style={s.recentOrder}>
+      <View pointerEvents="none" style={s.recentOrderAccent} />
       <View style={s.recentOrderHead}>
         <View><Text style={s.eyebrow}>{t("latestOrder")}</Text><Text style={s.recentOrderNumber}>{order.order_number}</Text></View>
         <View style={s.statusPill}><Text style={s.statusText}>{order.status.toUpperCase()}</Text></View>
@@ -882,6 +884,7 @@ const RecentOrderCard = memo(function RecentOrderCard({
       <View style={s.recentOrderBody}>
         <View style={s.orderThumb}>
           {item?.image ? <Image accessibilityLabel={item.name || t("orderProduct")} source={{ uri: item.image }} resizeMode="contain" style={s.orderThumbImage} /> : <Ionicons name="bag-handle-outline" size={25} color={RED} />}
+          {itemCount > 1 ? <View style={s.orderItemCount}><Text style={s.orderItemCountText}>+{itemCount - 1}</Text></View> : null}
         </View>
         <View style={s.recentOrderCopy}>
           <Text numberOfLines={2} style={s.recentOrderName}>{item?.name || t("orderSummary")}</Text>
@@ -1138,6 +1141,7 @@ function LoggedInAccount({
           {page === "home" ? (
             <>
               <View style={s.accountIdentity}>
+                <View pointerEvents="none" style={s.accountIdentityAccent} />
                 <View style={s.avatar}>
                   {avatarUrl && !avatarFailed ? <Image accessibilityLabel={name} source={{ uri: avatarUrl }} resizeMode="cover" onError={() => setAvatarFailed(true)} style={s.avatarImage} /> : <Text style={s.avatarText}>{name.slice(0, 1).toUpperCase()}</Text>}
                 </View>
@@ -1145,9 +1149,7 @@ function LoggedInAccount({
                   <Text style={s.accountIdentityLabel}>{t("account")}</Text>
                   <Text numberOfLines={2} style={s.accountIdentityName}>{name}</Text>
                   <View style={s.memberMetaRow}>
-                    <View style={[s.verifiedDot, !session.user.email_confirmed_at && { backgroundColor: "#b68a48" }]} />
-                    <Text style={s.verifiedText}>{session.user.email_confirmed_at ? t("verifiedAccount") : "Email not verified"}</Text>
-                    <View style={s.memberMetaDivider} />
+                    <View style={[s.verifiedBadge, !session.user.email_confirmed_at && s.unverifiedBadge]}><Ionicons name={session.user.email_confirmed_at ? "checkmark-circle" : "alert-circle"} size={11} color={session.user.email_confirmed_at ? GREEN : "#9a671f"} /><Text style={[s.verifiedText, !session.user.email_confirmed_at && s.unverifiedText]}>{session.user.email_confirmed_at ? t("verifiedAccount") : t("emailPendingVerification")}</Text></View>
                     <Text numberOfLines={1} style={s.memberEmail}>{session.user.email}</Text>
                   </View>
                 </View>
@@ -2377,26 +2379,40 @@ const s = StyleSheet.create({
   guestQuickLabel: { minHeight: 26, fontSize: 9, lineHeight: 13, fontWeight: "800", color: INK, textAlign: "center" },
   privacyNote: { minHeight: 52, borderRadius: 16, backgroundColor: "#eef7f1", borderWidth: 1, borderColor: "#d9e9df", paddingHorizontal: 13, paddingVertical: 10, flexDirection: "row", alignItems: "center", gap: 10 },
   privacyNoteText: { flex: 1, fontSize: 10.5, lineHeight: 15, color: "#466252" },
-   accountIdentity: {
-     borderRadius: 20,
-     backgroundColor: "#fff",
-     padding: 18,
-     flexDirection: "row",
-     alignItems: "center",
-     gap: 14,
-     borderWidth: 1,
-     borderColor: "#e7e2de",
-   },
-  editProfileButton: { width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: "#ded7d2", backgroundColor: "#faf8f7", alignItems: "center", justifyContent: "center" },
+  accountIdentity: {
+    position: "relative",
+    overflow: "hidden",
+    borderRadius: 24,
+    backgroundColor: "#fffaf8",
+    paddingHorizontal: 17,
+    paddingVertical: 18,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 13,
+    borderWidth: 1,
+    borderColor: "#eadfd9",
+    shadowColor: INK,
+    shadowOpacity: 0.07,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3,
+  },
+  accountIdentityAccent: { position: "absolute", top: 0, bottom: 0, left: 0, width: 4, backgroundColor: RED },
+  editProfileButton: { width: 43, height: 43, borderRadius: 15, borderWidth: 1, borderColor: "#e4d8d2", backgroundColor: "#fff", alignItems: "center", justifyContent: "center", shadowColor: INK, shadowOpacity: .06, shadowRadius: 6, shadowOffset: { width: 0, height: 3 }, elevation: 1 },
    avatar: {
-     width: 60,
-     height: 60,
-     borderRadius: 30,
-     backgroundColor: "#f4efec",
+     width: 62,
+     height: 62,
+     borderRadius: 31,
+     backgroundColor: "#fff0f3",
      alignItems: "center",
      justifyContent: "center",
-     borderWidth: 1,
-     borderColor: "#e2d9d4",
+     borderWidth: 2,
+     borderColor: "#fff",
+     shadowColor: RED,
+     shadowOpacity: .12,
+     shadowRadius: 8,
+     shadowOffset: { width: 0, height: 3 },
+     elevation: 2,
    },
   avatarText: {
     fontFamily: "serif",
@@ -2404,8 +2420,8 @@ const s = StyleSheet.create({
     fontWeight: "900",
     color: RED,
   },
-  avatarImage: { width: "100%", height: "100%", borderRadius: 30 },
-  memberCopy: { flex: 1 },
+  avatarImage: { width: "100%", height: "100%", borderRadius: 31 },
+  memberCopy: { flex: 1, minWidth: 0 },
   accountIdentityLabel: { fontSize: 8, lineHeight: 11, fontWeight: "900", letterSpacing: 1.2, color: RED, textTransform: "uppercase" },
   accountIdentityName: { marginTop: 3, fontFamily: "serif", fontSize: 22, lineHeight: 27, fontWeight: "900", color: INK, letterSpacing: -.25 },
    memberTitle: {
@@ -2417,15 +2433,16 @@ const s = StyleSheet.create({
      marginTop: 4,
      letterSpacing: -0.3,
    },
-  memberMetaRow: { flexDirection: "row", alignItems: "center", gap: 5, marginTop: 6, minWidth: 0 },
-  verifiedDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: "#62d28b" },
-  verifiedText: { fontSize: 7.5, lineHeight: 10, fontWeight: "800", color: GREEN },
-  memberMetaDivider: { width: 1, height: 10, backgroundColor: "#ddd5d0", marginHorizontal: 2 },
-  memberEmail: { flex: 1, fontSize: 9, lineHeight: 12, color: "#766c66" },
-  quickActions: { flexDirection: "row", gap: 9 },
-  quickActionHover: { borderColor: "#cfc5bf", backgroundColor: "#fff" },
+  memberMetaRow: { flexDirection: "row", alignItems: "center", flexWrap: "wrap", columnGap: 7, rowGap: 4, marginTop: 7, minWidth: 0 },
+  verifiedBadge: { minHeight: 21, paddingHorizontal: 7, borderRadius: 11, flexDirection: "row", alignItems: "center", gap: 4, backgroundColor: "#eaf6ee" },
+  unverifiedBadge: { backgroundColor: "#fff3dd" },
+  verifiedText: { fontSize: 7.5, lineHeight: 10, fontWeight: "900", color: GREEN },
+  unverifiedText: { color: "#9a671f" },
+  memberEmail: { flexBasis: "100%", flexGrow: 1, minWidth: 0, fontSize: 9, lineHeight: 12, color: "#766c66" },
+  quickActions: { minHeight: 102, flexDirection: "row", alignItems: "center", gap: 0, padding: 6, borderRadius: 22, borderWidth: 1, borderColor: "#e8e0db", backgroundColor: "#fff", shadowColor: INK, shadowOpacity: .055, shadowRadius: 11, shadowOffset: { width: 0, height: 4 }, elevation: 2 },
+  quickActionHover: { backgroundColor: "#faf7f5" },
   quickActionPressed: { opacity: .78, transform: [{ scale: .98 }] },
-  quickActionIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: "#f3efec", alignItems: "center", justifyContent: "center" },
+  quickActionIcon: { width: 38, height: 38, borderRadius: 14, backgroundColor: "#f7f1ef", alignItems: "center", justifyContent: "center" },
    statsCard: {
      minHeight: 90,
      borderRadius: 22,
@@ -2440,13 +2457,13 @@ const s = StyleSheet.create({
      shadowOffset: { width: 0, height: 4 },
      elevation: 2,
    },
-   profileProgressCard:{minHeight:92,borderRadius:20,borderWidth:1,borderColor:LIGHT_GRAY,backgroundColor:'#fff',padding:15,flexDirection:'row',alignItems:'center',gap:12,shadowColor:INK,shadowOpacity:0.06,shadowRadius:10,shadowOffset:{width:0,height:4},elevation:2},
-   profileProgressIcon:{width:48,height:48,borderRadius:15,backgroundColor:'rgba(212, 175, 55, 0.15)',alignItems:'center',justifyContent:'center',borderWidth:1,borderColor:'rgba(212, 175, 55, 0.25)'},
+   profileProgressCard:{minHeight:90,borderRadius:20,borderWidth:1,borderColor:'#eadfd9',backgroundColor:'#fff',padding:14,flexDirection:'row',alignItems:'center',gap:12,shadowColor:INK,shadowOpacity:0.045,shadowRadius:9,shadowOffset:{width:0,height:4},elevation:1},
+   profileProgressIcon:{width:46,height:46,borderRadius:15,backgroundColor:'#fff0f3',alignItems:'center',justifyContent:'center',borderWidth:1,borderColor:'#ffd5dc'},
   profileProgressCopy:{flex:1,minWidth:0},
   profileProgressHeading:{flexDirection:'row',alignItems:'center',justifyContent:'space-between',gap:8},
    profileProgressTitle:{fontSize:7,lineHeight:10,fontWeight:'900',letterSpacing:1.1,color:WARM_BROWN},
-   profileProgressValue:{fontSize:10,lineHeight:13,fontWeight:'900',color:RED,letterSpacing:-0.2},
-  profileProgressTrack:{height:5,borderRadius:3,backgroundColor:'#eee7e3',overflow:'hidden',marginTop:7},
+   profileProgressValue:{fontSize:9,lineHeight:13,fontWeight:'900',color:RED,letterSpacing:-0.2,backgroundColor:'#fff0f3',paddingHorizontal:7,paddingVertical:2,borderRadius:9},
+  profileProgressTrack:{height:6,borderRadius:3,backgroundColor:'#eee7e3',overflow:'hidden',marginTop:7},
   profileProgressFill:{height:'100%',borderRadius:3,backgroundColor:RED},
   profileProgressText:{fontSize:8.5,lineHeight:12,color:'#7b706a',marginTop:6},
   profileEditorHero:{minHeight:142,borderRadius:22,backgroundColor:'#fff',borderWidth:1,borderColor:'#e5dcd7',padding:16,marginTop:14,marginBottom:5,flexDirection:'row',alignItems:'center',gap:16,shadowColor:'#2a1714',shadowOpacity:.055,shadowRadius:12,shadowOffset:{width:0,height:6},elevation:2},
@@ -2466,10 +2483,10 @@ const s = StyleSheet.create({
   controlDisabled:{opacity:.5},
   profileFeedback:{fontSize:9,lineHeight:13,fontWeight:'700',color:GREEN,textAlign:'center',marginTop:8},
   profileFeedbackError:{color:RED},
-  accountStat: { flex: 1, minWidth: 0, minHeight: 112, borderRadius: 18, borderWidth: 1, borderColor: "#e7e2de", backgroundColor: "#fff", paddingHorizontal: 8, paddingVertical: 12, alignItems: "center", justifyContent: "center", gap: 4 },
+  accountStat: { flex: 1, minWidth: 0, minHeight: 88, borderRadius: 16, paddingHorizontal: 7, paddingVertical: 8, alignItems: "center", justifyContent: "center", gap: 3 },
    accountStatValue: {
      fontFamily: "serif",
-     fontSize: 20,
+     fontSize: 21,
      fontWeight: "900",
      color: INK,
      letterSpacing: -0.2,
@@ -2481,7 +2498,7 @@ const s = StyleSheet.create({
     letterSpacing: 1,
     color: "#776c66",
   },
-  statDivider: { display: "none" },
+  statDivider: { width: 1, height: 52, backgroundColor: "#eee7e3", alignSelf: "center" },
   loadingState: {
     minHeight: 60,
     flexDirection: "row",
@@ -2501,19 +2518,22 @@ const s = StyleSheet.create({
   accountErrorText: { fontSize: 8.5, lineHeight: 12, color: "#8a6b47" },
   retryButton: { width: 40, height: 40, borderRadius: 14, backgroundColor: "#f2e5d2", alignItems: "center", justifyContent: "center" },
   retryButtonText: { fontSize: 9, fontWeight: "900", color: "#fff", letterSpacing: .4 },
-   recentOrder: { borderRadius: 22, borderWidth: 1, borderColor: LIGHT_GRAY, backgroundColor: "#fff", padding: 18, gap: 14, shadowColor: INK, shadowOpacity: 0.06, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 2 },
+   recentOrder: { position: "relative", overflow: "hidden", borderRadius: 24, borderWidth: 1, borderColor: "#e7ddd7", backgroundColor: "#fff", padding: 17, gap: 13, shadowColor: INK, shadowOpacity: 0.065, shadowRadius: 13, shadowOffset: { width: 0, height: 5 }, elevation: 2 },
+  recentOrderAccent: { position: "absolute", top: 0, left: 0, right: 0, height: 3, backgroundColor: RED },
   recentOrderHead: { flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between", gap: 10 },
   recentOrderNumber: { fontFamily: "serif", fontSize: 19, lineHeight: 23, fontWeight: "800", color: INK, marginTop: 3 },
-  recentOrderBody: { flexDirection: "row", alignItems: "center", gap: 12 },
-   orderThumb: { width: 68, height: 68, borderRadius: 16, backgroundColor: DARK_CREAM, alignItems: "center", justifyContent: "center", overflow: "hidden", borderWidth: 1, borderColor: LIGHT_GRAY },
+  recentOrderBody: { flexDirection: "row", alignItems: "center", gap: 12, padding: 10, borderRadius: 18, backgroundColor: "#faf7f5" },
+   orderThumb: { position: "relative", width: 68, height: 68, borderRadius: 16, backgroundColor: "#fff", alignItems: "center", justifyContent: "center", overflow: "hidden", borderWidth: 1, borderColor: LIGHT_GRAY },
   orderThumbImage: { width: "88%", height: "88%" },
+  orderItemCount: { position: "absolute", top: 5, right: 5, minWidth: 22, height: 22, paddingHorizontal: 5, borderRadius: 11, backgroundColor: INK, alignItems: "center", justifyContent: "center" },
+  orderItemCountText: { fontSize: 8, lineHeight: 10, fontWeight: "900", color: "#fff" },
   recentOrderCopy: { flex: 1, minWidth: 0 },
   recentOrderName: { fontSize: 13, lineHeight: 18, fontWeight: "800", color: INK },
   recentOrderMeta: { fontSize: 10.5, lineHeight: 15, color: "#7d716b", marginTop: 4 },
   orderActions: { flexDirection: "row", gap: 8 },
-  orderPrimaryAction: { flex: 1.2, minHeight: 46, borderRadius: 16, backgroundColor: RED, paddingHorizontal: 12, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 7 },
+  orderPrimaryAction: { flex: 1.2, minHeight: 48, borderRadius: 18, backgroundColor: RED, paddingHorizontal: 12, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 7, shadowColor: RED, shadowOpacity: .16, shadowRadius: 7, shadowOffset: { width: 0, height: 3 }, elevation: 2 },
   orderPrimaryText: { fontSize: 8.5, fontWeight: "900", color: "#fff", letterSpacing: .35, textAlign: "center" },
-  orderSecondaryAction: { flex: 1, minHeight: 46, borderRadius: 16, borderWidth: 1, borderColor: "#d9cec8", paddingHorizontal: 10, alignItems: "center", justifyContent: "center" },
+  orderSecondaryAction: { flex: 1, minHeight: 48, borderRadius: 18, borderWidth: 1, borderColor: "#d9cec8", backgroundColor: "#fff", paddingHorizontal: 10, alignItems: "center", justifyContent: "center" },
   orderSecondaryText: { fontSize: 8.5, fontWeight: "900", color: INK, textAlign: "center" },
    noRecentOrder: { minHeight: 90, borderRadius: 20, borderWidth: 1, borderColor: LIGHT_GRAY, backgroundColor: "#fff", padding: 14, flexDirection: "row", alignItems: "center", gap: 12, shadowColor: INK, shadowOpacity: 0.06, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 2 },
    noRecentIcon: { width: 50, height: 50, borderRadius: 15, backgroundColor: "rgba(212, 175, 55, 0.15)", alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "rgba(212, 175, 55, 0.25)" },
@@ -2524,9 +2544,9 @@ const s = StyleSheet.create({
     fontSize: 10.5,
     lineHeight: 14,
     fontWeight: "900",
-    letterSpacing: .75,
+    letterSpacing: 1.05,
     color: "#4d4541",
-    marginTop: 12,
+    marginTop: 14,
     marginLeft: 2,
     textTransform: "uppercase",
   },

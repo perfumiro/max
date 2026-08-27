@@ -1,6 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { apiHeaders, apiJson, consumeRateLimit, readJsonObject, rejectNonJson, rejectUntrustedOrigin, requestOrigin, verifyFirebaseStaff } from '../_shared/security.ts';
-import { sendNewProductNotification } from '../_shared/pushNotifications.ts';
+import { sendNewProductNotification, sendPromotionNotification } from '../_shared/pushNotifications.ts';
 
 const MAX_BODY_BYTES = 256 * 1024;
 const METHODS = 'GET, POST, OPTIONS';
@@ -38,7 +38,7 @@ const updateProductCompat = async (admin: any, id: string, patch: Record<string,
 
 const upsertProductCompat = async (admin: any, row: Record<string, unknown>) => {
   let candidate = { ...row };
-  const optionalColumns = ['publication_status', 'base_sizes'];
+  const optionalColumns = ['publication_status', 'base_sizes', 'offer_start', 'offer_end', 'offer_featured', 'offer_badge', 'offer_display_order'];
   for (let attempt = 0; attempt <= optionalColumns.length; attempt += 1) {
     const result = await admin.from('products').upsert(candidate, { onConflict: 'id' });
     if (!result.error) return result;
@@ -50,7 +50,7 @@ const upsertProductCompat = async (admin: any, row: Record<string, unknown>) => 
 };
 
 const readProductPublication = async (admin: any, id: string) => {
-  let result = await admin.from('products').select('id,name,active,publication_status').eq('id', id).maybeSingle();
+  let result = await admin.from('products').select('id,name,active,publication_status,offer_start,offer_end,original_prices').eq('id', id).maybeSingle();
   if (result.error && isMissingColumn(result.error, 'publication_status')) result = await admin.from('products').select('id,name,active').eq('id', id).maybeSingle();
   return result;
 };
@@ -62,6 +62,22 @@ const normalizeSizes = (value: unknown): Record<string, number> => {
     .filter(([size, price]) => /^[0-9]{1,4}(?:ml|g)$/i.test(size) && Number.isFinite(price) && price >= 0 && price <= 1_000_000));
 };
 const cleanText = (value: unknown, maximum: number) => String(value || '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, maximum);
+const safeTimestamp = (value: unknown) => {
+  if (value === null || value === undefined || value === '') return null;
+  const timestamp = Date.parse(String(value));
+  return Number.isFinite(timestamp) ? new Date(timestamp).toISOString() : null;
+};
+const promotionActive = (product: any, now = Date.now()) => {
+  const startsAt = product?.offer_start ? Date.parse(product.offer_start) : Number.NaN;
+  const endsAt = product?.offer_end ? Date.parse(product.offer_end) : Number.NaN;
+  const prices = normalizeSizes(product?.original_prices);
+  return Boolean(
+    product?.active
+    && Object.keys(prices).length
+    && (!Number.isFinite(startsAt) || startsAt <= now)
+    && (!Number.isFinite(endsAt) || endsAt > now)
+  );
+};
 const safeImage = (value: unknown) => { const image = cleanText(value, 1000); return image.startsWith('https://') || image.startsWith('/') ? image : null; };
 const positiveInteger = (value: string | null, fallback: number, maximum: number) => {
   if (value === null) return fallback;
@@ -132,9 +148,11 @@ Deno.serve(async request => {
     if (typeof id !== 'string' || !/^[a-z0-9][a-z0-9_-]{1,127}$/i.test(id) || !['products', 'overrides'].includes(section)) return json({ error: 'Invalid sync payload', requestId }, 400, origin);
     if (value !== null && (!value || typeof value !== 'object' || Array.isArray(value))) return json({ error: 'Invalid product payload', requestId }, 400, origin);
     let wasPublished = false;
+    let previousProduct: any = null;
     if (section === 'products') {
       const previous = await readProductPublication(admin, id);
       if (previous.error) throw previous.error;
+      previousProduct = previous.data;
       wasPublished = Boolean(previous.data?.active && (!previous.data.publication_status || previous.data.publication_status === 'active'));
     }
     const variantsProbe = await admin.from('product_variants').select('id').limit(1);
@@ -174,6 +192,8 @@ Deno.serve(async request => {
           if (existing) return json({ error: 'A product with this identifier already exists', code: 'PRODUCT_EXISTS', requestId }, 409, origin);
         }
         const sizes = normalizeSizes(value.sizes);
+        const baseSizes = normalizeSizes(value.baseSizes);
+        const originalPrices = normalizeSizes(value.originalPrices);
         const name = cleanText(value.name, 160);
         const brand = cleanText(value.brand || 'IPORDISE', 100).toUpperCase();
         const images = (Array.isArray(value.images) && value.images.length ? value.images : [value.image]).slice(0, 12).map(safeImage).filter(Boolean);
@@ -185,9 +205,15 @@ Deno.serve(async request => {
         if (name.length < 2 || !brand || !Object.keys(sizes).length || !images.length || (stockLeft !== null && (!Number.isFinite(stockLeft) || stockLeft < 0 || stockLeft > 100_000)) || !Number.isFinite(rating) || rating < 0 || rating > 5 || !Number.isInteger(reviewCount) || reviewCount < 0 || reviewCount > 100_000_000 || invalidVariantStock) return json({ error: 'Invalid product details', requestId }, 400, origin);
         const publicationStatus = ['draft', 'active', 'archived'].includes(String(value.publicationStatus)) ? String(value.publicationStatus) : value.active === false ? 'archived' : 'active';
         const published = publicationStatus === 'active' && value.active !== false;
+        const offerStart = safeTimestamp(value.offerStart);
+        const offerEnd = safeTimestamp(value.offerEnd);
+        const offerFeatured = value.offerFeatured === true;
+        const offerBadge = cleanText(value.offerBadge, 40) || null;
+        const offerDisplayOrder = Number.isInteger(Number(value.offerDisplayOrder)) ? Math.max(0, Math.min(10_000, Number(value.offerDisplayOrder))) : 100;
+        if ((value.offerStart && !offerStart) || (value.offerEnd && !offerEnd) || (offerStart && offerEnd && Date.parse(offerEnd) <= Date.parse(offerStart))) return json({ error: 'Invalid promotion schedule', requestId }, 400, origin);
         const row = {
           id, name, brand, image: safeImage(value.image) || images[0],
-          gallery: images, sizes, base_sizes: sizes, original_prices: normalizeSizes(value.originalPrices),
+          gallery: images, sizes, base_sizes: Object.keys(baseSizes).length ? baseSizes : (Object.keys(originalPrices).length ? { ...sizes, ...originalPrices } : sizes), original_prices: originalPrices,
           filters: Array.isArray(value.filters) ? value.filters.slice(0, 30).map((entry: unknown) => cleanText(entry, 60)).filter(Boolean) : ['new-in'], badge: cleanText(value.badge, 40) || null,
           description: cleanText(value.description, 4000) || null, accords: Array.isArray(value.accords) ? value.accords.slice(0, 30).map((entry: unknown) => cleanText(entry, 80)).filter(Boolean) : [],
           notes: value.notes && typeof value.notes === 'object' && !Array.isArray(value.notes) ? value.notes : {}, ingredients: cleanText(value.ingredients, 4000) || null,
@@ -196,6 +222,11 @@ Deno.serve(async request => {
           // succeeded. A failed multi-row sync therefore fails closed instead
           // of exposing mixed old/new prices or inventory.
           stock_left: stockLeft, active: false, publication_status: 'draft',
+          offer_start: Object.keys(originalPrices).length ? offerStart : null,
+          offer_end: Object.keys(originalPrices).length ? offerEnd : null,
+          offer_featured: Object.keys(originalPrices).length && offerFeatured,
+          offer_badge: Object.keys(originalPrices).length ? offerBadge : null,
+          offer_display_order: offerDisplayOrder,
           source: 'admin',
         };
         const { error } = await upsertProductCompat(admin, row);
@@ -205,7 +236,7 @@ Deno.serve(async request => {
           const variantId = `${id}:${size}`;
           activeVariantIds.push(variantId);
           const millilitres = Number.parseFloat(size);
-          const compareAt = normalizeSizes(value.originalPrices)[size];
+          const compareAt = originalPrices[size];
           const variantStock = variantStocks[size] === null ? null : Number.isInteger(Number(variantStocks[size])) ? Number(variantStocks[size]) : stockLeft;
           const { error: variantError } = await admin.from('product_variants').upsert({
             id: variantId, product_id: id, size_label: size.replace(/(\d)(ml)$/i, '$1 ml'), size_key: size,
@@ -283,12 +314,16 @@ Deno.serve(async request => {
     const { error: auditError } = await admin.from('admin_audit_logs').insert({ admin_email: staff.email, action: 'catalog.sync', entity_type: section, entity_id: id, metadata: { requestId } });
     if (auditError) console.error(JSON.stringify({ requestId, event: 'admin_audit_write_failed', action: 'catalog.sync' }));
     let notification: Record<string, unknown> | null = null;
-    if (section === 'products' && value !== null && !wasPublished) {
+    if (section === 'products' && value !== null) {
       const published = await readProductPublication(admin, id);
       if (published.error) console.error(JSON.stringify({ requestId, event: 'new_product_publication_check_failed', productId: id }));
       else if (published.data?.active && (!published.data.publication_status || published.data.publication_status === 'active')) {
-        const pushTask = sendNewProductNotification(admin, { id, name: published.data.name }).catch(pushError => {
-          console.error(JSON.stringify({ requestId, event: 'new_product_push_failed', productId: id, error: pushError instanceof Error ? pushError.message : String(pushError) }));
+        const shouldNotifyPromotion = value.notifyPromotion === true && promotionActive(published.data) && (!promotionActive(previousProduct) || previousProduct?.offer_start !== published.data.offer_start);
+        const pushTask = (shouldNotifyPromotion
+          ? sendPromotionNotification(admin, { id, name: published.data.name, startsAt: published.data.offer_start })
+          : !wasPublished ? sendNewProductNotification(admin, { id, name: published.data.name }) : Promise.resolve(null)
+        ).catch(pushError => {
+          console.error(JSON.stringify({ requestId, event: shouldNotifyPromotion ? 'promotion_push_failed' : 'new_product_push_failed', productId: id, error: pushError instanceof Error ? pushError.message : String(pushError) }));
           return { status: 'failed' as const, attempted: 0, accepted: 0, failed: 0 };
         });
         const edgeRuntime = (globalThis as any).EdgeRuntime;
