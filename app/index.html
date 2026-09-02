@@ -1,29 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f7f4f2">
-  <link rel="canonical" href="https://ipordise.com/app">
-  <link rel="icon" href="/favicon.ico">
-  <title>IPORDISE App</title>
-  <style>
-    @font-face{font-family:Ionicons;src:url('/assets/app-fonts/Ionicons.b4eb097d35f44ed943676fd56f6bdc51.ttf') format('truetype');font-display:block}
-    @font-face{font-family:Feather;src:url('/assets/app-fonts/Feather.ca4b48e04dc1ce10bfbddb262c8b835f.ttf') format('truetype');font-display:block}
-    html,body,#root{height:100%;margin:0}body{overflow:hidden;background:#f7f4f2}#root{display:flex}
-    #app-loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:24px;background:#f7f4f2;color:#171310;font-family:Arial,sans-serif}
-    .loader-card{width:min(86vw,420px);padding:36px;border:1px solid #e4dcd7;border-radius:24px;background:#fff;box-shadow:0 18px 55px rgba(42,25,22,.12);text-align:center}
-    .loader-brand{font:700 28px Georgia,serif}.loader-label{margin-top:16px;color:#d7193f;font-size:10px;font-weight:800;letter-spacing:1.5px}.loader-copy{margin:10px 0 0;color:#766b65;font-size:13px;line-height:1.55}
-  </style>
-</head>
-<body>
-  <noscript>You need JavaScript enabled to use the IPORDISE app.</noscript>
-  <div id="root"></div>
-  <div id="app-loader" role="status" aria-live="polite"><div class="loader-card"><div class="loader-brand">IPORDISE</div><div class="loader-label">IPORDISE APP</div><p class="loader-copy">Opening your fragrance boutique…</p></div></div>
-  <script>
-    (function(){var root=document.getElementById('root');var loader=document.getElementById('app-loader');var reveal=function(){if(root&&root.childElementCount&&loader)loader.remove()};if(root)new MutationObserver(reveal).observe(root,{childList:true});reveal()})();
-  </script>
-  <script src="/_expo/static/js/web/AppEntry-fae0b9e63882aae38e7b1074204bb1b3.js?v=20260820-admin-cors-fix" defer></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>IPORDISE</title>
+    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
+    <style id="expo-reset">
+      /* These styles make the body full-height */
+      html,
+      body {
+        height: 100%;
+      }
+      /* These styles disable body scrolling if you are using <ScrollView> */
+      body {
+        overflow: hidden;
+      }
+      /* These styles make the root element full-height */
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
+    </style>
+  <link rel="icon" href="/favicon.ico" /></head>
+
+  <body>
+    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <!-- The root element for your Expo app. -->
+    <div id="root"></div>
+  <script src="/_expo/static/js/web/AppEntry-757d6d51df6007fedc79fde6695d7290.js" defer></script>
 </body>
 </html>

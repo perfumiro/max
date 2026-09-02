@@ -4,6 +4,7 @@ import { addBagLine, bagLineKey, countBagItems, removeBagLine, updateBagLineQuan
 import { useCustomerAuth } from '../account/CustomerAuthContext';
 import { loadCustomerShoppingState, saveCustomerShoppingState } from '../services/customerAccountService';
 import { logger } from '../observability/logger';
+import { readLocalShoppingState, saveLocalShoppingState } from './shoppingStorage';
 
 export type BagLine = {
   key: string;
@@ -43,6 +44,21 @@ const ShoppingSnapshotContext = createContext<ShoppingSnapshot | null>(null);
 const FavouriteSnapshotContext=createContext<Pick<ShoppingSnapshot,'favouriteIds'|'favourites'>|null>(null);
 const BagSnapshotContext=createContext<Pick<ShoppingSnapshot,'bag'|'bagCount'>|null>(null);
 const LastAddedContext=createContext<ShoppingSnapshot['lastAdded']|undefined>(undefined);
+const purchasableVariant=(product:Product,variantId?:string,size?:string)=>{
+  if(product.active===false)return undefined;
+  const normalizedSize=String(size||'').toLowerCase().replace(/\s+/g,'');
+  return product.variants?.find(item=>(item.id===variantId||item.sizeKey===normalizedSize)&&item.enabled&&(item.stock===null||item.stock>0));
+};
+const reconcileBag=(lines:BagLine[],products:Product[])=>{
+  const byId=new Map(products.map(product=>[product.id,product]));
+  return lines.flatMap(line=>{
+    const product=byId.get(line.product.id);
+    if(!product)return[];
+    const variant=purchasableVariant(product,line.variantId,line.size);
+    if(!variant)return[];
+    return[{...line,key:bagLineKey(product.id,variant.id),product,variantId:variant.id,size:variant.sizeKey,quantity:Math.max(1,Math.min(20,Math.floor(Number(line.quantity)||1)))}];
+  });
+};
 
 export function ShoppingProvider({ children }: PropsWithChildren) {
   const {session}=useCustomerAuth();
@@ -50,12 +66,30 @@ export function ShoppingProvider({ children }: PropsWithChildren) {
   const [bag, setBag] = useState<BagLine[]>([]);
   const [favourites, setFavourites] = useState<Product[]>([]);
   const [lastAdded,setLastAdded]=useState<{product:Product;animationId:number;origin?:BagFlightOrigin}|null>(null);
+  const [localReady,setLocalReady]=useState(false);
   const syncReady=useRef(false);
   const activeUserId=session?.user.id;
   const previousUserId=useRef<string|null|undefined>(undefined);
 
   useEffect(()=>{
-    if(previousUserId.current===activeUserId)return;
+    let active=true;
+    void Promise.all([readLocalShoppingState(),loadSharedProducts()]).then(([stored,products])=>{
+      if(!active)return;
+      const byId=new Map(products.map(product=>[product.id,product]));
+      setFavourites(stored.favouriteIds.map(id=>byId.get(id)).filter((product):product is Product=>Boolean(product)));
+      setBag(stored.bag.flatMap(line=>{const product=byId.get(line.productId);if(!product)return[];const variant=purchasableVariant(product,line.variantId,line.size);if(!variant)return[];const key=bagLineKey(product.id,variant.id);return[{key,product,variantId:variant.id,size:variant.sizeKey,quantity:Math.max(1,Math.min(20,Math.floor(Number(line.quantity)||1)))}];}));
+    }).catch(error=>logger.warn('local_shopping_restore_failed',{error})).finally(()=>{if(active)setLocalReady(true);});
+    return()=>{active=false;};
+  },[]);
+
+  useEffect(()=>{
+    if(!localReady)return;
+    const timer=setTimeout(()=>{void saveLocalShoppingState({favouriteIds:favourites.map(product=>product.id),bag:bag.map(line=>({productId:line.product.id,variantId:line.variantId,size:line.size,quantity:line.quantity}))}).catch(error=>logger.warn('local_shopping_save_failed',{error}));},250);
+    return()=>clearTimeout(timer);
+  },[bag,favourites,localReady]);
+
+  useEffect(()=>{
+    if(!localReady||previousUserId.current===activeUserId)return;
     const previous=previousUserId.current;
     previousUserId.current=activeUserId??null;
     syncReady.current=false;
@@ -72,12 +106,12 @@ export function ShoppingProvider({ children }: PropsWithChildren) {
         if(!active)return;
         const byId=new Map(products.map(product=>[product.id,product]));
         setFavourites(current=>{const local=mayMergeGuestState?current:[];const ids=new Set([...remote.favouriteIds,...local.map(product=>product.id)]);return [...ids].map(id=>byId.get(id)).filter((product):product is Product=>Boolean(product));});
-        setBag(current=>{const local=mayMergeGuestState?current:[];const merged=new Map(local.map(line=>[line.key,line]));remote.bag.forEach(line=>{const product=byId.get(line.productId);if(product){const normalizedSize=String(line.size||'').toLowerCase().replace(/\s+/g,'');const variant=product.variants?.find(item=>item.id===line.variantId||item.sizeKey===normalizedSize);const variantId=variant?.id||line.variantId||`${product.id}:${normalizedSize}`;const size=variant?.sizeKey||normalizedSize||undefined;const key=bagLineKey(product.id,variantId);if(variantId&&!merged.has(key))merged.set(key,{key,product,variantId,size,quantity:Math.max(1,Math.min(20,Number(line.quantity)||1))});}});return [...merged.values()];});
+        setBag(current=>{const local=reconcileBag(mayMergeGuestState?current:[],products);const merged=new Map(local.map(line=>[line.key,line]));remote.bag.forEach(line=>{const product=byId.get(line.productId);if(product){const variant=purchasableVariant(product,line.variantId,line.size);if(variant){const key=bagLineKey(product.id,variant.id);if(!merged.has(key))merged.set(key,{key,product,variantId:variant.id,size:variant.sizeKey,quantity:Math.max(1,Math.min(20,Math.floor(Number(line.quantity)||1)))});}}});return [...merged.values()];});
       }catch(error){logger.warn('customer_shopping_restore_failed',{error});}
       finally{if(active)syncReady.current=true;}
     })();
     return()=>{active=false;};
-  },[accessToken,activeUserId]);
+  },[accessToken,activeUserId,localReady]);
 
   useEffect(()=>{
     if(!accessToken||!syncReady.current)return;
@@ -96,7 +130,7 @@ export function ShoppingProvider({ children }: PropsWithChildren) {
 
   const updateQuantity = useCallback((key: string, quantity: number) => setBag(lines => updateBagLineQuantity(lines,key,quantity)), []);
   const clearBag = useCallback(() => setBag([]), []);
-  const refreshBag = useCallback(async()=>{const products=await loadSharedProducts(true);const byId=new Map(products.map(product=>[product.id,product]));setBag(lines=>lines.map(line=>byId.has(line.product.id)?{...line,product:byId.get(line.product.id)!}:line));},[]);
+  const refreshBag = useCallback(async()=>{const products=await loadSharedProducts(true);setBag(lines=>reconcileBag(lines,products));},[]);
 
   const toggleFavourite = useCallback((product: Product) => {
     setFavourites(current => current.some(item=>item.id===product.id) ? current.filter(item=>item.id!==product.id) : [...current,product]);
