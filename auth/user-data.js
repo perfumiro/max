@@ -200,18 +200,78 @@ const _generateOrderId = async () => {
  * @returns {Promise<string|null>} Human-readable order ID (e.g. IPD-2026-00042)
  */
 export const saveGlobalOrder = async (orderData) => {
+  const supabaseUrl = 'https://gdgrskgegrcgmzswefmn.supabase.co';
+  const publishableKey = 'sb_publishable_XbhrBW9Na65u8EkpgtEz4g_PuYkxs_H';
+  const items = Array.isArray(orderData?.items) ? orderData.items : [];
+  const customer = orderData?.customer || {};
+  const normalizeSize = (value) => String(value || '').toLowerCase().replace(/\s+/g, '').trim();
+
   try {
-    const orderId = await _generateOrderId();
-    await setDoc(doc(db, 'orders', orderId), {
-      ...orderData,
-      orderId,
-      createdAt: serverTimestamp(),
-      status: 'pending',
+    if (!items.length) throw new Error('Your shopping bag is empty.');
+
+    // Resolve the legacy website cart lines to the canonical commerce variants.
+    // The server then reloads prices and stock, so browser-provided totals are
+    // never trusted and website/mobile orders enter the same database table.
+    const variantResponse = await fetch(`${supabaseUrl}/rest/v1/product_variants?select=id,product_id,size_key,size_label,price_minor,stock_quantity,enabled&enabled=eq.true`, {
+      headers: { apikey: publishableKey, Accept: 'application/json' },
+      cache: 'no-store',
     });
-    return orderId;
+    if (!variantResponse.ok) throw new Error(`Product availability could not be verified (${variantResponse.status}).`);
+    const variants = await variantResponse.json();
+    const requestedItems = items.map((item) => {
+      const productId = String(item.id || '').trim();
+      const requestedSize = normalizeSize(item.size);
+      const matches = variants.filter((variant) => String(variant.product_id) === productId);
+      const variant = matches.find((candidate) => normalizeSize(candidate.size_key) === requestedSize)
+        || matches.find((candidate) => normalizeSize(candidate.size_label) === requestedSize)
+        || (matches.length === 1 ? matches[0] : null);
+      if (!variant) throw new Error(`${item.name || 'A product'} is no longer available in the selected size.`);
+      return {
+        variantId: variant.id,
+        quantity: Math.max(1, Math.min(20, Math.floor(Number(item.qty) || 1))),
+        expectedUnitPriceMinor: Math.round(Number(item.price || 0) * 100),
+      };
+    });
+
+    const idempotencyStorageKey = 'ipordise-checkout-idempotency-v1';
+    const fingerprint = JSON.stringify({
+      customer: [customer.firstName, customer.lastName, customer.phone, customer.email, customer.address, customer.city],
+      items: requestedItems,
+      notes: customer.notes || '',
+    });
+    let pending = null;
+    try { pending = JSON.parse(localStorage.getItem(idempotencyStorageKey) || 'null'); } catch {}
+    const idempotencyKey = pending?.fingerprint === fingerprint && pending?.key
+      ? pending.key
+      : (globalThis.crypto?.randomUUID?.() || `website-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+    localStorage.setItem(idempotencyStorageKey, JSON.stringify({ fingerprint, key: idempotencyKey }));
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/create-order`, {
+      method: 'POST',
+      headers: { apikey: publishableKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        idempotencyKey,
+        customer: {
+          name: `${customer.firstName || ''} ${customer.lastName || ''}`.trim(),
+          phone: String(customer.phone || '').trim(),
+          email: String(customer.email || '').trim().toLowerCase() || null,
+          city: String(customer.city || '').trim(),
+          address: String(customer.address || '').trim(),
+        },
+        items: requestedItems,
+        notes: String(customer.notes || '').trim() || null,
+        source: 'website',
+      }),
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || `Order could not be saved (${response.status}).`);
+    const orderNumber = String(result.orderNumber || result.order_number || '').trim();
+    if (!orderNumber) throw new Error('The order server did not return an order number.');
+    localStorage.removeItem(idempotencyStorageKey);
+    return orderNumber;
   } catch (err) {
     console.error('[IPORDISE] saveGlobalOrder failed:', err);
-    return null;
+    throw err;
   }
 };
 
