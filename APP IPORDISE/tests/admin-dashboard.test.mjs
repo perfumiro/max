@@ -88,7 +88,7 @@ test('legacy transactional website routes retire into the unified web and mobile
   ]);
   assert.match(home,/location\.replace\('\/app'/);
   assert.match(product,/location\.replace\('\/app\?'/);
-  assert.match(cart,/location\.replace\('\/app\?page=bag'/);
+  assert.match(cart,/location\.replace\('\/app\/\?page=checkout'/);
   assert.match(admin,/location\.replace\('\/app\?admin=1'/);
   assert.match(sitemap,/https:\/\/ipordise\.com\/app/);
   assert.doesNotMatch(sitemap,/pages\/product\.html|pages\/cart\.html|pages\/checkout\.html/);
