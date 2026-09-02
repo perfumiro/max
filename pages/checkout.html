@@ -6,7 +6,7 @@
       // canonical orders table. Route every production URL variant to the
       // unified checkout before the legacy page or its cached scripts run.
       if (!/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {
-        window.location.replace('/app?page=bag');
+        window.location.replace('/app/?page=checkout');
       }
     </script>
     <meta charset="UTF-8">
@@ -583,7 +583,7 @@ s0.parentNode.insertBefore(s1,s0);
       import { saveGlobalOrder } from '../auth/user-data.js';
       window._ipoSaveOrder = saveGlobalOrder;
     </script>
-    <script src="checkout.js"></script>
+    <script src="checkout.js?v=20260902-direct-checkout"></script>
 
     <!-- IPO Search Overlay -->
     <div class="ipo-search-overlay" id="ipoSearchOverlay" role="dialog" aria-label="Search" aria-modal="true" aria-hidden="true">
