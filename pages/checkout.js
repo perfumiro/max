@@ -1,4 +1,14 @@
 (function () {
+    // This Firebase-era checkout is no longer allowed to accept production
+    // orders. It could send an email even when its separate database write
+    // failed, leaving the canonical admin dashboard without the order.
+    // Send every production visit to the unified Supabase checkout instead.
+    const localHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    if (!localHost && window.location.pathname.replace(/\\/g, '/').endsWith('/pages/checkout.html')) {
+        window.location.replace('/app');
+        return;
+    }
+
     /* ── i18n helper ── */
     const t = (key, fallback) => {
         const val = window.__i18n?.translate(key);
@@ -698,6 +708,7 @@
                     }
                     const orderData = buildStructuredOrder('email');
                     orderId = await saveFn(orderData);
+                    if (!orderId) throw new Error('The order was not saved. Please try again.');
                     if (orderId) {
                         try {
                             const raw = sessionStorage.getItem('ipordise-pending-order');
@@ -708,7 +719,15 @@
                             }
                         } catch(e) {}
                     }
-                } catch(e) { console.error('[IPORDISE] Order save failed:', e); }
+                } catch(e) {
+                    console.error('[IPORDISE] Order save failed:', e);
+                    placeOrderBtn.disabled = false;
+                    placeOrderBtn.innerHTML = '<i class="fas fa-lock text-sm"></i> Place Order';
+                    validationMsg.textContent = e?.message || 'Your order could not be saved. Please try again.';
+                    validationMsg.style.display = 'block';
+                    validationMsg.style.color = '#dc2626';
+                    return;
+                }
 
                 // 1. Formspree — admin notification (always works, no setup needed)
                 try {
