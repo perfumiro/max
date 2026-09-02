@@ -1,15 +1,16 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   AccessibilityInfo,
   Animated,
   FlatList,
   Image,
-  KeyboardAvoidingView,
   Modal,
   Platform,
   Pressable,
   StyleSheet,
   View,
+  type TextInput as NativeTextInput,
+  type TextInputProps,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -42,6 +43,14 @@ import {
 } from "../services/customerValidation";
 
 const RED = "#d7193f";
+const EMPTY_CHECKOUT_CUSTOMER: CheckoutCustomer = {
+  name: "",
+  phone: "",
+  email: "",
+  city: "",
+  address: "",
+};
+let checkoutSessionDraft: { customer: CheckoutCustomer; notes: string } | null = null;
 const linePrice = (line: BagLine) => {
   if (line.size && line.product.sizes[line.size])
     return line.product.sizes[line.size];
@@ -2617,6 +2626,199 @@ export function BagPage({
   );
 }
 
+type CheckoutFormFieldProps = {
+  name: "name" | "phone" | "email" | "city" | "address" | "notes";
+  label: string;
+  icon: string;
+  value: string;
+  onChangeText: (value: string) => void;
+  accessibilityLabel: string;
+  placeholder: string;
+  autoCapitalize?: TextInputProps["autoCapitalize"];
+  autoCorrect?: boolean;
+  keyboardType?: TextInputProps["keyboardType"];
+  multiline?: "large" | "small";
+  inputRef?: React.RefObject<NativeTextInput | null>;
+  returnKeyType?: TextInputProps["returnKeyType"];
+  onSubmitEditing?: TextInputProps["onSubmitEditing"];
+};
+
+/**
+ * Owns only the transient focus state for one native input. Keeping this
+ * component at module scope gives React a stable element type and prevents a
+ * focus change in one field from rebuilding the other native TextInputs.
+ */
+const CheckoutFormField = React.memo(function CheckoutFormField({
+  name,
+  label,
+  icon,
+  value,
+  onChangeText,
+  accessibilityLabel,
+  placeholder,
+  autoCapitalize,
+  autoCorrect,
+  keyboardType,
+  multiline,
+  inputRef,
+  returnKeyType,
+  onSubmitEditing,
+}: CheckoutFormFieldProps) {
+  const [isFocused, setIsFocused] = useState(false);
+  const optional = label.includes("OPTIONAL");
+  const displayLabel = label.replace(/\s*·?\s*OPTIONAL/g, "");
+  const normalizedValue = value.trim();
+  const hasValue = Boolean(normalizedValue);
+  const validatesFormat = name === "phone" || name === "email";
+  const formatValid =
+    name === "phone"
+      ? isValidMoroccanPhone(normalizedValue)
+      : name === "email"
+        ? isValidEmail(normalizedValue)
+        : hasValue;
+  const invalid = validatesFormat && hasValue && !formatValid;
+  const confirmed = hasValue && formatValid;
+  const validationMessage =
+    name === "phone"
+      ? formatValid
+        ? "Moroccan phone number confirmed."
+        : "Use 10 digits, for example 06 12 34 56 78."
+      : name === "email"
+        ? formatValid
+          ? "Email address confirmed."
+          : "Enter a complete email such as name@example.com."
+        : "";
+
+  return (
+    <View
+      style={[
+        styles.checkoutField,
+        professionalCheckoutStyles.field,
+        confirmed && professionalCheckoutStyles.fieldComplete,
+        invalid && professionalCheckoutStyles.fieldInvalid,
+        isFocused && styles.checkoutFieldFocused,
+        isFocused && professionalCheckoutStyles.fieldFocused,
+        multiline && styles.checkoutFieldMultiline,
+        multiline && professionalCheckoutStyles.fieldMultiline,
+      ]}
+    >
+      <View
+        style={[
+          styles.checkoutFieldIcon,
+          professionalCheckoutStyles.fieldIcon,
+          confirmed && professionalCheckoutStyles.fieldIconComplete,
+          invalid && professionalCheckoutStyles.fieldIconInvalid,
+          isFocused && styles.checkoutFieldIconFocused,
+          isFocused && professionalCheckoutStyles.fieldIconFocused,
+        ]}
+      >
+        <Ionicons
+          accessibilityElementsHidden
+          name={icon as any}
+          size={18}
+          color={
+            isFocused
+              ? RED
+              : invalid
+                ? RED
+                : confirmed
+                  ? "#176b43"
+                  : "#555b61"
+          }
+        />
+      </View>
+      <View style={[styles.checkoutFieldCopy, professionalCheckoutStyles.fieldCopy]}>
+        <View style={professionalCheckoutStyles.fieldLabelRow}>
+          <Text
+            style={[
+              styles.checkoutFieldLabel,
+              professionalCheckoutStyles.fieldLabel,
+              isFocused && styles.checkoutFieldLabelFocused,
+            ]}
+          >
+            {displayLabel}
+          </Text>
+          {invalid ? (
+            <View style={[professionalCheckoutStyles.fieldStatus, professionalCheckoutStyles.fieldStatusInvalid]}>
+              <Ionicons name="alert-circle" size={8} color={RED} />
+              <Text style={[professionalCheckoutStyles.fieldStatusText, professionalCheckoutStyles.fieldStatusTextInvalid]}>CHECK</Text>
+            </View>
+          ) : confirmed ? (
+            <View style={[professionalCheckoutStyles.fieldStatus, professionalCheckoutStyles.fieldStatusComplete]}>
+              <Ionicons name="checkmark" size={8} color="#176b43" />
+              <Text style={[professionalCheckoutStyles.fieldStatusText, professionalCheckoutStyles.fieldStatusTextComplete]}>
+                {validatesFormat ? "CORRECT" : "ADDED"}
+              </Text>
+            </View>
+          ) : optional ? (
+            <View style={[professionalCheckoutStyles.fieldStatus, professionalCheckoutStyles.fieldStatusOptional]}>
+              <Text style={[professionalCheckoutStyles.fieldStatusText, professionalCheckoutStyles.fieldStatusTextOptional]}>OPTIONAL</Text>
+            </View>
+          ) : (
+            <View style={[professionalCheckoutStyles.fieldStatus, professionalCheckoutStyles.fieldStatusRequired]}>
+              <Text style={[professionalCheckoutStyles.fieldStatusText, professionalCheckoutStyles.fieldStatusTextRequired]}>REQUIRED</Text>
+            </View>
+          )}
+        </View>
+        <TextInput
+          ref={inputRef}
+          accessibilityLabel={accessibilityLabel}
+          autoCapitalize={autoCapitalize}
+          autoCorrect={autoCorrect}
+          keyboardType={keyboardType}
+          multiline={Boolean(multiline)}
+          textAlignVertical={multiline ? "top" : "center"}
+          value={value}
+          onChangeText={onChangeText}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          placeholder={placeholder}
+          placeholderTextColor="#9b918b"
+          selectionColor={RED}
+          cursorColor={RED}
+          showSoftInputOnFocus
+          returnKeyType={returnKeyType}
+          blurOnSubmit={multiline ? undefined : returnKeyType === "done"}
+          onSubmitEditing={onSubmitEditing}
+          style={[
+            styles.checkoutFieldInput,
+            multiline === "large" && styles.checkoutFieldTextarea,
+            multiline === "small" && styles.checkoutFieldTextareaSmall,
+            professionalCheckoutStyles.input,
+          ]}
+        />
+        {validatesFormat ? (
+          <View
+            accessibilityElementsHidden={!hasValue}
+            importantForAccessibility={hasValue ? "auto" : "no-hide-descendants"}
+            accessibilityRole={hasValue && invalid ? "alert" : undefined}
+            style={[
+              professionalCheckoutStyles.fieldMessage,
+              !hasValue && professionalCheckoutStyles.fieldMessagePlaceholder,
+            ]}
+          >
+            <Ionicons
+              name={invalid ? "alert-circle-outline" : "checkmark-circle-outline"}
+              size={11}
+              color={invalid ? RED : "#176b43"}
+            />
+            <Text
+              style={[
+                professionalCheckoutStyles.fieldMessageText,
+                invalid
+                  ? professionalCheckoutStyles.fieldMessageError
+                  : professionalCheckoutStyles.fieldMessageSuccess,
+              ]}
+            >
+              {validationMessage}
+            </Text>
+          </View>
+        ) : null}
+      </View>
+    </View>
+  );
+});
+
 export function CheckoutPage({
   onBack,
   onComplete,
@@ -2624,25 +2826,21 @@ export function CheckoutPage({
   onBack: () => void;
   onComplete: (order: CompletedOrder) => void;
 }) {
+  const layout = useResponsiveLayout();
   const { bag } = useBagSnapshot();
   const { clearBag, refreshBag } = useShoppingActions();
   const { session } = useCustomerAuth();
   const { profile, addresses, defaultAddress, loading: customerLoading, updateProfile, upsertAddress } = useCustomer();
-  const [customer, setCustomer] = useState<CheckoutCustomer>({
-    name: "",
-    phone: "",
-    email: "",
-    city: "",
-    address: "",
-  });
-  const [notes, setNotes] = useState("");
+  const [customer, setCustomer] = useState<CheckoutCustomer>(() => ({
+    ...(checkoutSessionDraft?.customer || EMPTY_CHECKOUT_CUSTOMER),
+  }));
+  const [notes, setNotes] = useState(() => checkoutSessionDraft?.notes || "");
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     null,
   );
   const [addressPickerOpen, setAddressPickerOpen] = useState(false);
   const [saveProfileChanges, setSaveProfileChanges] = useState(false);
   const [saveAddressChanges, setSaveAddressChanges] = useState(false);
-  const [focusedField, setFocusedField] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const subtotal = bag.reduce(
@@ -2653,6 +2851,13 @@ export function CheckoutPage({
   const [deliveryAvailable, setDeliveryAvailable] = useState(true);
   const itemCount = bag.reduce((sum, line) => sum + line.quantity, 0);
   const prefilledIdentity = useRef<string | null>(null);
+  const phoneInputRef = useRef<NativeTextInput>(null);
+  const emailInputRef = useRef<NativeTextInput>(null);
+  const cityInputRef = useRef<NativeTextInput>(null);
+  const addressInputRef = useRef<NativeTextInput>(null);
+  useEffect(() => {
+    checkoutSessionDraft = { customer, notes };
+  }, [customer, notes]);
   useEffect(() => {
     if (!session || customerLoading || prefilledIdentity.current === session.user.id) return;
     const address = defaultAddress;
@@ -2689,11 +2894,18 @@ export function CheckoutPage({
       clearTimeout(timer);
     };
   }, [customer.city, subtotal]);
-  const update = (key: keyof CheckoutCustomer, value: string) =>
+  const update = useCallback((key: keyof CheckoutCustomer, value: string) => {
+    setError("");
     setCustomer((current) => ({
       ...current,
       [key]: key === "phone" ? formatMoroccanPhoneInput(value) : value,
     }));
+  }, []);
+  const updateName = useCallback((value: string) => update("name", value), [update]);
+  const updatePhone = useCallback((value: string) => update("phone", value), [update]);
+  const updateEmail = useCallback((value: string) => update("email", value), [update]);
+  const updateCity = useCallback((value: string) => update("city", value), [update]);
+  const updateAddress = useCallback((value: string) => update("address", value), [update]);
   const chooseAddress = (address: typeof defaultAddress) => {
     if (!address) return;
     setSelectedAddressId(address.id);
@@ -2710,6 +2922,10 @@ export function CheckoutPage({
     setSaveAddressChanges(false);
   };
   const submit = async () => {
+    if (!bag.length) {
+      setError("Your bag is empty. Add a fragrance before checkout.");
+      return;
+    }
     if (!isValidMoroccanPhone(customer.phone)) {
       setError(
         "Enter a valid Moroccan phone number, for example 06 12 34 56 78.",
@@ -2779,6 +2995,7 @@ export function CheckoutPage({
         await Promise.allSettled(saves);
       }
       onComplete(order);
+      checkoutSessionDraft = null;
       clearBag();
     } catch (error) {
       if (
@@ -2797,206 +3014,35 @@ export function CheckoutPage({
       setLoading(false);
     }
   };
-  const field = (
-    name: string,
-    label: string,
-    icon: string,
-    input: React.ReactNode,
-    multiline = false,
-  ) => {
-    const optional = label.includes("OPTIONAL");
-    const displayLabel = label.replace(/\s*·?\s*OPTIONAL/g, "");
-    const isFocused = focusedField === name;
-    const value = React.isValidElement(input)
-      ? String((input.props as any).value ?? "").trim()
-      : "";
-    const hasValue = Boolean(value);
-    const validatesFormat = name === "phone" || name === "email";
-    const formatValid =
-      name === "phone"
-        ? isValidMoroccanPhone(value)
-        : name === "email"
-          ? isValidEmail(value)
-          : hasValue;
-    const invalid = validatesFormat && hasValue && !formatValid;
-    const confirmed = hasValue && formatValid;
-    const validationMessage =
-      name === "phone"
-        ? formatValid
-          ? "Moroccan phone number confirmed."
-          : "Use 10 digits, for example 06 12 34 56 78."
-        : name === "email"
-          ? formatValid
-            ? "Email address confirmed."
-            : "Enter a complete email such as name@example.com."
-          : "";
+  if (!bag.length) {
     return (
-      <View
-        style={[
-          styles.checkoutField,
-          professionalCheckoutStyles.field,
-          confirmed && professionalCheckoutStyles.fieldComplete,
-          invalid && professionalCheckoutStyles.fieldInvalid,
-          isFocused && styles.checkoutFieldFocused,
-          isFocused && professionalCheckoutStyles.fieldFocused,
-          multiline && styles.checkoutFieldMultiline,
-          multiline && professionalCheckoutStyles.fieldMultiline,
-        ]}
-      >
-        <View
-          style={[
-            styles.checkoutFieldIcon,
-            professionalCheckoutStyles.fieldIcon,
-            confirmed && professionalCheckoutStyles.fieldIconComplete,
-            invalid && professionalCheckoutStyles.fieldIconInvalid,
-            isFocused && styles.checkoutFieldIconFocused,
-            isFocused && professionalCheckoutStyles.fieldIconFocused,
-          ]}
-        >
-          <Ionicons
-            accessibilityElementsHidden
-            name={icon as any}
-            size={18}
-            color={
-              isFocused
-                ? RED
-                : invalid
-                  ? RED
-                  : confirmed
-                    ? "#176b43"
-                    : "#555b61"
-            }
-          />
-        </View>
-        <View
-          style={[
-            styles.checkoutFieldCopy,
-            professionalCheckoutStyles.fieldCopy,
-          ]}
-        >
-          <View style={professionalCheckoutStyles.fieldLabelRow}>
-            <Text
-              style={[
-                styles.checkoutFieldLabel,
-                professionalCheckoutStyles.fieldLabel,
-                isFocused && styles.checkoutFieldLabelFocused,
-              ]}
-            >
-              {displayLabel}
-            </Text>
-            {invalid ? (
-              <View
-                style={[
-                  professionalCheckoutStyles.fieldStatus,
-                  professionalCheckoutStyles.fieldStatusInvalid,
-                ]}
-              >
-                <Ionicons name="alert-circle" size={8} color={RED} />
-                <Text
-                  style={[
-                    professionalCheckoutStyles.fieldStatusText,
-                    professionalCheckoutStyles.fieldStatusTextInvalid,
-                  ]}
-                >
-                  CHECK
-                </Text>
-              </View>
-            ) : confirmed ? (
-              <View
-                style={[
-                  professionalCheckoutStyles.fieldStatus,
-                  professionalCheckoutStyles.fieldStatusComplete,
-                ]}
-              >
-                <Ionicons name="checkmark" size={8} color="#176b43" />
-                <Text
-                  style={[
-                    professionalCheckoutStyles.fieldStatusText,
-                    professionalCheckoutStyles.fieldStatusTextComplete,
-                  ]}
-                >
-                  {validatesFormat ? "CORRECT" : "ADDED"}
-                </Text>
-              </View>
-            ) : optional ? (
-              <View
-                style={[
-                  professionalCheckoutStyles.fieldStatus,
-                  professionalCheckoutStyles.fieldStatusOptional,
-                ]}
-              >
-                <Text
-                  style={[
-                    professionalCheckoutStyles.fieldStatusText,
-                    professionalCheckoutStyles.fieldStatusTextOptional,
-                  ]}
-                >
-                  OPTIONAL
-                </Text>
-              </View>
-            ) : (
-              <View
-                style={[
-                  professionalCheckoutStyles.fieldStatus,
-                  professionalCheckoutStyles.fieldStatusRequired,
-                ]}
-              >
-                <Text
-                  style={[
-                    professionalCheckoutStyles.fieldStatusText,
-                    professionalCheckoutStyles.fieldStatusTextRequired,
-                  ]}
-                >
-                  REQUIRED
-                </Text>
-              </View>
-            )}
-          </View>
-          {React.isValidElement(input)
-            ? React.cloneElement(input as React.ReactElement<any>, {
-                style: [
-                  (input.props as any).style,
-                  professionalCheckoutStyles.input,
-                ],
-                selectionColor: RED,
-                cursorColor: RED,
-              })
-            : input}
-          {validatesFormat && hasValue ? (
-            <View
-              accessibilityRole={invalid ? "alert" : undefined}
-              style={professionalCheckoutStyles.fieldMessage}
-            >
-              <Ionicons
-                name={
-                  invalid ? "alert-circle-outline" : "checkmark-circle-outline"
-                }
-                size={11}
-                color={invalid ? RED : "#176b43"}
-              />
-              <Text
-                style={[
-                  professionalCheckoutStyles.fieldMessageText,
-                  invalid
-                    ? professionalCheckoutStyles.fieldMessageError
-                    : professionalCheckoutStyles.fieldMessageSuccess,
-                ]}
-              >
-                {validationMessage}
-              </Text>
-            </View>
-          ) : null}
-        </View>
-      </View>
-    );
-  };
-  return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
       <ScrollView
-        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[styles.checkoutPage, professionalCheckoutStyles.page]}
+      >
+        <View style={[styles.shell, professionalCheckoutStyles.shell]}>
+          <CommerceHeader eyebrow="YOUR BAG" title="Checkout" onBack={onBack} />
+          <View style={styles.empty}>
+            <View style={styles.emptyIcon}>
+              <Ionicons name="bag-outline" size={34} color={RED} />
+            </View>
+            <Text accessibilityRole="header" style={styles.emptyTitle}>Your bag is empty.</Text>
+            <Text style={styles.emptyText}>Add a fragrance before continuing to checkout.</Text>
+            <Pressable accessibilityRole="button" onPress={onBack} style={styles.darkButton}>
+              <Text style={styles.darkButtonText}>EXPLORE PERFUMES</Text>
+            </Pressable>
+          </View>
+        </View>
+      </ScrollView>
+    );
+  }
+  return (
+    <>
+      <ScrollView
+        keyboardShouldPersistTaps="always"
+        keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "none"}
+        automaticallyAdjustKeyboardInsets={Platform.OS === "ios"}
+        removeClippedSubviews={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.checkoutPage,
@@ -3102,56 +3148,49 @@ export function CheckoutPage({
                 </Text>
               </View>
             </View>
-            {field(
-              "name",
-              "FULL NAME",
-              "person-outline",
-              <TextInput
-                accessibilityLabel="Full name"
-                autoCapitalize="words"
-                value={customer.name}
-                onChangeText={(value) => update("name", value)}
-                onFocus={() => setFocusedField("name")}
-                onBlur={() => setFocusedField("")}
-                placeholder="Your full name"
-                placeholderTextColor="#9b918b"
-                style={styles.checkoutFieldInput}
-              />,
-            )}
-            {field(
-              "phone",
-              "MOROCCAN PHONE NUMBER",
-              "call-outline",
-              <TextInput
-                accessibilityLabel="Moroccan phone number"
-                keyboardType="phone-pad"
-                value={customer.phone}
-                onChangeText={(value) => update("phone", value)}
-                onFocus={() => setFocusedField("phone")}
-                onBlur={() => setFocusedField("")}
-                placeholder="06 12 34 56 78"
-                placeholderTextColor="#9b918b"
-                style={styles.checkoutFieldInput}
-              />,
-            )}
-            {field(
-              "email",
-              "EMAIL · OPTIONAL",
-              "mail-outline",
-              <TextInput
-                accessibilityLabel="Email, optional"
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType="email-address"
-                value={customer.email}
-                onChangeText={(value) => update("email", value)}
-                onFocus={() => setFocusedField("email")}
-                onBlur={() => setFocusedField("")}
-                placeholder="you@example.com"
-                placeholderTextColor="#9b918b"
-                style={styles.checkoutFieldInput}
-              />,
-            )}
+            <CheckoutFormField
+              key="checkout-name"
+              name="name"
+              label="FULL NAME"
+              icon="person-outline"
+              accessibilityLabel="Full name"
+              autoCapitalize="words"
+              value={customer.name}
+              onChangeText={updateName}
+              placeholder="Your full name"
+              returnKeyType="next"
+              onSubmitEditing={() => phoneInputRef.current?.focus()}
+            />
+            <CheckoutFormField
+              key="checkout-phone"
+              name="phone"
+              label="MOROCCAN PHONE NUMBER"
+              icon="call-outline"
+              accessibilityLabel="Moroccan phone number"
+              keyboardType="phone-pad"
+              value={customer.phone}
+              onChangeText={updatePhone}
+              placeholder="06 12 34 56 78"
+              inputRef={phoneInputRef}
+              returnKeyType="next"
+              onSubmitEditing={() => emailInputRef.current?.focus()}
+            />
+            <CheckoutFormField
+              key="checkout-email"
+              name="email"
+              label="EMAIL · OPTIONAL"
+              icon="mail-outline"
+              accessibilityLabel="Email, optional"
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="email-address"
+              value={customer.email || ""}
+              onChangeText={updateEmail}
+              placeholder="you@example.com"
+              inputRef={emailInputRef}
+              returnKeyType="next"
+              onSubmitEditing={() => cityInputRef.current?.focus()}
+            />
           </View>
           {session ? (
             <Pressable accessibilityRole="checkbox" accessibilityState={{ checked: saveProfileChanges }} onPress={() => setSaveProfileChanges(value => !value)} style={professionalCheckoutStyles.saveChoice}>
@@ -3210,64 +3249,43 @@ export function CheckoutPage({
                 </Pressable>
               ) : null}
             </View>
-            {field(
-              "city",
-              "CITY",
-              "location-outline",
-              <TextInput
-                accessibilityLabel="City"
-                autoCapitalize="words"
-                value={customer.city}
-                onChangeText={(value) => update("city", value)}
-                onFocus={() => setFocusedField("city")}
-                onBlur={() => setFocusedField("")}
-                placeholder="Your city"
-                placeholderTextColor="#9b918b"
-                style={styles.checkoutFieldInput}
-              />,
-            )}
-            {field(
-              "address",
-              "FULL DELIVERY ADDRESS",
-              "home-outline",
-              <TextInput
-                accessibilityLabel="Street address"
-                multiline
-                textAlignVertical="top"
-                value={customer.address}
-                onChangeText={(value) => update("address", value)}
-                onFocus={() => setFocusedField("address")}
-                onBlur={() => setFocusedField("")}
-                placeholder="Street, building, apartment and delivery details"
-                placeholderTextColor="#9b918b"
-                style={[
-                  styles.checkoutFieldInput,
-                  styles.checkoutFieldTextarea,
-                ]}
-              />,
-              true,
-            )}
-            {field(
-              "notes",
-              "ORDER NOTE · OPTIONAL",
-              "create-outline",
-              <TextInput
-                accessibilityLabel="Order notes"
-                multiline
-                textAlignVertical="top"
-                value={notes}
-                onChangeText={setNotes}
-                onFocus={() => setFocusedField("notes")}
-                onBlur={() => setFocusedField("")}
-                placeholder="A delivery preference or helpful note"
-                placeholderTextColor="#9b918b"
-                style={[
-                  styles.checkoutFieldInput,
-                  styles.checkoutFieldTextareaSmall,
-                ]}
-              />,
-              true,
-            )}
+            <CheckoutFormField
+              key="checkout-city"
+              name="city"
+              label="CITY"
+              icon="location-outline"
+              accessibilityLabel="City"
+              autoCapitalize="words"
+              value={customer.city}
+              onChangeText={updateCity}
+              placeholder="Your city"
+              inputRef={cityInputRef}
+              returnKeyType="next"
+              onSubmitEditing={() => addressInputRef.current?.focus()}
+            />
+            <CheckoutFormField
+              key="checkout-address"
+              name="address"
+              label="FULL DELIVERY ADDRESS"
+              icon="home-outline"
+              accessibilityLabel="Street address"
+              value={customer.address}
+              onChangeText={updateAddress}
+              placeholder="Street, building, apartment and delivery details"
+              multiline="large"
+              inputRef={addressInputRef}
+            />
+            <CheckoutFormField
+              key="checkout-notes"
+              name="notes"
+              label="ORDER NOTE · OPTIONAL"
+              icon="create-outline"
+              accessibilityLabel="Order notes"
+              value={notes}
+              onChangeText={setNotes}
+              placeholder="A delivery preference or helpful note"
+              multiline="small"
+            />
           </View>
           {session ? (
             <Pressable accessibilityRole="checkbox" accessibilityState={{ checked: saveAddressChanges }} onPress={() => setSaveAddressChanges(value => !value)} style={professionalCheckoutStyles.saveChoice}>
@@ -3428,8 +3446,8 @@ export function CheckoutPage({
         </View>
       </ScrollView>
       <Modal visible={addressPickerOpen} transparent animationType="slide" onRequestClose={() => setAddressPickerOpen(false)}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Close address chooser" onPress={() => setAddressPickerOpen(false)} style={professionalCheckoutStyles.modalBackdrop}>
-          <Pressable accessibilityRole="none" onPress={() => undefined} style={professionalCheckoutStyles.addressSheet}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Close address chooser" onPress={() => setAddressPickerOpen(false)} style={[professionalCheckoutStyles.modalBackdrop,layout.tablet&&professionalCheckoutStyles.modalBackdropTablet]}>
+          <Pressable accessibilityRole="none" onPress={() => undefined} style={[professionalCheckoutStyles.addressSheet,layout.tablet&&professionalCheckoutStyles.addressSheetTablet]}>
             <View style={professionalCheckoutStyles.sheetHandle} />
             <Text style={professionalCheckoutStyles.sheetEyebrow}>DELIVERY</Text>
             <Text style={professionalCheckoutStyles.sheetTitle}>Choose delivery address</Text>
@@ -3447,7 +3465,7 @@ export function CheckoutPage({
           </Pressable>
         </Pressable>
       </Modal>
-    </KeyboardAvoidingView>
+    </>
   );
 }
 
@@ -3618,7 +3636,9 @@ const professionalCheckoutStyles = StyleSheet.create({
   changeAddress: { minHeight: 44, paddingHorizontal: 8, flexDirection: "row", alignItems: "center", gap: 3 },
   changeAddressText: { fontSize: 6.5, fontWeight: "900", letterSpacing: 0.8, color: RED },
   modalBackdrop: { flex: 1, backgroundColor: "rgba(20,12,13,.46)", justifyContent: "flex-end" },
+  modalBackdropTablet: { justifyContent: "center", padding: 24 },
   addressSheet: { maxHeight: "78%", borderTopLeftRadius: 28, borderTopRightRadius: 28, backgroundColor: "#fffdf9", paddingHorizontal: 18, paddingTop: 10, paddingBottom: 32 },
+  addressSheetTablet: { width: "100%", maxWidth: 620, alignSelf: "center", borderRadius: 28 },
   sheetHandle: { width: 42, height: 4, borderRadius: 2, backgroundColor: "#d8cfca", alignSelf: "center", marginBottom: 18 },
   sheetEyebrow: { fontSize: 7, fontWeight: "900", letterSpacing: 1.35, color: RED },
   sheetTitle: { fontFamily: "serif", fontSize: 24, lineHeight: 29, fontWeight: "700", color: "#171310", marginTop: 3, marginBottom: 12 },
@@ -3643,7 +3663,6 @@ const professionalCheckoutStyles = StyleSheet.create({
   fieldComplete: { borderColor: "#dce8e1", backgroundColor: "#fbfdfc" },
   fieldInvalid: { borderColor: "#f2b9c5", backgroundColor: "#fffafb" },
   fieldFocused: {
-    borderWidth: 1.5,
     borderColor: RED,
     backgroundColor: "#fff",
     shadowColor: RED,
@@ -3719,6 +3738,7 @@ const professionalCheckoutStyles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
   },
+  fieldMessagePlaceholder: { opacity: 0 },
   fieldMessageText: { flex: 1, fontSize: 7, lineHeight: 10 },
   fieldMessageError: { color: "#a9233d" },
   fieldMessageSuccess: { color: "#327152" },
@@ -4072,7 +4092,7 @@ export function ThankYouPage({
               </View>
             </View>
             <Text style={[styles.thankTitle, thankYouProfessionalStyles.title]}>
-              Thank you. Your order is safely with us.
+              Thank you{order.customerName ? `, ${order.customerName.trim().split(/\s+/)[0]}` : ""}. Your order is safely with us.
             </Text>
             <Text style={[styles.thankCopy, thankYouProfessionalStyles.copy]}>
               We’re grateful you chose IPORDISE. Our boutique team will
