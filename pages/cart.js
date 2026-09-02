@@ -2,6 +2,7 @@
     const CART_STORAGE_KEY = 'cart';
     const LEGACY_CART_STORAGE_KEY = 'ipordise-cart-items';
     const CHECKOUT_ACCESS_KEY = 'ipordise-checkout-access';
+    const APP_SHOPPING_STORAGE_KEY = 'ipordise.shopping.local.v1';
     const SHIPPING_MAD = 35;
 
     /* Promo codes: legacy hardcoded list (fallback only — Firestore is primary) */
@@ -98,6 +99,35 @@
         if (typeof window.setHeaderCartCount === 'function') {
             window.setHeaderCartCount();
         }
+    };
+
+    const transferCartToApp = (items) => {
+        let existing = { favouriteIds: [], bag: [] };
+        try {
+            const parsed = JSON.parse(localStorage.getItem(APP_SHOPPING_STORAGE_KEY) || '{}');
+            existing = {
+                favouriteIds: Array.isArray(parsed.favouriteIds) ? parsed.favouriteIds : [],
+                bag: Array.isArray(parsed.bag) ? parsed.bag : []
+            };
+        } catch (error) {
+            // A damaged app cache must not prevent checkout from starting.
+        }
+
+        const transferred = items.map((item) => {
+            const size = String(item.size || '').toLowerCase().replace(/\s+/g, '');
+            return {
+                productId: item.id,
+                variantId: `${item.id}:${size || 'default'}`,
+                size: size || undefined,
+                quantity: Math.max(1, Math.min(20, Math.floor(Number(item.qty) || 1)))
+            };
+        });
+        const merged = new Map(existing.bag.map((line) => [`${line.productId}:${line.variantId}`, line]));
+        transferred.forEach((line) => merged.set(`${line.productId}:${line.variantId}`, line));
+        localStorage.setItem(APP_SHOPPING_STORAGE_KEY, JSON.stringify({
+            favouriteIds: existing.favouriteIds,
+            bag: Array.from(merged.values()).slice(0, 50)
+        }));
     };
 
     // One-time bridge so previously saved products keep working with the new required "cart" key.
@@ -442,14 +472,17 @@
 
         if (checkoutBtn) {
             checkoutBtn.addEventListener('click', (event) => {
-                const hasItems = readCart().length > 0;
-                if (!hasItems) {
+                const items = readCart();
+                if (!items.length) {
                     sessionStorage.removeItem(CHECKOUT_ACCESS_KEY);
                     event.preventDefault();
                     return;
                 }
 
+                event.preventDefault();
                 sessionStorage.setItem(CHECKOUT_ACCESS_KEY, '1');
+                transferCartToApp(items);
+                window.location.assign('/app/?page=checkout');
             });
         }
 
