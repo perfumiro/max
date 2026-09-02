@@ -4,8 +4,8 @@
     // failed, leaving the canonical admin dashboard without the order.
     // Send every production visit to the unified Supabase checkout instead.
     const localHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-    if (!localHost && window.location.pathname.replace(/\\/g, '/').endsWith('/pages/checkout.html')) {
-        window.location.replace('/app');
+    if (!localHost && /\/pages\/checkout(?:\.html)?\/?$/.test(window.location.pathname.replace(/\\/g, '/'))) {
+        window.location.replace('/app?page=bag');
         return;
     }
 

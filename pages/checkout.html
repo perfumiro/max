@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+      // The legacy checkout can report success without writing to the
+      // canonical orders table. Route every production URL variant to the
+      // unified checkout before the legacy page or its cached scripts run.
+      if (!/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {
+        window.location.replace('/app?page=bag');
+      }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google tag (gtag.js) -->
