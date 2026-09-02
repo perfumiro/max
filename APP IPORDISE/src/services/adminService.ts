@@ -38,6 +38,9 @@ export type AdminProduct = {
   original_prices: Record<string, number>;
   variant_stocks: Record<string, number | null>;
   stock_left: number | null;
+  preorder_enabled: boolean;
+  preorder_message: string | null;
+  preorder_estimated_availability: string | null;
   active: boolean;
   publication_status: "draft" | "active" | "archived";
   badge: string | null;
@@ -65,6 +68,9 @@ export type AdminProductPatch = Pick<
   | "active"
 > & {
   variant_stocks?: Record<string, number | null>;
+  preorder_enabled?: boolean;
+  preorder_message?: string | null;
+  preorder_estimated_availability?: string | null;
   base_sizes?: Record<string, number>;
   offer_start?: string | null;
   offer_end?: string | null;
@@ -201,6 +207,9 @@ export type AdminDashboardData = {
   subscriberCount: number;
   settings: Record<string, unknown>;
 };
+export type AdminPreorderStatus = "new" | "contacted" | "waiting_for_stock" | "customer_confirmed" | "converted_to_order" | "cancelled" | "completed";
+export type AdminPreorder = { id: string; product_id: string | null; variant_id: string | null; customer_name: string; phone: string; email: string | null; city: string | null; quantity: number; customer_message: string | null; selected_variant: string | null; product_snapshot_name: string; product_snapshot_image: string | null; product_snapshot_price: number | null; source: "website" | "mobile_app" | "admin"; status: AdminPreorderStatus; admin_notes: string | null; contacted_at: string | null; created_at: string; updated_at: string; products?: { stock_left: number | null; preorder_enabled: boolean }; product_variants?: { stock_quantity: number | null; sku: string | null } };
+export type AdminPreorderWorkspace = { items: AdminPreorder[]; enabled: boolean };
 export type AdminConnectionHealth = {
   firebase: "healthy" | "unavailable";
   runtime: "healthy" | "setup_required" | "unavailable";
@@ -541,6 +550,33 @@ const loadLegacyAdminOrders = (session: AdminSession) =>
   loadAdminPage(session, "admin-orders", "orders", 50);
 const loadAdminCustomers = (session: AdminSession) =>
   loadAdminPage(session, "admin-customers", "customers", 50);
+export async function loadAdminPreorders(session: AdminSession): Promise<AdminPreorderWorkspace> {
+  const api = edgeFunctionConfig("admin-preorders");
+  const items: AdminPreorder[] = [];
+  let page = 1;
+  let total = 0;
+  let enabled = true;
+  do {
+    const body = await parseResponse<any>(await fetch(`${api.url}?page=${page}&pageSize=100`, { headers: { apikey: api.key, Authorization: `Bearer ${session.accessToken}`, Accept: "application/json" }, cache: "no-store" }));
+    const rows = Array.isArray(body.preorders) ? body.preorders as AdminPreorder[] : [];
+    items.push(...rows);
+    total = Math.max(items.length, Number(body.pagination?.total || 0));
+    enabled = body.settings?.enabled !== false;
+    if (rows.length < 100) break;
+    page += 1;
+  } while (items.length < Math.min(total, 1_000));
+  return { items, enabled };
+}
+export async function updateAdminPreorder(session: AdminSession, id: string, patch: { status?: AdminPreorderStatus; adminNotes?: string }): Promise<AdminPreorder> {
+  const api = edgeFunctionConfig("admin-preorders");
+  const body = await parseResponse<{ preorder: AdminPreorder }>(await fetch(api.url, { method: "PATCH", headers: { apikey: api.key, Authorization: `Bearer ${session.accessToken}`, "Content-Type": "application/json" }, body: JSON.stringify({ id, ...patch }) }));
+  return body.preorder;
+}
+export async function updateAdminPreorderSettings(session: AdminSession, enabled: boolean): Promise<boolean> {
+  const api = edgeFunctionConfig("admin-preorders");
+  const body = await parseResponse<{ settings: { enabled?: boolean } }>(await fetch(api.url, { method: "PATCH", headers: { apikey: api.key, Authorization: `Bearer ${session.accessToken}`, "Content-Type": "application/json" }, body: JSON.stringify({ action: "update_settings", enabled }) }));
+  return body.settings.enabled !== false;
+}
 const patchLegacyAdminOrder = async (
   session: AdminSession,
   id: string,
@@ -639,6 +675,9 @@ const mapProduct = (raw: JsonMap): AdminProduct => {
       ),
     ),
     stock_left: raw.stock_left ?? raw.stockLeft ?? null,
+    preorder_enabled: raw.preorder_enabled === true,
+    preorder_message: raw.preorder_message || null,
+    preorder_estimated_availability: raw.preorder_estimated_availability || null,
     active: raw.active !== false,
     publication_status: ["draft", "archived"].includes(raw.publication_status)
       ? raw.publication_status
@@ -889,6 +928,9 @@ export async function updateAdminProduct(
     originalPrices: patch.original_prices,
     variantStocks,
     stockLeft: patch.stock_left,
+    preorderEnabled: patch.preorder_enabled ?? current.preorder_enabled,
+    preorderMessage: patch.preorder_message === undefined ? current.preorder_message : patch.preorder_message,
+    preorderEstimatedAvailability: patch.preorder_estimated_availability === undefined ? current.preorder_estimated_availability : patch.preorder_estimated_availability,
     active: patch.active,
     publicationStatus: patch.active ? "active" : "archived",
     badge: patch.badge === undefined ? current.badge : patch.badge,
@@ -994,6 +1036,9 @@ export async function createAdminProduct(
     original_prices: value.originalPrices,
     variant_stocks: value.variantStocks,
     stock_left: input.stock,
+    preorder_enabled: false,
+    preorder_message: null,
+    preorder_estimated_availability: null,
     active: publishNow,
     publication_status: publishNow ? "active" : "draft",
     badge: value.badge,

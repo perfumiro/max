@@ -12,7 +12,8 @@ type RequestOptions = Omit<RequestInit, 'signal'> & { timeoutMs?: number; maxAtt
 
 const wait = (milliseconds: number) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-const safeServiceMessage = (body: any) => {
+const safeServiceMessage = (body: any, status: number) => {
+  if (status >= 500) return 'The service is temporarily unavailable. Please try again.';
   const message = typeof body?.error === 'string' ? body.error : typeof body?.message === 'string' ? body.message : '';
   return message.length > 0 && message.length <= 240 ? message : 'The service could not complete this request.';
 };
@@ -35,7 +36,7 @@ export async function apiRequest<T>(url: string, options: RequestOptions = {}): 
       try { body = text ? JSON.parse(text) : null; } catch { body = null; }
       if (!response.ok) {
         const code = typeof body?.code === 'string' ? body.code : undefined;
-        const error = new ApiError(safeServiceMessage(body), response.status, code);
+        const error = new ApiError(safeServiceMessage(body, response.status), response.status, code);
         if (![408, 429].includes(response.status) && response.status < 500) throw error;
         lastError = error;
         if (attempt < maxAttempts-1) {

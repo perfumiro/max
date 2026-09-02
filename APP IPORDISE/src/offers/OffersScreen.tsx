@@ -2,7 +2,7 @@ import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from '
 import { ActivityIndicator, FlatList, Image, Modal, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { displaySize, formatMad, loadSharedProducts, type Product } from '../sharedCatalog';
+import { displaySize, formatMad, loadBundledProducts, loadSharedProducts, type Product } from '../sharedCatalog';
 import { useFavouriteSnapshot, useShoppingActions } from '../commerce/ShoppingContext';
 import { useResponsiveLayout } from '../useResponsiveLayout';
 import { defaultOfferHero, isScheduledNow, loadOfferHero, type OfferHeroConfig } from './offerConfig';
@@ -76,19 +76,21 @@ const OfferProductCard=memo(function OfferProductCard({product,width,onOpen,onCh
 });
 
 function VariantSheet({product,onClose}:{product:Product|null;onClose:()=>void}){
+  const layout=useResponsiveLayout();
   const {addToBag}=useShoppingActions();const [busy,setBusy]=useState('');const closeTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
   useEffect(()=>()=>{if(closeTimer.current)clearTimeout(closeTimer.current);},[]);
   if(!product)return null;
-  return <Modal transparent visible animationType="slide" onRequestClose={onClose}><Pressable accessibilityRole="button" accessibilityLabel="Close size selector" onPress={onClose} style={styles.modalBackdrop}><Pressable accessibilityRole="none" onPress={event=>event.stopPropagation()} style={styles.sheet}>
+  return <Modal transparent visible animationType="slide" onRequestClose={onClose}><Pressable accessibilityRole="button" accessibilityLabel="Close size selector" onPress={onClose} style={[styles.modalBackdrop,layout.tablet&&styles.modalBackdropTablet]}><Pressable accessibilityRole="none" onPress={event=>event.stopPropagation()} style={[styles.sheet,layout.tablet&&styles.sheetTablet]}>
     <View style={styles.sheetHandle}/><View style={styles.sheetHead}><View><Text style={styles.sheetEyebrow}>{product.brand}</Text><Text style={styles.sheetTitle}>Choose your size</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Close size selector" onPress={onClose} style={styles.close}><Ionicons name="close" size={21}/></Pressable></View>
     {offerValues(product).map(item=>{const discount=Math.round((1-item.price/item.original)*100);return <Pressable accessibilityRole="button" accessibilityState={{disabled:!!busy}} key={item.size} disabled={!!busy} onPress={()=>{setBusy(item.size);addToBag(product,item.size);closeTimer.current=setTimeout(onClose,450);}} style={({pressed})=>[styles.variantRow,pressed&&styles.pressed]}><View style={styles.variantSize}><Text style={styles.variantSizeText}>{displaySize(item.size)}</Text></View><View style={{flex:1}}><Text style={styles.variantPrice}>{formatMad(item.price)}</Text><Text style={styles.variantOld}>{formatMad(item.original)} · Save {discount}%</Text></View><View style={styles.variantAdd}>{busy===item.size?<ActivityIndicator color="#fff" size="small"/>:<Ionicons name="add" size={20} color="#fff"/>}</View></Pressable>})}
   </Pressable></Pressable></Modal>;
 }
 
 function FilterSheet({visible,onClose,filters,setFilters,sort,setSort,brands,families,sizes}:{visible:boolean;onClose:()=>void;filters:AdvancedFilters;setFilters:(v:AdvancedFilters)=>void;sort:Sort;setSort:(v:Sort)=>void;brands:string[];families:string[];sizes:string[]}){
+  const layout=useResponsiveLayout();
   const toggle=(key:'brands'|'families'|'sizes',value:string)=>setFilters({...filters,[key]:filters[key].includes(value)?filters[key].filter(item=>item!==value):[...filters[key],value]});
   const sorts:[Sort,string][]=[['recommended','Recommended'],['discount','Biggest discount'],['low','Price: low to high'],['high','Price: high to low'],['newest','Newest'],['bestselling','Bestselling']];
-  return <Modal transparent visible={visible} animationType="slide" onRequestClose={onClose}><Pressable onPress={onClose} style={styles.modalBackdrop}><Pressable onPress={event=>event.stopPropagation()} style={[styles.sheet,styles.filterSheet]}><View style={styles.sheetHandle}/><View style={styles.sheetHead}><View><Text style={styles.sheetEyebrow}>REFINE THE EDIT</Text><Text style={styles.sheetTitle}>Filter & sort</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Close filters" onPress={onClose} style={styles.close}><Ionicons name="close" size={21}/></Pressable></View><ScrollView showsVerticalScrollIndicator={false}>
+  return <Modal transparent visible={visible} animationType="slide" onRequestClose={onClose}><Pressable onPress={onClose} style={[styles.modalBackdrop,layout.tablet&&styles.modalBackdropTablet]}><Pressable onPress={event=>event.stopPropagation()} style={[styles.sheet,styles.filterSheet,layout.tablet&&styles.sheetTablet,layout.tablet&&{height:Math.min(720,layout.height-48)}]}><View style={styles.sheetHandle}/><View style={styles.sheetHead}><View><Text style={styles.sheetEyebrow}>REFINE THE EDIT</Text><Text style={styles.sheetTitle}>Filter & sort</Text></View><Pressable accessibilityRole="button" accessibilityLabel="Close filters" onPress={onClose} style={styles.close}><Ionicons name="close" size={21}/></Pressable></View><ScrollView showsVerticalScrollIndicator={false}>
     <Text style={styles.filterLabel}>SORT BY</Text><View style={styles.optionWrap}>{sorts.map(([value,label])=><Pressable accessibilityRole="radio" accessibilityState={{checked:sort===value}} key={value} onPress={()=>setSort(value)} style={[styles.option,sort===value&&styles.optionActive]}><Text style={[styles.optionText,sort===value&&styles.optionTextActive]}>{label}</Text></Pressable>)}</View>
     {[['BRAND','brands',brands],['FRAGRANCE FAMILY','families',families],['PRODUCT SIZE','sizes',sizes]] .map(([label,key,items])=><View key={String(key)}><Text style={styles.filterLabel}>{String(label)}</Text><View style={styles.optionWrap}>{(items as string[]).slice(0,18).map(value=><Pressable accessibilityRole="checkbox" accessibilityState={{checked:filters[key as 'brands'|'families'|'sizes'].includes(value)}} key={value} onPress={()=>toggle(key as 'brands'|'families'|'sizes',value)} style={[styles.option,filters[key as 'brands'|'families'|'sizes'].includes(value)&&styles.optionActive]}><Text style={[styles.optionText,filters[key as 'brands'|'families'|'sizes'].includes(value)&&styles.optionTextActive]}>{key==='sizes'?displaySize(value):value}</Text></Pressable>)}</View></View>)}
     <Text style={styles.filterLabel}>MINIMUM DISCOUNT</Text><View style={styles.optionWrap}>{[0,10,20,30].map(value=><Pressable key={value} onPress={()=>setFilters({...filters,minDiscount:value})} style={[styles.option,filters.minDiscount===value&&styles.optionActive]}><Text style={[styles.optionText,filters.minDiscount===value&&styles.optionTextActive]}>{value?`${value}%+`:'Any'}</Text></Pressable>)}</View>
@@ -114,9 +116,10 @@ function EmptyOffersState({products,onOpen,onExplore,shellWidth,gutter,tablet,bo
 
 export function OffersScreen({fallbackProducts,onOpenProduct,onExplore,bottomInset}:{fallbackProducts:Product[];onOpenProduct:(product:Product,products:Product[])=>void;onExplore:()=>void;bottomInset:number}){
   const layout=useResponsiveLayout();const listRef=useRef<FlatList<Product>>(null);
-  const [products,setProducts]=useState<Product[]>([]);const [loading,setLoading]=useState(true);const [error,setError]=useState(false);const [offline,setOffline]=useState(false);const [hero,setHero]=useState(defaultOfferHero);
+  const bundledProducts=useMemo(()=>fallbackProducts.length?fallbackProducts:loadBundledProducts(),[fallbackProducts]);
+  const [products,setProducts]=useState<Product[]>(bundledProducts);const [loading,setLoading]=useState(true);const [error,setError]=useState(false);const [offline,setOffline]=useState(false);const [hero,setHero]=useState(defaultOfferHero);
   const [category,setCategory]=useState<Category>(retainedCategory);const [sort,setSort]=useState<Sort>(retainedSort);const [filters,setFilters]=useState<AdvancedFilters>(retainedFilters);const [filterOpen,setFilterOpen]=useState(false);const [variantProduct,setVariantProduct]=useState<Product|null>(null);
-  const load=useCallback(async(force=false)=>{setLoading(true);setError(false);try{const live=await loadSharedProducts(force);setProducts(live);setOffline(false);}catch(loadError){logger.warn('offers_catalog_unavailable',{error:loadError});const cached=fallbackProducts.filter(isActiveOffer);setProducts(cached);setError(!cached.length);setOffline(Boolean(cached.length));}finally{setLoading(false);}},[fallbackProducts]);
+  const load=useCallback(async(force=false)=>{setLoading(true);setError(false);try{const live=await loadSharedProducts(force);setProducts(live);setOffline(false);}catch(loadError){logger.warn('offers_catalog_unavailable',{error:loadError});setProducts(bundledProducts);setError(!bundledProducts.length);setOffline(Boolean(bundledProducts.length));}finally{setLoading(false);}},[bundledProducts]);
   useEffect(()=>{void load();void loadOfferHero().then(setHero).catch(configError=>logger.warn('offer_config_using_defaults',{error:configError}));},[load]);
   useEffect(()=>{retainedCategory=category;retainedSort=sort;retainedFilters=filters;},[category,filters,sort]);
   useEffect(()=>{if(loading)return;const timer=setTimeout(()=>listRef.current?.scrollToOffset({offset:retainedOffset,animated:false}),0);return()=>clearTimeout(timer);},[loading]);
@@ -266,3 +269,9 @@ const productCardStyles=StyleSheet.create({
   addText:{fontSize:8,lineHeight:11,fontWeight:'900',letterSpacing:.85,color:'#fff'},
 });
 Object.assign(styles,productCardStyles);
+
+const responsiveOverlayStyles=StyleSheet.create({
+  modalBackdropTablet:{justifyContent:'center',padding:24},
+  sheetTablet:{width:'100%',maxWidth:720,alignSelf:'center',borderRadius:26},
+});
+Object.assign(styles,responsiveOverlayStyles);

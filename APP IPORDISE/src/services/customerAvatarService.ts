@@ -21,21 +21,28 @@ export async function uploadCustomerAvatar(token: string, userId: string, asset:
   const blob = await source.blob();
   if (blob.size > MAX_AVATAR_BYTES) throw new Error('Choose a photo smaller than 5 MB.');
   const objectPath = `${userId}/profile`;
-  const response = await fetch(`${appConfig.supabaseUrl}/storage/v1/object/customer-avatars/${objectPath}`, {
-    method: 'POST',
-    headers: {
-      apikey: appConfig.supabasePublishableKey,
-      Authorization: `Bearer ${token}`,
-      'Content-Type': contentType,
-      'x-upsert': 'true',
-      'Cache-Control': '3600',
-    },
-    body: blob,
-  });
-  if (!response.ok) {
-    if (response.status === 413) throw new Error('Choose a photo smaller than 5 MB.');
-    if (response.status === 401 || response.status === 403) throw new Error('Your session expired. Sign in and try again.');
-    throw new Error("We couldn't upload your photo. Check your connection and try again.");
-  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30_000);
+  try {
+    const response = await fetch(`${appConfig.supabaseUrl}/storage/v1/object/customer-avatars/${objectPath}`, {
+      method: 'POST', signal: controller.signal,
+      headers: {
+        apikey: appConfig.supabasePublishableKey,
+        Authorization: `Bearer ${token}`,
+        'Content-Type': contentType,
+        'x-upsert': 'true',
+        'Cache-Control': '3600',
+      },
+      body: blob,
+    });
+    if (!response.ok) {
+      if (response.status === 413) throw new Error('Choose a photo smaller than 5 MB.');
+      if (response.status === 401 || response.status === 403) throw new Error('Your session expired. Sign in and try again.');
+      throw new Error("We couldn't upload your photo. Check your connection and try again.");
+    }
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') throw new Error('The photo upload took too long. Check your connection and try again.');
+    throw error;
+  } finally { clearTimeout(timeout); }
   return `${appConfig.supabaseUrl}/storage/v1/object/public/customer-avatars/${objectPath}?v=${Date.now()}`;
 }

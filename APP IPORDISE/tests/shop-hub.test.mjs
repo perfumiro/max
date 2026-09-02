@@ -52,7 +52,8 @@ test('premium brand discovery uses live counts, local identities, states, and wo
   assert.match(shopScreenSource,/const openBrand=useCallback\(\(label:string\)=>\{Keyboard\.dismiss\(\);setSelectedCategory\(null\);setSelectedBrand\(label\)/);
   assert.match(shopScreenSource,/if\(selectedCategory\|\|selectedBrand\)return/);
   assert.match(shopScreenSource,/onOpenBrand=\{openBrand\}/);
-  assert.match(shopScreenSource,/layout\.largeTablet\?4:layout\.tablet\?3:layout\.compact\?1:2/);
+  assert.match(shopScreenSource,/layout\.compact\?1:layout\.catalogColumns/);
+  assert.match(shopScreenSource,/resultColumns=layout\.catalogColumns/);
   assert.match(brandDiscoverySource,/t\(directory \? 'brandDirectoryTitle' : 'brandTitle'\)/);
   assert.match(brandDiscoverySource,/BRAND_LOGOS/);
   assert.match(brandDiscoverySource,/BrandSkeleton/);

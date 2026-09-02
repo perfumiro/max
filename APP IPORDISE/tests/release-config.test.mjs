@@ -12,6 +12,7 @@ test('native release configuration contains required store identifiers', async (
   assert.deepEqual(validateReleaseConfig(config, easConfig), []);
   assert.equal(config.expo.ios.bundleIdentifier, config.expo.android.package);
   assert.equal(config.expo.ios.supportsTablet, true);
+  assert.equal(config.expo.android.allowBackup, false);
   assert.match(packageConfig.dependencies['expo-updates'], /^~29\./);
   assert.ok(packageConfig.dependencies['expo-dev-client']);
 });

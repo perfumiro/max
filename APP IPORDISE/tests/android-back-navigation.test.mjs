@@ -42,20 +42,65 @@ test('tab history records synchronously and pops the actual previous destination
   assert.equal(popPreviousNavigationEntry(history,'Home'),undefined);
 });
 
-test('root navigation source preserves Product under Cart and exits only at empty Home',()=>{
+test('root navigation preserves Product under Cart and exits only from the genuine Home root',()=>{
   const app=readFileSync(new URL('../App.tsx',import.meta.url),'utf8');
   const commerceIndex=app.indexOf("if(commercePage!=='store'){goBackCommerce();return true;}");
   const productIndex=app.indexOf('if(tabProduct){closeTabProduct();return true;}');
   const scopedIndex=app.indexOf('if(runScopedAndroidBackAction())return true;');
-  const tabIndex=app.indexOf("if(previous||active!=='Home')");
-  const rootExitIndex=app.indexOf('return false;',tabIndex);
+  const tabIndex=app.indexOf("if(previous||current!=='Home')");
+  const rootGuardIndex=app.indexOf('return true;',tabIndex);
   assert.ok(commerceIndex>0&&commerceIndex<productIndex);
   assert.ok(productIndex<scopedIndex&&scopedIndex<tabIndex);
-  assert.ok(tabIndex<rootExitIndex);
+  assert.ok(tabIndex<rootGuardIndex);
+  assert.match(app,/const current=activeRef\.current;\s*const previous=popPreviousNavigationEntry\(previousTabsRef\.current,current\)/);
   assert.match(app,/recordNavigationEntry\(commerceHistoryRef\.current,current,next\)/);
   assert.match(app,/recordNavigationEntry\(previousTabsRef\.current,current,next\)/);
   assert.match(app,/recordNavigationEntry\(tabProductHistoryRef\.current,current,product\)/);
   assert.match(app,/commercePage!==['"]store['"]&&styles\.storeLayerHidden/);
+  assert.match(app,/const handleAppBackRef=useRef\(handleAppBack\);\s*handleAppBackRef\.current=handleAppBack/);
+  assert.match(app,/BackHandler\.addEventListener\('hardwareBackPress',\(\)=>handleAppBackRef\.current\(\)\)/);
+  assert.match(app,/return false;\s*\},\[commercePage,commerceProduct,contextualHelpDestination,tabProduct,unavailableProductId\]\)/);
+});
+
+test('long category, product, cart and checkout flow unwinds one layer at a time',()=>{
+  const tabHistory=[];
+  const commerceHistory=[];
+  let tab='Home';
+  let categoryOpen=false;
+  let productOpen=false;
+  let commercePage='store';
+  const navigateTab=next=>{recordNavigationEntry(tabHistory,tab,next);tab=next;};
+  const navigateCommerce=next=>{recordNavigationEntry(commerceHistory,commercePage,next);commercePage=next;};
+  const back=()=>{
+    if(commercePage!=='store'){commercePage=commerceHistory.pop()||'store';return commercePage;}
+    if(productOpen){productOpen=false;return 'Product closed';}
+    if(categoryOpen){categoryOpen=false;return 'Category closed';}
+    const previous=popPreviousNavigationEntry(tabHistory,tab);
+    if(previous||tab!=='Home'){tab=previous||'Home';return tab;}
+    return 'EXIT';
+  };
+
+  navigateTab('Shop');
+  categoryOpen=true;
+  productOpen=true;
+  navigateCommerce('bag');
+  navigateCommerce('checkout');
+  assert.equal(back(),'bag');
+  assert.equal(back(),'store');
+  assert.equal(back(),'Product closed');
+  assert.equal(back(),'Category closed');
+  assert.equal(back(),'Home');
+  assert.equal(back(),'EXIT');
+});
+
+test('keyboard yields to Android before application history is consumed',()=>{
+  const app=readFileSync(new URL('../App.tsx',import.meta.url),'utf8');
+  const keyboardIndex=app.indexOf('if(keyboardVisibleRef.current)return false;');
+  const commerceIndex=app.indexOf("if(commercePage==='thankyou')");
+  assert.ok(keyboardIndex>0&&keyboardIndex<commerceIndex);
+  assert.match(app,/Keyboard\.addListener\('keyboardDidShow'/);
+  assert.match(app,/Keyboard\.addListener\('keyboardDidHide'/);
+  assert.match(app,/showSubscription\.remove\(\);hideSubscription\.remove\(\)/);
 });
 
 test('Help and authentication nested screens pop their local history instead of jumping home',()=>{

@@ -27,7 +27,7 @@ test('all catalogue adapters merge the live and bundled product galleries', asyn
   assert.match(gallerySource, /export const mergeProductGallery/);
   assert.match(gallerySource, /new Set<string>/);
   assert.equal((catalogSource.match(/mergeProductGallery\(/g) || []).length, 2);
-  assert.match(appSource, /setGalleryIndex\(0\);[\s\S]*?\},\[product\.id,stickyProgress\]\)/);
+  assert.match(appSource, /setGalleryIndex\(0\);[\s\S]*?stickyProgress\.setValue\(layout\.tablet\?0:1\);[\s\S]*?\},\[defaultSize,layout\.tablet,product\.id,stickyProgress\]\)/);
   assert.match(appSource, /setGalleryIndex\(current =>/);
   assert.match(appSource, /detailCounterPremium:\{right:14,bottom:12,minWidth:42,height:27/);
   assert.match(appSource, /detailCounterText:\{fontSize:11,lineHeight:14,fontWeight:'700'/);

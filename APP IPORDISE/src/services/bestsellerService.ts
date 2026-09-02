@@ -1,6 +1,7 @@
 import { appConfig } from '../config';
 import { decodeFirestoreFields, parseFirestoreDocument, publicFirestoreUrl } from './firestoreRest';
 import { rankBestsellerProductIds, type BestsellerOrder } from './bestsellerRanking';
+import { ApiError, apiRequest } from './apiClient';
 
 const CACHE_MS = 5 * 60_000;
 let cachedIds: string[] | null = null;
@@ -8,11 +9,14 @@ let cachedUntil = 0;
 let pendingRequest: Promise<string[]> | null = null;
 
 async function fetchPublishedRanking():Promise<string[]|null>{
-  const response=await fetch(publicFirestoreUrl('products/_bestsellers'),{headers:{Accept:'application/json','Cache-Control':'no-cache'}});
-  if(response.status===404)return null;
-  if(!response.ok)throw new Error(`Firebase bestseller summary returned HTTP ${response.status}`);
-  const document=parseFirestoreDocument(await response.json());
-  return Array.isArray(document.ranking)?document.ranking.filter((item):item is string=>typeof item==='string'&&item.length>0):[];
+  try {
+    const body=await apiRequest<Record<string,unknown>>(publicFirestoreUrl('products/_bestsellers'),{headers:{Accept:'application/json','Cache-Control':'no-cache'},maxAttempts:2});
+    const document=parseFirestoreDocument(body);
+    return Array.isArray(document.ranking)?document.ranking.filter((item):item is string=>typeof item==='string'&&item.length>0):[];
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return null;
+    throw error;
+  }
 }
 
 async function fetchOrderRanking(): Promise<string[]> {
@@ -23,11 +27,9 @@ async function fetchOrderRanking(): Promise<string[]> {
     query.append('mask.fieldPaths', 'items');
     query.append('mask.fieldPaths', 'status');
     if (pageToken) query.set('pageToken', pageToken);
-    const response = await fetch(`${appConfig.firestoreRoot}/orders?${query}`, {
-      headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' },
+    const body = await apiRequest<{documents?:{fields?:Record<string,unknown>}[];nextPageToken?:string}>(`${appConfig.firestoreRoot}/orders?${query}`, {
+      headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' }, maxAttempts:2,
     });
-    if (!response.ok) throw new Error(`Firebase bestseller ranking returned HTTP ${response.status}`);
-    const body = await response.json();
     orders.push(...(body.documents || []).map((document: { fields?: Record<string, unknown> }) => decodeFirestoreFields(document.fields || {})));
     pageToken = String(body.nextPageToken || '');
   } while (pageToken);

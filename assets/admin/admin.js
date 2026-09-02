@@ -279,10 +279,12 @@ const switchView = (name) => {
   qsa('.view').forEach(el => el.classList.remove('active'));
   qs('#view-' + name)?.classList.add('active');
   qsa('.sidebar-item[data-view]').forEach(it => it.classList.toggle('active', it.dataset.view === name));
+  qsa('.mobile-admin-nav [data-view]').forEach(it => it.classList.toggle('active', it.dataset.view === name));
   if (name === 'visitors')  loadVisitors().catch(e => toast(e.message, 'error'));
   if (name === 'analytics') loadAnalyticsView().catch(e => toast(e.message, 'error'));
   if (name === 'activity')  loadActivity().catch(e => toast(e.message, 'error'));
   if (name === 'orders')    loadOrdersView().catch(e => toast(e.message, 'error'));
+  if (name === 'preorders') loadPreordersView().catch(e => toast(e.message, 'error'));
   if (name === 'customers') loadCustomersView().catch(e => toast(e.message, 'error'));
   if (name === 'reviews')   loadReviewsView().catch(e => toast(e.message, 'error'));
   if (name === 'discounts') loadDiscountsView().catch(e => toast(e.message, 'error'));
@@ -297,6 +299,7 @@ const switchView = (name) => {
 const initSidebar = () => {
   qs('#menuBtn')?.addEventListener('click', openMobileSidebar);
   qs('#sidebarOverlay')?.addEventListener('click', closeMobileSidebar);
+  qs('#mobileMoreBtn')?.addEventListener('click', openMobileSidebar);
   qsa('.sidebar-item[data-view]').forEach(it => it.addEventListener('click', () => switchView(it.dataset.view)));
   document.addEventListener('click', e => {
     const btn = e.target.closest('[data-view]');
@@ -900,6 +903,7 @@ let _ordersUnsubscribe = null;  // holds the onSnapshot unsubscribe fn
 
 const ORDER_STATUS = {
   pending:    { color: '#f59e0b', label: 'Pending' },
+  contacted:  { color: '#14b8a6', label: 'Contacted' },
   confirmed:  { color: '#0ea5e9', label: 'Confirmed' },
   processing: { color: '#3b82f6', label: 'Processing' },
   ready_for_dispatch: { color: '#6366f1', label: 'Ready for dispatch' },
@@ -927,6 +931,9 @@ const _renderOrdersError = (msg) => {
     </div>
   </td></tr>`;
   qs('#ordersRetryBtn')?.addEventListener('click', () => loadOrdersView().catch(() => {}));
+  const mobile = qs('#ordersMobile');
+  if (mobile) mobile.innerHTML = `<div class="mobile-work-card"><div class="mobile-work-title">Could not load orders</div><div class="mobile-work-meta">${esc(msg)}</div><button class="btn btn-gold" id="ordersMobileRetryBtn" style="width:100%;margin-top:12px"><i class="fas fa-rotate-right"></i> Retry</button></div>`;
+  qs('#ordersMobileRetryBtn')?.addEventListener('click', () => loadOrdersView().catch(() => {}));
 };
 
 const _renderOrdersEmpty = () => {
@@ -941,6 +948,7 @@ const _renderOrdersEmpty = () => {
     </div>
   </td></tr>`;
   qs('#ordersTestBtn')?.addEventListener('click', _testOrdersConnection);
+  renderOrdersMobile([]);
 };
 
 const _testOrdersConnection = async () => {
@@ -1050,6 +1058,62 @@ const renderOrdersTable = (orders) => {
       </td>
     </tr>`;
   }).join('');
+  renderOrdersMobile(orders);
+};
+
+const normaliseWhatsAppPhone = (phone = '') => {
+  const clean = String(phone).replace(/\D/g, '');
+  return clean.startsWith('212') ? clean : (clean.startsWith('0') ? `212${clean.slice(1)}` : clean);
+};
+
+const mobileOrderCard = (o, preorder = false) => {
+  const customer = o.customer || {};
+  const name = `${customer.firstName || ''} ${customer.lastName || ''}`.trim() || customer.name || 'Guest';
+  const phone = customer.phone || '';
+  const waPhone = normaliseWhatsAppPhone(phone);
+  const cfg = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
+  const targetStatus = preorder ? 'contacted' : 'confirmed';
+  const targetLabel = preorder ? 'Mark Contacted' : 'Confirm';
+  const itemName = (o.items || [])[0]?.name || 'Order request';
+  return `<article class="mobile-work-card" data-mobile-order="${esc(o.id)}">
+    <div class="mobile-work-head">
+      <div class="mobile-work-title">${esc(name)}</div>
+      <span style="color:${cfg.color};background:${cfg.color}18;border:1px solid ${cfg.color}30;padding:4px 8px;border-radius:99px;font-size:10px;font-weight:700;white-space:nowrap">${cfg.label}</span>
+    </div>
+    <div class="mobile-work-meta"><strong>${esc(o.orderId || o.id)}</strong> · ${esc(itemName)}${phone ? `<br>${esc(phone)}` : ''}</div>
+    <div class="mobile-work-actions">
+      <button class="btn btn-xs" data-mobile-view-order="${esc(o.id)}"><i class="fas fa-eye"></i> Details</button>
+      ${waPhone ? `<a class="btn btn-xs" href="https://wa.me/${esc(waPhone)}" target="_blank" rel="noopener noreferrer" style="background:#25d366;color:#fff;border-color:#25d366"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : ''}
+      ${phone ? `<a class="btn btn-xs" href="tel:${esc(phone)}"><i class="fas fa-phone"></i> Call</a>` : ''}
+      ${o.status !== targetStatus ? `<button class="btn btn-xs btn-gold" data-quick-order-status="${targetStatus}" data-order-id="${esc(o.id)}"><i class="fas fa-check"></i> ${targetLabel}</button>` : ''}
+    </div>
+  </article>`;
+};
+
+const renderOrdersMobile = (orders) => {
+  const list = qs('#ordersMobile');
+  if (list) list.innerHTML = orders.length ? orders.map(o => mobileOrderCard(o)).join('') : '<div class="mobile-work-card mobile-work-meta">No orders found.</div>';
+};
+
+const isPreorderRequest = (o) => Boolean(o.preorder || o.type === 'preorder' || o.kind === 'preorder' || o.summary?.hasPendingPricing || (o.items || []).some(i => i.preorder || i.pricePending));
+
+const renderPreorders = () => {
+  const search = (qs('#preordersSearch')?.value || '').trim().toLowerCase();
+  const rows = _allOrders.filter(isPreorderRequest).filter(o => {
+    if (!search) return true;
+    const c = o.customer || {};
+    return [o.orderId, o.id, c.firstName, c.lastName, c.name, c.phone, ...(o.items || []).map(i => i.name)].join(' ').toLowerCase().includes(search);
+  });
+  const list = qs('#preordersMobile');
+  if (list) list.innerHTML = rows.length ? rows.map(o => mobileOrderCard(o, true)).join('') : '<div class="mobile-work-card mobile-work-meta">No preorder requests found.</div>';
+  if (qs('#preordersCount')) qs('#preordersCount').textContent = `${rows.length} request${rows.length === 1 ? '' : 's'}`;
+  const badge = qs('#navPreordersBadge');
+  if (badge) { badge.textContent = rows.length; badge.style.display = rows.length ? '' : 'none'; }
+};
+
+const loadPreordersView = async () => {
+  if (!_allOrders.length) await loadOrdersView();
+  renderPreorders();
 };
 
 const applyOrderFilters = () => {
@@ -1332,12 +1396,40 @@ document.addEventListener('change', async (e) => {
   } catch(e) { toast('Error: ' + e.message, 'error'); }
 });
 
+document.addEventListener('click', async (e) => {
+  const viewButton = e.target.closest('[data-mobile-view-order]');
+  if (viewButton) window._adminViewOrder(viewButton.dataset.mobileViewOrder);
+  const quickButton = e.target.closest('[data-quick-order-status]');
+  if (!quickButton || quickButton.disabled) return;
+  const id = quickButton.dataset.orderId;
+  const newStatus = quickButton.dataset.quickOrderStatus;
+  const order = _allOrders.find(o => o.id === id);
+  if (!order) return;
+  quickButton.disabled = true;
+  const previous = quickButton.innerHTML;
+  quickButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving';
+  try {
+    if (order._backend === 'firebase') await setDoc(doc(db, 'orders', id), { status: newStatus }, { merge: true });
+    else await supabaseAdminRequest('admin-orders', { method: 'PATCH', body: { id, status: newStatus } });
+    order.status = newStatus;
+    applyOrderFilters();
+    renderPreorders();
+    toast(`Status changed to ${ORDER_STATUS[newStatus]?.label || newStatus}`, 'success');
+  } catch (error) {
+    quickButton.disabled = false;
+    quickButton.innerHTML = previous;
+    toast(`Could not update status: ${error.message}`, 'error');
+  }
+});
+
 // Wire up orders filters — runs directly (module is already deferred, DOM is ready)
 const _initOrdersFilters = () => {
   qs('#ordersStatusFilter')?.addEventListener('change', applyOrderFilters);
   qs('#ordersSearch')?.addEventListener('input', applyOrderFilters);
   qs('#refreshOrdersBtn')?.addEventListener('click', () => loadOrdersView().catch(e => toast(e.message, 'error')));
   qs('#refreshCustomersBtn')?.addEventListener('click', () => loadCustomersView().catch(e => toast(e.message, 'error')));
+  qs('#refreshPreordersBtn')?.addEventListener('click', () => loadPreordersView().catch(e => toast(e.message, 'error')));
+  qs('#preordersSearch')?.addEventListener('input', renderPreorders);
   qs('#customersSearch')?.addEventListener('input', applyCustomerFilters);
 };
 
@@ -1349,6 +1441,8 @@ const renderCustomersTable = (customers) => {
   if (!tbody) return;
   if (!customers.length) {
     tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">No customers found.</td></tr>`;
+    const mobile = qs('#customersMobile');
+    if (mobile) mobile.innerHTML = '<div class="mobile-work-card mobile-work-meta">No customers found.</div>';
     return;
   }
   tbody.innerHTML = customers.map((c) => {
@@ -1374,6 +1468,14 @@ const renderCustomersTable = (customers) => {
            class="btn btn-xs" style="background:#25d366;color:#fff"><i class="fab fa-whatsapp"></i></a>` : ''}
       </td>
     </tr>`;
+  }).join('');
+  const mobile = qs('#customersMobile');
+  if (mobile) mobile.innerHTML = customers.map(c => {
+    const profile = c.profile || c;
+    const name = `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || profile.name || 'Customer';
+    const phone = profile.phone || '';
+    const waPhone = normaliseWhatsAppPhone(phone);
+    return `<article class="mobile-work-card"><div class="mobile-work-title">${esc(name)}</div><div class="mobile-work-meta">${esc(profile.city || '')}${phone ? `<br>${esc(phone)}` : ''}<br>${Number(c.orderCount || 0)} order${Number(c.orderCount || 0) === 1 ? '' : 's'}</div><div class="mobile-work-actions">${waPhone ? `<a class="btn btn-xs" href="https://wa.me/${esc(waPhone)}" target="_blank" rel="noopener noreferrer" style="background:#25d366;color:#fff;border-color:#25d366"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : ''}${phone ? `<a class="btn btn-xs" href="tel:${esc(phone)}"><i class="fas fa-phone"></i> Call</a>` : ''}</div></article>`;
   }).join('');
 };
 
@@ -5190,6 +5292,16 @@ const loadFirestoreProductsSection = async () => {
             </div>
             <div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px">${esc(p.brand||'')} — Added via Admin</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap">${sizesHtml}</div>
+            <div class="mobile-inventory-controls" style="display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:10px">
+              <label style="font-size:11px;color:var(--muted);flex:1;min-width:90px">Stock
+                <input class="select-sm fsprod-stock" type="number" inputmode="numeric" min="0" max="9999" value="${p.stockLeft ?? ''}" placeholder="Unlimited" style="width:100%;margin-top:4px">
+              </label>
+              <label style="font-size:11px;color:var(--muted);flex:1;min-width:110px">Price (${esc(_visibleSizes[0]?.[0] || 'size')})
+                <input class="select-sm fsprod-price" type="number" inputmode="decimal" min="0" value="${Number(_visibleSizes[0]?.[1] || 0)}" data-size="${esc(_visibleSizes[0]?.[0] || '')}" style="width:100%;margin-top:4px">
+              </label>
+              <button class="btn btn-xs btn-gold fsprod-quick-save" data-slug="${esc(p.slug)}"><i class="fas fa-floppy-disk"></i> Save</button>
+              <button class="btn btn-xs fsprod-preorder" data-slug="${esc(p.slug)}" data-enabled="${Boolean(p.preorderEnabled)}"><i class="fas fa-clock"></i> ${p.preorderEnabled ? 'Preorder on' : 'Enable preorder'}</button>
+            </div>
           </div>
           <div class="admin-product-actions" style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
             <button class="btn btn-xs fsprod-edit" data-slug="${esc(p.slug)}"
@@ -5221,6 +5333,36 @@ const loadFirestoreProductsSection = async () => {
       const editBtn   = e.target.closest('.fsprod-edit');
       const toggleBtn = e.target.closest('.fsprod-toggle');
       const deleteBtn = e.target.closest('.fsprod-delete');
+      const quickSave = e.target.closest('.fsprod-quick-save');
+      const preorderBtn = e.target.closest('.fsprod-preorder');
+
+      if (quickSave) {
+        const slug = quickSave.dataset.slug;
+        const row = rows.find(product => product.id === slug);
+        const card = quickSave.closest('[data-fsprod-slug]');
+        const stockRaw = card?.querySelector('.fsprod-stock')?.value.trim();
+        const priceInput = card?.querySelector('.fsprod-price');
+        const size = priceInput?.dataset.size;
+        const price = Number(priceInput?.value);
+        const value = { stockLeft: stockRaw === '' ? null : Math.max(0, Number(stockRaw)) };
+        if (size && row && Number.isFinite(price) && price >= 0) value.sizes = { ...supabaseRowToAdminProduct(row).sizes, [size]: price };
+        quickSave.disabled = true;
+        try { await syncMobileCatalogEntry('products', slug, value); toast('Stock and price saved', 'success'); }
+        catch (err) { toast(err.message, 'error'); }
+        finally { quickSave.disabled = false; }
+        return;
+      }
+
+      if (preorderBtn) {
+        const enabled = preorderBtn.dataset.enabled === 'true';
+        preorderBtn.disabled = true;
+        try {
+          await syncMobileCatalogEntry('products', preorderBtn.dataset.slug, { preorderEnabled: !enabled });
+          toast(`Preorder ${enabled ? 'disabled' : 'enabled'}`, 'success');
+          loadFirestoreProductsSection();
+        } catch (err) { preorderBtn.disabled = false; toast(err.message, 'error'); }
+        return;
+      }
 
       if (editBtn) {
         const slug = editBtn.dataset.slug;

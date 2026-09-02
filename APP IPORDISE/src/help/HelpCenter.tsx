@@ -3,21 +3,16 @@ import React, { memo, useMemo, useRef, useState } from 'react';
 import { Keyboard, Pressable, StyleSheet, View } from 'react-native';
 import { SmoothScrollView as ScrollView } from '../components/smoothHorizontalScroll';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from '../i18n/LocalizedPrimitives';
+import { useLanguage } from '../i18n/LanguageContext';
+import { translateSiteText } from '../i18n/siteTranslations';
 import { useResponsiveLayout } from '../useResponsiveLayout';
+import { sizes } from '../designSystem';
 import type { HelpConfig, HelpFaq, HelpTopic } from './helpConfig';
 import { searchHelpFaqs } from './helpLogic';
 
 const BURGUNDY = '#9E1734';
 const INK = '#181412';
 let helpOffset = 0;
-
-const primaryTopics: Pick<HelpTopic, 'id' | 'title' | 'description' | 'icon'>[] = [
-  { id: 'track', title: 'Track my order', description: 'View live status and delivery updates', icon: 'cube-outline' },
-  { id: 'orders', title: 'Orders', description: 'Manage or understand an order', icon: 'receipt-outline' },
-  { id: 'delivery', title: 'Delivery & returns', description: 'Delivery times, exchanges and returns', icon: 'swap-horizontal-outline' },
-  { id: 'payments', title: 'Payments', description: 'Payment methods and pay-on-delivery help', icon: 'card-outline' },
-  { id: 'contact', title: 'Contact support', description: 'Speak with the IPORDISE team', icon: 'chatbubble-ellipses-outline' },
-];
 
 const TopicRow = memo(function TopicRow({
   item,
@@ -26,10 +21,11 @@ const TopicRow = memo(function TopicRow({
   item: Pick<HelpTopic, 'id' | 'title' | 'description' | 'icon'>;
   onPress: () => void;
 }) {
+  const { language } = useLanguage();
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${item.title}. ${item.description}`}
+      accessibilityLabel={`${translateSiteText(item.title, language)}. ${translateSiteText(item.description, language)}`}
       onPress={onPress}
       style={({ pressed }) => [styles.topicRow, pressed && styles.rowPressed]}
     >
@@ -44,11 +40,12 @@ const TopicRow = memo(function TopicRow({
 });
 
 function FaqRow({ item, open, onToggle }: { item: HelpFaq; open: boolean; onToggle: () => void }) {
+  const { language } = useLanguage();
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ expanded: open }}
-      accessibilityLabel={item.question}
+      accessibilityLabel={translateSiteText(item.question, language)}
       onPress={onToggle}
       style={({ pressed }) => [styles.faqRow, pressed && styles.rowPressed]}
     >
@@ -68,11 +65,12 @@ export function HelpCenter({
   bottomInset,
 }: {
   config: HelpConfig;
-  onNavigate: (value: HelpTopic['id']) => void;
+  onNavigate: (value: Exclude<HelpTopic['id'], 'payments' | 'faq'>) => void;
   onShop: (filter: string) => void;
   bottomInset: number;
 }) {
   const layout = useResponsiveLayout();
+  const { language } = useLanguage();
   const scrollRef = useRef<any>(null);
   const restoredOffset = useRef(false);
   const faqY = useRef(0);
@@ -80,10 +78,18 @@ export function HelpCenter({
   const [openId, setOpenId] = useState('');
   const faqs = useMemo(() => searchHelpFaqs(config.faqs, query), [config.faqs, query]);
 
-  const openTopic = (item: (typeof primaryTopics)[number]) => {
-    if (item.id === 'payments') {
-      setQuery('payment');
-      requestAnimationFrame(() => scrollRef.current?.scrollTo({ y: Math.max(0, faqY.current - 16), animated: true }));
+  const scrollToFaqs = () => requestAnimationFrame(() => {
+    scrollRef.current?.scrollTo({ y: Math.max(0, faqY.current - 16), animated: true });
+  });
+
+  const openTopic = (item: HelpTopic) => {
+    if (item.id === 'payments' || item.id === 'faq') {
+      const paymentFaq = item.id === 'payments'
+        ? config.faqs.find(faq => faq.category.toLowerCase().includes('payment') || faq.keywords.some(keyword => keyword.toLowerCase().includes('payment')))
+        : undefined;
+      setQuery(item.id === 'payments' ? 'payment' : '');
+      setOpenId(paymentFaq?.id || '');
+      scrollToFaqs();
       return;
     }
     onNavigate(item.id);
@@ -99,7 +105,7 @@ export function HelpCenter({
         contentContainerStyle={[
           styles.content,
           {
-            maxWidth: layout.shellWidth,
+            maxWidth: Math.min(layout.shellWidth, sizes.readable + layout.gutter * 2),
             paddingHorizontal: Math.max(20, layout.gutter),
             paddingBottom: bottomInset + 32,
           },
@@ -118,7 +124,7 @@ export function HelpCenter({
         </View>
 
         <View accessibilityLabel="Customer care topics" style={styles.directory}>
-          {primaryTopics.map(item => (
+          {config.topics.map(item => (
             <TopicRow key={item.id} item={item} onPress={() => openTopic(item)} />
           ))}
         </View>
@@ -130,7 +136,7 @@ export function HelpCenter({
             <Ionicons name="search-outline" size={18} color="#756D68" />
             <TextInput
               accessibilityRole="search"
-              accessibilityLabel="Search frequently asked questions"
+              accessibilityLabel={translateSiteText('Search frequently asked questions', language)}
               value={query}
               onChangeText={setQuery}
               onSubmitEditing={Keyboard.dismiss}
@@ -140,7 +146,7 @@ export function HelpCenter({
               style={styles.searchInput}
             />
             {query ? (
-              <Pressable accessibilityRole="button" accessibilityLabel="Clear search" onPress={() => setQuery('')} style={styles.clearSearch}>
+              <Pressable accessibilityRole="button" accessibilityLabel={translateSiteText('Clear search', language)} onPress={() => setQuery('')} style={styles.clearSearch}>
                 <Ionicons name="close" size={16} color="#625B56" />
               </Pressable>
             ) : null}

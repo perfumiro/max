@@ -11,7 +11,7 @@ test('app catalog uses the exact canonical variants accepted by checkout', async
     read('../src/generated/catalogSnapshot.json').then(JSON.parse),
   ]);
   assert.match(catalog, /product_variants\?select=/);
-  assert.match(catalog, /productFromSupabase\(row, variantRows\)/);
+  assert.match(catalog, /productFromSupabase\(preordersEnabled \? row : \{ \.\.\.row, preorder_enabled: false \}, variantRows\)/);
   assert.match(catalog, /id: String\(row\.id \|\| ''\)/);
   assert.match(catalog, /price = Number\(row\.price_minor\) \/ 100/);
   assert.match(catalog, /loadBundledProducts/);
@@ -35,6 +35,13 @@ test('app and website orders use the same Supabase order and admin pipeline', as
 test('successful orders notify the boutique and customer with provider fallback', async () => {
   const checkout = await read('../supabase/functions/create-order/index.ts');
   assert.match(checkout, /DEFAULT_BOUTIQUE_EMAIL/);
+  assert.match(checkout, /DEFAULT_EMAILJS_SERVICE_ID/);
+  assert.match(checkout, /DEFAULT_EMAILJS_ADMIN_TEMPLATE_ID/);
+  assert.match(checkout, /DEFAULT_EMAILJS_CUSTOMER_TEMPLATE_ID/);
+  assert.match(checkout, /DEFAULT_EMAILJS_PUBLIC_KEY/);
+  assert.match(checkout, /DEFAULT_EMAILJS_ALLOWED_ORIGIN/);
+  assert.match(checkout, /Origin: emailJsAllowedOrigin/);
+  assert.match(checkout, /Referer: `\$\{emailJsAllowedOrigin\}\//);
   assert.match(checkout, /to: boutiqueEmail/);
   assert.match(checkout, /to: customer\.email/);
   assert.match(checkout, /if \(emailJsConfigured && message\.templateId\)/);

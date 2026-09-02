@@ -28,6 +28,9 @@ test('customer app owns exactly one Android hardware BackHandler subscription',(
   const occurrences=files.flatMap(path=>read(path).match(/BackHandler\.addEventListener\(/g)||[]);
   assert.equal(occurrences.length,1);
   assert.doesNotMatch(files.map(read).join('\n'),/BackHandler\.exitApp\(/);
+  const app=read('App.tsx');
+  assert.match(app,/BackHandler\.addEventListener\('hardwareBackPress',\(\)=>handleAppBackRef\.current\(\)\)/);
+  assert.match(app,/return\(\)=>subscription\.remove\(\);\s*\},\[\]\)/);
 });
 
 test('favorites and bag products preserve their commerce origin until Product Back',()=>{
@@ -51,10 +54,13 @@ test('direct product falls back to Shop and direct order falls back to My Orders
 
 test('customer modals dismiss themselves before root navigation and order success cannot reopen checkout',()=>{
   const app=read('App.tsx');
-  const customerModals=[read('src/offers/OffersScreen.tsx'),read('src/commerce/CommercePages.tsx'),read('src/account/AccountScreen.tsx')].join('\n');
+  const push=read('src/notifications/PushNotificationProvider.tsx');
+  const customerModals=[read('src/offers/OffersScreen.tsx'),read('src/commerce/CommercePages.tsx'),read('src/account/AccountScreen.tsx'),push].join('\n');
   const modalTags=customerModals.match(/<Modal\b[^>]*>/g)||[];
   assert.ok(modalTags.length>=4);
   for(const tag of modalTags)assert.match(tag,/onRequestClose=/);
+  assert.doesNotMatch(customerModals,/onRequestClose=\{\(\) => undefined\}/);
+  assert.match(push,/onRequestClose=\{dismissPrompt\}/);
   assert.match(app,/if\(commercePage==='thankyou'\)\{setCompletedOrder\(null\);activeRef\.current='Home';setActive\('Home'\);resetCommerce\(\);return true;\}/);
   assert.match(app,/onComplete=\{order=>\{setCompletedOrder\(order\);resetCommerce\('thankyou'\);\}\}/);
 });

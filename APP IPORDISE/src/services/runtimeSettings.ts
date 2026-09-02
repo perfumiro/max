@@ -1,6 +1,7 @@
 import { appConfig } from '../config';
 import { logger } from '../observability/logger';
 import { parseFirestoreDocument, publicFirestoreUrl } from './firestoreRest';
+import { apiRequest } from './apiClient';
 
 export const RUNTIME_SETTINGS_DOCUMENT='products/_app_config';
 type RuntimeSettings=Record<string,unknown>;
@@ -23,9 +24,7 @@ const fetchFirebaseSettings=async():Promise<RuntimeSettings>=>{
 const fetchSupabaseSettings=async():Promise<RuntimeSettings>=>{
   const url=appConfig.supabaseUrl,key=appConfig.supabasePublishableKey;
   if(!appConfig.supabaseConfigured||!url||!key)return{};
-  const response=await fetch(`${url}/rest/v1/store_settings?id=eq.main&select=value`,{headers:{apikey:key,Authorization:`Bearer ${key}`}});
-  if(!response.ok)throw new Error(`Fallback app settings returned HTTP ${response.status}`);
-  const rows=await response.json() as {value?:RuntimeSettings}[];
+  const rows=await apiRequest<{value?:RuntimeSettings}[]>(`${url}/rest/v1/store_settings?id=eq.main&select=value`,{headers:{apikey:key,Authorization:`Bearer ${key}`},maxAttempts:2});
   return rows[0]?.value||{};
 };
 

@@ -27,6 +27,9 @@ export type Product = {
   filters: string[];
   active: boolean;
   stockLeft?: number;
+  preorderEnabled?: boolean;
+  preorderMessage?: string;
+  preorderEstimatedAvailability?: string;
   description?: string;
   notes?: ProductNotes;
   offerStart?: string;
@@ -140,7 +143,17 @@ const loadRuntimeCatalog = async (): Promise<{ overrides: JsonMap[]; products: J
 
 const absoluteUrl = (value: string) => {
   if (!value) return '';
-  if (/^https?:\/\//i.test(value)) return value;
+  if (/^https:\/\//i.test(value)) return value;
+  if (/^http:\/\//i.test(value)) {
+    try {
+      const url = new URL(value);
+      if (url.hostname === 'ipordise.com' || url.hostname === 'www.ipordise.com') {
+        url.protocol = 'https:';
+        return url.toString();
+      }
+    } catch {}
+    return '';
+  }
   return `${STORE_ORIGIN}/${value.replace(/^\/+/, '')}`;
 };
 
@@ -225,6 +238,9 @@ const productFromCatalog = (raw: JsonMap, override?: JsonMap): Product | null =>
     description: raw.description || undefined,
     notes: normalizeProductNotes(String(id || ''), raw.notes),
     stockLeft: optionalFiniteNumber(override?.stockLeft ?? raw.stockLeft),
+    preorderEnabled: (override?.preorderEnabled ?? raw.preorderEnabled ?? raw.preorder_enabled) === true,
+    preorderMessage: String(override?.preorderMessage ?? raw.preorderMessage ?? raw.preorder_message ?? '') || undefined,
+    preorderEstimatedAvailability: String(override?.preorderEstimatedAvailability ?? raw.preorderEstimatedAvailability ?? raw.preorder_estimated_availability ?? '') || undefined,
     offerStart: typeof (override?.offerStart ?? raw.offerStart) === 'string' ? String(override?.offerStart ?? raw.offerStart) : undefined,
     offerEnd: typeof (override?.offerEnd ?? raw.offerEnd) === 'string' ? String(override?.offerEnd ?? raw.offerEnd) : undefined,
     offerFeatured: (override?.offerFeatured ?? raw.offerFeatured) === true,
@@ -259,6 +275,9 @@ const productFromFirestore = (raw: JsonMap): Product | null => {
     filters: Array.isArray(raw.filters) ? raw.filters : ['new-in'],
     active: true,
     stockLeft,
+    preorderEnabled: (raw.preorderEnabled ?? raw.preorder_enabled) === true,
+    preorderMessage: String(raw.preorderMessage ?? raw.preorder_message ?? '') || undefined,
+    preorderEstimatedAvailability: String(raw.preorderEstimatedAvailability ?? raw.preorder_estimated_availability ?? '') || undefined,
     description: raw.description || undefined,
     notes: normalizeProductNotes(String(id || ''), raw.notes),
     offerStart: typeof (raw.offerStart ?? raw.offer_start) === 'string' ? String(raw.offerStart ?? raw.offer_start) : undefined,
@@ -305,14 +324,16 @@ export const loadBundledProducts = (): Product[] => {
 
 const loadSupabaseProducts = async (): Promise<Product[]> => {
   if (!appConfig.supabaseUrl || !appConfig.supabasePublishableKey) throw new Error('Supabase catalogue is not configured');
-  const select = 'id,name,brand,image,gallery,filters,badge,description,notes,rating,review_count,active,sort_order,sizes,base_sizes,original_prices,stock_left,offer_start,offer_end,offer_featured,offer_badge,offer_display_order';
+  const select = 'id,name,brand,image,gallery,filters,badge,description,notes,rating,review_count,active,sort_order,sizes,base_sizes,original_prices,stock_left,preorder_enabled,preorder_message,preorder_estimated_availability,offer_start,offer_end,offer_featured,offer_badge,offer_display_order';
   const variantSelect = 'id,product_id,size_label,size_key,format,sku,price_minor,compare_at_price_minor,stock_quantity,enabled,sort_order';
-  const [rows, variantRows] = await Promise.all([
+  const [rows, variantRows, settingsRows] = await Promise.all([
     fetchJson(`${appConfig.supabaseUrl}/rest/v1/products?select=${encodeURIComponent(select)}&active=eq.true&order=sort_order.asc,updated_at.desc`, 'IPORDISE commerce catalogue', { apikey: appConfig.supabasePublishableKey }),
     fetchJson(`${appConfig.supabaseUrl}/rest/v1/product_variants?select=${encodeURIComponent(variantSelect)}&enabled=eq.true&order=sort_order.asc`, 'IPORDISE commerce variants', { apikey: appConfig.supabasePublishableKey }),
+    fetchJson(`${appConfig.supabaseUrl}/rest/v1/store_settings?select=value&id=eq.main&limit=1`, 'IPORDISE preorder settings', { apikey: appConfig.supabasePublishableKey }),
   ]);
-  if (!Array.isArray(rows) || !Array.isArray(variantRows)) throw new Error('IPORDISE commerce catalogue returned invalid data');
-  const products = rows.map(row => productFromSupabase(row, variantRows)).filter(Boolean) as Product[];
+  if (!Array.isArray(rows) || !Array.isArray(variantRows) || !Array.isArray(settingsRows)) throw new Error('IPORDISE commerce catalogue returned invalid data');
+  const preordersEnabled = settingsRows[0]?.value?.preorders?.enabled !== false;
+  const products = rows.map(row => productFromSupabase(preordersEnabled ? row : { ...row, preorder_enabled: false }, variantRows)).filter(Boolean) as Product[];
   if (!products.length) throw new Error('IPORDISE commerce catalogue contains no published products');
   return products;
 };
@@ -350,10 +371,17 @@ const loadFirebaseAdminProducts = async (): Promise<Product[]> => {
 };
 
 const fetchSharedProducts = async (): Promise<Product[]> => {
-  // Fail closed when the canonical commerce API is unavailable. Serving a
-  // second catalogue can expose archived products or prices that checkout will
-  // reject, so availability must never be manufactured from a legacy source.
-  return loadSupabaseProducts();
+  try {
+    return await loadSupabaseProducts();
+  } catch (error) {
+    const bundledProducts = loadBundledProducts();
+    logger.warn('commerce_catalog_unavailable_using_bundled_snapshot', {
+      error,
+      bundledProductCount: bundledProducts.length,
+    });
+    if (bundledProducts.length) return bundledProducts;
+    throw error;
+  }
 };
 
 export const loadSharedProducts = async (forceRefresh = false): Promise<Product[]> => {

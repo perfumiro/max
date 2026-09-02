@@ -2,7 +2,7 @@
 
 This mapping is based on the mobile source and Supabase/Firebase backend code in this repository. The account owner must reconcile it with production provider contracts, retention practice, server logs, and Play Console's current definitions before declaring it final.
 
-All production client endpoints are HTTPS. Authentication tokens are stored in Expo SecureStore on native devices. The app has no advertising SDK, mobile analytics SDK, crash-reporting SDK, push-token collection, contacts access, microphone access, camera access, or GPS/location permission.
+All production client endpoints are HTTPS. Authentication tokens are stored in Expo SecureStore on native devices. The app has no advertising SDK, mobile analytics SDK, crash-reporting SDK, contacts access, camera access, or GPS/location permission. It does have optional voice search and push notifications; see `../PLAY_STORE_DATA_SAFETY_AUDIT.md` for the current source-backed inventory.
 
 | Play data type | Collected | Required / optional | Purpose | Shared outside IPORDISE |
 |---|---|---|---|---|
@@ -19,7 +19,8 @@ All production client endpoints are HTTPS. Authentication tokens are stored in E
 | Precise/approximate device location | No | Not requested | Shipping city/address is manually entered, not device location | N/A |
 | Device or advertising ID | No explicit collection in app code | N/A | N/A | N/A |
 | Crash/diagnostic data | No third-party crash SDK in app | N/A | Local redacted logging only | Verify platform/backend infrastructure logs separately |
-| Push token | No | Notifications are preferences only; no push SDK is installed | N/A | N/A |
+| Push token and installation identifier | Optional | Collected after notification opt-in | Push delivery and preference routing | Supabase and Expo push service |
+| Microphone audio | Optional | Processed when voice search is invoked; not persisted by app code | Speech-to-text fragrance search | Device/platform speech-recognition provider; owner must confirm provider handling |
 
 ## Play Console answers to confirm
 

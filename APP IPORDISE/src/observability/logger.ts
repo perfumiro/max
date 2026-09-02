@@ -17,6 +17,6 @@ export const logger = {
     if (__DEV__) console.warn(`[IPORDISE] ${event}`, sanitize(context));
   },
   error(event: string, error: unknown, context?: Context) {
-    console.error(`[IPORDISE] ${event}`, sanitize({ ...context, error: error instanceof Error ? error : String(error) }));
+    if (__DEV__) console.error(`[IPORDISE] ${event}`, sanitize({ ...context, error: error instanceof Error ? error : String(error) }));
   },
 };

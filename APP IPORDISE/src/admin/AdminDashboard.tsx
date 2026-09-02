@@ -28,6 +28,7 @@ import {
   createAdminProduct,
   deleteAdminOrder,
   loadAdminDashboard,
+  loadAdminPreorders,
   loadAdminSupportThread,
   publishAdminBestsellerRanking,
   restoreAdminSession,
@@ -41,6 +42,8 @@ import {
   updateAdminOrderShipping,
   updateAdminOrderStatus,
   updateAdminProduct,
+  updateAdminPreorder,
+  updateAdminPreorderSettings,
   type AdminConnectionHealth,
   type AdminConversation,
   type AdminDashboardData,
@@ -48,6 +51,8 @@ import {
   type AdminOrderShippingPatch,
   type AdminProduct,
   type AdminProductPatch,
+  type AdminPreorder,
+  type AdminPreorderStatus,
   type AdminSession,
   type AdminSupportThread,
   type NewAdminProduct,
@@ -77,6 +82,7 @@ type AdminTab =
   | "Products"
   | "Inventory"
   | "Orders"
+  | "Preorders"
   | "Customers"
   | "Promotions"
   | "Support"
@@ -86,6 +92,7 @@ const navItems: [AdminTab, string][] = [
   ["Products", "cube-outline"],
   ["Inventory", "layers-outline"],
   ["Orders", "receipt-outline"],
+  ["Preorders", "time-outline"],
   ["Customers", "people-outline"],
   ["Promotions", "pricetag-outline"],
   ["Support", "chatbubbles-outline"],
@@ -100,8 +107,16 @@ const orderFlow: AdminOrder["status"][] = [
   "out_for_delivery",
   "delivered",
 ];
-const orderStatuses: AdminOrder["status"][] = [...orderFlow, "delivery_failed", "return_requested", "returned", "cancelled"];
-const primaryOrderTransition: Partial<Record<AdminOrder["status"], AdminOrder["status"]>> = {
+const orderStatuses: AdminOrder["status"][] = [
+  ...orderFlow,
+  "delivery_failed",
+  "return_requested",
+  "returned",
+  "cancelled",
+];
+const primaryOrderTransition: Partial<
+  Record<AdminOrder["status"], AdminOrder["status"]>
+> = {
   pending: "confirmed",
   confirmed: "processing",
   processing: "ready_for_dispatch",
@@ -442,16 +457,21 @@ function MetricCard({
   detail,
   icon,
   tone = "dark",
+  onPress,
 }: {
   label: string;
   value: string;
   detail: string;
   icon: string;
   tone?: "dark" | "red" | "light";
+  onPress?: () => void;
 }) {
   const phone = useResponsiveLayout().width < 600;
+  const Container = onPress ? Pressable : View;
   return (
-    <View
+    <Container
+      accessibilityRole={onPress ? "button" : undefined}
+      onPress={onPress}
       style={[
         styles.metricCard,
         phone && styles.metricCardPhone,
@@ -502,7 +522,7 @@ function MetricCard({
       >
         {detail}
       </Text>
-    </View>
+    </Container>
   );
 }
 
@@ -577,6 +597,11 @@ function Overview({
   data: AdminDashboardData;
   onNavigate: (tab: AdminTab) => void;
 }) {
+  const { compact } = useResponsiveLayout();
+  const today = new Date().toDateString();
+  const todayOrders = data.orders.filter(
+    (order) => new Date(order.created_at).toDateString() === today,
+  ).length;
   const revenue = data.orders
     .filter((order) => order.status !== "cancelled")
     .reduce((sum, order) => sum + Number(order.total || 0), 0);
@@ -586,6 +611,10 @@ function Overview({
   const openSupport = data.conversations.filter(
     (item) => item.status === "open" || item.status === "pending_customer",
   ).length;
+  const lowStock = data.products.filter(
+    (product) => product.stock_left != null && product.stock_left > 0 && product.stock_left <= 5,
+  ).length;
+  const outOfStock = data.products.filter((product) => product.stock_left === 0).length;
   return (
     <>
       <SectionHeader
@@ -595,11 +624,12 @@ function Overview({
       />
       <View style={styles.metricGrid}>
         <MetricCard
-          label="CATALOGUE"
-          value={String(data.totals.products)}
-          detail={`${data.products.filter((item) => item.active).length} live in this view`}
-          icon="cube-outline"
+          label={compact ? "TODAY'S ORDERS" : "CATALOGUE"}
+          value={String(compact ? todayOrders : data.totals.products)}
+          detail={compact ? "Open order queue" : `${data.products.filter((item) => item.active).length} live in this view`}
+          icon={compact ? "receipt-outline" : "cube-outline"}
           tone="dark"
+          onPress={() => onNavigate(compact ? "Orders" : "Products")}
         />
         <MetricCard
           label="ORDERS"
@@ -607,6 +637,7 @@ function Overview({
           detail={`${attention} need attention`}
           icon="receipt-outline"
           tone="red"
+          onPress={() => onNavigate("Orders")}
         />
         <MetricCard
           label="REVENUE"
@@ -614,15 +645,36 @@ function Overview({
           detail="Recent non-cancelled orders"
           icon="trending-up-outline"
           tone="light"
+          onPress={() => onNavigate("Orders")}
         />
         <MetricCard
-          label="CLIENT CARE"
-          value={String(openSupport)}
-          detail="Open conversations"
-          icon="chatbubbles-outline"
+          label={compact ? "LOW / NO STOCK" : "CLIENT CARE"}
+          value={String(compact ? lowStock + outOfStock : openSupport)}
+          detail={compact ? `${outOfStock} out · ${lowStock} low` : "Open conversations"}
+          icon={compact ? "alert-circle-outline" : "chatbubbles-outline"}
           tone="light"
+          onPress={() => onNavigate(compact ? "Inventory" : "Support")}
         />
       </View>
+      {compact ? (
+        <View style={styles.mobileQuickActions}>
+          <Text style={styles.mobileQuickTitle}>QUICK ACTIONS</Text>
+          <View style={styles.mobileQuickGrid}>
+            {([
+              ["New orders", "Orders", "receipt-outline"],
+              ["Preorders", "Preorders", "time-outline"],
+              ["Add / edit product", "Products", "add-circle-outline"],
+              ["Update stock", "Inventory", "layers-outline"],
+            ] as [string, AdminTab, string][]).map(([label, tab, icon]) => (
+              <Pressable key={label} onPress={() => onNavigate(tab)} style={styles.mobileQuickButton}>
+                <Ionicons name={icon as any} size={20} color={RED} />
+                <Text style={styles.mobileQuickButtonText}>{label}</Text>
+                <Ionicons name="chevron-forward" size={16} color="#8a7e78" />
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      ) : null}
       <View style={styles.twoColumn}>
         <View style={styles.panel}>
           <View style={styles.panelHead}>
@@ -775,6 +827,9 @@ function ProductEditor({
     {},
   );
   const [stock, setStock] = useState("");
+  const [preorderEnabled, setPreorderEnabled] = useState(false);
+  const [preorderMessage, setPreorderMessage] = useState("");
+  const [preorderEstimate, setPreorderEstimate] = useState("");
   const [active, setActive] = useState(true);
   const [newSize, setNewSize] = useState("");
   const [error, setError] = useState("");
@@ -804,6 +859,9 @@ function ProductEditor({
         ),
       );
       setStock(product.stock_left == null ? "" : String(product.stock_left));
+      setPreorderEnabled(product.preorder_enabled);
+      setPreorderMessage(product.preorder_message || "");
+      setPreorderEstimate(product.preorder_estimated_availability || "");
       setActive(product.active);
       setError("");
     }
@@ -878,6 +936,9 @@ function ProductEditor({
       sizes,
       original_prices,
       stock_left: stockValue,
+      preorder_enabled: preorderEnabled,
+      preorder_message: preorderMessage.trim() || null,
+      preorder_estimated_availability: preorderEstimate.trim() || null,
       active,
     });
   };
@@ -1002,6 +1063,47 @@ function ProductEditor({
               placeholderTextColor="#a29994"
               style={styles.editorInput}
             />
+            <View style={styles.editorToggleRow}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.fieldLabel}>PREORDER SETTINGS</Text>
+                <Text style={styles.editorHelp}>
+                  Allow requests only when this product is out of stock.
+                </Text>
+              </View>
+              <Pressable
+                accessibilityRole="switch"
+                accessibilityState={{ checked: preorderEnabled }}
+                onPress={() => setPreorderEnabled((value) => !value)}
+                style={[styles.toggle, preorderEnabled && styles.toggleActive]}
+              >
+                <View
+                  style={[
+                    styles.toggleKnob,
+                    preorderEnabled && styles.toggleKnobActive,
+                  ]}
+                />
+              </Pressable>
+            </View>
+            {preorderEnabled ? (
+              <>
+                <TextInput
+                  value={preorderMessage}
+                  onChangeText={setPreorderMessage}
+                  maxLength={500}
+                  placeholder="Customer message"
+                  placeholderTextColor="#a29994"
+                  style={styles.editorInput}
+                />
+                <TextInput
+                  value={preorderEstimate}
+                  onChangeText={setPreorderEstimate}
+                  maxLength={160}
+                  placeholder="Estimated availability, e.g. 7–10 days"
+                  placeholderTextColor="#a29994"
+                  style={styles.editorInput}
+                />
+              </>
+            ) : null}
             <View style={styles.priceHead}>
               <View>
                 <Text style={styles.fieldLabel}>SIZE PRICES</Text>
@@ -1043,14 +1145,18 @@ function ProductEditor({
                 <Pressable
                   accessibilityRole="button"
                   accessibilityLabel={`Remove ${size} variant`}
-                  onPress={() =>
-                    (setPrices((current) =>
-                      Object.fromEntries(Object.entries(current).filter(([key]) => key !== size)),
+                  onPress={() => (
+                    setPrices((current) =>
+                      Object.fromEntries(
+                        Object.entries(current).filter(([key]) => key !== size),
+                      ),
                     ),
                     setOriginalPrices((current) =>
-                      Object.fromEntries(Object.entries(current).filter(([key]) => key !== size)),
-                    ))
-                  }
+                      Object.fromEntries(
+                        Object.entries(current).filter(([key]) => key !== size),
+                      ),
+                    )
+                  )}
                   style={styles.removePrice}
                 >
                   <Ionicons name="trash-outline" size={16} color={RED} />
@@ -1139,7 +1245,8 @@ function NewProductEditor({
   };
   const submit = () => {
     const numericPrice = Number(price);
-    const numericOriginalPrice = originalPrice.trim() === "" ? null : Number(originalPrice);
+    const numericOriginalPrice =
+      originalPrice.trim() === "" ? null : Number(originalPrice);
     const numericStock = stock.trim() === "" ? null : Number(stock);
     if (
       name.trim().length < 2 ||
@@ -1252,7 +1359,8 @@ function NewProductEditor({
               <View style={{ flex: 1, minWidth: 0 }}>
                 <Text style={styles.fieldLabel}>LAUNCH AS 48H PROMOTION</Text>
                 <Text style={styles.editorHelp}>
-                  Publishes immediately in Promotions and notifies customers who enabled offers.
+                  Publishes immediately in Promotions and notifies customers who
+                  enabled offers.
                 </Text>
               </View>
               <Pressable
@@ -1264,12 +1372,19 @@ function NewProductEditor({
                 }}
                 style={[styles.toggle, promotion && styles.toggleActive]}
               >
-                <View style={[styles.toggleKnob, promotion && styles.toggleKnobActive]} />
+                <View
+                  style={[
+                    styles.toggleKnob,
+                    promotion && styles.toggleKnobActive,
+                  ]}
+                />
               </Pressable>
             </View>
             {promotion ? (
               <>
-                <Text style={styles.fieldLabel}>ORIGINAL PRICE BEFORE PROMOTION</Text>
+                <Text style={styles.fieldLabel}>
+                  ORIGINAL PRICE BEFORE PROMOTION
+                </Text>
                 <TextInput
                   accessibilityLabel="Original price before promotion"
                   value={originalPrice}
@@ -1676,8 +1791,8 @@ function PromotionEditor({
   }, [product]);
   const active = Boolean(
     product &&
-      Object.keys(product.original_prices).length &&
-      isPromotionWindowActive(product.offer_start, product.offer_end, clock),
+    Object.keys(product.original_prices).length &&
+    isPromotionWindowActive(product.offer_start, product.offer_end, clock),
   );
   useEffect(() => {
     setClock(Date.now());
@@ -1773,26 +1888,39 @@ function PromotionEditor({
     });
   };
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
       <View style={[styles.modalBackdrop, phone && styles.modalBackdropPhone]}>
         <View style={[styles.editor, phone && styles.editorPhone]}>
           <View style={styles.editorHead}>
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={styles.sectionEyebrow}>48H PROMOTION CONTROL</Text>
-              <Text numberOfLines={2} style={styles.editorTitle}>{product.name}</Text>
+              <Text numberOfLines={2} style={styles.editorTitle}>
+                {product.name}
+              </Text>
               <Text style={styles.editorMeta}>
                 {active
                   ? `${formatPromotionCountdown(promotionRemainingMilliseconds(product.offer_end, clock))} remaining`
                   : "Ready to launch immediately"}
               </Text>
             </View>
-            <Pressable accessibilityLabel="Close promotion editor" onPress={onClose} style={styles.closeButton}>
+            <Pressable
+              accessibilityLabel="Close promotion editor"
+              onPress={onClose}
+              style={styles.closeButton}
+            >
               <Ionicons name="close" size={20} />
             </Pressable>
           </View>
           <ScrollView contentContainerStyle={styles.editorBody}>
             <Text style={styles.editorHelp}>
-              Enter a sale price for one or more sizes. Launching starts a fresh 48-hour window and sends one alert to customers who enabled offer notifications.
+              Enter a sale price for one or more sizes. Launching starts a fresh
+              48-hour window and sends one alert to customers who enabled offer
+              notifications.
             </Text>
             <View style={styles.priceHead}>
               <Text style={styles.fieldLabel}>REGULAR / 48H SALE PRICE</Text>
@@ -1820,32 +1948,83 @@ function PromotionEditor({
               </View>
             ))}
             <Text style={styles.fieldLabel}>PROMOTION BADGE</Text>
-            <TextInput value={badge} onChangeText={setBadge} maxLength={40} style={styles.editorInput} />
+            <TextInput
+              value={badge}
+              onChangeText={setBadge}
+              maxLength={40}
+              style={styles.editorInput}
+            />
             <Text style={styles.fieldLabel}>DISPLAY ORDER</Text>
-            <TextInput value={displayOrder} onChangeText={setDisplayOrder} keyboardType="number-pad" style={styles.editorInput} />
+            <TextInput
+              value={displayOrder}
+              onChangeText={setDisplayOrder}
+              keyboardType="number-pad"
+              style={styles.editorInput}
+            />
             <View style={styles.editorToggleRow}>
               <View style={{ flex: 1, minWidth: 0 }}>
                 <Text style={styles.fieldLabel}>FEATURE ON TOP</Text>
-                <Text style={styles.editorHelp}>Featured offers appear first in the customer section.</Text>
+                <Text style={styles.editorHelp}>
+                  Featured offers appear first in the customer section.
+                </Text>
               </View>
-              <Pressable accessibilityRole="switch" accessibilityState={{ checked: featured }} onPress={() => setFeatured((value) => !value)} style={[styles.toggle, featured && styles.toggleActive]}>
-                <View style={[styles.toggleKnob, featured && styles.toggleKnobActive]} />
+              <Pressable
+                accessibilityRole="switch"
+                accessibilityState={{ checked: featured }}
+                onPress={() => setFeatured((value) => !value)}
+                style={[styles.toggle, featured && styles.toggleActive]}
+              >
+                <View
+                  style={[
+                    styles.toggleKnob,
+                    featured && styles.toggleKnobActive,
+                  ]}
+                />
               </Pressable>
             </View>
-            {error ? <Text accessibilityRole="alert" style={styles.editorError}>{error}</Text> : null}
+            {error ? (
+              <Text accessibilityRole="alert" style={styles.editorError}>
+                {error}
+              </Text>
+            ) : null}
           </ScrollView>
           <View style={styles.editorFooter}>
             {active ? (
-              <Pressable disabled={saving} onPress={stop} style={styles.secondaryButton}>
+              <Pressable
+                disabled={saving}
+                onPress={stop}
+                style={styles.secondaryButton}
+              >
                 <Text style={styles.secondaryButtonText}>Stop promotion</Text>
               </Pressable>
             ) : (
-              <Pressable disabled={saving} onPress={onClose} style={styles.secondaryButton}>
+              <Pressable
+                disabled={saving}
+                onPress={onClose}
+                style={styles.secondaryButton}
+              >
                 <Text style={styles.secondaryButtonText}>Cancel</Text>
               </Pressable>
             )}
-            <Pressable disabled={saving} onPress={launch} style={[styles.primaryButton, saving && styles.pressed]}>
-              {saving ? <ActivityIndicator color="#fff" /> : <><Text style={styles.primaryButtonText}>{active ? "Restart for 48H" : "Launch 48H offer"}</Text><Ionicons name="notifications-outline" size={18} color="#fff" /></>}
+            <Pressable
+              disabled={saving}
+              onPress={launch}
+              style={[styles.primaryButton, saving && styles.pressed]}
+            >
+              {saving ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <>
+                  <Text style={styles.primaryButtonText}>
+                    {active ? "Restart for 48H" : "Launch 48H offer"}
+                  </Text>
+                  <Ionicons
+                    name="notifications-outline"
+                    size={18}
+                    color="#fff"
+                  />
+                </>
+              )}
             </Pressable>
           </View>
         </View>
@@ -1866,17 +2045,24 @@ function Promotions({
   const promoted = data.products.filter((product) =>
     Object.keys(product.original_prices || {}).some(
       (size) =>
-        Number(product.original_prices[size]) > Number(product.sizes[size] || 0),
+        Number(product.original_prices[size]) >
+        Number(product.sizes[size] || 0),
     ),
   );
   const activePromotions = promoted.filter((product) =>
     isPromotionWindowActive(product.offer_start, product.offer_end),
   );
-  const activePromotionIds = new Set(activePromotions.map((product) => product.id));
+  const activePromotionIds = new Set(
+    activePromotions.map((product) => product.id),
+  );
   const products = [...data.products].sort((a, b) => {
     const aActive = activePromotionIds.has(a.id);
     const bActive = activePromotionIds.has(b.id);
-    return Number(bActive) - Number(aActive) || a.brand.localeCompare(b.brand) || a.name.localeCompare(b.name);
+    return (
+      Number(bActive) - Number(aActive) ||
+      a.brand.localeCompare(b.brand) ||
+      a.name.localeCompare(b.name)
+    );
   });
   const save = async (patch: AdminProductPatch) => {
     if (!selected) return;
@@ -1915,7 +2101,10 @@ function Promotions({
                   {product.name}
                 </Text>
                 <Text numberOfLines={1} style={styles.customerMeta}>
-                  {product.brand} · {Object.keys(product.original_prices).join(", ").toUpperCase()}
+                  {product.brand} ·{" "}
+                  {Object.keys(product.original_prices)
+                    .join(", ")
+                    .toUpperCase()}
                 </Text>
               </View>
               <Pressable
@@ -1961,21 +2150,29 @@ function Orders({
 }: {
   data: AdminDashboardData;
   onStatus: (order: AdminOrder, status: AdminOrder["status"]) => Promise<void>;
-  onShipping: (order: AdminOrder, patch: AdminOrderShippingPatch) => Promise<void>;
+  onShipping: (
+    order: AdminOrder,
+    patch: AdminOrderShippingPatch,
+  ) => Promise<void>;
   onRemove: (order: AdminOrder) => Promise<void>;
 }) {
   const { compact } = useResponsiveLayout();
   const [filter, setFilter] = useState<"all" | AdminOrder["status"]>("all");
+  const [query, setQuery] = useState("");
   const [busy, setBusy] = useState("");
   const [expanded, setExpanded] = useState<string | null>(null);
   const [confirmCancel, setConfirmCancel] = useState<AdminOrder | null>(null);
   const [confirmRemove, setConfirmRemove] = useState<AdminOrder | null>(null);
   const [removeError, setRemoveError] = useState("");
-  const [shippingDrafts, setShippingDrafts] = useState<Record<string, AdminOrderShippingPatch>>({});
+  const [shippingDrafts, setShippingDrafts] = useState<
+    Record<string, AdminOrderShippingPatch>
+  >({});
   const orders = [
-    ...data.orders.filter(
-      (order) => filter === "all" || order.status === filter,
-    ),
+    ...data.orders.filter((order) => {
+      const matchesStatus = filter === "all" || order.status === filter;
+      const haystack = `${order.order_number || ""} ${order.customer?.name || ""} ${order.customer?.phone || ""} ${order.customer?.city || ""}`.toLowerCase();
+      return matchesStatus && haystack.includes(query.trim().toLowerCase());
+    }),
   ].sort(
     (a, b) =>
       b.risk_score - a.risk_score || b.created_at.localeCompare(a.created_at),
@@ -1995,7 +2192,11 @@ function Orders({
       await onRemove(order);
       setConfirmRemove(null);
     } catch (error) {
-      setRemoveError(error instanceof Error ? error.message : "The order could not be removed.");
+      setRemoveError(
+        error instanceof Error
+          ? error.message
+          : "The order could not be removed.",
+      );
     } finally {
       setBusy("");
     }
@@ -2009,21 +2210,35 @@ function Orders({
         `https://wa.me/${phone}?text=${encodeURIComponent(`Hello ${order.customer?.name || ""}, regarding your IPORDISE order ${order.order_number || ""}.`)}`,
       );
   };
-  const shippingDraft = (order: AdminOrder): AdminOrderShippingPatch => shippingDrafts[order.id] || {
-    courierCode: order.courier_code || "",
-    courierName: order.courier_name || "",
-    trackingNumber: order.tracking_number || "",
-    trackingUrl: order.tracking_url || "",
-    estimatedDelivery: order.estimated_delivery ? order.estimated_delivery.slice(0, 10) : "",
-  };
-  const setShippingField = (order: AdminOrder, field: keyof AdminOrderShippingPatch, value: string) => {
-    setShippingDrafts(current => ({ ...current, [order.id]: { ...shippingDraft(order), ...current[order.id], [field]: value } }));
+  const shippingDraft = (order: AdminOrder): AdminOrderShippingPatch =>
+    shippingDrafts[order.id] || {
+      courierCode: order.courier_code || "",
+      courierName: order.courier_name || "",
+      trackingNumber: order.tracking_number || "",
+      trackingUrl: order.tracking_url || "",
+      estimatedDelivery: order.estimated_delivery
+        ? order.estimated_delivery.slice(0, 10)
+        : "",
+    };
+  const setShippingField = (
+    order: AdminOrder,
+    field: keyof AdminOrderShippingPatch,
+    value: string,
+  ) => {
+    setShippingDrafts((current) => ({
+      ...current,
+      [order.id]: {
+        ...shippingDraft(order),
+        ...current[order.id],
+        [field]: value,
+      },
+    }));
   };
   const saveShipping = async (order: AdminOrder) => {
     setBusy(`shipping:${order.id}`);
     try {
       await onShipping(order, shippingDraft(order));
-      setShippingDrafts(current => {
+      setShippingDrafts((current) => {
         const next = { ...current };
         delete next[order.id];
         return next;
@@ -2039,6 +2254,18 @@ function Orders({
         title="Orders"
         detail="Confirm, fulfil and track every customer order. New orders refresh automatically."
       />
+      <View style={styles.toolbar}>
+        <Ionicons name="search-outline" size={20} color="#6f6660" />
+        <TextInput
+          accessibilityLabel="Search orders"
+          value={query}
+          onChangeText={setQuery}
+          placeholder="Order number, customer or phone"
+          placeholderTextColor="#817771"
+          autoCapitalize="none"
+          style={styles.toolbarInput}
+        />
+      </View>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -2123,6 +2350,30 @@ function Orders({
                   {money(order.total, order.currency)}
                 </Text>
               </View>
+              {compact ? (
+                <View style={styles.mobileContactRow}>
+                  <Pressable
+                    accessibilityRole="link"
+                    accessibilityLabel={`Call ${order.customer?.name || "customer"}`}
+                    disabled={!order.customer?.phone}
+                    onPress={() => void Linking.openURL(`tel:${order.customer?.phone}`)}
+                    style={styles.mobileContactButton}
+                  >
+                    <Ionicons name="call-outline" size={18} color="#211719" />
+                    <Text style={styles.mobileContactText}>Call</Text>
+                  </Pressable>
+                  <Pressable
+                    accessibilityRole="link"
+                    accessibilityLabel={`WhatsApp ${order.customer?.name || "customer"}`}
+                    disabled={!order.customer?.phone}
+                    onPress={() => whatsapp(order)}
+                    style={[styles.mobileContactButton, styles.mobileWhatsappButton]}
+                  >
+                    <Ionicons name="logo-whatsapp" size={18} color="#176b43" />
+                    <Text style={[styles.mobileContactText, { color: "#176b43" }]}>WhatsApp</Text>
+                  </Pressable>
+                </View>
+              ) : null}
               {open ? (
                 <View style={styles.orderDetails}>
                   <View style={styles.orderDetailGrid}>
@@ -2202,19 +2453,76 @@ function Orders({
                     <View style={styles.shippingEditorHead}>
                       <View style={{ flex: 1 }}>
                         <Text style={styles.metaLabel}>COURIER & TRACKING</Text>
-                        <Text style={styles.orderDetailMeta}>These verified details appear on the customer&apos;s tracking page.</Text>
+                        <Text style={styles.orderDetailMeta}>
+                          These verified details appear on the customer&apos;s
+                          tracking page.
+                        </Text>
                       </View>
                       <Ionicons name="navigate-outline" size={18} color={RED} />
                     </View>
                     <View style={styles.shippingEditorGrid}>
-                      <TextInput value={shippingDraft(order).courierName || ""} onChangeText={value => setShippingField(order, "courierName", value)} placeholder="Courier name" placeholderTextColor="#9b918b" style={styles.shippingInput} />
-                      <TextInput value={shippingDraft(order).courierCode || ""} onChangeText={value => setShippingField(order, "courierCode", value)} placeholder="Courier code" placeholderTextColor="#9b918b" autoCapitalize="characters" style={styles.shippingInput} />
-                      <TextInput value={shippingDraft(order).trackingNumber || ""} onChangeText={value => setShippingField(order, "trackingNumber", value)} placeholder="Tracking number" placeholderTextColor="#9b918b" autoCapitalize="characters" style={styles.shippingInput} />
-                      <TextInput value={shippingDraft(order).trackingUrl || ""} onChangeText={value => setShippingField(order, "trackingUrl", value)} placeholder="Tracking URL (https://…)" placeholderTextColor="#9b918b" autoCapitalize="none" keyboardType="url" style={styles.shippingInput} />
-                      <TextInput value={shippingDraft(order).estimatedDelivery || ""} onChangeText={value => setShippingField(order, "estimatedDelivery", value)} placeholder="Estimated delivery (YYYY-MM-DD)" placeholderTextColor="#9b918b" style={styles.shippingInput} />
+                      <TextInput
+                        value={shippingDraft(order).courierName || ""}
+                        onChangeText={(value) =>
+                          setShippingField(order, "courierName", value)
+                        }
+                        placeholder="Courier name"
+                        placeholderTextColor="#9b918b"
+                        style={styles.shippingInput}
+                      />
+                      <TextInput
+                        value={shippingDraft(order).courierCode || ""}
+                        onChangeText={(value) =>
+                          setShippingField(order, "courierCode", value)
+                        }
+                        placeholder="Courier code"
+                        placeholderTextColor="#9b918b"
+                        autoCapitalize="characters"
+                        style={styles.shippingInput}
+                      />
+                      <TextInput
+                        value={shippingDraft(order).trackingNumber || ""}
+                        onChangeText={(value) =>
+                          setShippingField(order, "trackingNumber", value)
+                        }
+                        placeholder="Tracking number"
+                        placeholderTextColor="#9b918b"
+                        autoCapitalize="characters"
+                        style={styles.shippingInput}
+                      />
+                      <TextInput
+                        value={shippingDraft(order).trackingUrl || ""}
+                        onChangeText={(value) =>
+                          setShippingField(order, "trackingUrl", value)
+                        }
+                        placeholder="Tracking URL (https://…)"
+                        placeholderTextColor="#9b918b"
+                        autoCapitalize="none"
+                        keyboardType="url"
+                        style={styles.shippingInput}
+                      />
+                      <TextInput
+                        value={shippingDraft(order).estimatedDelivery || ""}
+                        onChangeText={(value) =>
+                          setShippingField(order, "estimatedDelivery", value)
+                        }
+                        placeholder="Estimated delivery (YYYY-MM-DD)"
+                        placeholderTextColor="#9b918b"
+                        style={styles.shippingInput}
+                      />
                     </View>
-                    <Pressable disabled={busy === `shipping:${order.id}`} onPress={() => void saveShipping(order)} style={styles.shippingSave}>
-                      {busy === `shipping:${order.id}` ? <ActivityIndicator size="small" color="#fff" /> : <Text style={styles.orderAdvanceText}>Save delivery details</Text>}
+                    <Pressable
+                      disabled={busy === `shipping:${order.id}`}
+                      onPress={() => void saveShipping(order)}
+                      style={styles.shippingSave}
+                    >
+                      {busy === `shipping:${order.id}` ? (
+                        <ActivityIndicator size="small" color="#fff" />
+                      ) : (
+                        <Text style={styles.orderAdvanceText}>
+                          Save delivery details
+                        </Text>
+                      )}
                     </Pressable>
                   </View>
                   <View style={styles.orderTotals}>
@@ -2272,13 +2580,26 @@ function Orders({
                     accessibilityRole="button"
                     accessibilityLabel={`Remove order ${order.order_number || order.id}`}
                     disabled={busy === `remove:${order.id}`}
-                    onPress={() => { setRemoveError(""); setConfirmRemove(order); }}
-                    style={[styles.orderRemove, compact && styles.orderCancelMobile]}
+                    onPress={() => {
+                      setRemoveError("");
+                      setConfirmRemove(order);
+                    }}
+                    style={[
+                      styles.orderRemove,
+                      compact && styles.orderCancelMobile,
+                    ]}
                   >
                     <Ionicons name="trash-outline" size={14} color={RED} />
                     <Text style={styles.orderRemoveText}>Remove</Text>
                   </Pressable>
-                  {(["pending", "confirmed", "processing", "ready_for_dispatch"] as AdminOrder["status"][]).includes(order.status) ? (
+                  {(
+                    [
+                      "pending",
+                      "confirmed",
+                      "processing",
+                      "ready_for_dispatch",
+                    ] as AdminOrder["status"][]
+                  ).includes(order.status) ? (
                     <Pressable
                       disabled={busy === order.id}
                       onPress={() => setConfirmCancel(order)}
@@ -2290,8 +2611,17 @@ function Orders({
                       <Text style={styles.orderCancelText}>Cancel</Text>
                     </Pressable>
                   ) : null}
-                  {(["shipped", "out_for_delivery"] as AdminOrder["status"][]).includes(order.status) ? (
-                    <Pressable disabled={busy === order.id} onPress={() => update(order, "delivery_failed")} style={[styles.orderCancel, compact && styles.orderCancelMobile]}>
+                  {(
+                    ["shipped", "out_for_delivery"] as AdminOrder["status"][]
+                  ).includes(order.status) ? (
+                    <Pressable
+                      disabled={busy === order.id}
+                      onPress={() => update(order, "delivery_failed")}
+                      style={[
+                        styles.orderCancel,
+                        compact && styles.orderCancelMobile,
+                      ]}
+                    >
                       <Text style={styles.orderCancelText}>Delivery issue</Text>
                     </Pressable>
                   ) : null}
@@ -2333,30 +2663,93 @@ function Orders({
           text="Orders matching this status will appear here."
         />
       ) : null}
-      <Modal visible={!!confirmCancel} transparent animationType="fade" onRequestClose={() => setConfirmCancel(null)}>
+      <Modal
+        visible={!!confirmCancel}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setConfirmCancel(null)}
+      >
         <View style={styles.confirmBackdrop}>
           <View style={styles.confirmDialog}>
-            <View style={styles.confirmIcon}><Ionicons name="warning-outline" size={24} color={RED} /></View>
+            <View style={styles.confirmIcon}>
+              <Ionicons name="warning-outline" size={24} color={RED} />
+            </View>
             <Text style={styles.confirmTitle}>Cancel this order?</Text>
-            <Text style={styles.confirmText}>This changes the customer-visible status for {confirmCancel?.order_number || "this order"}. It does not delete the audit history.</Text>
+            <Text style={styles.confirmText}>
+              This changes the customer-visible status for{" "}
+              {confirmCancel?.order_number || "this order"}. It does not delete
+              the audit history.
+            </Text>
             <View style={styles.confirmActions}>
-              <Pressable accessibilityRole="button" onPress={() => setConfirmCancel(null)} style={styles.secondaryButton}><Text style={styles.secondaryButtonText}>Keep order</Text></Pressable>
-              <Pressable accessibilityRole="button" disabled={!confirmCancel || busy === confirmCancel?.id} onPress={() => { const order=confirmCancel; if(!order)return; setConfirmCancel(null); void update(order,"cancelled"); }} style={styles.dangerButton}><Text style={styles.primaryButtonText}>Cancel order</Text></Pressable>
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => setConfirmCancel(null)}
+                style={styles.secondaryButton}
+              >
+                <Text style={styles.secondaryButtonText}>Keep order</Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                disabled={!confirmCancel || busy === confirmCancel?.id}
+                onPress={() => {
+                  const order = confirmCancel;
+                  if (!order) return;
+                  setConfirmCancel(null);
+                  void update(order, "cancelled");
+                }}
+                style={styles.dangerButton}
+              >
+                <Text style={styles.primaryButtonText}>Cancel order</Text>
+              </Pressable>
             </View>
           </View>
         </View>
       </Modal>
-      <Modal visible={!!confirmRemove} transparent animationType="fade" onRequestClose={() => busy ? undefined : setConfirmRemove(null)}>
+      <Modal
+        visible={!!confirmRemove}
+        transparent
+        animationType="fade"
+        onRequestClose={() => (busy ? undefined : setConfirmRemove(null))}
+      >
         <View style={styles.confirmBackdrop}>
           <View style={styles.confirmDialog}>
-            <View style={styles.confirmIcon}><Ionicons name="trash-outline" size={24} color={RED} /></View>
-            <Text style={styles.confirmTitle}>Permanently remove this order?</Text>
-            <Text style={styles.confirmText}>{confirmRemove?.order_number || "This order"} will disappear from All Orders and customer tracking. This cannot be undone.</Text>
-            {removeError ? <Text style={styles.confirmError}>{removeError}</Text> : null}
+            <View style={styles.confirmIcon}>
+              <Ionicons name="trash-outline" size={24} color={RED} />
+            </View>
+            <Text style={styles.confirmTitle}>
+              Permanently remove this order?
+            </Text>
+            <Text style={styles.confirmText}>
+              {confirmRemove?.order_number || "This order"} will disappear from
+              All Orders and customer tracking. This cannot be undone.
+            </Text>
+            {removeError ? (
+              <Text style={styles.confirmError}>{removeError}</Text>
+            ) : null}
             <View style={styles.confirmActions}>
-              <Pressable accessibilityRole="button" disabled={!!busy} onPress={() => setConfirmRemove(null)} style={styles.secondaryButton}><Text style={styles.secondaryButtonText}>Keep order</Text></Pressable>
-              <Pressable accessibilityRole="button" disabled={!confirmRemove || !!busy} onPress={() => confirmRemove ? void remove(confirmRemove) : undefined} style={styles.dangerButton}>
-                {busy === `remove:${confirmRemove?.id}` ? <ActivityIndicator size="small" color="#fff" /> : <Text style={styles.primaryButtonText}>Remove permanently</Text>}
+              <Pressable
+                accessibilityRole="button"
+                disabled={!!busy}
+                onPress={() => setConfirmRemove(null)}
+                style={styles.secondaryButton}
+              >
+                <Text style={styles.secondaryButtonText}>Keep order</Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                disabled={!confirmRemove || !!busy}
+                onPress={() =>
+                  confirmRemove ? void remove(confirmRemove) : undefined
+                }
+                style={styles.dangerButton}
+              >
+                {busy === `remove:${confirmRemove?.id}` ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <Text style={styles.primaryButtonText}>
+                    Remove permanently
+                  </Text>
+                )}
               </Pressable>
             </View>
           </View>
@@ -4169,6 +4562,368 @@ function Settings({
   );
 }
 
+const preorderStatuses: AdminPreorderStatus[] = [
+  "new",
+  "contacted",
+  "waiting_for_stock",
+  "customer_confirmed",
+  "converted_to_order",
+  "completed",
+  "cancelled",
+];
+function Preorders({ session }: { session: AdminSession }) {
+  const [items, setItems] = useState<AdminPreorder[]>([]);
+  const [globalEnabled, setGlobalEnabled] = useState(true);
+  const [selected, setSelected] = useState<AdminPreorder | null>(null);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<AdminPreorderStatus | "all">("all");
+  const [notes, setNotes] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const reload = useCallback(async () => {
+    try {
+      const workspace = await loadAdminPreorders(session);
+      setItems(workspace.items);
+      setSelected((current) =>
+        current
+          ? workspace.items.find((item) => item.id === current.id) || current
+          : null,
+      );
+      setGlobalEnabled(workspace.enabled);
+      setError("");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Preorders could not be loaded.",
+      );
+    }
+  }, [session]);
+  useEffect(() => {
+    void reload();
+    const timer = setInterval(() => void reload(), 10_000);
+    return () => clearInterval(timer);
+  }, [reload]);
+  const visible = items.filter(
+    (item) =>
+      (filter === "all" || item.status === filter) &&
+      `${item.customer_name} ${item.phone} ${item.email || ""} ${item.product_snapshot_name}`
+        .toLowerCase()
+        .includes(query.trim().toLowerCase()),
+  );
+  const save = async (patch: {
+    status?: AdminPreorderStatus;
+    adminNotes?: string;
+  }) => {
+    if (!selected) return;
+    setBusy(true);
+    setError("");
+    try {
+      const updated = await updateAdminPreorder(session, selected.id, patch);
+      setItems((current) =>
+        current.map((item) => (item.id === updated.id ? updated : item)),
+      );
+      setSelected(updated);
+      setNotes(updated.admin_notes || "");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Request could not be updated.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
+  const open = (item: AdminPreorder) => {
+    setSelected(item);
+    setNotes(item.admin_notes || "");
+  };
+  const toggleGlobal = async () => {
+    if (busy) return;
+    setBusy(true);
+    setError("");
+    try {
+      setGlobalEnabled(
+        await updateAdminPreorderSettings(session, !globalEnabled),
+      );
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Global preorder setting could not be saved.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
+  const whatsapp = (item: AdminPreorder) =>
+    `https://wa.me/${item.phone.replace(/\D/g, "").replace(/^0/, "212")}?text=${encodeURIComponent(`Hello ${item.customer_name}, we are contacting you regarding your request for ${item.product_snapshot_name}.`)}`;
+  return (
+    <>
+      <SectionHeader
+        eyebrow="CUSTOMER DEMAND"
+        title="Preorder requests"
+        detail="Contact customers and manage every out-of-stock product request."
+        action={
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <Pressable
+              accessibilityRole="switch"
+              accessibilityState={{ checked: globalEnabled, busy }}
+              disabled={busy}
+              onPress={() => void toggleGlobal()}
+              style={[
+                styles.secondaryButton,
+                globalEnabled && { borderColor: "#18834d" },
+              ]}
+            >
+              <Text style={styles.secondaryButtonText}>
+                {globalEnabled ? "GLOBAL ON" : "GLOBAL OFF"}
+              </Text>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Refresh preorders"
+              onPress={() => void reload()}
+              style={styles.iconButton}
+            >
+              <Ionicons name="refresh-outline" size={18} />
+            </Pressable>
+            <View style={styles.countBadge}>
+              <Text style={styles.countValue}>
+                {items.filter((item) => item.status === "new").length}
+              </Text>
+              <Text style={styles.countLabel}>NEW</Text>
+            </View>
+          </View>
+        }
+      />
+      <View style={styles.toolbar}>
+        <Ionicons name="search-outline" size={19} color="#6f6660" />
+        <TextInput
+          value={query}
+          onChangeText={setQuery}
+          placeholder="Search customer, phone or product"
+          placeholderTextColor="#9b918b"
+          style={styles.toolbarInput}
+        />
+      </View>
+      <ScrollView
+        horizontal
+        contentContainerStyle={{ gap: 7, paddingBottom: 12 }}
+      >
+        {(["all", ...preorderStatuses] as const).map((value) => (
+          <Pressable
+            key={value}
+            onPress={() => setFilter(value)}
+            style={[
+              styles.secondaryButton,
+              filter === value && { borderColor: RED },
+            ]}
+          >
+            <Text style={styles.secondaryButtonText}>
+              {value.replaceAll("_", " ").toUpperCase()}
+            </Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+      {error ? (
+        <Text accessibilityRole="alert" style={styles.editorError}>
+          {error}
+        </Text>
+      ) : null}
+      <View style={styles.productAdminGrid}>
+        {visible.map((item) => (
+          <Pressable
+            key={item.id}
+            onPress={() => open(item)}
+            style={styles.productAdminCard}
+          >
+            <View style={styles.productAdminTop}>
+              {item.product_snapshot_image ? (
+                <Image
+                  source={{ uri: item.product_snapshot_image }}
+                  resizeMode="contain"
+                  style={styles.productAdminImage}
+                />
+              ) : (
+                <Ionicons name="cube-outline" size={36} color="#999" />
+              )}
+              <StatusPill value={item.status} />
+            </View>
+            <Text style={styles.productAdminBrand}>
+              {item.customer_name} · {item.phone}
+            </Text>
+            <Text numberOfLines={2} style={styles.productAdminName}>
+              {item.product_snapshot_name}
+            </Text>
+            <Text style={styles.editorHelp}>
+              {item.selected_variant || "Any variant"} · Qty {item.quantity} ·{" "}
+              {item.source.replace("_", " ")}
+            </Text>
+            <Text style={styles.editorHelp}>
+              {new Date(item.created_at).toLocaleString()}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+      {!visible.length ? (
+        <EmptyState
+          icon="time-outline"
+          title="No preorder requests"
+          text="New requests will appear here automatically."
+        />
+      ) : null}
+      <Modal
+        visible={!!selected}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setSelected(null)}
+      >
+        {selected ? (
+          <View style={styles.modalBackdrop}>
+            <View style={styles.editor}>
+              <View style={styles.editorHead}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.sectionEyebrow}>PREORDER REQUEST</Text>
+                  <Text style={styles.editorTitle}>
+                    {selected.product_snapshot_name}
+                  </Text>
+                  <Text style={styles.editorMeta}>
+                    {selected.customer_name} · {selected.phone}
+                  </Text>
+                </View>
+                <Pressable
+                  onPress={() => setSelected(null)}
+                  style={styles.closeButton}
+                >
+                  <Ionicons name="close" size={20} />
+                </Pressable>
+              </View>
+              <ScrollView contentContainerStyle={styles.editorBody}>
+                {selected.product_snapshot_image ? (
+                  <Image
+                    source={{ uri: selected.product_snapshot_image }}
+                    resizeMode="contain"
+                    style={styles.productImagePreview}
+                  />
+                ) : null}
+                <Text style={styles.fieldLabel}>CUSTOMER</Text>
+                <Text style={styles.editorHelp}>
+                  {selected.customer_name}\n{selected.phone}\n
+                  {selected.email || "No email"}\n{selected.city || "No city"}
+                </Text>
+                <Text style={styles.fieldLabel}>REQUEST METADATA</Text>
+                <Text style={styles.editorHelp}>
+                  ID: {selected.id}{"\n"}
+                  Created: {new Date(selected.created_at).toLocaleString()}{"\n"}
+                  Source: {selected.source.replace("_", " ")}
+                </Text>
+                <Text style={styles.fieldLabel}>REQUEST</Text>
+                <Text style={styles.editorHelp}>
+                  {selected.selected_variant || "Any variant"} · Quantity{" "}
+                  {selected.quantity}\n
+                  {selected.customer_message || "No customer note"}
+                </Text>
+                <Text style={styles.fieldLabel}>PRODUCT</Text>
+                <Text style={styles.editorHelp}>
+                  Product ID: {selected.product_id || "Deleted product"}{"\n"}
+                  Variant ID: {selected.variant_id || "No variant"}{"\n"}
+                  SKU: {selected.product_variants?.sku || "Not assigned"}
+                </Text>
+                {selected.product_id ? (
+                  <Pressable
+                    onPress={() =>
+                      void Linking.openURL(
+                        `https://ipordise.com/app?store=1&product=${encodeURIComponent(selected.product_id!)}`,
+                      )
+                    }
+                    style={styles.secondaryButton}
+                  >
+                    <Text style={styles.secondaryButtonText}>Open product</Text>
+                  </Pressable>
+                ) : null}
+                {(selected.product_variants
+                  ? selected.product_variants.stock_quantity === null ||
+                    selected.product_variants.stock_quantity > 0
+                  : selected.products?.stock_left === null ||
+                    Number(selected.products?.stock_left) > 0) ? (
+                  <Text style={[styles.editorHelp, { color: "#18834d" }]}>
+                    Product now in stock
+                  </Text>
+                ) : null}
+                <View
+                  style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}
+                >
+                  <Pressable
+                    onPress={() =>
+                      void Linking.openURL(`tel:${selected.phone}`)
+                    }
+                    style={styles.primaryButton}
+                  >
+                    <Text style={styles.primaryButtonText}>Call</Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => void Linking.openURL(whatsapp(selected))}
+                    style={styles.primaryButton}
+                  >
+                    <Text style={styles.primaryButtonText}>WhatsApp</Text>
+                  </Pressable>
+                  {selected.email ? (
+                    <Pressable
+                      onPress={() =>
+                        void Linking.openURL(`mailto:${selected.email}`)
+                      }
+                      style={styles.secondaryButton}
+                    >
+                      <Text style={styles.secondaryButtonText}>Email</Text>
+                    </Pressable>
+                  ) : null}
+                </View>
+                <Text style={styles.fieldLabel}>STATUS</Text>
+                <View
+                  style={{ flexDirection: "row", flexWrap: "wrap", gap: 7 }}
+                >
+                  {preorderStatuses.map((status) => (
+                    <Pressable
+                      disabled={busy}
+                      key={status}
+                      onPress={() => void save({ status })}
+                      style={[
+                        styles.secondaryButton,
+                        selected.status === status && { borderColor: RED },
+                      ]}
+                    >
+                      <Text style={styles.secondaryButtonText}>
+                        {status.replaceAll("_", " ")}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+                <Text style={styles.fieldLabel}>PRIVATE ADMIN NOTES</Text>
+                <TextInput
+                  value={notes}
+                  onChangeText={setNotes}
+                  maxLength={4000}
+                  multiline
+                  style={[styles.editorInput, styles.homeMultiline]}
+                />
+                <Pressable
+                  disabled={busy}
+                  onPress={() => void save({ adminNotes: notes })}
+                  style={styles.primaryButton}
+                >
+                  {busy ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : (
+                    <Text style={styles.primaryButtonText}>Save notes</Text>
+                  )}
+                </Pressable>
+              </ScrollView>
+            </View>
+          </View>
+        ) : null}
+      </Modal>
+    </>
+  );
+}
+
 function AdminNavigation({
   active,
   data,
@@ -4182,7 +4937,8 @@ function AdminNavigation({
   onNavigate: (tab: AdminTab) => void;
   onSignOut: () => void;
 }) {
-  const pending = data?.orders.filter((item) => item.status === "pending").length || 0;
+  const pending =
+    data?.orders.filter((item) => item.status === "pending").length || 0;
   return (
     <>
       <View style={styles.sidebarBrand}>
@@ -4197,23 +4953,50 @@ function AdminNavigation({
             accessibilityState={{ selected: active === label }}
             key={label}
             onPress={() => onNavigate(label)}
-            style={[styles.sidebarItem, active === label && styles.sidebarItemActive]}
+            style={[
+              styles.sidebarItem,
+              active === label && styles.sidebarItemActive,
+            ]}
           >
-            <Ionicons name={icon as any} size={20} color={active === label ? "#fff" : "#c8bec0"} />
-            <Text style={[styles.sidebarItemText, active === label && styles.sidebarItemTextActive]}>{label}</Text>
-            {label === "Orders" && pending ? <View style={styles.sidebarBadge}><Text style={styles.sidebarBadgeText}>{pending}</Text></View> : null}
+            <Ionicons
+              name={icon as any}
+              size={20}
+              color={active === label ? "#fff" : "#c8bec0"}
+            />
+            <Text
+              style={[
+                styles.sidebarItemText,
+                active === label && styles.sidebarItemTextActive,
+              ]}
+            >
+              {label}
+            </Text>
+            {label === "Orders" && pending ? (
+              <View style={styles.sidebarBadge}>
+                <Text style={styles.sidebarBadgeText}>{pending}</Text>
+              </View>
+            ) : null}
           </Pressable>
         ))}
       </View>
       <View style={styles.sidebarFooter}>
         <View style={styles.sidebarUser}>
-          <View style={styles.sidebarAvatar}><Text style={styles.sidebarAvatarText}>IP</Text></View>
+          <View style={styles.sidebarAvatar}>
+            <Text style={styles.sidebarAvatarText}>IP</Text>
+          </View>
           <View style={{ flex: 1, minWidth: 0 }}>
-            <Text numberOfLines={1} style={styles.sidebarUserName}>{email}</Text>
+            <Text numberOfLines={1} style={styles.sidebarUserName}>
+              {email}
+            </Text>
             <Text style={styles.sidebarRole}>ADMINISTRATOR</Text>
           </View>
         </View>
-        <Pressable accessibilityRole="button" accessibilityLabel="Sign out of Admin" onPress={onSignOut} style={styles.signOut}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Sign out of Admin"
+          onPress={onSignOut}
+          style={styles.signOut}
+        >
           <Ionicons name="log-out-outline" size={18} color="#c8bec0" />
           <Text style={styles.signOutText}>Sign out</Text>
         </Pressable>
@@ -4336,19 +5119,32 @@ export function AdminDashboard() {
         : current,
     );
   };
-  const saveOrderShipping = async (order: AdminOrder, patch: AdminOrderShippingPatch) => {
+  const saveOrderShipping = async (
+    order: AdminOrder,
+    patch: AdminOrderShippingPatch,
+  ) => {
     const updated = await updateAdminOrderShipping(session, order.id, patch);
-    setData(current => current ? {
-      ...current,
-      orders: current.orders.map(item => item.id === order.id ? { ...item, ...updated } : item),
-    } : current);
+    setData((current) =>
+      current
+        ? {
+            ...current,
+            orders: current.orders.map((item) =>
+              item.id === order.id ? { ...item, ...updated } : item,
+            ),
+          }
+        : current,
+    );
   };
   const removeOrder = async (order: AdminOrder) => {
     await deleteAdminOrder(session, order.id);
-    setData(current => current ? {
-      ...current,
-      orders: current.orders.filter(item => item.id !== order.id),
-    } : current);
+    setData((current) =>
+      current
+        ? {
+            ...current,
+            orders: current.orders.filter((item) => item.id !== order.id),
+          }
+        : current,
+    );
   };
   const saveConversation = async (
     item: AdminConversation,
@@ -4426,7 +5222,14 @@ export function AdminDashboard() {
     ) : active === "Inventory" ? (
       <VariantInventoryWorkspace data={data} onSave={saveProduct} />
     ) : active === "Orders" ? (
-      <Orders data={data} onStatus={saveOrder} onShipping={saveOrderShipping} onRemove={removeOrder} />
+      <Orders
+        data={data}
+        onStatus={saveOrder}
+        onShipping={saveOrderShipping}
+        onRemove={removeOrder}
+      />
+    ) : active === "Preorders" ? (
+      <Preorders session={session} />
     ) : active === "Customers" ? (
       <Customers data={data} />
     ) : active === "Promotions" ? (
@@ -4458,7 +5261,15 @@ export function AdminDashboard() {
       <View style={styles.adminApp}>
         {desktop ? (
           <View style={styles.sidebar}>
-            <AdminNavigation active={active} data={data} email={session.user.email} onNavigate={openAdminTab} onSignOut={() => void signOutAdmin(session).then(() => setSession(null))} />
+            <AdminNavigation
+              active={active}
+              data={data}
+              email={session.user.email}
+              onNavigate={openAdminTab}
+              onSignOut={() =>
+                void signOutAdmin(session).then(() => setSession(null))
+              }
+            />
           </View>
         ) : null}
         <View style={styles.adminMain}>
@@ -4466,12 +5277,19 @@ export function AdminDashboard() {
             <View>
               {!desktop ? (
                 <View style={styles.mobileHeaderTitle}>
-                  <Pressable accessibilityRole="button" accessibilityLabel="Open Admin navigation" onPress={() => setDrawerOpen(true)} style={styles.menuButton}>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel="Open Admin navigation"
+                    onPress={() => setDrawerOpen(true)}
+                    style={styles.menuButton}
+                  >
                     <Ionicons name="menu" size={24} color="#211719" />
                   </Pressable>
                   <View style={{ minWidth: 0 }}>
                     <Text style={styles.mobileBrandMeta}>IPORDISE ADMIN</Text>
-                    <Text numberOfLines={1} style={styles.mobilePageTitle}>{active}</Text>
+                    <Text numberOfLines={1} style={styles.mobilePageTitle}>
+                      {active}
+                    </Text>
                   </View>
                 </View>
               ) : (
@@ -4499,12 +5317,39 @@ export function AdminDashboard() {
             </View>
           </View>
           {!desktop ? (
-            <Modal visible={drawerOpen} transparent animationType="fade" onRequestClose={() => setDrawerOpen(false)}>
+            <Modal
+              visible={drawerOpen}
+              transparent
+              animationType="fade"
+              onRequestClose={() => setDrawerOpen(false)}
+            >
               <View style={styles.drawerLayer}>
-                <Pressable accessibilityRole="button" accessibilityLabel="Close Admin navigation" onPress={() => setDrawerOpen(false)} style={styles.drawerBackdrop} />
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Close Admin navigation"
+                  onPress={() => setDrawerOpen(false)}
+                  style={styles.drawerBackdrop}
+                />
                 <SafeAreaView style={styles.drawerPanel}>
-                  <View style={styles.drawerCloseRow}><Pressable accessibilityRole="button" accessibilityLabel="Close Admin navigation" onPress={() => setDrawerOpen(false)} style={styles.iconButton}><Ionicons name="close" size={22} /></Pressable></View>
-                  <AdminNavigation active={active} data={data} email={session.user.email} onNavigate={openAdminTab} onSignOut={() => void signOutAdmin(session).then(() => setSession(null))} />
+                  <View style={styles.drawerCloseRow}>
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel="Close Admin navigation"
+                      onPress={() => setDrawerOpen(false)}
+                      style={styles.iconButton}
+                    >
+                      <Ionicons name="close" size={22} />
+                    </Pressable>
+                  </View>
+                  <AdminNavigation
+                    active={active}
+                    data={data}
+                    email={session.user.email}
+                    onNavigate={openAdminTab}
+                    onSignOut={() =>
+                      void signOutAdmin(session).then(() => setSession(null))
+                    }
+                  />
                 </SafeAreaView>
               </View>
             </Modal>
@@ -5626,13 +6471,46 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  menuButton: { width: 48, height: 48, borderRadius: 14, alignItems: "center", justifyContent: "center", backgroundColor: "#f4f0ee" },
-  mobileHeaderTitle: { flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: 10 },
-  mobilePageTitle: { fontFamily: "serif", fontSize: 18, lineHeight: 22, fontWeight: "700", color: "#171310" },
-  drawerLayer: { flex: 1, flexDirection: "row", backgroundColor: "rgba(18,12,12,.52)" },
+  menuButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f4f0ee",
+  },
+  mobileHeaderTitle: {
+    flex: 1,
+    minWidth: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  mobilePageTitle: {
+    fontFamily: "serif",
+    fontSize: 18,
+    lineHeight: 22,
+    fontWeight: "700",
+    color: "#171310",
+  },
+  drawerLayer: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "rgba(18,12,12,.52)",
+  },
   drawerBackdrop: { ...StyleSheet.absoluteFillObject },
-  drawerPanel: { width: "86%", maxWidth: 330, backgroundColor: "#151011", paddingHorizontal: 16, paddingTop: 8 },
-  drawerCloseRow: { minHeight: 52, alignItems: "flex-end", justifyContent: "center" },
+  drawerPanel: {
+    width: "86%",
+    maxWidth: 330,
+    backgroundColor: "#151011",
+    paddingHorizontal: 16,
+    paddingTop: 8,
+  },
+  drawerCloseRow: {
+    minHeight: 52,
+    alignItems: "flex-end",
+    justifyContent: "center",
+  },
   onlinePill: {
     height: 30,
     borderRadius: 15,
@@ -6032,7 +6910,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f5f3",
     overflow: "hidden",
   },
-  editorPhone: { maxWidth: "100%", maxHeight: "100%", height: "100%", borderRadius: 0 },
+  editorPhone: {
+    maxWidth: "100%",
+    maxHeight: "100%",
+    height: "100%",
+    borderRadius: 0,
+  },
   editorHead: {
     padding: 19,
     backgroundColor: "#fff",
@@ -6097,15 +6980,54 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 7,
   },
-  productImagePreview: { width: "100%", height: 150, borderRadius: 14, backgroundColor: "#fff", marginTop: 9 },
-  confirmBackdrop: { flex: 1, backgroundColor: "rgba(18,12,12,.64)", padding: 18, alignItems: "center", justifyContent: "center" },
-  confirmDialog: { width: "100%", maxWidth: 430, borderRadius: 22, backgroundColor: "#fff", padding: 22 },
-  confirmIcon: { width: 48, height: 48, borderRadius: 16, backgroundColor: "#fff0f4", alignItems: "center", justifyContent: "center" },
-  confirmTitle: { fontFamily: "serif", fontSize: 23, fontWeight: "700", color: "#211719", marginTop: 14 },
+  productImagePreview: {
+    width: "100%",
+    height: 150,
+    borderRadius: 14,
+    backgroundColor: "#fff",
+    marginTop: 9,
+  },
+  confirmBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(18,12,12,.64)",
+    padding: 18,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  confirmDialog: {
+    width: "100%",
+    maxWidth: 430,
+    borderRadius: 22,
+    backgroundColor: "#fff",
+    padding: 22,
+  },
+  confirmIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: "#fff0f4",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  confirmTitle: {
+    fontFamily: "serif",
+    fontSize: 23,
+    fontWeight: "700",
+    color: "#211719",
+    marginTop: 14,
+  },
   confirmText: { fontSize: 13, lineHeight: 20, color: "#70645e", marginTop: 7 },
   confirmError: { fontSize: 12, lineHeight: 18, color: RED, marginTop: 10 },
   confirmActions: { flexDirection: "row", gap: 9, marginTop: 20 },
-  dangerButton: { minHeight: 48, borderRadius: 14, backgroundColor: RED, flex: 1, alignItems: "center", justifyContent: "center", paddingHorizontal: 16 },
+  dangerButton: {
+    minHeight: 48,
+    borderRadius: 14,
+    backgroundColor: RED,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+  },
   priceHead: {
     flexDirection: "row",
     alignItems: "flex-end",

@@ -141,7 +141,7 @@ test('checkout retries reuse a private idempotency key until Firebase confirms t
   const source = await readFile(new URL('../src/services/orderService.ts', import.meta.url), 'utf8');
   assert.match(source, /IDEMPOTENCY_STORAGE_KEY/);
   assert.match(source, /pending\.fingerprint===currentFingerprint/);
-  assert.match(source, /24\*60\*60\*1000/);
+  assert.doesNotMatch(source, /Date\.now\(\)-pending\.createdAt<24\*60\*60\*1000/);
   assert.match(source, /await clearPendingAttempt\(\)/);
   assert.match(source, /timeoutMs:45_000,\s*maxAttempts:1/);
   assert.doesNotMatch(source, /localStorage\.setItem\([^,]+,\s*JSON\.stringify\(orderPayload\)/);
@@ -178,6 +178,8 @@ test('shared API hardening rejects hostile origins and unsafe retry defaults', a
   assert.match(client, /retrySafe=\['GET','HEAD','OPTIONS'\]\.includes\(method\)\|\|headers\.has\('Idempotency-Key'\)/);
   assert.match(client, /credentials:'omit'/);
   assert.match(client, /redirect:'error'/);
+  assert.match(client, /if \(status >= 500\) return 'The service is temporarily unavailable\. Please try again\.'/);
+  assert.match(client, /safeServiceMessage\(body, response\.status\)/);
 });
 
 test('legacy administration fails closed and cannot send client-authored order confirmations', async () => {

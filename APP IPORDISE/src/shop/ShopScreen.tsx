@@ -4,7 +4,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Svg,{Path,Text as SvgText} from 'react-native-svg';
 import {useResponsiveLayout} from '../useResponsiveLayout';
-import {loadSharedProducts,type Product} from '../sharedCatalog';
+import {loadBundledProducts,loadSharedProducts,type Product} from '../sharedCatalog';
 import {searchProducts} from '../productSearch';
 import {useBagSnapshot,useFavouriteSnapshot,useShoppingActions} from '../commerce/ShoppingContext';
 import {logger} from '../observability/logger';
@@ -84,8 +84,9 @@ function SkeletonGrid({width}:{width:number}){return <View accessibilityLabel="L
 export function ShopScreen({fallbackProducts,onBrowse,onOpenProduct,onWishlist,onBag,bottomInset}:{fallbackProducts:Product[];onBrowse:(intent:ShopBrowseIntent)=>void;onOpenProduct:(product:Product,products:Product[])=>void;onWishlist:()=>void;onBag:()=>void;bottomInset:number}){
   const layout=useResponsiveLayout();const {bagCount}=useBagSnapshot();const {favouriteIds,favourites}=useFavouriteSnapshot();const {toggleFavourite}=useShoppingActions();const listRef=useRef<FlatList<SectionId>>(null);
   const restoredOffset=useRef(false);
-  const [products,setProducts]=useState(fallbackProducts);const [config,setConfig]=useState<ShopConfig>({...defaultShopConfig,banner:{...defaultShopConfig.banner,active:false}});const [loading,setLoading]=useState(true);const [error,setError]=useState(false);const [query,setQuery]=useState('');const deferredQuery=useDeferredValue(query);const [selectedCategory,setSelectedCategory]=useState<ShopLink|null>(null);const [selectedBrand,setSelectedBrand]=useState<string|null>(()=>Platform.OS==='web'&&typeof globalThis.location!=='undefined'?new URLSearchParams(globalThis.location.search).get('shopBrand'):null);const [sortMode,setSortMode]=useState<'featured'|'name'|'price-asc'|'price-desc'>('featured');const [availableOnly,setAvailableOnly]=useState(false);
-  const refresh=useCallback(async(forceRefresh:unknown=false)=>{setLoading(true);setError(false);try{const catalog=await loadSharedProducts(forceRefresh===true);setProducts(catalog);}catch(reason){setError(true);logger.warn('shop_hub_using_cached_catalogue',{error:reason});}finally{setLoading(false);}},[]);
+  const bundledProducts=useMemo(()=>fallbackProducts.length?fallbackProducts:loadBundledProducts(),[fallbackProducts]);
+  const [products,setProducts]=useState(bundledProducts);const [config,setConfig]=useState<ShopConfig>({...defaultShopConfig,banner:{...defaultShopConfig.banner,active:false}});const [loading,setLoading]=useState(true);const [error,setError]=useState(false);const [query,setQuery]=useState('');const deferredQuery=useDeferredValue(query);const [selectedCategory,setSelectedCategory]=useState<ShopLink|null>(null);const [selectedBrand,setSelectedBrand]=useState<string|null>(()=>Platform.OS==='web'&&typeof globalThis.location!=='undefined'?new URLSearchParams(globalThis.location.search).get('shopBrand'):null);const [sortMode,setSortMode]=useState<'featured'|'name'|'price-asc'|'price-desc'>('featured');const [availableOnly,setAvailableOnly]=useState(false);
+  const refresh=useCallback(async(forceRefresh:unknown=false)=>{setLoading(true);setError(false);try{const catalog=await loadSharedProducts(forceRefresh===true);setProducts(catalog);}catch(reason){setProducts(bundledProducts);setError(!bundledProducts.length);logger.warn('shop_hub_using_cached_catalogue',{error:reason});}finally{setLoading(false);}},[bundledProducts]);
   useEffect(()=>{void refresh();},[refresh]);
   useEffect(()=>{let mounted=true;void loadShopConfig().then(shop=>{if(mounted)setConfig({...shop,banner:{...shop.banner,active:false}});}).catch(reason=>logger.warn('shop_config_using_defaults',{error:reason}));return()=>{mounted=false;};},[]);
   const openIntent=useCallback((intent:ShopBrowseIntent)=>{const search=intent.brand||intent.query;if(search){recentSearches=[search,...recentSearches.filter(value=>value.toLowerCase()!==search.toLowerCase())].slice(0,5);}Keyboard.dismiss();onBrowse(intent);},[onBrowse]);
@@ -95,8 +96,8 @@ export function ShopScreen({fallbackProducts,onBrowse,onOpenProduct,onWishlist,o
   const visibleCategories=useMemo(()=>config.categories.map(item=>({item,count:countFor(products,item)})).filter(entry=>entry.count>0),[config.categories,products]);
   const allBrands=useMemo(()=>buildBrandDiscoveryItems(products,config.featuredBrands,''),[config.featuredBrands,products]);
   const brands=allBrands;
-  const columns=layout.largeTablet?4:layout.tablet?3:layout.compact?1:2;const cardWidth=Math.floor((layout.contentWidth-10*(columns-1))/columns);
-  const resultColumns=layout.largeTablet?4:layout.tablet?3:2;const resultCardWidth=Math.floor((layout.contentWidth-10*(resultColumns-1))/resultColumns);
+  const columns=layout.compact?1:layout.catalogColumns;const cardWidth=Math.floor((layout.contentWidth-10*(columns-1))/columns);
+  const resultColumns=layout.catalogColumns;const resultCardWidth=Math.floor((layout.contentWidth-10*(resultColumns-1))/resultColumns);
   const selectedProducts=useMemo(()=>{
     if(!selectedCategory&&!selectedBrand)return [];
     let matches=products.filter(product=>selectedBrand?matchesShopIntent(product,{brand:selectedBrand}):matchesShopIntent(product,selectedCategory!));

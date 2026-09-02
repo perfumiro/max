@@ -14,8 +14,10 @@ test('guest checkout survives authentication without losing the intended page', 
   assert.match(app, /previewCommercePage==='checkout'/);
   assert.match(app, /rememberProtectedCommercePath\(next\)/);
   assert.match(app, /clearProtectedCommercePath\(\)/);
+  assert.match(app, /if\(next==='wishlist'\)\{navigateCommerce\(next\);return;\}/);
   assert.match(app, /onCheckout=\{\(\)=>navigateCommerce\('checkout'\)\}/);
   assert.doesNotMatch(app, /!session&&\(commercePage==='checkout'\|\|commercePage==='wishlist'\)/);
+  assert.doesNotMatch(app, /if\(!session&&commercePage==='wishlist'\)/);
   assert.match(navigation, /page: destination/);
   assert.match(navigation, /history\?\.replaceState/);
   assert.match(auth, /current !== destination\) window\.location\.replace\(destination\)/);
@@ -34,7 +36,7 @@ test('guest customers can submit checkout while the server keeps authoritative o
   assert.match(client, /order=await submitCompatibleOrder\(''\)/);
   assert.match(client, /normalizeCompletedOrder/);
   assert.match(client, /INVALID_ORDER_CONFIRMATION/);
-  assert.match(checkout, /onComplete\(order\);\s*clearBag\(\)/);
+  assert.match(checkout, /onComplete\(order\);\s*checkoutSessionDraft = null;\s*clearBag\(\)/);
   assert.match(checkout, /session\?\.access_token\s*\|\|\s*["']/);
   assert.match(edge, /authenticatedUser \? 25 : 8/);
   assert.match(edge, /p_user_id: authenticatedUser\?\.id \|\| null/);
@@ -43,13 +45,21 @@ test('guest customers can submit checkout while the server keeps authoritative o
 });
 
 test('successful guest orders open the confirmation and guest tracking experiences safely', async () => {
-  const [app, checkout, service] = await Promise.all([
+  const [app, service] = await Promise.all([
     read('App.tsx'),
-    read('src/commerce/CommercePages.tsx'),
     read('src/services/orderService.ts'),
   ]);
   assert.match(app, /setHelpDestination\('track'\);activeRef\.current='Help';setActive\('Help'\)/);
   assert.match(app, /<ThankYouPage/);
   assert.match(service, /raw\.orderNumber\?\?raw\.order_number/);
   assert.match(service, /Number\.isFinite\(total\)/);
+});
+
+test('checkout preserves entered details during in-app back navigation and blocks empty checkout', async () => {
+  const checkout = await read('src/commerce/CommercePages.tsx');
+  assert.match(checkout, /let checkoutSessionDraft:/);
+  assert.match(checkout, /checkoutSessionDraft = \{ customer, notes \}/);
+  assert.match(checkout, /if \(!bag\.length\) \{/);
+  assert.match(checkout, /Your bag is empty\./);
+  assert.match(checkout, /checkoutSessionDraft = null;\s*clearBag\(\)/);
 });

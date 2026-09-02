@@ -2,15 +2,24 @@ const normalizeUrl = (value: string | undefined, preserveLocation = false) => {
   if (!value) return undefined;
   try {
     const url = new URL(value);
-    return url.protocol === 'https:' || url.hostname === 'localhost' ? (preserveLocation ? url.toString() : url.origin) : undefined;
+    const localDevelopmentUrl = __DEV__ && ['localhost', '127.0.0.1', '10.0.2.2'].includes(url.hostname);
+    return url.protocol === 'https:' || (localDevelopmentUrl && url.protocol === 'http:')
+      ? (preserveLocation ? url.toString() : url.origin)
+      : undefined;
   } catch {
     return undefined;
   }
 };
 
-const supabaseUrl = normalizeUrl(process.env.EXPO_PUBLIC_SUPABASE_URL);
-const supabasePublishableKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim();
-const adminDashboardUrl = normalizeUrl(process.env.EXPO_PUBLIC_ADMIN_DASHBOARD_URL, true);
+// These are public client credentials, not server secrets. Keep production
+// defaults in the bundle so an EAS environment/OTA mismatch cannot disable the
+// catalogue, account, checkout, tracking, reviews, or customer-care screens.
+const supabaseUrl = normalizeUrl(process.env.EXPO_PUBLIC_SUPABASE_URL)
+  || 'https://gdgrskgegrcgmzswefmn.supabase.co';
+const supabasePublishableKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim()
+  || 'sb_publishable_XbhrBW9Na65u8EkpgtEz4g_PuYkxs_H';
+const adminDashboardUrl = normalizeUrl(process.env.EXPO_PUBLIC_ADMIN_DASHBOARD_URL, true)
+  || 'https://ipordise.com/admin';
 const firebaseFunctionsUrl = normalizeUrl(process.env.EXPO_PUBLIC_FIREBASE_FUNCTIONS_URL)
   || 'https://europe-west3-ipordise-aef54.cloudfunctions.net';
 // Firebase Functions require a paid Firebase plan and are not deployed for this

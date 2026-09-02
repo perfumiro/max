@@ -1,11 +1,12 @@
 import React, { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  AccessibilityInfo, ActivityIndicator, Alert, Animated, AppState, BackHandler, Easing, FlatList, Image, KeyboardAvoidingView, Linking, PanResponder, Platform, Pressable, ScrollView as NativeScrollView, Share, StatusBar as RNStatusBar,
-  StyleSheet, View, type ImageSourcePropType, type NativeScrollEvent, type NativeSyntheticEvent,
+  AccessibilityInfo, ActivityIndicator, Alert, Animated, AppState, BackHandler, Easing, FlatList, Image, Keyboard, KeyboardAvoidingView, Linking, Modal, PanResponder, Platform, Pressable, ScrollView as NativeScrollView, Share, StatusBar as RNStatusBar,
+  RefreshControl, StyleSheet, View, type ImageSourcePropType, type TextInput as NativeTextInput,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { StatusBar } from 'expo-status-bar';
+import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from 'expo-speech-recognition';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -24,7 +25,9 @@ import { createSupportConversation, loadSupportConversation, sendCustomerSupport
 import { clearSupportSession, readSupportSession, saveSupportSession } from './src/services/supportSessionStorage';
 import { BagPage, CheckoutPage, ThankYouPage, WishlistPage } from './src/commerce/CommercePages';
 import type { CompletedOrder } from './src/services/orderService';
-import { trackOrder, type TrackedOrder } from './src/services/orderTrackingService';
+import { trackOrder, trackSavedGuestOrder, type TrackedOrder } from './src/services/orderTrackingService';
+import { saveGuestOrder, syncGuestOrders, type SavedGuestOrder } from './src/services/guestOrdersService';
+import { ORDER_STATUS_LABELS, ORDER_TIMELINE, timelineStatus } from './src/orders/orderStatus';
 import { loadBestsellerProductIds } from './src/services/bestsellerService';
 import { bestsellerNameKey } from './src/services/bestsellerRanking';
 import { ResponsiveContainer } from './src/components/ResponsiveContainer';
@@ -49,19 +52,11 @@ import { AdminEntry } from './src/admin/AdminEntry';
 import { LanguageProvider, useLanguage } from './src/i18n/LanguageContext';
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from './src/i18n/LocalizedPrimitives';
 import { ProductReviews } from './src/reviews/ProductReviews';
+import { createPreorder } from './src/services/preorderService';
 import { rankSimilarProducts } from './src/productRecommendations';
 import { PushNotificationProvider, usePushNotifications } from './src/notifications/PushNotificationProvider';
 
 const RED = '#d7193f';
-type BrowserSpeechResultEvent={results:ArrayLike<{0?:{transcript?:string};isFinal?:boolean}>};
-type BrowserSpeechErrorEvent={error?:string};
-type BrowserSpeechRecognition={lang:string;continuous:boolean;interimResults:boolean;maxAlternatives:number;onstart:null|(()=>void);onresult:null|((event:BrowserSpeechResultEvent)=>void);onerror:null|((event:BrowserSpeechErrorEvent)=>void);onend:null|(()=>void);start:()=>void;stop:()=>void;abort:()=>void};
-type BrowserSpeechRecognitionConstructor=new()=>BrowserSpeechRecognition;
-const getBrowserSpeechRecognition=()=>{
-  if(Platform.OS!=='web')return undefined;
-  const browser=globalThis as typeof globalThis&{SpeechRecognition?:BrowserSpeechRecognitionConstructor;webkitSpeechRecognition?:BrowserSpeechRecognitionConstructor};
-  return browser.SpeechRecognition||browser.webkitSpeechRecognition;
-};
 const ACCOUNT_MODES=['signin','create'] as const;
 const ACCOUNT_SECURITY_ITEMS=[
   {icon:'lock-closed-outline',title:'Passwordless',text:'Nothing to remember'},
@@ -135,25 +130,25 @@ function LaunchIntro({onFinish}:{onFinish:()=>void}) {
         signature.setValue(1);
         caption.setValue(1);
         animation=Animated.sequence([
-          Animated.delay(100),
-          Animated.timing(backdrop,{toValue:0,duration:120,easing:Easing.out(Easing.quad),useNativeDriver:driver}),
+          Animated.delay(2700),
+          Animated.timing(backdrop,{toValue:0,duration:300,easing:Easing.out(Easing.quad),useNativeDriver:driver}),
         ]);
       }else{
         animation=Animated.sequence([
-          Animated.delay(20),
+          Animated.delay(50),
           Animated.parallel([
-            Animated.timing(wordmark,{toValue:1,duration:220,easing:Easing.out(Easing.cubic),useNativeDriver:driver}),
+            Animated.timing(wordmark,{toValue:1,duration:650,easing:Easing.out(Easing.cubic),useNativeDriver:driver}),
             Animated.sequence([
-              Animated.delay(80),
-              Animated.timing(signature,{toValue:1,duration:180,easing:Easing.out(Easing.cubic),useNativeDriver:driver}),
+              Animated.delay(180),
+              Animated.timing(signature,{toValue:1,duration:520,easing:Easing.out(Easing.cubic),useNativeDriver:driver}),
             ]),
             Animated.sequence([
-              Animated.delay(140),
-              Animated.timing(caption,{toValue:1,duration:160,easing:Easing.out(Easing.quad),useNativeDriver:driver}),
+              Animated.delay(480),
+              Animated.timing(caption,{toValue:1,duration:360,easing:Easing.out(Easing.quad),useNativeDriver:driver}),
             ]),
           ]),
-          Animated.delay(80),
-          Animated.timing(backdrop,{toValue:0,duration:140,easing:Easing.inOut(Easing.cubic),useNativeDriver:driver}),
+          Animated.delay(1660),
+          Animated.timing(backdrop,{toValue:0,duration:450,easing:Easing.inOut(Easing.cubic),useNativeDriver:driver}),
         ]);
       }
       animation.start(({finished})=>{if(finished&&active)onFinish();});
@@ -165,7 +160,11 @@ function LaunchIntro({onFinish}:{onFinish:()=>void}) {
     <View style={styles.launchAmbientGlow}/>
     <Animated.View style={[styles.launchIdentity,{opacity:wordmark,transform:[{translateY:wordmark.interpolate({inputRange:[0,1],outputRange:[10,0]})},{scale:wordmark.interpolate({inputRange:[0,1],outputRange:[.965,1]})}]}]}>
       <Animated.Image accessibilityLabel="IPORDISE" source={require('./assets/ipordise-app-icon-v2.png')} resizeMode="contain" style={[styles.launchLogo,{opacity:signature,transform:[{scale:signature.interpolate({inputRange:[0,1],outputRange:[.96,1]})}]}]}/>
-      <Animated.Text style={[styles.launchCaption,{opacity:caption,transform:[{translateY:caption.interpolate({inputRange:[0,1],outputRange:[5,0]})}]}]}>PARFUMERIE · MAROC</Animated.Text>
+      <Animated.View accessibilityLabel="Application developed by Zakaria Zemzami" style={[styles.launchDeveloperCredit,{opacity:caption,transform:[{translateY:caption.interpolate({inputRange:[0,1],outputRange:[5,0]})}]}]}>
+        <Text style={styles.launchDeveloperLabel}>APPLICATION DEVELOPED BY</Text>
+        <View style={styles.launchDeveloperNameRow}><View style={styles.launchDeveloperDiamond}/><Text style={styles.launchDeveloperName}>ZAKARIA ZEMZAMI</Text><View style={styles.launchDeveloperDiamond}/></View>
+      </Animated.View>
+      <Animated.View style={[styles.launchSignature,{opacity:caption,transform:[{translateY:caption.interpolate({inputRange:[0,1],outputRange:[5,0]})}]}]}><View style={styles.launchRule}/><Animated.Text style={styles.launchCaption}>MAISON DE PARFUM · MAROC</Animated.Text><View style={styles.launchRule}/></Animated.View>
     </Animated.View>
   </Animated.View>;
 }
@@ -212,34 +211,89 @@ function LocationScreen({ onContinue }: { onContinue: () => void }) {
   );
 }
 
+type BrowserSpeechRecognitionResult = ArrayLike<{transcript?:string}> & {isFinal?:boolean};
+type BrowserSpeechRecognitionEvent = {resultIndex?:number;results:ArrayLike<BrowserSpeechRecognitionResult>};
+type BrowserSpeechRecognition = {
+  lang:string;continuous:boolean;interimResults:boolean;maxAlternatives:number;
+  start:()=>void;stop:()=>void;abort:()=>void;
+  onstart:(event:unknown)=>void;onresult:(event:BrowserSpeechRecognitionEvent)=>void;onnomatch:(event:unknown)=>void;onerror:(event:{error?:string})=>void;onend:(event:unknown)=>void;
+};
+type BrowserSpeechRecognitionConstructor = new()=>BrowserSpeechRecognition;
+const getBrowserSpeechRecognition=()=>{
+  if(typeof globalThis==='undefined')return null;
+  const browser=globalThis as typeof globalThis&{SpeechRecognition?:BrowserSpeechRecognitionConstructor;webkitSpeechRecognition?:BrowserSpeechRecognitionConstructor};
+  return browser.SpeechRecognition||browser.webkitSpeechRecognition||null;
+};
+
 function Header({ query, setQuery, mobile,onHome,onOpenWishlist,onOpenBag }: { query: string; setQuery: (v: string) => void; mobile: boolean;onHome:()=>void;onOpenWishlist:()=>void;onOpenBag:()=>void }) {
   const {language}=useLanguage();
   const {bagCount}=useBagSnapshot();
   const {favouriteIds}=useFavouriteSnapshot();
   const [searchFocused,setSearchFocused]=useState(false);
   const [listening,setListening]=useState(false);
-  const recognitionRef=useRef<BrowserSpeechRecognition|null>(null);
-  useEffect(()=>()=>recognitionRef.current?.abort(),[]);
-  const toggleVoiceSearch=useCallback(()=>{
-    if(listening){recognitionRef.current?.stop();return;}
-    const Recognition=getBrowserSpeechRecognition();
-    if(!Recognition){Alert.alert('Voice search unavailable','Voice search is supported in Chrome, Edge, and compatible browsers. You can still type a perfume, brand, note, or collection.');return;}
-    const recognition=new Recognition();
-    recognition.lang=language==='fr'?'fr-FR':language==='ar'?'ar-MA':'en-US';
-    recognition.continuous=false;
-    recognition.interimResults=true;
-    recognition.maxAlternatives=3;
-    recognition.onstart=()=>{recognitionRef.current=recognition;setListening(true);setSearchFocused(true);};
-    recognition.onresult=(event)=>{
-      const transcript=Array.from(event.results).map(result=>result[0]?.transcript||'').join(' ').replace(/\s+/g,' ').trim();
-      if(transcript)setQuery(transcript);
-    };
-    recognition.onerror=(event)=>{if(event.error&&event.error!=='aborted'&&event.error!=='no-speech')Alert.alert('Voice search','Microphone access was unavailable. Check the browser microphone permission and try again.');};
-    recognition.onend=()=>{recognitionRef.current=null;setListening(false);setSearchFocused(false);};
-    try{recognition.start();}catch{setListening(false);Alert.alert('Voice search','The microphone could not start. Please try again.');}
+  const [voiceLevel,setVoiceLevel]=useState(0);
+  const [voiceMessage,setVoiceMessage]=useState('');
+  const webRecognition=useRef<BrowserSpeechRecognition|null>(null);
+  const voiceStarting=useRef(false);
+  useSpeechRecognitionEvent('start',()=>{setListening(true);setSearchFocused(true);setVoiceMessage(language==='fr'?'Je vous écoute…':language==='ar'?'جارٍ الاستماع…':'Listening…');});
+  useSpeechRecognitionEvent('volumechange',event=>setVoiceLevel(Math.max(0,Math.min(10,event.value))));
+  useSpeechRecognitionEvent('result',event=>{
+    const transcript=event.results[0]?.transcript?.replace(/\s+/g,' ').trim()||'';
+    if(transcript){setQuery(transcript);setVoiceMessage(event.isFinal?(language==='fr'?'Recherche en cours…':language==='ar'?'جارٍ البحث…':'Searching…'):(language==='fr'?'Je vous écoute…':language==='ar'?'جارٍ الاستماع…':'Listening…'));}
+  });
+  useSpeechRecognitionEvent('nomatch',()=>setVoiceMessage(language==='fr'?'Parlez plus près du microphone':language==='ar'?'تحدث بالقرب من الميكروفون':'Try speaking closer to the microphone'));
+  useSpeechRecognitionEvent('error',event=>{
+    if(event.error==='aborted')return;
+    setListening(false);setVoiceLevel(0);
+    if(event.error==='no-speech'||event.error==='speech-timeout'){setVoiceMessage(language==='fr'?'Aucune voix détectée. Réessayez.':language==='ar'?'لم يتم اكتشاف صوت. حاول مجددًا.':'No speech detected. Try again.');return;}
+    const permissionError=event.error==='not-allowed'||event.error==='service-not-allowed';
+    setVoiceMessage(permissionError?(language==='fr'?'Autorisez le microphone pour continuer':language==='ar'?'اسمح باستخدام الميكروفون للمتابعة':'Allow microphone access to continue'):(language==='fr'?'Recherche vocale indisponible':language==='ar'?'البحث الصوتي غير متاح':'Voice search unavailable'));
+    Alert.alert(permissionError?'Microphone permission':'Voice search',permissionError?'Allow microphone access in your phone settings, then try again.':'Speech recognition could not start on this device. Check that the phone speech service is enabled and try again.');
+  });
+  useSpeechRecognitionEvent('end',()=>{setListening(false);setVoiceLevel(0);setSearchFocused(false);});
+  useEffect(()=>()=>{voiceStarting.current=false;webRecognition.current?.abort();ExpoSpeechRecognitionModule.abort();},[]);
+  const toggleVoiceSearch=useCallback(async()=>{
+    if(listening||voiceStarting.current){if(Platform.OS==='web')webRecognition.current?.stop();else ExpoSpeechRecognitionModule.stop();voiceStarting.current=false;return;}
+    setVoiceMessage('');
+    if(Platform.OS==='web'){
+      const SpeechRecognitionClass=getBrowserSpeechRecognition();
+      if(!SpeechRecognitionClass){setVoiceMessage(language==='fr'?'Utilisez Chrome, Edge ou Safari pour la recherche vocale':language==='ar'?'استخدم Chrome أو Edge أو Safari للبحث الصوتي':'Use Chrome, Edge, or Safari for voice search');Alert.alert('Voice search unavailable','This browser does not provide speech recognition. Open IPORDISE in Chrome, Edge, or Safari and try again.');return;}
+      const recognition=new SpeechRecognitionClass();
+      recognition.lang=language==='fr'?'fr-FR':language==='ar'?'ar-MA':'en-US';
+      recognition.continuous=false;
+      recognition.interimResults=true;
+      recognition.maxAlternatives=3;
+      recognition.onstart=()=>{voiceStarting.current=false;setListening(true);setVoiceLevel(4);setSearchFocused(true);setVoiceMessage(language==='fr'?'Je vous écoute…':language==='ar'?'جارٍ الاستماع…':'Listening…');};
+      recognition.onresult=event=>{const result=event.results[event.resultIndex||0];const transcript=result?.[0]?.transcript?.replace(/\s+/g,' ').trim()||'';if(transcript){setQuery(transcript);setVoiceMessage(result.isFinal?(language==='fr'?'Recherche en cours…':language==='ar'?'جارٍ البحث…':'Searching…'):(language==='fr'?'Je vous écoute…':language==='ar'?'جارٍ الاستماع…':'Listening…'));}};
+      recognition.onnomatch=()=>setVoiceMessage(language==='fr'?'Parlez plus près du microphone':language==='ar'?'تحدث بالقرب من الميكروفون':'Try speaking closer to the microphone');
+      recognition.onerror=event=>{voiceStarting.current=false;setListening(false);setVoiceLevel(0);if(event.error==='aborted')return;if(event.error==='no-speech'){setVoiceMessage(language==='fr'?'Aucune voix détectée. Réessayez.':language==='ar'?'لم يتم اكتشاف صوت. حاول مجددًا.':'No speech detected. Try again.');return;}const permissionError=event.error==='not-allowed'||event.error==='service-not-allowed';setVoiceMessage(permissionError?(language==='fr'?'Autorisez le microphone pour ce site':language==='ar'?'اسمح باستخدام الميكروفون لهذا الموقع':'Allow microphone access for this site'):(language==='fr'?'Recherche vocale indisponible':language==='ar'?'البحث الصوتي غير متاح':'Voice search unavailable'));if(permissionError)Alert.alert('Microphone permission','Allow microphone access for IPORDISE in your browser site settings, then try again.');};
+      recognition.onend=()=>{voiceStarting.current=false;setListening(false);setVoiceLevel(0);setSearchFocused(false);if(webRecognition.current===recognition)webRecognition.current=null;};
+      webRecognition.current=recognition;
+      voiceStarting.current=true;
+      try{recognition.start();}catch{voiceStarting.current=false;webRecognition.current=null;setListening(false);setVoiceMessage(language==='fr'?'Impossible de démarrer le microphone':language==='ar'?'تعذر تشغيل الميكروفون':'Could not start microphone');Alert.alert('Voice search','The browser could not start the microphone. Check this site’s microphone permission and try again.');}
+      return;
+    }
+    if(!ExpoSpeechRecognitionModule.isRecognitionAvailable()){
+      setVoiceMessage(language==='fr'?'Service vocal indisponible':language==='ar'?'خدمة الصوت غير متاحة':'Voice service unavailable');
+      Alert.alert('Voice search unavailable',Platform.OS==='android'?'Enable or install Google Speech Recognition & Synthesis in your phone settings, then try again.':'Speech recognition is not available on this device.');
+      return;
+    }
+    const permission=await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+    if(!permission.granted){setVoiceMessage(language==='fr'?'Microphone non autorisé':language==='ar'?'لم يتم السماح بالميكروفون':'Microphone permission needed');Alert.alert('Microphone permission','Allow IPORDISE to use the microphone in your phone settings to search by voice.');return;}
+    try{
+      ExpoSpeechRecognitionModule.start({
+        lang:language==='fr'?'fr-FR':language==='ar'?'ar-MA':'en-US',
+        continuous:false,
+        interimResults:true,
+        maxAlternatives:3,
+        contextualStrings:['IPORDISE','Jean Paul Gaultier','Yves Saint Laurent','Maison Francis Kurkdjian','Xerjoff','Valentino','Dior','Chanel','Armani','Givenchy','Guerlain','Versace','Tom Ford','Stronger With You','Bleu de Chanel'],
+        volumeChangeEventOptions:{enabled:true,intervalMillis:160},
+        androidIntentOptions:{EXTRA_LANGUAGE_MODEL:'web_search',EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS:1800,EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS:1100,EXTRA_MASK_OFFENSIVE_WORDS:false},
+      });
+    }catch{setListening(false);setVoiceMessage(language==='fr'?'Impossible de démarrer le microphone':language==='ar'?'تعذر تشغيل الميكروفون':'Could not start microphone');Alert.alert('Voice search','The microphone could not start. Please try again.');}
   },[language,listening,setQuery]);
   const searchActive=query.trim().length>0;
-  const search = <View style={[styles.search,mobile&&styles.searchMobile,!mobile&&searchActive&&styles.searchActiveDesktop,searchFocused&&styles.searchFocused,listening&&styles.searchListening]}><View style={[styles.searchIconWrap,mobile&&styles.searchIconMobile,!mobile&&searchActive&&styles.searchIconActiveDesktop,searchFocused&&styles.searchIconFocused]}><Feather name="search" size={mobile?18:19} color={searchFocused||searchActive?RED:'#5f5550'} /></View><TextInput accessibilityLabel="Search the IPORDISE fragrance catalogue" accessibilityHint="Search by perfume, brand, note, collection, or voice" value={query} onChangeText={setQuery} onFocus={()=>setSearchFocused(true)} onBlur={()=>!listening&&setSearchFocused(false)} placeholder="Search perfumes, brands or collections" placeholderTextColor="#8b807a" selectionColor={RED} cursorColor={RED} style={[styles.searchInput,mobile&&styles.searchInputMobile,!mobile&&searchActive&&styles.searchInputActiveDesktop,Platform.OS==='web'&&styles.searchInputWeb]} returnKeyType="search" autoComplete="off" autoCapitalize="none" autoCorrect={false} clearButtonMode="never" /><Pressable accessibilityRole="button" accessibilityLabel={listening?'Stop voice search':'Search with microphone'} accessibilityHint="Speak a perfume, brand, note, or collection" accessibilityState={{busy:listening}} hitSlop={6} onPress={toggleVoiceSearch} style={({pressed})=>[styles.searchMic,mobile&&styles.searchMicMobile,listening&&styles.searchMicListening,pressed&&styles.searchMicPressed]}><Ionicons name={listening?'stop':'mic-outline'} size={mobile?18:20} color={listening?'#fff':RED}/>{listening?<View style={styles.searchMicPulse}/>:null}</Pressable>{query.length>0?<Pressable accessibilityRole="button" accessibilityLabel="Clear search" hitSlop={8} onPress={()=>setQuery('')} style={[styles.searchClear,!mobile&&styles.searchClearActiveDesktop]}><Ionicons name="close" size={mobile?14:22} color="#655c57"/></Pressable>:!mobile?<View style={styles.searchHint}><Text style={styles.searchHintText}>SCENT FINDER</Text></View>:null}</View>;
+  const search = <View><View style={[styles.search,mobile&&styles.searchMobile,!mobile&&searchActive&&styles.searchActiveDesktop,searchFocused&&styles.searchFocused,listening&&styles.searchListening]}><View style={[styles.searchIconWrap,mobile&&styles.searchIconMobile,!mobile&&searchActive&&styles.searchIconActiveDesktop,searchFocused&&styles.searchIconFocused]}><Feather name="search" size={mobile?18:19} color={searchFocused||searchActive?RED:'#5f5550'} /></View><TextInput accessibilityLabel="Search the IPORDISE fragrance catalogue" accessibilityHint="Search by perfume, brand, note, collection, or voice" value={query} onChangeText={setQuery} onFocus={()=>setSearchFocused(true)} onBlur={()=>!listening&&setSearchFocused(false)} placeholder={listening?(language==='fr'?'Parlez maintenant…':language==='ar'?'تحدث الآن…':'Speak now…'):'Search perfumes, brands or collections'} placeholderTextColor={listening?RED:'#8b807a'} selectionColor={RED} cursorColor={RED} style={[styles.searchInput,mobile&&styles.searchInputMobile,!mobile&&searchActive&&styles.searchInputActiveDesktop,Platform.OS==='web'&&styles.searchInputWeb]} returnKeyType="search" autoComplete="off" autoCapitalize="none" autoCorrect={false} clearButtonMode="never" /><Pressable accessibilityRole="button" accessibilityLabel={listening?'Stop voice search':'Search with microphone'} accessibilityHint="Speak a perfume, brand, note, or collection" accessibilityState={{busy:listening}} hitSlop={8} onPress={()=>void toggleVoiceSearch()} style={({pressed})=>[styles.searchMic,mobile&&styles.searchMicMobile,listening&&styles.searchMicListening,listening&&{transform:[{scale:1+voiceLevel*.012}]},pressed&&styles.searchMicPressed]}><Ionicons name={listening?'stop':'mic'} size={mobile?19:21} color={listening?'#fff':RED}/>{listening?<View style={styles.searchMicPulse}/>:null}</Pressable>{query.length>0?<Pressable accessibilityRole="button" accessibilityLabel="Clear search" hitSlop={8} onPress={()=>setQuery('')} style={[styles.searchClear,!mobile&&styles.searchClearActiveDesktop]}><Ionicons name="close" size={mobile?14:22} color="#655c57"/></Pressable>:!mobile?<View style={styles.searchHint}><Text style={styles.searchHintText}>SCENT FINDER</Text></View>:null}</View>{voiceMessage?<Text accessibilityLiveRegion="polite" numberOfLines={1} style={[styles.searchVoiceMessage,listening&&styles.searchVoiceMessageListening]}>{voiceMessage}</Text>:null}</View>;
   const actions = <View style={[styles.headerActions,mobile&&styles.headerActionsMobile]}><Pressable accessibilityRole="button" accessibilityLabel={`Favourites, ${favouriteIds.size} saved`} hitSlop={8} style={({pressed})=>[styles.headerAction,mobile&&styles.headerActionMobile,pressed&&styles.headerActionPressed]} onPress={onOpenWishlist}><Ionicons name={favouriteIds.size?'heart':'heart-outline'} size={mobile?21:26} color={favouriteIds.size?RED:'#171412'} />{favouriteIds.size>0&&<View style={styles.headerBadge}><Text style={styles.headerBadgeText}>{Math.min(favouriteIds.size,99)}</Text></View>}</Pressable>{mobile?<View style={styles.headerActionDivider}/>:null}<Pressable accessibilityRole="button" accessibilityLabel={`Shopping bag, ${bagCount} items`} hitSlop={8} style={({pressed})=>[styles.headerAction,mobile&&styles.headerActionMobile,mobile&&styles.headerBagMobile,pressed&&styles.headerActionPressed]} onPress={onOpenBag}><Ionicons name={bagCount?'bag-handle':'bag-outline'} size={mobile?20:26} color="#171412" />{bagCount>0&&<View style={styles.headerBadge}><Text style={styles.headerBadgeText}>{Math.min(bagCount,99)}</Text></View>}</Pressable></View>;
   const homeLogo=<Pressable accessibilityRole="button" accessibilityLabel="IPORDISE, return to Accueil" accessibilityHint="Closes the current view and opens the home page" hitSlop={6} onPress={onHome} style={({pressed})=>[styles.headerLogoButton,pressed&&styles.headerLogoButtonPressed]}><Brand compact={mobile}/></Pressable>;
   return <View style={[styles.header,mobile&&styles.headerMobile]}><View style={[styles.headerInner,mobile&&styles.headerInnerMobile]}>{mobile ? <><View style={styles.headerTopMobile}>{homeLogo}{actions}</View><View style={styles.searchMobileRow}>{search}</View></> : <>{homeLogo}{search}{actions}</>}</View></View>;
@@ -334,7 +388,8 @@ function HomeBenefitStrip({messages=defaultHomeConfig.announcements}:{messages?:
 
 function HomeCategories({products,activeFilter,onSelect,categories=defaultHomeConfig.categories}:{products:Product[];activeFilter:string;onSelect:(filter:string)=>void;categories?:HomeCategory[]}) {
   const countFor=(filter:string)=>products.filter(product=>filter==='miniatures'?Object.keys(product.sizes).some(size=>parseFloat(size)<=10):product.filters.some(item=>item.toLowerCase()===filter)).length;
-  return <View style={homeStyles.section}><View style={homeStyles.compactSectionHead}><View><Text style={homeStyles.sectionEyebrow}>SHOP YOUR WAY</Text><Text style={homeStyles.sectionTitle}>Explore categories</Text></View><Text style={homeStyles.sectionMeta}>SWIPE</Text></View><ScrollView horizontal nestedScrollEnabled directionalLockEnabled disableIntervalMomentum decelerationRate="fast" snapToInterval={141} snapToAlignment="start" scrollEventThrottle={16} overScrollMode="never" showsHorizontalScrollIndicator={false} contentContainerStyle={homeStyles.categoryRail}>{categories.map(item=>{const count=countFor(item.filter);const selected=activeFilter===item.filter;const image=categoryImages[item.id]||categoryImages[item.filter];return <Pressable accessibilityRole="button" accessibilityLabel={`${item.label}${count?`, ${count} fragrances`:''}`} accessibilityState={{selected}} key={item.id} onPress={()=>onSelect(item.filter)} style={({pressed})=>[homeStyles.categoryCard,selected&&homeStyles.categoryCardActive,pressed&&homeStyles.pressed]}>{image?<View style={homeStyles.categoryImageWrap}><Image source={image} resizeMode="cover" style={homeStyles.categoryImage}/><LinearGradient colors={['transparent','rgba(39,18,20,.08)']} style={StyleSheet.absoluteFill}/></View>:<View style={[homeStyles.categoryIcon,selected&&homeStyles.categoryIconActive]}><Ionicons name={item.icon as any} size={21} color={selected?'#fff':'#6b1f31'}/></View>}<View><Text numberOfLines={1} style={[homeStyles.categoryLabel,selected&&homeStyles.categoryLabelActive]}>{item.label}</Text><Text style={[homeStyles.categoryCount,selected&&homeStyles.categoryCountActive]}>{count?`${count} scents`:'Explore edit'}</Text></View></Pressable>})}</ScrollView></View>;
+  const visibleCategories=defaultHomeConfig.categories.map(fallback=>categories.find(item=>item.filter===fallback.filter)||fallback);
+  return <View style={homeStyles.section}><View style={homeStyles.compactSectionHead}><View><Text style={homeStyles.sectionEyebrow}>SHOP YOUR WAY</Text><Text style={homeStyles.sectionTitle}>Explore categories</Text></View></View><ScrollView horizontal nestedScrollEnabled directionalLockEnabled disableIntervalMomentum decelerationRate="fast" snapToInterval={141} snapToAlignment="start" scrollEventThrottle={16} overScrollMode="never" showsHorizontalScrollIndicator={false} contentContainerStyle={homeStyles.categoryRail}>{visibleCategories.map(item=>{const count=countFor(item.filter);const selected=activeFilter===item.filter;const image=categoryImages[item.id]||categoryImages[item.filter];return <Pressable accessibilityRole="button" accessibilityLabel={`${item.label}${count?`, ${count} fragrances`:''}`} accessibilityState={{selected}} key={item.id} onPress={()=>onSelect(item.filter)} style={({pressed})=>[homeStyles.categoryCard,selected&&homeStyles.categoryCardActive,pressed&&homeStyles.pressed]}>{image?<View style={homeStyles.categoryImageWrap}><Image source={image} resizeMode="cover" style={homeStyles.categoryImage}/><LinearGradient colors={['transparent','rgba(39,18,20,.08)']} style={StyleSheet.absoluteFill}/></View>:<View style={[homeStyles.categoryIcon,selected&&homeStyles.categoryIconActive]}><Ionicons name={item.icon as any} size={21} color={selected?'#fff':'#6b1f31'}/></View>}<View><Text numberOfLines={1} style={[homeStyles.categoryLabel,selected&&homeStyles.categoryLabelActive]}>{item.label}</Text><Text style={[homeStyles.categoryCount,selected&&homeStyles.categoryCountActive]}>{count?`${count} scents`:'Explore edit'}</Text></View></Pressable>})}</ScrollView></View>;
 }
 
 function HomeHeroCarousel({layout,onSelect,configuredSlides=defaultHomeConfig.heroSlides}:{layout:ReturnType<typeof useResponsiveLayout>;onSelect:(filter:string)=>void;configuredSlides?:HomeHeroSlide[]}) {
@@ -910,13 +965,16 @@ function ProductVariantSelector({groups,selectedKey,compact,onSelect}:{groups:Pr
 }
 
 function ProductDetail({ product, recommendations, onBack, onOpenBag, onSelectProduct }: { product: Product; recommendations: Product[]; onBack: () => void; onOpenBag: () => void; onSelectProduct: (product: Product) => void }) {
+  const { session } = useCustomerAuth();
   const {favouriteIds}=useFavouriteSnapshot();
   const {bagCount}=useBagSnapshot();
   const {toggleFavourite,addToBag}=useShoppingActions();
   const layout = useResponsiveLayout();
   const similarProducts = useMemo(() => rankSimilarProducts(product, recommendations, 6), [product, recommendations]);
-  const availableSizes = Object.entries(product.sizes).filter(([,price]) => price > 0).sort(([a],[b]) => (parseFloat(a)||0)-(parseFloat(b)||0));
+  const availableVariantKeys = new Set((product.variants || []).filter(variant => variant.enabled && (variant.stock === null || variant.stock > 0)).map(variant => variant.sizeKey));
+  const availableSizes = Object.entries(product.sizes).filter(([key,price]) => price > 0 && (!product.variants?.length || availableVariantKeys.has(key))).sort(([a],[b]) => (parseFloat(a)||0)-(parseFloat(b)||0));
   const variantOptions:ProductVariantOption[]=(product.variants?.length?product.variants.filter(variant=>variant.enabled).map(variant=>({id:variant.id,key:variant.sizeKey,price:variant.price,ml:parseFloat(variant.sizeKey)||0,available:variant.stock===null||variant.stock>0})):availableSizes.map(([key,price])=>({id:`${product.id}:${key}`,key,price,ml:parseFloat(key)||0,available:true}))).sort((a,b)=>a.ml-b.ml);
+  const unavailableVariants=(product.variants||[]).filter(variant=>variant.enabled&&variant.stock===0);
   const sizeGroups = ([
     {key:'decants',title:'DECANTS',description:'Try the fragrance before committing',icon:'flask-outline',options:variantOptions.filter(option=>option.ml<50)},
     {key:'bottles',title:'FULL BOTTLES',description:'Original retail presentation',icon:'cube-outline',options:variantOptions.filter(option=>option.ml>=50)},
@@ -926,28 +984,27 @@ function ProductDetail({ product, recommendations, onBack, onOpenBag, onSelectPr
   const liked=favouriteIds.has(product.id);
   const [added, setAdded] = useState(false);
   const [sharing,setSharing]=useState(false);
+  const [preorderOpen,setPreorderOpen]=useState(false); const [preorderName,setPreorderName]=useState(String(session?.user.user_metadata?.full_name || session?.user.user_metadata?.name || '')); const [preorderPhone,setPreorderPhone]=useState(String(session?.user.user_metadata?.phone || '')); const [preorderEmail,setPreorderEmail]=useState(session?.user.email || ''); const [preorderCity,setPreorderCity]=useState(String(session?.user.user_metadata?.city || '')); const [preorderQuantity,setPreorderQuantity]=useState('1'); const [preorderNote,setPreorderNote]=useState(''); const [preorderBusy,setPreorderBusy]=useState(false); const [preorderError,setPreorderError]=useState(''); const [preorderSuccess,setPreorderSuccess]=useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
-  const [stickyVisible,setStickyVisible]=useState(false);
-  const stickyVisibleRef=useRef(false);
-  const stickyProgress=useRef(new Animated.Value(0)).current;
-  const stickyRevealThreshold=Math.max(520,layout.height*.82);
+  const stickyProgress=useRef(new Animated.Value(layout.tablet?0:1)).current;
   useEffect(()=>{
     setGalleryIndex(0);
-    stickyVisibleRef.current=false;
-    setStickyVisible(false);
-    stickyProgress.setValue(0);
-  },[product.id,stickyProgress]);
+    setSize(defaultSize);
+    setAdded(false);
+    setPreorderOpen(false);
+    setPreorderSuccess(false);
+    setPreorderError('');
+    setPreorderQuantity('1');
+    setPreorderNote('');
+    stickyProgress.setValue(layout.tablet?0:1);
+  },[defaultSize,layout.tablet,product.id,stickyProgress]);
   useEffect(()=>{
-    Animated.timing(stickyProgress,{toValue:stickyVisible?1:0,duration:stickyVisible?220:160,easing:Easing.out(Easing.cubic),useNativeDriver:true}).start();
-  },[stickyProgress,stickyVisible]);
-  const handleProductScroll=useCallback((event:NativeSyntheticEvent<NativeScrollEvent>)=>{
-    if(layout.tablet)return;
-    const offset=event.nativeEvent.contentOffset.y;
-    const nextVisible=stickyVisibleRef.current?offset>stickyRevealThreshold-90:offset>stickyRevealThreshold;
-    if(nextVisible===stickyVisibleRef.current)return;
-    stickyVisibleRef.current=nextVisible;
-    setStickyVisible(nextVisible);
-  },[layout.tablet,stickyRevealThreshold]);
+    if(!session?.user)return;
+    setPreorderName(current=>current||String(session.user.user_metadata?.full_name||session.user.user_metadata?.name||''));
+    setPreorderPhone(current=>current||String(session.user.user_metadata?.phone||''));
+    setPreorderEmail(current=>current||session.user.email||'');
+    setPreorderCity(current=>current||String(session.user.user_metadata?.city||''));
+  },[session?.user]);
   const previewInfoTab = Platform.OS === 'web' && typeof globalThis.location !== 'undefined'
     ? new URLSearchParams(globalThis.location.search).get('tab')
     : null;
@@ -986,8 +1043,10 @@ function ProductDetail({ product, recommendations, onBack, onOpenBag, onSelectPr
     }catch(error){logger.warn('product_share_cancelled_or_unavailable',{productId:product.id,error});}
     finally{setSharing(false);}
   };
-  const handlePrimaryAction=()=>{if(availableSizes.length){if(added){onOpenBag();return;}setAdded(true);addToBag(product,size);return;}void openAvailabilityWhatsApp(product,size);};
-  return <View style={styles.detailPage}><ScrollView onScroll={handleProductScroll} scrollEventThrottle={16} showsVerticalScrollIndicator={false} contentContainerStyle={[styles.detailScroll,styles.detailScrollPremium,!layout.tablet&&styles.detailScrollMobile]}><View style={styles.detailContainer}>
+  const canPreorder=!availableSizes.length&&product.preorderEnabled===true;
+  const handlePrimaryAction=()=>{if(availableSizes.length){if(added){onOpenBag();return;}setAdded(true);addToBag(product,size);return;}if(canPreorder){setPreorderOpen(true);return;}void openAvailabilityWhatsApp(product,size);};
+  const submitPreorder=async()=>{if(preorderBusy)return;setPreorderError('');setPreorderSuccess(false);const quantity=Number(preorderQuantity);if(preorderName.trim().length<2||!/^(?:\+?212|0)[5-7]\d{8}$/.test(preorderPhone.replace(/[\s()-]/g,''))||!Number.isInteger(quantity)||quantity<1||quantity>20){setPreorderError('Please enter your full name, a valid Moroccan phone number and quantity.');return;}try{setPreorderBusy(true);const unavailableVariant=unavailableVariants[0];await createPreorder({productId:product.id,variantId:unavailableVariant?.id,selectedVariant:unavailableVariant?.size||undefined,customerName:preorderName,phone:preorderPhone,email:preorderEmail||undefined,city:preorderCity||undefined,quantity,customerMessage:preorderNote||undefined},session?.access_token||'');setPreorderSuccess(true);AccessibilityInfo.announceForAccessibility('Request received. Our team will contact you.');}catch(error){setPreorderError(error instanceof Error?error.message:'The request could not be sent. Please check your connection and retry.');}finally{setPreorderBusy(false);}};
+  return <View style={styles.detailPage}><ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={[styles.detailScroll,styles.detailScrollPremium,!layout.tablet&&styles.detailScrollMobile]}><View style={styles.detailContainer}>
     <View style={[styles.detailLayout, layout.tablet && styles.detailLayoutTablet]}>
       <View style={[styles.detailGallery,styles.detailGalleryPremium,{height:layout.tablet?570:layout.compact?330:360},layout.tablet&&styles.detailGalleryTablet]}>
         <View style={[styles.detailImageStage,layout.tablet&&styles.detailImageStageTablet]}><Image source={product.gallery[galleryIndex]} style={[styles.detailImage,styles.detailImagePremium]} resizeMode="contain" resizeMethod="resize" fadeDuration={0}/></View>
@@ -1020,7 +1079,7 @@ function ProductDetail({ product, recommendations, onBack, onOpenBag, onSelectPr
           <View style={styles.detailTaxRow}><Ionicons name="card-outline" size={12} color="#80736c"/><Text style={styles.detailTax}>VAT included · Cash or card on delivery</Text></View>
         </View>
         <ProductVariantSelector groups={sizeGroups} selectedKey={size} compact={layout.compact} onSelect={selectVariant}/>
-        <Pressable accessibilityRole="button" accessibilityLabel={added?'Go to cart':availableSizes.length?`Add ${product.name} to bag`:`Ask about ${product.name} availability on WhatsApp`} accessibilityHint={added?'Opens your shopping cart':availableSizes.length?undefined:'Opens a prefilled conversation with IPORDISE on WhatsApp'} onPress={handlePrimaryAction} style={({pressed})=>[styles.detailAdd,styles.detailAddPremium,added&&styles.buyButtonAdded,!availableSizes.length&&{backgroundColor:'#292526'},pressed&&styles.stickyPurchasePressed]}><Ionicons name={added?'bag-handle-outline':availableSizes.length?'bag-outline':'logo-whatsapp'} size={19} color="#fff"/><Text style={[styles.detailAddText,styles.detailAddTextPremium]}>{added?'Go to cart':availableSizes.length?`Add to bag · ${selectedPrice}`:'Ask about availability'}</Text></Pressable>
+        {layout.tablet?<Pressable accessibilityRole="button" accessibilityLabel={added?'Go to cart':availableSizes.length?`Add ${product.name} to bag`:canPreorder?`Request ${product.name}`:`Ask about ${product.name} availability on WhatsApp`} onPress={handlePrimaryAction} style={({pressed})=>[styles.detailAdd,styles.detailAddPremium,added&&styles.buyButtonAdded,!availableSizes.length&&{backgroundColor:'#292526'},pressed&&styles.stickyPurchasePressed]}><Ionicons name={added?'bag-handle-outline':availableSizes.length?'bag-outline':canPreorder?'time-outline':'logo-whatsapp'} size={19} color="#fff"/><Text style={[styles.detailAddText,styles.detailAddTextPremium]}>{added?'Go to cart':availableSizes.length?`Add to bag · ${selectedPrice}`:canPreorder?'Request this product':'Out of stock'}</Text></Pressable>:null}
         <View style={[styles.infoTabs,styles.infoTabsPremium]}>{(['Details','Notes','Reviews'] as const).map(tab => <Pressable accessibilityRole="tab" accessibilityState={{selected:infoTab===tab}} key={tab} onPress={() => setInfoTab(tab)} style={[styles.infoTab,infoTab===tab&&styles.infoTabActive]}><Text style={[styles.infoTabText,styles.infoTabTextPremium,infoTab===tab&&styles.infoTabTextActive]}>{tab}</Text></Pressable>)}</View>
         <View style={styles.infoPanel}>
           {infoTab==='Details' && <><Text style={styles.notesTitle}>The fragrance</Text><Text style={styles.notesText}>{product.description || 'The full product story is being prepared by the IPORDISE boutique.'}</Text><View style={styles.detailFacts}><View style={[styles.detailFact,styles.detailFactPremium]}><Text style={styles.factLabel}>AVAILABILITY</Text><Text style={styles.factValue}>{availableSizes.length?'In stock':'Coming soon'}</Text></View><View style={[styles.detailFact,styles.detailFactPremium]}><Text style={styles.factLabel}>SELECTED SIZE</Text><Text style={styles.factValue}>{size?displaySize(size):'Not available'}</Text></View></View><View style={[styles.deliveryRow,styles.deliveryRowPremium]}><Ionicons name="cube-outline" size={18} color={RED}/><View style={{flex:1}}><Text style={styles.deliveryTitle}>Delivery across Morocco</Text><Text style={styles.deliveryText}>Estimated delivery in 1–3 business days.</Text></View></View></>}
@@ -1043,7 +1102,7 @@ function ProductDetail({ product, recommendations, onBack, onOpenBag, onSelectPr
         {similarProducts.map(item => <CatalogCard key={item.id} product={item} tablet={layout.tablet} cardWidth={layout.tablet ? 248 : 206} compactProductImage onOpen={() => onSelectProduct(item)} />)}
       </ScrollView>
     </View>
-  </View></ScrollView>{!layout.tablet?<Animated.View accessibilityElementsHidden={!stickyVisible} importantForAccessibility={stickyVisible?'auto':'no-hide-descendants'} pointerEvents={stickyVisible?'auto':'none'} style={[styles.stickyPurchase,{opacity:stickyProgress,transform:[{translateY:stickyProgress.interpolate({inputRange:[0,1],outputRange:[92,0]})}]}]}><View style={styles.stickyPurchaseSummary}><Text style={styles.stickyPurchaseSize}>{size?displaySize(size):'SELECT A SIZE'}</Text><Text style={styles.stickyPurchasePrice}>{selectedPrice}</Text></View><Pressable accessibilityRole="button" accessibilityLabel={added?'Go to cart':availableSizes.length?`Add ${product.name} to bag for ${selectedPrice}`:`Ask about ${product.name} availability`} accessibilityHint={added?'Opens your shopping cart':undefined} onPress={handlePrimaryAction} style={({pressed})=>[styles.stickyPurchaseButton,added&&styles.buyButtonAdded,!availableSizes.length&&styles.stickyPurchaseUnavailable,pressed&&styles.stickyPurchasePressed]}><Ionicons name={added?'bag-handle-outline':availableSizes.length?'bag-outline':'logo-whatsapp'} size={18} color="#fff"/><Text style={styles.stickyPurchaseButtonText}>{added?'GO TO CART':availableSizes.length?'ADD TO BAG':'ASK AVAILABILITY'}</Text></Pressable></Animated.View>:null}</View>;
+  </View></ScrollView>{!layout.tablet?<Animated.View style={[styles.stickyPurchase,{opacity:stickyProgress,transform:[{translateY:stickyProgress.interpolate({inputRange:[0,1],outputRange:[92,0]})}]}]}><View style={styles.stickyPurchaseSummary}><Text style={styles.stickyPurchaseSize}>{size?displaySize(size):canPreorder?'PREORDER':'OUT OF STOCK'}</Text><Text style={styles.stickyPurchasePrice}>{selectedPrice}</Text></View><Pressable accessibilityRole="button" onPress={handlePrimaryAction} style={({pressed})=>[styles.stickyPurchaseButton,added&&styles.buyButtonAdded,!availableSizes.length&&styles.stickyPurchaseUnavailable,pressed&&styles.stickyPurchasePressed]}><Ionicons name={added?'bag-handle-outline':availableSizes.length?'bag-outline':canPreorder?'time-outline':'close-circle-outline'} size={18} color="#fff"/><Text style={styles.stickyPurchaseButtonText}>{added?'GO TO CART':availableSizes.length?'ADD TO BAG':canPreorder?'REQUEST PRODUCT':'OUT OF STOCK'}</Text></Pressable></Animated.View>:null}<Modal visible={preorderOpen} transparent animationType="fade" onRequestClose={()=>!preorderBusy&&setPreorderOpen(false)}><KeyboardAvoidingView behavior={Platform.OS==='ios'?'padding':undefined} style={styles.modalBackdrop}><View style={styles.preorderModal}><View style={styles.editorHead}><View style={{flex:1}}><Text style={styles.catalogEyebrow}>PREORDER REQUEST</Text><Text style={styles.notesTitle}>{product.name}</Text></View><Pressable disabled={preorderBusy} onPress={()=>setPreorderOpen(false)}><Ionicons name="close" size={23}/></Pressable></View><NativeScrollView keyboardShouldPersistTaps="handled"><Text style={styles.notesText}>{product.preorderMessage||'Currently unavailable. Leave your information and we will contact you when available.'}{product.preorderEstimatedAvailability?`\n${product.preorderEstimatedAvailability}`:''}</Text>{preorderSuccess?<View style={styles.preorderSuccess}><Ionicons name="checkmark-circle" size={25} color="#18834d"/><Text style={styles.deliveryTitle}>Request received. Our team will contact you.</Text></View>:<><TextInput value={preorderName} onChangeText={setPreorderName} placeholder="Full name *" style={styles.preorderInput}/><TextInput value={preorderPhone} onChangeText={setPreorderPhone} placeholder="Phone number *" keyboardType="phone-pad" style={styles.preorderInput}/><TextInput value={preorderEmail} onChangeText={setPreorderEmail} placeholder="Email (optional)" keyboardType="email-address" autoCapitalize="none" style={styles.preorderInput}/><TextInput value={preorderCity} onChangeText={setPreorderCity} placeholder="City (optional)" style={styles.preorderInput}/><TextInput value={preorderQuantity} onChangeText={setPreorderQuantity} placeholder="Quantity" keyboardType="number-pad" style={styles.preorderInput}/><TextInput value={preorderNote} onChangeText={setPreorderNote} placeholder="Message (optional)" multiline maxLength={1000} style={[styles.preorderInput,{minHeight:80,textAlignVertical:'top'}]}/>{preorderError?<Text accessibilityRole="alert" style={{color:RED,marginTop:8}}>{preorderError}</Text>:null}<Pressable disabled={preorderBusy} onPress={()=>void submitPreorder()} style={[styles.detailAdd,preorderBusy&&{opacity:.6}]}>{preorderBusy?<ActivityIndicator color="#fff"/>:<Text style={styles.detailAddText}>Send request</Text>}</Pressable></>}</NativeScrollView></View></KeyboardAvoidingView></Modal></View>;
 }
 
 function SupportChatCard() {
@@ -1102,6 +1161,12 @@ const formatMoroccanPhoneInput=(value:string)=>{
   return digits.match(/.{1,2}/g)?.join(' ')||digits;
 };
 
+const trackedItemImageSource=(image?:string)=>{
+  const value=image?.trim();
+  if(!value)return undefined;
+  return {uri:/^https?:\/\//i.test(value)?value:`${appConfig.storeOrigin.replace(/\/$/,'')}/${value.replace(/^\/+/, '')}`};
+};
+
 function TrackOrderPage({onBack,onContact}:{onBack:()=>void;onContact:()=>void}) {
   const [orderNumber,setOrderNumber]=useState('');
   const [phone,setPhone]=useState('');
@@ -1112,7 +1177,42 @@ function TrackOrderPage({onBack,onContact}:{onBack:()=>void;onContact:()=>void})
   const [phoneError,setPhoneError]=useState('');
   const [focused,setFocused]=useState<'order'|'phone'|''>('');
   const [order,setOrder]=useState<TrackedOrder|null>(null);
-  const phoneRef=useRef<any>(null);
+  const [savedOrders,setSavedOrders]=useState<{saved:SavedGuestOrder;order?:TrackedOrder;error?:unknown}[]>([]);
+  const [savedLoading,setSavedLoading]=useState(true);
+  const [refreshing,setRefreshing]=useState(false);
+  const phoneRef=useRef<NativeTextInput|null>(null);
+  const savedLoadSequence=useRef(0);
+  const trackPageMounted=useRef(true);
+
+  const loadSavedOrders=useCallback(async(background=false)=>{
+    const sequence=++savedLoadSequence.current;
+    if(!background)setSavedLoading(true);
+    try{const latest=await syncGuestOrders();if(trackPageMounted.current&&sequence===savedLoadSequence.current)setSavedOrders(latest);}
+    finally{if(trackPageMounted.current&&sequence===savedLoadSequence.current){setSavedLoading(false);setRefreshing(false);}}
+  },[]);
+  useEffect(()=>{trackPageMounted.current=true;return()=>{trackPageMounted.current=false;};},[]);
+  useEffect(()=>{void loadSavedOrders();},[loadSavedOrders]);
+  useEffect(()=>{const subscription=AppState.addEventListener('change',state=>{if(state==='active')void loadSavedOrders(true);});return()=>subscription.remove();},[loadSavedOrders]);
+  const openOrderNumber=order?.orderNumber;
+  const openCredential=savedOrders.find(entry=>entry.saved.orderReference===openOrderNumber)?.saved;
+  const openCredentialReference=openCredential?.orderReference;
+  const openCredentialToken=openCredential?.trackingToken;
+  useEffect(()=>{
+    if(!openOrderNumber||!openCredentialReference||!openCredentialToken)return;
+    let active=true;
+    let inFlight=false;
+    const refresh=async()=>{if(inFlight||AppState.currentState!=='active')return;inFlight=true;try{const latest=await trackSavedGuestOrder(openCredentialReference,openCredentialToken);if(active){setOrder(latest);setSavedOrders(current=>current.map(entry=>entry.saved.orderReference===latest.orderNumber?{...entry,order:latest,error:undefined}:entry));}}catch{}finally{inFlight=false;}};
+    const timer=setInterval(()=>void refresh(),60_000);
+    return()=>{active=false;clearInterval(timer);};
+  },[openCredentialReference,openCredentialToken,openOrderNumber]);
+
+  const openSaved=async(saved:SavedGuestOrder)=>{
+    if(loading)return;
+    setLoading(true);setError('');setErrorKind('');
+    try{setOrder(await trackSavedGuestOrder(saved.orderReference,saved.trackingToken));}
+    catch(caught){setError(caught instanceof Error?caught.message:'Order tracking is temporarily unavailable.');setErrorKind('network');}
+    finally{setLoading(false);}
+  };
 
   const submit=async()=>{
     if(loading)return;
@@ -1123,7 +1223,11 @@ function TrackOrderPage({onBack,onContact}:{onBack:()=>void;onContact:()=>void})
     setOrderError(nextOrderError);setPhoneError(nextPhoneError);setError('');setErrorKind('');
     if(nextOrderError||nextPhoneError)return;
     setLoading(true);setOrder(null);
-    try{setOrder(await trackOrder(normalizedOrder,normalizedPhone));}
+    try{
+      const recovered=await trackOrder(normalizedOrder,normalizedPhone);
+      setOrder(recovered);
+      if(recovered.trackingToken){await saveGuestOrder({orderReference:recovered.orderNumber,trackingToken:recovered.trackingToken,createdAt:recovered.createdAt});await loadSavedOrders(true);}
+    }
     catch(caught){
       const message=caught instanceof Error?caught.message:'Order tracking is temporarily unavailable.';
       const notFound=/not found|couldn't find|do not match|matching order/i.test(message);
@@ -1131,22 +1235,14 @@ function TrackOrderPage({onBack,onContact}:{onBack:()=>void;onContact:()=>void})
     }finally{setLoading(false);}
   };
 
-  const stages=[
-    {id:'pending',label:'Order received'},
-    {id:'confirmed',label:'Order confirmed'},
-    {id:'processing',label:'Preparing your fragrance'},
-    {id:'ready_for_dispatch',label:'Ready for dispatch'},
-    {id:'shipped',label:'Shipped'},
-    {id:'out_for_delivery',label:'Out for delivery'},
-    {id:'delivered',label:'Delivered'},
-  ];
-  const statusLabels:Record<TrackedOrder['status'],string>={pending:'Order received',confirmed:'Confirmed',processing:'Preparing',ready_for_dispatch:'Ready for dispatch',shipped:'Shipped',out_for_delivery:'Out for delivery',delivered:'Delivered',cancelled:'Cancelled',return_requested:'Return requested',returned:'Returned',delivery_failed:'Delivery issue'};
-  const activeIndex=order?stages.findIndex(stage=>stage.id===(order.status==='return_requested'||order.status==='returned'?'delivered':order.status==='delivery_failed'?'shipped':order.status)):-1;
+  const stages=ORDER_TIMELINE;
+  const statusLabels=ORDER_STATUS_LABELS;
+  const activeIndex=order?stages.findIndex(stage=>stage.id===timelineStatus(order.status)):-1;
   const orderDate=order&&Number.isFinite(Date.parse(order.createdAt))?new Date(order.createdAt).toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'}):'';
   const estimatedDelivery=order?.estimatedDelivery&&Number.isFinite(Date.parse(order.estimatedDelivery))?new Date(order.estimatedDelivery).toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'}):'';
 
   return <KeyboardAvoidingView style={styles.trackPage} behavior={Platform.OS==='ios'?'padding':undefined}>
-    <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" showsVerticalScrollIndicator={false} contentContainerStyle={styles.trackScroll}>
+    <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={()=>{setRefreshing(true);void loadSavedOrders(true);}} tintColor={RED} colors={[RED]}/>} contentContainerStyle={styles.trackScroll}>
       <View style={styles.trackContainer}>
         <View style={styles.trackHeader}>
           <View style={styles.trackHeaderTop}>
@@ -1160,6 +1256,10 @@ function TrackOrderPage({onBack,onContact}:{onBack:()=>void;onContact:()=>void})
         </View>
 
         <View style={styles.trackForm}>
+          <View style={styles.trackResultTop}><View><Text style={styles.trackEyebrow}>MY ORDERS</Text><Text style={styles.trackFormTitle}>Orders saved on this device</Text></View>{savedLoading?<ActivityIndicator size="small" color={RED}/>:null}</View>
+          {!savedLoading&&!savedOrders.length?<View style={styles.trackEstimate}><Text style={styles.trackEstimateLabel}>NO ORDERS YET</Text><Text style={styles.trackEstimateText}>Your next guest order will appear here automatically after checkout.</Text></View>:null}
+          {savedOrders.map(entry=><Pressable accessibilityRole="button" accessibilityLabel={`Open order ${entry.saved.orderReference}`} key={entry.saved.orderReference} onPress={()=>void openSaved(entry.saved)} style={({pressed})=>[styles.trackSupport,pressed&&styles.trackPressed]}><View style={styles.trackSupportCopy}><Text style={styles.trackSupportLabel}>{entry.order?(statusLabels[entry.order.status]||'Order update').toUpperCase():'SAVED ORDER'}</Text><Text style={styles.trackSupportTitle}>{entry.saved.orderReference}</Text><Text style={styles.trackPrivacyText}>{entry.order?`${new Date(entry.order.createdAt).toLocaleDateString()} · ${formatMad(entry.order.total)} · ${entry.order.itemCount} item${entry.order.itemCount===1?'':'s'}`:'Pull down to refresh this order.'}</Text></View><Ionicons name="chevron-forward" size={18} color="#322A26"/></Pressable>)}
+          <View style={styles.orderRule}/>
           <Text accessibilityRole="header" style={styles.trackFormTitle}>Find your delivery</Text>
           <Text style={styles.trackFormIntro}>Your order number appears on the confirmation screen.</Text>
 
@@ -1187,7 +1287,7 @@ function TrackOrderPage({onBack,onContact}:{onBack:()=>void;onContact:()=>void})
         </View>:null}
 
         {order?<View style={styles.trackResult}>
-          <View style={styles.trackResultTop}><View style={styles.trackResultCopy}><Text style={styles.trackEyebrow}>ORDER FOUND</Text><Text accessibilityRole="header" style={styles.trackResultNumber}>{order.orderNumber}</Text></View><View style={[styles.trackStatus,order.status==='cancelled'&&styles.trackStatusCancelled]}><Text style={[styles.trackStatusText,order.status==='cancelled'&&styles.trackStatusTextCancelled]}>{statusLabels[order.status].toUpperCase()}</Text></View></View>
+          <View style={styles.trackResultTop}><View style={styles.trackResultCopy}><Text style={styles.trackEyebrow}>ORDER FOUND</Text><Text accessibilityRole="header" style={styles.trackResultNumber}>{order.orderNumber}</Text></View><View style={[styles.trackStatus,order.status==='cancelled'&&styles.trackStatusCancelled]}><Text style={[styles.trackStatusText,order.status==='cancelled'&&styles.trackStatusTextCancelled]}>{(statusLabels[order.status]||'Order update').toUpperCase()}</Text></View></View>
           <View style={styles.trackSummary}>
             <View style={styles.trackSummaryItem}><Text style={styles.trackSummaryLabel}>ORDER DATE</Text><Text style={styles.trackSummaryValue}>{orderDate||'—'}</Text></View>
             <View style={styles.trackSummaryDivider}/>
@@ -1195,6 +1295,9 @@ function TrackOrderPage({onBack,onContact}:{onBack:()=>void;onContact:()=>void})
             <View style={styles.trackSummaryDivider}/>
             <View style={styles.trackSummaryItem}><Text style={styles.trackSummaryLabel}>ITEMS</Text><Text style={styles.trackSummaryValue}>{order.itemCount}</Text></View>
           </View>
+          {order.deliveryAddress?<View style={styles.trackEstimate}><Text style={styles.trackEstimateLabel}>DELIVERY</Text><Text style={styles.trackEstimateText}>{[order.customerName,order.phoneMasked,order.deliveryAddress].filter(Boolean).join(' · ')}</Text></View>:null}
+          {order.items?.length?<View style={styles.trackEstimate}><Text style={styles.trackEstimateLabel}>YOUR PERFUMES</Text>{order.items.map((item,index)=>{const source=trackedItemImageSource(item.image);return <View key={`${item.name}-${item.size||''}-${index}`} style={styles.trackSummary}>{source?<Image source={source} resizeMode="contain" style={styles.trackItemImage}/>:<View style={styles.trackItemImage}><Ionicons name="cube-outline" size={20} color="#8a7d76"/></View>}<View style={styles.trackSummaryItem}><Text style={styles.trackSummaryValue}>{item.brand?`${item.brand} `:''}{item.name}</Text><Text style={styles.trackPrivacyText}>{[item.size,`Qty ${item.quantity}`].filter(Boolean).join(' · ')}</Text></View><Text style={styles.trackSummaryValue}>{formatMad(item.lineTotal||0)}</Text></View>;})}</View>:null}
+          <View style={styles.trackEstimate}><Text style={styles.trackEstimateLabel}>ORDER TOTAL</Text><Text style={styles.trackEstimateText}>Subtotal {formatMad(order.subtotal||0)} · Delivery {formatMad(order.deliveryFee||0)}{order.discount?` · Discount -${formatMad(order.discount)}`:''}</Text><Text style={styles.trackResultNumber}>{formatMad(order.total)}</Text></View>
           {order.status==='cancelled'?<View style={styles.trackCancelled}><Ionicons name="close-circle-outline" size={18} color="#8E263B"/><Text style={styles.trackCancelledText}>This order has been cancelled. Contact Care if you need assistance.</Text></View>:order.status==='delivery_failed'?<View style={styles.trackCancelled}><Ionicons name="alert-circle-outline" size={18} color="#8E263B"/><Text style={styles.trackCancelledText}>The courier could not complete this delivery. IPORDISE Care can help arrange the next step.</Text></View>:<View accessibilityLabel={`Delivery status: ${statusLabels[order.status]}`} style={styles.trackTimeline}>
             {stages.map((stage,index)=>{const complete=index<activeIndex;const current=index===activeIndex;const history=order.statusHistory?.find(item=>item.status.toLowerCase()===stage.id);const date=history&&Number.isFinite(Date.parse(history.createdAt))?new Date(history.createdAt).toLocaleDateString(undefined,{day:'numeric',month:'short'}):'';return <View key={stage.id} style={styles.trackStep}><View style={styles.trackStepAxis}><View style={[styles.trackDot,(complete||current)&&styles.trackDotActive,current&&styles.trackDotCurrent]}>{complete?<Ionicons name="checkmark" size={11} color="#fff"/>:null}</View>{index<stages.length-1?<View style={[styles.trackLine,complete&&styles.trackLineActive]}/>:null}</View><View style={styles.trackStepCopy}><Text style={[styles.trackStepTitle,(complete||current)&&styles.trackStepTitleActive]}>{stage.label}</Text><Text style={styles.trackStepMeta}>{current?'CURRENT STATUS':date||(!complete?'UP NEXT':'COMPLETED')}</Text></View></View>;})}
           </View>}
@@ -1247,7 +1350,7 @@ function HelpPage({onShop,onOpenProduct,bottomInset,initialDestination='home',on
   if(destination==='delivery')return <DeliveryReturnsPage config={config} onBack={goBackHelp} onContact={()=>navigateHelp('contact')}/>;
   if(destination==='advice')return <ProductAdvicePage onBack={goBackHelp} onShop={onShop} onOpenProduct={onOpenProduct} onContact={()=>navigateHelp('contact')}/>;
   if(destination==='contact')return <ContactSupportPage config={config} onBack={goBackHelp}/>;
-  return <HelpCenter config={config} onNavigate={value=>{if(value==='orders')navigateHelp('track');else if(value==='payments'||value==='faq')return;else if(value==='products'||value==='advice')navigateHelp('advice');else if(value==='account')navigateHelp('contact');else navigateHelp(value);}} onShop={onShop} bottomInset={bottomInset}/>;
+  return <HelpCenter config={config} onNavigate={value=>{if(value==='orders')navigateHelp('track');else if(value==='products'||value==='advice')navigateHelp('advice');else if(value==='account')navigateHelp('contact');else navigateHelp(value);}} onShop={onShop} bottomInset={bottomInset}/>;
 }
 
 function AdminPortalCard() {
@@ -1347,7 +1450,7 @@ function StoreShell() {
   const [homeFilter,setHomeFilter]=useState(previewFilter);
   const [homeQuery,setHomeQuery]=useState(previewQuery);
   const [homeBrand,setHomeBrand]=useState(previewBrand);
-  const previewThankYouOrder:CompletedOrder={id:'preview-order',orderNumber:'IP-260807-82339D',subtotal:1850,deliveryFee:35,total:1885,currency:'MAD',status:'pending',createdAt:new Date().toISOString()};
+  const previewThankYouOrder:CompletedOrder={id:'preview-order',orderNumber:'IP-260807-82339D',trackingToken:'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',subtotal:1850,deliveryFee:35,total:1885,currency:'MAD',status:'pending',createdAt:new Date().toISOString()};
   const [commercePage,setCommercePage]=useState<CommercePage>(previewCommercePage==='bag'||previewCommercePage==='wishlist'||previewCommercePage==='checkout'||(__DEV__&&previewCommercePage==='thankyou')?previewCommercePage:'store');
   const commerceHistoryRef=useRef<CommercePage[]>([]);
   const commercePageRef=useRef(commercePage);
@@ -1366,11 +1469,19 @@ function StoreShell() {
   const [protectedDestination,setProtectedDestination]=useState<'wishlist'|'checkout'|null>(null);
   const previousTabsRef=useRef<string[]>([]);
   const activeRef=useRef(active);
+  const keyboardVisibleRef=useRef(false);
   const layout = useResponsiveLayout();
+  useEffect(()=>{
+    if(Platform.OS!=='android')return;
+    const showSubscription=Keyboard.addListener('keyboardDidShow',()=>{keyboardVisibleRef.current=true;});
+    const hideSubscription=Keyboard.addListener('keyboardDidHide',()=>{keyboardVisibleRef.current=false;});
+    return()=>{showSubscription.remove();hideSubscription.remove();};
+  },[]);
   useEffect(()=>{setPromptEligible(active==='Home'&&commercePage==='store'&&!tabProduct&&!contextualHelpDestination&&!unavailableProductId);},[active,commercePage,contextualHelpDestination,setPromptEligible,tabProduct,unavailableProductId]);
   const navigateTab=(next:string)=>{const current=activeRef.current;if(!recordNavigationEntry(previousTabsRef.current,current,next))return;activeRef.current=next;setActive(next);};
   const navigateCommerce=(next:CommercePage)=>{const current=commercePageRef.current;if(!recordNavigationEntry(commerceHistoryRef.current,current,next))return;commercePageRef.current=next;setCommercePage(next);};
   const openCustomerCommerce=(next:'wishlist'|'checkout')=>{
+    if(next==='wishlist'){navigateCommerce(next);return;}
     if(session){navigateCommerce(next);return;}
     setProtectedDestination(next);
     if(Platform.OS==='web')rememberProtectedCommercePath(next);
@@ -1442,17 +1553,11 @@ function StoreShell() {
       setCommercePage(destination);
       return;
     }
-    if(session&&commercePage==='wishlist'){
-      if(Platform.OS==='web')clearProtectedCommercePath();
-      return;
-    }
-    if(!session&&commercePage==='wishlist'){
-      setProtectedDestination(commercePage);
-      navigateTab('Account');
-      resetCommerce();
-    }
   },[authReady,commercePage,protectedDestination,session]);
   const handleAppBack=useCallback(()=>{
+      // Yield the first Back press to Android while the IME is visible. The OS
+      // dismisses the keyboard without consuming any application history.
+      if(keyboardVisibleRef.current)return false;
       if(commercePage==='thankyou'){setCompletedOrder(null);activeRef.current='Home';setActive('Home');resetCommerce();return true;}
       if(commerceProduct&&commercePage===commerceProductOriginRef.current){setCommerceProduct(null);return true;}
       if(commercePage!=='store'){goBackCommerce();return true;}
@@ -1464,20 +1569,25 @@ function StoreShell() {
         return true;
       }
       if(runScopedAndroidBackAction())return true;
-      const previous=popPreviousNavigationEntry(previousTabsRef.current,active);
-      if(previous||active!=='Home'){
+      const current=activeRef.current;
+      const previous=popPreviousNavigationEntry(previousTabsRef.current,current);
+      if(previous||current!=='Home'){
         const destination=previous||'Home';
         activeRef.current=destination;
         setActive(destination);
         return true;
       }
+      // Nothing in the app handled Back. Android may perform its normal root
+      // activity behavior only from the genuine Home root.
       return false;
-  },[active,commercePage,commerceProduct,contextualHelpDestination,tabProduct,unavailableProductId]);
+  },[commercePage,commerceProduct,contextualHelpDestination,tabProduct,unavailableProductId]);
+  const handleAppBackRef=useRef(handleAppBack);
+  handleAppBackRef.current=handleAppBack;
   useEffect(()=>{
     if(Platform.OS!=='android')return;
-    const subscription=BackHandler.addEventListener('hardwareBackPress',handleAppBack);
+    const subscription=BackHandler.addEventListener('hardwareBackPress',()=>handleAppBackRef.current());
     return()=>subscription.remove();
-  },[handleAppBack]);
+  },[]);
   const baseStoreBody=active === 'Home' ? <HomeContent key={`${homeFilter}|${homeQuery}|${homeBrand}|${navigationRevision}|${pendingProduct?.id||''}`} initialFilter={homeFilter} initialQuery={homeQuery} initialBrand={homeBrand} initialProduct={pendingProduct} onOpenWishlist={()=>openCustomerCommerce('wishlist')} onOpenBag={()=>navigateCommerce('bag')}/> : <TabPage key={`${active}|${navigationRevision}`} tab={active} helpDestination={helpDestination} accountOrderId={deepLinkedOrderId} onAccountOrderHandled={()=>setDeepLinkedOrderId(null)} bottomInset={layout.bottomNavHeight} onOpenProduct={(product,products)=>openTabProduct(product,products)} onWishlist={()=>openCustomerCommerce('wishlist')} onBag={()=>navigateCommerce('bag')} onHelp={(destination)=>{if(destination&&activeRef.current==='Account'){setContextualHelpDestination(destination);return;}setHelpDestination(destination||'home');navigateTab('Help');resetCommerce();}} onBoutique={()=>{setTabProduct(null);tabProductHistoryRef.current=[];setPendingProduct(null);navigateTab('Shop');resetCommerce();}} onShop={(intent)=>{const normalized=typeof intent==='string'?{filter:intent}:intent;setTabProduct(null);tabProductHistoryRef.current=[];setHomeFilter(normalized.filter||'');setHomeBrand(normalized.brand||'');setHomeQuery(normalized.query||normalized.brand||'');navigateTab('Home');resetCommerce();if(Platform.OS==='web'&&typeof globalThis.location!=='undefined'){const params=new URLSearchParams({store:'1'});if(normalized.filter)params.set('filter',normalized.filter);if(normalized.query)params.set('search',normalized.query);if(normalized.brand)params.set('brand',normalized.brand);(globalThis as any).history?.pushState({},'',`${globalThis.location.pathname}?${params}`);}}}/>;
   const unavailableCopy=language==='fr'?{title:'Ce produit n’est plus disponible.',body:'Il a peut-être été retiré ou momentanément dépublié.',action:'Explorer les produits'}:language==='ar'?{title:'هذا المنتج لم يعد متاحاً.',body:'ربما تمت إزالته أو إيقاف نشره مؤقتاً.',action:'استكشف المنتجات'}:{title:'This product is no longer available.',body:'It may have been removed or temporarily unpublished.',action:'Explore products'};
   const unavailableOverlay=unavailableProductId?<View accessibilityRole="alert" style={styles.unavailableProduct}><View style={styles.unavailableProductIcon}><Ionicons name="sparkles-outline" size={25} color={RED}/></View><Text style={[styles.unavailableProductTitle,rtl&&styles.rtlText]}>{unavailableCopy.title}</Text><Text style={[styles.unavailableProductBody,rtl&&styles.rtlText]}>{unavailableCopy.body}</Text><Pressable accessibilityRole="button" onPress={()=>{setUnavailableProductId(null);activeRef.current='Shop';setActive('Shop');}} style={styles.unavailableProductButton}><Text style={styles.unavailableProductButtonText}>{unavailableCopy.action}</Text><Ionicons name={rtl?'arrow-back':'arrow-forward'} size={16} color="#fff"/></Pressable></View>:null;
@@ -1506,10 +1616,10 @@ export default function App() {
   const previewAdmin = Platform.OS === 'web' && typeof globalThis.location !== 'undefined' && (()=>{const path=globalThis.location.pathname.replace(/\/+$/,'').toLowerCase();return path==='/admin'||path.startsWith('/admin/')||new URLSearchParams(globalThis.location.search).get('admin')==='1';})();
   const previewStore = Platform.OS === 'web' && typeof globalThis.location !== 'undefined' && (()=>{const path=globalThis.location.pathname.replace(/\/+$/,'').toLowerCase();return path==='/app'||path.startsWith('/app/')||new URLSearchParams(globalThis.location.search).get('store') === '1';})();
   const previewSkipIntro = Platform.OS === 'web' && typeof globalThis.location !== 'undefined' && new URLSearchParams(globalThis.location.search).get('skipIntro') === '1';
-  // Native already displays the OS splash and IPORDISE supports one market,
-  // so enter the shop immediately instead of blocking every launch twice.
+  // The store mounts beneath the intro so catalogue, auth and saved shopping
+  // state load during the branded three-second opening instead of afterwards.
   const [entered, setEntered] = useState(Platform.OS!=='web'||previewStore);
-  const [launching,setLaunching]=useState(Platform.OS==='web'&&!previewAdmin&&!previewSkipIntro);
+  const [launching,setLaunching]=useState(!previewAdmin&&!previewSkipIntro);
   const finishLaunch=useCallback(()=>setLaunching(false),[]);
   useEffect(()=>{if(Platform.OS!=='web'||typeof document==='undefined')return;const id='ipordise-scrollbar-policy';if(document.getElementById(id))return;const style=document.createElement('style');style.id=id;style.textContent='*{scrollbar-width:none;-ms-overflow-style:none}*::-webkit-scrollbar{display:none;width:0;height:0}';document.head.appendChild(style);return()=>style.remove();},[]);
   return <AppErrorBoundary><LanguageProvider><SafeAreaProvider><RNStatusBar translucent backgroundColor="transparent" barStyle={launching?'light-content':'dark-content'}/>{previewAdmin?<AdminEntry/>:entered ? <StoreScreen /> : <LocationScreen onContinue={() => setEntered(true)} />}{launching?<LaunchIntro onFinish={finishLaunch}/>:null}</SafeAreaProvider></LanguageProvider></AppErrorBoundary>;
@@ -1557,7 +1667,7 @@ const homeStyles=StyleSheet.create({
 });
 
 const styles:Record<string,any> = StyleSheet.create({
-  launchIntro:{...StyleSheet.absoluteFillObject,zIndex:10000,alignItems:'center',justifyContent:'center',overflow:'hidden',backgroundColor:'#030303'},launchAmbientGlow:{position:'absolute',width:300,height:300,borderRadius:150,backgroundColor:'rgba(215,25,63,.035)',shadowColor:'#d7193f',shadowOpacity:.12,shadowRadius:80,shadowOffset:{width:0,height:0}},launchIdentity:{width:300,alignItems:'center',justifyContent:'center'},launchLogo:{width:280,height:280},launchCaption:{marginTop:8,color:'rgba(255,255,255,.52)',fontSize:7,lineHeight:11,fontWeight:'800',letterSpacing:2.7},
+  launchIntro:{...StyleSheet.absoluteFillObject,zIndex:10000,alignItems:'center',justifyContent:'center',overflow:'hidden',backgroundColor:'#030303'},launchAmbientGlow:{position:'absolute',width:340,height:340,borderRadius:170,backgroundColor:'rgba(215,25,63,.04)',shadowColor:'#d7193f',shadowOpacity:.14,shadowRadius:90,shadowOffset:{width:0,height:0}},launchIdentity:{width:320,alignItems:'center',justifyContent:'center'},launchLogo:{width:280,height:280},launchDeveloperCredit:{alignItems:'center',justifyContent:'center',marginTop:-2,marginBottom:10},launchDeveloperLabel:{color:'rgba(255,255,255,.42)',fontSize:5.5,lineHeight:9,fontWeight:'700',letterSpacing:1.85},launchDeveloperNameRow:{flexDirection:'row',alignItems:'center',justifyContent:'center',gap:8,marginTop:3},launchDeveloperDiamond:{width:3,height:3,backgroundColor:'rgba(215,25,63,.9)',transform:[{rotate:'45deg'}]},launchDeveloperName:{color:'rgba(255,255,255,.9)',fontFamily:'serif',fontSize:10,lineHeight:14,fontWeight:'700',letterSpacing:1.8},launchSignature:{marginTop:0,flexDirection:'row',alignItems:'center',justifyContent:'center',gap:12},launchRule:{width:28,height:1,backgroundColor:'rgba(215,25,63,.68)'},launchCaption:{color:'rgba(255,255,255,.66)',fontSize:7,lineHeight:11,fontWeight:'800',letterSpacing:2.35},
   accountAccessCardUpgraded:{padding:20,borderColor:'#dfd4ce',shadowOpacity:.11,shadowRadius:20,shadowOffset:{width:0,height:9}},accountAccessTopline:{flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginBottom:13},accountAccessStatus:{flexDirection:'row',alignItems:'center',gap:6},accountAccessStatusDot:{width:6,height:6,borderRadius:3,backgroundColor:RED},accountAccessStatusText:{fontSize:6.5,fontWeight:'900',letterSpacing:1.25,color:'#6f625c'},accountAccessSeal:{height:26,borderRadius:13,backgroundColor:'#edf7f1',paddingHorizontal:9,flexDirection:'row',alignItems:'center',gap:4},accountAccessSealText:{fontSize:6,fontWeight:'900',letterSpacing:.8,color:'#176b43'},accountModeSwitchUpgraded:{height:50,borderRadius:16,marginBottom:22,padding:4,backgroundColor:'#f1ece9'},accountModeTabUpgraded:{borderRadius:12,overflow:'hidden'},accountModeTextUpgraded:{fontSize:7,letterSpacing:1.25},accountModeIndicator:{position:'absolute',bottom:4,width:20,height:2,borderRadius:1,backgroundColor:RED},accountAccessIconUpgraded:{width:48,height:48,borderRadius:16,borderWidth:1,borderColor:'#f2dce2'},accountAccessTitleUpgraded:{fontSize:24,lineHeight:29,letterSpacing:-.25},accountAccessIntroUpgraded:{fontSize:10.5,lineHeight:16,marginTop:13,marginBottom:18,maxWidth:470},accountFieldLabelRow:{flexDirection:'row',alignItems:'center',justifyContent:'space-between'},accountFieldRequired:{fontSize:6,fontWeight:'900',letterSpacing:.9,color:'#9a8e88'},accountAccessInputUpgraded:{height:60,borderRadius:17,borderWidth:1.2,backgroundColor:'#fff',shadowColor:'#2c1d18',shadowOpacity:.035,shadowRadius:6,shadowOffset:{width:0,height:2}},accountInputIconUpgraded:{width:42,height:42,borderRadius:14},accountPrivacyHint:{minHeight:29,flexDirection:'row',alignItems:'center',gap:5,paddingHorizontal:4},accountPrivacyHintText:{fontSize:7.5,lineHeight:11,color:'#7b817d'},accountAccessButtonUpgraded:{height:58,borderRadius:29,overflow:'hidden',paddingLeft:21,paddingRight:7,shadowColor:'#a00d2d',shadowOpacity:.19,shadowRadius:10,shadowOffset:{width:0,height:5},elevation:4},signInTextUpgraded:{fontSize:11.5,letterSpacing:.2},signInArrowUpgraded:{width:44,height:44,borderRadius:22,backgroundColor:'rgba(255,255,255,.17)',borderWidth:1,borderColor:'rgba(255,255,255,.14)'},accountSecurityRowUpgraded:{minHeight:82,marginTop:17,borderTopWidth:1,borderBottomWidth:1,borderColor:'#eee6e1'},accountSecurityItemUpgraded:{gap:1,paddingHorizontal:3},accountSecurityDivider:{width:1,height:45,backgroundColor:'#eee6e1'},accountSecurityIcon:{width:29,height:29,borderRadius:10,backgroundColor:'#edf7f1',alignItems:'center',justifyContent:'center',marginBottom:3},accountSecurityTitle:{fontSize:7.5,fontWeight:'900',color:'#2d352f'},accountSecurityDescription:{fontSize:6.2,lineHeight:9,color:'#8b827d',textAlign:'center'},accountLegalRow:{minHeight:28,flexDirection:'row',alignItems:'center',justifyContent:'center',gap:4,paddingTop:7},formLegalUpgraded:{marginTop:0,paddingHorizontal:0,fontSize:7.2},
   locationBg:{flex:1,backgroundColor:'#070707',overflow:'hidden'},heroImage:{...StyleSheet.absoluteFillObject,width:'100%',height:'100%'},locationSafe:{flex:1,maxWidth:sizes.form,alignSelf:'center'},locationBrand:{alignItems:'center',marginTop:'11%'},locationBrandLandscape:{display:'none'},locationBrandCaption:{color:'rgba(255,255,255,.72)',fontSize:7,fontWeight:'900',letterSpacing:3.2,marginTop:-5},locationControls:{marginTop:'auto',paddingBottom:spacing.lg},locationControlsLandscape:{paddingBottom:6},locationEyebrowRow:{flexDirection:'row',alignItems:'center',gap:10,marginBottom:9},locationEyebrowLine:{width:23,height:2,borderRadius:2,backgroundColor:'#ff3d67'},locationEyebrow:{color:'#ff91a9',fontSize:8,lineHeight:12,fontWeight:'900',letterSpacing:1.65},locationQuestion:{color:'#fff',fontFamily:'serif',fontSize:35,lineHeight:40,fontWeight:'700',letterSpacing:-.7,textShadowColor:'rgba(0,0,0,.35)',textShadowOffset:{width:0,height:1},textShadowRadius:8},locationIntro:{maxWidth:360,color:'rgba(255,255,255,.76)',fontSize:11.5,lineHeight:17.5,marginTop:6,marginBottom:17},countryCard:{alignSelf:'stretch',minHeight:96,borderRadius:22,backgroundColor:'#fbfaf9',borderWidth:1,borderColor:'rgba(255,255,255,.9)',flexDirection:'row',alignItems:'center',paddingLeft:16,paddingRight:12,overflow:'hidden',shadowColor:'#000',shadowOpacity:.28,shadowRadius:18,shadowOffset:{width:0,height:10},elevation:8},countryAccent:{position:'absolute',left:0,top:20,bottom:20,width:3,borderTopRightRadius:4,borderBottomRightRadius:4,backgroundColor:RED},moroccoFlag:{width:44,height:36,borderRadius:8,backgroundColor:'#c92732',alignItems:'center',justifyContent:'center',marginRight:13,flexShrink:0,shadowColor:'#8d1116',shadowOpacity:.2,shadowRadius:5,shadowOffset:{width:0,height:2},elevation:2},flagStar:{width:16,height:16,alignItems:'center',justifyContent:'center'},flagStarText:{fontSize:22,lineHeight:23,color:'#006233',fontWeight:'900'},marketCopy:{flex:1,minWidth:0},marketLabel:{fontSize:7,lineHeight:10,fontWeight:'900',letterSpacing:1.45,color:'#9a8d84'},countryText:{fontFamily:'serif',fontSize:22,color:'#171412',fontWeight:'700',lineHeight:25,marginTop:2},marketDetails:{flexDirection:'row',alignItems:'center',gap:3,marginTop:3},marketMeta:{fontSize:8.5,lineHeight:12,color:'#796f68'},marketDot:{width:3,height:3,borderRadius:2,backgroundColor:'#bbb'},countryDivider:{height:48,width:1,backgroundColor:'#e5ded9',marginHorizontal:11,flexShrink:0},arrowButton:{width:50,height:50,borderRadius:25,backgroundColor:RED,alignItems:'center',justifyContent:'center',flexShrink:0,shadowColor:RED,shadowOpacity:.32,shadowRadius:10,shadowOffset:{width:0,height:5},elevation:4},arrowButtonPressed:{opacity:.86,transform:[{scale:.94}]},locationTrust:{height:30,flexDirection:'row',alignItems:'center',justifyContent:'center',gap:5},locationTrustText:{color:'rgba(255,255,255,.72)',fontSize:8,fontWeight:'600',letterSpacing:.25},
   brandWrap:{alignItems:'center',justifyContent:'center',minWidth:106},
@@ -1575,7 +1685,7 @@ const styles:Record<string,any> = StyleSheet.create({
   search:{height:50,borderWidth:1,borderColor:'#d9d0cb',borderRadius:25,flex:1,minWidth:70,flexDirection:'row',alignItems:'center',paddingLeft:6,paddingRight:7,gap:7,backgroundColor:'#fbfaf9',shadowColor:'#2a1b17',shadowOpacity:.045,shadowRadius:9,shadowOffset:{width:0,height:4},elevation:1},searchFocused:{borderColor:'#672131',borderWidth:1.5,backgroundColor:'#fff',shadowColor:'#2a1b17',shadowOpacity:.09,shadowRadius:11,elevation:3},searchIconWrap:{width:38,height:38,borderRadius:19,backgroundColor:'#f0ebe8',alignItems:'center',justifyContent:'center',flexShrink:0},searchIconFocused:{backgroundColor:'#fff0f4'},
   searchActiveDesktop:{height:52,borderWidth:0,borderBottomWidth:1.5,borderBottomColor:RED,borderRadius:0,backgroundColor:'transparent',paddingLeft:0,paddingRight:0,shadowOpacity:0,elevation:0},searchIconActiveDesktop:{width:34,height:48,borderRadius:0,backgroundColor:'transparent'},searchInputActiveDesktop:{fontSize:15,letterSpacing:.15},searchClearActiveDesktop:{width:42,height:42,borderRadius:0,alignItems:'center',justifyContent:'center'},
   searchMobile:{width:'100%',height:50,minHeight:50,maxHeight:50,flex:0,backgroundColor:'#fff',borderWidth:1,borderColor:'#ddd4cf',borderRadius:25,paddingLeft:5,paddingRight:6,gap:6,overflow:'hidden',shadowColor:'#2a1b17',shadowOpacity:.055,shadowRadius:9,shadowOffset:{width:0,height:4},elevation:2},
-  searchIconMobile:{width:40,height:40,borderRadius:20,backgroundColor:'#f2ece9',alignItems:'center',justifyContent:'center',flexShrink:0},searchInput:{height:48,fontSize:14,flex:1,minWidth:0,paddingVertical:0,color:'#211b18'},searchInputMobile:{height:48,fontSize:13,lineHeight:19,color:'#211d1a',paddingVertical:0,paddingHorizontal:4,borderWidth:0,backgroundColor:'transparent'},searchInputWeb:{outlineStyle:'none',outlineWidth:0,outlineColor:'transparent'} as any,searchListening:{borderColor:RED,backgroundColor:'#fff8fa'},searchMic:{width:38,height:38,borderRadius:19,backgroundColor:'#fff0f4',borderWidth:1,borderColor:'#f2d7de',alignItems:'center',justifyContent:'center',flexShrink:0,overflow:'hidden'},searchMicMobile:{width:38,height:38,borderRadius:19},searchMicListening:{backgroundColor:RED,borderColor:RED},searchMicPressed:{opacity:.76,transform:[{scale:.94}]},searchMicPulse:{position:'absolute',width:7,height:7,borderRadius:4,right:4,top:4,backgroundColor:'#fff',borderWidth:1,borderColor:RED},searchHint:{height:28,borderRadius:14,backgroundColor:'#211719',paddingHorizontal:10,alignItems:'center',justifyContent:'center'},searchHintText:{fontSize:5.5,fontWeight:'900',letterSpacing:1,color:'#fff'},
+  searchIconMobile:{width:40,height:40,borderRadius:20,backgroundColor:'#f2ece9',alignItems:'center',justifyContent:'center',flexShrink:0},searchInput:{height:48,fontSize:14,flex:1,minWidth:0,paddingVertical:0,color:'#211b18'},searchInputMobile:{height:48,fontSize:13,lineHeight:19,color:'#211d1a',paddingVertical:0,paddingHorizontal:4,borderWidth:0,backgroundColor:'transparent'},searchInputWeb:{outlineStyle:'none',outlineWidth:0,outlineColor:'transparent'} as any,searchListening:{borderColor:RED,backgroundColor:'#fff8fa',shadowColor:RED,shadowOpacity:.13,shadowRadius:12,elevation:4},searchMic:{width:38,height:38,borderRadius:19,backgroundColor:'#fff5f7',borderWidth:1,borderColor:'#dfc7cd',alignItems:'center',justifyContent:'center',flexShrink:0,overflow:'visible',shadowColor:'#5a1627',shadowOpacity:.12,shadowRadius:7,shadowOffset:{width:0,height:3},elevation:3},searchMicMobile:{width:38,height:38,borderRadius:19},searchMicListening:{backgroundColor:RED,borderColor:RED,shadowOpacity:.3,shadowRadius:10,elevation:6},searchMicPressed:{opacity:.82,transform:[{scale:.94}]},searchMicPulse:{position:'absolute',width:9,height:9,borderRadius:5,right:-1,top:-1,backgroundColor:'#fff',borderWidth:2,borderColor:RED},searchVoiceMessage:{minHeight:16,paddingHorizontal:17,paddingTop:3,fontSize:9,lineHeight:13,fontWeight:'700',color:'#7b6e68'},searchVoiceMessageListening:{color:RED},searchHint:{height:28,borderRadius:14,backgroundColor:'#211719',paddingHorizontal:10,alignItems:'center',justifyContent:'center'},searchHintText:{fontSize:5.5,fontWeight:'900',letterSpacing:1,color:'#fff'},
   feed:{paddingBottom:4},contentContainer:{width:'100%',alignSelf:'center'},results:{minHeight:128,marginTop:11,padding:12,backgroundColor:'#f8f4f2',borderRadius:20,borderWidth:1,borderColor:'#e4dad5',overflow:'hidden',shadowColor:'#2a1b17',shadowOpacity:.045,shadowRadius:10,shadowOffset:{width:0,height:5},elevation:2},resultsAccent:{position:'absolute',left:0,top:18,bottom:18,width:3,borderTopRightRadius:3,borderBottomRightRadius:3,backgroundColor:RED},resultsTop:{minHeight:51,flexDirection:'row',alignItems:'center',gap:10},resultsIcon:{width:43,height:43,borderRadius:14,backgroundColor:'#fff',borderWidth:1,borderColor:'#ebe3df',alignItems:'center',justifyContent:'center'},resultsCopy:{flex:1,minWidth:0},resultsEyebrow:{fontSize:5.5,fontWeight:'900',letterSpacing:1.2,color:RED},resultsText:{fontFamily:'serif',fontSize:15,lineHeight:19,fontWeight:'700',color:'#211a17',marginTop:1},resultsQuery:{fontSize:7.5,lineHeight:11,color:'#847871',marginTop:1},resultsCount:{minWidth:48,height:45,borderRadius:14,backgroundColor:'#211719',alignItems:'center',justifyContent:'center',paddingHorizontal:7},resultsCountEmpty:{backgroundColor:'#e9e1dd'},resultsCountValue:{fontFamily:'serif',fontSize:17,lineHeight:19,fontWeight:'700',color:'#fff'},resultsCountValueEmpty:{color:'#776c65'},resultsCountLabel:{fontSize:4.5,fontWeight:'900',letterSpacing:.75,color:'#a99da0',marginTop:1},resultsBest:{minHeight:45,borderRadius:14,backgroundColor:'#fff',borderWidth:1,borderColor:'#e8dfda',paddingLeft:6,paddingRight:5,marginTop:9,flexDirection:'row',alignItems:'center',gap:8},resultsBestMark:{width:33,height:33,borderRadius:11,backgroundColor:RED,alignItems:'center',justifyContent:'center'},resultsBestCopy:{flex:1,minWidth:0},resultsBestLabel:{fontSize:5,fontWeight:'900',letterSpacing:.9,color:'#9a8e87'},resultsBestValue:{fontSize:8,lineHeight:11,fontWeight:'900',color:'#211b18',marginTop:2},resultsBestArrow:{width:33,height:33,borderRadius:17,backgroundColor:'#f2ece9',alignItems:'center',justifyContent:'center'},
   accueilShowcase:{paddingTop:12},
   accueilHero:{height:330,borderRadius:21,overflow:'hidden',backgroundColor:'#0a0908',shadowColor:'#160d09',shadowOpacity:.2,shadowRadius:17,shadowOffset:{width:0,height:9},elevation:6},
@@ -1748,6 +1858,7 @@ const trackingLuxuryStyles=StyleSheet.create({
   trackStatusText:{fontSize:6,lineHeight:9,fontWeight:'900',letterSpacing:.8,color:'#426550'},
   trackStatusTextCancelled:{color:'#8E263B'},
   trackSummary:{minHeight:78,marginTop:19,paddingVertical:14,borderTopWidth:1,borderBottomWidth:1,borderColor:'#E2DBD5',flexDirection:'row',alignItems:'stretch'},
+  trackItemImage:{width:54,height:54,borderRadius:12,marginRight:12,backgroundColor:'#f7f3f1',borderWidth:1,borderColor:'#ebe2dd',alignItems:'center',justifyContent:'center'},
   trackSummaryItem:{flex:1,minWidth:0,justifyContent:'center',paddingHorizontal:8},
   trackSummaryDivider:{width:1,backgroundColor:'#E5DED8'},
   trackSummaryLabel:{fontSize:6,lineHeight:9,fontWeight:'900',letterSpacing:1,color:'#90857E'},
@@ -1777,3 +1888,10 @@ const trackingLuxuryStyles=StyleSheet.create({
   trackSupportActionText:{fontSize:8.5,lineHeight:12,fontWeight:'700',color:'#8E263B'},
 });
 Object.assign(styles,trackingLuxuryStyles);
+Object.assign(styles, StyleSheet.create({
+  modalBackdrop:{flex:1,backgroundColor:'rgba(20,14,12,.58)',alignItems:'center',justifyContent:'center',padding:18},
+  preorderModal:{width:'100%',maxWidth:520,maxHeight:'90%',backgroundColor:'#fff',borderRadius:22,padding:20,shadowColor:'#000',shadowOpacity:.2,shadowRadius:24,elevation:12},
+  editorHead:{flexDirection:'row',alignItems:'flex-start',gap:12,paddingBottom:12,borderBottomWidth:1,borderBottomColor:'#eee6e2'},
+  preorderInput:{minHeight:48,marginTop:10,borderWidth:1,borderColor:'#ded5d0',borderRadius:12,paddingHorizontal:13,paddingVertical:10,fontSize:14,color:'#211719',backgroundColor:'#fff'},
+  preorderSuccess:{marginTop:18,padding:18,borderRadius:14,backgroundColor:'#edf7f0',flexDirection:'row',alignItems:'center',gap:10},
+}));

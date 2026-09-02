@@ -53,7 +53,7 @@ export const normalizeHelpConfig=(value:unknown):HelpConfig=>{
     timezone:string(raw.timezone,defaultHelpConfig.timezone),availabilityOverride:['online','offline'].includes(raw.availabilityOverride)?raw.availabilityOverride:'auto',temporaryClosure:raw.temporaryClosure===true,
     holidayClosures:array<string>(raw.holidayClosures,[]).filter(item=>typeof item==='string'),businessHours:array<SupportDay>(raw.businessHours,[]).filter(item=>Number.isInteger(item?.day)&&typeof item?.open==='string'&&typeof item?.close==='string'),expectedResponse:string(raw.expectedResponse),
     contacts:{whatsapp:string(contacts.whatsapp),phone:string(contacts.phone),email:string(contacts.email)},
-    topics:(()=>{const configured=array<HelpTopic>(raw.topics,[]).filter(item=>item&&item.active!==false);const byId=new Map(configured.map(item=>[item.id,item]));return defaultHelpConfig.topics.map(item=>byId.get(item.id)||item).filter(item=>item.active!==false).sort((a,b)=>(a.order||0)-(b.order||0));})(),
+    topics:(()=>{const configured=array<HelpTopic>(raw.topics,[]).filter(item=>item&&defaultHelpConfig.topics.some(topic=>topic.id===item.id));const byId=new Map(configured.map(item=>[item.id,item]));return defaultHelpConfig.topics.map(item=>byId.get(item.id)||item).filter(item=>item.active!==false).sort((a,b)=>(a.order||0)-(b.order||0));})(),
     faqs:array<HelpFaq>(configuredFaqs,defaultHelpConfig.faqs).filter(item=>item&&item.active!==false&&item.question&&item.answer).sort((a,b)=>(a.order||0)-(b.order||0)),
     deliveryPolicies:array<HelpPolicy>(raw.deliveryPolicies,[]).filter(item=>item&&item.active!==false&&item.title&&item.body).sort((a,b)=>(a.order||0)-(b.order||0)),adviceQuestions:array<string>(raw.adviceQuestions,defaultHelpConfig.adviceQuestions),
   };

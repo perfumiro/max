@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text as NativeText, TextInput as NativeTextInput, type TextInput, type TextInputProps, type TextProps } from 'react-native';
+import { Platform, StyleSheet, Text as NativeText, TextInput as NativeTextInput, type TextInput, type TextInputProps, type TextProps } from 'react-native';
 import { useLanguage } from './LanguageContext';
 import { translateSiteText } from './siteTranslations';
 
@@ -11,7 +11,7 @@ function translateChildren(children: React.ReactNode, language: 'fr' | 'ar' | 'e
 
 export function LocalizedText({ children, ...props }: TextProps) {
   const { language } = useLanguage();
-  return <NativeText {...props}>{translateChildren(children, language)}</NativeText>;
+  return <NativeText maxFontSizeMultiplier={1.5} {...props} style={[styles.text,props.style]}>{translateChildren(children, language)}</NativeText>;
 }
 
 export const LocalizedTextInput = React.forwardRef<TextInput, TextInputProps>(function LocalizedTextInput(props, ref) {
@@ -19,5 +19,10 @@ export const LocalizedTextInput = React.forwardRef<TextInput, TextInputProps>(fu
   const placeholder = typeof props.placeholder === 'string' ? translateSiteText(props.placeholder, language) : props.placeholder;
   const accessibilityLabel = typeof props.accessibilityLabel === 'string' ? translateSiteText(props.accessibilityLabel, language) : props.accessibilityLabel;
   const accessibilityHint = typeof props.accessibilityHint === 'string' ? translateSiteText(props.accessibilityHint, language) : props.accessibilityHint;
-  return <NativeTextInput ref={ref} {...props} placeholder={placeholder} accessibilityLabel={accessibilityLabel} accessibilityHint={accessibilityHint} />;
+  return <NativeTextInput ref={ref} maxFontSizeMultiplier={1.5} {...props} placeholder={placeholder} accessibilityLabel={accessibilityLabel} accessibilityHint={accessibilityHint} style={[styles.input,props.style]} />;
+});
+
+const styles=StyleSheet.create({
+  text:Platform.select({android:{includeFontPadding:false},default:{}}),
+  input:{paddingVertical:0,...Platform.select({android:{includeFontPadding:false,textAlignVertical:'center'},default:{}})},
 });

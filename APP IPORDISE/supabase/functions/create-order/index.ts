@@ -1,9 +1,18 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { normalizeMoroccanPhone } from '../_shared/orderIdentity.ts';
+import { guestOrderToken } from '../_shared/guestOrderToken.ts';
 import { apiHeaders, apiJson, bearerToken, consumeRateLimit, readJsonObject, rejectNonJson, rejectUntrustedOrigin, requestOrigin } from '../_shared/security.ts';
 
 const MAX_BODY_BYTES = 64 * 1024;
 const DEFAULT_BOUTIQUE_EMAIL = 'perfumiro@gmail.com';
+// These identifiers are intentionally public and already shipped by the
+// website checkout. Keeping the same defaults here makes native-app orders use
+// the proven EmailJS service without placing any private credential in the app.
+const DEFAULT_EMAILJS_SERVICE_ID = 'service_8aoubkb';
+const DEFAULT_EMAILJS_ADMIN_TEMPLATE_ID = 'template_ab23cpc';
+const DEFAULT_EMAILJS_CUSTOMER_TEMPLATE_ID = 'template_bp5cscd';
+const DEFAULT_EMAILJS_PUBLIC_KEY = 'kNyQsCbHg-0jS4Xks';
+const DEFAULT_EMAILJS_ALLOWED_ORIGIN = 'https://ipordise.com';
 const METHODS = 'POST, OPTIONS';
 const json = (body: unknown, status: number, origin: string | null) => apiJson(body, status, origin, METHODS);
 const normalizeSize = (value: unknown) => String(value || '').toLowerCase().replace(/\s+/g, '');
@@ -124,12 +133,13 @@ async function createLegacySchemaOrder(admin: any, input: {
 }
 
 async function sendOrderNotifications(order: any, customer: any, items: any[], notes: string | null, risk: { score: number; level: string; flags: string[] }) {
-  const emailJsServiceId = Deno.env.get('EMAILJS_SERVICE_ID')?.trim() || 'service_8aoubkb';
+  const emailJsServiceId = Deno.env.get('EMAILJS_SERVICE_ID')?.trim() || DEFAULT_EMAILJS_SERVICE_ID;
   const emailJsTemplateId = Deno.env.get('EMAILJS_ORDER_TEMPLATE_ID')?.trim();
-  const emailJsAdminTemplateId = Deno.env.get('EMAILJS_ADMIN_TEMPLATE_ID')?.trim() || emailJsTemplateId;
-  const emailJsCustomerTemplateId = Deno.env.get('EMAILJS_CUSTOMER_TEMPLATE_ID')?.trim() || emailJsTemplateId;
-  const emailJsPublicKey = Deno.env.get('EMAILJS_PUBLIC_KEY')?.trim();
+  const emailJsAdminTemplateId = Deno.env.get('EMAILJS_ADMIN_TEMPLATE_ID')?.trim() || emailJsTemplateId || DEFAULT_EMAILJS_ADMIN_TEMPLATE_ID;
+  const emailJsCustomerTemplateId = Deno.env.get('EMAILJS_CUSTOMER_TEMPLATE_ID')?.trim() || emailJsTemplateId || DEFAULT_EMAILJS_CUSTOMER_TEMPLATE_ID;
+  const emailJsPublicKey = Deno.env.get('EMAILJS_PUBLIC_KEY')?.trim() || DEFAULT_EMAILJS_PUBLIC_KEY;
   const emailJsPrivateKey = Deno.env.get('EMAILJS_PRIVATE_KEY')?.trim();
+  const emailJsAllowedOrigin = (Deno.env.get('EMAILJS_ALLOWED_ORIGIN')?.trim() || DEFAULT_EMAILJS_ALLOWED_ORIGIN).replace(/\/$/, '');
   const resendApiKey = Deno.env.get('RESEND_API_KEY')?.trim();
   const resendFrom = Deno.env.get('RESEND_FROM_EMAIL')?.trim();
   const boutiqueEmail = Deno.env.get('ORDER_NOTIFICATION_EMAIL')?.trim() || DEFAULT_BOUTIQUE_EMAIL;
@@ -163,7 +173,11 @@ async function sendOrderNotifications(order: any, customer: any, items: any[], n
       try {
         const response = await fetchWithTimeout('https://api.emailjs.com/api/v1.0/email/send', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Origin: emailJsAllowedOrigin,
+            Referer: `${emailJsAllowedOrigin}/`,
+          },
           body: JSON.stringify({
             service_id: emailJsServiceId,
             template_id: message.templateId,
@@ -375,7 +389,8 @@ Deno.serve(async request => {
       const { error: notificationError } = await admin.from('orders').update(update).eq('id', order.id);
       if (notificationError) console.error(JSON.stringify({ requestId, event: 'order_post_commit_update_failed', orderId: order.id }));
     }
-    return json({ id: order.id, orderNumber: order.order_number, subtotal: order.subtotal, deliveryFee: order.delivery_fee, discount: order.discount, total: order.total, currency: order.currency, status: order.status, paymentMethod: order.payment_method, source: order.source, createdAt: order.created_at }, checkoutResult.replayed ? 200 : 201, origin);
+    const trackingToken = await guestOrderToken(serviceKey, order.id, order.order_number);
+    return json({ id: order.id, orderNumber: order.order_number, trackingToken, subtotal: order.subtotal, deliveryFee: order.delivery_fee, discount: order.discount, total: order.total, currency: order.currency, status: order.status, paymentMethod: order.payment_method, source: order.source, createdAt: order.created_at }, checkoutResult.replayed ? 200 : 201, origin);
   } catch (error) {
     console.error(JSON.stringify({ requestId, event: 'order_create_failed', error: error instanceof Error ? error.message : String(error) }));
     return json({ error: 'Checkout could not complete your order', requestId }, 500, origin);

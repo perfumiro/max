@@ -416,6 +416,12 @@ verify_jwt = false
 [functions.track-order]
 verify_jwt = false
 
+[functions.create-preorder]
+verify_jwt = false
+
+[functions.admin-preorders]
+verify_jwt = false
+
 [functions.product-reviews]
 verify_jwt = false
 

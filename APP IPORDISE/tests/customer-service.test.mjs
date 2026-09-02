@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { formatMoroccanPhoneInput, isStrongPassword, isValidEmail, isValidMoroccanPhone, normalizeEmail } from '../src/services/customerValidation.ts';
 import { CustomerAuthError, classifyCustomerAuthError } from '../src/services/customerAuthErrors.ts';
+import { translateSiteText } from '../src/i18n/siteTranslations.ts';
 
 test('customer email input is normalized consistently', () => {
   assert.equal(normalizeEmail('  Client@Example.COM '), 'client@example.com');
@@ -29,6 +30,15 @@ test('checkout formats local and international Moroccan phone input', () => {
   assert.equal(formatMoroccanPhoneInput('0612345678'), '06 12 34 56 78');
   assert.equal(formatMoroccanPhoneInput('+212612345678'), '+212 6 12 34 56 78');
   assert.equal(formatMoroccanPhoneInput('0812345678'), '08 12 34 56 78');
+});
+
+test('checkout field labels and placeholders follow the selected language', () => {
+  assert.equal(translateSiteText('FULL NAME', 'fr'), 'NOM COMPLET');
+  assert.equal(translateSiteText('Your full name', 'fr'), 'Votre nom complet');
+  assert.equal(translateSiteText('FULL DELIVERY ADDRESS', 'fr'), 'ADRESSE DE LIVRAISON COMPLÈTE');
+  assert.equal(translateSiteText('A delivery preference or helpful note', 'fr'), 'Une préférence de livraison ou une note utile');
+  assert.equal(translateSiteText('FULL NAME', 'ar'), 'الاسم الكامل');
+  assert.equal(translateSiteText('Your city', 'ar'), 'مدينتك');
 });
 
 test('authentication failures map to stable customer-safe codes', () => {

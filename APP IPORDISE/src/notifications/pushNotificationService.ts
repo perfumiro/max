@@ -4,6 +4,7 @@ import * as Notifications from 'expo-notifications';
 import * as SecureStore from 'expo-secure-store';
 import { Linking, Platform } from 'react-native';
 import { appConfig } from '../config';
+import { apiRequest } from '../services/apiClient';
 import { normalizePushPermission, safeNotificationProductId, type NormalizedPushPermission } from './notificationLogic';
 
 const INSTALLATION_KEY = 'ipordise.push.installation.v1';
@@ -81,18 +82,17 @@ export async function requestProductionPushToken() {
 export async function savePushDevice(input: { token: string; accessToken?: string | null; language: 'fr' | 'en' | 'ar'; preferences: PushPreferences; action?: 'register' | 'preferences' }) {
   if (!appConfig.supabaseUrl || !appConfig.supabasePublishableKey || Platform.OS === 'web') return;
   await saveLocalPushPreferences(input.preferences);
-  const response = await fetch(`${appConfig.supabaseUrl}/functions/v1/push-devices`, {
+  await apiRequest(`${appConfig.supabaseUrl}/functions/v1/push-devices`, {
     method: 'POST',
     headers: { apikey: appConfig.supabasePublishableKey, Authorization: `Bearer ${input.accessToken || appConfig.supabasePublishableKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ action: input.action || 'register', installationId: await getInstallationId(), expoPushToken: input.token, platform: Platform.OS, language: input.language, appVersion: Constants.expoConfig?.version, ...input.preferences }),
   });
-  if (!response.ok) throw new Error((await response.json().catch(() => null))?.error || 'Push registration could not be saved.');
 }
 
 export async function unlinkPushDevice(accessToken?: string | null) {
   const token = await readStoredPushToken();
   if (!token || !accessToken || !appConfig.supabaseUrl || !appConfig.supabasePublishableKey || Platform.OS === 'web') return;
-  await fetch(`${appConfig.supabaseUrl}/functions/v1/push-devices`, {
+  await apiRequest(`${appConfig.supabaseUrl}/functions/v1/push-devices`, {
     method: 'POST', headers: { apikey: appConfig.supabasePublishableKey, Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ action: 'unlink', installationId: await getInstallationId(), expoPushToken: token }),
   });

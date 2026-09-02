@@ -5,7 +5,7 @@ import { resolveResponsiveLayout } from '../src/responsive.ts';
 
 const cases=[
   [320,568,'compact',2],[360,640,'phone',2],[375,667,'phone',2],[390,844,'phone',2],
-  [412,915,'phone',2],[430,932,'largePhone',2],[768,1024,'tablet',3],[820,1180,'tablet',3],[1024,1366,'largeTablet',4],
+  [412,915,'phone',2],[430,932,'largePhone',2],[768,1024,'tablet',3],[820,1180,'tablet',3],[1024,1366,'largeTablet',4],[1366,1024,'largeTablet',5],
 ];
 
 test('representative phone and tablet sizes resolve to adaptive layouts',()=>{
@@ -54,10 +54,11 @@ test('phone back and active bottom tabs return through app navigation',async()=>
   assert.match(app,/if\(commercePage!==['"]store['"]\)\{goBackCommerce\(\);return true;\}/);
   assert.match(app,/if\(tabProduct\)\{closeTabProduct\(\);return true;\}/);
   assert.match(app,/if\(runScopedAndroidBackAction\(\)\)return true/);
-  assert.match(app,/previous\|\|active!==['"]Home['"]/);
+  assert.match(app,/const current=activeRef\.current;\s*const previous=popPreviousNavigationEntry\(previousTabsRef\.current,current\)/);
+  assert.match(app,/previous\|\|current!==['"]Home['"]/);
   assert.match(app,/storeLayerHidden:\{display:'none'\}/);
   assert.match(app,/if\(active===t\.label\)setNavigationRevision/);
-  assert.match(app,/popPreviousNavigationEntry\(previousTabsRef\.current,active\)/);
+  assert.doesNotMatch(app,/popPreviousNavigationEntry\(previousTabsRef\.current,active\)/);
 });
 
 test('category portraits and swipe rail stay consistent and smooth',async()=>{
@@ -99,4 +100,35 @@ test('all horizontal rails share native smooth swipe physics',async()=>{
   assert.match(shared,/decelerationRate:\s*'fast'/);
   assert.match(shared,/overScrollMode:\s*'never'/);
   for(const screen of screens)assert.match(screen,/SmoothScrollView as ScrollView/);
+});
+
+test('responsive foundations constrain readable content and normalize Android controls',async()=>{
+  const [responsive,design,localized,help,offers,checkout,shop]=await Promise.all([
+    readFile(new URL('../src/responsive.ts',import.meta.url),'utf8'),
+    readFile(new URL('../src/designSystem.ts',import.meta.url),'utf8'),
+    readFile(new URL('../src/i18n/LocalizedPrimitives.tsx',import.meta.url),'utf8'),
+    readFile(new URL('../src/help/HelpCenter.tsx',import.meta.url),'utf8'),
+    readFile(new URL('../src/offers/OffersScreen.tsx',import.meta.url),'utf8'),
+    readFile(new URL('../src/commerce/CommercePages.tsx',import.meta.url),'utf8'),
+    readFile(new URL('../src/shop/ShopScreen.tsx',import.meta.url),'utf8'),
+  ]);
+  assert.match(responsive,/resolveGridColumns/);
+  assert.match(design,/readable:\s*680/);
+  assert.match(localized,/includeFontPadding:false/);
+  assert.match(localized,/maxFontSizeMultiplier=\{1\.5\}/);
+  assert.match(help,/sizes\.readable \+ layout\.gutter \* 2/);
+  assert.match(offers,/modalBackdropTablet/);
+  assert.match(offers,/sheetTablet/);
+  assert.match(checkout,/addressSheetTablet/);
+  assert.match(shop,/resultColumns=layout\.catalogColumns/);
+});
+
+test('responsive customer UI has no stale global Dimensions snapshots or iPhone-frame sizing',async()=>{
+  const files=['../App.tsx','../src/account/AccountScreen.tsx','../src/commerce/CommercePages.tsx','../src/help/HelpCenter.tsx','../src/offers/OffersScreen.tsx','../src/shop/ShopScreen.tsx'];
+  const sources=await Promise.all(files.map(file=>readFile(new URL(file,import.meta.url),'utf8')));
+  for(const source of sources){
+    assert.doesNotMatch(source,/Dimensions\.get\(['"](?:window|screen)['"]\)/);
+    assert.doesNotMatch(source,/width:\s*(?:390|430)\b/);
+    assert.doesNotMatch(source,/height:\s*(?:844|1000)\b/);
+  }
 });

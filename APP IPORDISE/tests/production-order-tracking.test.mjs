@@ -4,14 +4,16 @@ import test from 'node:test';
 
 const read = path => readFile(new URL(path, import.meta.url), 'utf8');
 
-test('public tracking API is rate-limited, generic on mismatch, and delegates to a safe database projection', async () => {
+test('public tracking API is rate-limited, generic on mismatch, and validates phone or a signed guest credential', async () => {
   const edge = await read('../supabase/functions/track-order/index.ts');
   assert.match(edge, /consumeRateLimit\(admin, request, 'track-order', 12, 900\)/);
   assert.match(edge, /code: 'ORDER_NOT_FOUND'/);
-  assert.match(edge, /admin\.rpc\('track_commerce_order'/);
+  assert.match(edge, /guestOrderToken/);
+  assert.match(edge, /constantTimeTokenMatch/);
   assert.match(edge, /Retry-After/);
   assert.match(edge, /maskMoroccanPhone/);
-  assert.doesNotMatch(edge, /\.from\('orders'\)/);
+  assert.match(edge, /\.from\('orders'\)[\s\S]*\.eq\('order_number', orderNumber\)/);
+  assert.doesNotMatch(edge, /serviceKey|trackingToken[^\n]*console/);
 });
 
 test('database migration enforces canonical identity, safe response fields, atomic history, and shipping state', async () => {
@@ -38,7 +40,7 @@ test('checkout, tracking client, and admin use the production contracts', async 
   ]);
   assert.match(checkout, /normalizeMoroccanPhone\(customer\.phone\)/);
   assert.match(client, /timeoutMs:12_000/);
-  assert.match(client, /return response\.order/);
+  assert.match(client, /return normalizeTrackedOrderResponse\(response\)/);
   assert.match(adminEdge, /admin\.rpc\('update_order_shipping'/);
   assert.match(adminEdge, /action: 'order\.shipping\.update'/);
   assert.match(adminClient, /updateAdminOrderShipping/);

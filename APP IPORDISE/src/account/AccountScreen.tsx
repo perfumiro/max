@@ -1,6 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Constants from "expo-constants";
 import * as ImagePicker from "expo-image-picker";
+import * as Updates from "expo-updates";
 import React, { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -16,9 +17,14 @@ import {
   StyleSheet,
   Switch,
   View,
+  type ImageSourcePropType,
+  type ImageStyle,
+  type StyleProp,
+  type ViewStyle,
 } from "react-native";
 import { useBagSnapshot, useFavouriteSnapshot } from "../commerce/ShoppingContext";
 import { appConfig } from "../config";
+import { loadBundledProducts } from "../sharedCatalog";
 import { LocalizedText as Text, LocalizedTextInput as TextInput } from "../i18n/LocalizedPrimitives";
 import { useLanguage, type AppLanguage } from "../i18n/LanguageContext";
 import { useResponsiveLayout } from "../useResponsiveLayout";
@@ -29,6 +35,7 @@ import {
   requestDataExport,
   saveCustomerAddress,
   type CustomerAddress,
+  type CustomerOrderItem,
   type CustomerOrderSummary,
   type CustomerProfile,
 } from "../services/customerAccountService";
@@ -55,6 +62,40 @@ const GREEN = "#2d6a4f";
 const DARK_CREAM = "#f0ebe7";
 const WARM_BROWN = "#6b5b4f";
 const LIGHT_GRAY = "#e8e0da";
+const normalizeOrderProductKey = (value: unknown) => String(value || "")
+  .normalize("NFKD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/^-|-$/g, "");
+const bundledOrderProducts = loadBundledProducts();
+const bundledOrderImages = new Map(bundledOrderProducts.map(product => [product.id, product.image]));
+const guaranteedOrderImages = new Map<string, ImageSourcePropType>([
+  ["versace-dylan-blue-eau-de-toilette", require("../../website-ipordise/assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg")],
+]);
+const bundledOrderImagesByName = new Map(bundledOrderProducts.flatMap(product => [
+  [normalizeOrderProductKey(product.name), product.image] as const,
+  [normalizeOrderProductKey(`${product.brand} ${product.name}`), product.image] as const,
+]));
+const resolveOrderItemImages = (item?: CustomerOrderItem): ImageSourcePropType[] => {
+  if (!item) return [];
+  const legacyItem = item as CustomerOrderItem & Record<string, unknown>;
+  const rawProductId = String(item.productId || legacyItem.product_id || legacyItem.id || "");
+  const productId = rawProductId.includes(":") ? rawProductId.slice(0, rawProductId.lastIndexOf(":")) : rawProductId;
+  const productName = String(item.name || legacyItem.productName || legacyItem.product_name || "");
+  const brand = String(item.brand || legacyItem.productBrand || legacyItem.product_brand || "");
+  const catalogImage = guaranteedOrderImages.get(productId)
+    || bundledOrderImages.get(productId)
+    || bundledOrderImagesByName.get(normalizeOrderProductKey(`${brand} ${productName}`))
+    || bundledOrderImagesByName.get(normalizeOrderProductKey(productName));
+  const storedImage = String(item.image || legacyItem.image_url || legacyItem.imageUrl || "").trim();
+  if (!storedImage) return catalogImage ? [catalogImage] : [];
+  const uri = /^https?:\/\//i.test(storedImage)
+    ? storedImage
+    : `${appConfig.storeOrigin.replace(/\/$/, "")}/${storedImage.replace(/^\/+/, "")}`;
+  const storedSource: ImageSourcePropType = { uri, cache: "force-cache" };
+  return catalogImage ? [catalogImage, storedSource] : [storedSource];
+};
 const retryableAuthCodes = new Set(["network", "timeout", "unavailable"]);
 const authErrorMessage = (error: unknown, t: (key: string) => string) =>
   error instanceof CustomerAuthError ? t(`authError_${error.code}`) : t("authError_generic");
@@ -67,6 +108,7 @@ type AccountPage =
   | "addresses"
   | "language"
   | "notifications"
+  | "updates"
   | "privacy"
   | "legal";
 type AddressPageHandle = { requestBack: () => boolean };
@@ -513,6 +555,7 @@ function LoggedOutAccount({
               <Text style={s.guestDescription}>{t("authIntro")}</Text>
             </View>
           </View> : null}
+          {mode === "welcome" ? <Pressable accessibilityRole="button" accessibilityLabel={t("guestOrdersTitle")} onPress={onHelp} style={({pressed})=>[s.guestWelcome,pressed&&s.pressed]}><View style={s.guestAvatar}><Ionicons name="cube-outline" size={27} color={RED}/></View><View style={s.guestWelcomeCopy}><Text style={s.guestEyebrow}>{t("guestOrders")}</Text><Text style={s.cardTitle}>{t("guestOrdersTitle")}</Text><Text style={s.guestDescription}>{t("guestOrdersCopy")}</Text></View><Ionicons name={rtl?"chevron-back":"chevron-forward"} size={19} color={INK}/></Pressable>:null}
           <View style={[s.authCard, !layout.tablet && s.authCardCompact, layout.tablet && s.authCardWide, !layout.tablet && mode!=="welcome" && s.authCardFormCompact]}>
             {mode === "welcome" ? null : <View style={s.authStatus}><Text style={s.eyebrow}>{t("memberAccess")}</Text></View>}
             {authNotice ? (
@@ -857,6 +900,26 @@ function AccountSkeleton() {
   );
 }
 
+const OrderProductPhoto = memo(function OrderProductPhoto({
+  item,
+  imageStyle,
+  placeholderStyle,
+  icon = "flask-outline",
+}: {
+  item?: CustomerOrderItem;
+  imageStyle: StyleProp<ImageStyle>;
+  placeholderStyle: StyleProp<ViewStyle>;
+  icon?: keyof typeof Ionicons.glyphMap;
+}) {
+  const [sourceIndex, setSourceIndex] = useState(0);
+  const sources = resolveOrderItemImages(item);
+  const source = sources[sourceIndex];
+  const legacyItem = item as (CustomerOrderItem & Record<string, unknown>) | undefined;
+  useEffect(() => setSourceIndex(0), [item?.image, item?.name, item?.productId, legacyItem?.image_url, legacyItem?.product_id]);
+  if (source) return <Image accessibilityLabel={item?.name || "IPORDISE fragrance"} accessibilityIgnoresInvertColors source={source} resizeMode="contain" onError={() => setSourceIndex(current => current + 1)} style={imageStyle} />;
+  return <View style={placeholderStyle}><Ionicons name={icon} size={22} color={RED} /></View>;
+});
+
 const RecentOrderCard = memo(function RecentOrderCard({
   order,
   language,
@@ -883,7 +946,7 @@ const RecentOrderCard = memo(function RecentOrderCard({
       </View>
       <View style={s.recentOrderBody}>
         <View style={s.orderThumb}>
-          {item?.image ? <Image accessibilityLabel={item.name || t("orderProduct")} source={{ uri: item.image }} resizeMode="contain" style={s.orderThumbImage} /> : <Ionicons name="bag-handle-outline" size={25} color={RED} />}
+          <OrderProductPhoto item={item} imageStyle={s.orderThumbImage} placeholderStyle={s.orderThumbImagePlaceholder} icon="bag-handle-outline" />
           {itemCount > 1 ? <View style={s.orderItemCount}><Text style={s.orderItemCountText}>+{itemCount - 1}</Text></View> : null}
         </View>
         <View style={s.recentOrderCopy}>
@@ -915,6 +978,55 @@ function Stat({ value, label, icon, onPress }: any) {
       <Text style={s.accountStatLabel}>{label}</Text>
     </Pressable>
   );
+}
+
+type AppUpdateState = "idle" | "checking" | "downloading" | "ready" | "current" | "error";
+
+function AppUpdatesPage() {
+  const { language, rtl } = useLanguage();
+  const [state, setState] = useState<AppUpdateState>("idle");
+  const copy = language === "fr" ? {
+    title: "Mises à jour de l’application", body: "Gardez IPORDISE à jour pour profiter des dernières améliorations et corrections.",
+    check: "RECHERCHER UNE MISE À JOUR", checking: "RECHERCHE EN COURS", downloading: "TÉLÉCHARGEMENT EN COURS",
+    ready: "La mise à jour est prête.", restart: "REDÉMARRER ET METTRE À JOUR", current: "Votre application est à jour.",
+    error: "Impossible de vérifier maintenant. Vérifiez votre connexion et réessayez.", unavailable: "La vérification est disponible dans l’application IPORDISE installée.", version: "Version installée",
+  } : language === "ar" ? {
+    title: "تحديثات التطبيق", body: "حافظ على تحديث IPORDISE للحصول على أحدث التحسينات والإصلاحات.",
+    check: "التحقق من وجود تحديث", checking: "جارٍ التحقق", downloading: "جارٍ تنزيل التحديث",
+    ready: "التحديث جاهز.", restart: "إعادة التشغيل والتحديث", current: "تطبيقك محدّث.",
+    error: "تعذر التحقق الآن. تحقق من اتصالك وحاول مرة أخرى.", unavailable: "التحقق من التحديثات متاح في تطبيق IPORDISE المثبّت.", version: "الإصدار المثبّت",
+  } : {
+    title: "App updates", body: "Keep IPORDISE up to date with the latest improvements and fixes.",
+    check: "CHECK FOR UPDATE", checking: "CHECKING FOR UPDATE", downloading: "DOWNLOADING UPDATE",
+    ready: "Your update is ready.", restart: "RESTART AND UPDATE", current: "Your app is up to date.",
+    error: "We couldn't check right now. Check your connection and try again.", unavailable: "Update checking is available in the installed IPORDISE app.", version: "Installed version",
+  };
+  const version = Constants.expoConfig?.version || "1.0.0";
+  const busy = state === "checking" || state === "downloading";
+  const checkForUpdate = async () => {
+    if (Platform.OS === "web" || !Updates.isEnabled) { setState("error"); return; }
+    setState("checking");
+    try {
+      const result = await Updates.checkForUpdateAsync();
+      if (!result.isAvailable) { setState("current"); return; }
+      setState("downloading");
+      const fetched = await Updates.fetchUpdateAsync();
+      setState(fetched.isNew ? "ready" : "current");
+    } catch { setState("error"); }
+  };
+  return <View>
+    <Text style={[s.pageHeading, rtl && s.updateTextRtl]}>{copy.title}</Text>
+    <Text style={[s.copy, rtl && s.updateTextRtl]}>{copy.body}</Text>
+    <View style={s.updateCard}>
+      <View style={s.updateIcon}><Ionicons name="cloud-download-outline" size={29} color={RED}/></View>
+      <Text style={s.updateVersion}>{copy.version}</Text>
+      <Text style={s.updateVersionValue}>IPORDISE v{version}</Text>
+      {state === "current" ? <View style={s.updateStatus}><Ionicons name="checkmark-circle" size={18} color={GREEN}/><Text style={s.updateStatusText}>{copy.current}</Text></View> : null}
+      {state === "ready" ? <View style={s.updateStatus}><Ionicons name="sparkles" size={18} color={GREEN}/><Text style={s.updateStatusText}>{copy.ready}</Text></View> : null}
+      {state === "error" ? <Text style={s.updateError}>{Platform.OS === "web" || !Updates.isEnabled ? copy.unavailable : copy.error}</Text> : null}
+      {state === "ready" ? <Pressable accessibilityRole="button" onPress={() => void Updates.reloadAsync()} style={s.updatePrimary}><Text style={s.updatePrimaryText}>{copy.restart}</Text><Ionicons name="refresh" size={17} color="#fff"/></Pressable> : <Pressable accessibilityRole="button" accessibilityState={{busy,disabled:busy}} disabled={busy} onPress={() => void checkForUpdate()} style={[s.updatePrimary,busy&&s.controlDisabled]}>{busy?<ActivityIndicator color="#fff"/>:<Ionicons name="refresh-outline" size={17} color="#fff"/>}<Text style={s.updatePrimaryText}>{state === "checking" ? copy.checking : state === "downloading" ? copy.downloading : copy.check}</Text></Pressable>}
+    </View>
+  </View>;
 }
 
 function AccountInfoRow({
@@ -1121,6 +1233,7 @@ function LoggedInAccount({
             addresses: t("addresses"),
             language: t("language"),
             notifications: t("notifications"),
+            updates: language === "fr" ? "Mises à jour" : language === "ar" ? "التحديثات" : "App updates",
             privacy: t("privacy"),
             legal: t("legal"),
           } as const
@@ -1244,6 +1357,12 @@ function LoggedInAccount({
                   title={t("notifications")}
                   onPress={() => navigateAccount("notifications")}
                 />
+                <MenuRow
+                  icon="cloud-download-outline"
+                  title={language === "fr" ? "Mises à jour de l’application" : language === "ar" ? "تحديثات التطبيق" : "App updates"}
+                  subtitle={language === "fr" ? "Rechercher la dernière version" : language === "ar" ? "تحقق من أحدث إصدار" : "Check for the latest version"}
+                  onPress={() => navigateAccount("updates")}
+                />
               </View>
               <Text style={s.sectionLabel}>{t("privacy")}</Text>
               <View style={s.menuCard}>
@@ -1334,7 +1453,7 @@ function LoggedInAccount({
               </View>
               <View style={s.orderDetailPanel}>
                 <Text style={s.sectionLabel}>ITEMS</Text>
-                {(selectedOrder.items || []).map((item,index)=><View key={`${item.productId||item.name}-${index}`} style={s.orderItemRow}>{item.image?<Image source={{uri:item.image,cache:'force-cache'}} resizeMode="contain" style={s.orderItemImage}/>:<View style={s.orderItemImagePlaceholder}><Ionicons name="flask-outline" size={20} color={RED}/></View>}<View style={s.menuCopy}><Text style={s.menuTitle}>{item.name || "IPORDISE fragrance"}</Text><Text style={s.menuSubtitle}>{item.size || ""} · Qty {item.quantity || 1}</Text></View><Text style={s.orderItemPrice}>{Number(item.lineTotal || item.unitPrice || 0).toLocaleString()} {selectedOrder.currency}</Text></View>)}
+                {(selectedOrder.items || []).map((item,index)=><View key={`${item.productId||item.name}-${index}`} style={s.orderItemRow}><OrderProductPhoto item={item} imageStyle={s.orderItemImage} placeholderStyle={s.orderItemImagePlaceholder}/><View style={s.menuCopy}><Text style={s.menuTitle}>{item.name || "IPORDISE fragrance"}</Text><Text style={s.menuSubtitle}>{item.size || ""} · Qty {item.quantity || 1}</Text></View><Text style={s.orderItemPrice}>{Number(item.lineTotal || item.unitPrice || 0).toLocaleString()} {selectedOrder.currency}</Text></View>)}
               </View>
               <View style={s.orderDetailPanel}>
                 <Text style={s.sectionLabel}>DELIVERY & PAYMENT</Text>
@@ -1499,6 +1618,7 @@ function LoggedInAccount({
           {page === "privacy" ? (
             <PrivacyPage token={session.access_token} />
           ) : null}
+          {page === "updates" ? <AppUpdatesPage /> : null}
           {page === "legal" ? <LegalPage /> : null}
         </View>
       </ScrollView>
@@ -1889,7 +2009,7 @@ export function CustomerAccountScreen(props: {
   return session ? (
     <LoggedInAccount {...props} />
   ) : (
-    <LoggedOutAccount onShop={props.onShop} onWishlist={props.onWishlist} onBag={props.onBag} onHelp={() => props.onHelp()} bottomInset={props.bottomInset} />
+    <LoggedOutAccount onShop={props.onShop} onWishlist={props.onWishlist} onBag={props.onBag} onHelp={() => props.onHelp("track")} bottomInset={props.bottomInset} />
   );
 }
 
@@ -2525,6 +2645,7 @@ const s = StyleSheet.create({
   recentOrderBody: { flexDirection: "row", alignItems: "center", gap: 12, padding: 10, borderRadius: 18, backgroundColor: "#faf7f5" },
    orderThumb: { position: "relative", width: 68, height: 68, borderRadius: 16, backgroundColor: "#fff", alignItems: "center", justifyContent: "center", overflow: "hidden", borderWidth: 1, borderColor: LIGHT_GRAY },
   orderThumbImage: { width: "88%", height: "88%" },
+  orderThumbImagePlaceholder: { width: "88%", height: "88%", alignItems: "center", justifyContent: "center" },
   orderItemCount: { position: "absolute", top: 5, right: 5, minWidth: 22, height: 22, paddingHorizontal: 5, borderRadius: 11, backgroundColor: INK, alignItems: "center", justifyContent: "center" },
   orderItemCountText: { fontSize: 8, lineHeight: 10, fontWeight: "900", color: "#fff" },
   recentOrderCopy: { flex: 1, minWidth: 0 },
@@ -2718,6 +2839,16 @@ const s = StyleSheet.create({
   notificationEnableButton: { minHeight: 48, marginVertical: 14, borderRadius: 14, backgroundColor: RED, flexDirection: "row", gap: 8, alignItems: "center", justifyContent: "center" },
   notificationEnableText: { color: "#fff", fontSize: 12, fontWeight: "900" },
   notificationError: { color: RED, fontSize: 12, lineHeight: 18, marginBottom: 10 },
+  updateCard: { marginTop: 18, borderRadius: 22, borderWidth: 1, borderColor: LIGHT_GRAY, backgroundColor: "#fff", padding: 20, alignItems: "center", shadowColor: INK, shadowOpacity: .06, shadowRadius: 12, shadowOffset: { width: 0, height: 5 }, elevation: 2 },
+  updateIcon: { width: 62, height: 62, borderRadius: 20, backgroundColor: "#fff0f3", alignItems: "center", justifyContent: "center", marginBottom: 15 },
+  updateVersion: { fontSize: 9, fontWeight: "900", letterSpacing: 1.1, color: "#8c7f79" },
+  updateVersionValue: { fontFamily: "serif", fontSize: 23, lineHeight: 29, fontWeight: "800", color: INK, marginTop: 4 },
+  updateStatus: { minHeight: 44, marginTop: 15, borderRadius: 14, backgroundColor: "#eef8f2", paddingHorizontal: 13, flexDirection: "row", alignItems: "center", gap: 8, alignSelf: "stretch", justifyContent: "center" },
+  updateStatusText: { color: GREEN, fontSize: 11, lineHeight: 16, fontWeight: "700", textAlign: "center" },
+  updateError: { marginTop: 15, color: RED, fontSize: 11, lineHeight: 17, textAlign: "center" },
+  updatePrimary: { minHeight: 52, marginTop: 18, borderRadius: 17, backgroundColor: INK, paddingHorizontal: 18, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 9, alignSelf: "stretch" },
+  updatePrimaryText: { color: "#fff", fontSize: 10, fontWeight: "900", letterSpacing: .55, textAlign: "center" },
+  updateTextRtl: { textAlign: "right", writingDirection: "rtl" },
    addressCard: {
      borderRadius: 20,
      borderWidth: 1,

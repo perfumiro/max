@@ -116,7 +116,7 @@ test('guest and member account states expose accessible real destinations', asyn
     read('src/account/AccountScreen.tsx'),
     read('App.tsx'),
   ]);
-  for (const page of ['orders', 'profile', 'addresses', 'language', 'notifications', 'privacy', 'legal']) {
+  for (const page of ['orders', 'profile', 'addresses', 'language', 'notifications', 'updates', 'privacy', 'legal']) {
     assert.match(screen, new RegExp(`navigateAccount\\(["']${page}["']\\)`));
   }
   assert.match(screen, /onHelp\(["']track["']\)/);
@@ -133,6 +133,15 @@ test('account back navigation follows real page history and protects unsaved for
   assert.match(screen, /addressPageRef\.current\?\.requestBack\(\)/);
   assert.match(screen, /registerAndroidBackAction\(requestBack\)/);
   assert.doesNotMatch(screen, /page === "order-details" \? "orders" : "home"/);
+});
+
+test('account exposes a manual Expo update flow without interrupting the current session', async () => {
+  const screen = await readFile(new URL('../src/account/AccountScreen.tsx', import.meta.url), 'utf8');
+  assert.match(screen, /navigateAccount\("updates"\)/);
+  assert.match(screen, /Updates\.checkForUpdateAsync\(\)/);
+  assert.match(screen, /Updates\.fetchUpdateAsync\(\)/);
+  assert.match(screen, /Updates\.reloadAsync\(\)/);
+  assert.match(screen, /state === "ready"/);
 });
 
 test('mobile guest header integrates language, currency and secure status without a second control row', async () => {
@@ -162,7 +171,14 @@ test('account dashboard provides loading, retry, empty and product-image fallbac
   assert.match(screen, /noRecentOrder/);
   assert.match(screen, /guestWelcome/);
   assert.match(screen, /accountIdentity/);
-  assert.match(screen, /item\?\.image \?/);
+  assert.match(screen, /loadBundledProducts/);
+  assert.match(screen, /resolveOrderItemImages/);
+  assert.match(screen, /legacyItem\.product_id/);
+  assert.match(screen, /bundledOrderImagesByName/);
+  assert.match(screen, /guaranteedOrderImages\.get\(productId\)/);
+  assert.match(screen, /versace-dylan-blue-eau-de-toilette\/1\.jpg/);
+  assert.match(screen, /appConfig\.storeOrigin/);
+  assert.match(screen, /onError=\{\(\) => setSourceIndex\(current => current \+ 1\)\}/);
 });
 
 test('authentication forms use labelled autocomplete fields, password visibility and duplicate-submit protection', async () => {

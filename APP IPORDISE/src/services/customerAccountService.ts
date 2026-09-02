@@ -1,4 +1,5 @@
 import { appConfig } from '../config';
+import { apiRequest } from './apiClient';
 
 export type CustomerProfile = { user_id: string; email?: string; first_name?: string; last_name?: string; display_name?: string; phone?: string; locale?: string; currency?: string; avatar_url?: string; marketing_consent?: boolean; default_address_id?: string | null };
 export type CustomerAddress = { id: string; label: string; recipient_name: string; recipient_first_name?: string | null; recipient_last_name?: string | null; phone: string; country?: string; address_line1: string; address_line2?: string | null; building?: string | null; apartment?: string | null; city: string; region?: string | null; postal_code?: string | null; delivery_instructions?: string | null; latitude?: number | null; longitude?: number | null; is_default: boolean };
@@ -98,13 +99,12 @@ export async function saveNotificationPreferences(token: string, preferences: Pa
 export async function requestDataExport(token: string) { await rest('data_export_requests', token, { method: 'POST', body: '{}' }); }
 export async function deleteCustomerAccount(token: string) {
   if (!appConfig.supabaseUrl || !appConfig.supabasePublishableKey) throw new Error('Account deletion is temporarily unavailable.');
-  const response = await fetch(`${appConfig.supabaseUrl}/functions/v1/delete-account`, {
+  const result = await apiRequest<{deleted?:boolean}>(`${appConfig.supabaseUrl}/functions/v1/delete-account`, {
     method: 'POST',
     headers: { apikey: appConfig.supabasePublishableKey, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: '{}',
   });
-  const result = await response.json().catch(() => null);
-  if (!response.ok || result?.deleted !== true) throw new Error('Account deletion could not be confirmed.');
+  if (result?.deleted !== true) throw new Error('Account deletion could not be confirmed.');
 }
 
 export async function loadCustomerShoppingState(token: string) {

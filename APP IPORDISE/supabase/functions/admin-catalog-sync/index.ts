@@ -27,13 +27,16 @@ const isMissingColumn = (error: any, column: string) => (
 );
 
 const updateProductCompat = async (admin: any, id: string, patch: Record<string, unknown>) => {
-  let result = await admin.from('products').update(patch).eq('id', id);
-  if (result.error && 'publication_status' in patch && isMissingColumn(result.error, 'publication_status')) {
-    const legacyPatch = { ...patch };
-    delete legacyPatch.publication_status;
-    result = await admin.from('products').update(legacyPatch).eq('id', id);
+  const optionalColumns = ['publication_status'];
+  const candidate = { ...patch };
+  for (let attempt = 0; attempt <= optionalColumns.length; attempt += 1) {
+    const result = await admin.from('products').update(candidate).eq('id', id);
+    if (!result.error) return result;
+    const missingColumn = optionalColumns.find(column => column in candidate && isMissingColumn(result.error, column));
+    if (!missingColumn) return result;
+    delete candidate[missingColumn];
   }
-  return result;
+  return admin.from('products').update(candidate).eq('id', id);
 };
 
 const upsertProductCompat = async (admin: any, row: Record<string, unknown>) => {
@@ -174,6 +177,7 @@ Deno.serve(async request => {
         if (value.stockLeft === null) patch.stock_left = null;
         else if (Number.isInteger(value.stockLeft) && value.stockLeft >= 0 && value.stockLeft <= 100_000) patch.stock_left = value.stockLeft;
         else if (value.stockLeft !== undefined) return json({ error: 'Invalid stock quantity', requestId }, 400, origin);
+        if (typeof value.preorderEnabled === 'boolean') patch.preorder_enabled = value.preorderEnabled;
         if (!Object.keys(patch).length) return json({ error: 'Empty product update', requestId }, 400, origin);
         const { error } = await updateProductCompat(admin, id, patch);
         if (error) throw error;
@@ -222,6 +226,9 @@ Deno.serve(async request => {
           // succeeded. A failed multi-row sync therefore fails closed instead
           // of exposing mixed old/new prices or inventory.
           stock_left: stockLeft, active: false, publication_status: 'draft',
+          preorder_enabled: value.preorderEnabled === true,
+          preorder_message: cleanText(value.preorderMessage, 500) || null,
+          preorder_estimated_availability: cleanText(value.preorderEstimatedAvailability, 160) || null,
           offer_start: Object.keys(originalPrices).length ? offerStart : null,
           offer_end: Object.keys(originalPrices).length ? offerEnd : null,
           offer_featured: Object.keys(originalPrices).length && offerFeatured,

@@ -40,12 +40,12 @@ test('every product-detail entry point provides working bag navigation', async (
   assert.doesNotMatch(app, /onOpenBag=\{\(\)=>\{setTabProduct\(null\);tabProductHistoryRef\.current=\[\];navigateCommerce\('bag'\);\}\}/);
 });
 
-test('mobile sticky purchase waits for meaningful product-page scrolling', async () => {
+test('mobile sticky purchase is immediately available without excessive scrolling', async () => {
   const app = await readFile(new URL('../App.tsx', import.meta.url), 'utf8');
-  assert.match(app, /const stickyRevealThreshold=Math\.max\(520,layout\.height\*\.82\)/);
-  assert.match(app, /onScroll=\{handleProductScroll\} scrollEventThrottle=\{16\}/);
-  assert.match(app, /offset>stickyRevealThreshold-90:offset>stickyRevealThreshold/);
-  assert.match(app, /pointerEvents=\{stickyVisible\?'auto':'none'\}/);
+  assert.doesNotMatch(app, /stickyRevealThreshold/);
+  assert.doesNotMatch(app, /handleProductScroll/);
+  assert.match(app, /new Animated\.Value\(layout\.tablet\?0:1\)/);
+  assert.match(app, /stickyProgress\.setValue\(layout\.tablet\?0:1\)/);
   assert.match(app, /outputRange:\[92,0\]/);
   assert.match(app, /stickyPurchase:\{position:'absolute'/);
 });
