@@ -70,7 +70,9 @@ test('checkout inputs keep stable native identity and use one keyboard inset str
   assert.match(checkout, /showSoftInputOnFocus/);
   assert.match(checkout, /keyboardShouldPersistTaps="always"/);
   assert.match(checkout, /automaticallyAdjustKeyboardInsets=\{Platform\.OS === "ios"\}/);
-  assert.equal(JSON.parse(appConfig).expo.android.softwareKeyboardLayoutMode, 'pan');
+  const expoConfig = JSON.parse(appConfig).expo;
+  assert.equal(expoConfig.android.softwareKeyboardLayoutMode, 'resize');
+  assert.equal(expoConfig.androidStatusBar.translucent, false);
   assert.match(checkout, /onSubmitEditing=\{onSubmitEditing\}/);
   assert.doesNotMatch(checkout, /React\.cloneElement/);
   assert.doesNotMatch(checkout, /editable: !loading/);

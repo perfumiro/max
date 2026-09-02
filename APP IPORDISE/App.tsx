@@ -1622,7 +1622,7 @@ export default function App() {
   const [launching,setLaunching]=useState(!previewAdmin&&!previewSkipIntro);
   const finishLaunch=useCallback(()=>setLaunching(false),[]);
   useEffect(()=>{if(Platform.OS!=='web'||typeof document==='undefined')return;const id='ipordise-scrollbar-policy';if(document.getElementById(id))return;const style=document.createElement('style');style.id=id;style.textContent='*{scrollbar-width:none;-ms-overflow-style:none}*::-webkit-scrollbar{display:none;width:0;height:0}';document.head.appendChild(style);return()=>style.remove();},[]);
-  return <AppErrorBoundary><LanguageProvider><SafeAreaProvider><RNStatusBar translucent backgroundColor="transparent" barStyle={launching?'light-content':'dark-content'}/>{previewAdmin?<AdminEntry/>:entered ? <StoreScreen /> : <LocationScreen onContinue={() => setEntered(true)} />}{launching?<LaunchIntro onFinish={finishLaunch}/>:null}</SafeAreaProvider></LanguageProvider></AppErrorBoundary>;
+  return <AppErrorBoundary><LanguageProvider><SafeAreaProvider><RNStatusBar translucent={Platform.OS !== 'android'} backgroundColor={Platform.OS === 'android' ? '#ffffff' : 'transparent'} barStyle={launching?'light-content':'dark-content'}/>{previewAdmin?<AdminEntry/>:entered ? <StoreScreen /> : <LocationScreen onContinue={() => setEntered(true)} />}{launching?<LaunchIntro onFinish={finishLaunch}/>:null}</SafeAreaProvider></LanguageProvider></AppErrorBoundary>;
 }
 
 const homeStyles=StyleSheet.create({

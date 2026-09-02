@@ -23,7 +23,7 @@
       "versionCode": 1,
       "allowBackup": false,
       "edgeToEdgeEnabled": true,
-      "softwareKeyboardLayoutMode": "pan",
+      "softwareKeyboardLayoutMode": "resize",
       "predictiveBackGestureEnabled": true,
       "blockedPermissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -36,6 +36,11 @@
         "foregroundImage": "./assets/ipordise-app-icon-v3.png",
         "backgroundColor": "#030303"
       }
+    },
+    "androidStatusBar": {
+      "translucent": false,
+      "backgroundColor": "#ffffff",
+      "barStyle": "dark-content"
     },
     "ios": {
       "bundleIdentifier": "com.ipordise.app",

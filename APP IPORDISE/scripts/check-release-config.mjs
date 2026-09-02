@@ -14,7 +14,8 @@ export const validateReleaseConfig = (config, easConfig) => {
   if (!expo?.android?.blockedPermissions?.includes('android.permission.READ_EXTERNAL_STORAGE') || !expo?.android?.blockedPermissions?.includes('android.permission.WRITE_EXTERNAL_STORAGE')) errors.push('Legacy Android storage permissions must be blocked');
   if (!expo?.android?.blockedPermissions?.includes('android.permission.USE_BIOMETRIC') || !expo?.android?.blockedPermissions?.includes('android.permission.USE_FINGERPRINT')) errors.push('Unused biometric permissions from SecureStore must be blocked');
   if (expo?.android?.allowBackup !== false) errors.push('Android application backups must be disabled for customer data protection');
-  if (expo?.android?.softwareKeyboardLayoutMode !== 'pan') errors.push('Android checkout requires pan keyboard layout mode to keep the checkout overlay stable');
+  if (expo?.android?.softwareKeyboardLayoutMode !== 'resize') errors.push('Android checkout requires resize keyboard layout mode so its ScrollView is the only focus-scrolling surface');
+  if (expo?.androidStatusBar?.translucent !== false) errors.push('Android checkout requires a non-translucent status bar for stable resize keyboard insets');
   if (new Set(expo?.android?.blockedPermissions || []).size !== (expo?.android?.blockedPermissions || []).length) errors.push('Android blocked permissions must not contain duplicates');
   if (expo?.ios?.infoPlist?.NSAppTransportSecurity?.NSAllowsArbitraryLoads !== false) errors.push('iOS arbitrary HTTP loads must be disabled');
   const projectId = expo?.extra?.eas?.projectId;
