@@ -5,7 +5,7 @@
     // Send every production visit to the unified Supabase checkout instead.
     const localHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
     if (!localHost && /\/pages\/checkout(?:\.html)?\/?$/.test(window.location.pathname.replace(/\\/g, '/'))) {
-        window.location.replace('/app/?page=checkout');
+        window.location.replace('/checkout/');
         return;
     }
 

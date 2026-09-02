@@ -6,7 +6,7 @@
       // canonical orders table. Route every production URL variant to the
       // unified checkout before the legacy page or its cached scripts run.
       if (!/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {
-        window.location.replace('/app/?page=checkout');
+        window.location.replace('/checkout/');
       }
     </script>
     <meta charset="UTF-8">
