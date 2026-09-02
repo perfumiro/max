@@ -573,7 +573,7 @@ s0.parentNode.insertBefore(s1,s0);
     </footer>
     <!-- Firebase order-save bridge: exposes window._ipoSaveOrder so the IIFE can call it reliably -->
     <script type="module">
-      import { saveGlobalOrder } from '../auth/user-data.js';
+      import { saveGlobalOrder } from '../auth/user-data.js?v=20260902-canonical-orders';
       window._ipoSaveOrder = saveGlobalOrder;
     </script>
     <!-- IPO Search Overlay -->

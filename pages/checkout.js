@@ -693,7 +693,7 @@
                 try {
                     let saveFn = window._ipoSaveOrder;
                     if (!saveFn) {
-                        const { saveGlobalOrder } = await import('../auth/user-data.js');
+                        const { saveGlobalOrder } = await import('../auth/user-data.js?v=20260902-canonical-orders');
                         saveFn = saveGlobalOrder;
                         window._ipoSaveOrder = saveFn;
                     }
@@ -757,7 +757,7 @@
                 try {
                     let saveFn = window._ipoSaveOrder;
                     if (!saveFn) {
-                        const { saveGlobalOrder } = await import('../auth/user-data.js');
+                        const { saveGlobalOrder } = await import('../auth/user-data.js?v=20260902-canonical-orders');
                         saveFn = saveGlobalOrder;
                         window._ipoSaveOrder = saveFn;
                     }
