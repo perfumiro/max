@@ -37,7 +37,7 @@
         window.__IPORDISE_DEDICATED_CHECKOUT__ = true;
     </script>
     <script src="../script.js" defer></script>
-    <script src="checkout.js?v=20260902-website-canonical-order-v4" defer></script>
+    <script src="checkout.js?v=20260902-canonical-product-resolution-v5" defer></script>
     <script src="../i18n.js" defer></script>
     <link rel="stylesheet" href="../style.css">
     <!-- PWA -->
@@ -573,7 +573,7 @@ s0.parentNode.insertBefore(s1,s0);
     </footer>
     <!-- Firebase order-save bridge: exposes window._ipoSaveOrder so the IIFE can call it reliably -->
     <script type="module">
-      import { saveGlobalOrder } from '../auth/canonical-order.js';
+      import { saveGlobalOrder } from '../auth/canonical-order.js?v=20260902-canonical-product-resolution-v5';
       window._ipoSaveOrder = saveGlobalOrder;
     </script>
     <!-- IPO Search Overlay -->

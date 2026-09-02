@@ -2,19 +2,35 @@ const SUPABASE_URL = 'https://gdgrskgegrcgmzswefmn.supabase.co';
 const PUBLISHABLE_KEY = 'sb_publishable_XbhrBW9Na65u8EkpgtEz4g_PuYkxs_H';
 const IDEMPOTENCY_KEY = 'ipordise-checkout-idempotency-v1';
 const normalizeSize = value => String(value || '').toLowerCase().replace(/\s+/g, '').trim();
+const normalizeProductName = value => String(value || '')
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, ' ')
+  .trim();
 
 export async function saveGlobalOrder(orderData) {
   const items = Array.isArray(orderData?.items) ? orderData.items : [];
   const customer = orderData?.customer || {};
   if (!items.length) throw new Error('Your shopping bag is empty.');
 
-  const variantResponse = await fetch(`${SUPABASE_URL}/rest/v1/product_variants?select=id,product_id,size_key,size_label,price_minor,stock_quantity,enabled&enabled=eq.true`, {
-    headers: { apikey: PUBLISHABLE_KEY, Accept: 'application/json' }, cache: 'no-store',
-  });
-  if (!variantResponse.ok) throw new Error(`Product availability could not be verified (${variantResponse.status}).`);
-  const variants = await variantResponse.json();
+  const requestOptions = { headers: { apikey: PUBLISHABLE_KEY, Accept: 'application/json' }, cache: 'no-store' };
+  const [productResponse, variantResponse] = await Promise.all([
+    fetch(`${SUPABASE_URL}/rest/v1/products?select=id,name&active=eq.true`, requestOptions),
+    fetch(`${SUPABASE_URL}/rest/v1/product_variants?select=id,product_id,size_key,size_label,price_minor,stock_quantity,enabled&enabled=eq.true`, requestOptions),
+  ]);
+  if (!productResponse.ok || !variantResponse.ok) {
+    const status = !productResponse.ok ? productResponse.status : variantResponse.status;
+    throw new Error(`Product availability could not be verified (${status}).`);
+  }
+  const [products, variants] = await Promise.all([productResponse.json(), variantResponse.json()]);
+  const productIds = new Set(products.map(product => String(product.id)));
+  const productIdByName = new Map(products.map(product => [normalizeProductName(product.name), String(product.id)]));
   const requestedItems = items.map(item => {
-    const productId = String(item.id || '').trim();
+    const cartProductId = String(item.id || '').trim();
+    const productId = productIds.has(cartProductId)
+      ? cartProductId
+      : productIdByName.get(normalizeProductName(item.name));
     const size = normalizeSize(item.size);
     const matches = variants.filter(variant => String(variant.product_id) === productId);
     const variant = matches.find(candidate => normalizeSize(candidate.size_key) === size)

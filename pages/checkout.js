@@ -693,7 +693,7 @@
                 try {
                     let saveFn = window._ipoSaveOrder;
                     if (!saveFn) {
-                        const { saveGlobalOrder } = await import('../auth/canonical-order.js');
+                        const { saveGlobalOrder } = await import('../auth/canonical-order.js?v=20260902-canonical-product-resolution-v5');
                         saveFn = saveGlobalOrder;
                         window._ipoSaveOrder = saveFn;
                     }
@@ -757,7 +757,7 @@
                 try {
                     let saveFn = window._ipoSaveOrder;
                     if (!saveFn) {
-                        const { saveGlobalOrder } = await import('../auth/canonical-order.js');
+                        const { saveGlobalOrder } = await import('../auth/canonical-order.js?v=20260902-canonical-product-resolution-v5');
                         saveFn = saveGlobalOrder;
                         window._ipoSaveOrder = saveFn;
                     }

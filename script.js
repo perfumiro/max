@@ -7162,9 +7162,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 nextItems[existingIndex].unitPrice  = selectedSize.unitPrice;
                 nextItems[existingIndex].priceText  = selectedSize.priceText || '';
                 nextItems[existingIndex].pricePending = selectedSize.unitPrice <= 0;
+                nextItems[existingIndex].id = productId;
             } else {
                 nextItems.unshift({
-                    id: `${canonicalProductName(productName)}-${canonicalProductName(selectedSize.label)}-${Date.now()}`,
+                    id: productId,
                     name: productName,
                     brand: resolvedBrand,
                     size: selectedSize.label,
