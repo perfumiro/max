@@ -482,7 +482,7 @@
                 event.preventDefault();
                 sessionStorage.setItem(CHECKOUT_ACCESS_KEY, '1');
                 transferCartToApp(items);
-                window.location.assign('/checkout/');
+                window.location.assign('checkout.html');
             });
         }
 

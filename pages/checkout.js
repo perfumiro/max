@@ -1,13 +1,4 @@
 (function () {
-    // This Firebase-era checkout is no longer allowed to accept production
-    // orders. It could send an email even when its separate database write
-    // failed, leaving the canonical admin dashboard without the order.
-    // Send every production visit to the unified Supabase checkout instead.
-    const localHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-    if (!localHost && /\/pages\/checkout(?:\.html)?\/?$/.test(window.location.pathname.replace(/\\/g, '/'))) {
-        window.location.replace('/checkout/');
-        return;
-    }
 
     /* ── i18n helper ── */
     const t = (key, fallback) => {

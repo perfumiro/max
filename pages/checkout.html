@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-      // The legacy checkout can report success without writing to the
-      // canonical orders table. Route every production URL variant to the
-      // unified checkout before the legacy page or its cached scripts run.
-      if (!/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {
-        window.location.replace('/checkout/');
-      }
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google tag (gtag.js) -->
@@ -45,6 +37,7 @@
         window.__IPORDISE_DEDICATED_CHECKOUT__ = true;
     </script>
     <script src="../script.js" defer></script>
+    <script src="checkout.js?v=20260902-website-canonical-order-v4" defer></script>
     <script src="../i18n.js" defer></script>
     <link rel="stylesheet" href="../style.css">
     <!-- PWA -->
@@ -583,8 +576,6 @@ s0.parentNode.insertBefore(s1,s0);
       import { saveGlobalOrder } from '../auth/user-data.js';
       window._ipoSaveOrder = saveGlobalOrder;
     </script>
-    <script src="checkout.js?v=20260902-direct-checkout"></script>
-
     <!-- IPO Search Overlay -->
     <div class="ipo-search-overlay" id="ipoSearchOverlay" role="dialog" aria-label="Search" aria-modal="true" aria-hidden="true">
         <div class="ipo-search-overlay-backdrop" id="ipoSearchOverlayBackdrop"></div>
