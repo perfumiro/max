@@ -218,6 +218,60 @@ const syncMobileProductFromStore = async (slug) => {
   }
 };
 
+// Repair legacy Firestore products referenced by this browser's cart when
+// their secure Supabase commerce row was never created.
+const reconcileCheckoutCartProducts = async () => {
+  let cart = [];
+  try {
+    const parsed = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart = Array.isArray(parsed) ? parsed : [];
+  } catch {}
+  if (!cart.length) return 0;
+
+  const normalizeName = value => String(value || '')
+    .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ').trim();
+  const firebaseToken = await auth.currentUser?.getIdToken();
+  if (!firebaseToken) return 0;
+  const response = await fetch(`${SUPABASE_SYNC_URL}?pageSize=100`, {
+    headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${firebaseToken}` },
+    cache: 'no-store',
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || `Could not verify checkout catalog (${response.status})`);
+  const canonicalProducts = Array.isArray(payload.products) ? payload.products : [];
+  const canonicalIds = new Set(canonicalProducts.map(product => String(product.id)));
+  const canonicalNames = new Set(canonicalProducts.flatMap(product => {
+    const name = normalizeName(product.name);
+    const brand = normalizeName(product.brand);
+    return [name, normalizeName(`${brand} ${name}`), normalizeName(`${name} ${brand}`)];
+  }));
+
+  const firestoreSnapshot = await getDocs(collection(db, 'products'));
+  const firestoreProducts = firestoreSnapshot.docs
+    .filter(productDoc => productDoc.id !== MOBILE_CATALOG_DOC_ID)
+    .map(productDoc => ({ id: productDoc.id, value: productDoc.data() }));
+  let repaired = 0;
+  for (const item of cart) {
+    const itemId = String(item?.id || item?.sku || '').trim();
+    const itemName = normalizeName(item?.name || item?.title);
+    if (canonicalIds.has(itemId) || canonicalNames.has(itemName)) continue;
+    const match = firestoreProducts.find(product => {
+      if (product.id === itemId) return true;
+      const productName = normalizeName(product.value?.name);
+      const brand = normalizeName(product.value?.brand);
+      return itemName === productName
+        || itemName === normalizeName(`${brand} ${productName}`)
+        || itemName === normalizeName(`${productName} ${brand}`);
+    });
+    if (!match || match.value?.active === false) continue;
+    await syncMobileCatalogEntry('products', match.id, match.value);
+    canonicalIds.add(match.id);
+    repaired += 1;
+  }
+  return repaired;
+};
+
 // --- UTILITIES ----------------------------------------------------------------
 const qs  = (sel, ctx = document) => ctx.querySelector(sel);
 const qsa = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
@@ -865,6 +919,12 @@ const bootstrapDashboard = async (user) => {
   const userEl = qs('#sidebarUserEmail');
   if (userEl) userEl.textContent = user.email || ADMIN_EMAIL;
   showDashboard();
+  try {
+    const repaired = await reconcileCheckoutCartProducts();
+    if (repaired) toast(`${repaired} checkout product ${repaired === 1 ? 'was' : 'were'} repaired. You can retry the order now.`, 'success', 6000);
+  } catch (error) {
+    console.warn('[Checkout catalog reconciliation] Deferred:', error);
+  }
   switchView('overview');
   setLoadingSkeleton();
 
