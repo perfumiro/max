@@ -95,6 +95,9 @@
 
     const writeCart = (items) => {
         localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+        // The canonical cart is now authoritative. Keeping a legacy copy here
+        // can resurrect a product after the customer intentionally removes it.
+        localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
         // Update header badge & bottom-nav badge instantly (defined in script.js)
         if (typeof window.setHeaderCartCount === 'function') {
             window.setHeaderCartCount();
@@ -142,9 +145,10 @@
             return;
         }
 
+        const hasCanonicalCart = localStorage.getItem(CART_STORAGE_KEY) !== null;
         const currentCart = readCart();
 
-        if (!currentCart.length) {
+        if (!hasCanonicalCart) {
             writeCart(legacyItems);
             // Clear legacy key so a future empty-cart state doesn’t re-import.
             localStorage.removeItem(LEGACY_CART_STORAGE_KEY);

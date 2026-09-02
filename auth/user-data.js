@@ -8,8 +8,8 @@
 //    • Orders   → users/{uid}/orders/{orderId}  (subcollection)
 //
 //  Cart sync strategy:
-//    On LOGIN  : load Firestore cart + local cart, merge, write to
-//                localStorage so existing IIFE scripts keep working.
+//    On LOGIN  : an existing local `cart` key is authoritative (including an
+//                intentionally empty cart); otherwise load the Firestore cart.
 //    On CHANGE : localStorage.setItem is patched (once) to auto-save
 //                the 'cart' key to Firestore whenever it is updated.
 //    On LOGOUT : Firestore sync stops; local cart is untouched.
@@ -356,14 +356,17 @@ const _activateCartSync = () => {
 onAuthStateChanged(auth, async (user) => {
   // Ignore anonymous users created by analytics — they are not real accounts
   if (user && !user.isAnonymous) {
-    // Merge Firestore cart with any local cart
+    // Never merge deleted local lines back from an older cloud copy. The
+    // presence of the canonical key distinguishes an intentional empty cart
+    // from a browser that has never loaded a cart.
+    const hasLocalCart = localStorage.getItem(CART_KEY) !== null;
     const [serverCart, localCart] = await Promise.all([
       _loadUserCart(user.uid),
       Promise.resolve(_readLocalCart()),
     ]);
-    const merged = _mergeCart(serverCart, localCart);
-    _writeLocalCart(merged);
-    if (merged.length) await _saveUserCart(user.uid, merged);
+    const resolvedCart = hasLocalCart ? localCart : serverCart;
+    _writeLocalCart(resolvedCart);
+    await _saveUserCart(user.uid, resolvedCart);
 
     // Activate cart auto-sync (patches localStorage.setItem once)
     _activateCartSync();
