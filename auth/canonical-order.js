@@ -9,6 +9,24 @@ const normalizeProductName = value => String(value || '')
   .replace(/[^a-z0-9]+/g, ' ')
   .trim();
 
+const resolveProductId = (item, products) => {
+  const cartProductId = String(item?.id || '').trim();
+  const directMatch = products.find(product => String(product.id) === cartProductId);
+  if (directMatch) return String(directMatch.id);
+
+  const cartName = normalizeProductName(item?.name);
+  if (!cartName) return null;
+  const nameMatches = products.filter(product => {
+    const productName = normalizeProductName(product.name);
+    const brand = normalizeProductName(product.brand);
+    if (productName === cartName) return true;
+    if (!brand) return false;
+    return normalizeProductName(`${brand} ${productName}`) === cartName
+      || normalizeProductName(`${productName} ${brand}`) === cartName;
+  });
+  return nameMatches.length === 1 ? String(nameMatches[0].id) : null;
+};
+
 export async function saveGlobalOrder(orderData) {
   const items = Array.isArray(orderData?.items) ? orderData.items : [];
   const customer = orderData?.customer || {};
@@ -16,7 +34,7 @@ export async function saveGlobalOrder(orderData) {
 
   const requestOptions = { headers: { apikey: PUBLISHABLE_KEY, Accept: 'application/json' }, cache: 'no-store' };
   const [productResponse, variantResponse] = await Promise.all([
-    fetch(`${SUPABASE_URL}/rest/v1/products?select=id,name&active=eq.true`, requestOptions),
+    fetch(`${SUPABASE_URL}/rest/v1/products?select=id,name,brand&active=eq.true`, requestOptions),
     fetch(`${SUPABASE_URL}/rest/v1/product_variants?select=id,product_id,size_key,size_label,price_minor,stock_quantity,enabled&enabled=eq.true`, requestOptions),
   ]);
   if (!productResponse.ok || !variantResponse.ok) {
@@ -24,13 +42,8 @@ export async function saveGlobalOrder(orderData) {
     throw new Error(`Product availability could not be verified (${status}).`);
   }
   const [products, variants] = await Promise.all([productResponse.json(), variantResponse.json()]);
-  const productIds = new Set(products.map(product => String(product.id)));
-  const productIdByName = new Map(products.map(product => [normalizeProductName(product.name), String(product.id)]));
   const requestedItems = items.map(item => {
-    const cartProductId = String(item.id || '').trim();
-    const productId = productIds.has(cartProductId)
-      ? cartProductId
-      : productIdByName.get(normalizeProductName(item.name));
+    const productId = resolveProductId(item, products);
     const size = normalizeSize(item.size);
     const matches = variants.filter(variant => String(variant.product_id) === productId);
     const variant = matches.find(candidate => normalizeSize(candidate.size_key) === size)
