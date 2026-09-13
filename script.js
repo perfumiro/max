@@ -3856,7 +3856,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Merge it last so Firestore quota/cache failures can never hide a
                     // newly published size or leave an old customer-facing price behind.
                     try {
-                        const select = encodeURIComponent('id,sizes,original_prices,active,updated_at');
+                        const select = encodeURIComponent('id,sizes,original_prices,active,updated_at,stock_left,preorder_enabled,preorder_message,preorder_estimated_availability');
                         const response = await fetch(
                             `${CATALOG_SUPABASE_URL}/rest/v1/products?select=${select}&active=eq.true&order=updated_at.desc`,
                             {
@@ -3881,6 +3881,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             const existing = _firestoreProductOverridesCache[slug] || {};
                             _firestoreProductOverridesCache[slug] = {
                                 ...existing,
+                                stockLeft: row.stock_left,
+                                preorderEnabled: row.preorder_enabled === true,
+                                preorderEstimatedAvailability: row.preorder_estimated_availability || '',
+                                preorderMessage: row.preorder_message || '',
                                 prices: normalizedSizes,
                                 removedSizes: [],
                                 ...(row.original_prices && typeof row.original_prices === 'object'
@@ -4467,11 +4471,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // i18n helpers for dynamically-built card text
                 const _isFr = currentLanguage === 'fr';
-                const _addToCartLabel = _isFr ? 'AJOUTER AU PANIER' : 'ADD TO CART';
+                const _addToCartLabel = p.stockLeft === 0 && p.preorderEnabled
+                    ? (_isFr ? 'PRÉCOMMANDER' : 'PREORDER')
+                    : (_isFr ? 'AJOUTER AU PANIER' : 'ADD TO CART');
 
                 // Stock indicator — show whenever admin has set stockLeft
                 const _stockLeft = typeof p.stockLeft === 'number' ? p.stockLeft : null;
-                const _stockHtml = _stockLeft === null ? ''
+                const _stockHtml = _stockLeft === 0 && p.preorderEstimatedAvailability
+                    ? `<span style="display:inline-block;margin-bottom:8px;font-size:11px;font-weight:700;color:#876326;background:#fff6df;border-radius:8px;padding:5px 10px">✈ ${_isFr ? 'Bientôt disponible' : 'Arriving soon'}</span>`
+                    : _stockLeft === null ? ''
                     : _stockLeft === 0
                         ? `<span style="display:inline-block;margin-bottom:8px;font-size:10px;font-weight:700;color:#6b7280;background:rgba(107,114,128,0.08);border:1px solid rgba(107,114,128,0.2);border-radius:6px;padding:3px 9px;"><i class="fas fa-ban" style="margin-right:4px;font-size:9px"></i>${_isFr ? 'Rupture de stock' : 'Out of stock'}</span>`
                     : _stockLeft <= 5
@@ -6899,6 +6907,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         let selectedSize = null;
+        const { setupPreorder } = await import('./assets/preorder.js?v=7');
+        const preorderController = await setupPreorder({
+            productId: _normalizedPid, productName,
+            getSize: () => selectedSize?.button?.dataset.sizeKey || '',
+            getLanguage: () => currentLanguage,
+        });
 
         const syncPriceCardState = (selectedPriceText) => {
             if (!priceCardEl) return;
@@ -6925,6 +6939,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const productWhatsappBlockBtn = document.getElementById('productWhatsappBlockBtn');
 
         const setAddButtonsEnabled = (enabled) => {
+            preorderController.render();
+            if (preorderController.blocked()) return;
             // Hide cart UI if whole product has no prices, or if selected size has no price
             const selectedHasNoPrice = selectedSize && selectedSize.unitPrice <= 0;
             if (!hasPrices || selectedHasNoPrice) {
@@ -6950,6 +6966,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const updateWhatsAppBtn = () => {
+            if (preorderController.blocked()) return;
             const selectedHasNoPrice = selectedSize && selectedSize.unitPrice <= 0;
             const showForSelected = selectedHasNoPrice || (!hasPrices && selectedSize);
             // Also show the block (without size) when the whole product has no prices
@@ -7068,7 +7085,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 addToCartBtn.textContent = t('product_add_to_cart');
             }
         } else {
-            if (productOndemandBox) productOndemandBox.removeAttribute('hidden');
+            // The preorder controller owns the unavailable state and replaces
+            // the legacy WhatsApp card with the new preorder panel.
+            if (productOndemandBox && !preorderController.blocked()) productOndemandBox.removeAttribute('hidden');
             if (addToCartBtn) {
                 addToCartBtn.className = 'hidden product-cart-btn';
                 addToCartBtn.textContent = t('product_add_to_cart');
@@ -7111,6 +7130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const handleAddToCart = () => {
+            if (preorderController.blocked()) { preorderController.render(); return; }
             if (!selectedSize) {
                 // Shake the size selector and show a notice
                 const sizeEl = document.getElementById('sizeSelector');
@@ -7422,6 +7442,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateDisplayedPrice();
 
             // Reviews count
+            preorderController.render();
             const reviewsCountEl = document.getElementById('productReviewsCount');
             if (reviewsCountEl) {
                 reviewsCountEl.textContent = currentLanguage === 'fr'

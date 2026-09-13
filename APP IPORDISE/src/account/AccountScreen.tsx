@@ -71,7 +71,7 @@ const normalizeOrderProductKey = (value: unknown) => String(value || "")
 const bundledOrderProducts = loadBundledProducts();
 const bundledOrderImages = new Map(bundledOrderProducts.map(product => [product.id, product.image]));
 const guaranteedOrderImages = new Map<string, ImageSourcePropType>([
-  ["versace-dylan-blue-eau-de-toilette", require("../../website-ipordise/assets/images/products/versace/versace-dylan-blue-eau-de-toilette/1.jpg")],
+  ["versace-dylan-blue-eau-de-toilette", require("../../assets/products/Versace Dylan Blue  Eau de Toilette/1.jpg")],
 ]);
 const bundledOrderImagesByName = new Map(bundledOrderProducts.flatMap(product => [
   [normalizeOrderProductKey(product.name), product.image] as const,

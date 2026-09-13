@@ -1,12 +1,12 @@
-﻿/* ═══════════════════════════════════════════════════════════════
-   IPORDISE ADMIN — Premium Analytics Dashboard
+/* ---------------------------------------------------------------
+   IPORDISE ADMIN � Premium Analytics Dashboard
    Design system: dark luxury SaaS, gold accent, glass effects
-   ═══════════════════════════════════════════════════════════════ */
+   --------------------------------------------------------------- */
 
-/* ── BASE RESET ── */
+/* -- BASE RESET -- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── DESIGN TOKENS (Dark) ── */
+/* -- DESIGN TOKENS (Dark) -- */
 :root {
   --font-ui:      'Inter', system-ui, sans-serif;
   --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -46,7 +46,7 @@
   --trans: .18s ease;
 }
 
-/* ── LIGHT THEME ── */
+/* -- LIGHT THEME -- */
 body[data-theme='light'] {
   --s1: #f0f0f5;
   --s2: #ffffff;
@@ -64,7 +64,7 @@ body[data-theme='light'] {
   --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
 }
 
-/* ── GLOBAL ── */
+/* -- GLOBAL -- */
 html, body {
   height: 100%;
   background: var(--s1);
@@ -81,9 +81,9 @@ input, select { font-family: inherit; font-size: inherit; }
 table { width: 100%; border-collapse: collapse; }
 .hidden { display: none !important; }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    BUTTONS
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .btn {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 8px 16px; border-radius: var(--radius-md);
@@ -108,9 +108,9 @@ table { width: 100%; border-collapse: collapse; }
 .btn-xs { padding: 5px 10px; font-size: 12px; background: var(--s4); color: var(--muted); border: 1px solid var(--border); border-radius: var(--radius-sm); }
 .btn-xs:hover { color: var(--ink); background: var(--s5); }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    AUTH SCREEN
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .auth-shell {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
   background:
@@ -234,17 +234,17 @@ table { width: 100%; border-collapse: collapse; }
   font-size: 10px; color: var(--dim); font-weight: 500; letter-spacing: .03em;
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    DASHBOARD SHELL
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .dashboard-shell {
   display: flex; min-height: 100vh;
 }
 .dashboard-shell.hidden { display: none !important; }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    SIDEBAR
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .sidebar {
   width: var(--sidebar-w);
   min-width: var(--sidebar-w);
@@ -406,9 +406,9 @@ body[data-theme='light'] .sidebar { background: #111120; background-image: none;
   z-index: 199; backdrop-filter: blur(2px);
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    MAIN WRAP
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .main-wrap {
   flex: 1;
   margin-left: var(--sidebar-w);
@@ -418,9 +418,9 @@ body[data-theme='light'] .sidebar { background: #111120; background-image: none;
   background: var(--s1);
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    TOPBAR
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .topbar {
   height: var(--topbar-h);
   position: sticky; top: 0; z-index: 100;
@@ -458,9 +458,9 @@ body[data-theme='light'] .topbar { background: rgba(240,240,245,.88); }
 }
 .topbar-icon-btn:hover { color: var(--gold); background: var(--gold-glow); }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    SCROLL AREA + VIEWS
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .scroll-area { flex: 1; padding: 24px; overflow-x: hidden; }
 .view { display: none; }
 .view.active { display: block; }
@@ -475,9 +475,9 @@ body[data-theme='light'] .topbar { background: rgba(240,240,245,.88); }
   font-family: var(--font-ui);
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    CARDS
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .card {
   background: var(--s2);
   border: 1px solid var(--border);
@@ -502,9 +502,9 @@ body[data-theme='light'] .topbar { background: rgba(240,240,245,.88); }
 .card-body-list { padding: 8px 0; }
 .card-body-center { display: flex; flex-direction: column; align-items: center; }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    STAT CARDS
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -556,9 +556,9 @@ body[data-theme='light'] .topbar { background: rgba(240,240,245,.88); }
 @keyframes skelShim { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 .skel-stat { height: 80px; border-radius: var(--radius-lg); }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    CHARTS
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .charts-row {
   display: grid;
   grid-template-columns: 1fr 320px;
@@ -583,9 +583,9 @@ body[data-theme='light'] .topbar { background: rgba(240,240,245,.88); }
 .donut-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .donut-legend-val { margin-left: auto; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    DETAILS GRID (3-col rank lists)
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .details-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -593,7 +593,7 @@ body[data-theme='light'] .topbar { background: rgba(240,240,245,.88); }
   margin-bottom: 16px;
 }
 
-/* ── Rank List ── */
+/* -- Rank List -- */
 .rank-item {
   display: flex; align-items: center; gap: 10px;
   padding: 9px 18px; border-bottom: 1px solid var(--border);
@@ -610,9 +610,9 @@ body[data-theme='light'] .topbar { background: rgba(240,240,245,.88); }
 .rank-bar-fill  { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); transition: width .5s ease; }
 .rank-count { min-width: 32px; text-align: right; font-size: 12px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    TABLES
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 table { width: 100%; min-width: 600px; }
 thead th {
@@ -632,7 +632,7 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
 .td-page   { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
 .td-short  { max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* ── Badges ── */
+/* -- Badges -- */
 .badge {
   display: inline-flex; align-items: center; gap: 4px;
   padding: 2px 8px; border-radius: 20px;
@@ -644,9 +644,9 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
 .badge-rose   { background: rgba(244,63,94,.12);   color: var(--rose); }
 .badge-muted  { background: var(--s4);             color: var(--muted); }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    FILTERS
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .filters-card { margin-bottom: 16px; }
 .filters-grid {
   display: grid;
@@ -669,9 +669,9 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
 }
 .select-sm:focus { border-color: var(--gold); }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    PAGINATION
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .pagination {
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
   padding: 12px 18px; border-top: 1px solid var(--border);
@@ -688,9 +688,9 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
 .page-btn.active   { background: var(--gold); color: #0c0a00; border-color: var(--gold); }
 .page-btn:disabled { opacity: .35; cursor: default; }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    ACTIVITY FEED
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .activity-feed { display: flex; flex-direction: column; gap: 0; }
 .activity-item {
   display: flex; align-items: flex-start; gap: 12px;
@@ -717,9 +717,9 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
 .activity-meta-sep { color: var(--dim); }
 .activity-time    { font-size: 11px; color: var(--dim); flex-shrink: 0; white-space: nowrap; }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    MOBILE CARDS
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 .mobile-cards { display: none; }
 .mobile-card {
   background: var(--s3); border: 1px solid var(--border);
@@ -729,9 +729,9 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
 .mobile-card-key   { color: var(--muted); font-weight: 600; }
 .mobile-card-val   { color: var(--ink); text-align: right; overflow: hidden; text-overflow: ellipsis; }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    TOAST NOTIFICATIONS
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 #toastContainer {
   position: fixed; bottom: 20px; right: 20px;
   display: flex; flex-direction: column; gap: 8px;
@@ -755,9 +755,9 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
 .toast-error   .toast-icon { color: var(--rose); }
 .toast-info    .toast-icon { color: var(--gold); }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    RESPONSIVE
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 @media (max-width: 1024px) {
   .charts-row { grid-template-columns: 1fr; }
   .details-grid { grid-template-columns: repeat(2, 1fr); }
@@ -787,6 +787,7 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
 
 .mobile-admin-nav,
 .mobile-work-list { display: none; }
+.mobile-work-list.always-visible { display: grid; gap: 10px; margin-top: 12px; }
 
 @media (max-width: 768px) {
   html { -webkit-text-size-adjust: 100%; }
@@ -859,9 +860,9 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* --------------------------------------------------------------
    PRODUCT MANAGER CARDS
-══════════════════════════════════════════════════════════════ */
+-------------------------------------------------------------- */
 
 /* Grid: 2-col on large, 1-col on small */
 #productsGrid {
@@ -902,7 +903,7 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
   letter-spacing: -.01em;
 }
 
-/* Size chips area — allow wrap cleanly */
+/* Size chips area � allow wrap cleanly */
 .prod-size-chip {
   display: inline-flex !important;
   align-items: center !important;
@@ -915,7 +916,7 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
   box-shadow: 0 2px 8px rgba(0,0,0,.22) !important;
 }
 
-/* Editable price input — subtle focus ring */
+/* Editable price input � subtle focus ring */
 .prod-price-input:focus {
   outline: none;
   background: rgba(200,169,106,.06) !important;
@@ -966,7 +967,7 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
   50%       { opacity: .65; }
 }
 
-/* Action buttons row — consistent spacing */
+/* Action buttons row � consistent spacing */
 .prod-card .btn-xs {
   padding: 5px 11px !important;
   font-size: 11px !important;
@@ -1249,3 +1250,13 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
   .product-legend { grid-template-columns: 1fr; }
   .product-legend span:last-child { grid-column: auto; }
 }
+.product-availability-fields{min-width:0;border:1px solid var(--border);border-radius:14px;padding:18px;margin:18px 0;background:var(--s2)}
+.product-availability-fields legend{font-size:14px;font-weight:750;color:var(--text);padding:0 6px}
+.product-availability-fields .availability-toggle{display:flex;align-items:flex-start;gap:12px;padding:12px 0;cursor:pointer;border-bottom:1px solid var(--border)}
+.product-availability-fields input[type=checkbox]{width:20px;height:20px;margin:2px 0 0;accent-color:var(--gold);flex-shrink:0}
+.product-availability-fields strong{font-size:13px;color:var(--text)}
+.product-availability-fields small{display:block;font-size:12px;color:var(--muted);line-height:1.6;margin-top:3px}
+.product-availability-fields .availability-text{display:block;font-size:12px;color:var(--muted);margin-top:14px}
+.product-availability-fields .select-sm{display:block;width:100%;box-sizing:border-box;margin-top:6px;min-height:42px;font-size:14px}
+.product-availability-fields p{font-size:12px;color:var(--muted);line-height:1.6;margin:14px 0 0}
+.preorder-contact-actions{display:flex;gap:8px;margin:10px 0 12px}.preorder-contact-actions .btn{display:inline-flex!important;align-items:center;gap:7px;padding:9px 13px!important;border-radius:8px!important;font-weight:700!important;color:#fff!important;border:1px solid transparent!important;text-decoration:none!important}.preorder-contact-actions .btn[href^="mailto:"]{background:#2563eb!important;border-color:#3b82f6!important}.preorder-contact-actions .btn[href^="https://wa.me"]{background:#16a34a!important;border-color:#22c55e!important}.preorder-contact-actions .btn:hover{filter:brightness(1.12);transform:translateY(-1px)}

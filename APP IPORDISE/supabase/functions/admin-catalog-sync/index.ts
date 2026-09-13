@@ -178,6 +178,12 @@ Deno.serve(async request => {
         else if (Number.isInteger(value.stockLeft) && value.stockLeft >= 0 && value.stockLeft <= 100_000) patch.stock_left = value.stockLeft;
         else if (value.stockLeft !== undefined) return json({ error: 'Invalid stock quantity', requestId }, 400, origin);
         if (typeof value.preorderEnabled === 'boolean') patch.preorder_enabled = value.preorderEnabled;
+        if ('priceComingSoon' in value) {
+          if (typeof value.priceComingSoon !== 'boolean') return json({ error: 'Invalid price display option', requestId }, 400, origin);
+          patch.price_coming_soon = value.priceComingSoon;
+        }
+        if ('preorderMessage' in value) patch.preorder_message = cleanText(value.preorderMessage, 500) || null;
+        if ('preorderEstimatedAvailability' in value) patch.preorder_estimated_availability = cleanText(value.preorderEstimatedAvailability, 160) || null;
         if (!Object.keys(patch).length) return json({ error: 'Empty product update', requestId }, 400, origin);
         const { error } = await updateProductCompat(admin, id, patch);
         if (error) throw error;
@@ -226,9 +232,10 @@ Deno.serve(async request => {
           // succeeded. A failed multi-row sync therefore fails closed instead
           // of exposing mixed old/new prices or inventory.
           stock_left: stockLeft, active: false, publication_status: 'draft',
-          preorder_enabled: value.preorderEnabled === true,
-          preorder_message: cleanText(value.preorderMessage, 500) || null,
-          preorder_estimated_availability: cleanText(value.preorderEstimatedAvailability, 160) || null,
+          ...(typeof value.preorderEnabled === 'boolean' ? { preorder_enabled: value.preorderEnabled } : {}),
+          ...(typeof value.priceComingSoon === 'boolean' ? { price_coming_soon: value.priceComingSoon } : {}),
+          ...('preorderMessage' in value ? { preorder_message: cleanText(value.preorderMessage, 500) || null } : {}),
+          ...('preorderEstimatedAvailability' in value ? { preorder_estimated_availability: cleanText(value.preorderEstimatedAvailability, 160) || null } : {}),
           offer_start: Object.keys(originalPrices).length ? offerStart : null,
           offer_end: Object.keys(originalPrices).length ? offerEnd : null,
           offer_featured: Object.keys(originalPrices).length && offerFeatured,

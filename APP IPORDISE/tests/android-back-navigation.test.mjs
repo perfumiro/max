@@ -93,14 +93,19 @@ test('long category, product, cart and checkout flow unwinds one layer at a time
   assert.equal(back(),'EXIT');
 });
 
-test('keyboard yields to Android before application history is consumed',()=>{
+test('keyboard Back is consumed after dismissing the IME before application history is consumed',()=>{
   const app=readFileSync(new URL('../App.tsx',import.meta.url),'utf8');
-  const keyboardIndex=app.indexOf('if(keyboardVisibleRef.current)return false;');
+  const keyboardIndex=app.indexOf('if(keyboardVisibleRef.current){keyboardVisibleRef.current=false;Keyboard.dismiss();return true;}');
   const commerceIndex=app.indexOf("if(commercePage==='thankyou')");
   assert.ok(keyboardIndex>0&&keyboardIndex<commerceIndex);
   assert.match(app,/Keyboard\.addListener\('keyboardDidShow'/);
   assert.match(app,/Keyboard\.addListener\('keyboardDidHide'/);
   assert.match(app,/showSubscription\.remove\(\);hideSubscription\.remove\(\)/);
+});
+
+test('native predictive Back stays disabled for custom cross-brand Android navigation',()=>{
+  const config=JSON.parse(readFileSync(new URL('../app.json',import.meta.url),'utf8'));
+  assert.equal(config.expo.android.predictiveBackGestureEnabled,false);
 });
 
 test('Help and authentication nested screens pop their local history instead of jumping home',()=>{

@@ -13,6 +13,10 @@ test('returning clients receive the branded launch intro on every fresh app moun
   assert.match(app,/ZAKARIA ZEMZAMI/);
   assert.match(app,/MAISON DE PARFUM · MAROC/);
   assert.match(app,/entered \? <StoreScreen \/> : <LocationScreen/);
+  assert.match(app,/SecureStore\.getItemAsync\('ipordise\.onboarding\.complete\.v1'\)/);
+  assert.match(app,/SecureStore\.setItemAsync\('ipordise\.onboarding\.complete\.v1','1'\)/);
+  assert.match(app,/source=\{require\('\.\/assets\/onboarding-hero-male\.png'\)\}/);
+  assert.match(app,/entered===null\?<View/);
   assert.match(app,/\{launching\?<LaunchIntro onFinish=\{finishLaunch\}\/>:null\}/);
 });
 

@@ -2638,9 +2638,9 @@ type CheckoutFormFieldProps = {
   autoCorrect?: boolean;
   keyboardType?: TextInputProps["keyboardType"];
   multiline?: "large" | "small";
-  inputRef?: React.RefObject<NativeTextInput | null>;
-  returnKeyType?: TextInputProps["returnKeyType"];
-  onSubmitEditing?: TextInputProps["onSubmitEditing"];
+  focused: boolean;
+  onFocus: () => void;
+  onBlur: () => void;
 };
 
 /**
@@ -2660,11 +2660,12 @@ const CheckoutFormField = React.memo(function CheckoutFormField({
   autoCorrect,
   keyboardType,
   multiline,
-  inputRef,
-  returnKeyType,
-  onSubmitEditing,
+  focused,
+  onFocus,
+  onBlur,
 }: CheckoutFormFieldProps) {
-  const [isFocused, setIsFocused] = useState(false);
+  const [androidEditorOpen, setAndroidEditorOpen] = useState(false);
+  const androidInputRef = useRef<NativeTextInput>(null);
   const optional = label.includes("OPTIONAL");
   const displayLabel = label.replace(/\s*·?\s*OPTIONAL/g, "");
   const normalizedValue = value.trim();
@@ -2689,6 +2690,98 @@ const CheckoutFormField = React.memo(function CheckoutFormField({
           : "Enter a complete email such as name@example.com."
         : "";
 
+  if (Platform.OS === "android") {
+    return (
+      <>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`${accessibilityLabel}. ${value || placeholder}`}
+          onPress={() => setAndroidEditorOpen(true)}
+          style={({ pressed }) => [
+            styles.checkoutField,
+            professionalCheckoutStyles.field,
+            confirmed && professionalCheckoutStyles.fieldComplete,
+            invalid && professionalCheckoutStyles.fieldInvalid,
+            multiline && styles.checkoutFieldMultiline,
+            multiline && professionalCheckoutStyles.fieldMultiline,
+            pressed && professionalCheckoutStyles.androidFieldPressed,
+          ]}
+        >
+          <View style={[
+            styles.checkoutFieldIcon,
+            professionalCheckoutStyles.fieldIcon,
+            confirmed && professionalCheckoutStyles.fieldIconComplete,
+            invalid && professionalCheckoutStyles.fieldIconInvalid,
+          ]}>
+            <Ionicons name={icon as any} size={18} color={invalid ? RED : confirmed ? "#176b43" : "#555b61"} />
+          </View>
+          <View style={[styles.checkoutFieldCopy, professionalCheckoutStyles.fieldCopy]}>
+            <View style={professionalCheckoutStyles.fieldLabelRow}>
+              <Text style={[styles.checkoutFieldLabel, professionalCheckoutStyles.fieldLabel]}>{displayLabel}</Text>
+              <Text style={professionalCheckoutStyles.androidEditLabel}>EDIT</Text>
+            </View>
+            <Text numberOfLines={multiline ? 2 : 1} style={[
+              professionalCheckoutStyles.androidFieldValue,
+              !value && professionalCheckoutStyles.androidFieldPlaceholder,
+            ]}>{value || placeholder}</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={17} color="#8d817a" />
+        </Pressable>
+        <Modal
+          animationType="fade"
+          transparent
+          visible={androidEditorOpen}
+          onRequestClose={() => setAndroidEditorOpen(false)}
+          onShow={() => androidInputRef.current?.focus()}
+        >
+          <View style={professionalCheckoutStyles.androidEditorBackdrop}>
+            <View style={professionalCheckoutStyles.androidEditorCard}>
+              <View style={professionalCheckoutStyles.androidEditorHeader}>
+                <View style={professionalCheckoutStyles.androidEditorIcon}>
+                  <Ionicons name={icon as any} size={21} color={RED} />
+                </View>
+                <View style={professionalCheckoutStyles.androidEditorCopy}>
+                  <Text style={professionalCheckoutStyles.androidEditorEyebrow}>CHECKOUT DETAILS</Text>
+                  <Text style={professionalCheckoutStyles.androidEditorTitle}>{displayLabel}</Text>
+                </View>
+              </View>
+              <TextInput
+                ref={androidInputRef}
+                accessibilityLabel={accessibilityLabel}
+                autoCapitalize={autoCapitalize}
+                autoCorrect={autoCorrect}
+                keyboardType={keyboardType}
+                multiline={Boolean(multiline)}
+                textAlignVertical={multiline ? "top" : "center"}
+                value={value}
+                onChangeText={onChangeText}
+                placeholder={placeholder}
+                placeholderTextColor="#9b918b"
+                selectionColor={RED}
+                cursorColor={RED}
+                returnKeyType={multiline ? undefined : "done"}
+                blurOnSubmit={!multiline}
+                onSubmitEditing={() => setAndroidEditorOpen(false)}
+                style={[
+                  professionalCheckoutStyles.androidEditorInput,
+                  multiline && professionalCheckoutStyles.androidEditorInputMultiline,
+                ]}
+              />
+              {validatesFormat && hasValue ? <Text style={[
+                professionalCheckoutStyles.androidEditorValidation,
+                invalid ? professionalCheckoutStyles.fieldMessageError : professionalCheckoutStyles.fieldMessageSuccess,
+              ]}>{validationMessage}</Text> : null}
+              <Pressable accessibilityRole="button" onPress={() => setAndroidEditorOpen(false)} style={professionalCheckoutStyles.androidEditorDone}>
+                <Text style={professionalCheckoutStyles.androidEditorDoneText}>DONE</Text>
+                <Ionicons name="checkmark" size={18} color="#fff" />
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+      </>
+    );
+  }
+
   return (
     <View
       style={[
@@ -2696,8 +2789,8 @@ const CheckoutFormField = React.memo(function CheckoutFormField({
         professionalCheckoutStyles.field,
         confirmed && professionalCheckoutStyles.fieldComplete,
         invalid && professionalCheckoutStyles.fieldInvalid,
-        isFocused && styles.checkoutFieldFocused,
-        isFocused && professionalCheckoutStyles.fieldFocused,
+        focused && styles.checkoutFieldFocused,
+        focused && professionalCheckoutStyles.fieldFocused,
         multiline && styles.checkoutFieldMultiline,
         multiline && professionalCheckoutStyles.fieldMultiline,
       ]}
@@ -2708,8 +2801,8 @@ const CheckoutFormField = React.memo(function CheckoutFormField({
           professionalCheckoutStyles.fieldIcon,
           confirmed && professionalCheckoutStyles.fieldIconComplete,
           invalid && professionalCheckoutStyles.fieldIconInvalid,
-          isFocused && styles.checkoutFieldIconFocused,
-          isFocused && professionalCheckoutStyles.fieldIconFocused,
+          focused && styles.checkoutFieldIconFocused,
+          focused && professionalCheckoutStyles.fieldIconFocused,
         ]}
       >
         <Ionicons
@@ -2717,7 +2810,7 @@ const CheckoutFormField = React.memo(function CheckoutFormField({
           name={icon as any}
           size={18}
           color={
-            isFocused
+            focused
               ? RED
               : invalid
                 ? RED
@@ -2733,7 +2826,7 @@ const CheckoutFormField = React.memo(function CheckoutFormField({
             style={[
               styles.checkoutFieldLabel,
               professionalCheckoutStyles.fieldLabel,
-              isFocused && styles.checkoutFieldLabelFocused,
+              focused && styles.checkoutFieldLabelFocused,
             ]}
           >
             {displayLabel}
@@ -2761,7 +2854,6 @@ const CheckoutFormField = React.memo(function CheckoutFormField({
           )}
         </View>
         <TextInput
-          ref={inputRef}
           accessibilityLabel={accessibilityLabel}
           autoCapitalize={autoCapitalize}
           autoCorrect={autoCorrect}
@@ -2770,16 +2862,14 @@ const CheckoutFormField = React.memo(function CheckoutFormField({
           textAlignVertical={multiline ? "top" : "center"}
           value={value}
           onChangeText={onChangeText}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onFocus={onFocus}
+          onBlur={onBlur}
           placeholder={placeholder}
           placeholderTextColor="#9b918b"
           selectionColor={RED}
           cursorColor={RED}
-          showSoftInputOnFocus
-          returnKeyType={returnKeyType}
-          blurOnSubmit={multiline ? undefined : returnKeyType === "done"}
-          onSubmitEditing={onSubmitEditing}
+          returnKeyType={multiline ? undefined : "done"}
+          blurOnSubmit={!multiline}
           style={[
             styles.checkoutFieldInput,
             multiline === "large" && styles.checkoutFieldTextarea,
@@ -2843,6 +2933,7 @@ export function CheckoutPage({
   const [saveAddressChanges, setSaveAddressChanges] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [focusedField, setFocusedField] = useState<CheckoutFormFieldProps["name"] | null>(null);
   const subtotal = bag.reduce(
     (sum, line) => sum + linePrice(line) * line.quantity,
     0,
@@ -2851,10 +2942,14 @@ export function CheckoutPage({
   const [deliveryAvailable, setDeliveryAvailable] = useState(true);
   const itemCount = bag.reduce((sum, line) => sum + line.quantity, 0);
   const prefilledIdentity = useRef<string | null>(null);
-  const phoneInputRef = useRef<NativeTextInput>(null);
-  const emailInputRef = useRef<NativeTextInput>(null);
-  const cityInputRef = useRef<NativeTextInput>(null);
-  const addressInputRef = useRef<NativeTextInput>(null);
+  const checkoutFocusProps = useMemo(() => {
+    const names: CheckoutFormFieldProps["name"][] = ["name", "phone", "email", "city", "address", "notes"];
+    return Object.fromEntries(names.map(name => [name, {
+      focused: focusedField === name,
+      onFocus: () => setFocusedField(name),
+      onBlur: () => setFocusedField(current => current === name ? null : current),
+    }])) as Record<CheckoutFormFieldProps["name"], Pick<CheckoutFormFieldProps, "focused" | "onFocus" | "onBlur">>;
+  }, [focusedField]);
   useEffect(() => {
     checkoutSessionDraft = { customer, notes };
   }, [customer, notes]);
@@ -3158,8 +3253,7 @@ export function CheckoutPage({
               value={customer.name}
               onChangeText={updateName}
               placeholder="Your full name"
-              returnKeyType="next"
-              onSubmitEditing={() => phoneInputRef.current?.focus()}
+              {...checkoutFocusProps.name}
             />
             <CheckoutFormField
               key="checkout-phone"
@@ -3171,9 +3265,7 @@ export function CheckoutPage({
               value={customer.phone}
               onChangeText={updatePhone}
               placeholder="06 12 34 56 78"
-              inputRef={phoneInputRef}
-              returnKeyType="next"
-              onSubmitEditing={() => emailInputRef.current?.focus()}
+              {...checkoutFocusProps.phone}
             />
             <CheckoutFormField
               key="checkout-email"
@@ -3187,9 +3279,7 @@ export function CheckoutPage({
               value={customer.email || ""}
               onChangeText={updateEmail}
               placeholder="you@example.com"
-              inputRef={emailInputRef}
-              returnKeyType="next"
-              onSubmitEditing={() => cityInputRef.current?.focus()}
+              {...checkoutFocusProps.email}
             />
           </View>
           {session ? (
@@ -3259,9 +3349,7 @@ export function CheckoutPage({
               value={customer.city}
               onChangeText={updateCity}
               placeholder="Your city"
-              inputRef={cityInputRef}
-              returnKeyType="next"
-              onSubmitEditing={() => addressInputRef.current?.focus()}
+              {...checkoutFocusProps.city}
             />
             <CheckoutFormField
               key="checkout-address"
@@ -3273,7 +3361,7 @@ export function CheckoutPage({
               onChangeText={updateAddress}
               placeholder="Street, building, apartment and delivery details"
               multiline="large"
-              inputRef={addressInputRef}
+              {...checkoutFocusProps.address}
             />
             <CheckoutFormField
               key="checkout-notes"
@@ -3285,6 +3373,7 @@ export function CheckoutPage({
               onChangeText={setNotes}
               placeholder="A delivery preference or helpful note"
               multiline="small"
+              {...checkoutFocusProps.notes}
             />
           </View>
           {session ? (
@@ -3742,6 +3831,22 @@ const professionalCheckoutStyles = StyleSheet.create({
   fieldMessageText: { flex: 1, fontSize: 7, lineHeight: 10 },
   fieldMessageError: { color: "#a9233d" },
   fieldMessageSuccess: { color: "#327152" },
+  androidFieldPressed: { opacity: 0.82 },
+  androidEditLabel: { fontSize: 6, lineHeight: 9, fontWeight: "900", letterSpacing: 0.8, color: RED },
+  androidFieldValue: { minHeight: 28, paddingTop: 5, fontSize: 11.5, lineHeight: 17, color: "#171310" },
+  androidFieldPlaceholder: { color: "#9b918b" },
+  androidEditorBackdrop: { flex: 1, backgroundColor: "rgba(15,8,9,.62)", justifyContent: "center", padding: 20 },
+  androidEditorCard: { width: "100%", maxWidth: 560, alignSelf: "center", borderRadius: 24, backgroundColor: "#fff", padding: 18 },
+  androidEditorHeader: { flexDirection: "row", alignItems: "center", gap: 11, marginBottom: 15 },
+  androidEditorIcon: { width: 44, height: 44, borderRadius: 14, backgroundColor: "#fff0f4", alignItems: "center", justifyContent: "center" },
+  androidEditorCopy: { flex: 1, minWidth: 0 },
+  androidEditorEyebrow: { fontSize: 6.5, lineHeight: 9, fontWeight: "900", letterSpacing: 1.1, color: RED },
+  androidEditorTitle: { fontFamily: "serif", fontSize: 20, lineHeight: 25, fontWeight: "700", color: "#171310", marginTop: 2 },
+  androidEditorInput: { minHeight: 58, borderRadius: 15, borderWidth: 2, borderColor: RED, backgroundColor: "#fffafb", paddingHorizontal: 14, fontSize: 16, color: "#171310" },
+  androidEditorInputMultiline: { minHeight: 112, paddingTop: 13 },
+  androidEditorValidation: { fontSize: 10, lineHeight: 15, marginTop: 8 },
+  androidEditorDone: { minHeight: 52, borderRadius: 26, backgroundColor: RED, marginTop: 14, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8 },
+  androidEditorDoneText: { fontSize: 9, lineHeight: 12, fontWeight: "900", letterSpacing: 1.2, color: "#fff" },
   payment: {
     minHeight: 86,
     marginTop: 12,

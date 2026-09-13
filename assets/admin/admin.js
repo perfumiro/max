@@ -75,6 +75,13 @@ const fetchAllSupabaseAdminRows = async (functionName, field) => {
 
 const syncMobileCatalogEntry = async (section, id, value) => {
   if (!id || id === MOBILE_CATALOG_DOC_ID) return;
+  if (section === 'products' && value?.name) {
+    const previous = await getDoc(doc(db, 'products', id));
+    const data = previous.exists() ? previous.data() : {};
+    for (const field of ['preorderEnabled', 'preorderMessage', 'preorderEstimatedAvailability', 'priceComingSoon']) {
+      if (!(field in value) && field in data) value = { ...value, [field]: data[field] };
+    }
+  }
   const firebaseToken = await auth.currentUser?.getIdToken();
   if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
   const response = await fetch(SUPABASE_SYNC_URL, {
@@ -185,6 +192,10 @@ const supabaseRowToAdminProduct = (row) => {
     rating: row.rating,
     reviewCount: row.review_count,
     stockLeft: row.stock_left,
+    preorderEnabled: row.preorder_enabled === true,
+    preorderMessage: row.preorder_message || '',
+    preorderEstimatedAvailability: row.preorder_estimated_availability || '',
+    priceComingSoon: row.price_coming_soon !== false,
     active: row.active !== false,
     source: row.source || 'website',
   };
@@ -1157,23 +1168,78 @@ const renderOrdersMobile = (orders) => {
 
 const isPreorderRequest = (o) => Boolean(o.preorder || o.type === 'preorder' || o.kind === 'preorder' || o.summary?.hasPendingPricing || (o.items || []).some(i => i.preorder || i.pricePending));
 
+let preorderRequests = [];
+let preorderCatalog = null;
+const loadPreorderProductSettings = async () => {
+  const form = qs('#preorderProductSettings');
+  const select = qs('#preorderProductSelect');
+  if (!form || !select) return;
+  if (!preorderCatalog) preorderCatalog = await fetchAllSupabaseAdminRows('admin-catalog-sync', 'products');
+  const previous = select.value;
+  select.innerHTML = '<option value="">Choose a perfume</option>' + [...preorderCatalog].sort((a, b) => a.name.localeCompare(b.name)).map(p => `<option value="${esc(p.id)}">${esc(p.brand)} · ${esc(p.name)}</option>`).join('');
+  select.value = previous;
+  select.onchange = () => {
+    const p = preorderCatalog.find(p => p.id === select.value);
+    if (!p) return;
+    qs('#preorderProductStock').value = p.stock_left ?? '';
+    qs('#preorderProductStock').dataset.original = String(p.stock_left ?? '');
+    qs('#preorderProductComing').checked = Boolean(p.preorder_estimated_availability);
+    qs('#preorderProductEta').value = p.preorder_estimated_availability || '';
+    qs('#preorderProductEnabled').checked = p.preorder_enabled === true;
+    qs('#preorderProductPriceSoon').checked = p.price_coming_soon !== false;
+    qs('#preorderProductMessage').value = p.preorder_message || '';
+  };
+  form.onsubmit = async event => {
+    event.preventDefault();
+    if (!select.value) return;
+    const button = form.querySelector('[type="submit"]'); button.disabled = true;
+    const stock = qs('#preorderProductStock');
+    const value = {
+      preorderEnabled: qs('#preorderProductEnabled').checked,
+      priceComingSoon: qs('#preorderProductPriceSoon').checked,
+      preorderEstimatedAvailability: qs('#preorderProductComing').checked ? (qs('#preorderProductEta').value.trim() || 'Date to be confirmed') : '',
+      preorderMessage: qs('#preorderProductMessage').value.trim(),
+      ...(stock.value !== stock.dataset.original ? { stockLeft: stock.value === '' ? null : Number(stock.value) } : {}),
+    };
+    try {
+      await syncMobileCatalogEntry('products', select.value, value);
+      toast('Availability and preorder settings saved', 'success');
+      preorderCatalog = null;
+      await loadPreorderProductSettings();
+      select.onchange();
+    } catch (error) { toast(error.message, 'error'); }
+    finally { button.disabled = false; }
+  };
+};
 const renderPreorders = () => {
   const search = (qs('#preordersSearch')?.value || '').trim().toLowerCase();
-  const rows = _allOrders.filter(isPreorderRequest).filter(o => {
+  const rows = preorderRequests.filter(o => {
     if (!search) return true;
     const c = o.customer || {};
-    return [o.orderId, o.id, c.firstName, c.lastName, c.name, c.phone, ...(o.items || []).map(i => i.name)].join(' ').toLowerCase().includes(search);
+    return [o.id, o.customer_name, o.phone, o.product_snapshot_name, o.city].join(' ').toLowerCase().includes(search);
   });
   const list = qs('#preordersMobile');
-  if (list) list.innerHTML = rows.length ? rows.map(o => mobileOrderCard(o, true)).join('') : '<div class="mobile-work-card mobile-work-meta">No preorder requests found.</div>';
+  if (list) list.innerHTML = rows.length ? rows.map(o => `<article class="mobile-work-card"><div class="mobile-work-title">${esc(o.customer_name)}</div><div class="mobile-work-meta">${esc(o.product_snapshot_name)} · ${esc(o.selected_variant || 'Any size')} × ${Number(o.quantity)}<br>${esc(o.phone)} · ${esc(o.city || '')}<br>${esc(o.customer_message || '')}</div><div class="preorder-contact-actions"><a class="btn btn-xs" href="mailto:${esc(o.email || '')}"><i class="fas fa-envelope"></i> Email</a><a class="btn btn-xs" target="_blank" href="https://wa.me/${String(o.phone || '').replace(/\D/g,'')}"><i class="fab fa-whatsapp"></i> WhatsApp</a></div><label>Status <select class="select-sm preorder-request-status" data-id="${esc(o.id)}">${['new','contacted','waiting_for_stock','customer_confirmed','converted_to_order','cancelled','completed'].map(status => `<option value="${status}" ${status === o.status ? 'selected' : ''}>${esc(status.replaceAll('_', ' '))}</option>`).join('')}</select></label></article>`).join('') : '<div class="mobile-work-card mobile-work-meta">No preorder requests found.</div>';
   if (qs('#preordersCount')) qs('#preordersCount').textContent = `${rows.length} request${rows.length === 1 ? '' : 's'}`;
   const badge = qs('#navPreordersBadge');
   if (badge) { badge.textContent = rows.length; badge.style.display = rows.length ? '' : 'none'; }
 };
 
 const loadPreordersView = async () => {
-  if (!_allOrders.length) await loadOrdersView();
+  preorderRequests = await fetchAllSupabaseAdminRows('admin-preorders', 'preorders');
   renderPreorders();
+  void loadPreorderProductSettings().catch(error => toast(error.message, 'error'));
+  const list = qs('#preordersMobile');
+  if (list) list.onchange = async event => {
+    const select = event.target.closest('.preorder-request-status');
+    if (!select) return;
+    select.disabled = true;
+    try {
+      await supabaseAdminRequest('admin-preorders', { method: 'PATCH', body: { id: select.dataset.id, status: select.value } });
+      toast('Preorder status saved', 'success');
+      await loadPreordersView();
+    } catch (error) { toast(error.message, 'error'); renderPreorders(); }
+  };
 };
 
 const applyOrderFilters = () => {
@@ -2931,6 +2997,7 @@ const loadProductsView = async () => {
               <!-- Action buttons -->
               <div class="prod-card-actions" style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;align-items:flex-end">
                 <div class="prod-primary-actions" style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end">
+                  <button class="btn btn-xs prod-open-editor" data-slug="${esc(slug)}" style="gap:4px;font-size:11px;padding:4px 10px"><i class="fas fa-pen"></i> Edit details</button>
                   <button class="btn btn-xs btn-gold prod-save" data-slug="${esc(slug)}" style="gap:4px;font-size:11px;padding:4px 10px">
                     <i class="fas fa-floppy-disk"></i> Save
                   </button>
@@ -3214,12 +3281,23 @@ const loadProductsView = async () => {
     // -- Event delegation ---------------------------------------------------
     grid.addEventListener('click', async (e) => {
       const saveBtn   = e.target.closest('.prod-save');
+      const editBtn   = e.target.closest('.prod-open-editor');
       const toggleBtn = e.target.closest('.prod-toggle');
       const removeBtn = e.target.closest('.prod-remove-size');
       const addBtn    = e.target.closest('.prod-add-size');
       const resetBtn  = e.target.closest('.prod-reset');
       const promoClearBtn = e.target.closest('.prod-promo-clear');
       const promoSaveBtn  = e.target.closest('.prod-promo-save');
+      if (editBtn) {
+        e.preventDefault();
+        try {
+          const latest = await fetchSupabaseAdminProducts();
+          const row = latest.find(item => String(item.id) === String(editBtn.dataset.slug));
+          if (!row) throw new Error('Product could not be loaded for editing.');
+          openEditProductModal(editBtn.dataset.slug, supabaseRowToAdminProduct(row));
+        } catch (error) { toast(`Could not open editor: ${error.message}`, 'error'); }
+        return;
+      }
       if (!saveBtn && !toggleBtn && !removeBtn && !addBtn && !resetBtn && !promoClearBtn && !promoSaveBtn) return;
 
       // "Save Promotion" delegates to the card's main Save button
@@ -4283,6 +4361,33 @@ const _apAddSizeRow = (container, sizeVal = '', priceVal = '', origPriceVal = ''
   container.appendChild(row);
 };
 
+const productAvailabilityFields = prefix => `
+  <fieldset class="product-availability-fields">
+    <legend>Availability &amp; preorder options</legend>
+    <label class="availability-toggle"><input type="checkbox" id="${prefix}ProductPreorderEnabled"><span><strong>Allow preorders</strong><small>Accept requests when this perfume is unavailable. No payment is taken.</small></span></label>
+    <label class="availability-toggle"><input type="checkbox" id="${prefix}ProductArrivingSoon"><span><strong>Arriving soon</strong><small>Show the animated Spain-to-Morocco flight when out of stock.</small></span></label>
+    <label class="availability-toggle"><input type="checkbox" id="${prefix}ProductPriceComingSoon" checked><span><strong>Price coming soon</strong><small>Hide prices while unavailable. Turn off to show the saved prices.</small></span></label>
+    <label class="availability-text">Estimated arrival (optional)<input class="select-sm" id="${prefix}ProductArrivalEstimate" maxlength="160" placeholder="e.g. October 2026"></label>
+    <label class="availability-text">Message for customers (optional)<textarea class="select-sm" id="${prefix}ProductPreorderMessage" maxlength="500" rows="2" placeholder="We will contact you when it arrives."></textarea></label>
+    <p>Set <strong>Stock Left to 0</strong> for an unavailable perfume. Keep its sizes and saved prices. These options can be changed at any time.</p>
+  </fieldset>`;
+
+const readProductAvailabilityFields = prefix => ({
+  preorderEnabled: document.getElementById(`${prefix}ProductPreorderEnabled`).checked,
+  priceComingSoon: document.getElementById(`${prefix}ProductPriceComingSoon`).checked,
+  preorderEstimatedAvailability: document.getElementById(`${prefix}ProductArrivingSoon`).checked
+    ? (document.getElementById(`${prefix}ProductArrivalEstimate`).value.trim() || 'Date to be confirmed') : '',
+  preorderMessage: document.getElementById(`${prefix}ProductPreorderMessage`).value.trim(),
+});
+
+const fillProductAvailabilityFields = (prefix, data) => {
+  document.getElementById(`${prefix}ProductPreorderEnabled`).checked = data.preorderEnabled === true;
+  document.getElementById(`${prefix}ProductPriceComingSoon`).checked = data.priceComingSoon !== false;
+  document.getElementById(`${prefix}ProductArrivingSoon`).checked = Boolean(data.preorderEstimatedAvailability);
+  document.getElementById(`${prefix}ProductArrivalEstimate`).value = data.preorderEstimatedAvailability || '';
+  document.getElementById(`${prefix}ProductPreorderMessage`).value = data.preorderMessage || '';
+};
+
 const initAddProductModal = () => {
   if (document.getElementById('addProductModal')) return;
   const modal = document.createElement('div');
@@ -4382,6 +4487,7 @@ const initAddProductModal = () => {
         </div>
 
         <!-- Stock & Badge -->
+        ${productAvailabilityFields('add')}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div>
             <label style="font-size:0.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:6px">
@@ -4591,6 +4697,7 @@ const initAddProductModal = () => {
       progressLabel.textContent = 'Saving product data...';
       progressBar.style.width = '92%';
       const productPayload = {
+        ...readProductAvailabilityFields('add'),
         name, brand: brand.toUpperCase(), slug,
         image: downloadURL, images: allImages, sizes, active: true,
         filters: ['new-in', gender, category],
@@ -4853,6 +4960,7 @@ const initEditProductModal = () => {
         </div>
 
         <!-- Section 7: Stock & Badge -->
+        ${productAvailabilityFields('edit')}
         <div>
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
             <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:800;flex-shrink:0">7</div>
@@ -5162,13 +5270,14 @@ const initEditProductModal = () => {
       const newSlug = _apToSlug(name);
       const payload = {
         name, brand: brand.toUpperCase(), slug: newSlug,
+        ...readProductAvailabilityFields('edit'),
         image: mainUrl, images: allImages, sizes, active: true,
         filters: ['new-in', gender, category],
         ...(description ? { description } : {}),
         ...(accordsRaw.length ? { accords: accordsRaw } : {}),
         ...(notesTop || notesHeart || notesBase ? { notes: { top: notesTop, heart: notesHeart, base: notesBase } } : {}),
         ...(ingredients ? { ingredients } : {}),
-        ...(stockLeft !== null ? { stockLeft } : {}),
+        stockLeft,
         ...(badge ? { badge } : {}),
         originalPrices: Object.keys(originalPrices).length ? originalPrices : null,
         fragranceProfile,
@@ -5270,6 +5379,7 @@ const openEditProductModal = (slug, data) => {
   document.getElementById('editProductIngredients').value = data.ingredients || '';
 
   // Stock & Badge
+  fillProductAvailabilityFields('edit', data);
   const _stockEl = document.getElementById('editProductStockLeft');
   const _badgeEl = document.getElementById('editProductBadge');
   if (_stockEl) _stockEl.value = data.stockLeft != null ? String(data.stockLeft) : '';
@@ -5360,6 +5470,14 @@ const loadFirestoreProductsSection = async () => {
                 <input class="select-sm fsprod-price" type="number" inputmode="decimal" min="0" value="${Number(_visibleSizes[0]?.[1] || 0)}" data-size="${esc(_visibleSizes[0]?.[0] || '')}" style="width:100%;margin-top:4px">
               </label>
               <button class="btn btn-xs btn-gold fsprod-quick-save" data-slug="${esc(p.slug)}"><i class="fas fa-floppy-disk"></i> Save</button>
+              <label style="font-size:11px;flex-basis:100%">Expected arrival (leave blank if unknown)
+                <input class="select-sm fsprod-arrival" maxlength="160" value="${esc(p.preorderEstimatedAvailability || '')}" placeholder="e.g. October 2026" style="width:100%;margin-top:4px">
+              </label>
+              <label style="font-size:11px;flex-basis:100%">Message for customers
+                <input class="select-sm fsprod-preorder-message" maxlength="500" value="${esc(p.preorderMessage || '')}" placeholder="We will contact you when it arrives." style="width:100%;margin-top:4px">
+              </label>
+              <button class="btn btn-xs fsprod-arrival-save" data-slug="${esc(p.slug)}">Save arrival information</button>
+              <small style="flex-basis:100%">Set stock to 0 for unavailable perfumes. An expected arrival shows the airplane. Enable preorder to accept requests. Keep sizes and prices.</small>
               <button class="btn btn-xs fsprod-preorder" data-slug="${esc(p.slug)}" data-enabled="${Boolean(p.preorderEnabled)}"><i class="fas fa-clock"></i> ${p.preorderEnabled ? 'Preorder on' : 'Enable preorder'}</button>
             </div>
           </div>
@@ -5396,6 +5514,20 @@ const loadFirestoreProductsSection = async () => {
       const quickSave = e.target.closest('.fsprod-quick-save');
       const preorderBtn = e.target.closest('.fsprod-preorder');
 
+      const arrivalSave = e.target.closest('.fsprod-arrival-save');
+      if (arrivalSave) {
+        const card = arrivalSave.closest('[data-fsprod-slug]');
+        arrivalSave.disabled = true;
+        try {
+          await syncMobileCatalogEntry('products', arrivalSave.dataset.slug, {
+            preorderEstimatedAvailability: card.querySelector('.fsprod-arrival').value.trim(),
+            preorderMessage: card.querySelector('.fsprod-preorder-message').value.trim(),
+          });
+          toast('Arrival information saved', 'success');
+        } catch (error) { toast(error.message, 'error'); }
+        finally { arrivalSave.disabled = false; }
+        return;
+      }
       if (quickSave) {
         const slug = quickSave.dataset.slug;
         const row = rows.find(product => product.id === slug);

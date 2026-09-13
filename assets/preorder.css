@@ -1,0 +1,58 @@
+.arrival-panel{margin:18px 0;padding:24px;border:1px solid #dec99e;border-radius:22px;background:linear-gradient(135deg,#fffaf0,#f4f7ff);color:#182338;overflow:hidden}.arrival-panel[hidden],.arrival-panel [hidden],.preorder-dialog [hidden]{display:none!important}.arrival-panel h3{font-family:Georgia,serif;font-size:24px;line-height:1.2;margin:14px 0 10px}.arrival-panel p{font-size:13px;line-height:1.65;margin:8px 0}.arrival-panel .arrival-estimate{font-weight:700;color:#876326}.arrival-panel button{margin-top:18px;width:100%}.arrival-panel .product-cart-btn{display:block!important;min-height:52px;padding:14px 20px!important;border:0!important;border-radius:999px!important;background:#182338!important;color:#fff!important;font-size:13px!important;font-weight:800!important;letter-spacing:.04em;cursor:pointer;box-shadow:0 10px 24px #18233830}.arrival-stock{color:#876326!important;background:#fff6df!important}.preorder-dialog{width:min(440px,calc(100% - 24px));max-height:90dvh;padding:28px;border:1px solid #e9dfce;border-radius:24px;color:#182338;background:#fff;box-shadow:0 24px 80px #0004}.preorder-dialog::backdrop{background:#10182799;backdrop-filter:blur(4px)}.preorder-dialog h2{font-family:Georgia,serif;font-size:26px;margin:8px 24px 12px 0}.preorder-dialog p{font-size:13px;line-height:1.6;margin:12px 0;overflow-wrap:anywhere}.preorder-product{font-weight:700}.preorder-dialog label{display:block;font-size:13px;font-weight:600;margin-top:14px}.preorder-dialog input{display:block;width:100%;box-sizing:border-box;border:1px solid #cbd0da;border-radius:10px;padding:12px;margin-top:6px;font-size:16px;background:#fff}.preorder-dialog button[type=submit]{width:100%;margin-top:16px}.preorder-close{position:absolute;right:12px;top:10px;min-width:44px;min-height:44px;font-size:28px}.preorder-result{color:#785515}.preorder-dialog :focus-visible,.arrival-panel button:focus-visible{outline:3px solid #ae8543;outline-offset:3px}@keyframes perfume-flight{0%,100%{transform:translateX(0) rotate(-8deg)}50%{transform:translateX(120px) translateY(-8px) rotate(-8deg)}}@media(prefers-reduced-motion:reduce){.arrival-flight span{animation:none}}
+
+/* Illustrative Spain-to-Morocco route, scaled with its SVG viewBox. */
+.arrival-flight{margin:0 -4px 22px;padding:4px 0 18px;border-bottom:1px solid #deccaa80}
+.arrival-flight-caption{text-align:center;color:#927443;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
+.arrival-flight-map{display:block;width:100%;height:auto;overflow:visible;margin-top:2px}
+.arrival-cloud{fill:#fff;opacity:.9;stroke:#e9e4dc;stroke-width:.7}
+.arrival-cloud-far{opacity:.65}
+.arrival-route{fill:none;stroke:#d6c4a4;stroke-width:1.5;stroke-dasharray:3 6;stroke-linecap:round}
+.arrival-route-progress{fill:none;stroke:#b38a46;stroke-width:2;stroke-linecap:round;stroke-dasharray:100;animation:arrival-trail 6s ease-in-out infinite}
+.arrival-airport-halo{fill:#b38a4614;stroke:#b38a4630;stroke-width:1}
+.arrival-airport{fill:#ae8341;stroke:#fff;stroke-width:2}
+.arrival-plane{fill:#a77933;stroke:#fffaf1;stroke-width:1;filter:drop-shadow(0 4px 3px #75542530);offset-path:path('M30 108C87 5 233 5 290 108');offset-rotate:auto;animation:arrival-journey 6s ease-in-out infinite}
+.arrival-countries{display:flex;justify-content:space-between;gap:10px;margin-top:0}
+.arrival-countries>div{display:grid;grid-template-columns:22px auto;gap:3px 7px;align-items:center}
+.arrival-countries svg{width:22px;height:16px;border-radius:3px;box-shadow:0 1px 3px #0001}
+.arrival-countries span{font-size:12px;font-weight:750;color:#273249}
+.arrival-countries small{grid-column:2;font-size:9px;color:#998465;letter-spacing:.12em}
+@keyframes arrival-journey{0%,8%{offset-distance:0%;opacity:0}14%{opacity:1}82%{offset-distance:100%;opacity:1}92%,100%{offset-distance:100%;opacity:0}}
+@keyframes arrival-trail{0%,8%{stroke-dashoffset:100;opacity:.3}82%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@media(prefers-reduced-motion:reduce){.arrival-plane{animation:none;offset-distance:50%;opacity:1}.arrival-route-progress{animation:none;stroke-dashoffset:50;opacity:1}}
+.price-soon-summary{padding:2px 0 4px}
+.price-soon-summary[hidden]{display:none!important}
+.price-soon-kicker{display:block;font-size:9px;font-weight:750;letter-spacing:.15em;text-transform:uppercase;color:#a17c42;margin-bottom:9px}
+.price-soon-summary strong{display:block;font-family:Georgia,serif;font-size:26px;font-weight:400;line-height:1.2;letter-spacing:-.02em;color:#233047}
+.price-soon-summary p{margin:10px 0 0;font-size:12px;line-height:1.65;color:#7a8090;max-width:290px}
+.has-price-coming-soon .price-card-top-row{display:none!important}
+.has-price-coming-soon .price-live-note{color:#a17c42!important}
+.has-price-coming-soon .price-live-note::before{background:#b79154!important;box-shadow:0 0 0 3px #b7915418!important;animation:none!important}
+.has-price-coming-soon .price-size-heading{flex-wrap:wrap;gap:8px}
+.size-pill.is-price-pending{border-style:dashed!important;background:linear-gradient(145deg,#fff,#fcf9f3)!important}
+.size-pill.is-price-pending .spill-price{color:#9c7841!important;font-weight:600!important;letter-spacing:.02em;font-size:11px!important}
+.size-pill.is-price-pending.is-active{background:#273249!important;border-style:solid!important}
+.size-pill.is-price-pending.is-active .spill-price{color:#eed5ab!important}
+#productCtaHint.is-price-pending{display:none!important}
+
+.arrival-panel .product-cart-btn:empty::after{content:'PREORDER THIS PERFUME';color:#fff}
+/* Premium preorder card */
+.arrival-panel{position:relative;margin:20px 0;padding:30px 28px;border:1px solid #ead8b5;border-radius:24px;background:linear-gradient(145deg,#fffdf8 0%,#f7f8fc 100%);box-shadow:0 14px 35px rgba(41,31,20,.09)}
+.arrival-panel h3{margin:4px 0 10px;font-size:28px;letter-spacing:-.02em;color:#1b263b}
+.arrival-panel .arrival-message{color:#667085;max-width:380px}
+.arrival-panel .arrival-estimate{display:inline-block;padding:7px 11px;border-radius:999px;background:#f7edd9;color:#896b35;font-size:11px}
+.arrival-panel .product-cart-btn{margin-top:22px;min-height:50px;background:linear-gradient(135deg,#1d293f,#0f172a)!important;box-shadow:0 12px 25px rgba(15,23,42,.22);transition:transform .2s,box-shadow .2s}
+.arrival-panel .product-cart-btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(15,23,42,.3)}
+.arrival-panel:not(:has(.arrival-flight:not([hidden]))) .arrival-flight{display:none}.arrival-panel:before{content:'IPORDISE PRIVATE RESERVE';display:block;font:700 10px/1 sans-serif;letter-spacing:.2em;color:#a27a3b;margin-bottom:14px}
+.arrival-panel h3{font-family:Georgia,serif;font-weight:400;background:none!important;color:#172338!important}
+.arrival-panel h3:after{content:' ?';font-size:18px;color:#b58a49}
+.arrival-panel .arrival-estimate:empty,.arrival-panel .arrival-message:empty{display:none}/* Compact editorial layout */
+.arrival-panel{padding:22px 24px!important;border-radius:18px!important}
+.arrival-panel:before{margin-bottom:10px!important;font-size:9px!important}
+.arrival-panel h3{font-size:22px!important;margin:0 0 8px!important}
+.arrival-panel h3:after{display:none}
+.arrival-panel .arrival-message{font-size:12px!important;margin:0!important;line-height:1.5!important}
+.arrival-panel .arrival-estimate{margin:8px 0 0!important;font-size:10px!important}
+.arrival-panel .product-cart-btn{margin-top:18px!important;min-height:46px!important;font-size:12px!important}.arrival-panel{display:flex;flex-direction:column;gap:0!important;background:#fff!important;border:1px solid #e6d6b7!important;box-shadow:0 8px 24px rgba(40,30,20,.06)!important}
+.arrival-panel:before{content:'PREORDER';align-self:flex-start;background:#f4e7cf;color:#8b682f;padding:6px 10px;border-radius:999px;margin:0 0 14px!important}
+.arrival-panel h3{font-size:24px!important;color:#172338!important}
+.arrival-panel .product-cart-btn{background:#b18445!important;color:#fff!important;box-shadow:none!important}.preorder-confirmed{position:relative;margin-top:22px!important;padding:46px 16px 14px!important;text-align:center;background:linear-gradient(180deg,#fffaf0,#fff);border:1px solid #ead8b5;border-radius:16px;color:#8b682f!important;font-weight:700}.preorder-confirmed:before{content:'?';position:absolute;top:8px;left:50%;font-size:28px;color:#b18445;animation:preorder-flight 2.8s ease-in-out infinite}@keyframes preorder-flight{0%{transform:translateX(-55px) rotate(-8deg);opacity:.3}50%{transform:translateX(0) rotate(-3deg);opacity:1}100%{transform:translateX(55px) rotate(-8deg);opacity:.3}}.preorder-thankyou{border-color:#8bc9a5!important;background:linear-gradient(145deg,#f3fff7,#fff)!important}.preorder-thankyou:before{content:"?";display:block;color:#16834a;font-size:30px;margin-bottom:8px}.preorder-thankyou h3{color:#166534!important}.preorder-thankyou .arrival-message{color:#347454!important}

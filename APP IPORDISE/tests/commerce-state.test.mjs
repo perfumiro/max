@@ -67,13 +67,17 @@ test('checkout inputs keep stable native identity and use one keyboard inset str
     readFile(new URL('../app.json', import.meta.url), 'utf8'),
   ]);
   assert.match(checkout, /const CheckoutFormField = React\.memo/);
-  assert.match(checkout, /showSoftInputOnFocus/);
+  assert.match(checkout, /const \[focusedField, setFocusedField\]/);
+  assert.match(checkout, /checkoutFocusProps/);
   assert.match(checkout, /keyboardShouldPersistTaps="always"/);
   assert.match(checkout, /automaticallyAdjustKeyboardInsets=\{Platform\.OS === "ios"\}/);
   const expoConfig = JSON.parse(appConfig).expo;
-  assert.equal(expoConfig.android.softwareKeyboardLayoutMode, 'resize');
+  assert.equal(expoConfig.android.softwareKeyboardLayoutMode, 'pan');
   assert.equal(expoConfig.androidStatusBar.translucent, false);
-  assert.match(checkout, /onSubmitEditing=\{onSubmitEditing\}/);
+  assert.match(checkout, /if \(Platform\.OS === "android"\)/);
+  assert.match(checkout, /const \[androidEditorOpen, setAndroidEditorOpen\]/);
+  assert.match(checkout, /visible=\{androidEditorOpen\}/);
+  assert.match(checkout, /onShow=\{\(\) => androidInputRef\.current\?\.focus\(\)\}/);
   assert.doesNotMatch(checkout, /React\.cloneElement/);
   assert.doesNotMatch(checkout, /editable: !loading/);
   assert.doesNotMatch(checkout, /<KeyboardAvoidingView/);

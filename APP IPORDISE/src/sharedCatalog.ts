@@ -238,7 +238,7 @@ const productFromCatalog = (raw: JsonMap, override?: JsonMap): Product | null =>
     description: raw.description || undefined,
     notes: normalizeProductNotes(String(id || ''), raw.notes),
     stockLeft: optionalFiniteNumber(override?.stockLeft ?? raw.stockLeft),
-    preorderEnabled: (override?.preorderEnabled ?? raw.preorderEnabled ?? raw.preorder_enabled) === true,
+    preorderEnabled: selected ? ((override?.preorderEnabled ?? raw.preorderEnabled ?? raw.preorder_enabled) === true) : true,
     preorderMessage: String(override?.preorderMessage ?? raw.preorderMessage ?? raw.preorder_message ?? '') || undefined,
     preorderEstimatedAvailability: String(override?.preorderEstimatedAvailability ?? raw.preorderEstimatedAvailability ?? raw.preorder_estimated_availability ?? '') || undefined,
     offerStart: typeof (override?.offerStart ?? raw.offerStart) === 'string' ? String(override?.offerStart ?? raw.offerStart) : undefined,
@@ -275,7 +275,7 @@ const productFromFirestore = (raw: JsonMap): Product | null => {
     filters: Array.isArray(raw.filters) ? raw.filters : ['new-in'],
     active: true,
     stockLeft,
-    preorderEnabled: (raw.preorderEnabled ?? raw.preorder_enabled) === true,
+    preorderEnabled: selected ? ((raw.preorderEnabled ?? raw.preorder_enabled) === true) : true,
     preorderMessage: String(raw.preorderMessage ?? raw.preorder_message ?? '') || undefined,
     preorderEstimatedAvailability: String(raw.preorderEstimatedAvailability ?? raw.preorder_estimated_availability ?? '') || undefined,
     description: raw.description || undefined,
@@ -309,7 +309,9 @@ const productFromSupabase = (raw: JsonMap, rows: JsonMap[]): Product | null => {
       } as ProductVariant;
     })
     .filter(variant => variant.enabled);
-  if (!variants.length) return null;
+  // Keep active products without priced variants in the catalogue so the app
+  // can present their preorder card instead of silently hiding them.
+  if (!variants.length) return productFromFirestore({ ...raw, sizes: {}, stock_left: 0 });
   const sizes = Object.fromEntries(variants.map(variant => [variant.sizeKey, variant.price]));
   const originalPrices = Object.fromEntries(variants.filter(variant => variant.compareAtPrice).map(variant => [variant.sizeKey, variant.compareAtPrice!]));
   const product = productFromFirestore({ ...raw, sizes, original_prices: originalPrices });
@@ -410,3 +412,4 @@ export const loadSharedProducts = async (forceRefresh = false): Promise<Product[
 };
 
 export { displaySize, formatMad };
+

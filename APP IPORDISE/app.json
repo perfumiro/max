@@ -23,8 +23,8 @@
       "versionCode": 1,
       "allowBackup": false,
       "edgeToEdgeEnabled": true,
-      "softwareKeyboardLayoutMode": "resize",
-      "predictiveBackGestureEnabled": true,
+      "softwareKeyboardLayoutMode": "pan",
+      "predictiveBackGestureEnabled": false,
       "blockedPermissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",

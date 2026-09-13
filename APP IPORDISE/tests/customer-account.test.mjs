@@ -176,7 +176,7 @@ test('account dashboard provides loading, retry, empty and product-image fallbac
   assert.match(screen, /legacyItem\.product_id/);
   assert.match(screen, /bundledOrderImagesByName/);
   assert.match(screen, /guaranteedOrderImages\.get\(productId\)/);
-  assert.match(screen, /versace-dylan-blue-eau-de-toilette\/1\.jpg/);
+  assert.match(screen, /assets\/products\/Versace Dylan Blue  Eau de Toilette\/1\.jpg/);
   assert.match(screen, /appConfig\.storeOrigin/);
   assert.match(screen, /onError=\{\(\) => setSourceIndex\(current => current \+ 1\)\}/);
 });
