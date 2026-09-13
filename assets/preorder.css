@@ -56,3 +56,16 @@
 .arrival-panel:before{content:'PREORDER';align-self:flex-start;background:#f4e7cf;color:#8b682f;padding:6px 10px;border-radius:999px;margin:0 0 14px!important}
 .arrival-panel h3{font-size:24px!important;color:#172338!important}
 .arrival-panel .product-cart-btn{background:#b18445!important;color:#fff!important;box-shadow:none!important}.preorder-confirmed{position:relative;margin-top:22px!important;padding:46px 16px 14px!important;text-align:center;background:linear-gradient(180deg,#fffaf0,#fff);border:1px solid #ead8b5;border-radius:16px;color:#8b682f!important;font-weight:700}.preorder-confirmed:before{content:'?';position:absolute;top:8px;left:50%;font-size:28px;color:#b18445;animation:preorder-flight 2.8s ease-in-out infinite}@keyframes preorder-flight{0%{transform:translateX(-55px) rotate(-8deg);opacity:.3}50%{transform:translateX(0) rotate(-3deg);opacity:1}100%{transform:translateX(55px) rotate(-8deg);opacity:.3}}.preorder-thankyou{border-color:#8bc9a5!important;background:linear-gradient(145deg,#f3fff7,#fff)!important}.preorder-thankyou:before{content:"?";display:block;color:#16834a;font-size:30px;margin-bottom:8px}.preorder-thankyou h3{color:#166534!important}.preorder-thankyou .arrival-message{color:#347454!important}
+.arrival-panel{box-shadow:0 18px 50px rgba(92,61,20,.10);background:linear-gradient(145deg,#fffdf9,#f8f4ec)} .arrival-panel h3{font-size:28px;letter-spacing:-.02em}.arrival-panel button{background:linear-gradient(135deg,#b98a45,#8f672d)!important;letter-spacing:.08em}.arrival-flight-map{filter:drop-shadow(0 8px 10px rgba(164,116,45,.16))}
+
+/* Premium Europe to Morocco route */
+.arrival-panel{border:1px solid #d7b879!important;border-radius:26px!important;padding:28px 26px!important;background:linear-gradient(145deg,#fffdf8 0%,#f7f1e5 100%)!important;box-shadow:0 20px 55px rgba(112,78,29,.14)!important}
+.arrival-panel:before{color:#9b7234!important;letter-spacing:.24em!important}
+.arrival-flight{padding:8px 4px 22px!important;border-bottom:1px solid #dfcba5!important}
+.arrival-flight-caption{font-size:11px!important;letter-spacing:.22em!important;color:#9b7234!important}
+.arrival-countries>div{font-weight:800!important;color:#182338!important}
+.arrival-countries small{color:#9b7234!important;letter-spacing:.16em!important}
+.arrival-panel h3{font-size:30px!important;color:#182338!important;margin-top:24px!important}
+.arrival-panel .arrival-message{color:#6d6253!important}
+.arrival-panel button{height:58px!important;border-radius:30px!important;background:linear-gradient(135deg,#c39955,#9d7335)!important;box-shadow:0 12px 25px rgba(157,115,53,.28)!important}
+

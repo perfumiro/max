@@ -101,7 +101,7 @@ const startPreviewAutoRefresh = () => {
     window.setInterval(checkForChanges, 2000);
 };
 
-startPreviewAutoRefresh();
+// Preview auto-refresh disabled to prevent interrupting customer interactions.
 
 const initPageTransitionLoader = () => {
     if (window.__ipordisePageTransitionReady) return;
@@ -6907,7 +6907,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         let selectedSize = null;
-        const { setupPreorder } = await import('./assets/preorder.js?v=7');
+        const { setupPreorder } = await import('./assets/preorder.js?v=10');
         const preorderController = await setupPreorder({
             productId: _normalizedPid, productName,
             getSize: () => selectedSize?.button?.dataset.sizeKey || '',

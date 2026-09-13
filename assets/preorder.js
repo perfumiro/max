@@ -48,7 +48,7 @@ export async function setupPreorder({ productId, productName, getSize, getLangua
             <g class="arrival-plane"><path transform="scale(.72)" d="M-15-4H-3L-8-17H-3L7-4 18-2Q22 0 18 2L7 4-3 17H-8L-3 4H-15L-19 9H-22L-19 0-22-9H-19Z"/></g>
         </svg>
         <div class="arrival-countries">
-            <div><svg viewBox="0 0 28 20" aria-hidden="true"><rect width="28" height="20" rx="3" fill="#aa151b"/><path d="M0 5h28v10H0z" fill="#f1bf00"/></svg><span class="arrival-origin-label"></span><small>ES</small></div>
+            <div><svg viewBox="0 0 28 20" aria-hidden="true"><rect width="28" height="20" rx="3" fill="#164a8a"/><g fill="#f6c744"><circle cx="14" cy="4" r="1"/><circle cx="17" cy="4.8" r="1"/><circle cx="19.5" cy="7" r="1"/><circle cx="20" cy="10" r="1"/><circle cx="19.5" cy="13" r="1"/><circle cx="17" cy="15.2" r="1"/><circle cx="14" cy="16" r="1"/><circle cx="11" cy="15.2" r="1"/><circle cx="8.5" cy="13" r="1"/><circle cx="8" cy="10" r="1"/><circle cx="8.5" cy="7" r="1"/><circle cx="11" cy="4.8" r="1"/></g></svg><span class="arrival-origin-label"></span><small>ES</small></div>
             <div><svg viewBox="0 0 28 20" aria-hidden="true"><rect width="28" height="20" rx="3" fill="#c1272d"/><path d="m14 4 3.5 11-9-6.8h11L10.5 15Z" fill="none" stroke="#006233" stroke-width="1.2"/></svg><span class="arrival-destination-label"></span><small>MA</small></div>
         </div>
     </div><h3></h3><p class="arrival-estimate"></p><p class="arrival-message"></p><button type="button" class="product-cart-btn"></button>`;
@@ -60,7 +60,7 @@ export async function setupPreorder({ productId, productName, getSize, getLangua
     priceSummary.innerHTML = '<span class="price-soon-kicker"></span><strong></strong><p></p>';
     priceCard.prepend(priceSummary);
     const originalSizePrices = new Map(Array.from(priceCard.querySelectorAll('.spill-price'), el => [el, el.textContent]));
-    let product = null, failed = false, missing = false, globallyEnabled = true; const preorderStorageKey = ipordise.preorder.submitted.; let alreadySubmitted = (() => { try { return localStorage.getItem(preorderStorageKey) === '1'; } catch { return false; } })();
+    let product = null, failed = false, missing = false, globallyEnabled = true; const preorderStorageKey = `ipordise.preorder.submitted.${productId}`; let alreadySubmitted = (() => { try { return localStorage.getItem(preorderStorageKey) === '1'; } catch { return false; } })();
     try {
         const query = new URLSearchParams({ id: `eq.${productId}`, select: 'id,name,active,stock_left,preorder_enabled,preorder_message,preorder_estimated_availability,price_coming_soon,product_variants(id,size_key,size_label,stock_quantity,enabled)' });
         const options = { headers: { apikey: KEY }, cache: 'no-store', signal: AbortSignal.timeout(3000) };
@@ -83,7 +83,7 @@ export async function setupPreorder({ productId, productName, getSize, getLangua
     };
     const render = () => {
         const current = state();
-        panel.hidden = !current.blocked;
+        panel.hidden = false;
         // Availability controls ordering, never price visibility. Arriving-soon
         // and preorder products must keep their published prices visible.
         const pricePending = false;
@@ -108,10 +108,10 @@ export async function setupPreorder({ productId, productName, getSize, getLangua
         const arriving = current.preorder || (current.soldOut && Boolean(product?.preorder_estimated_availability));
         // The flight is also the empty-catalog illustration. Its visibility must
         // not depend on checkout eligibility; only confirmed stock enables orders.
-        panel.querySelector('.arrival-flight').hidden = !(arriving || missing);
-        panel.querySelector('.arrival-flight').setAttribute('aria-label', tr('Animated flight from Spain to Morocco', 'Vol animé de l’Espagne vers le Maroc'));
+        panel.querySelector('.arrival-flight').hidden = false;
+        panel.querySelector('.arrival-flight').setAttribute('aria-label', tr('Animated flight from Europe to Morocco', 'Vol animé de l’Espagne vers le Maroc'));
         panel.querySelector('.arrival-flight-caption').textContent = tr('A fragrance worth waiting for', 'Un parfum qui mérite d’attendre');
-        panel.querySelector('.arrival-origin-label').textContent = tr('Spain', 'Espagne');
+        panel.querySelector('.arrival-origin-label').textContent = tr('Europe', 'Europe');
         panel.querySelector('.arrival-destination-label').textContent = tr('Morocco', 'Maroc');
         const title = missing ? tr('A fragrance worth waiting for', 'Un parfum qui mérite d’attendre')
             : failed ? tr('Preorder available', 'Disponibilité temporairement indisponible')

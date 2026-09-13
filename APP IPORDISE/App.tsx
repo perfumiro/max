@@ -1086,7 +1086,7 @@ function ProductDetail({ product, recommendations, onBack, onOpenBag, onSelectPr
           <View style={styles.detailTrustDivider}/>
           <View style={styles.detailTrustItem}><Ionicons name="location-outline" size={13} color="#6b1f31"/><Text style={styles.detailTrustText}>Delivery across Morocco</Text></View>
         </View>
-        {canPreorder?<View style={{marginTop:14,padding:14,borderRadius:16,backgroundColor:'#fff8eb',borderWidth:1,borderColor:'#ead5aa'}}><View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}><View style={{alignItems:'center',gap:3}}><Text style={{fontSize:18}}>🇪🇸</Text><Text style={{fontSize:9,fontWeight:'900',letterSpacing:.7,color:'#9a7137'}}>SPAIN</Text></View><View style={{flex:1,marginHorizontal:10,height:28,justifyContent:'center',alignItems:'center'}}><View style={{position:'absolute',left:0,right:0,borderTopWidth:1,borderStyle:'dashed',borderColor:'#c9a86c'}}/><Animated.View style={{transform:[{translateX:airplaneProgress.interpolate({inputRange:[0,1],outputRange:[-35,35]})}]}}><Ionicons name="airplane" size={20} color="#b18445"/></Animated.View></View><View style={{alignItems:'center',gap:3}}><Text style={{fontSize:18}}>🇲🇦</Text><Text style={{fontSize:9,fontWeight:'900',letterSpacing:.7,color:'#9a7137'}}>MOROCCO</Text></View></View><Text style={{fontSize:10,fontWeight:'900',letterSpacing:1.2,color:'#9a7137',textAlign:'center',marginTop:11}}>ARRIVING SOON</Text><Text style={{fontSize:11,color:'#76634d',marginTop:3,textAlign:'center'}}>Reserve now and we’ll contact you when it arrives.</Text></View>:null}
+        {canPreorder?<View style={{marginTop:18,padding:22,borderRadius:24,backgroundColor:'#fffaf0',borderWidth:1,borderColor:'#c5964a',shadowColor:'#8f672d',shadowOpacity:.16,shadowRadius:20,shadowOffset:{width:0,height:10},elevation:5}}><View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}><View style={{alignItems:'center',gap:3}}><Text style={{fontSize:18}}>🇪🇸</Text><Text style={{fontSize:9,fontWeight:'900',letterSpacing:.7,color:'#9a7137'}}>EUROPE</Text></View><View style={{flex:1,marginHorizontal:10,height:28,justifyContent:'center',alignItems:'center'}}><View style={{position:'absolute',left:0,right:0,borderTopWidth:1,borderStyle:'dashed',borderColor:'#c9a86c'}}/><Animated.View style={{transform:[{translateX:airplaneProgress.interpolate({inputRange:[0,1],outputRange:[-35,35]})}]}}><Ionicons name="airplane" size={20} color="#b18445"/></Animated.View></View><View style={{alignItems:'center',gap:3}}><Text style={{fontSize:18}}>🇲🇦</Text><Text style={{fontSize:9,fontWeight:'900',letterSpacing:.7,color:'#9a7137'}}>MOROCCO</Text></View></View><Text style={{fontSize:10,fontWeight:'900',letterSpacing:1.2,color:'#9a7137',textAlign:'center',marginTop:14,letterSpacing:1.8}}>ARRIVING SOON</Text><Text style={{fontSize:11,color:'#76634d',marginTop:3,textAlign:'center'}}>Reserve now and we’ll contact you when it arrives.</Text></View>:null}
         <View style={[styles.detailPricePanel,styles.detailPricePanelPremium]}>
           <View style={styles.detailPricePanelTop}><Text style={styles.priceLabel}>IPORDISE PRICE</Text><View style={[styles.detailDeliveryPromise,styles.detailDeliveryPromisePremium]}><Ionicons name="cube-outline" size={11} color="#176b43"/><Text style={styles.detailDeliveryPromiseText}>1–3 DAY DELIVERY</Text></View></View>
           <View style={styles.detailPriceRow}><Text style={[styles.detailPrice,styles.detailPricePremium]}>{selectedPrice}</Text>{selectedOldPrice ? <Text style={styles.detailOldPrice}>{selectedOldPrice}</Text> : null}{selectedOldPrice ? <Text style={[styles.detailSaving,styles.detailSavingPremium]}>SAVE {savingPercent || 10}%</Text> : null}</View>
@@ -1633,7 +1633,7 @@ export default function App() {
   const previewSkipIntro = Platform.OS === 'web' && typeof globalThis.location !== 'undefined' && new URLSearchParams(globalThis.location.search).get('skipIntro') === '1';
   // The store mounts beneath the intro so catalogue, auth and saved shopping
   // state load during the branded three-second opening instead of afterwards.
-  const [entered, setEntered] = useState<boolean|null>(Platform.OS==='web' ? previewStore : null);
+  const [entered, setEntered] = useState<boolean|null>(Platform.OS==='web' ? (previewStore || (()=>{try{return localStorage.getItem('ipordise.onboarding.complete.v1')==='1';}catch{return false;}})()) : null);
   const [launching,setLaunching]=useState(!previewAdmin&&!previewSkipIntro);
   const finishLaunch=useCallback(()=>setLaunching(false),[]);
   useEffect(()=>{
@@ -1644,7 +1644,7 @@ export default function App() {
   },[]);
   const completeOnboarding=useCallback(()=>{
     setEntered(true);
-    if(Platform.OS!=='web')void SecureStore.setItemAsync('ipordise.onboarding.complete.v1','1').catch(()=>undefined);
+    if(Platform.OS!=='web')void SecureStore.setItemAsync('ipordise.onboarding.complete.v1','1').catch(()=>undefined); else { try { localStorage.setItem('ipordise.onboarding.complete.v1','1'); } catch {} }
   },[]);
   useEffect(()=>{if(Platform.OS!=='web'||typeof document==='undefined')return;const id='ipordise-scrollbar-policy';if(document.getElementById(id))return;const style=document.createElement('style');style.id=id;style.textContent='*{scrollbar-width:none;-ms-overflow-style:none}*::-webkit-scrollbar{display:none;width:0;height:0}';document.head.appendChild(style);return()=>style.remove();},[]);
   return <AppErrorBoundary><LanguageProvider><SafeAreaProvider><RNStatusBar translucent={Platform.OS !== 'android'} backgroundColor={Platform.OS === 'android' ? '#ffffff' : 'transparent'} barStyle={launching?'light-content':'dark-content'}/>{previewAdmin?<AdminEntry/>:entered===null?<View style={{flex:1,backgroundColor:'#030303'}}/>:entered ? <StoreScreen /> : <LocationScreen onContinue={completeOnboarding} />}{launching?<LaunchIntro onFinish={finishLaunch}/>:null}</SafeAreaProvider></LanguageProvider></AppErrorBoundary>;
@@ -1920,5 +1920,6 @@ Object.assign(styles, StyleSheet.create({
   preorderInput:{minHeight:48,marginTop:10,borderWidth:1,borderColor:'#ded5d0',borderRadius:12,paddingHorizontal:13,paddingVertical:10,fontSize:14,color:'#211719',backgroundColor:'#fff'},
   preorderSuccess:{marginTop:18,padding:18,borderRadius:14,backgroundColor:'#edf7f0',flexDirection:'row',alignItems:'center',gap:10},
 }));
+
 
 
