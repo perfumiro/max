@@ -831,9 +831,20 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
   #orderDetailModal > div { width: 100% !important; max-width: none !important; max-height: 100dvh !important; height: 100dvh; border-radius: 0 !important; }
   #addProductModal, #editProductModal, #replyModal, #discountModal { padding: 0 !important; align-items: stretch !important; }
   #addProductModal > div, #editProductModal > div, #replyModal > div, #discountModal > div {
-    width: 100% !important; max-width: none !important; height: 100dvh !important; max-height: 100dvh !important; border-radius: 0 !important;
+    width: 100% !important; max-width: none !important; min-height: 100dvh; height: auto !important; max-height: none !important; margin: 0 !important; border-radius: 0 !important;
   }
-  #addProductModal form, #editProductModal form { min-width: 0; }
+  /* Long cards must grow inside the scrolling overlay, not clip their forms. */
+  #addProductModal, #editProductModal, #replyModal, #discountModal {
+    max-height: 100dvh;
+    overflow-y: auto !important;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  #editProductModal > div > div:first-child { flex-wrap: wrap; gap: 12px; padding: 14px 12px !important; }
+  #addProductModal form, #editProductModal form {
+    min-width: 0;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom)) !important;
+  }
   #addProductModal [style*="grid-template-columns"], #editProductModal [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
   #addProductModal [style*="padding:20px 24px"], #editProductModal [style*="padding:20px 24px"] { padding: 14px 12px !important; }
   #orderDetailBody { padding: 14px 12px calc(22px + env(safe-area-inset-bottom)) !important; }
@@ -1260,3 +1271,5 @@ tbody td { padding: 10px 14px; font-size: 12.5px; color: var(--ink); vertical-al
 .product-availability-fields .select-sm{display:block;width:100%;box-sizing:border-box;margin-top:6px;min-height:42px;font-size:14px}
 .product-availability-fields p{font-size:12px;color:var(--muted);line-height:1.6;margin:14px 0 0}
 .preorder-contact-actions{display:flex;gap:8px;margin:10px 0 12px}.preorder-contact-actions .btn{display:inline-flex!important;align-items:center;gap:7px;padding:9px 13px!important;border-radius:8px!important;font-weight:700!important;color:#fff!important;border:1px solid transparent!important;text-decoration:none!important}.preorder-contact-actions .btn[href^="mailto:"]{background:#2563eb!important;border-color:#3b82f6!important}.preorder-contact-actions .btn[href^="https://wa.me"]{background:#16a34a!important;border-color:#22c55e!important}.preorder-contact-actions .btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
+/* Product forms use --text for inputs and secondary actions. */
+#addProductModal, #editProductModal { --text: var(--ink); }
