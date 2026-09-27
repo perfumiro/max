@@ -3784,8 +3784,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     const numPrice = Number(price);
                                     if (numPrice > 0) _normAdminSizes[normSz] = numPrice;
                                 });
-                                // All sizes have price 0 — treat as out of stock, don’t inject
-                                if (Object.keys(_normAdminSizes).length === 0) return;
+                                // Keep metadata and images for coming-soon products too.
+                                // An empty price list does not mean the product was deleted.
                                 pricesById[slug] = { ..._normAdminSizes };
                                 // Always overwrite _firestoreProductOverridesCache so that
                                 // getConfiguredSizeKeys derives its list exclusively from the
@@ -3876,7 +3876,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const numericPrice = Number(price);
                                 if (normalizedSize && numericPrice > 0) normalizedSizes[normalizedSize] = numericPrice;
                             });
-                            if (!Object.keys(normalizedSizes).length) return;
                             pricesById[slug] = normalizedSizes;
                             const existing = _firestoreProductOverridesCache[slug] || {};
                             _firestoreProductOverridesCache[slug] = {
@@ -6393,20 +6392,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Load sizes and prices in parallel
         const [pricesById] = await Promise.all([loadPricesJson(), loadSizesJson()]);
 
-        // Guard: if this is an admin-uploaded product (Cloudinary image) and it's no
-        // longer in Firestore (deleted/not found in cache), redirect away.
-        const _rawImage = params.get('image') || '';
-        const _isCloudinaryAdminImg = _rawImage.includes('res.cloudinary.com/dp5eszu4p');
-        const _normalizedPidEarly = String(productId || '').trim();
-        if (_isCloudinaryAdminImg
-            && !_firestoreProductImagesCache[_normalizedPidEarly]
-            && !productDetailOverrides[canonicalProductName(productName)]) {
-            // Product was deleted from admin panel — redirect to discover page
-            const _discoverPath = window.location.pathname.includes('/pages/')
-                ? '../discover.html' : 'discover.html';
-            window.location.replace(_discoverPath);
-            return;
-        }
+        // A missing image-cache entry is not proof of deletion: the catalog may
+        // be loading from Supabase, offline, or contain a coming-soon product.
+        // Stay on the requested detail page; availability controls purchasing.
+        const _isCloudinaryAdminImg = (params.get('image') || '').includes('res.cloudinary.com/dp5eszu4p');
 
         const productPrice = formatCatalogPrice(productId, pricesById) || params.get('price') || '/';
         const productOldPrice = params.get('oldPrice') || '';
