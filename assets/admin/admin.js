@@ -76,6 +76,11 @@ const fetchAllSupabaseAdminRows = async (functionName, field) => {
 
 const syncMobileCatalogEntry = async (section, id, value) => {
   if (!id || id === MOBILE_CATALOG_DOC_ID) return;
+  // Full product saves must send unlimited stock explicitly. Older catalog
+  // API deployments reject an omitted stockLeft as NaN. Leave partial patches alone.
+  if (section === 'products' && value?.name && value.stockLeft === undefined) {
+    value = { ...value, stockLeft: null };
+  }
   if (section === 'products' && value?.name) {
     const previous = await getDoc(doc(db, 'products', id));
     const data = previous.exists() ? previous.data() : {};

@@ -207,7 +207,7 @@ Deno.serve(async request => {
         const name = cleanText(value.name, 160);
         const brand = cleanText(value.brand || 'IPORDISE', 100).toUpperCase();
         const images = (Array.isArray(value.images) && value.images.length ? value.images : [value.image]).slice(0, 12).map(safeImage).filter(Boolean);
-        const stockLeft = value.stockLeft === null ? null : Math.floor(Number(value.stockLeft));
+        const stockLeft = value.stockLeft == null ? null : Math.floor(Number(value.stockLeft));
         const rating = Number(value.rating ?? 4.8);
         const reviewCount = Number(value.reviewCount ?? 0);
         const variantStocks = value.variantStocks && typeof value.variantStocks === 'object' && !Array.isArray(value.variantStocks) ? value.variantStocks : {};
