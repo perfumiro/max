@@ -1,3 +1,4 @@
+import { uploadProductImage } from './product-upload.mjs?v=1';
 // --- IPORDISE Admin — Firebase Analytics Dashboard ----------------------------
 // Auth: Firebase Email/Password   Data: Firestore   No server required.
 
@@ -4189,24 +4190,8 @@ const _fpSeasonLabel = v => {
 };
 
 // Upload a single File to Cloudinary; calls progressCb(0–100)
-const _apUploadToCloudinary = (file, progressCb) => new Promise((resolve, reject) => {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', CLOUDINARY_PRESET);
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`);
-  if (progressCb) {
-    xhr.upload.addEventListener('progress', (ev) => {
-      if (ev.lengthComputable) progressCb(Math.round((ev.loaded / ev.total) * 100));
-    });
-  }
-  xhr.addEventListener('load', () => {
-    let parsed; try { parsed = JSON.parse(xhr.responseText); } catch(_) { parsed = {}; }
-    if (xhr.status >= 200 && xhr.status < 300 && parsed.secure_url) resolve(parsed.secure_url);
-    else reject(new Error(parsed.error?.message || 'Upload failed: ' + xhr.status));
-  });
-  xhr.addEventListener('error', () => reject(new Error('Network error during upload.')));
-  xhr.send(formData);
+const _apUploadToCloudinary = (file, progressCb) => uploadProductImage(file, {
+  cloud: CLOUDINARY_CLOUD, preset: CLOUDINARY_PRESET, progress: progressCb,
 });
 
 // Thumbnail image gallery widget — items: { type:'url'|'file', src, file? }
