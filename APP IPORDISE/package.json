@@ -21,6 +21,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build:web": "expo export --platform web --output-dir out",
+    "build:site": "npm run build:web && node scripts/sync-site-export.mjs",
     "build:eas": "eas build",
     "build:eas:preview": "eas build --platform android --profile preview",
     "build:eas:production": "eas build --platform android --profile production",

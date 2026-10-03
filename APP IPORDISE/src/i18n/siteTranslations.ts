@@ -3,6 +3,8 @@ import type { AppLanguage } from './LanguageContext';
 type Translation = { fr: string; ar: string };
 
 const SITE_TRANSLATIONS: Record<string, Translation> = {
+  'Just arrived': { fr: 'Les dernières créations', ar: 'وصل حديثاً' },
+  'The newest signatures at IPORDISE.': { fr: 'De nouvelles signatures à découvrir chez IPORDISE.', ar: 'اكتشف أحدث العطور لدى IPORDISE.' },
   'MOROCCO': { fr: 'MAROC', ar: 'المغرب' },
   'CURATED BEAUTY · MADE FOR MOROCCO': { fr: 'BEAUTÉ SÉLECTIONNÉE · PENSÉE POUR LE MAROC', ar: 'جمال مختار · صُمم للمغرب' },
   'Find your signature.': { fr: 'Trouvez votre signature.', ar: 'اكتشف عطرك المميز.' },
@@ -461,6 +463,13 @@ export function translateSiteText(value: string, language: AppLanguage) {
   const trimmed = value.trim();
   const translated = SITE_TRANSLATIONS[trimmed];
   if (!translated) {
+    const remainingFragrances = trimmed.match(/^(\d+) fragrances? still to discover$/);
+    if (remainingFragrances) {
+      const count = remainingFragrances[1];
+      return language === 'fr'
+        ? `${count} parfum${count === '1' ? '' : 's'} à découvrir`
+        : `${count} عطر بانتظار اكتشافك`;
+    }
     const scentCount = trimmed.match(/^(\d+) scents?$/i);
     if (scentCount) return language === 'fr' ? `${scentCount[1]} parfum${scentCount[1] === '1' ? '' : 's'}` : `${scentCount[1]} عطر`;
     const todayCount = trimmed.match(/^(\d+) TODAY$/);

@@ -48,7 +48,10 @@ test('catalogue requests and remote images use bounded caching and deduplication
   const source = await readFile(catalogPath, 'utf8');
   assert.match(source, /pendingCatalogRequest/);
   assert.match(source, /cacheExpiresAt = Date\.now\(\) \+ appConfig\.catalogCacheTtlMs/);
-  assert.match(source, /cache: 'force-cache'/);
+  assert.match(source, /gallery: images\.map\(productImageSource\)/);
+  const imageSource = await readFile(new URL('../src/productImageSource.ts', import.meta.url), 'utf8');
+  assert.match(imageSource, /bundledProductImages/);
+  assert.doesNotMatch(imageSource, /only-if-cached/);
 });
 
 test('high-frequency shopping consumers use narrow context subscriptions', async () => {

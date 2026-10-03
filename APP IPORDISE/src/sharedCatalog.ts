@@ -1,3 +1,4 @@
+import { normalizeProductImageUrl, productImageSource } from './productImageSource';
 import type { ImageSourcePropType } from 'react-native';
 import { appConfig } from './config';
 import catalogSnapshot from './generated/catalogSnapshot.json';
@@ -27,6 +28,7 @@ export type Product = {
   filters: string[];
   active: boolean;
   stockLeft?: number;
+  priceComingSoon?: boolean;
   preorderEnabled?: boolean;
   preorderMessage?: string;
   preorderEstimatedAvailability?: string;
@@ -141,21 +143,7 @@ const loadRuntimeCatalog = async (): Promise<{ overrides: JsonMap[]; products: J
   }
 };
 
-const absoluteUrl = (value: string) => {
-  if (!value) return '';
-  if (/^https:\/\//i.test(value)) return value;
-  if (/^http:\/\//i.test(value)) {
-    try {
-      const url = new URL(value);
-      if (url.hostname === 'ipordise.com' || url.hostname === 'www.ipordise.com') {
-        url.protocol = 'https:';
-        return url.toString();
-      }
-    } catch {}
-    return '';
-  }
-  return `${STORE_ORIGIN}/${value.replace(/^\/+/, '')}`;
-};
+const absoluteUrl = normalizeProductImageUrl;
 
 const normalizeSizes = (value: unknown): Record<string, number> => {
   if (!value || typeof value !== 'object') return {};
@@ -224,13 +212,14 @@ const productFromCatalog = (raw: JsonMap, override?: JsonMap): Product | null =>
     id,
     brand: String(raw.brand || 'IPORDISE').toUpperCase(),
     name: raw.name || raw.slug,
-    price: selected ? formatMad(selected[1]) : 'Coming soon',
+    price: (raw.priceComingSoon ?? raw.price_coming_soon) === true ? 'Price coming soon' : selected ? formatMad(selected[1]) : 'Price on request',
+    priceComingSoon: (raw.priceComingSoon ?? raw.price_coming_soon) === true,
     oldPrice: selectedOriginal ? formatMad(selectedOriginal) : '',
     badge: Object.keys(originalSizes).length ? 'OFFER' : (raw.badge || 'NEW'),
     rating: Number(raw.rating || 4.8).toFixed(1),
     reviewCount: Number(raw.reviewCount || 0),
-    image: { uri: images[0], cache: 'force-cache' },
-    gallery: images.map((uri: string) => ({ uri, cache: 'force-cache' })),
+    image: productImageSource(images[0]),
+    gallery: images.map(productImageSource),
     sizes: effectiveSizes,
     originalSizes,
     filters: Array.isArray(raw.filters) ? raw.filters : [],
@@ -253,7 +242,7 @@ const productFromCatalog = (raw: JsonMap, override?: JsonMap): Product | null =>
 const productFromFirestore = (raw: JsonMap): Product | null => {
   if (raw.active === false) return null;
   const stockLeft = optionalFiniteNumber(raw.stockLeft ?? raw.stock_left);
-  const sizes = stockLeft === 0 ? {} : normalizeSizes(raw.sizes);
+  const sizes = normalizeSizes(raw.sizes);
   const originalSizes = normalizeSizes(raw.originalPrices ?? raw.original_prices);
   const selected = preferredSize(sizes, String(raw.brand || ''));
   const id = raw.slug || raw.id;
@@ -263,13 +252,14 @@ const productFromFirestore = (raw: JsonMap): Product | null => {
     id,
     brand: String(raw.brand || 'IPORDISE').toUpperCase(),
     name: raw.name,
-    price: selected ? formatMad(selected[1]) : 'Coming soon',
+    price: (raw.priceComingSoon ?? raw.price_coming_soon) === true ? 'Price coming soon' : selected ? formatMad(selected[1]) : 'Price on request',
+    priceComingSoon: (raw.priceComingSoon ?? raw.price_coming_soon) === true,
     oldPrice: selected && originalSizes[selected[0]] > selected[1] ? formatMad(originalSizes[selected[0]]) : '',
     badge: raw.badge || 'NEW',
     rating: Number(raw.rating || 4.8).toFixed(1),
     reviewCount: Number(raw.reviewCount || 0),
-    image: { uri: images[0], cache: 'force-cache' },
-    gallery: images.map((uri: string) => ({ uri, cache: 'force-cache' })),
+    image: productImageSource(images[0]),
+    gallery: images.map(productImageSource),
     sizes,
     originalSizes,
     filters: Array.isArray(raw.filters) ? raw.filters : ['new-in'],
@@ -324,13 +314,24 @@ export const loadBundledProducts = (): Product[] => {
   return products.map(row => productFromSupabase(row, variants)).filter(Boolean) as Product[];
 };
 
+const fetchCatalogRows = async (url: string, label: string): Promise<JsonMap[]> => {
+  const rows: JsonMap[] = [];
+  const pageSize = 500;
+  for (let offset = 0; ; offset += pageSize) {
+    const page = await fetchJson(url + '&limit=' + pageSize + '&offset=' + offset, label, { apikey: appConfig.supabasePublishableKey });
+    if (!Array.isArray(page)) throw new Error(label + ' returned invalid data');
+    rows.push(...page);
+    if (page.length < pageSize) return rows;
+  }
+};
+
 const loadSupabaseProducts = async (): Promise<Product[]> => {
   if (!appConfig.supabaseUrl || !appConfig.supabasePublishableKey) throw new Error('Supabase catalogue is not configured');
-  const select = 'id,name,brand,image,gallery,filters,badge,description,notes,rating,review_count,active,sort_order,sizes,base_sizes,original_prices,stock_left,preorder_enabled,preorder_message,preorder_estimated_availability,offer_start,offer_end,offer_featured,offer_badge,offer_display_order';
+  const select = 'id,name,brand,image,gallery,filters,badge,description,notes,rating,review_count,active,sort_order,sizes,base_sizes,original_prices,stock_left,preorder_enabled,preorder_message,preorder_estimated_availability,price_coming_soon,offer_start,offer_end,offer_featured,offer_badge,offer_display_order';
   const variantSelect = 'id,product_id,size_label,size_key,format,sku,price_minor,compare_at_price_minor,stock_quantity,enabled,sort_order';
   const [rows, variantRows, settingsRows] = await Promise.all([
-    fetchJson(`${appConfig.supabaseUrl}/rest/v1/products?select=${encodeURIComponent(select)}&active=eq.true&order=sort_order.asc,updated_at.desc`, 'IPORDISE commerce catalogue', { apikey: appConfig.supabasePublishableKey }),
-    fetchJson(`${appConfig.supabaseUrl}/rest/v1/product_variants?select=${encodeURIComponent(variantSelect)}&enabled=eq.true&order=sort_order.asc`, 'IPORDISE commerce variants', { apikey: appConfig.supabasePublishableKey }),
+    fetchCatalogRows(`${appConfig.supabaseUrl}/rest/v1/products?select=${encodeURIComponent(select)}&active=eq.true&order=sort_order.asc,updated_at.desc,id.asc`, 'IPORDISE commerce catalogue'),
+    fetchCatalogRows(`${appConfig.supabaseUrl}/rest/v1/product_variants?select=${encodeURIComponent(variantSelect)}&enabled=eq.true&order=sort_order.asc,id.asc`, 'IPORDISE commerce variants'),
     fetchJson(`${appConfig.supabaseUrl}/rest/v1/store_settings?select=value&id=eq.main&limit=1`, 'IPORDISE preorder settings', { apikey: appConfig.supabasePublishableKey }),
   ]);
   if (!Array.isArray(rows) || !Array.isArray(variantRows) || !Array.isArray(settingsRows)) throw new Error('IPORDISE commerce catalogue returned invalid data');

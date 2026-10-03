@@ -193,5 +193,5 @@ test('legacy administration fails closed and cannot send client-authored order c
   assert.match(server, /consumeLoginAttempt/);
   assert.match(server, /endpoint has been retired/i);
   assert.match(rules, /request\.auth\.uid == resource\.data\.uid/);
-  assert.match(checkout, /window\.location\.replace\('\/app'\)/);
+  assert.match(checkout, /window\.location\.replace\('\/app\/\?page=checkout'\)/);
 });

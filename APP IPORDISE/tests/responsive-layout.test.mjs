@@ -71,8 +71,13 @@ test('category portraits and swipe rail stay consistent and smooth',async()=>{
 
 test('catalog photography cannot collapse inside mobile result cards',async()=>{
   const app=await readFile(new URL('../App.tsx',import.meta.url),'utf8');
-  assert.match(app,/catalogImageWrap:\{height:174,minHeight:174,flexShrink:0/);
-  assert.match(app,/<Image source=\{product\.image\}[^>]+resizeMode="contain"/);
+  const base=app.match(/catalogImageWrap:\{height:(\d+),minHeight:(\d+),flexShrink:0/);
+  assert.ok(base,'The image stage must keep a non-shrinking minimum height');
+  assert.ok(Number(base[1])>0&&Number(base[2])>=Number(base[1]));
+  const standard=app.match(/const cardMediaStyles = StyleSheet.create\(\{\s*stage:\s*\{\s*height:\s*(\d+),\s*minHeight:\s*(\d+)/);
+  assert.ok(standard,'Check the standard card override as well as the base style');
+  assert.ok(Number(standard[1])>0&&Number(standard[2])>=Number(standard[1]));
+  assert.match(app,/<ProductImage source=\{product\.image\}[^>]+resizeMode="contain"/);
 });
 
 test('mobile search chrome stays pinned while only the product grid scrolls',async()=>{

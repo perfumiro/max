@@ -46,3 +46,23 @@ test('API accepts omitted stock while still rejecting invalid stock', async () =
   assert.equal(parse({ stockLeft: 12 }), 12);
   assert.ok(Number.isNaN(parse({ stockLeft: 'invalid' })));
 });
+
+for (const checked of [false, true]) {
+  test('price coming soon choice survives save and both catalog mirrors: ' + checked, async () => {
+    let sent;
+    const mirrors = [];
+    const context = vm.createContext({
+      MOBILE_CATALOG_DOC_ID: '__mobile_catalog__', SUPABASE_SYNC_URL: 'https://catalog.test/sync', SUPABASE_PUBLISHABLE_KEY: 'key',
+      auth: { currentUser: { getIdToken: async () => 'token' } }, db: {}, doc: (...args) => args,
+      getDoc: async () => ({ exists: () => true, data: () => ({ priceComingSoon: true }) }),
+      setDoc: async (_target, data) => mirrors.push(data), deleteDoc: async () => {}, serverTimestamp: () => 0,
+      fetch: async (_url, init) => { sent = JSON.parse(init.body); return { ok: true }; }, console,
+    });
+    vm.runInContext(syncSource + '\nglobalThis.sync = syncMobileCatalogEntry;', context);
+    await context.sync('products', 'new-perfume', { name: 'New perfume', active: true, priceComingSoon: checked });
+    assert.equal(sent.value.priceComingSoon, checked);
+    assert.equal(mirrors[0].priceComingSoon, checked);
+    assert.equal(mirrors[1].products['new-perfume'].priceComingSoon, checked);
+    assert.equal(sent.value.active, true);
+  });
+}

@@ -201,7 +201,7 @@ const supabaseRowToAdminProduct = (row) => {
     preorderEnabled: row.preorder_enabled === true,
     preorderMessage: row.preorder_message || '',
     preorderEstimatedAvailability: row.preorder_estimated_availability || '',
-    priceComingSoon: row.price_coming_soon !== false,
+    priceComingSoon: row.price_coming_soon === true,
     active: row.active !== false,
     source: row.source || 'website',
   };
@@ -1192,7 +1192,7 @@ const loadPreorderProductSettings = async () => {
     qs('#preorderProductComing').checked = Boolean(p.preorder_estimated_availability);
     qs('#preorderProductEta').value = p.preorder_estimated_availability || '';
     qs('#preorderProductEnabled').checked = p.preorder_enabled === true;
-    qs('#preorderProductPriceSoon').checked = p.price_coming_soon !== false;
+    qs('#preorderProductPriceSoon').checked = p.price_coming_soon === true;
     qs('#preorderProductMessage').value = p.preorder_message || '';
   };
   form.onsubmit = async event => {
@@ -4356,7 +4356,7 @@ const productAvailabilityFields = prefix => `
     <legend>Availability &amp; preorder options</legend>
     <label class="availability-toggle"><input type="checkbox" id="${prefix}ProductPreorderEnabled"><span><strong>Allow preorders</strong><small>Accept requests when this perfume is unavailable. No payment is taken.</small></span></label>
     <label class="availability-toggle"><input type="checkbox" id="${prefix}ProductArrivingSoon"><span><strong>Arriving soon</strong><small>Show the animated Spain-to-Morocco flight when out of stock.</small></span></label>
-    <label class="availability-toggle"><input type="checkbox" id="${prefix}ProductPriceComingSoon" checked><span><strong>Price coming soon</strong><small>Hide prices while unavailable. Turn off to show the saved prices.</small></span></label>
+    <label class="availability-toggle"><input type="checkbox" id="${prefix}ProductPriceComingSoon"><span><strong>Price coming soon</strong><small>Hide prices while unavailable. Turn off to show the saved prices.</small></span></label>
     <label class="availability-text">Estimated arrival (optional)<input class="select-sm" id="${prefix}ProductArrivalEstimate" maxlength="160" placeholder="e.g. October 2026"></label>
     <label class="availability-text">Message for customers (optional)<textarea class="select-sm" id="${prefix}ProductPreorderMessage" maxlength="500" rows="2" placeholder="We will contact you when it arrives."></textarea></label>
     <p>Set <strong>Stock Left to 0</strong> for an unavailable perfume. Keep its sizes and saved prices. These options can be changed at any time.</p>
@@ -4372,7 +4372,7 @@ const readProductAvailabilityFields = prefix => ({
 
 const fillProductAvailabilityFields = (prefix, data) => {
   document.getElementById(`${prefix}ProductPreorderEnabled`).checked = data.preorderEnabled === true;
-  document.getElementById(`${prefix}ProductPriceComingSoon`).checked = data.priceComingSoon !== false;
+  document.getElementById(`${prefix}ProductPriceComingSoon`).checked = data.priceComingSoon === true;
   document.getElementById(`${prefix}ProductArrivingSoon`).checked = Boolean(data.preorderEstimatedAvailability);
   document.getElementById(`${prefix}ProductArrivalEstimate`).value = data.preorderEstimatedAvailability || '';
   document.getElementById(`${prefix}ProductPreorderMessage`).value = data.preorderMessage || '';

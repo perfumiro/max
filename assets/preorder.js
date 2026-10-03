@@ -84,9 +84,8 @@ export async function setupPreorder({ productId, productName, getSize, getLangua
     const render = () => {
         const current = state();
         panel.hidden = false;
-        // Availability controls ordering, never price visibility. Arriving-soon
-        // and preorder products must keep their published prices visible.
-        const pricePending = false;
+        // Only the explicit admin choice controls price visibility.
+        const pricePending = product?.price_coming_soon === true;
         priceCard.classList.toggle('has-price-coming-soon', pricePending);
         document.getElementById('productCtaHint')?.classList.toggle('is-price-pending', current.blocked);
         priceSummary.hidden = !pricePending;
@@ -96,7 +95,7 @@ export async function setupPreorder({ productId, productName, getSize, getLangua
         const priceNote = priceCard.querySelector('.price-live-note');
         if (priceNote) priceNote.textContent = pricePending ? tr('Price to be confirmed', 'Prix à confirmer') : tr('Current prices', 'Prix actuels');
         priceCard.querySelectorAll('.size-pill').forEach(pill => {
-            const pending = false;
+            const pending = pricePending;
             const price = pill.querySelector('.spill-price');
             pill.classList.toggle('is-price-pending', pending);
             if (price) price.textContent = pending ? tr('Price soon', 'Prix à venir') : originalSizePrices.get(price) || '';

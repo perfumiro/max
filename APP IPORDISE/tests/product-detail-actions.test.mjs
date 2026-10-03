@@ -24,10 +24,10 @@ test('share remains available as a quiet labelled product-information action', a
 
 test('product introduction uses a restrained editorial hierarchy', async () => {
   const app = await readFile(new URL('../App.tsx', import.meta.url), 'utf8');
-  assert.match(app, /detailNamePremium:\{fontSize:28,lineHeight:34,fontWeight:'500'/);
-  assert.match(app, /detailRatingShareRow:\{minHeight:48,marginTop:14,paddingBottom:10,borderBottomWidth:1/);
-  assert.match(app, /detailShareAction:\{minHeight:30,paddingHorizontal:3/);
-  assert.match(app, /reviewLink:\{fontSize:8\.5,color:'#726760'\}/);
+  assert.match(app, /detailNamePremium:\{fontSize:32,lineHeight:39,fontWeight:'500'/);
+  assert.match(app, /detailRatingShareRow:\{minHeight:58,marginTop:20,paddingBottom:16,borderBottomWidth:1/);
+  assert.match(app, /detailShareAction:\{minHeight:44,paddingHorizontal:14/);
+  assert.match(app, /reviewLink:\{fontSize:11,lineHeight:17,color:'#807268'\}/);
   assert.doesNotMatch(app, /reviewLink:\{[^}]*textDecorationLine:'underline'/);
 });
 

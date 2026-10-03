@@ -827,6 +827,7 @@ function ProductEditor({
     {},
   );
   const [stock, setStock] = useState("");
+  const [priceComingSoon, setPriceComingSoon] = useState(false);
   const [preorderEnabled, setPreorderEnabled] = useState(false);
   const [preorderMessage, setPreorderMessage] = useState("");
   const [preorderEstimate, setPreorderEstimate] = useState("");
@@ -859,6 +860,7 @@ function ProductEditor({
         ),
       );
       setStock(product.stock_left == null ? "" : String(product.stock_left));
+      setPriceComingSoon(product.price_coming_soon === true);
       setPreorderEnabled(product.preorder_enabled);
       setPreorderMessage(product.preorder_message || "");
       setPreorderEstimate(product.preorder_estimated_availability || "");
@@ -936,6 +938,7 @@ function ProductEditor({
       sizes,
       original_prices,
       stock_left: stockValue,
+      price_coming_soon: priceComingSoon,
       preorder_enabled: preorderEnabled,
       preorder_message: preorderMessage.trim() || null,
       preorder_estimated_availability: preorderEstimate.trim() || null,
@@ -1082,6 +1085,12 @@ function ProductEditor({
                     preorderEnabled && styles.toggleKnobActive,
                   ]}
                 />
+              </Pressable>
+            </View>
+            <View style={styles.editorToggleRow}>
+              <Text style={styles.fieldLabel}>PRICE COMING SOON</Text>
+              <Pressable accessibilityRole="switch" accessibilityLabel="Price coming soon" accessibilityState={{ checked: priceComingSoon }} onPress={() => setPriceComingSoon(value => !value)} style={[styles.toggle, priceComingSoon && styles.toggleActive]}>
+                <View style={[styles.toggleKnob, priceComingSoon && styles.toggleKnobActive]} />
               </Pressable>
             </View>
             {preorderEnabled ? (
@@ -6682,6 +6691,23 @@ const styles = StyleSheet.create({
   },
   metricDetail: { fontSize: 8, color: "#81756f", marginTop: 3 },
   twoColumn: { flexDirection: "row", flexWrap: "wrap", gap: 12, marginTop: 13 },
+  mobileQuickActions: { marginTop: 16 },
+  mobileQuickTitle: { fontSize: 9, fontWeight: "800", letterSpacing: 1, color: "#605650", marginBottom: 8 },
+  mobileQuickGrid: { gap: 8 },
+  mobileQuickButton: {
+    minHeight: 48, paddingHorizontal: 13, paddingVertical: 10,
+    flexDirection: "row", alignItems: "center", gap: 10,
+    borderRadius: 12, borderWidth: 1, borderColor: "#e5ddd9", backgroundColor: "#fff",
+  },
+  mobileQuickButtonText: { flex: 1, fontSize: 12, fontWeight: "700", color: "#211719" },
+  mobileContactRow: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 12 },
+  mobileContactButton: {
+    flexGrow: 1, minHeight: 44, paddingHorizontal: 12, paddingVertical: 10,
+    flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 7,
+    borderRadius: 12, borderWidth: 1, borderColor: "#e5ddd9", backgroundColor: "#fff",
+  },
+  mobileContactText: { fontSize: 11, fontWeight: "700", color: "#211719" },
+  mobileWhatsappButton: { backgroundColor: "#eaf6ee", borderColor: "#cce6d5" },
   panel: {
     flexGrow: 1,
     flexBasis: 380,

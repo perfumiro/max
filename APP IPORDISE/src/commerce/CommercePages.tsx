@@ -1,3 +1,4 @@
+import { ProductImage } from '../components/ProductImage';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   AccessibilityInfo,
@@ -525,10 +526,10 @@ function BestsellerCard({
       ]}
     >
       <View style={bagStyles.bestsellerImageWrap}>
-        <Image
+        <ProductImage
           accessibilityLabel={`${product.brand} ${product.name}`}
           accessibilityIgnoresInvertColors
-          source={product.image}
+          source={product.image} fallbackSources={product.gallery}
           resizeMode="contain"
           style={bagStyles.bestsellerImage}
         />
@@ -679,8 +680,8 @@ export function WishlistPage({
       renderItem={({ item: product }) => (
         <View style={[styles.savedCard, { width: cardWidth }]}>
           <Pressable accessibilityRole="button" accessibilityLabel={`Open ${product.brand} ${product.name}`} onPress={() => onProduct(product)} style={styles.savedImageWrap}>
-            <Image
-              source={product.image}
+            <ProductImage
+              source={product.image} fallbackSources={product.gallery}
               resizeMode="contain"
               resizeMethod="resize"
               fadeDuration={0}
@@ -801,8 +802,8 @@ function FilledBagPage({
                       layout.compact && { width: 82 },
                     ]}
                   >
-                    <Image
-                      source={line.product.image}
+                    <ProductImage
+                      source={line.product.image} fallbackSources={line.product.gallery}
                       resizeMode="contain"
                       style={styles.bagImage}
                     />
@@ -1096,10 +1097,10 @@ function PremiumBagLineCard({
           compact && professionalBagStyles.productImageCompact,
         ]}
       >
-        <Image
+        <ProductImage
           accessibilityLabel={`${line.product.brand} ${line.product.name}`}
           accessibilityIgnoresInvertColors
-          source={line.product.image}
+          source={line.product.image} fallbackSources={line.product.gallery}
           resizeMode="contain"
           style={professionalBagStyles.productImage}
         />

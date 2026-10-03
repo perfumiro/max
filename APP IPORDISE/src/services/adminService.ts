@@ -38,6 +38,7 @@ export type AdminProduct = {
   original_prices: Record<string, number>;
   variant_stocks: Record<string, number | null>;
   stock_left: number | null;
+  price_coming_soon?: boolean;
   preorder_enabled: boolean;
   preorder_message: string | null;
   preorder_estimated_availability: string | null;
@@ -68,6 +69,7 @@ export type AdminProductPatch = Pick<
   | "active"
 > & {
   variant_stocks?: Record<string, number | null>;
+  price_coming_soon?: boolean;
   preorder_enabled?: boolean;
   preorder_message?: string | null;
   preorder_estimated_availability?: string | null;
@@ -675,6 +677,7 @@ const mapProduct = (raw: JsonMap): AdminProduct => {
       ),
     ),
     stock_left: raw.stock_left ?? raw.stockLeft ?? null,
+    price_coming_soon: raw.price_coming_soon === true,
     preorder_enabled: raw.preorder_enabled === true,
     preorder_message: raw.preorder_message || null,
     preorder_estimated_availability: raw.preorder_estimated_availability || null,
@@ -928,6 +931,7 @@ export async function updateAdminProduct(
     originalPrices: patch.original_prices,
     variantStocks,
     stockLeft: patch.stock_left,
+    priceComingSoon: patch.price_coming_soon ?? (current.price_coming_soon === true),
     preorderEnabled: patch.preorder_enabled ?? current.preorder_enabled,
     preorderMessage: patch.preorder_message === undefined ? current.preorder_message : patch.preorder_message,
     preorderEstimatedAvailability: patch.preorder_estimated_availability === undefined ? current.preorder_estimated_availability : patch.preorder_estimated_availability,
@@ -1013,6 +1017,7 @@ export async function createAdminProduct(
     stockLeft: input.stock,
     active: publishNow,
     publicationStatus: publishNow ? "active" : "draft",
+    priceComingSoon: false,
     createOnly: true,
     filters: ["new-in"],
     badge: input.promotion ? "48H OFFER" : "NEW",
