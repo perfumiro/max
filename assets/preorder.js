@@ -27,12 +27,13 @@ export async function setupPreorder({ productId, productName, getSize, getLangua
     const tr = (en, fr) => getLanguage() === 'fr' ? fr : en;
     if (!document.querySelector('link[data-preorder-style]')) {
         const css = document.createElement('link'); css.rel = 'stylesheet';
-        css.href = new URL('./preorder.css?v=4', import.meta.url).href;
+        css.href = new URL('./preorder.css?v=5', import.meta.url).href;
         css.dataset.preorderStyle = ''; document.head.append(css);
     }
     document.getElementById('arrivalPanel')?.remove();
     document.getElementById('preorderDialog')?.remove();
     const panel = document.createElement('section'); panel.id = 'arrivalPanel'; panel.className = 'arrival-panel';
+    panel.hidden = true;
     panel.setAttribute('aria-live', 'polite');
     panel.innerHTML = `<div class="arrival-flight" role="img">
         <div class="arrival-flight-caption"></div>
@@ -77,13 +78,13 @@ export async function setupPreorder({ productId, productName, getSize, getLangua
         // If the availability endpoint is temporarily unreachable, preserve
         // the product's published price and normal checkout action. Network
         // failure must not turn a priced perfume into an unavailable one.
-        if (failed) return { blocked: true, preorder: true, soldOut: true };
+        if (failed) return { blocked: missing, preorder: false, soldOut: false };
         const current = availability(product, getSize());
         return { ...current, preorder: current.preorder && globallyEnabled };
     };
     const render = () => {
         const current = state();
-        panel.hidden = false;
+        panel.hidden = !current.preorder;
         // Only the explicit admin choice controls price visibility.
         const pricePending = product?.price_coming_soon === true;
         priceCard.classList.toggle('has-price-coming-soon', pricePending);
@@ -104,10 +105,8 @@ export async function setupPreorder({ productId, productName, getSize, getLangua
             const stickyPrice = document.getElementById('stickyPrice');
             if (stickyPrice) stickyPrice.textContent = originalSizePrices.get(priceCard.querySelector('.spill-price')) || stickyPrice.textContent;
         }
-        const arriving = current.preorder || (current.soldOut && Boolean(product?.preorder_estimated_availability));
-        // The flight is also the empty-catalog illustration. Its visibility must
-        // not depend on checkout eligibility; only confirmed stock enables orders.
-        panel.querySelector('.arrival-flight').hidden = false;
+        const arriving = current.preorder;
+        panel.querySelector('.arrival-flight').hidden = !arriving;
         panel.querySelector('.arrival-flight').setAttribute('aria-label', tr('Animated flight from Europe to Morocco', 'Vol animé de l’Espagne vers le Maroc'));
         panel.querySelector('.arrival-flight-caption').textContent = tr('A fragrance worth waiting for', 'Un parfum qui mérite d’attendre');
         panel.querySelector('.arrival-origin-label').textContent = tr('Europe', 'Europe');
@@ -117,13 +116,13 @@ export async function setupPreorder({ productId, productName, getSize, getLangua
             : arriving ? tr('Your next fragrance is on its way', 'Votre prochain parfum arrive bientôt')
             : tr('Currently out of stock', 'Actuellement en rupture de stock');
         panel.querySelector('h3').textContent = title;
-        panel.querySelector('.arrival-estimate').textContent = arriving ? `${tr('Expected arrival', 'Arrivée estimée')} · ${product.preorder_estimated_availability}` : '';
+        panel.querySelector('.arrival-estimate').textContent = arriving && product?.preorder_estimated_availability ? `${tr('Expected arrival', 'Arrivée estimée')} · ${product.preorder_estimated_availability}` : '';
         panel.querySelector('.arrival-message').textContent = current.preorder
             ? (product.preorder_message || tr('Reserve yours. We will contact you when it is available. No payment now; arrival dates are estimates.', 'Réservez le vôtre. Nous vous contacterons dès sa disponibilité. Aucun paiement maintenant ; les dates sont estimatives.'))
             : missing ? tr('Ask us about its arrival and reserve your interest. We’ll confirm availability before you order.', 'Contactez-nous pour connaître son arrivée et nous faire part de votre intérêt. Nous confirmerons sa disponibilité avant votre commande.')
             : failed ? tr('Reserve your bottle before it arrives.', 'Actualisez la page pour vérifier la disponibilité.')
             : tr('Preorders are not open for this option yet.', 'Les précommandes ne sont pas encore ouvertes pour cette option.');
-        const button = panel.querySelector('button'); button.hidden = !missing && !current.preorder && !failed;
+        const button = panel.querySelector('button'); button.hidden = !current.preorder;
         button.textContent = missing ? tr('Ask about this perfume', 'Se renseigner sur ce parfum') : failed ? tr('Preorder this perfume', 'Précommander ce parfum') : tr('Preorder this perfume', 'Précommander ce parfum');
         const badge = document.querySelector('.ipp-badge-stock');
         if (badge) { badge.textContent = current.blocked ? (arriving ? tr('✈ Arriving soon', '✈ Bientôt disponible') : tr('Unavailable', 'Indisponible')) : tr('● In stock', '● En stock'); badge.classList.toggle('arrival-stock', current.blocked); }
@@ -141,7 +140,6 @@ export async function setupPreorder({ productId, productName, getSize, getLangua
             window.location.href = `https://wa.me/212663750210?text=${encodeURIComponent(message)}`;
             return;
         }
-        if (failed && !product) product = { id: productId, name: productName, active: true, preorder_enabled: true, stock_left: 0, product_variants: [] };
         if (!state().preorder) return;
         const selectedVariant = state().variant;
         const dialog = document.createElement('dialog'); dialog.id = 'preorderDialog'; dialog.className = 'preorder-dialog';

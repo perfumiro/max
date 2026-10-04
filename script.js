@@ -6893,7 +6893,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         let selectedSize = null;
-        const { setupPreorder } = await import('./assets/preorder.js?v=10');
+        const { setupPreorder } = await import('./assets/preorder.js?v=11');
         const preorderController = await setupPreorder({
             productId: _normalizedPid, productName,
             getSize: () => selectedSize?.button?.dataset.sizeKey || '',
