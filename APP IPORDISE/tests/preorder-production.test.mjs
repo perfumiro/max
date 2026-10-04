@@ -33,7 +33,7 @@ test('guest and Firebase-admin requests reach functions that enforce their own a
 test('server validates availability, global control, identity and duplicate submissions', () => {
   assert.match(createApi, /value\?\.preorders\?\.enabled === false/);
   assert.match(createApi, /PRODUCT_AVAILABLE/);
-  assert.match(createApi, /product\.stock_left === null/);
+  assert.match(createApi, /product\.active !== true \|\| product\.preorder_enabled !== true/);
   assert.match(createApi, /phonePattern/);
   assert.match(createApi, /idempotencyPattern/);
   assert.match(migration, /preorder_requests_open_customer_product_unique/);
@@ -52,7 +52,7 @@ test('web and native clients use the same remote endpoint and durable retry iden
 test('catalogue and admin share product and global controls with persisted management', () => {
   assert.match(catalog, /preorder_enabled/);
   assert.match(catalog, /store_settings\?select=/);
-  assert.match(app, /canPreorder=!availableSizes\.length&&product\.preorderEnabled===true/);
+  assert.match(app, /canPreorder=!selectedAvailable&&product\.active!==false&&product\.preorderEnabled===true/);
   assert.match(dashboard, /PREORDER SETTINGS/);
   assert.match(dashboard, /GLOBAL ON/);
   assert.match(dashboard, /setInterval\(\(\) => void reload\(\), 10_000\)/);

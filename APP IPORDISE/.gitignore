@@ -28,3 +28,4 @@ GoogleService-Info.plist
 /e.children.length
 
 .vercel
+release-artifacts/

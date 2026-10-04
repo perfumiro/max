@@ -40,24 +40,23 @@ Deno.serve(async request => {
     if (settings?.value?.preorders?.enabled === false) return apiJson({ error: 'Preorder requests are currently unavailable.', code: 'PREORDERS_DISABLED', requestId }, 409, origin, METHODS);
     const { data: product, error: productError } = await admin.from('products').select('id,name,image,active,publication_status,preorder_enabled,stock_left').eq('id', productId).maybeSingle();
     if (productError) throw productError;
-    if (!product || (product.preorder_enabled !== true && !(product.stock_left !== null && Number(product.stock_left) <= 0))) return apiJson({ error: 'This product is not accepting requests.', code: 'PREORDER_NOT_ALLOWED', requestId }, 409, origin, METHODS);
+    if (!product || product.active !== true || product.preorder_enabled !== true) return apiJson({ error: 'This product is not accepting requests.', code: 'PREORDER_NOT_ALLOWED', requestId }, 409, origin, METHODS);
     let variant: any = null;
     if (variantId) {
       const result = await admin.from('product_variants').select('id,product_id,size_label,price_minor,stock_quantity,enabled').eq('id', variantId).eq('product_id', productId).maybeSingle();
       if (result.error) throw result.error;
       variant = result.data;
       if (!variant || !variant.enabled) return apiJson({ error: 'The selected option is invalid.', code: 'INVALID_VARIANT', requestId }, 400, origin, METHODS);
-      // An administrator may explicitly open preorder even before stock is
-      // depleted (for launches and advance reservations).
-      const productAvailable = variant.stock_quantity === null || Number(variant.stock_quantity) > 0; // PRODUCT_AVAILABLE is allowed when preorder is explicitly enabled.
+      const productAvailable = Number(variant.price_minor) > 0 && (variant.stock_quantity === null || Number(variant.stock_quantity) > 0);
+      if (productAvailable) return apiJson({ error: 'This size is available. Please add it to your bag.', code: 'PRODUCT_AVAILABLE', requestId }, 409, origin, METHODS);
     } else {
-      const { data: variants, error } = await admin.from('product_variants').select('stock_quantity,enabled').eq('product_id', productId).eq('enabled', true);
+      const { data: variants, error } = await admin.from('product_variants').select('price_minor,stock_quantity,enabled').eq('product_id', productId).eq('enabled', true);
       if (error) throw error;
       const enabledVariants = variants || [];
       const productAvailable = enabledVariants.length
-        ? enabledVariants.some(item => item.stock_quantity === null || Number(item.stock_quantity) > 0)
-        : product.stock_left === null || Number(product.stock_left) > 0;
-      // Explicit preorder configuration is authoritative for reservations.
+        ? enabledVariants.some(item => Number(item.price_minor) > 0 && (item.stock_quantity === null || Number(item.stock_quantity) > 0))
+        : false;
+      if (productAvailable) return apiJson({ error: 'This product is available. Please select a size and add it to your bag.', code: 'PRODUCT_AVAILABLE', requestId }, 409, origin, METHODS);
     }
     let userId: string | null = null;
     const token = bearerToken(request.headers.get('Authorization'));

@@ -4396,8 +4396,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Normalise Firestore product data before rendering:
             // - lowercase size keys matching prices.json convention (50ml, 100ml)
-            // - drop tester/sample sizes under 50 ml (5ml, 10ml, 20ml, 30ml)
-            // - default to 50ml + 100ml if nothing valid remains
+            // - preserve published decants and full bottles from the admin
+            // - reject invalid sizes/prices without inventing placeholder sizes
             // - parse "Brand / Name" compound strings typed into the name field
             const normalizeAdminProduct = (raw) => {
                 let name  = (raw.name  || raw.title || '').trim();
@@ -4413,13 +4413,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     let k = key.trim().toLowerCase().replace(/\s+/g, '');
                     if (!k.endsWith('ml')) k = parseFloat(k) + 'ml';
                     const ml = parseFloat(k);
-                    if (Number.isFinite(ml) && ml >= 50) normSizes[k] = price;
+                    const numericPrice = Number(price);
+                    if (Number.isFinite(ml) && ml > 0 && /^\d+(?:\.\d+)?ml$/.test(k) && Number.isFinite(numericPrice) && numericPrice >= 0) normSizes[k] = numericPrice;
                 });
-                const finalSizes = Object.keys(normSizes).length > 0
-                    ? normSizes
-                    : { '50ml': rawSizes['50ml'] || rawSizes['50ML'] || 0,
-                        '100ml': rawSizes['100ml'] || rawSizes['100ML'] || 0 };
-                return { ...raw, name, brand, sizes: finalSizes };
+                return { ...raw, name, brand, sizes: normSizes };
             };
 
             snap.forEach(docSnap => {

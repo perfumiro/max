@@ -4,11 +4,11 @@
 
 - [x] Expo managed/CNG workflow retained; no duplicate native project created.
 - [x] Display name `IPORDISE`, scheme `ipordise`, and package `com.ipordise.app` are configured.
-- [x] App version is `1.0.0`; initial Android versionCode is `1`; EAS remote versioning and production auto-increment are configured.
+- [x] Release version is `1.0.1`, Android version code `15`; EAS remote versioning and production auto-increment are configured. See `RELEASE_1.0.1.md` for build and deployment status.
 - [x] Expo SDK 54 targets Android API 36.
 - [x] Production EAS profile produces a store-distribution Android App Bundle.
 - [x] Legacy broad Android storage permissions and development overlay permission are blocked.
-- [x] Camera and microphone permissions are removed; photo access is requested only when choosing an optional profile image.
+- [x] Camera permission is removed; photo access is requested only for an optional profile image. Microphone and iOS speech-recognition permissions are configured for optional voice search.
 - [x] Edge-to-edge, safe-area layout, and predictive Android Back are configured.
 - [x] Production API origins are HTTPS; iOS arbitrary HTTP loads are disabled.
 - [x] Native bundles no longer import the web-only staff dashboard.

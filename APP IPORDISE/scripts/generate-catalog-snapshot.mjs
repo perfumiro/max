@@ -6,7 +6,7 @@ const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL?.replace(/\/$/, '');
 const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 if (!supabaseUrl || !supabaseKey) throw new Error('Canonical Supabase catalogue configuration is missing');
 
-const productSelect = 'id,name,brand,image,gallery,filters,badge,description,notes,rating,review_count,active,sort_order,sizes,base_sizes,original_prices,stock_left,offer_start,offer_end,offer_featured,offer_badge,offer_display_order';
+const productSelect = 'id,name,brand,image,gallery,filters,badge,description,notes,rating,review_count,active,sort_order,sizes,base_sizes,original_prices,stock_left,preorder_enabled,preorder_message,preorder_estimated_availability,price_coming_soon,offer_start,offer_end,offer_featured,offer_badge,offer_display_order';
 const variantSelect = 'id,product_id,size_label,size_key,format,sku,price_minor,compare_at_price_minor,stock_quantity,enabled,sort_order';
 
 const fetchRows = async (path, label) => {

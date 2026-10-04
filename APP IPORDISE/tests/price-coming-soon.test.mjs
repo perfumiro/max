@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import ts from 'typescript';
 
 const source = readFileSync(new URL('../src/sharedCatalog.ts', import.meta.url), 'utf8');
-const compiled = ts.transpileModule(source + '\nexport { productFromSupabase, fetchCatalogRows };', { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
+const compiled = ts.transpileModule(source + '\nexport { productFromSupabase, productFromCatalog, fetchCatalogRows };', { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
 const context = vm.createContext({ exports: {}, require: name => {
   if (name === './productImageSource') return { normalizeProductImageUrl: value => value, productImageSource: uri => ({uri}) };
   if (name === './config') return { appConfig: { storeOrigin: 'https://store.test', requestRetries: 0, requestTimeoutMs: 20000 } };
@@ -27,6 +27,24 @@ for (const flag of [undefined, false, true]) {
     assert.equal(product.sizes['100ml'], 450);
   });
 }
+
+for (const flag of [undefined, false, true]) {
+  test('unpriced products respect explicit preorder permission: ' + flag, () => {
+    const raw = { id: 'unpriced', name: 'Unpriced perfume', image: 'https://store.test/image.jpg', active: true, sizes: {}, preorder_enabled: flag, price_coming_soon: false };
+    const product = context.exports.productFromSupabase(raw, []);
+    assert.equal(product.preorderEnabled, flag === true);
+    assert.equal(product.priceComingSoon, false);
+    assert.equal(product.price, 'Price on request');
+    const catalogProduct = context.exports.productFromCatalog(raw, { preorderEnabled: false });
+    assert.equal(catalogProduct.preorderEnabled, false);
+  });
+}
+
+test('an explicit unchecked price override restores the published price', () => {
+  const product = context.exports.productFromCatalog({ id: 'priced', name: 'Perfume', image: 'https://store.test/image.jpg', sizes: { '100ml': 450 }, priceComingSoon: true }, { priceComingSoon: false });
+  assert.equal(product.priceComingSoon, false);
+  assert.equal(product.price, '450 MAD');
+});
 test('catalog pages include products past the first response', async () => {
   const calls = [];
   context.fetch = async url => { calls.push(url); return { ok: true, json: async () => url.includes('offset=0') ? Array.from({length:500}, (_,id) => ({id})) : [{id:'new-admin-product'}] }; };

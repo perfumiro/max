@@ -24,7 +24,7 @@ const fetchJson = async (path, label) => {
 };
 
 const [products, variants, settings] = await Promise.all([
-  fetchJson('products?active=eq.true&select=id,name,image,gallery,active,publication_status,preorder_enabled,preorder_message,preorder_estimated_availability', 'Canonical products'),
+  fetchJson('products?active=eq.true&select=id,name,brand,image,gallery,filters,badge,description,notes,rating,review_count,active,publication_status,sort_order,sizes,base_sizes,original_prices,stock_left,preorder_enabled,preorder_message,preorder_estimated_availability,price_coming_soon,offer_start,offer_end,offer_featured,offer_badge,offer_display_order', 'Canonical products'),
   fetchJson('product_variants?enabled=eq.true&select=id,product_id,size_key,price_minor,stock_quantity,enabled', 'Canonical variants'),
   fetchJson('store_settings?id=eq.main&select=value', 'Canonical store settings'),
 ]);

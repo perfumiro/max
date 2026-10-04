@@ -498,7 +498,7 @@ const syncCatalogProduct = async (
   value: JsonMap,
 ) => {
   const api = edgeFunctionConfig("admin-catalog-sync");
-  return parseResponse(
+  const result = await parseResponse(
     await fetch(api.url, {
       method: "POST",
       headers: {
@@ -509,6 +509,18 @@ const syncCatalogProduct = async (
       body: JSON.stringify({ section: "products", id, value }),
     }),
   );
+  // The legacy website reads Firestore, while native and /app use Supabase.
+  // Confirm the canonical save before publishing the matching website record.
+  const existing = await getDocument(session, `products/${id}`);
+  const { createOnly: _createOnly, notifyPromotion: _notifyPromotion, ...product } = value;
+  await patchDocument(session, `products/${id}`, {
+    ...product,
+    slug: id,
+    source: "admin",
+    addedAt: existing.addedAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  });
+  return result;
 };
 type AdminPage<T> = {
   items: T[];

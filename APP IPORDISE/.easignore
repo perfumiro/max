@@ -17,6 +17,7 @@ website-ipordise/*
 .env.local
 .env.*.local
 .vercel/
+release-artifacts/
 *.jks
 *.keystore
 *.p8
