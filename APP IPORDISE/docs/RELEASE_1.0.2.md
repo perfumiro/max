@@ -23,3 +23,14 @@ This update targets runtime 1.0.1. Close and reopen the app, then use the update
 - A disposable admin publication reached the canonical service but Firestore mirroring returned HTTP 429; test records were cleaned up. End-to-end mirror verification did not pass.
 
 Store submission/review and physical-device validation must be recorded separately from successful Expo builds or OTA publication.
+
+## Deployment and queued store artifacts
+
+- Website deployed successfully from GitHub commit `42047c4`; public `script.js` and `/app` entry were checked for the new code/bundle.
+- The user confirmed Boss In Motion appears on their installed Play Store 1.0.1 app after the production update.
+- Android 1.0.2, version code 16: https://expo.dev/accounts/ipordises-team/projects/ipordise/builds/502adb9c-88bc-4801-af0e-c2de227c27eb
+- Scheduled Google Play internal draft submission: https://expo.dev/accounts/ipordises-team/projects/ipordise/submissions/e2f635ee-8581-4d1c-b0cf-b07c27ac354a
+- iOS 1.0.2, build 12: https://expo.dev/accounts/ipordises-team/projects/ipordise/builds/eef8ad99-9f0e-40d1-8b99-e9bd9c6d3743
+- Scheduled App Store Connect upload: https://expo.dev/accounts/ipordises-team/projects/ipordise/submissions/a44dc446-44b4-4443-8d99-cb1cb2fb562b
+
+Both submissions were accepted by EAS with existing stored credentials. At scheduling, Android was queued and iOS was building. Completion, store processing, and public store release have not yet been verified.
