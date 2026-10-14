@@ -9,6 +9,8 @@ import {loadBundledProducts,loadSharedProducts,type Product} from '../sharedCata
 import {searchProducts} from '../productSearch';
 import {useBagSnapshot,useFavouriteSnapshot,useShoppingActions} from '../commerce/ShoppingContext';
 import {logger} from '../observability/logger';
+import {appConfig} from '../config';
+import {startCatalogAutoRefresh} from '../services/catalogAutoRefresh';
 import {defaultShopConfig,loadShopConfig,type ShopConfig,type ShopLink} from './shopConfig';
 import {matchesShopIntent,type ShopBrowseIntent} from './shopLogic';
 import {SmoothScrollView as ScrollView} from '../components/smoothHorizontalScroll';
@@ -88,8 +90,9 @@ export function ShopScreen({fallbackProducts,onBrowse,onOpenProduct,onWishlist,o
   const restoredOffset=useRef(false);
   const bundledProducts=useMemo(()=>fallbackProducts.length?fallbackProducts:loadBundledProducts(),[fallbackProducts]);
   const [products,setProducts]=useState(bundledProducts);const [config,setConfig]=useState<ShopConfig>({...defaultShopConfig,banner:{...defaultShopConfig.banner,active:false}});const [loading,setLoading]=useState(true);const [error,setError]=useState(false);const [query,setQuery]=useState('');const deferredQuery=useDeferredValue(query);const [selectedCategory,setSelectedCategory]=useState<ShopLink|null>(null);const [selectedBrand,setSelectedBrand]=useState<string|null>(()=>Platform.OS==='web'&&typeof globalThis.location!=='undefined'?new URLSearchParams(globalThis.location.search).get('shopBrand'):null);const [sortMode,setSortMode]=useState<'featured'|'name'|'price-asc'|'price-desc'>('featured');const [availableOnly,setAvailableOnly]=useState(false);
-  const refresh=useCallback(async(forceRefresh:unknown=false)=>{setLoading(true);setError(false);try{const catalog=await loadSharedProducts(forceRefresh===true);setProducts(catalog);}catch(reason){setProducts(bundledProducts);setError(!bundledProducts.length);logger.warn('shop_hub_using_cached_catalogue',{error:reason});}finally{setLoading(false);}},[bundledProducts]);
-  useEffect(()=>{void refresh();},[refresh]);
+  const mountedRef=useRef(false);
+  const refresh=useCallback(async(forceRefresh:unknown=false,silent=false)=>{if(!silent)setLoading(true);try{const catalog=await loadSharedProducts(forceRefresh===true);if(mountedRef.current){setProducts(catalog);setError(false);}}catch(reason){if(mountedRef.current)setError(true);logger.warn('shop_hub_using_cached_catalogue',{error:reason});}finally{if(mountedRef.current)setLoading(false);}},[]);
+  useEffect(()=>{mountedRef.current=true;const stop=startCatalogAutoRefresh(()=>refresh(true,true),appConfig.catalogCacheTtlMs);return()=>{mountedRef.current=false;stop();};},[refresh]);
   useEffect(()=>{let mounted=true;void loadShopConfig().then(shop=>{if(mounted)setConfig({...shop,banner:{...shop.banner,active:false}});}).catch(reason=>logger.warn('shop_config_using_defaults',{error:reason}));return()=>{mounted=false;};},[]);
   const openIntent=useCallback((intent:ShopBrowseIntent)=>{const search=intent.brand||intent.query;if(search){recentSearches=[search,...recentSearches.filter(value=>value.toLowerCase()!==search.toLowerCase())].slice(0,5);}Keyboard.dismiss();onBrowse(intent);},[onBrowse]);
   const openBrand=useCallback((label:string)=>{Keyboard.dismiss();setSelectedCategory(null);setSelectedBrand(label);setSortMode('featured');setAvailableOnly(false);},[]);

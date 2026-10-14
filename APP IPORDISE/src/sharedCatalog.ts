@@ -217,7 +217,7 @@ const productFromCatalog = (raw: JsonMap, override?: JsonMap): Product | null =>
     oldPrice: selectedOriginal ? formatMad(selectedOriginal) : '',
     badge: Object.keys(originalSizes).length ? 'OFFER' : (raw.badge || 'NEW'),
     rating: Number(raw.rating || 4.8).toFixed(1),
-    reviewCount: Number(raw.reviewCount || 0),
+    reviewCount: Number(raw.reviewCount ?? raw.review_count ?? 0),
     image: productImageSource(images[0]),
     gallery: images.map(productImageSource),
     sizes: effectiveSizes,
@@ -257,7 +257,7 @@ const productFromFirestore = (raw: JsonMap): Product | null => {
     oldPrice: selected && originalSizes[selected[0]] > selected[1] ? formatMad(originalSizes[selected[0]]) : '',
     badge: raw.badge || 'NEW',
     rating: Number(raw.rating || 4.8).toFixed(1),
-    reviewCount: Number(raw.reviewCount || 0),
+    reviewCount: Number(raw.reviewCount ?? raw.review_count ?? 0),
     image: productImageSource(images[0]),
     gallery: images.map(productImageSource),
     sizes,
@@ -301,7 +301,10 @@ const productFromSupabase = (raw: JsonMap, rows: JsonMap[]): Product | null => {
     .filter(variant => variant.enabled);
   // Keep active products without priced variants in the catalogue so the app
   // can present their preorder card instead of silently hiding them.
-  if (!variants.length) return productFromFirestore({ ...raw, sizes: {}, stock_left: 0 });
+  if (!variants.length) {
+    const sizes = promotionActive ? normalizeSizes(raw.sizes) : { ...normalizeSizes(raw.sizes), ...baseSizes };
+    return productFromFirestore({ ...raw, sizes, original_prices: promotionActive ? raw.original_prices : {} });
+  }
   const sizes = Object.fromEntries(variants.map(variant => [variant.sizeKey, variant.price]));
   const originalPrices = Object.fromEntries(variants.filter(variant => variant.compareAtPrice).map(variant => [variant.sizeKey, variant.compareAtPrice!]));
   const product = productFromFirestore({ ...raw, sizes, original_prices: originalPrices });
@@ -327,17 +330,21 @@ const fetchCatalogRows = async (url: string, label: string): Promise<JsonMap[]> 
 
 const loadSupabaseProducts = async (): Promise<Product[]> => {
   if (!appConfig.supabaseUrl || !appConfig.supabasePublishableKey) throw new Error('Supabase catalogue is not configured');
-  const select = 'id,name,brand,image,gallery,filters,badge,description,notes,rating,review_count,active,sort_order,sizes,base_sizes,original_prices,stock_left,preorder_enabled,preorder_message,preorder_estimated_availability,price_coming_soon,offer_start,offer_end,offer_featured,offer_badge,offer_display_order';
+  // Read available canonical fields even when optional offer columns are not deployed.
+  // Includes sizes,original_prices,stock_left and all product information used by the website.
+  const select = '*';
   const variantSelect = 'id,product_id,size_label,size_key,format,sku,price_minor,compare_at_price_minor,stock_quantity,enabled,sort_order';
   const [rows, variantRows, settingsRows] = await Promise.all([
-    fetchCatalogRows(`${appConfig.supabaseUrl}/rest/v1/products?select=${encodeURIComponent(select)}&active=eq.true&order=sort_order.asc,updated_at.desc,id.asc`, 'IPORDISE commerce catalogue'),
-    fetchCatalogRows(`${appConfig.supabaseUrl}/rest/v1/product_variants?select=${encodeURIComponent(variantSelect)}&enabled=eq.true&order=sort_order.asc,id.asc`, 'IPORDISE commerce variants'),
-    fetchJson(`${appConfig.supabaseUrl}/rest/v1/store_settings?select=value&id=eq.main&limit=1`, 'IPORDISE preorder settings', { apikey: appConfig.supabasePublishableKey }),
+    fetchCatalogRows(`${appConfig.supabaseUrl}/rest/v1/products?select=${encodeURIComponent(select)}&active=eq.true&order=updated_at.desc,id.asc`, 'IPORDISE commerce catalogue'),
+    fetchCatalogRows(`${appConfig.supabaseUrl}/rest/v1/product_variants?select=${encodeURIComponent(variantSelect)}&enabled=eq.true&order=sort_order.asc,id.asc`, 'IPORDISE commerce variants')
+      .catch(error => { logger.warn('catalog_variants_unavailable_using_product_prices', { error }); return []; }),
+    fetchJson(`${appConfig.supabaseUrl}/rest/v1/store_settings?select=value&id=eq.main&limit=1`, 'IPORDISE preorder settings', { apikey: appConfig.supabasePublishableKey })
+      .catch(error => { logger.warn('catalog_settings_unavailable_using_product_flags', { error }); return []; }),
   ]);
   if (!Array.isArray(rows) || !Array.isArray(variantRows) || !Array.isArray(settingsRows)) throw new Error('IPORDISE commerce catalogue returned invalid data');
   const preordersEnabled = settingsRows[0]?.value?.preorders?.enabled !== false;
   const products = rows.map(row => productFromSupabase(preordersEnabled ? row : { ...row, preorder_enabled: false }, variantRows)).filter(Boolean) as Product[];
-  if (!products.length) throw new Error('IPORDISE commerce catalogue contains no published products');
+  // Successful empty results are authoritative, including after unpublishing.
   return products;
 };
 
@@ -377,6 +384,11 @@ const fetchSharedProducts = async (): Promise<Product[]> => {
   try {
     return await loadSupabaseProducts();
   } catch (error) {
+    // Preserve newer publications on refresh instead of reverting to the build snapshot.
+    if (cachedProducts !== null) {
+      logger.warn('commerce_catalog_unavailable_using_last_known_products', { error });
+      return cachedProducts;
+    }
     const bundledProducts = loadBundledProducts();
     logger.warn('commerce_catalog_unavailable_using_bundled_snapshot', {
       error,

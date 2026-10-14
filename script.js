@@ -3697,6 +3697,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let liveCatalogRefreshRunning = false;
     let liveCatalogPollStarted = false;
     let lastKnownSupabaseCatalogSnapshot = '';
+    let canonicalCatalogRows = null;
     let lastKnownPricesSnapshot = '';
     // Firestore productOverrides cache — populated inside loadPricesJson.
     // Used by getConfiguredSizeKeys to honour admin size changes even for
@@ -3856,7 +3857,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Merge it last so Firestore quota/cache failures can never hide a
                     // newly published size or leave an old customer-facing price behind.
                     try {
-                        const select = encodeURIComponent('id,sizes,original_prices,active,updated_at,stock_left,preorder_enabled,preorder_message,preorder_estimated_availability');
+                        const select = '*';
                         const response = await fetch(
                             `${CATALOG_SUPABASE_URL}/rest/v1/products?select=${select}&active=eq.true&order=updated_at.desc`,
                             {
@@ -3867,6 +3868,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (!response.ok) throw new Error(`Catalog API returned ${response.status}`);
                         const rows = await response.json();
                         if (!Array.isArray(rows)) throw new Error('Catalog API returned invalid data');
+                        canonicalCatalogRows = rows;
                         rows.forEach((row) => {
                             const slug = String(row?.id || '').trim();
                             if (!slug || !row.sizes || typeof row.sizes !== 'object') return;
@@ -4374,15 +4376,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // even if called before or during Firestore injection.
     window._ipordiseFsCarouselCards = window._ipordiseFsCarouselCards || [];
 
+    const getPublicCatalogSnapshot = async () => {
+        // Native apps and the website render the same confirmed publications.
+        // Firebase is a compatibility fallback, never a prerequisite for new cards.
+        if (canonicalCatalogRows !== null) {
+            return {
+                empty: canonicalCatalogRows.length === 0,
+                forEach: (visit) => canonicalCatalogRows.forEach(row => visit({
+                    id: row.id,
+                    data: () => ({ ...row, slug: row.id, images: row.gallery,
+                        addedAt: row.created_at || row.updated_at,
+                        stockLeft: row.stock_left, originalPrices: row.original_prices,
+                        priceComingSoon: row.price_coming_soon === true,
+                        preorderEnabled: row.preorder_enabled === true,
+                        preorderMessage: row.preorder_message,
+                        preorderEstimatedAvailability: row.preorder_estimated_availability,
+                    }),
+                })),
+            };
+        }
+        const { db: fsDb } = await import('./auth/firebase.js');
+        const { collection: col, getDocs: gDocs, query: fsQuery, orderBy: fsOrderBy }
+            = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
+        return gDocs(fsQuery(col(fsDb, 'products'), fsOrderBy('addedAt', 'desc')));
+    };
+
     const injectFirestoreProductCards = async (pricesById) => {
         if (_firestoreProductsInjected) return;
         const carousel = document.getElementById('newArrivalsCarousel');
         if (!carousel) return;
         try {
-            const { db: fsDb } = await import('./auth/firebase.js');
-            const { collection: col, getDocs: gDocs, query: fsQuery, orderBy: fsOrderBy, where: fsWhere }
-                = await import('https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js');
-            const snap = await gDocs(fsQuery(col(fsDb, 'products'), fsOrderBy('addedAt', 'desc')));
+            const snap = await getPublicCatalogSnapshot();
             // Remove any previously injected Firestore cards so deleted products disappear immediately
             carousel.querySelectorAll('[data-firestore-product="true"]').forEach(el => el.remove());
             window._ipordiseFsCarouselCards = []; // reset cache

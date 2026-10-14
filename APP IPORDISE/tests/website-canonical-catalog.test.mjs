@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import vm from 'node:vm';
+import { readFileSync } from 'node:fs';
+const website = readFileSync(new URL('../../script.js', import.meta.url), 'utf8');
+const helper = website.slice(website.indexOf('const getPublicCatalogSnapshot ='), website.indexOf('const injectFirestoreProductCards ='));
+test('new website cards use canonical publications even when Firebase is unavailable', async () => {
+  const context = vm.createContext({ canonicalCatalogRows: [{ id: 'boss-in-motion', name: 'Boss In Motion', active: true, sizes: { '10ml': 75 }, gallery: ['https://images.test/boss.png'], stock_left: 4, created_at: '2026-10-14T12:00:00Z', price_coming_soon: false, preorder_enabled: true }] });
+  vm.runInContext(helper + '\nglobalThis.snapshot = getPublicCatalogSnapshot;', context);
+  const snapshot = await context.snapshot();
+  const products = [];
+  snapshot.forEach(document => products.push(document.data()));
+  assert.equal(snapshot.empty, false);
+  assert.equal(products[0].slug, 'boss-in-motion');
+  assert.equal(products[0].sizes['10ml'], 75);
+  assert.equal(products[0].stockLeft, 4);
+  assert.equal(products[0].preorderEnabled, true);
+  assert.equal(products[0].addedAt, '2026-10-14T12:00:00Z');
+  context.canonicalCatalogRows = [];
+  const empty = await context.snapshot();
+  assert.equal(empty.empty, true, 'unpublishing never resurrects compatibility records');
+});

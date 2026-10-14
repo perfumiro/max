@@ -7,6 +7,7 @@ module.exports = defineConfig([
   {
     ignores: [
       ".expo/**",
+      ".eas-build-inspect/**",
       ".preview-export/**",
       ".vercel/**",
       "design-qa/**",
@@ -14,6 +15,7 @@ module.exports = defineConfig([
       "functions/**",
       "IPORDISE/**",
       "out*/**",
+      "release-artifacts/**",
       "scripts/**",
       "supabase/functions/**",
       "tmp/**",

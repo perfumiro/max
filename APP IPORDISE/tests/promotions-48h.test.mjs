@@ -30,7 +30,10 @@ test('admin, catalogue, checkout and push delivery share the promotion contract'
   ]);
   assert.match(admin, /48H PROMOTION CONTROL/);
   assert.match(admin, /notify_promotion:\s*true/);
-  assert.match(catalog, /offer_start,offer_end,offer_featured,offer_badge,offer_display_order/);
+  assert.match(catalog, /const select = '\*'/);
+  for (const field of ['offer_start', 'offer_end', 'offer_featured', 'offer_badge', 'offer_display_order']) {
+    assert.ok(catalog.includes(`raw.${field}`), `Catalogue maps ${field} from canonical product data`);
+  }
   assert.match(edge, /sendPromotionNotification/);
   assert.match(sender, /offers_enabled/);
   assert.match(sender, /dataType:\s*'promotion'/);

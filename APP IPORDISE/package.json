@@ -1,8 +1,9 @@
 {
   "name": "ipordise-app",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
+    "postinstall": "node scripts/fix-ios-build-paths.mjs",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -14,6 +15,9 @@
     "test": "node --test \"tests/*.test.mjs\"",
     "typecheck": "tsc --noEmit",
     "check:release": "node scripts/check-release-config.mjs",
+    "check:ios": "node scripts/check-ios-config.mjs",
+    "export:ios": "expo export --platform ios --output-dir dist-ios",
+    "validate:ios": "npm run validate:offline && npm run check:ios && npm run lint && npm run export:ios",
     "check:api": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/check-catalog-api.mjs",
     "generate:catalog-snapshot": "node --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/generate-catalog-snapshot.mjs",
     "validate:offline": "npm run check:release && npm run typecheck && npm test",
@@ -25,6 +29,8 @@
     "build:eas": "eas build",
     "build:eas:preview": "eas build --platform android --profile preview",
     "build:eas:production": "eas build --platform android --profile production",
+    "build:ios": "eas build --platform ios --profile production",
+    "submit:ios": "eas submit --platform ios --profile production",
     "build:eas:production:all": "eas build --platform all --profile production",
     "deploy:web": "vercel --prod",
     "deploy:eas": "eas submit"

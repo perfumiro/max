@@ -2,7 +2,7 @@
   "expo": {
     "name": "IPORDISE",
     "slug": "ipordise",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "scheme": "ipordise",
     "platforms": [
       "ios",
@@ -43,6 +43,7 @@
       "barStyle": "dark-content"
     },
     "ios": {
+      "icon": "./assets/ipordise-app-icon-v4.png",
       "bundleIdentifier": "com.ipordise.app",
       "buildNumber": "1",
       "supportsTablet": true,
@@ -60,6 +61,7 @@
       "favicon": "./assets/ipordise-app-icon-v3.png"
     },
     "plugins": [
+      "./plugins/withSpaceSafeIosBundle.cjs",
       [
         "expo-secure-store",
         {

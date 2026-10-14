@@ -35,6 +35,10 @@
       "android": {
         "buildType": "app-bundle"
       },
+      "ios": {
+        "image": "macos-sequoia-15.6-xcode-26.0",
+        "buildConfiguration": "Release"
+      },
       "channel": "production"
     }
   },
@@ -46,6 +50,9 @@
       }
     },
     "production": {
+      "ios": {
+        "ascAppId": "6822698526"
+      },
       "android": {
         "track": "internal",
         "releaseStatus": "draft"
