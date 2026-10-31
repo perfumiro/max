@@ -82,10 +82,17 @@ const syncMobileCatalogEntry = async (section, id, value) => {
     value = { ...value, stockLeft: null };
   }
   if (section === 'products' && value?.name) {
-    const previous = await getDoc(doc(db, 'products', id));
-    const data = previous.exists() ? previous.data() : {};
-    for (const field of ['preorderEnabled', 'preorderMessage', 'preorderEstimatedAvailability', 'priceComingSoon']) {
-      if (!(field in value) && field in data) value = { ...value, [field]: data[field] };
+    try {
+      const previous = await getDoc(doc(db, 'products', id));
+      const data = previous.exists() ? previous.data() : {};
+      for (const field of ['preorderEnabled', 'preorderMessage', 'preorderEstimatedAvailability', 'priceComingSoon']) {
+        if (!(field in value) && field in data) value = { ...value, [field]: data[field] };
+      }
+    } catch (error) {
+      // Optional legacy fields must not block publication to the catalogue
+      // used by both native apps when Firestore's daily quota is exhausted.
+      // The canonical API preserves availability fields omitted from a save.
+      console.warn('[Catalog legacy availability] Read unavailable; publishing canonical data:', error);
     }
   }
   const firebaseToken = await auth.currentUser?.getIdToken();
@@ -109,11 +116,15 @@ const syncMobileCatalogEntry = async (section, id, value) => {
   // These operations are idempotent, so retrying a partially mirrored save is safe.
   const collectionName = section === 'products' ? 'products' : 'productOverrides';
   const target = doc(db, collectionName, id);
-  if (value === null) {
-    await deleteDoc(target);
-  } else {
-    const partialProductUpdate = section === 'products' && !value.name;
-    await setDoc(target, value, { merge: partialProductUpdate });
+  try {
+    if (value === null) {
+      await deleteDoc(target);
+    } else {
+      const partialProductUpdate = section === 'products' && !value.name;
+      await setDoc(target, value, { merge: partialProductUpdate });
+    }
+  } catch (error) {
+    throw new Error('Saved to the app catalogue, but the website mirror failed. Retry the same save to finish syncing. ' + (error?.message || ''));
   }
 
   // Keep the compatibility snapshot current for older app releases. Failure

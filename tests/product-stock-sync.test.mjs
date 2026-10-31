@@ -6,6 +6,23 @@ import vm from 'node:vm';
 const source = await readFile(new URL('../assets/admin/admin.js', import.meta.url), 'utf8');
 const syncSource = source.slice(source.indexOf('const syncMobileCatalogEntry ='), source.indexOf('const fetchSupabaseAdminProducts ='));
 
+test('Firestore quota exhaustion cannot prevent a new product reaching the native app catalogue', async () => {
+  let canonical;
+  const context = vm.createContext({
+    MOBILE_CATALOG_DOC_ID: '__mobile_catalog__', SUPABASE_SYNC_URL: 'https://catalog.test/sync', SUPABASE_PUBLISHABLE_KEY: 'public',
+    auth: { currentUser: { getIdToken: async () => 'test' } }, db: {}, doc: (...args) => args,
+    getDoc: async () => { throw new Error('Quota exceeded'); },
+    setDoc: async () => { throw new Error('Quota exceeded'); },
+    fetch: async (_url, init) => { canonical = JSON.parse(init.body); return { ok: true }; },
+    console: { warn() {} },
+  });
+  vm.runInContext(syncSource + '\nglobalThis.sync = syncMobileCatalogEntry;', context);
+  await assert.rejects(context.sync('products', 'new-admin-perfume', { name: 'New admin perfume', active: true, sizes: { '100ml': 450 } }), /Saved to the app catalogue, but the website mirror failed/);
+  assert.equal(canonical.id, 'new-admin-perfume');
+  assert.equal(canonical.value.active, true);
+  assert.equal(canonical.value.sizes['100ml'], 450);
+});
+
 for (const [label, value, expected] of [
   ['blank stock', { name: 'Test perfume' }, null],
   ['unlimited stock', { name: 'Test perfume', stockLeft: null }, null],
