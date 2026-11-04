@@ -9,6 +9,43 @@ const staticSource = readFileSync(new URL('../../assets/admin/admin.js', import.
 const service = readFileSync(new URL('../src/services/adminService.ts', import.meta.url), 'utf8');
 const rows = Array.from({ length: 201 }, (_, index) => ({ id: `perfume-${index}`, name: `Perfume ${index}`, active: index !== 200 }));
 
+test('typing shows immediate dedicated results, supports Edit and initializes before data arrives', () => {
+  const input = { value: '', events: {}, addEventListener(event, callback) { this.events[event] = callback; }, focus() {} };
+  let markup = '', renders = 0;
+  const panel = { hidden: true, get innerHTML() { return markup; }, set innerHTML(value) { markup=value; renders++; }, events: {}, addEventListener(event, callback) { this.events[event] = callback; } };
+  const clear = { addEventListener(_event, callback) { this.click = callback; } };
+  const grid = { style: {} }, section = { style: {} };
+  let edited;
+  const context = vm.createContext({
+    document: { getElementById: id => ({ productsSearch: input, productSearchResults: panel, clearProductsSearchBtn: clear, productsGrid: grid, firestoreProductsSection: section })[id] },
+    matchesProductSearch, esc: value => String(value ?? ''), supabaseRowToAdminProduct: row => row,
+    openEditProductModal: (id, row) => { edited = { id, row }; },
+  });
+  vm.runInContext(staticSource.slice(staticSource.indexOf('let adminProductSearchRows ='), staticSource.indexOf('const applyAdminAddedProductSearch =')) + '\nglobalThis.init = initAdminProductSearch; globalThis.setRows = value => { adminProductSearchRows=value; renderAdminProductSearch(); };', context);
+  context.init(); context.init();
+  input.value = 'cafe'; input.events.input();
+  assert.equal(panel.hidden, false);
+  assert.match(panel.innerHTML, /Loading products/);
+  context.setRows([{ id: 'cafe-rose', name: 'Café Rose', brand: 'HOUSE' }, { id: 'other', name: 'Sauvage', brand: 'DIOR' }]);
+  assert.match(panel.innerHTML, /1 matching product/);
+  assert.match(panel.innerHTML, /data-search-edit="cafe-rose"/);
+  assert.doesNotMatch(panel.innerHTML, /Sauvage/);
+  assert.equal(grid.style.display, 'none');
+  const beforeBlur = renders;
+  input.events.change();
+  assert.equal(renders, beforeBlur, 'blur must not replace the Edit button before its click');
+  panel.events.click({ target: { closest: selector => selector === '[data-search-edit]' ? { dataset: { searchEdit: 'cafe-rose' } } : null } });
+  assert.equal(edited.id, 'cafe-rose');
+  assert.equal(edited.row.name, 'Café Rose');
+  input.value = 'dior'; input.events.input();
+  assert.match(panel.innerHTML, /Sauvage/);
+  input.value = 'missing'; input.events.search();
+  assert.match(panel.innerHTML, /No matching products/);
+  clear.click();
+  assert.equal(panel.hidden, true);
+  assert.equal(grid.style.display, 'grid');
+});
+
 test('product search finds names, brands and IDs with accents, punctuation and reordered words', () => {
   const text = "Unique’e Luxury Café Rose perfume-201";
   for (const query of ['cafe', 'rose uniquee', 'PERFUME-201', '  luxury   cafe  ', '']) {

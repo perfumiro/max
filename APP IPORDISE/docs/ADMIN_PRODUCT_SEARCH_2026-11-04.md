@@ -32,3 +32,23 @@ App-admin updates on the existing production channel:
 
 Android, iOS and web exports succeeded. Removed the temporary compatibility
 configuration after publishing; the normal app version remains 1.0.2.
+
+## Instant-search follow-up
+
+Added a dedicated result list directly beneath the search field. Typing filters
+the complete protected catalog immediately without rebuilding the large product
+cards. Each match shows its name, brand, ID and an Edit button. The listener is
+registered before catalog loading, and results populate when that request
+completes. Legacy price-file failures no longer prevent catalog search.
+
+The search reads all catalog sources in one paginated load, reuses those rows
+for the admin-added section, and refreshes its index after product edits. Input,
+search, change and Enter are supported. Identical results stay mounted on input
+blur so that clicking Edit does not lose its click to a result-list replacement.
+Updated the admin script cache version to 42.
+
+All 17 focused admin tests passed. Signed-in browser tests against the real
+production catalog, with the candidate website code intercepted locally, passed
+at 1280px and 390px: typing Sauvage returned two matches, clicking Edit opened
+the actual DIOR SAUVAGE Eau de Parfum editor, a nonexistent query showed an empty
+state, and clearing restored the catalog. No product save was performed.

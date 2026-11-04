@@ -2693,6 +2693,62 @@ const loadNewsletterView = async () => {
 };
 
 // --- PRODUCTS MANAGER VIEW --------------------------------------------------
+let adminProductSearchRows = null;
+let adminProductSearchError = '';
+const renderAdminProductSearch = () => {
+  const panel = document.getElementById('productSearchResults');
+  const query = document.getElementById('productsSearch')?.value.trim() || '';
+  if (!panel) return;
+  panel.hidden = !query;
+  for (const id of ['productsGrid', 'firestoreProductsSection']) {
+    const element = document.getElementById(id);
+    if (element) element.style.display = query ? 'none' : id === 'productsGrid' ? 'grid' : '';
+  }
+  if (!query) return;
+  // Blurring the input fires change before a result receives its click.
+  // Keep identical results mounted so that click reaches the Edit button.
+  if (panel._searchQuery === query && panel._searchRows === adminProductSearchRows && panel._searchError === adminProductSearchError) return;
+  panel._searchQuery = query;
+  panel._searchRows = adminProductSearchRows;
+  panel._searchError = adminProductSearchError;
+  if (adminProductSearchError && !adminProductSearchRows) {
+    panel.innerHTML = `<div class="card"><div class="card-body">${esc(adminProductSearchError)} <button type="button" class="btn btn-xs" data-search-retry>Retry loading products</button></div></div>`;
+    return;
+  }
+  if (!adminProductSearchRows) {
+    panel.innerHTML = '<div class="card"><div class="card-body">Loading products for your search...</div></div>';
+    return;
+  }
+  const matches = adminProductSearchRows.filter(row => matchesProductSearch(`${row.name || ''} ${row.brand || ''} ${row.id || ''}`, query));
+  panel.innerHTML = `<div style="font-weight:700;margin-bottom:10px">${matches.length} matching product${matches.length === 1 ? '' : 's'}</div>` +
+    (matches.length ? matches.map(row => `<div class="card" style="margin-bottom:8px"><div class="card-body" style="display:flex;align-items:center;gap:12px">
+      <div style="flex:1;min-width:0;overflow-wrap:anywhere"><strong>${esc(row.name || row.id)}</strong><div style="font-size:12px;color:var(--muted);margin-top:4px">${esc(row.brand || '')} · ${row.active === false ? 'Disabled / draft' : 'Active'}</div><div style="font-size:11px;color:var(--muted)">${esc(row.id)}</div></div>
+      <button type="button" class="btn btn-xs btn-gold" data-search-edit="${esc(row.id).replace(/"/g, '&quot;')}"><i class="fas fa-pen"></i> Edit</button>
+    </div></div>`).join('') : '<div class="card"><div class="card-body">No matching products. Try part of the name, brand or product ID.</div></div>');
+};
+
+const initAdminProductSearch = () => {
+  const input = document.getElementById('productsSearch');
+  if (!input || input._instantProductSearch) return;
+  input._instantProductSearch = true;
+  for (const event of ['input', 'search', 'change']) input.addEventListener(event, renderAdminProductSearch);
+  input.addEventListener('keydown', event => {
+    if (event.key === 'Enter') { event.preventDefault(); renderAdminProductSearch(); }
+  });
+  document.getElementById('clearProductsSearchBtn')?.addEventListener('click', () => {
+    input.value = '';
+    input.focus();
+    renderAdminProductSearch();
+  });
+  document.getElementById('productSearchResults')?.addEventListener('click', event => {
+    if (event.target.closest('[data-search-retry]')) { void loadProductsView().catch(error => toast(error.message, 'error')); return; }
+    const button = event.target.closest('[data-search-edit]');
+    if (!button) return;
+    const row = adminProductSearchRows?.find(product => String(product.id) === button.dataset.searchEdit);
+    if (row) openEditProductModal(row.id, supabaseRowToAdminProduct(row));
+  });
+};
+
 const applyAdminAddedProductSearch = () => {
   const section = document.getElementById('firestoreProductsSection');
   if (!section) return;
@@ -2716,12 +2772,18 @@ const loadProductsView = async () => {
   const searchEl = document.getElementById('productsSearch');
   const filterEl = document.getElementById('productsStatusFilter');
   if (!grid) return;
+  initAdminProductSearch();
+  adminProductSearchError = '';
+  renderAdminProductSearch();
   grid.innerHTML = `<div style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-spinner fa-spin"></i> Loading products...</div>`;
   try {
-    const [pricesRes, supabaseRows] = await Promise.all([
-      fetch('/prices.json').then(r=>r.json()),
-      fetchSupabaseAdminProducts('website')
+    const [pricesRes, allProductRows] = await Promise.all([
+      fetch('/prices.json').then(r=>{ if (!r.ok) throw new Error('Legacy prices unavailable'); return r.json(); }).catch(() => ({})),
+      fetchSupabaseAdminProducts()
     ]);
+    adminProductSearchRows = allProductRows;
+    renderAdminProductSearch();
+    const supabaseRows = allProductRows.filter(row => row.source === 'website');
 
     // -- Helpers ------------------------------------------------------------
     const normSizeKey = (sz) => {
@@ -3308,9 +3370,8 @@ const loadProductsView = async () => {
     const prodSig = prodAC.signal;
 
     // Search + filter
-    if (searchEl) { searchEl.addEventListener('input', render, { signal: prodSig }); }
+    if (searchEl) { searchEl.addEventListener('input', () => { if (!searchEl.value.trim()) render(); }, { signal: prodSig }); }
     document.getElementById('clearProductsSearchBtn')?.addEventListener('click', () => {
-      if (searchEl) { searchEl.value = ''; searchEl.focus(); }
       if (filterEl) filterEl.value = '';
       render();
     }, { signal: prodSig });
@@ -3327,7 +3388,7 @@ const loadProductsView = async () => {
     }
 
     // -- Load Firestore products section ----------------------------------
-    loadFirestoreProductsSection();
+    loadFirestoreProductsSection(allProductRows.filter(row => row.source === 'admin'));
 
     // -- Event delegation ---------------------------------------------------
     grid.addEventListener('click', async (e) => {
@@ -3591,6 +3652,8 @@ const loadProductsView = async () => {
       }
     }, { signal: prodSig });
   } catch(e) {
+    adminProductSearchError = 'Products could not be loaded. Please retry.';
+    renderAdminProductSearch();
     grid.innerHTML = `<div class="card"><div class="card-body" style="color:var(--rose);text-align:center;padding:32px"><i class="fas fa-triangle-exclamation"></i> ${esc(e.message)}</div></div>`;
     throw e;
   }
@@ -5356,7 +5419,7 @@ const initEditProductModal = () => {
       setTimeout(() => {
         closeModal();
         toast(`"${name}" updated successfully.`, 'success', 4000);
-        loadFirestoreProductsSection();
+          void loadProductsView().catch(error => toast(error.message, 'error'));
       }, 500);
     } catch (err) {
       progressEl.style.display = 'none';
@@ -5460,7 +5523,7 @@ const openEditProductModal = (slug, data) => {
   modal.style.display = 'block';
 };
 
-const loadFirestoreProductsSection = async () => {
+const loadFirestoreProductsSection = async (catalogRows) => {
   const section = document.getElementById('firestoreProductsSection');
   if (!section) return;
   const UNIQUE_LOCAL_IMAGE_BY_SLUG = {
@@ -5473,7 +5536,11 @@ const loadFirestoreProductsSection = async () => {
     'chocolate-makes-me-happy': 'https://res.cloudinary.com/dp5eszu4p/image/upload/v1777287393/idqhoenngo6pgtzldy7n.jpg'
   };
   try {
-    const rows = await fetchSupabaseAdminProducts('admin');
+    const rows = catalogRows || await fetchSupabaseAdminProducts('admin');
+    if (!catalogRows && adminProductSearchRows) {
+      adminProductSearchRows = [...adminProductSearchRows.filter(row => row.source !== 'admin'), ...rows];
+      renderAdminProductSearch();
+    }
     if (!rows.length) { section.innerHTML = ''; return; }
 
     const products = rows.map(supabaseRowToAdminProduct);
