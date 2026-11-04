@@ -23,6 +23,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useResponsiveLayout } from "../useResponsiveLayout";
+import { normalizeSearchText } from "../productSearch";
 import {
   checkAdminConnections,
   createAdminProduct,
@@ -1507,11 +1508,10 @@ function Products({
   const [saving, setSaving] = useState(false);
   const products = useMemo(
     () =>
-      data.products.filter((item) =>
-        `${item.brand} ${item.name} ${item.id}`
-          .toLowerCase()
-          .includes(query.trim().toLowerCase()),
-      ),
+      data.products.filter((item) => {
+        const text = normalizeSearchText(`${item.brand} ${item.name} ${item.id}`);
+        return normalizeSearchText(query).split(' ').filter(Boolean).every(term => text.includes(term));
+      }),
     [data.products, query],
   );
   const save = async (patch: AdminProductPatch) => {
@@ -1542,10 +1542,17 @@ function Products({
         <TextInput
           value={query}
           onChangeText={setQuery}
-          placeholder="Search products or brands"
+          accessibilityLabel="Search all products by name, brand or ID"
+          placeholder="Search name, brand or ID"
+          autoCorrect={false}
+          autoCapitalize="none"
+          returnKeyType="search"
           placeholderTextColor="#9b918b"
           style={styles.toolbarInput}
         />
+        {query ? <Pressable accessibilityRole="button" accessibilityLabel="Clear product search" onPress={() => setQuery("")} style={styles.closeButton}>
+          <Ionicons name="close" size={19} color="#6f6660" />
+        </Pressable> : null}
         <View style={styles.livePill}>
           <View style={styles.liveDot} />
           <Text style={styles.liveText}>LIVE CATALOGUE</Text>

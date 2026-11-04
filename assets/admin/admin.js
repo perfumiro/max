@@ -1,4 +1,5 @@
 import { uploadProductImage } from './product-upload.mjs?v=1';
+import { matchesProductSearch } from './product-search.mjs?v=1';
 // --- IPORDISE Admin — Firebase Analytics Dashboard ----------------------------
 // Auth: Firebase Email/Password   Data: Firestore   No server required.
 
@@ -144,26 +145,36 @@ const syncMobileCatalogEntry = async (section, id, value) => {
 const fetchSupabaseAdminProducts = async (source = '') => {
   const firebaseToken = await auth.currentUser?.getIdToken();
   if (!firebaseToken) throw new Error('Admin session expired. Please sign in again.');
-  const url = source ? `${SUPABASE_SYNC_URL}?source=${encodeURIComponent(source)}` : SUPABASE_SYNC_URL;
-  const response = await fetch(url, {
-    headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${firebaseToken}` },
-  });
-  const payload = await response.json().catch(() => ({}));
-  if (response.status >= 500) {
-    const search = new URLSearchParams({ select: '*', order: 'updated_at.desc', limit: '1000' });
-    if (source === 'website' || source === 'admin') search.set('source', `eq.${source}`);
-    const fallbackResponse = await fetch(`${SUPABASE_REST_URL}/products?${search}`, {
-      headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Accept: 'application/json' },
-      cache: 'no-store',
+  const products = [];
+  for (let page = 1; page <= 100; page += 1) {
+    const search = new URLSearchParams({ page: String(page), pageSize: '100' });
+    if (source) search.set('source', source);
+    const url = `${SUPABASE_SYNC_URL}?${search}`;
+    const response = await fetch(url, {
+      headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${firebaseToken}` },
     });
-    if (fallbackResponse.ok) {
-      console.warn('[Admin catalog] Protected read failed; showing active products from the public catalog.');
-      const fallbackProducts = await fallbackResponse.json().catch(() => []);
-      if (Array.isArray(fallbackProducts)) return fallbackProducts;
+    const payload = await response.json().catch(() => ({}));
+    if (response.status >= 500) {
+      const search = new URLSearchParams({ select: '*', order: 'updated_at.desc', limit: '1000' });
+      if (source === 'website' || source === 'admin') search.set('source', `eq.${source}`);
+      const fallbackResponse = await fetch(`${SUPABASE_REST_URL}/products?${search}`, {
+        headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Accept: 'application/json' },
+        cache: 'no-store',
+      });
+      if (fallbackResponse.ok) {
+        console.warn('[Admin catalog] Protected read failed; showing active products from the public catalog.');
+        const fallbackProducts = await fallbackResponse.json().catch(() => []);
+        if (Array.isArray(fallbackProducts)) return fallbackProducts;
+      }
+    }
+    if (!response.ok) throw new Error(payload.error || `Could not load Supabase catalog (${response.status})`);
+    if (!Array.isArray(payload.products)) throw new Error('Invalid product catalog response');
+    products.push(...payload.products);
+    if (payload.products.length < 100 || products.length >= Number(payload.pagination?.total || Infinity)) {
+      return [...new Map(products.map(product => [product.id, product])).values()];
     }
   }
-  if (!response.ok) throw new Error(payload.error || `Could not load Supabase catalog (${response.status})`);
-  return Array.isArray(payload.products) ? payload.products : [];
+  throw new Error('The product catalog is too large to load. Please contact support.');
 };
 
 // Product variants are the live source of truth used by the storefront and
@@ -2682,6 +2693,23 @@ const loadNewsletterView = async () => {
 };
 
 // --- PRODUCTS MANAGER VIEW --------------------------------------------------
+const applyAdminAddedProductSearch = () => {
+  const section = document.getElementById('firestoreProductsSection');
+  if (!section) return;
+  const query = document.getElementById('productsSearch')?.value || '';
+  const cards = [...section.querySelectorAll('[data-product-search]')];
+  let visible = 0;
+  cards.forEach(card => {
+    const matches = matchesProductSearch(card.dataset.productSearch, query);
+    card.style.display = matches ? 'flex' : 'none';
+    if (matches) visible += 1;
+  });
+  const count = section.querySelector('[data-product-search-count]');
+  if (count) count.textContent = `${visible} of ${cards.length} products`;
+  const empty = section.querySelector('[data-product-search-empty]');
+  if (empty) empty.hidden = visible > 0;
+};
+
 const loadProductsView = async () => {
   const grid     = document.getElementById('productsGrid');
   const countEl  = document.getElementById('productsCount');
@@ -2709,6 +2737,7 @@ const loadProductsView = async () => {
     };
 
     const overrides = {};
+    const productDetails = new Map(supabaseRows.map(row => [row.id, row]));
     supabaseRows.forEach(row => {
       const livePricing = supabaseRowPricing(row);
       const current = normalizeOv({ prices: livePricing.sizes }).prices;
@@ -2872,6 +2901,7 @@ const loadProductsView = async () => {
     const render = () => {
       const q      = (searchEl?.value || '').toLowerCase();
       const status = filterEl?.value || '';
+      applyAdminAddedProductSearch();
 
       // -- Admin Added: scroll to Firestore section, clear grid ----------
       if (status === 'admin-added') {
@@ -2894,7 +2924,8 @@ const loadProductsView = async () => {
         const ov       = overrides[slug] || {};
         const disabled = ov.disabled || false;
         const hasOv    = !!(Object.keys(ov.prices||{}).length || (ov.removedSizes||[]).length);
-        if (q && !slug.replace(/-/g,' ').includes(q)) return false;
+        const detail = productDetails.get(slug);
+        if (!matchesProductSearch(`${slug} ${detail?.name || ''} ${detail?.brand || ''}`, q)) return false;
         if (status === 'active'    && disabled) return false;
         if (status === 'disabled'  && !disabled) return false;
         if (status === 'overridden'&& (!hasOv || disabled)) return false;
@@ -3267,9 +3298,7 @@ const loadProductsView = async () => {
       });
     };
 
-    // Clear search/filter BEFORE render so stale values don't hide products
-    if (searchEl) { searchEl.value = ''; }
-    if (filterEl) { filterEl.value = ''; }
+    // Preserve the search when refreshing or returning from the product editor.
     render();
 
     // Abort any event listeners from a previous loadProductsView call
@@ -3280,6 +3309,11 @@ const loadProductsView = async () => {
 
     // Search + filter
     if (searchEl) { searchEl.addEventListener('input', render, { signal: prodSig }); }
+    document.getElementById('clearProductsSearchBtn')?.addEventListener('click', () => {
+      if (searchEl) { searchEl.value = ''; searchEl.focus(); }
+      if (filterEl) filterEl.value = '';
+      render();
+    }, { signal: prodSig });
     if (filterEl) { filterEl.addEventListener('change', render, { signal: prodSig }); }
     const refreshBtn = document.getElementById('refreshProductsBtn');
     if (refreshBtn) { const b=refreshBtn.cloneNode(true); refreshBtn.replaceWith(b); b.addEventListener('click',()=>loadProductsView()); }
@@ -5454,7 +5488,7 @@ const loadFirestoreProductsSection = async () => {
         ? '<span style="font-size:10px;font-weight:700;background:rgba(239,68,68,0.12);color:var(--rose);padding:3px 8px;border-radius:20px;border:1px solid rgba(239,68,68,0.25)">Disabled</span>'
         : '<span style="font-size:10px;font-weight:700;background:rgba(34,197,94,0.12);color:var(--emerald);padding:3px 8px;border-radius:20px;border:1px solid rgba(34,197,94,0.25)">Live</span>';
       return `
-        <div class="admin-product-card" style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:flex-start" data-fsprod-slug="${esc(p.slug)}">
+        <div class="admin-product-card" style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:flex-start" data-fsprod-slug="${esc(p.slug)}" data-product-search="${esc(`${p.name || ''} ${p.brand || ''} ${p.slug || ''}`)}">
           <img src="${esc(displayImage)}" alt="${esc(p.name||'')}" style="width:64px;height:64px;object-fit:contain;border-radius:8px;background:var(--s3);flex-shrink:0" onerror="this.style.display='none'">
           <div class="admin-product-body" style="flex:1;min-width:0">
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
@@ -5501,13 +5535,18 @@ const loadFirestoreProductsSection = async () => {
       <div style="margin-bottom:10px">
         <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px">
           <i class="fas fa-database" style="color:var(--gold)"></i> Products Added via Admin Panel
-          <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">(${products.length} product${products.length!==1?'s':''})</span>
+          <span data-product-search-count aria-live="polite" style="font-size:0.7rem;font-weight:400;color:var(--muted)"></span>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px">${cards}</div>
+        <p data-product-search-empty hidden>No admin-added products match your search. Try a product name, brand or ID.</p>
       </div>
       <div style="height:1px;background:var(--border);margin:16px 0"></div>`;
+    applyAdminAddedProductSearch();
 
     // Wire toggle + delete + edit
+    section._productActionsAC?.abort();
+    const productActionsAC = new AbortController();
+    section._productActionsAC = productActionsAC;
     section.addEventListener('click', async (e) => {
       const editBtn   = e.target.closest('.fsprod-edit');
       const toggleBtn = e.target.closest('.fsprod-toggle');
@@ -5588,7 +5627,7 @@ const loadFirestoreProductsSection = async () => {
           loadFirestoreProductsSection();
         } catch (err) { toast(err.message, 'error'); }
       }
-    });
+    }, { signal: productActionsAC.signal });
   } catch (err) {
     section.innerHTML = `<div style="font-size:0.78rem;color:var(--muted);padding:8px">Could not load admin products: ${esc(err.message)}</div>`;
   }

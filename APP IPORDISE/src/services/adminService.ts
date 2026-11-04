@@ -558,8 +558,17 @@ const loadAdminPage = async (
     total: Math.max(items.length, Number(body.pagination?.total || 0)),
   };
 };
-const loadAdminCatalog = (session: AdminSession) =>
-  loadAdminPage(session, "admin-catalog-sync", "products", 100);
+const loadAdminCatalog = async (session: AdminSession): Promise<AdminPage<JsonMap>> => {
+  const items = new Map<string, JsonMap>();
+  for (let page = 1; page <= 100; page += 1) {
+    const result = await loadAdminPage(session, "admin-catalog-sync", "products", 100, { page });
+    result.items.forEach(item => items.set(String(item.id), item));
+    if (result.items.length < result.pageSize || page * result.pageSize >= result.total) {
+      return { ...result, page: 1, items: [...items.values()] };
+    }
+  }
+  throw new AdminApiError("The product catalog is too large to load. Please contact support.");
+};
 const loadLegacyAdminOrders = (session: AdminSession) =>
   loadAdminPage(session, "admin-orders", "orders", 50);
 const loadAdminCustomers = (session: AdminSession) =>
