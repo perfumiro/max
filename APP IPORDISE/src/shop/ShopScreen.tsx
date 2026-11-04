@@ -107,10 +107,9 @@ export function ShopScreen({fallbackProducts,onBrowse,onOpenProduct,onWishlist,o
     if(!selectedCategory&&!selectedBrand)return [];
     let matches=products.filter(product=>selectedBrand?matchesShopIntent(product,{brand:selectedBrand}):matchesShopIntent(product,selectedCategory!));
     if(availableOnly)matches=matches.filter(product=>product.stockLeft!==0&&Object.values(product.sizes).some(price=>price>0));
-    const isNewArrivals=selectedCategory?.id==='new'||selectedCategory?.filter==='new-in';
     if(sortMode==='name')matches=[...matches].sort((a,b)=>a.name.localeCompare(b.name));
     if(sortMode==='price-asc'||sortMode==='price-desc')matches=[...matches].sort((a,b)=>{const price=(product:Product)=>Math.min(...Object.values(product.sizes).filter(value=>value>0),Number.MAX_SAFE_INTEGER);return sortMode==='price-asc'?price(a)-price(b):price(b)-price(a);});
-    return isNewArrivals?matches.slice(0,15):matches;
+    return matches;
   },[availableOnly,products,selectedBrand,selectedCategory,sortMode]);
   const openCategory=useCallback((category:ShopLink)=>{Keyboard.dismiss();setSelectedBrand(null);setSelectedCategory(category);setSortMode('featured');setAvailableOnly(false);},[]);
   const closeResults=useCallback(()=>{setSelectedCategory(null);setSelectedBrand(null);setSortMode('featured');setAvailableOnly(false);},[]);

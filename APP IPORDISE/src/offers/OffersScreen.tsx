@@ -9,6 +9,8 @@ import { useResponsiveLayout } from '../useResponsiveLayout';
 import { defaultOfferHero, isScheduledNow, loadOfferHero, type OfferHeroConfig } from './offerConfig';
 import { getOfferVariants as offerValues, isEligibleOffer as isActiveOffer, summarizeOffer as offerSummary } from './offerPricing';
 import { logger } from '../observability/logger';
+import { appConfig } from '../config';
+import { startCatalogAutoRefresh } from '../services/catalogAutoRefresh';
 import { SmoothScrollView as ScrollView } from '../components/smoothHorizontalScroll';
 import { LocalizedText as Text } from '../i18n/LocalizedPrimitives';
 
@@ -120,8 +122,10 @@ export function OffersScreen({fallbackProducts,onOpenProduct,onExplore,bottomIns
   const bundledProducts=useMemo(()=>fallbackProducts.length?fallbackProducts:loadBundledProducts(),[fallbackProducts]);
   const [products,setProducts]=useState<Product[]>(bundledProducts);const [loading,setLoading]=useState(true);const [error,setError]=useState(false);const [offline,setOffline]=useState(false);const [hero,setHero]=useState(defaultOfferHero);
   const [category,setCategory]=useState<Category>(retainedCategory);const [sort,setSort]=useState<Sort>(retainedSort);const [filters,setFilters]=useState<AdvancedFilters>(retainedFilters);const [filterOpen,setFilterOpen]=useState(false);const [variantProduct,setVariantProduct]=useState<Product|null>(null);
-  const load=useCallback(async(force=false)=>{setLoading(true);setError(false);try{const live=await loadSharedProducts(force);setProducts(live);setOffline(false);}catch(loadError){logger.warn('offers_catalog_unavailable',{error:loadError});setProducts(bundledProducts);setError(!bundledProducts.length);setOffline(Boolean(bundledProducts.length));}finally{setLoading(false);}},[bundledProducts]);
-  useEffect(()=>{void load();void loadOfferHero().then(setHero).catch(configError=>logger.warn('offer_config_using_defaults',{error:configError}));},[load]);
+  const mountedRef=useRef(false);
+  const load=useCallback(async(force=false,silent=false)=>{if(!silent){setLoading(true);setError(false);}try{const live=await loadSharedProducts(force);if(mountedRef.current){setProducts(live);setOffline(false);setError(false);}}catch(loadError){logger.warn('offers_catalog_unavailable',{error:loadError});if(mountedRef.current){setError(!bundledProducts.length);setOffline(true);}}finally{if(mountedRef.current&&!silent)setLoading(false);}},[bundledProducts.length]);
+  useEffect(()=>{mountedRef.current=true;void load();const stop=startCatalogAutoRefresh(()=>load(true,true),appConfig.catalogCacheTtlMs);return()=>{mountedRef.current=false;stop();};},[load]);
+  useEffect(()=>{let mounted=true;void loadOfferHero().then(value=>{if(mounted)setHero(value);}).catch(configError=>logger.warn('offer_config_using_defaults',{error:configError}));return()=>{mounted=false;};},[]);
   useEffect(()=>{retainedCategory=category;retainedSort=sort;retainedFilters=filters;},[category,filters,sort]);
   useEffect(()=>{if(loading)return;const timer=setTimeout(()=>listRef.current?.scrollToOffset({offset:retainedOffset,animated:false}),0);return()=>clearTimeout(timer);},[loading]);
   const offers=useMemo(()=>products.filter(isActiveOffer),[products]);

@@ -22,6 +22,16 @@ const product={id:'one',brand:'HOUSE',name:'Scent',price:'450 MAD',oldPrice:'',b
 
 test('price shortcuts use the lowest real available size price',()=>{assert.equal(minimumProductPrice(product),450);assert.equal(matchesShopIntent(product,{filter:'price-under-500'}),true);assert.equal(matchesShopIntent(product,{filter:'price-under-300'}),false);});
 test('catalogue shortcuts match real filters and badge semantics',()=>{assert.equal(matchesShopIntent(product,{filter:'for-men'}),true);assert.equal(matchesShopIntent(product,{filter:'new-in'}),true);assert.equal(matchesShopIntent(product,{filter:'offers'}),false);});
+
+test('New arrivals includes publications beyond the first fifteen products',()=>{
+  const body=shopScreenSource.match(/const selectedProducts=useMemo\(\(\)=>\{([\s\S]*?)\n  \},\[availableOnly,products,selectedBrand,selectedCategory,sortMode\]\)/)?.[1];
+  assert.ok(body,'Boutique results selector must be found');
+  const products=Array.from({length:22},(_,index)=>({...product,id:`published-${index}`}));
+  const selector=ts.transpileModule(`exports.select=()=>{${body}}`,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;
+  const context={exports:{},products,selectedBrand:null,selectedCategory:{id:'new',filter:'new-in'},availableOnly:false,sortMode:'featured',matchesShopIntent};
+  vm.runInNewContext(selector,context);
+  assert.deepEqual(Array.from(context.exports.select(),entry=>entry.id),products.map(entry=>entry.id));
+});
 test('internal Boutique category results retain reliable product and back navigation',()=>{
   assert.match(shopScreenSource,/for-him-editorial-v2\.png/);
   assert.match(shopScreenSource,/onPress=\{\(\)=>openCategory\(link\)\}/);
