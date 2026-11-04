@@ -5488,7 +5488,7 @@ const loadFirestoreProductsSection = async () => {
         ? '<span style="font-size:10px;font-weight:700;background:rgba(239,68,68,0.12);color:var(--rose);padding:3px 8px;border-radius:20px;border:1px solid rgba(239,68,68,0.25)">Disabled</span>'
         : '<span style="font-size:10px;font-weight:700;background:rgba(34,197,94,0.12);color:var(--emerald);padding:3px 8px;border-radius:20px;border:1px solid rgba(34,197,94,0.25)">Live</span>';
       return `
-        <div class="admin-product-card" style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:flex-start" data-fsprod-slug="${esc(p.slug)}" data-product-search="${esc(`${p.name || ''} ${p.brand || ''} ${p.slug || ''}`)}">
+        <div class="admin-product-card" style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:flex-start" data-fsprod-slug="${esc(p.slug)}" data-product-search="${esc(`${p.name || ''} ${p.brand || ''} ${p.slug || ''}`).replace(/"/g, '&quot;')}">
           <img src="${esc(displayImage)}" alt="${esc(p.name||'')}" style="width:64px;height:64px;object-fit:contain;border-radius:8px;background:var(--s3);flex-shrink:0" onerror="this.style.display='none'">
           <div class="admin-product-body" style="flex:1;min-width:0">
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
