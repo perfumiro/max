@@ -2721,10 +2721,17 @@ const renderAdminProductSearch = () => {
   }
   const matches = adminProductSearchRows.filter(row => matchesProductSearch(`${row.name || ''} ${row.brand || ''} ${row.id || ''}`, query));
   panel.innerHTML = `<div style="font-weight:700;margin-bottom:10px">${matches.length} matching product${matches.length === 1 ? '' : 's'}</div>` +
-    (matches.length ? matches.map(row => `<div class="card" style="margin-bottom:8px"><div class="card-body" style="display:flex;align-items:center;gap:12px">
+    (matches.length ? matches.map(row => {
+      const candidate = String(row.image || (Array.isArray(row.gallery) ? row.gallery.find(image => typeof image === 'string' && image) : '') || '');
+      const image = /^(https:\/\/|\/(?!\/)|assets\/)/i.test(candidate) ? candidate : '';
+      return `<div class="card" style="margin-bottom:8px"><div class="card-body" style="display:flex;align-items:center;gap:12px">
+      <div style="width:64px;height:76px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#fff;border:1px solid var(--border);overflow:hidden;padding:5px;box-sizing:border-box">
+        ${image ? `<img src="${esc(image).replace(/"/g, '&quot;')}" alt="${esc(row.name || 'Product image').replace(/"/g, '&quot;')}" width="54" height="66" loading="lazy" style="width:100%;height:100%;object-fit:contain" onerror="this.hidden=true;this.nextElementSibling.hidden=false">` : ''}<span ${image ? 'hidden' : ''} role="img" aria-label="Product image unavailable" style="color:#948b82;font-size:22px"><i class="fas fa-image" aria-hidden="true"></i></span>
+      </div>
       <div style="flex:1;min-width:0;overflow-wrap:anywhere"><strong>${esc(row.name || row.id)}</strong><div style="font-size:12px;color:var(--muted);margin-top:4px">${esc(row.brand || '')} · ${row.active === false ? 'Disabled / draft' : 'Active'}</div><div style="font-size:11px;color:var(--muted)">${esc(row.id)}</div></div>
       <button type="button" class="btn btn-xs btn-gold" data-search-edit="${esc(row.id).replace(/"/g, '&quot;')}"><i class="fas fa-pen"></i> Edit</button>
-    </div></div>`).join('') : '<div class="card"><div class="card-body">No matching products. Try part of the name, brand or product ID.</div></div>');
+    </div></div>`;
+    }).join('') : '<div class="card"><div class="card-body">No matching products. Try part of the name, brand or product ID.</div></div>');
 };
 
 const initAdminProductSearch = () => {
