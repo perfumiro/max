@@ -1,0 +1,67 @@
+name: IPORDISE catalog and API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'APP IPORDISE/**'
+      - 'assets/admin/**'
+      - '.github/workflows/catalog-sync.yml'
+  pull_request:
+    paths:
+      - 'APP IPORDISE/**'
+      - 'assets/admin/**'
+      - '.github/workflows/catalog-sync.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '23 */6 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: catalog-sync-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: APP IPORDISE
+
+jobs:
+  catalog-regressions:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: APP IPORDISE/package-lock.json
+      - run: npm ci
+      - run: npm run check:release
+      - run: npm run typecheck
+      - name: Verify product publication, removal, refresh and shopping state
+        run: node --test --test-concurrency=2 tests/catalog-sync-behavior.test.mjs tests/catalog-shopping-sync.test.mjs tests/catalog-auto-refresh.test.mjs tests/admin-catalog-publication.test.mjs tests/admin-product-search.test.mjs tests/shop-hub.test.mjs tests/commerce-state.test.mjs
+
+  production-api:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      EXPO_PUBLIC_SUPABASE_URL: https://gdgrskgegrcgmzswefmn.supabase.co
+      # Public client key, also shipped in the application; no staff/server credentials.
+      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_XbhrBW9Na65u8EkpgtEz4g_PuYkxs_H
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: APP IPORDISE/package-lock.json
+      - run: npm ci
+      - name: Check catalog, function preflight, validation and staff authorization
+        run: npm run check:api
+      - name: Verify actual mobile catalog reader uses live data
+        run: node scripts/check-mobile-catalog.mjs

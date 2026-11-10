@@ -7,7 +7,7 @@ export function startCatalogAutoRefresh(refresh: () => Promise<void>, intervalMs
   const run = async () => {
     if (disposed || running || (AppState.currentState && AppState.currentState !== 'active')) return;
     running = true;
-    try { await refresh(); } finally { running = false; }
+    try { await refresh(); } catch { /* A later foreground/timer event retries. */ } finally { running = false; }
   };
   void run();
   const timer = setInterval(() => { void run(); }, intervalMs);

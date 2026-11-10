@@ -3,7 +3,7 @@ import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from '
 import { ActivityIndicator, FlatList, Image, Modal, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { displaySize, formatMad, loadBundledProducts, loadSharedProducts, type Product } from '../sharedCatalog';
+import { displaySize, formatMad, loadBundledProducts, loadSharedProducts, subscribeToCatalog, type Product } from '../sharedCatalog';
 import { useFavouriteSnapshot, useShoppingActions } from '../commerce/ShoppingContext';
 import { useResponsiveLayout } from '../useResponsiveLayout';
 import { defaultOfferHero, isScheduledNow, loadOfferHero, type OfferHeroConfig } from './offerConfig';
@@ -123,6 +123,10 @@ export function OffersScreen({fallbackProducts,onOpenProduct,onExplore,bottomIns
   const [products,setProducts]=useState<Product[]>(bundledProducts);const [loading,setLoading]=useState(true);const [error,setError]=useState(false);const [offline,setOffline]=useState(false);const [hero,setHero]=useState(defaultOfferHero);
   const [category,setCategory]=useState<Category>(retainedCategory);const [sort,setSort]=useState<Sort>(retainedSort);const [filters,setFilters]=useState<AdvancedFilters>(retainedFilters);const [filterOpen,setFilterOpen]=useState(false);const [variantProduct,setVariantProduct]=useState<Product|null>(null);
   const mountedRef=useRef(false);
+  useEffect(()=>subscribeToCatalog(live=>{
+    setProducts(live);
+    setVariantProduct(current=>current?live.find(product=>product.id===current.id)||null:null);
+  }),[]);
   const load=useCallback(async(force=false,silent=false)=>{if(!silent){setLoading(true);setError(false);}try{const live=await loadSharedProducts(force);if(mountedRef.current){setProducts(live);setOffline(false);setError(false);}}catch(loadError){logger.warn('offers_catalog_unavailable',{error:loadError});if(mountedRef.current){setError(!bundledProducts.length);setOffline(true);}}finally{if(mountedRef.current&&!silent)setLoading(false);}},[bundledProducts.length]);
   useEffect(()=>{mountedRef.current=true;void load();const stop=startCatalogAutoRefresh(()=>load(true,true),appConfig.catalogCacheTtlMs);return()=>{mountedRef.current=false;stop();};},[load]);
   useEffect(()=>{let mounted=true;void loadOfferHero().then(value=>{if(mounted)setHero(value);}).catch(configError=>logger.warn('offer_config_using_defaults',{error:configError}));return()=>{mounted=false;};},[]);

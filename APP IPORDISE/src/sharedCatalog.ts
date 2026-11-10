@@ -11,6 +11,14 @@ const { storeOrigin: STORE_ORIGIN, firestoreRoot: FIRESTORE_ROOT, firebaseApiKey
 let cachedProducts: Product[] | null = null;
 let cacheExpiresAt = 0;
 let pendingCatalogRequest: Promise<Product[]> | null = null;
+const catalogListeners = new Set<(products: Product[]) => void>();
+
+// Only confirmed live reads notify consumers. Offline snapshots must never
+// remove saved items or overwrite a newer product detail.
+export const subscribeToCatalog = (listener: (products: Product[]) => void) => {
+  catalogListeners.add(listener);
+  return () => { catalogListeners.delete(listener); };
+};
 
 export type Product = {
   id: string;
@@ -240,7 +248,7 @@ const productFromCatalog = (raw: JsonMap, override?: JsonMap): Product | null =>
 };
 
 const productFromFirestore = (raw: JsonMap): Product | null => {
-  if (raw.active === false) return null;
+  if (raw.active === false || (raw.publication_status && raw.publication_status !== 'active')) return null;
   const stockLeft = optionalFiniteNumber(raw.stockLeft ?? raw.stock_left);
   const sizes = normalizeSizes(raw.sizes);
   const originalSizes = normalizeSizes(raw.originalPrices ?? raw.original_prices);
@@ -382,7 +390,12 @@ const loadFirebaseAdminProducts = async (): Promise<Product[]> => {
 
 const fetchSharedProducts = async (): Promise<Product[]> => {
   try {
-    return await loadSupabaseProducts();
+    const products = await loadSupabaseProducts();
+    for (const listener of catalogListeners) {
+      try { listener(products); }
+      catch (error) { logger.warn('catalog_listener_failed', { error }); }
+    }
+    return products;
   } catch (error) {
     // Preserve newer publications on refresh instead of reverting to the build snapshot.
     if (cachedProducts !== null) {

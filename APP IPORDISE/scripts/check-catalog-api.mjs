@@ -45,7 +45,7 @@ if (invalidVariants.length) throw new Error(`Canonical catalog has ${invalidVari
 const purchasableProductIds = new Set(variants.filter(variant => variant.stock_quantity == null || Number(variant.stock_quantity) > 0).map(variant => String(variant.product_id)));
 if (!purchasableProductIds.size) throw new Error('Canonical catalog has no in-stock products');
 
-const functionNames = ['create-order', 'track-order', 'push-devices', 'create-preorder', 'admin-preorders'];
+const functionNames = ['admin-catalog-sync', 'admin-orders', 'create-order', 'track-order', 'push-devices', 'create-preorder', 'admin-preorders'];
 const functionChecks = await Promise.all(functionNames.map(async name => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 12_000);
@@ -68,24 +68,29 @@ if (failedFunctions.length) {
   throw new Error(`Production function preflight failed: ${failures}. Verified: ${verified}`);
 }
 
-const unauthorizedAdminResponse = await fetch(`${supabaseUrl}/functions/v1/admin-preorders?page=1&pageSize=1`, {
-  headers: { apikey: supabaseKey, Origin: 'https://ipordise.com', Accept: 'application/json' },
-});
-if (unauthorizedAdminResponse.status !== 401) throw new Error(`Admin preorder authorization check failed: expected HTTP 401, received ${unauthorizedAdminResponse.status}`);
+const adminAuthorizationChecks = await Promise.all(['admin-catalog-sync', 'admin-orders', 'admin-preorders'].map(async name => {
+  const response = await fetch(`${supabaseUrl}/functions/v1/${name}?page=1&pageSize=1`, {
+    headers: { apikey: supabaseKey, Origin: 'https://ipordise.com', Accept: 'application/json' },
+    signal: AbortSignal.timeout(12_000),
+  });
+  if (response.status !== 401) throw new Error(`${name} authorization check failed: expected HTTP 401, received ${response.status}`);
+  return { name, status: response.status };
+}));
 
 const invalidPreorderResponse = await fetch(`${supabaseUrl}/functions/v1/create-preorder`, {
   method: 'POST',
+  signal: AbortSignal.timeout(12_000),
   headers: { apikey: supabaseKey, Origin: 'https://ipordise.com', Accept: 'application/json', 'Content-Type': 'application/json' },
   body: JSON.stringify({}),
 });
 if (invalidPreorderResponse.status !== 400) throw new Error(`Preorder validation check failed: expected HTTP 400, received ${invalidPreorderResponse.status}`);
 
-const productionHtmlResponse = await fetch(`https://ipordise.com/app?preorderHealth=${Date.now()}`, { headers: { 'Cache-Control': 'no-cache' } });
+const productionHtmlResponse = await fetch(`https://ipordise.com/app?preorderHealth=${Date.now()}`, { headers: { 'Cache-Control': 'no-cache' }, signal: AbortSignal.timeout(20_000) });
 if (!productionHtmlResponse.ok) throw new Error(`Production website check failed: HTTP ${productionHtmlResponse.status}`);
 const productionHtml = await productionHtmlResponse.text();
 const bundlePath = productionHtml.match(/<script[^>]+src=["']([^"']*AppEntry-[^"']+\.js[^"']*)["']/i)?.[1];
 if (!bundlePath) throw new Error('Production website does not reference the Expo application bundle');
-const productionBundleResponse = await fetch(new URL(bundlePath, 'https://ipordise.com').toString(), { headers: { 'Cache-Control': 'no-cache' } });
+const productionBundleResponse = await fetch(new URL(bundlePath, 'https://ipordise.com').toString(), { headers: { 'Cache-Control': 'no-cache' }, signal: AbortSignal.timeout(30_000) });
 if (!productionBundleResponse.ok) throw new Error(`Production application bundle check failed: HTTP ${productionBundleResponse.status}`);
 const productionBundle = await productionBundleResponse.text();
 if (!productionBundle.includes('create-preorder') || !productionBundle.includes('PREORDER REQUEST') || !productionBundle.includes('admin-preorders')) throw new Error('Production application bundle does not contain the shared preorder customer/admin integration');
@@ -100,7 +105,8 @@ console.log(JSON.stringify({
   productImages: imageValues.length,
   preorderEnabledProducts: products.filter(product => product.preorder_enabled === true).length,
   preordersGloballyEnabled: settings[0].value.preorders.enabled,
-  preorderUnauthorizedStatus: unauthorizedAdminResponse.status,
+  preorderUnauthorizedStatus: adminAuthorizationChecks.find(check => check.name === 'admin-preorders').status,
+  adminAuthorizationChecks,
   preorderInvalidPayloadStatus: invalidPreorderResponse.status,
   productionPreorderUi: true,
   verifiedFunctions: functionChecks.map(check => check.name),

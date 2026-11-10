@@ -984,6 +984,7 @@ type AppUpdateState = "idle" | "checking" | "downloading" | "ready" | "current" 
 
 function AppUpdatesPage() {
   const { language, rtl } = useLanguage();
+  const { isUpdatePending } = Updates.useUpdates();
   const [state, setState] = useState<AppUpdateState>("idle");
   const copy = language === "fr" ? {
     title: "Mises à jour de l’application", body: "Gardez IPORDISE à jour pour profiter des dernières améliorations et corrections.",
@@ -1002,9 +1003,11 @@ function AppUpdatesPage() {
     error: "We couldn't check right now. Check your connection and try again.", unavailable: "Update checking is available in the installed IPORDISE app.", version: "Installed version",
   };
   const version = Constants.expoConfig?.version || "1.0.0";
+  const ready = state === "ready" || isUpdatePending;
   const busy = state === "checking" || state === "downloading";
   const checkForUpdate = async () => {
     if (Platform.OS === "web" || !Updates.isEnabled) { setState("error"); return; }
+    if (isUpdatePending) { setState("ready"); return; }
     setState("checking");
     try {
       const result = await Updates.checkForUpdateAsync();
@@ -1021,10 +1024,10 @@ function AppUpdatesPage() {
       <View style={s.updateIcon}><Ionicons name="cloud-download-outline" size={29} color={RED}/></View>
       <Text style={s.updateVersion}>{copy.version}</Text>
       <Text style={s.updateVersionValue}>IPORDISE v{version}</Text>
-      {state === "current" ? <View style={s.updateStatus}><Ionicons name="checkmark-circle" size={18} color={GREEN}/><Text style={s.updateStatusText}>{copy.current}</Text></View> : null}
-      {state === "ready" ? <View style={s.updateStatus}><Ionicons name="sparkles" size={18} color={GREEN}/><Text style={s.updateStatusText}>{copy.ready}</Text></View> : null}
+      {state === "current" && !ready ? <View style={s.updateStatus}><Ionicons name="checkmark-circle" size={18} color={GREEN}/><Text style={s.updateStatusText}>{copy.current}</Text></View> : null}
+      {ready ? <View style={s.updateStatus}><Ionicons name="sparkles" size={18} color={GREEN}/><Text style={s.updateStatusText}>{copy.ready}</Text></View> : null}
       {state === "error" ? <Text style={s.updateError}>{Platform.OS === "web" || !Updates.isEnabled ? copy.unavailable : copy.error}</Text> : null}
-      {state === "ready" ? <Pressable accessibilityRole="button" onPress={() => void Updates.reloadAsync()} style={s.updatePrimary}><Text style={s.updatePrimaryText}>{copy.restart}</Text><Ionicons name="refresh" size={17} color="#fff"/></Pressable> : <Pressable accessibilityRole="button" accessibilityState={{busy,disabled:busy}} disabled={busy} onPress={() => void checkForUpdate()} style={[s.updatePrimary,busy&&s.controlDisabled]}>{busy?<ActivityIndicator color="#fff"/>:<Ionicons name="refresh-outline" size={17} color="#fff"/>}<Text style={s.updatePrimaryText}>{state === "checking" ? copy.checking : state === "downloading" ? copy.downloading : copy.check}</Text></Pressable>}
+      {ready ? <Pressable accessibilityRole="button" onPress={() => void Updates.reloadAsync()} style={s.updatePrimary}><Text style={s.updatePrimaryText}>{copy.restart}</Text><Ionicons name="refresh" size={17} color="#fff"/></Pressable> : <Pressable accessibilityRole="button" accessibilityState={{busy,disabled:busy}} disabled={busy} onPress={() => void checkForUpdate()} style={[s.updatePrimary,busy&&s.controlDisabled]}>{busy?<ActivityIndicator color="#fff"/>:<Ionicons name="refresh-outline" size={17} color="#fff"/>}<Text style={s.updatePrimaryText}>{state === "checking" ? copy.checking : state === "downloading" ? copy.downloading : copy.check}</Text></Pressable>}
     </View>
   </View>;
 }

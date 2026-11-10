@@ -1,5 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type PropsWithChildren } from 'react';
-import { loadSharedProducts, type Product } from '../sharedCatalog';
+import { loadSharedProducts, subscribeToCatalog, type Product } from '../sharedCatalog';
+import { startCatalogAutoRefresh } from '../services/catalogAutoRefresh';
+import { appConfig } from '../config';
 import { addBagLine, bagLineKey, countBagItems, removeBagLine, updateBagLineQuantity } from './shoppingState';
 import { useCustomerAuth } from '../account/CustomerAuthContext';
 import { loadCustomerShoppingState, saveCustomerShoppingState } from '../services/customerAccountService';
@@ -70,6 +72,18 @@ export function ShoppingProvider({ children }: PropsWithChildren) {
   const syncReady=useRef(false);
   const activeUserId=session?.user.id;
   const previousUserId=useRef<string|null|undefined>(undefined);
+
+  useEffect(()=>{
+    const unsubscribe=subscribeToCatalog(products=>{
+      const byId=new Map(products.map(product=>[product.id,product]));
+      setBag(lines=>reconcileBag(lines,products));
+      setFavourites(current=>current.flatMap(product=>{const live=byId.get(product.id);return live?[live]:[];}));
+      setLastAdded(current=>current&&byId.has(current.product.id)?{...current,product:byId.get(current.product.id)!}:null);
+    });
+    // This provider stays mounted even while an overlay, wishlist or bag is open.
+    const stop=startCatalogAutoRefresh(async()=>{await loadSharedProducts(true);},appConfig.catalogCacheTtlMs);
+    return()=>{stop();unsubscribe();};
+  },[]);
 
   useEffect(()=>{
     let active=true;

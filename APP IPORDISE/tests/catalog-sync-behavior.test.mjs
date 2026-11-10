@@ -61,3 +61,40 @@ test('unpublishing all products clears the catalog instead of resurrecting bundl
   context.fetch = async () => ({ ok: true, json: async () => [] });
   assert.equal((await api.loadSharedProducts(true)).length, 0);
 });
+
+test('an offline launch recovers new admin publications on the next live refresh', async () => {
+  const { api, context } = setup({ rows: new Error('offline') });
+  assert.equal((await api.loadSharedProducts())[0].id, 'old-bundled');
+  context.fetch = async url => ({ ok: true, json: async () =>
+    url.includes('/products?') ? [product, { ...product, id: 'next-publication' }] : [] });
+  const refreshed = await api.loadSharedProducts(true);
+  assert.deepEqual(Array.from(refreshed, item => item.id), ['new-perfume', 'next-publication']);
+});
+
+test('every confirmed publication and removal reaches subscribers, including an empty catalog', async () => {
+  const { api, context } = setup();
+  const updates = [];
+  const stop = api.subscribeToCatalog(products => updates.push(Array.from(products, item => item.id)));
+  await api.loadSharedProducts();
+  context.fetch = async url => ({ ok: true, json: async () => url.includes('/products?') ? [{ ...product, id: 'replacement' }] : [] });
+  await api.loadSharedProducts(true);
+  context.fetch = async () => ({ ok: true, json: async () => [] });
+  await api.loadSharedProducts(true);
+  assert.deepEqual(updates, [['new-perfume'], ['replacement'], []]);
+  stop();
+  await api.loadSharedProducts(true);
+  assert.equal(updates.length, 3);
+});
+
+test('offline fallback does not broadcast stale bundled records as confirmed publications', async () => {
+  const { api } = setup({ rows: new Error('offline') });
+  let updates = 0;
+  api.subscribeToCatalog(() => updates++);
+  await api.loadSharedProducts(true);
+  assert.equal(updates, 0);
+});
+
+test('archived and draft records never appear even if their legacy active flag is true', async () => {
+  const { api } = setup({ rows: [product, { ...product, id: 'archived', publication_status: 'archived' }, { ...product, id: 'draft', publication_status: 'draft' }] });
+  assert.deepEqual(Array.from(await api.loadSharedProducts(), item => item.id), ['new-perfume']);
+});

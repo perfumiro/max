@@ -5,7 +5,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Svg,{Path,Text as SvgText} from 'react-native-svg';
 import {useResponsiveLayout} from '../useResponsiveLayout';
-import {loadBundledProducts,loadSharedProducts,type Product} from '../sharedCatalog';
+import {loadBundledProducts,loadSharedProducts,subscribeToCatalog,type Product} from '../sharedCatalog';
 import {searchProducts} from '../productSearch';
 import {useBagSnapshot,useFavouriteSnapshot,useShoppingActions} from '../commerce/ShoppingContext';
 import {logger} from '../observability/logger';
@@ -91,6 +91,7 @@ export function ShopScreen({fallbackProducts,onBrowse,onOpenProduct,onWishlist,o
   const bundledProducts=useMemo(()=>fallbackProducts.length?fallbackProducts:loadBundledProducts(),[fallbackProducts]);
   const [products,setProducts]=useState(bundledProducts);const [config,setConfig]=useState<ShopConfig>({...defaultShopConfig,banner:{...defaultShopConfig.banner,active:false}});const [loading,setLoading]=useState(true);const [error,setError]=useState(false);const [query,setQuery]=useState('');const deferredQuery=useDeferredValue(query);const [selectedCategory,setSelectedCategory]=useState<ShopLink|null>(null);const [selectedBrand,setSelectedBrand]=useState<string|null>(()=>Platform.OS==='web'&&typeof globalThis.location!=='undefined'?new URLSearchParams(globalThis.location.search).get('shopBrand'):null);const [sortMode,setSortMode]=useState<'featured'|'name'|'price-asc'|'price-desc'>('featured');const [availableOnly,setAvailableOnly]=useState(false);
   const mountedRef=useRef(false);
+  useEffect(()=>subscribeToCatalog(setProducts),[]);
   const refresh=useCallback(async(forceRefresh:unknown=false,silent=false)=>{if(!silent)setLoading(true);try{const catalog=await loadSharedProducts(forceRefresh===true);if(mountedRef.current){setProducts(catalog);setError(false);}}catch(reason){if(mountedRef.current)setError(true);logger.warn('shop_hub_using_cached_catalogue',{error:reason});}finally{if(mountedRef.current)setLoading(false);}},[]);
   useEffect(()=>{mountedRef.current=true;const stop=startCatalogAutoRefresh(()=>refresh(true,true),appConfig.catalogCacheTtlMs);return()=>{mountedRef.current=false;stop();};},[refresh]);
   useEffect(()=>{let mounted=true;void loadShopConfig().then(shop=>{if(mounted)setConfig({...shop,banner:{...shop.banner,active:false}});}).catch(reason=>logger.warn('shop_config_using_defaults',{error:reason}));return()=>{mounted=false;};},[]);

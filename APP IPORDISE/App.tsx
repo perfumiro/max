@@ -15,7 +15,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Svg, { Path, Text as SvgText, Rect, Circle } from 'react-native-svg';
 import { colors, radius, shadow, sizes, spacing } from './src/designSystem';
 import { useResponsiveLayout } from './src/useResponsiveLayout';
-import { displaySize, formatMad, loadBundledProducts, loadSharedProducts, type Product } from './src/sharedCatalog';
+import { displaySize, formatMad, loadBundledProducts, loadSharedProducts, subscribeToCatalog, type Product } from './src/sharedCatalog';
 import { createProductShareCard, downloadProductShareCard } from './src/sharing/productShareCard';
 import { ShoppingProvider, useBagSnapshot, useFavouriteSnapshot, useLastAdded, useShoppingActions } from './src/commerce/ShoppingContext';
 import { AppUpdateBanner } from './src/components/AppUpdateBanner';
@@ -769,6 +769,12 @@ function HomeContent({initialFilter='',initialQuery='',initialBrand='',initialPr
   const [newsletterError,setNewsletterError]=useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(() => initialProduct);
   const selectedProductHistoryRef=useRef<Product[]>([]);
+  useEffect(()=>subscribeToCatalog(live=>{
+    const byId=new Map(live.map(product=>[product.id,product]));
+    setProducts(live);
+    setSelectedProduct(current=>current?byId.get(current.id)||null:null);
+    selectedProductHistoryRef.current=selectedProductHistoryRef.current.flatMap(product=>{const current=byId.get(product.id);return current?[current]:[];});
+  }),[]);
   const [selectedCollection, setSelectedCollection] = useState<(typeof discoveryLinks)[number] | null>(() => discoveryLinks.find(item=>item.value===previewCollectionValue) || null);
   const [discoveryIndex, setDiscoveryIndex] = useState(0);
   const discoveryScrollRef = useRef<NativeScrollView>(null);
@@ -1608,6 +1614,15 @@ function StoreShell() {
   const commerceProductOriginRef=useRef<CommercePage>('store');
   const tabProductHistoryRef=useRef<Product[]>([]);
   const [tabRecommendations,setTabRecommendations]=useState<Product[]>([]);
+  useEffect(()=>subscribeToCatalog(products=>{
+    const byId=new Map(products.map(product=>[product.id,product]));
+    const currentProduct=(product:Product|null)=>product?byId.get(product.id)||null:null;
+    setPendingProduct(currentProduct);
+    setTabProduct(currentProduct);
+    setCommerceProduct(currentProduct);
+    setTabRecommendations(current=>current.flatMap(product=>{const live=byId.get(product.id);return live?[live]:[];}));
+    tabProductHistoryRef.current=tabProductHistoryRef.current.flatMap(product=>{const live=byId.get(product.id);return live?[live]:[];});
+  }),[]);
   const [navigationRevision,setNavigationRevision]=useState(0);
   const [helpDestination,setHelpDestination]=useState<HelpDestination>(previewHelpDestination==='track'||previewHelpDestination==='contact'||previewHelpDestination==='delivery'||previewHelpDestination==='advice'?previewHelpDestination:'home');
   const [contextualHelpDestination,setContextualHelpDestination]=useState<HelpDestination|null>(null);
