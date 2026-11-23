@@ -1874,24 +1874,21 @@ s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
 
-    <!-- -- Firestore admin-uploaded products injected into catalog grid -- -->
+    <!-- Published products use the same catalog as the mobile apps. -->
     <script type="module">
-    import { db } from './auth/firebase.js';
-    import { collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
-
-    (async function injectFirestoreProducts() {
+    (async function loadPublishedProducts() {
         const grid = document.querySelector('[data-discover-grid]');
         if (!grid) return;
         try {
-            const snap = await getDocs(query(collection(db, 'products'), orderBy('addedAt', 'desc')));
-            if (snap.empty) return;
+            const response = await fetch('https://gdgrskgegrcgmzswefmn.supabase.co/rest/v1/products?select=id,name,brand,image,sizes,filters,created_at&active=eq.true&order=created_at.desc,id.asc', {
+                cache: 'no-store',
+                headers: { apikey: 'sb_publishable_XbhrBW9Na65u8EkpgtEz4g_PuYkxs_H' },
+            });
+            if (!response.ok) throw new Error('Published catalog returned ' + response.status);
+            const products = await response.json();
 
             const _isFr = (localStorage.getItem('ipordise-language') || 'en') === 'fr';
             const _addToCartLabel = _isFr ? 'Ajouter au panier' : 'Add to Cart';
-
-            const toSlug = (name) => String(name).trim().toLowerCase()
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-                .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
             const fmtPrice = (sizes) => Object.entries(sizes || {})
                 .filter(([, v]) => v > 0)
@@ -1901,10 +1898,8 @@ s0.parentNode.insertBefore(s1,s0);
             const today = new Date().toISOString().slice(0, 10);
             let injected = 0;
 
-            snap.forEach(docSnap => {
-                const p = docSnap.data();
-                if (p.active === false) return;
-                const slug = p.slug || toSlug(p.name || docSnap.id);
+            products.forEach(p => {
+                const slug = p.id;
 
                 // Skip if already in grid (e.g. hardcoded)
                 if (grid.querySelector(`[data-id="${CSS.escape(slug)}"]`)) return;
@@ -1944,7 +1939,7 @@ s0.parentNode.insertBefore(s1,s0);
                     const priceDisplay = fmtPrice(p.sizes);
 
                     // 7-day NEW ? LIMITED badge
-                    const addedAt = p.addedAt?.toDate ? p.addedAt.toDate() : new Date(p.addedAt || 0);
+                    const addedAt = new Date(p.created_at || 0);
                     const isNew7Days = (Date.now() - addedAt.getTime()) < 7 * 24 * 60 * 60 * 1000;
                     const badgeHtml = isNew7Days
                         ? `<span class="absolute top-3 left-3 bg-gray-900 text-white shadow-sm text-[9px] uppercase font-bold px-2 py-0.5 rounded-full tracking-wide">New</span>`
@@ -1997,7 +1992,7 @@ s0.parentNode.insertBefore(s1,s0);
                 setTimeout(bindHearts, 600);
             }
         } catch (err) {
-            console.warn('Could not load Firestore products:', err);
+            console.warn('Could not load published products:', err);
         }
     })();
     </script>

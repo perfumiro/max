@@ -4353,6 +4353,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Also pull extra images saved in the Firestore admin products collection
         const lookupId = productId || productOverride?.id || productOverride?.slug || '';
+        const published = canonicalCatalogRows?.find(row => row.id === lookupId);
+        if (published) {
+            const images = [published.image, ...(Array.isArray(published.gallery) ? published.gallery : [])]
+                .filter(src => typeof src === 'string' && src.trim())
+                .map(normalizeImagePathForCurrentPage);
+            if (images.length) return [...new Set(images)];
+        }
         const fsImages = lookupId && Array.isArray(_firestoreProductImagesCache[lookupId])
             ? _firestoreProductImagesCache[lookupId].map((src) => normalizeImagePathForCurrentPage(src)).filter(Boolean)
             : [];
