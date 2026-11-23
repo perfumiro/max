@@ -1,4 +1,50 @@
 
+// Keep the merchant's original gallery when available. Use a local bottle
+// photo when a catalog upload fails, including items rendered after checkout.
+(() => {
+    const uploadPrefix = 'https://res.cloudinary.com/dp5eszu4p/image/upload/';
+    let recoveryMap;
+
+    async function restorePhoto(image, source) {
+        try {
+            if (!recoveryMap) {
+                recoveryMap = fetch('/assets/images/catalog-recovery/sources.json')
+                    .then(response => {
+                        if (!response.ok) throw new Error('Photo index unavailable');
+                        return response.json();
+                    })
+                    .catch(error => {
+                        recoveryMap = undefined;
+                        throw error;
+                    });
+            }
+            const photos = await recoveryMap;
+            const filename = new URL(source).pathname.split('/').pop();
+            if (photos[filename] && (image.currentSrc || image.src) === source) {
+                image.src = photos[filename];
+            }
+        } catch {
+            // A later image request can retry after connectivity returns.
+        }
+    }
+
+    document.addEventListener('error', event => {
+        const image = event.target;
+        if (!(image instanceof HTMLImageElement)) return;
+        const source = image.currentSrc || image.src;
+        if (!source.startsWith(uploadPrefix)) return;
+        event.stopImmediatePropagation();
+        void restorePhoto(image, source);
+    }, true);
+
+    for (const image of document.images) {
+        const source = image.currentSrc || image.src;
+        if (image.complete && !image.naturalWidth && source.startsWith(uploadPrefix)) {
+            void restorePhoto(image, source);
+        }
+    }
+})();
+
 const startPreviewAutoRefresh = () => {
     if (window.__ipordisePreviewAutoRefreshStarted) return;
     window.__ipordisePreviewAutoRefreshStarted = true;
