@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type PropsWithChildren } from 'react';
 import { loadSharedProducts, subscribeToCatalog, type Product } from '../sharedCatalog';
+import { watchCatalogPublications } from '../services/catalogPublicationEvents';
 import { startCatalogAutoRefresh } from '../services/catalogAutoRefresh';
 import { appConfig } from '../config';
 import { addBagLine, bagLineKey, countBagItems, removeBagLine, updateBagLineQuantity } from './shoppingState';
@@ -82,7 +83,8 @@ export function ShoppingProvider({ children }: PropsWithChildren) {
     });
     // This provider stays mounted even while an overlay, wishlist or bag is open.
     const stop=startCatalogAutoRefresh(async()=>{await loadSharedProducts(true);},appConfig.catalogCacheTtlMs);
-    return()=>{stop();unsubscribe();};
+    const stopEvents = watchCatalogPublications();
+    return()=>{stopEvents();stop();unsubscribe();};
   },[]);
 
   useEffect(()=>{

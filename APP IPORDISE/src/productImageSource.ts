@@ -1,4 +1,5 @@
 import { Platform, type ImageSourcePropType } from 'react-native';
+import recoveredProductPhotos from './generated/recoveredProductPhotos.json';
 import { bundledProductImages } from './generated/productImages';
 
 export function normalizeProductImageUrl(value: string): string {
@@ -20,6 +21,11 @@ export function productImageSource(value: string): ImageSourcePropType {
       const local = bundledProductImages[pathname];
       if (local) return local;
     }
+  }
+  if (uri.startsWith('https://res.cloudinary.com/dp5eszu4p/image/upload/')) {
+    const filename = new URL(uri).pathname.split('/').pop() || '';
+    const path = (recoveredProductPhotos as Record<string, string>)[filename];
+    if (path) return { uri: 'https://ipordise.com' + path };
   }
   return { uri };
 }
